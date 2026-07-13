@@ -22,9 +22,19 @@ EN_WORDS = re.compile(r"\b(will|the|who|what|when|there|more|less)\b", re.I)
 
 
 def lint_gambling(text: str) -> list[str]:
-    """Return banned gambling-language stems found in user-facing text."""
+    """Return banned gambling-language stems found in user-facing text.
+
+    Stems are regex patterns (word boundaries allowed), so "statymas" is
+    caught while "įstatymas" (law) passes.
+    """
     low = text.lower()
-    return [stem for stem in config.BANNED_STEMS if stem in low]
+    return [stem for stem in config.BANNED_STEMS if re.search(stem, low)]
+
+
+def lint_blocked(question: str) -> list[str]:
+    """Return team-blocked subjects mentioned in the question."""
+    low = question.lower()
+    return [s for s in config.BLOCKED_SUBJECTS if s in low]
 
 
 def lint_vague(question: str) -> list[str]:
@@ -81,6 +91,10 @@ def validate_candidate(
     hits = lint_gambling(user_facing)
     if hits:
         return None, f"gambling language: {', '.join(hits)}"
+
+    blocked = lint_blocked(cand.question_lt)
+    if blocked:
+        return None, f"blocked subject: {', '.join(blocked)}"
 
     vague = lint_vague(cand.question_lt)
     if vague:

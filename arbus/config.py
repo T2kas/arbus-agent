@@ -59,7 +59,7 @@ MEDIUM_MAX_DAYS = 30
 BANNED_STEMS = [
     "lažyb",        # lažybos, lažybų ...
     "lažin",        # lažintis, lažinuosi ...
-    "statym",       # statymas, statymai ...
+    r"\bstatym",    # statymas as its own word — NOT įstatymas (law) / pastatymas
     "koeficient",   # koeficientas (odds)
     "kazino",
     "azart",        # azartiniai lošimai
@@ -69,6 +69,15 @@ BANNED_STEMS = [
     "jackpot",
     "wager",
     "odds",
+]
+
+# ── Blocked subjects (editorial taste, curated by the team) ─────────────────
+# Case-insensitive substrings. Markets whose question mentions any of these
+# are rejected, and the generator is told upfront to avoid them. Add niche
+# creators or dead-end angles here as you spot them in batches.
+BLOCKED_SUBJECTS = [
+    "šeškės",                 # niche creator group, not mass-audience
+    "statybų transliacij",    # stadium-livestream-metrics angle: about nothing
 ]
 
 # ── Headline-clarity linter ─────────────────────────────────────────────────

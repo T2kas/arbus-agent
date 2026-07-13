@@ -67,10 +67,18 @@ def run_batch(
         n = min(remaining, config.DRAFT_CHUNK_SIZE)
         progress(f"Researching & drafting {n} candidates "
                  f"({len(candidates)} done, provider: {llm.provider()})...")
-        avoid = ""
+        avoid_parts = []
+        if config.BLOCKED_SUBJECTS:
+            avoid_parts.append(
+                "NEVER propose markets about these subjects (team-blocked): "
+                + ", ".join(config.BLOCKED_SUBJECTS)
+            )
         if candidates:
-            avoid = ("\nALREADY DRAFTED — do NOT duplicate these questions or topics:\n"
-                     + "\n".join(f"- {c.question_lt}" for c in candidates))
+            avoid_parts.append(
+                "ALREADY DRAFTED — do NOT duplicate these questions or topics:\n"
+                + "\n".join(f"- {c.question_lt}" for c in candidates)
+            )
+        avoid = ("\n" + "\n".join(avoid_parts)) if avoid_parts else ""
         draft_prompt = llm.load_prompt(
             "draft",
             today=today.isoformat(),

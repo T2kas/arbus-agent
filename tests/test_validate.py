@@ -42,6 +42,18 @@ def test_bare_bet_conjunction_is_allowed():
     assert validate.lint_gambling("Komanda pralaimėjo, bet kovojo iki galo") == []
 
 
+def test_istatymas_is_not_gambling():
+    # "įstatymas" (law) contains "statym" but must NOT trip the linter
+    assert validate.lint_gambling("Ar Seimas priims įstatymo pataisą?") == []
+    assert validate.lint_gambling("Koks statymas laimės?") != []
+
+
+def test_blocked_subjects_rejected():
+    cand = make(question_lt="Ar grupės Šeškės daina pateks į Top 50 iki rugsėjo 1 d.?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "blocked" in reason
+
+
 def test_english_question_rejected():
     cand = make(question_lt="Will the team win the game?")
     fixed, reason = validate.validate_candidate(cand, TODAY)

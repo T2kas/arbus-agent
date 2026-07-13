@@ -1,0 +1,244 @@
+[
+  {
+    "id": 50,
+    "verify_verdict": "OPEN",
+    "verify_note": "2026 m. FIBA Europos čempionatas dar neįvyko, Lietuvos rinktinės rezultatai nežinomi, turnyro datos atitinka FIBA logiką (numatomas 2025/2026 ciklas)[UNCLEAR S1]",
+    "question_lt": "Ar Lietuvos vyrų krepšinio rinktinė 2026 m. Europos čempionate pateks bent į pusfinalį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "Krepšinis / sportas",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime oficialius FIBA Europos čempionato rezultatus ir Lietuvos rinktinės galutinę poziciją FIBA svetainėje.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2989292/dominavusio-juzeno-pakyleta-lietuvos-u20-krepsinio-rinktine-sutriuskino-lenkija",
+      "https://www.fiba.basketball/eurobasket"
+    ],
+    "rationale_en": "Eurobasket and Lithuanian national team performance are always hot topics, with massive coverage on LRT, 15min, Lrytas and huge social media engagement."
+  },
+  {
+    "id": 51,
+    "verify_verdict": "OPEN",
+    "verify_note": "2026-08 laikotarpis dar neįvyko, LHMT duomenys šiam mėnesiui dar nėra, sąlyga ir rezoliucijos data suderintos[UNCLEAR S2]",
+    "question_lt": "Ar nuo 2026-08-01 iki 2026-08-31 bent vieną dieną Vilniuje bus užfiksuota ≥30 °C oro temperatūra pagal oficialius LHMT duomenis?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "Orai / kasdienybė / „negali būti prognozuojama?“",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime Lietuvos hidrometeorologijos tarnybos Vilniaus stoties paros maksimalios temperatūros duomenis už 2026-08 mėn.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/lietuvoje/2/2989282/sinoptike-apie-griztancia-vasara-termometru-stulpeliai-sokteles-iki-28-laipsniu-silumos[76]",
+      "https://www.meteo.lt"
+    ],
+    "rationale_en": "Heat waves, storms and temperature records get wide national coverage and social buzz, with recent articles about returning summer and near-30°C forecasts."
+  },
+  {
+    "id": 52,
+    "verify_verdict": "OPEN",
+    "verify_note": "„Keptos duonos festivalis“ Druskininkuose 2026 m. dar neįvykęs, bilietų išpirkimo statuso dar nėra, rezoliucijos mechanizmas faktologiškai teisingas[UNCLEAR S3]",
+    "question_lt": "Ar iki 2026-09-15 „Keptos duonos festivalis“ Druskininkuose bus oficialiai paskelbta išparduotu renginiu (nebebus likusių bilietų organizatorių kanaluose)?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "Renginiai / maistas / laisvalaikis",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime festivalio organizatorių ir Druskininkų savivaldybės paskyrų bei bilietų platintojų viešus pranešimus dėl likusių bilietų.",
+    "sources": [
+      "http://www.lrytas.lt/skonis/gurmanu-klubas/2026/07/13/news/druskininkai-kviecia-i-skaniausia-vasaros-savaitgali-apie-20-restoranu-suvienys-jegas-pirmajame-keptos-duonos-festivalyje--43130702/[86]",
+      "https://www.druskinnkai.lt"
+    ],
+    "rationale_en": "A first-time „Keptos duonos festivalis“ with ~20 restaurants is a very shareable, meme‑friendly topic extensively covered by Lrytas and local media."
+  },
+  {
+    "id": 53,
+    "verify_verdict": "OPEN",
+    "verify_note": "Vilniaus nacionalinio stadiono statybos transliacijos peržiūrų 2026-08–10 laikotarpiui dar nėra, transliacijos platformos ir statistikos nuoroda apibrėžta faktologiškai korektiškai[UNCLEAR S4]",
+    "question_lt": "Ar Vilniaus Nacionalinio stadiono statybos transliacija iki 2026-10-01 bent vieną kartą viršys 50 tūkst. peržiūrų per 24 valandas pagal oficialią transliacijos platformos statistiką?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.3,
+      0.7
+    ],
+    "category": "Miestai / infrastruktūra / politika",
+    "resolve_by": "2026-10-05",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime pasirinktos oficialios transliacijos platformos (savivaldybės ar rangovo paskyros) viešai matomą peržiūrų skaičių per atitinkamą 24 val. periodą.",
+    "sources": [
+      "http://www.lrytas.lt/verslas/rinkos-pulsas/2026/07/13/news/nuo-siol-nacionalinio-stadiono-statybos-bus-transliuojamos-visa-para-43130559/[79]",
+      "https://vilnius.lt"
+    ],
+    "rationale_en": "National stadium has been a long‑running saga; 24/7 livestream announcement drew wide coverage and jokes, making view‑count drama engaging for young Vilnius residents."
+  },
+  {
+    "id": 54,
+    "verify_verdict": "OPEN",
+    "verify_note": "laikotarpis 2026-08-01–2026-09-01 dar neįvyko, „Šeškės“ kūrinio buvimas „Spotify Top 50 Lietuva“ dar nepatikrintas, pats setup (dainos pavadinimas, „Top 50 Lietuva“ sąrašas) yra teisingas[UNCLEAR S5]",
+    "question_lt": "Ar iki 2026-09-01 bent vieną dieną „Šeškės“ daina (ar bendradarbystės kūrinys) bus „Spotify Top 50 Lietuva“ sąraše?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "Influenceriai / interneto kultūra",
+    "resolve_by": "2026-09-02",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime „Spotify Top 50 Lietuva“ sąrašą visam laikotarpiui nuo 2026-08-01 iki 2026-09-01.",
+    "sources": [
+      "http://www.lrytas.lt/zmones/veidai-ir-vardai/2026/07/13/news/grupe-seskes-kadras-apkalbu-sukuryje-stebisi-del-vieno-dalyko-43128530/[53]",
+      "https://spotifycharts.com/regional/lt"
+    ],
+    "rationale_en": "„Šeškės“ are repeatedly covered by Lrytas for viral content and drama, indicating strong youth recognition and potential music virality measurable via Spotify charts."
+  },
+  {
+    "id": 55,
+    "verify_verdict": "OPEN",
+    "verify_note": "2026-09-01 dar nebuvo, „pricer.lt“ vidutinė A95 benzino kaina šiai datai nežinoma, rezoliucijos šaltinis faktologiškai teisingas[UNCLEAR S6]",
+    "question_lt": "Ar benzino A95 vidutinė kaina Lietuvoje pagal „pricer.lt“ 2026-09-01 bus aukštesnė nei 1,70 €/l?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.52,
+      0.48
+    ],
+    "category": "Ekonomika / kainos / naudinga info",
+    "resolve_by": "2026-09-02",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rėmėmės 2026-09-01 „pricer.lt“ skelbiamu vidutiniu benzino A95 kainos rodikliu Lietuvoje.",
+    "sources": [
+      "http://www.lrytas.lt/auto/rinka/2026/07/13/news/salies-degalinese-ir-vel-pasikeitusios-kainos-43130226/[78]",
+      "https://www.pricer.lt/degalu-kainos"
+    ],
+    "rationale_en": "Fuel prices are a top concern for Lithuanian youth and heavily covered in portals like Lrytas, with frequent debates about rising costs."
+  },
+  {
+    "id": 56,
+    "verify_verdict": "OPEN",
+    "verify_note": "2026–2027 FIBA Čempionų lygos sezonas dar neprasidėjo / nepasibaigė, „Rytas“ ir „Juventus“ Utena yra realios komandos, turnyro struktūra ir rezoliucijos variantai atitinka faktus[UNCLEAR S7]",
+    "question_lt": "Kas 2026 m. FIBA Čempionų lygoje pasieks aukštesnę galutinę poziciją: „Rytas“ ar „Juventus“ Utena?",
+    "market_type": "multi",
+    "options_lt": [
+      "„Rytas“",
+      "„Juventus“",
+      "Abi komandos pasieks tą pačią etapą (iškris tame pačiame etape)"
+    ],
+    "probabilities": [
+      0.55,
+      0.35,
+      0.1
+    ],
+    "category": "Krepšinis / klubai",
+    "resolve_by": "2027-05-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime 2026–2027 FIBA Čempionų lygos oficialią turnyrinę lentelę ir playoff etapų rezultatus FIBA svetainėje.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2989243/paaiskejo-ryto-ir-juventus-tvarkarastis-fiba-cempionu-lygoje[82]",
+      "https://www.fiba.basketball/championsleague"
+    ],
+    "rationale_en": "„Rytas“ and „Juventus“ Champions League campaigns have fresh schedule news on LRT and are heavily discussed among basketball fans."
+  },
+  {
+    "id": 57,
+    "verify_verdict": "OPEN",
+    "verify_note": "laikotarpis 2026-08-01–2026-12-31 dar neprasidėjęs, pensijų indeksavimo pokyčiai 2026 m. jau patvirtinti, bet klausimas apie būsimus naujus pranešimus per vėlesnį laikotarpį, tad dar neįvykę[2][3]",
+    "question_lt": "Ar nuo 2026-08-01 iki 2026-12-31 bent du kartus bus oficialiai paskelbta apie bazinių pensijų ar pensijų indeksavimo pokyčius, didinančius išmokas Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "Ekonomika / politika / socialinė apsauga",
+    "resolve_by": "2027-01-05",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime Socialinės apsaugos ir darbo ministerijos bei „Sodra“ oficialius pranešimus ir teisės aktų pakeitimus dėl pensijų dydžių.",
+    "sources": [
+      "http://www.lrytas.lt/verslas/rinkos-pulsas/2026/07/13/news/pensiju-imokoms-sugrizus-i-gyventoju-saskaitas-pigu-lt-stebi-augancius-pardavimus-43130229/[80]",
+      "https://www.lrt.lt/en/news-in-english/19/2794135/nine-key-changes-coming-into-effect-in-lithuania-in-2026[4]"
+    ],
+    "rationale_en": "Pension system and related cash payouts are widely discussed in Lithuanian media, with direct impact on households and visible coverage of every change."
+  },
+  {
+    "id": 58,
+    "verify_verdict": "OPEN",
+    "verify_note": "laikotarpis 2026-09-01–2026-10-31 dar neprasidėjęs, „YouTube Trending Lietuva“ būsimam klipui „Gamtos gira“ neįvertinamas iš anksto, sąrašai yra dinaminiai ir ateičiai nežinomi[UNCLEAR VIA SEARCH]",
+    "question_lt": "Ar 2026 m. rugsėjo–spalio mėn. bent vieną kartą „YouTube Trending Lietuva“ sąraše bus klipas „Gamtos gira“ (Arana Ra ir Rūta Jančiukaitė)?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.3,
+      0.7
+    ],
+    "category": "Muzika / interneto kultūra",
+    "resolve_by": "2026-11-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime „YouTube Trending Lietuva“ kasdienį sąrašą nuo 2026-09-01 iki 2026-10-31.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/muzika/680/2989298/arana-ra-ir-ruta-janciukaite-pristato-klipa-gamtos-gira-kurinys-apie-kitoki-pasauli[66]",
+      "https://www.youtube.com/feed/trending"
+    ],
+    "rationale_en": "New Lithuanian music videos promoted on LRT, especially with a distinctive concept like „Gamtos gira“, often gain traction on YouTube LT trending, a key youth platform."
+  },
+  {
+    "id": 59,
+    "verify_verdict": "OPEN",
+    "verify_note": "Pitbull koncertas Kaune numatytas 2026-07-31, dar neįvykęs, todėl nėra duomenų, ar jo daina pateks į „Spotify Top 50 Lietuva“ per nurodytą laikotarpį[UNCLEAR VIA SEARCH]",
+    "question_lt": "Ar per Pitbull koncertą Kaune 2026 m. liepos 31 d. bent viena jo daina pateks į „Spotify Top 50 Lietuva“ tą pačią dieną arba per 3 kalendorines dienas po koncerto?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "music",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime „Spotify Top 50 Lietuva“ sąrašą koncerto dieną ir dar 3 kalendorines dienas po jos.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/muzika/680/2989311/i-kauna-atvykstantis-dainininkas-pitbullis-londone-pasieke-du-guinnesso-rekordus",
+      "https://spotifycharts.com/regional/lt"
+    ],
+    "rationale_en": "International stars’ shows in Kaunas always spark hype; LRT covers Pitbull’s Guinness records and upcoming concert, and Spotify LT charts are widely followed by youth."
+  }
+]
