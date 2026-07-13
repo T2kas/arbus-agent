@@ -1,0 +1,5 @@
+anthropic>=0.116.0
+feedparser>=6.0.11
+pydantic>=2.7
+rapidfuzz>=3.9
+requests>=2.32

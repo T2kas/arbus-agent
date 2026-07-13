@@ -1,0 +1,49 @@
+name: generate-markets
+
+on:
+  schedule:
+    # Mon & Thu 05:00 UTC = 08:00 Vilnius (EEST) — batch is ready with morning coffee
+    - cron: "0 5 * * 1,4"
+  workflow_dispatch:
+    inputs:
+      count:
+        description: "Candidates to generate"
+        default: "35"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate batch
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m arbus generate --count "${{ github.event.inputs.count || '35' }}"
+
+      - name: Commit batch back
+        run: |
+          git config user.name "arbus-bot"
+          git config user.email "arbus-bot@users.noreply.github.com"
+          git add data/ reports/ exports/
+          git diff --cached --quiet || git commit -m "batch $(date -u +%F) [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push
