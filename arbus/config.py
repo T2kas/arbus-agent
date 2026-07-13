@@ -67,6 +67,21 @@ BANNED_STEMS = [
     "odds",
 ]
 
+# ── Headline-clarity linter ─────────────────────────────────────────────────
+# Vague phrasing that must never appear in the QUESTION text (rigor belongs
+# in the resolution criteria, the headline must be instantly clear).
+VAGUE_STEMS = [
+    "panaš",            # panašaus lygio, panašiai ...
+    "artimiaus",        # artimiausią savaitę / artimiausiu metu
+    "netrukus",
+    "greitu metu",
+    "pvz",              # examples belong in the rules, not the headline
+    "ir pan",
+    "ir kt",
+    "ar kitok",         # "ar kitoks sprendimas" style catch-alls
+    "bent vienoje didž",
+]
+
 # ── Dedupe ──────────────────────────────────────────────────────────────────
 DEDUPE_SIMILARITY = 87        # rapidfuzz token_set_ratio threshold (0-100)
 DEDUPE_LOOKBACK_DAYS = 60     # compare against markets created in this window

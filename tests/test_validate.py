@@ -10,7 +10,7 @@ TODAY = date(2026, 7, 13)
 
 def make(**overrides) -> Candidate:
     base = dict(
-        question_lt="Ar Žalgiris laimės artimiausias rungtynes?",
+        question_lt="Ar Žalgiris liepos 20 d. laimės rungtynes prieš Rytą?",
         market_type="binary",
         options_lt=["Taip", "Ne"],
         probabilities=[0.6, 0.4],
@@ -78,7 +78,29 @@ def test_multi_needs_3_to_6_options():
     assert fixed is None and "3-6" in reason
 
 
+def test_vague_headline_rejected():
+    for bad in [
+        "Ar Vyriausybė priims panašaus lygio sprendimą?",
+        "Ar artimiausią savaitę bus karšta?",
+        "Ar bus paskelbtas sprendimas (pvz., naujas ambasadorius)?",
+    ]:
+        fixed, reason = validate.validate_candidate(make(question_lt=bad), TODAY)
+        assert fixed is None and "vague" in reason, bad
+
+
+def test_non_url_sources_rejected():
+    cand = make(sources=["LRT", "Lrytas"])
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "source" in reason
+
+
+def test_mixed_sources_filtered_to_urls():
+    cand = make(sources=["LRT", "https://www.lrt.lt/x"])
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed.sources == ["https://www.lrt.lt/x"]
+
+
 def test_duplicate_detected_despite_wording():
-    existing = ["Ar Žalgiris laimės artimiausias LKL rungtynes?"]
-    assert validate.is_duplicate("Ar artimiausias rungtynes laimės Žalgiris?", existing)
+    existing = ["Ar Žalgiris liepos 20 d. laimės LKL rungtynes prieš Rytą?"]
+    assert validate.is_duplicate("Ar rungtynes prieš Rytą liepos 20 d. laimės Žalgiris?", existing)
     assert validate.is_duplicate("Ar Vilniuje liepą bus 35 laipsniai karščio?", existing) is None

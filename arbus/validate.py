@@ -27,6 +27,12 @@ def lint_gambling(text: str) -> list[str]:
     return [stem for stem in config.BANNED_STEMS if stem in low]
 
 
+def lint_vague(question: str) -> list[str]:
+    """Return vague-phrasing stems found in the market question (headline)."""
+    low = question.lower()
+    return [stem for stem in config.VAGUE_STEMS if stem in low]
+
+
 def looks_lithuanian(text: str) -> bool:
     has_lt = any(c in LT_MARKERS for c in text.lower()) or bool(LT_WORDS.search(text))
     clearly_en = bool(EN_WORDS.search(text)) and not LT_WORDS.search(text)
@@ -74,6 +80,10 @@ def validate_candidate(cand: Candidate, today: date) -> tuple[Candidate | None, 
     if hits:
         return None, f"gambling language: {', '.join(hits)}"
 
+    vague = lint_vague(cand.question_lt)
+    if vague:
+        return None, f"vague headline wording: {', '.join(vague)}"
+
     if not looks_lithuanian(cand.question_lt):
         return None, "question does not look Lithuanian"
 
@@ -104,7 +114,9 @@ def validate_candidate(cand: Candidate, today: date) -> tuple[Candidate | None, 
     # Recompute duration from the date — the model's label is advisory only.
     cand.duration_class = classify_duration(resolve_by, today)
 
+    # Sources must be actual links, not outlet names like "LRT"
+    cand.sources = [s for s in cand.sources if s.startswith("http")]
     if not cand.sources:
-        return None, "no grounding sources"
+        return None, "no grounding source URLs"
 
     return cand, None
