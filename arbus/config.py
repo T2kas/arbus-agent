@@ -83,7 +83,17 @@ VAGUE_STEMS = [
     "ir pan",
     "ir kt",
     "ar kitok",         # "ar kitoks sprendimas" style catch-alls
+    # "any member of an undefined class" — resolution nightmare unless the
+    # class is objectively defined (precise measurable phrases like
+    # "bent vieną dieną 30 °C" are fine and don't match these stems)
     "bent vienoje didž",
+    "bent vienas didel",
+    "bent viena didel",
+    "bent vienas stambus",
+    "bent viena stambi",
+    "bent vienas žinomas",
+    "bent viena žinoma",
+    "bent vienas populiarus",
 ]
 
 # ── Dedupe ──────────────────────────────────────────────────────────────────

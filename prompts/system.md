@@ -82,6 +82,11 @@ HEADLINE CLARITY — the question text is the product:
 - Every measurable term in the question must be exact: name the exact
   source, the exact threshold, the exact entity. "pagal LEA duomenis" only
   if the criteria define which LEA data and when it is read.
+- "Any member of a class" markets ("ar bent vienas ... ?") are allowed ONLY
+  when the class is objectively defined: named entities, an official
+  registry, or a measurable threshold ("bent vieną dieną ≥30 °C Vilniuje"
+  is fine). NEVER "bent vienas didelis / stambus / žinomas / populiarus X"
+  — name the specific people/brands/events or define the exact threshold.
 - Detailed edge-case language lives in the resolution hint / full-mode
   rules. Headline = instantly clear; rules = rigorous.
 

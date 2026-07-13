@@ -88,6 +88,15 @@ def test_vague_headline_rejected():
         assert fixed is None and "vague" in reason, bad
 
 
+def test_undefined_class_rejected_but_precise_threshold_allowed():
+    bad = make(question_lt="Ar iki rugsėjo 15 d. bent vienas didelis influenceris paskelbs apie sugrįžimą?")
+    fixed, reason = validate.validate_candidate(bad, TODAY)
+    assert fixed is None and "vague" in reason
+    ok = make(question_lt="Ar iki rugsėjo 1 d. Vilniuje bent vieną dieną bus 30 laipsnių karščio?")
+    fixed, reason = validate.validate_candidate(ok, TODAY)
+    assert reason is None
+
+
 def test_non_url_sources_rejected():
     cand = make(sources=["LRT", "Lrytas"])
     fixed, reason = validate.validate_candidate(cand, TODAY)
