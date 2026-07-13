@@ -93,18 +93,48 @@ def run_batch(
     conn = store.connect()
     existing = store.recent_questions(conn)
     accepted_cands: list[Candidate] = []
+    fixables: list[tuple[Candidate, str]] = []
+
+    def admit(cand: Candidate, reason: str | None, repairable: bool) -> None:
+        if reason:
+            if repairable and reason.startswith("vague headline"):
+                fixables.append((cand, reason))
+            else:
+                result.rejected.append((cand, reason))
+            return
+        dup = validate.is_duplicate(cand.question_lt, existing)
+        if dup:
+            result.rejected.append((cand, f"duplicate of existing market: {dup!r}"))
+            return
+        existing.append(cand.question_lt)  # dedupe within the batch too
+        accepted_cands.append(cand)
 
     for cand in candidates:
         fixed, reason = validate.validate_candidate(cand, today, min_resolve=min_resolve)
-        if reason:
-            result.rejected.append((cand, reason))
-            continue
-        dup = validate.is_duplicate(fixed.question_lt, existing)
-        if dup:
-            result.rejected.append((fixed, f"duplicate of existing market: {dup!r}"))
-            continue
-        existing.append(fixed.question_lt)  # dedupe within the batch too
-        accepted_cands.append(fixed)
+        admit(fixed or cand, reason, repairable=True)
+
+    # A vague headline is a wording problem, not an idea problem — give those
+    # candidates one LLM rewrite round before discarding them.
+    if fixables:
+        progress(f"Repairing {len(fixables)} vague headlines...")
+        try:
+            import json as _json
+
+            items = _json.dumps(
+                [{"rejection_reason": r, **c.model_dump()} for c, r in fixables],
+                ensure_ascii=False, indent=1,
+            )
+            repaired = llm.structure(
+                llm.load_prompt("repair", items=items), CandidateBatch, max_tokens=8000
+            )
+            for cand in repaired.candidates:
+                fixed, reason = validate.validate_candidate(cand, today, min_resolve=min_resolve)
+                admit(fixed or cand, f"repair failed: {reason}" if reason else None,
+                      repairable=False)
+        except Exception as exc:
+            log.warning("repair round failed: %s", exc)
+            for cand, reason in fixables:
+                result.rejected.append((cand, reason))
 
     if skip_verify:
         verdicts = [("UNCLEAR", "verification skipped")] * len(accepted_cands)

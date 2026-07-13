@@ -10,11 +10,14 @@ STEP 1 — SCOUT (use web search extensively):
   releases, votes in the Seimas, festivals), and ongoing debates. Search in
   Lithuanian.
 - GO INTO SOCIAL MEDIA: search what big Lithuanian TikTok/Instagram/YouTube
-  creators are doing right now — current follower/subscriber counts (find
-  ones approaching round milestones), feuds, new projects, viral videos.
-  Check Spotify Top 50 Lietuva and YouTube Trending LT. At least a third of
-  the batch must come from this culture/influencer/hype territory, including
-  1-3 absurd-but-verifiable "negi tikrai galima tai prognozuoti??" markets.
+  creators are doing right now — the ACTUAL trending dramas with the actual
+  people named (e.g. Viltė & Viktoras / viktorasbalykov style stories),
+  feuds, new projects, viral videos. Check Spotify Top 50 Lietuva and
+  YouTube Trending LT. For any follower/metric market, look up the current
+  number FIRST and state it in the rationale — never guess milestones.
+  Only creators a mass audience recognizes; no niche accounts. At least a
+  third of the batch comes from this culture/influencer/hype territory,
+  including 1-3 absurd-angle markets on FAMILIAR subjects.
 - APPLY THE ATTENTION GATE to every topic: search for engagement evidence
   (comment counts, multiple outlets covering it, social buzz). If fewer than
   ~10% of young Lithuanians would recognize the subject and have an opinion,

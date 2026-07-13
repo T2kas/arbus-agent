@@ -35,6 +35,11 @@ signals with web search: comment counts on Delfi/15min/Lrytas articles,
 TikTok/Instagram/X buzz, whether multiple outlets cover it, whether it's
 group-chat material.
 
+HARD EVIDENCE ONLY: if you cannot cite a concrete number or fact proving
+mass attention (comment count, view count, follower count, multiple outlets
+covering it), the topic FAILS the gate. Never assert popularity you did not
+verify — "sekėjai greitai auga" without a checked number is a lie.
+
 PASSES the gate: Žalgiris, Rytas, national basketball teams, Lithuanian NBA
 players (e.g. "kuriame klube Jonas Valančiūnas žais 2026-2027 sezone?"),
 Sabonis, Eurovizija, MAMA apdovanojimai and similar big award shows/events,
@@ -51,9 +56,11 @@ MARKET ARCHETYPES — actively use these; at least a THIRD of every batch
 must be culture / influencers / internet-hype territory:
 
 - Follower & subscriber milestones: "Ar [kūrėjas] pasieks 500 tūkst. sekėjų
-  Instagram iki rugsėjo 1 d.?" — verifiable from the public profile count.
-  Search the actual current follower counts of big Lithuanian creators and
-  find ones approaching round milestones.
+  Instagram iki rugsėjo 1 d.?" — ONLY for creators the mass audience already
+  knows. MANDATORY: search the creator's CURRENT follower count first and
+  state it in the rationale. The milestone must be genuinely within reach
+  but uncertain (roughly 5-40% above the current count, or backed by a
+  visible growth trend). A 100k target for a 7k account is an instant fail.
 - Charts & views: Spotify Top 50 Lietuva positions ("Ar [daina] išsilaikys
   Top 10 iki ...?"), YouTube Trending LT, video/stream view milestones.
 - Sold-out drama: "Ar [koncertas/festivalis] bus išparduotas iki ...?"
@@ -61,10 +68,15 @@ must be culture / influencers / internet-hype territory:
   atrankos — who wins, who gets nominated.
 - Influencer/celebrity events the internet argues about: relationships,
   collabs, comebacks, new channels/projects — as long as resolution is
-  publicly checkable.
+  publicly checkable. NAME the actual people involved in the actual
+  trending drama (e.g. if the week's story is Viltė & Viktoras
+  (viktorasbalykov), the market is about THEM by name) — never a generic
+  "ar koks nors influenceris...".
 - "Negi tikrai galima tai prognozuoti??" absurdity (Polymarket energy):
-  weird-but-verifiable markets — record temperatures, ar liepą Vilniuje
-  snigs, city quirks, viral phenomena. 1-3 per batch.
+  an absurd ANGLE on something everyone already knows — record heat, ar
+  liepą snigs, iconic people/places doing weird things. If the subject
+  itself needs explaining to the average 20-year-old, it is not absurd-fun,
+  it is just obscure — drop it. 1-3 per batch.
 - Informative/useful markets where knowing the answer helps people: degalų
   kaina, elektros kaina (NordPool LT), infliacija, būsto paskolų palūkanos,
   viešojo transporto sprendimai.
@@ -82,6 +94,11 @@ HEADLINE CLARITY — the question text is the product:
 - Every measurable term in the question must be exact: name the exact
   source, the exact threshold, the exact entity. "pagal LEA duomenis" only
   if the criteria define which LEA data and when it is read.
+- NAMES: for coaches, athletes in formal contexts, politicians, officials
+  and other serious-domain figures, use the proper form "V. Pavardė"
+  ("S. Jasikevičiaus komanda", not "Šaro komanda") — no nicknames or
+  trumpiniai in headlines. Influencers/artists may be called by the handle
+  or stage name they are actually known by (Jessica Shy, viktorasbalykov).
 - "Any member of a class" markets ("ar bent vienas ... ?") are allowed ONLY
   when the class is objectively defined: named entities, an official
   registry, or a measurable threshold ("bent vieną dieną ≥30 °C Vilniuje"
