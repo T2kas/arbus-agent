@@ -1,0 +1,270 @@
+[
+  {
+    "id": 1,
+    "verify_verdict": "OPEN",
+    "verify_note": "KT paieškoje nėra viešai matomo sprendimo ar bylos priėmimo dėl skundo apie M. Sinkevičiaus Vyriausybės teisėtumą; terminas nagrinėjimui dar nepasibaigęs[6].",
+    "question_lt": "Ar Konstitucinis Teismas iki rugpjūčio pabaigos pradės nagrinėti skundą dėl M. Sinkevičiaus Vyriausybės teisėtumo?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "politika",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime, ar iki šios datos KT tinklalapyje oficialiai paskelbtas skundo priėmimas ir bylos nagrinėjimo pradžia dėl M. Sinkevičiaus Vyriausybės.",
+    "sources": [
+      "LRT"
+    ],
+    "rationale_en": "Fresh government legitimacy drama and potential Constitutional Court case is a big political topic that younger Lithuanians follow on social media and news."
+  },
+  {
+    "id": 2,
+    "verify_verdict": "OPEN",
+    "verify_note": "Nė vienoje iš didžiųjų portalų (LRT, Delfi, 15min, Lrytas) antraštėse nerandama žinia apie oficialiai įregistruotą skundą KT dėl M. Sinkevičiaus Vyriausybės, o sprendimo terminas dar nepasibaigęs[5].",
+    "question_lt": "Ar iki liepos 20 d. bent vienoje didžiojoje naujienų portalo antraštėje pasirodys pranešimas apie oficialiai pateiktą skundą Konstituciniam Teismui dėl M. Sinkevičiaus Vyriausybės?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.7,
+      0.3
+    ],
+    "category": "politika/žiniasklaida",
+    "resolve_by": "2026-07-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Žiūrėsime LRT, 15min, Delfi, Lrytas pirmo puslapio naujienas, ar skundas KT jau oficialiai įregistruotas ir apie tai skelbiama antraštėse.",
+    "sources": [
+      "LRT"
+    ],
+    "rationale_en": "Short-term “will they actually do it?” question is ideal for people following the hot constitutional debate in real time."
+  },
+  {
+    "id": 3,
+    "verify_verdict": "OPEN",
+    "verify_note": "Iki šiol Vyriausybės ir URM pranešimuose nėra aiškiai įvardyto konkretaus žingsnio „santykių su Kinija atnormalizavimo“ (pvz., ambasadoriaus grąžinimo ar naujos oficialios iniciatyvos), o sprendimo data dar nepasiekta.",
+    "question_lt": "Ar iki rugsėjo 1 d. Vyriausybė oficialiai paskelbs konkretų žingsnį santykių su Kinija atnormalizavimo link (pvz., atnaujintas ambasadorius, nauja ekonominė iniciatyva ar panašaus lygio sprendimas)?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "politika/ekonomika",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remsimės Vyriausybės, URM, LRT ir BNS pranešimais apie oficialius sprendimus dėl santykių su Kinija atkūrimo.",
+    "sources": [
+      "LRT",
+      "Lrytas"
+    ],
+    "rationale_en": "China-Lithuania saga affects jobs, tech, and national pride, so young people care how fast and how far normalization will go."
+  },
+  {
+    "id": 4,
+    "verify_verdict": "OPEN",
+    "verify_note": "Seimo ir VRK viešuose duomenyse kol kas nėra informacijos, kad bent 5 Seimo nariai atsisakė mandatų dėl mero postų po naujų savivaldos sprendimų, o prognozės terminas dar nepasibaigęs.",
+    "question_lt": "Ar iki spalio 1 d. Seime mandatų atsisakys bent 5 nariai, kad galėtų užimti mero postus po naujų savivaldos sprendimų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "politika/savivalda",
+    "resolve_by": "2026-10-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime Seimo ir Vyriausiosios rinkimų komisijos viešus duomenis apie mandatų atsisakymus bei merų paskyrimus.",
+    "sources": [
+      "LRT"
+    ],
+    "rationale_en": "The “Seimas vs merai” dynamic and MPs chasing mayoral seats is a juicy power game story that social media users debate."
+  },
+  {
+    "id": 5,
+    "verify_verdict": "OPEN",
+    "verify_note": "LEA paskutiniai vieši degalų kainų atnaujinimai nerodo naujo oficialaus vidutinės benzino kainos sumažėjimo, tačiau iki liepos 31 d. dar galimi pokyčiai.",
+    "question_lt": "Ar benzino vidutinė kaina Lietuvoje iki liepos 31 d. dar bent kartą oficialiai sumažės pagal LEA pirmadienio atnaujinimus?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "ekonomika/kasdienybė",
+    "resolve_by": "2026-07-31",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Naudosime Lietuvos energetikos agentūros (LEA) viešus degalų kainų pranešimus ir jų nurodomas vidutines benzino kainas.",
+    "sources": [
+      "LRT",
+      "Lrytas"
+    ],
+    "rationale_en": "Fuel prices are a constant pain point for drivers and young commuters, making small price moves very relatable."
+  },
+  {
+    "id": 6,
+    "verify_verdict": "OPEN",
+    "verify_note": "LHMT ir LRT orų apžvalgose kol kas nepateiktas pilnas artimiausios savaitės (iki liepos 20 d.) maksimalios temperatūros rodmuo, todėl rezultatas dar nežinomas.",
+    "question_lt": "Kokį aukščiausią oro temperatūros rodmenį fiksuos Lietuvos hidrometeorologijos tarnyba artimiausią savaitę (iki liepos 20 d.)?",
+    "market_type": "multi",
+    "options_lt": [
+      "Iki 26 °C",
+      "27–28 °C",
+      "29–30 °C",
+      "31 °C ir daugiau"
+    ],
+    "probabilities": [
+      0.2,
+      0.45,
+      0.25,
+      0.1
+    ],
+    "category": "orai/kasdienybė",
+    "resolve_by": "2026-07-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Tikrinsime LHMT oficialius duomenis ir LRT orų pranešimus apie didžiausią per laikotarpį užfiksuotą temperatūrą.",
+    "sources": [
+      "LRT",
+      "15min"
+    ],
+    "rationale_en": "Summer heat, storms and “ar grįžo vasara?” are everyday topics that dominate chats and memes."
+  },
+  {
+    "id": 7,
+    "verify_verdict": "OPEN",
+    "verify_note": "Vilniaus savivaldybės ir projekto transliacijos medžiagoje iki šiol nėra aiškiai fiksuoto pirmojo tribūnų segmento konstrukcijos montavimo, o stebėjimo laikotarpis tęsiasi iki rugpjūčio 15 d.",
+    "question_lt": "Ar iki rugpjūčio 15 d. Vilniaus nacionalinio stadiono statybų transliacijoje oficialiai bus užfiksuotas pirmojo tribūnų segmento konstrukcijos montavimas (aiškiai matomas vaizduose)?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "miesto gyvenimas/infrastruktūra",
+    "resolve_by": "2026-08-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remsimės Vilniaus savivaldybės ir projekto svetainės 24/7 transliacijos įrašais, fiksuodami datą, kai aiškiai matosi pirmos tribūnos konstrukcijų montavimas.",
+    "sources": [
+      "Lrytas"
+    ],
+    "rationale_en": "National stadium has been a meme for years, so visible construction milestones are a big “finally?” moment for young Vilniečiai."
+  },
+  {
+    "id": 8,
+    "verify_verdict": "OPEN",
+    "verify_note": "LRT, Lrytas, 15min ir pagrindiniuose krepšinio portaluose nerasta interviu ar platesnio komentaro, kuriame Karnišovas Lietuvos žiniasklaidai kalbėtų apie „NBA Europe“ konsultanto rolę, o galutinis terminas dar nepasiektas.",
+    "question_lt": "Ar Artūras Karnišovas iki rugsėjo 1 d. viešai duos bent vieną interviu Lietuvos žiniasklaidai apie savo naują „NBA Europe“ konsultanto rolę?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "krepšinis",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime LRT, Lrytas, 15min sporto skiltis ir pagrindinius krepšinio portalus, ar publikuotas interviu ar platesnis komentaras su Karnišovu apie naujas pareigas.",
+    "sources": [
+      "LRT",
+      "Lrytas"
+    ],
+    "rationale_en": "NBA + Lithuanian exec news easily catches the attention of basketball-obsessed youth."
+  },
+  {
+    "id": 9,
+    "verify_verdict": "OPEN",
+    "verify_note": "FIBA Europos moterų čempionato, kuriame dalyvauja Lietuvos rinktinė, dar nėra pasibaigęs ir galutinė Lietuvos vieta turnyre dar nepaskelbta[8][5].",
+    "question_lt": "Koks bus Lietuvos moterų krepšinio rinktinės užimta vieta artėjančiame Europos čempionate?",
+    "market_type": "multi",
+    "options_lt": [
+      "1–4 vieta",
+      "5–8 vieta",
+      "9–12 vieta",
+      "13 vieta ir žemiau"
+    ],
+    "probabilities": [
+      0.15,
+      0.3,
+      0.35,
+      0.2
+    ],
+    "category": "krepšinis",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Naudosime oficialius FIBA Europos čempionato moterų turnyro galutinius rezultatus ir Lietuvos krepšinio federacijos pranešimus.",
+    "sources": [
+      "Lrytas"
+    ],
+    "rationale_en": "Under-the-radar but emotional topic: how will a shorthanded women’s national team perform at EuroBasket."
+  },
+  {
+    "id": 10,
+    "verify_verdict": "OPEN",
+    "verify_note": "Dabartinis FIBA U20 Europos čempionatas dar vyksta, oficialus galutinis reitingas dar nepaskelbtas, todėl nėra aišku, ar Lietuva pateks į top-8; patikimų šaltinių apie galutinę Lietuvos U20 vietą dar nėra[3].",
+    "question_lt": "Ar Lietuvos U20 krepšinio rinktinė dabartiniame Europos čempionate užbaigs turnyrą būdama tarp geriausių 8 komandų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.7,
+      0.3
+    ],
+    "category": "krepšinis",
+    "resolve_by": "2026-07-31",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Tikrinsime oficialų FIBA U20 čempionato galutinį reitingą ir LRT/Lrytas sporto naujienas apie Lietuvos U20 vietą.",
+    "sources": [
+      "LRT",
+      "Lrytas"
+    ],
+    "rationale_en": "U20 team’s strong start sparks optimism and debate about how far the next generation will go."
+  },
+  {
+    "id": 11,
+    "verify_verdict": "OPEN",
+    "verify_note": "„Mados alchemija 2026“ programos sudėtis dar viešai nepateikta pilna apimtimi, iki liepos 25 d. skelbiami dalyviai dar gali keistis; nėra galutinio oficialaus sąrašo, pagal kurį būtų aišku, kiek lietuvių atlikėjų patvirtinta[1].",
+    "question_lt": "Kiek lietuvių atlikėjų bus oficialiai patvirtinta „Mados alchemija 2026“ renginio programoje iki liepos 25 d.?",
+    "market_type": "multi",
+    "options_lt": [
+      "Iki 5 atlikėjų",
+      "6–10 atlikėjų",
+      "11 ir daugiau atlikėjų"
+    ],
+    "probabilities": [
+      0.25,
+      0.45,
+      0.3
+    ],
+    "category": "pramogos/muzika/mada",
+    "resolve_by": "2026-07-25",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Tikrinsime oficialią „Mados alchemija 2026“ komunikaciją, programos paskelbimus ir Lrytas/LRT straipsnius apie renginio dalyvius.",
+    "sources": [
+      "Lrytas"
+    ],
+    "rationale_en": "Fashion+music event hype is huge in summer, especially with influencers and performers involved."
+  }
+]

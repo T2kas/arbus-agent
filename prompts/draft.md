@@ -24,6 +24,7 @@ STEP 2 — DRAFT exactly {count} quick-mode market candidates:
 
 Write the candidates as a clearly numbered list with all fields labeled.
 Do not write full-mode specs — quick mode only.
+{avoid}
 
 HARVESTED HEADLINES:
 {headlines}

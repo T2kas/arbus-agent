@@ -1,43 +1,123 @@
-"""Claude API helpers: web-search research calls and structured-output calls.
+"""LLM backends: Perplexity Sonar (default when only that key is set) and
+Claude (Anthropic API).
 
-Two-phase design on purpose:
-  - research(): Claude + server-side web search, returns free text. Web-search
-    responses carry citations, which are incompatible with structured outputs,
-    so this call never constrains the format.
-  - structure(): no tools, converts research text into a validated Pydantic
-    object via client.messages.parse().
+Two operations, provider-agnostic:
+  - research(): web-grounded free-text generation. Perplexity models search
+    natively; the Claude path uses the server-side web_search tool.
+  - structure(): convert free text into a validated Pydantic object.
+    Perplexity via response_format json_schema (with a plain-JSON fallback),
+    Claude via client.messages.parse().
 """
 
 from __future__ import annotations
 
+import json
 import logging
+import os
+import re
 from pathlib import Path
 from typing import Type, TypeVar
 
-import anthropic
-from pydantic import BaseModel
+import requests
+from pydantic import BaseModel, ValidationError
 
 from . import config
 
 log = logging.getLogger(__name__)
-
-_client: anthropic.Anthropic | None = None
 
 PROMPT_DIR = Path(__file__).resolve().parent.parent / "prompts"
 
 T = TypeVar("T", bound=BaseModel)
 
 
-def client() -> anthropic.Anthropic:
-    global _client
-    if _client is None:
-        _client = anthropic.Anthropic()
-    return _client
+def provider() -> str:
+    forced = os.environ.get("LLM_PROVIDER", "").strip().lower()
+    if forced in ("anthropic", "perplexity"):
+        return forced
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return "anthropic"
+    if os.environ.get("PERPLEXITY_API_KEY"):
+        return "perplexity"
+    raise RuntimeError("Set PERPLEXITY_API_KEY or ANTHROPIC_API_KEY (or LLM_PROVIDER + key)")
 
 
 def load_prompt(name: str, **kwargs: str) -> str:
     text = (PROMPT_DIR / f"{name}.md").read_text(encoding="utf-8")
     return text.format(**kwargs) if kwargs else text
+
+
+# ── Perplexity backend ──────────────────────────────────────────────────────
+
+def perplexity_chat(
+    user: str,
+    system: str | None = None,
+    model: str = config.PERPLEXITY_MODEL,
+    max_tokens: int = 8000,
+    response_format: dict | None = None,
+) -> str:
+    messages = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": user}
+    ]
+    payload: dict = {"model": model, "messages": messages, "max_tokens": max_tokens}
+    if response_format:
+        payload["response_format"] = response_format
+    resp = requests.post(
+        "https://api.perplexity.ai/chat/completions",
+        headers={"Authorization": f"Bearer {os.environ['PERPLEXITY_API_KEY']}"},
+        json=payload,
+        timeout=600,
+    )
+    resp.raise_for_status()
+    return resp.json()["choices"][0]["message"]["content"]
+
+
+def _extract_json(text: str) -> str:
+    """Pull the outermost JSON object out of possibly-chatty model output."""
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.M)
+    start, end = text.find("{"), text.rfind("}")
+    if start == -1 or end <= start:
+        raise ValueError("no JSON object found in model output")
+    return text[start : end + 1]
+
+
+def _structure_perplexity(text: str, output_model: Type[T], max_tokens: int) -> T:
+    schema = output_model.model_json_schema()
+    rf = {"type": "json_schema", "json_schema": {"schema": schema}}
+    try:
+        content = perplexity_chat(
+            text, model=config.PERPLEXITY_STRUCTURE_MODEL,
+            max_tokens=max_tokens, response_format=rf,
+        )
+    except requests.HTTPError as exc:
+        log.warning("perplexity json_schema mode failed (%s); falling back to plain JSON", exc)
+        content = perplexity_chat(
+            text
+            + "\n\nRespond with ONLY a JSON object (no prose, no code fences) matching this "
+            + "JSON schema:\n" + json.dumps(schema),
+            model=config.PERPLEXITY_STRUCTURE_MODEL,
+            max_tokens=max_tokens,
+        )
+    try:
+        return output_model.model_validate_json(_extract_json(content))
+    except (ValidationError, ValueError) as exc:
+        # One repair round: show the model its own output and the error.
+        log.warning("structure output invalid (%s); attempting one repair round", exc)
+        repaired = perplexity_chat(
+            "Fix this JSON so it validates against the schema. Respond with ONLY the "
+            f"corrected JSON object.\n\nSCHEMA:\n{json.dumps(schema)}\n\n"
+            f"ERROR:\n{exc}\n\nJSON:\n{content}",
+            model=config.PERPLEXITY_STRUCTURE_MODEL,
+            max_tokens=max_tokens,
+        )
+        return output_model.model_validate_json(_extract_json(repaired))
+
+
+# ── Anthropic backend ───────────────────────────────────────────────────────
+
+def _anthropic_client():
+    import anthropic
+
+    return anthropic.Anthropic()
 
 
 def _web_search_tool(max_uses: int) -> dict:
@@ -54,11 +134,11 @@ def _web_search_tool(max_uses: int) -> dict:
     }
 
 
-def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000) -> str:
-    """Run a web-search-enabled research turn; return the concatenated text output."""
+def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens: int) -> str:
+    client = _anthropic_client()
     messages: list[dict] = [{"role": "user", "content": user_prompt}]
     for attempt in range(6):
-        with client().messages.stream(
+        with client.messages.stream(
             model=config.MODEL,
             max_tokens=max_tokens,
             system=system,
@@ -69,7 +149,6 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
             resp = stream.get_final_message()
 
         if resp.stop_reason == "pause_turn":
-            # Server-side tool loop hit its iteration limit — resume where it left off.
             messages = [messages[0], {"role": "assistant", "content": resp.content}]
             log.info("research: pause_turn, resuming (attempt %d)", attempt + 1)
             continue
@@ -77,21 +156,37 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
             raise RuntimeError("Claude refused the research request")
         if resp.stop_reason == "max_tokens":
             log.warning("research: hit max_tokens; output may be truncated")
-
         return "".join(b.text for b in resp.content if b.type == "text")
 
     raise RuntimeError("research: too many pause_turn continuations")
 
 
-def structure(text: str, output_model: Type[T], system: str | None = None, max_tokens: int = 16000) -> T:
-    """Convert free text into a validated instance of `output_model`."""
-    resp = client().messages.parse(
+def _structure_anthropic(text: str, output_model: Type[T], max_tokens: int) -> T:
+    client = _anthropic_client()
+    resp = client.messages.parse(
         model=config.MODEL,
         max_tokens=max_tokens,
-        system=system or anthropic.NOT_GIVEN,
         messages=[{"role": "user", "content": text}],
         output_format=output_model,
     )
     if resp.parsed_output is None:
         raise RuntimeError(f"structure: no parsed output (stop_reason={resp.stop_reason})")
     return resp.parsed_output
+
+
+# ── Public API ──────────────────────────────────────────────────────────────
+
+def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000) -> str:
+    """Web-grounded free-text generation."""
+    if provider() == "perplexity":
+        return perplexity_chat(
+            user_prompt, system=system, model=config.PERPLEXITY_MODEL, max_tokens=max_tokens
+        )
+    return _research_anthropic(user_prompt, system, max_uses, max_tokens)
+
+
+def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:
+    """Convert free text into a validated instance of `output_model`."""
+    if provider() == "perplexity":
+        return _structure_perplexity(text, output_model, max_tokens)
+    return _structure_anthropic(text, output_model, max_tokens)

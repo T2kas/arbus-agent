@@ -2,6 +2,25 @@
 
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
+
+def _load_dotenv() -> None:
+    """Minimal .env loader (repo root); real env vars always win."""
+    env_path = Path(__file__).resolve().parent.parent / ".env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, _, value = line.partition("=")
+            if value.strip():
+                os.environ.setdefault(key.strip(), value.strip())
+
+
+_load_dotenv()
+
 MODEL = "claude-opus-4-8"
 
 # ── RSS sources ─────────────────────────────────────────────────────────────
@@ -54,7 +73,14 @@ DEDUPE_LOOKBACK_DAYS = 60     # compare against markets created in this window
 
 # ── Verification ────────────────────────────────────────────────────────────
 VERIFY_CHUNK_SIZE = 8         # candidates per verification LLM call
-PERPLEXITY_MODEL = "sonar-pro"
+PERPLEXITY_MODEL = "sonar-pro"            # research + verification (search-native)
+# sonar-pro for structuring too: the small "sonar" model corrupts Lithuanian
+# diacritics when copying text (tested 2026-07-13).
+PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
+
+# Draft in chunks: Perplexity output caps around 8K tokens, so one call can't
+# reliably carry 35 candidates through draft + structure.
+DRAFT_CHUNK_SIZE = 15
 
 # ── Paths (relative to repo root) ───────────────────────────────────────────
 DB_PATH = "data/arbus.db"
