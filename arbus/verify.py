@@ -4,9 +4,10 @@ Uses Perplexity Sonar when PERPLEXITY_API_KEY is set (search-native, cited),
 otherwise Claude + web search. Candidates are checked in chunks to bound cost.
 
 Verdicts:
-  OPEN     — outcome genuinely undecided as of now   -> keep
-  DECIDED  — already resolved / event already happened -> reject
-  UNCLEAR  — could not verify / sources conflict      -> keep but flag
+  OPEN     — outcome genuinely undecided, setup factually sound -> keep
+  DECIDED  — already resolved / event already happened          -> reject
+  WRONG    — market setup contradicts facts (bad date/options)  -> reject
+  UNCLEAR  — could not verify / sources conflict                -> keep but flag
 """
 
 from __future__ import annotations
@@ -21,26 +22,39 @@ from .schemas import Candidate
 
 log = logging.getLogger(__name__)
 
-VERDICT_RE = re.compile(r"^\s*\**(\d+)\**\s*[:.\-]\s*\**(OPEN|DECIDED|UNCLEAR)\b\**\s*[-—:]?\s*(.*)$", re.M)
+VERDICT_RE = re.compile(r"^\s*\**(\d+)\**\s*[:.\-]\s*\**(OPEN|DECIDED|WRONG|UNCLEAR)\b\**\s*[-—:]?\s*(.*)$", re.M)
 
 SYSTEM = (
     "You are a fact-checker for a Lithuanian prediction-market app. "
-    "Verify the current status of each item using live web information. Be strict: "
+    "Verify each item against live web information. Be strict: "
     "if the event already happened or the outcome is publicly known, the verdict is "
-    "DECIDED. If sources conflict or you cannot verify, say UNCLEAR — never guess."
+    "DECIDED. If the market's setup contradicts the facts, the verdict is WRONG. "
+    "If sources conflict or you cannot verify, say UNCLEAR — never guess."
 )
 
 
 def _verify_prompt(cands: list[Candidate], today: date) -> str:
     lines = [
         f"Today is {today.isoformat()}. For each numbered prediction-market question below, "
-        "check the live web and decide whether its outcome is still genuinely open, already "
-        "decided (event happened / result known / event cancelled), or unverifiable.\n",
+        "check the live web and decide:\n",
+        "- DECIDED: the outcome is already known / the event already happened or was cancelled.",
+        "- WRONG: the setup contradicts facts — e.g. the resolution date does not match the "
+        "actual event schedule (event ends earlier or later), the listed options are not "
+        "factually valid or exhaustive as of today (teams already eliminated, wrong "
+        "participants, misnamed entities), or the premise is false.",
+        "- OPEN: genuinely undecided and the setup is factually sound.",
+        "- UNCLEAR: cannot verify.\n",
         "Answer with EXACTLY one line per item, format:",
-        "N: OPEN|DECIDED|UNCLEAR — short reason with source\n",
+        "N: OPEN|DECIDED|WRONG|UNCLEAR — short reason with source\n",
     ]
     for i, c in enumerate(cands, 1):
-        lines.append(f"{i}. {c.question_lt} (resolution: {c.resolution_hint_lt}; resolves by {c.resolve_by})")
+        opts = ""
+        if c.market_type == "multi":
+            opts = f"; options: {' / '.join(c.options_lt)}"
+        lines.append(
+            f"{i}. {c.question_lt} (resolution: {c.resolution_hint_lt}; "
+            f"resolves by {c.resolve_by}{opts})"
+        )
     return "\n".join(lines)
 
 

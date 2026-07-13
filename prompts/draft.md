@@ -9,6 +9,12 @@ STEP 1 — SCOUT (use web search extensively):
   events (basketball schedules, NBA Lithuanians, award shows like MAMA,
   releases, votes in the Seimas, festivals), and ongoing debates. Search in
   Lithuanian.
+- GO INTO SOCIAL MEDIA: search what big Lithuanian TikTok/Instagram/YouTube
+  creators are doing right now — current follower/subscriber counts (find
+  ones approaching round milestones), feuds, new projects, viral videos.
+  Check Spotify Top 50 Lietuva and YouTube Trending LT. At least a third of
+  the batch must come from this culture/influencer/hype territory, including
+  1-3 absurd-but-verifiable "negi tikrai galima tai prognozuoti??" markets.
 - APPLY THE ATTENTION GATE to every topic: search for engagement evidence
   (comment counts, multiple outlets covering it, social buzz). If fewer than
   ~10% of young Lithuanians would recognize the subject and have an opinion,
@@ -28,8 +34,10 @@ STEP 2 — DRAFT exactly {count} quick-mode market candidates:
   one-line English rationale that names the attention evidence (e.g. "300+
   comments on Delfi", "every outlet covered it").
 - Roughly 70% binary ("Ar ...?" with Taip/Ne), 30% multi-outcome (3-6 options).
-- Duration mix: ~30% resolving within 48 hours, ~50% within days-to-weeks,
-  ~20% one month or later.
+- Multi-outcome options must be factually valid and exhaustive AS OF TODAY —
+  check the current state (who is still in the competition, who is actually
+  participating) before writing options.
+{timing}
 - Probabilities must reflect your genuine estimate, not 50/50 defaults.
 - Remember: no gambling vocabulary anywhere in user-facing text.
 

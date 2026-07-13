@@ -47,6 +47,28 @@ or consultant is), niche industry events, procedural politics without drama,
 minor officials, B2B/business-press stories, anything only one outlet wrote
 one article about with 5 comments.
 
+MARKET ARCHETYPES — actively use these; at least a THIRD of every batch
+must be culture / influencers / internet-hype territory:
+
+- Follower & subscriber milestones: "Ar [kūrėjas] pasieks 500 tūkst. sekėjų
+  Instagram iki rugsėjo 1 d.?" — verifiable from the public profile count.
+  Search the actual current follower counts of big Lithuanian creators and
+  find ones approaching round milestones.
+- Charts & views: Spotify Top 50 Lietuva positions ("Ar [daina] išsilaikys
+  Top 10 iki ...?"), YouTube Trending LT, video/stream view milestones.
+- Sold-out drama: "Ar [koncertas/festivalis] bus išparduotas iki ...?"
+- Awards & shows: MAMA apdovanojimai, TV projektų nugalėtojai, Eurovizijos
+  atrankos — who wins, who gets nominated.
+- Influencer/celebrity events the internet argues about: relationships,
+  collabs, comebacks, new channels/projects — as long as resolution is
+  publicly checkable.
+- "Negi tikrai galima tai prognozuoti??" absurdity (Polymarket energy):
+  weird-but-verifiable markets — record temperatures, ar liepą Vilniuje
+  snigs, city quirks, viral phenomena. 1-3 per batch.
+- Informative/useful markets where knowing the answer helps people: degalų
+  kaina, elektros kaina (NordPool LT), infliacija, būsto paskolų palūkanos,
+  viešojo transporto sprendimai.
+
 HEADLINE CLARITY — the question text is the product:
 
 - A user must understand the question in ONE reading, instantly.

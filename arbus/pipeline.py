@@ -37,6 +37,21 @@ def run_batch(
     batch_id = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M")
     result = BatchResult(batch_id=batch_id)
 
+    min_resolve: date | None = None
+    if config.MIN_RESOLVE_DATE:
+        launch = date.fromisoformat(config.MIN_RESOLVE_DATE)
+        if launch > today:
+            min_resolve = launch
+    if min_resolve:
+        timing = (
+            f"- CRITICAL: the app goes live on {min_resolve.isoformat()}. Every market MUST "
+            f"resolve on {min_resolve.isoformat()} or later — never earlier. Spread the "
+            "dates: most within 2-3 weeks after that day, ~20% a month or more later."
+        )
+    else:
+        timing = ("- Duration mix: ~30% resolving within 48 hours, ~50% within "
+                  "days-to-weeks, ~20% one month or later.")
+
     progress("Harvesting Lithuanian headlines...")
     items = harvest.harvest()
     if not items:
@@ -62,6 +77,7 @@ def run_batch(
             count=str(n),
             headlines=headlines,
             avoid=avoid,
+            timing=timing,
         )
         draft_text = llm.research(draft_prompt, system=system, max_uses=16, max_tokens=8000)
         structure_prompt = llm.load_prompt("structure", draft=draft_text)
@@ -79,7 +95,7 @@ def run_batch(
     accepted_cands: list[Candidate] = []
 
     for cand in candidates:
-        fixed, reason = validate.validate_candidate(cand, today)
+        fixed, reason = validate.validate_candidate(cand, today, min_resolve=min_resolve)
         if reason:
             result.rejected.append((cand, reason))
             continue
@@ -97,11 +113,12 @@ def run_batch(
         verdicts = verify.verify_candidates(accepted_cands, today)
 
     for cand, (verdict, note) in zip(accepted_cands, verdicts):
-        if verdict == "DECIDED":
-            result.rejected.append((cand, f"already decided: {note}"))
+        if verdict in ("DECIDED", "WRONG"):
+            label = "already decided" if verdict == "DECIDED" else "factually flawed"
+            result.rejected.append((cand, f"{label}: {note}"))
             store.insert_candidate(conn, cand, batch_id, "rejected",
                                    verify_verdict=verdict, verify_note=note,
-                                   reject_reason="already decided")
+                                   reject_reason=label)
             continue
         status = "needs_review" if verdict == "UNCLEAR" else "candidate"
         db_id = store.insert_candidate(conn, cand, batch_id, status,
@@ -109,7 +126,7 @@ def run_batch(
         result.accepted.append((db_id, cand, verdict, note))
 
     for cand, reason in result.rejected:
-        if not reason.startswith("already decided"):
+        if not reason.startswith(("already decided", "factually flawed")):
             store.insert_candidate(conn, cand, batch_id, "rejected", reject_reason=reason)
     conn.commit()
     conn.close()

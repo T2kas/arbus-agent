@@ -69,7 +69,9 @@ def is_duplicate(question: str, existing_questions: list[str]) -> str | None:
     return None
 
 
-def validate_candidate(cand: Candidate, today: date) -> tuple[Candidate | None, str | None]:
+def validate_candidate(
+    cand: Candidate, today: date, min_resolve: date | None = None
+) -> tuple[Candidate | None, str | None]:
     """Validate and normalize one candidate.
 
     Returns (fixed_candidate, None) on success or (None, reason) on rejection.
@@ -93,6 +95,8 @@ def validate_candidate(cand: Candidate, today: date) -> tuple[Candidate | None, 
         return None, f"unparseable resolve_by: {cand.resolve_by!r}"
     if resolve_by <= today:
         return None, f"resolve_by {cand.resolve_by} is not in the future"
+    if min_resolve and resolve_by < min_resolve:
+        return None, f"resolve_by {cand.resolve_by} is before app launch ({min_resolve})"
     if resolve_by > today + timedelta(days=365):
         return None, f"resolve_by {cand.resolve_by} is more than a year out"
 

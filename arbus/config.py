@@ -42,6 +42,10 @@ HARVEST_MAX_HEADLINES = 120
 
 # ── Batch shape ─────────────────────────────────────────────────────────────
 DEFAULT_BATCH_SIZE = 35
+
+# App goes live in August — until then no market may resolve earlier than this.
+# Set to "" once live (then only "must be in the future" applies).
+MIN_RESOLVE_DATE = "2026-08-01"
 # Duration mix targets (informational — enforced softly via prompt + report)
 DURATION_MIX = {"short": 0.30, "medium": 0.50, "long": 0.20}
 # Boundaries in days used to (re)classify duration from resolve_by

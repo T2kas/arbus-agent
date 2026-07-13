@@ -100,6 +100,16 @@ def test_mixed_sources_filtered_to_urls():
     assert reason is None and fixed.sources == ["https://www.lrt.lt/x"]
 
 
+def test_min_resolve_date_enforced():
+    from datetime import date as d
+    cand = make(resolve_by="2026-07-20")
+    fixed, reason = validate.validate_candidate(cand, TODAY, min_resolve=d(2026, 8, 1))
+    assert fixed is None and "launch" in reason
+    cand = make(resolve_by="2026-08-05")
+    fixed, reason = validate.validate_candidate(cand, TODAY, min_resolve=d(2026, 8, 1))
+    assert reason is None
+
+
 def test_duplicate_detected_despite_wording():
     existing = ["Ar Žalgiris liepos 20 d. laimės LKL rungtynes prieš Rytą?"]
     assert validate.is_duplicate("Ar rungtynes prieš Rytą liepos 20 d. laimės Žalgiris?", existing)

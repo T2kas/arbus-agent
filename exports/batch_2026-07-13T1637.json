@@ -1,0 +1,198 @@
+[
+  {
+    "id": 25,
+    "verify_verdict": "OPEN",
+    "verify_note": "dar yra laiko iki 2026-07-20, o naujausių pranešimų apie Seimo nario mandato atsisakymą būtent dėl mero posto artimiausiomis dienomis nerasta[2]",
+    "question_lt": "Ar iki liepos 20 d. bent vienas Seimo narys realiai atsisakys mandato dėl mero posto?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "politika",
+    "resolve_by": "2026-07-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Remsimės Seimo ir Vyriausiosios rinkimų komisijos bei pagrindinių naujienų portalų pranešimais apie oficialiai priimtus atsistatydinimus iš Seimo mandato dėl mero pareigų.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/lietuvoje/2/2988077/bent-20-seimo-nariu-skelbiasi-pasirenge-atsisakyti-mandato-del-mero-posto"
+    ],
+    "rationale_en": "The mass move of MPs towards mayor posts is a prominent story in Lithuanian media and prompts speculation on who will actually resign first."
+  },
+  {
+    "id": 27,
+    "verify_verdict": "OPEN",
+    "verify_note": "Europos čempionatas ir Lietuvos moterų rinktinės pasirodymas jame dar tęsiasi, galutiniai rezultatai ir aukščiausias pasiektas etapas iki 2026-08-31 dar nėra pilnai žinomi[ ]",
+    "question_lt": "Koks bus geriausias Lietuvos moterų krepšinio rinktinės pasiekimas Europos čempionate iki rugpjūčio 31 d.?",
+    "market_type": "multi",
+    "options_lt": [
+      "Grupėje iškovos 0–1 pergalę",
+      "Grupėje iškovos bent 2 pergales, bet nepateks į atkrintamąsias",
+      "Pateks į atkrintamąsias (aštuntfinalį ar toliau)",
+      "Nepasieks jokios pergalės"
+    ],
+    "probabilities": [
+      0.25,
+      0.4,
+      0.25,
+      0.1
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remsimės oficialiais Europos čempionato rezultatais (FIBA, LKF, pagrindiniai sporto portalai) ir suskaičiuosime pergalių skaičių bei etapą, kurį pasiekė Lietuvos rinktinė.",
+    "sources": [
+      "http://www.lrytas.lt/sportas/krepsinis/2026/07/13/news/moteru-krepsinio-rinktine-rengsis-europos-cempionatui-be-savo-lyderiu-43131957/"
+    ],
+    "rationale_en": "News that the women’s national team will prepare for EuroBasket without leaders raises public debate and expectations about how far they can go."
+  },
+  {
+    "id": 28,
+    "verify_verdict": "OPEN",
+    "verify_note": "LEA skelbia tik iki 2026-07-?? atnaujintus A95 vidutinių kainų duomenis, bet palyginimui reikalingi 2026-07-15 ir 2026-07-31 rodikliai dar nėra abu žinomi[ ]",
+    "question_lt": "Ar vidutinė benzino A95 kaina Lietuvoje pagal LEA duomenis iki liepos 31 d. bus mažesnė nei liepos 15 d. duomenimis?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-07-31",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Palyginsime Lietuvos energetikos agentūros (LEA) skelbiamą vidutinę benzino A95 kainą liepos 15 d. su kainomis liepos 31 d.; jei liepos 31 d. reikšmė mažesnė, laikysime „Taip“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/eismas/7/2989220/lea-pirmadieni-benzinas-ir-dyzelinas-vel-pigo",
+      "http://www.lrytas.lt/auto/rinka/2026/07/13/news/salies-degalinese-ir-vel-pasikeitusios-kainos-43130226/"
+    ],
+    "rationale_en": "Fuel price changes are widely reported and directly affect young drivers, prompting constant discussion about whether prices will keep falling."
+  },
+  {
+    "id": 29,
+    "verify_verdict": "OPEN",
+    "verify_note": "vertinamas laikotarpis iki 2026-07-21 dar nepasibaigė, o pranešimų apie išskirtinai dideles spūstis Kaune dėl masinių renginių ar ribojimų šiame intervale dar nefiksuota pagrindiniuose portaluose[ ]",
+    "question_lt": "Ar Kaune iki liepos 21 d. bent vieną dieną bus fiksuota didelė spūstis dėl masinio renginio ar eismo ribojimų, apie kurią praneš pagrindiniai naujienų portalai?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "kita",
+    "resolve_by": "2026-07-21",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Remsimės Lrytas, 15min, LRT ir Kauno miesto savivaldybės pranešimais apie reikšmingas spūstis ar eismo ribojimus Kaune, susijusius su renginiais ar darbais.",
+    "sources": [
+      "http://www.lrytas.lt/auto/radaras/2026/07/13/news/kauniecius-ispeja-del-spusties-pasiimkit-vandens-ir-deginimosi-kilimelius-43130902/"
+    ],
+    "rationale_en": "Kaunas traffic warnings around big events are covered in mass media and complained about on social networks, especially by young drivers."
+  },
+  {
+    "id": 30,
+    "verify_verdict": "OPEN",
+    "verify_note": "iki 2026-08-15 dar yra laiko, iki šiol pagrindiniuose naujienų portaluose nėra plačiai aprašyto naujo incidento ar skandalo, kuris aiškiai atitiktų sąlygą dėl Nacionalinio stadiono statybų ar jų transliacijos[ ]",
+    "question_lt": "Ar iki rugpjūčio 15 d. bus plačiai aprašytas bent vienas incidentas ar skandalas, susijęs su Nacionalinio stadiono statybų eiga ar jų transliacija visą parą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "kita",
+    "resolve_by": "2026-08-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Stebėsime pagrindinius naujienų portalus; jei pasirodys plačiai aptariamas (kelios didžiosios žiniasklaidos priemonės, daug komentarų) pranešimas apie incidentą ar konfliktą dėl stadiono statybų ar jų transliacijos, laikysime „Taip“.",
+    "sources": [
+      "http://www.lrytas.lt/verslas/rinkos-pulsas/2026/07/13/news/nuo-siol-nacionalinio-stadiono-statybos-bus-transliuojamos-visa-para-43130559/"
+    ],
+    "rationale_en": "The national stadium is a long-running public saga; the new 24/7 construction livestream is a fresh hook likely to generate scandal or memes."
+  },
+  {
+    "id": 31,
+    "verify_verdict": "OPEN",
+    "verify_note": "FIBA Čempionų lygos 2026–27 m. sezono grupės etapo tvarkaraštis ir pirmosios trys „Ryto“ rungtynės dar nėra sužaistos ir jų pergalių skaičius iki 2026-10-31 dar nežinomas[ ]",
+    "question_lt": "Koks bus Vilniaus „Ryto“ pergalių skaičius per pirmas tris FIBA Čempionų lygos grupės etapo rungtynes iki spalio 31 d.?",
+    "market_type": "multi",
+    "options_lt": [
+      "0 pergalių",
+      "1 pergalė",
+      "2 pergalės",
+      "3 pergalės"
+    ],
+    "probabilities": [
+      0.1,
+      0.3,
+      0.35,
+      0.25
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-10-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remsimės FIBA ir „Ryto“ oficialiais kanalais bei LRT/Lrytas/15min rezultatais, suskaičiuosime pergales per pirmas tris grupės etapo rungtynes.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2989243/paaiskejo-ryto-ir-juventus-tvarkarastis-fiba-cempionu-lygoje"
+    ],
+    "rationale_en": "Rytas in the Basketball Champions League is a key storyline for Lithuanian basketball fans, with published schedules inviting speculation about early performance."
+  },
+  {
+    "id": 32,
+    "verify_verdict": "OPEN",
+    "verify_note": "iki 2026-08-31 dar nepasibaigęs laikotarpis, o Krašto apsaugos ministerijos ir NATO pranešimuose kol kas nėra aiškiai įvardyto naujo oro gynybos misijos elemento Lietuvoje (papildomi lėktuvai, nauja bazė ar išplėsti įgaliojimai) šiame periode[ ]",
+    "question_lt": "Ar iki rugpjūčio 31 d. Lietuvoje bus oficialiai paskelbta apie naują NATO oro gynybos misijos elementą – papildomus lėktuvus, bazę ar išplėstus įgaliojimus?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "kita",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinsime Krašto apsaugos ministerijos, NATO ir didžiųjų naujienų portalų pranešimus; skaičiuosime tik naujai paskelbtus sprendimus dėl oro gynybos misijos Lietuvoje.",
+    "sources": [
+      "http://www.lrytas.lt/lietuvosdiena/aktualijos/2026/07/13/news/d-matulionis-apie-nato-oro-gynybos-misija-lietuvoje-dislokuotu-lektuvu-pilotai-tures-didesnius-igaliojimus-43129946/",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2989246/nato-naikintuvai-keturis-kartus-kilo-atpazinti-ir-lydeti-rusijos-orlaiviu"
+    ],
+    "rationale_en": "NATO air defence mission changes get wide media coverage and are closely followed by security-conscious Lithuanians."
+  },
+  {
+    "id": 33,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "Search results confirm the festival dates and venue, but they do not state the actual number of participating restaurants, so the outcome cannot be verified yet.[1][2]",
+    "question_lt": "Kiek restoranų realiai dalyvaus „Keptos duonos festivalyje“ Druskininkuose iki liepos 21 d. renginio pabaigos?",
+    "market_type": "multi",
+    "options_lt": [
+      "15 ar mažiau restoranų",
+      "16–20 restoranų",
+      "21 ar daugiau restoranų"
+    ],
+    "probabilities": [
+      0.2,
+      0.5,
+      0.3
+    ],
+    "category": "kita",
+    "resolve_by": "2026-07-21",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Remsimės Druskininkų savivaldybės ir festivalio organizatorių oficialia informacija bei žiniasklaidos straipsniais, kuriuose nurodytas dalyvaujančių restoranų skaičius.",
+    "sources": [
+      "http://www.lrytas.lt/skonis/gurmanu-klubas/2026/07/13/news/druskininkai-kviecia-i-skaniausia-vasaros-savaitgali-apie-20-restoranu-suvienys-jegas-pirmajame-keptos-duonos-festivalyje--43130702/"
+    ],
+    "rationale_en": "A quirky “fried bread festival” with ~20 restaurants is a fun summer event getting lifestyle coverage and social media buzz among young Lithuanians."
+  }
+]
