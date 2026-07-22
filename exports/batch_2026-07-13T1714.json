@@ -1,0 +1,217 @@
+[
+  {
+    "id": 62,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nėra pateikta oficialių 2026 m. EuroBasket moterų turnyro rezultatų ar Lietuvos rinktinės sudėties/patekimo į atkrintamąsias iki šios dienos, todėl pagal pateiktus šaltinius to patvirtinti negalima.",
+    "question_lt": "Ar Lietuvos moterų krepšinio rinktinė su dabartine sudėtimi pateks į Europos čempionato atkrintamąsias varžybas 2026 m.?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "sportas-krepsinis",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal oficialius Europos moterų krepšinio čempionato rezultatus FIBA ir LKF svetainėse, ar rinktinė pateko į atkrintamąsias varžybas.",
+    "sources": [
+      "http://www.lrytas.lt/sportas/krepsinis/2026/07/13/news/moteru-krepsinio-rinktine-rengsis-europos-cempionatui-be-savo-lyderiu-43131957/[3]"
+    ],
+    "rationale_en": "Lrytas highlights that the women’s national team is preparing without its leaders, which sparked concern and debate in the basketball community about their chances in the upcoming EuroBasket."
+  },
+  {
+    "id": 63,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "pateiktuose šaltiniuose nėra 2026-08-05 12:00 „Spotify Top 50 Lietuva“ reitingo, todėl aukščiausiai reitinguotos lietuviškos dainos neįmanoma patikrinti.[3][8]",
+    "question_lt": "Kas 2026 m. rugpjūčio 5 d. 12:00 val. pagal „Spotify Top 50 Lietuva“ bus aukščiausiai reitinguota lietuviška daina?",
+    "market_type": "multi",
+    "options_lt": [
+      "Jessica Shy",
+      "8 Kambarys",
+      "Omerta",
+      "Kitas lietuviškas atlikėjas"
+    ],
+    "probabilities": [
+      0.3,
+      0.25,
+      0.2,
+      0.25
+    ],
+    "category": "muzika-topai",
+    "resolve_by": "2026-08-05",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal „Spotify Top 50 Lietuva“ reitingą 2026-08-05 12:00 val., nustatant, kurios lietuviškos dainos atlikėjas tuo metu yra aukščiausiai sąraše.",
+    "sources": [
+      "https://open.spotify.com/playlist/37i9dQZEVXbKcVj5aD1ZEK[4]"
+    ],
+    "rationale_en": "The Lithuanian Spotify Top 50 is widely discussed, and Jessica Shy, 8 Kambarys and Omerta are among the most streamed youth artists whose songs often dominate charts and social media."
+  },
+  {
+    "id": 64,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nėra pateikto oficialaus Lietuvos statistikos departamento 2026 m. liepos mėn. metinės infliacijos rodiklio, todėl ar jis bus ≥ 3,0 % nepatikrinama iš šių šaltinių.",
+    "question_lt": "Ar 2026 m. liepos mėnesio infliacijos metinis rodiklis Lietuvoje, skelbiamas Statistikos departamento, bus ≥ 3,0 %?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "ekonomika-kainos",
+    "resolve_by": "2026-08-08",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal oficialų 2026 m. liepos mėnesio metinės infliacijos rodiklį, paskelbtą Lietuvos statistikos departamento svetainėje, ar jis yra ne mažesnis kaip 3,0 %.",
+    "sources": [
+      "https://madeinvilnius.lt/en/news/Lithuanian-news/Lithuanian-youth-are-most-concerned-about-rising-prices/[1]",
+      "https://osp.stat.gov.lt/statistiniu-rodikliu-analize[5]"
+    ],
+    "rationale_en": "Eurobarometer-based reporting shows rising prices are the top concern for Lithuanian youth, and inflation figures are constantly covered in media and online discussions."
+  },
+  {
+    "id": 65,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nėra duomenų apie „Nacionalinio stadiono statybų“ „YouTube“ kanalo peržiūras ar mėnesio sumą nuo 2026-07-15 iki 2026-08-15, todėl rezultato patvirtinti negalima.",
+    "question_lt": "Ar iki 2026-08-15 „Nacionalinio stadiono statybų“ tiesioginės transliacijos per mėnesį „YouTube“ kanale pasieks bent 150 tūkst. peržiūrų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "miesto-gyvenimas-infrastruktura",
+    "resolve_by": "2026-08-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal bendrą peržiūrų skaičių oficialiame Nacionalinio stadiono statybų transliacijos „YouTube“ kanale nuo 2026-07-15 iki 2026-08-15, ar jis siekė bent 150 tūkst. peržiūrų.",
+    "sources": [
+      "http://www.lrytas.lt/verslas/rinkos-pulsas/2026/07/13/news/nuo-siol-nacionalinio-stadiono-statybos-bus-transliuojamos-visa-para-43130559/[6]"
+    ],
+    "rationale_en": "The National Stadium project has generated huge public interest and memes for years, and news about a 24/7 live construction stream triggered many reactions and comments, making view-count bets natural."
+  },
+  {
+    "id": 66,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nėra pateiktų oficialių „Mados alchemija 2026“ renginio ir bilietų platintojų pranešimų apie „sold out“ statusą, todėl iki 2026-08-20 to patikrinti neįmanoma.",
+    "question_lt": "Ar 2026 m. „Mados alchemija 2026“ renginys Kėdainiuose bus oficialiai paskelbtas išparduotu iki 2026-08-20?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "kultura-renginiai",
+    "resolve_by": "2026-08-20",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal renginio organizatorių ir bilietų platinimo platformų pranešimus, ar iki 2026-08-20 bilietai paskelbti kaip „sold out“.",
+    "sources": [
+      "http://www.lrytas.lt/zmones/stilius/2026/07/13/news/paskutine-proga-patirti-stebukla-kodel-mados-alchemija-2026-yra-laukiamiausias-sios-vasaros-renginys--43131819/[7]",
+      "https://www.lrt.lt/naujienos/laisvalaikis/13/2989302/kedainiai-taps-zaliaja-mados-sostine-laukia-viesas-podiumas-ir-50-tukst-agurku[8]"
+    ],
+    "rationale_en": "Both Lrytas and LRT call the event one of the most anticipated summer happenings in Kėdainiai, and the articles have many comments and social media attention, fuelling speculation about full sellout."
+  },
+  {
+    "id": 67,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nėra pateikto 2026-08-10 A95 kainoraščio iš „Circle K“, „Neste“ ar „Viada“, todėl vidutinės kainos ≥ 1,70 €/l neįmanoma patvirtinti.",
+    "question_lt": "Ar benzino A95 vidutinė kaina Lietuvoje 2026-08-10 bus ≥ 1,70 €/l pagal pagrindinių degalinių tinklų viešai skelbiamus kainoraščius?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.52,
+      0.48
+    ],
+    "category": "ekonomika-degalu-kainos",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal 2026-08-10 dienos A95 benzino kainas, skelbiamas didžiausių tinklų („Circle K“, „Neste“, „Viada“) svetainėse ir degalų kainų apžvalgose, apskaičiuojant, ar vidutinė kaina yra bent 1,70 €/l.",
+    "sources": [
+      "http://www.lrytas.lt/auto/rinka/2026/07/13/news/salies-degalinese-ir-vel-pasikeitusios-kainos-43130226/[9]"
+    ],
+    "rationale_en": "Fuel price changes are constantly covered by news portals and youth groups, and a fresh Lrytas piece about new price moves has many reactions and comments, inviting bets on future levels."
+  },
+  {
+    "id": 68,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nėra pateiktų oficialių NBA/NBA Europe pranešimų apie Artūro Karnišovo pareigų pradžią iki 2026-09-01, todėl patikrinti negalima.",
+    "question_lt": "Ar Artūras Karnišovas iki 2026-09-01 oficialiai pradės eiti „NBA Europe“ konsultanto pareigas, kaip anonsuoja žiniasklaida?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.7,
+      0.3
+    ],
+    "category": "sportas-krepsinis",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal oficialius NBA ir „NBA Europe“ pranešimus bei Lietuvos žiniasklaidos publikacijas, ar Karnišovas iki 2026-09-01 oficialiai pradėjo eiti šias pareigas.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2989299/ziniasklaida-karnisovas-uzims-nba-europe-konsultanto-pareigas[13]",
+      "http://www.lrytas.lt/sportas/krepsinis/2026/07/13/news/arturas-karnisovas-gavo-darba-europoje-tures-rysi-ir-su-nba-komisaru-43130898/[14]"
+    ],
+    "rationale_en": "Karnišovas’ new role is widely discussed in the basketball community and major portals, sparking debate about Lithuanian influence in the NBA and Europe, which makes for an engaging speculation market."
+  },
+  {
+    "id": 69,
+    "verify_verdict": "OPEN",
+    "verify_note": "ateities įvykis, nėra viešų įrašų, aiškiai patvirtinančių, kad Justina Partikė vėl poroje su straipsnyje minimu buvusiu mylimuoju iki 2026-08-31; santykių statusas ir tokio įrašo galimybė dar gali pasikeisti[1][4][5]",
+    "question_lt": "Ar Justina Partikė iki 2026-08-31 viešai socialiniuose tinkluose patvirtins, kad vėl yra poroje su straipsnyje minimu buvusiu mylimuoju?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.48,
+      0.52
+    ],
+    "category": "interneto-kultura-influenceriai",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal viešus Justinos Partikės įrašus „Instagram“, „TikTok“ ar „Facebook“, kuriuose aiškiai įvardijama, kad jie vėl yra poroje, paskelbtus iki 2026-08-31 imtinai.",
+    "sources": [
+      "http://www.lrytas.lt/zmones/veidai-ir-vardai/2026/07/13/news/irasas-apie-justina-partike-pribloske-internautus-atgaivino-santykius-su-buvusiu-mylimuoju--43130998/[15]"
+    ],
+    "rationale_en": "The Lrytas article on Partikė’s relationship drama “shocked internet users” and drew many comments; as a well-known influencer among young audiences, her relationship status naturally fuels speculation."
+  },
+  {
+    "id": 70,
+    "verify_verdict": "OPEN",
+    "verify_note": "straipsniai apie sugrąžintas pensijų įmokas ir gyventojų elgesį su jomis iki 2026-09-01 dar gali būti publikuoti, o dabartiniai paieškos rezultatai nerodo, kad toks konkretus reikalavimas (≥3 portalai su naujais straipsniais po 2026-07-13) jau būtų įvykdytas ar negalimas[1][4][5]",
+    "question_lt": "Ar iki 2026-09-01 bent 3 didieji naujienų portalai (LRT, Delfi, 15min, Lrytas, VZ) paskelbs naują straipsnį apie tai, kaip gyventojai leidžia sugrąžintas pensijų įmokas?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.62,
+      0.38
+    ],
+    "category": "ekonomika-asmeniniai-finansai",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus išspręsta suskaičiavus naujus straipsnius, paskelbtus po 2026-07-13 minėtuose portaluose, kuriuose aiškiai nagrinėjama tema apie sugrąžintas pensijų įmokas ir gyventojų elgesį su jomis; rinka laikoma įvykusia, jei tokių straipsnių bus bent trijuose skirtinguose portaluose.",
+    "sources": [
+      "http://www.lrytas.lt/verslas/rinkos-pulsas/2026/07/13/news/pensiju-imokoms-sugrizus-i-gyventoju-saskaitas-pigu-lt-stebi-augancius-pardavimus-43130229/[16]",
+      "https://www.lrt.lt/naujienos/verslas/4/2989253/taurimas-valys-buiti-gerinti-pensiju-lesomis-finansinis-zmoniu-nerastingumas[17]"
+    ],
+    "rationale_en": "Multiple portals are already analysing how people are spending returned pension contributions, and this topic directly affects many working-age people, driving demand for more explanatory content."
+  }
+]
