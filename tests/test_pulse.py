@@ -148,6 +148,40 @@ def test_youtube_inert_without_key(monkeypatch):
     assert pulse._youtube(cap=10) == []
 
 
+# ── TikTok Creative Center JSON ──────────────────────────────────────────────
+
+TIKTOK_HASHTAGS = {
+    "data": {"list": [
+        {"hashtag_name": "lietuva", "rank": 1, "video_views": 1200000},
+        {"hashtag_name": "vilnius", "rank": 2},
+        {"hashtag_name": "", "rank": 3, "video_views": 5},
+    ]}
+}
+
+TIKTOK_SOUNDS = {
+    "data": {"sound_list": [
+        {"title": "Vasara", "author": "Some Artist", "rank": 1, "link": "https://t/1"},
+        {"title": "", "author": "X", "rank": 2},
+    ]}
+}
+
+
+def test_tiktok_hashtags_parse_and_skip_empty():
+    sigs = pulse._parse_tiktok_hashtags(TIKTOK_HASHTAGS, cap=10)
+    assert [s.title for s in sigs] == ["#lietuva", "#vilnius"]
+    assert sigs[0].metric == "1 200 000 vaizdo įrašų peržiūrų (TikTok #1)"
+    assert sigs[1].metric == "TikTok trending #2"       # no view count
+    assert sigs[0].url == "https://www.tiktok.com/tag/lietuva"
+    assert sigs[0].kind == "tiktok"
+
+
+def test_tiktok_sounds_parse_and_skip_empty():
+    sigs = pulse._parse_tiktok_sounds(TIKTOK_SOUNDS, cap=10)
+    assert len(sigs) == 1
+    assert sigs[0].title == "Vasara — Some Artist"
+    assert sigs[0].source == "TikTok Sounds LT"
+
+
 # ── pulse_block rendering ────────────────────────────────────────────────────
 
 def test_pulse_block_groups_by_source():

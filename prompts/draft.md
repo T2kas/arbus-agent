@@ -1,5 +1,11 @@
 Today is {today}.
 
+TEAM FEEDBACK — the people running Arbus reviewed past batches and left these
+notes. Treat them as HARD rules with the highest priority: they override your
+defaults and the category mix below. If they say "less economics" or "stop
+pension markets", obey it this batch.
+{feedback}
+
 You have TWO live signals about Lithuania right now. Use BOTH — they cover
 different things and the second is the one naive generators miss.
 

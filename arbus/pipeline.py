@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from typing import Callable
 
-from . import config, harvest, llm, pulse, report, store, validate, verify
+from . import config, feedback, harvest, llm, pulse, report, store, validate, verify
 from .schemas import Candidate, CandidateBatch
 
 log = logging.getLogger(__name__)
@@ -65,6 +65,8 @@ def run_batch(
     pulse_text = pulse.pulse_block(signals)
     progress(f"Pulse: {len(signals)} live signals from social/search sources.")
 
+    feedback_text = feedback.feedback_block(feedback.load_feedback())
+
     system = llm.load_prompt("system")
 
     # Draft + structure in chunks — one call can't reliably carry a full
@@ -93,6 +95,7 @@ def run_batch(
             count=str(n),
             headlines=headlines,
             pulse=pulse_text,
+            feedback=feedback_text,
             avoid=avoid,
             timing=timing,
         )

@@ -50,6 +50,9 @@ PULSE_ENABLED = True
 PULSE_MAX_PER_SOURCE = 12       # cap signals kept per source (keeps the prompt tight)
 GOOGLE_TRENDS_GEO = "LT"        # also used as YouTube regionCode
 REDDIT_SUBS = ["lietuva", "Lithuania"]  # lietuva = LT-language, Lithuania = mixed/expat
+# TikTok Creative Center (best-effort; may be empty if LT is unsupported there).
+TIKTOK_COUNTRY = "LT"           # try "" or a bigger market as a fallback if LT is empty
+TIKTOK_PERIOD = 7               # trend window in days: 7, 30 or 120
 
 # Optional keyed sources — inert until the key is set, so enabling them is safe.
 #   YOUTUBE_API_KEY  free from Google Cloud (YouTube Data API v3) -> Trending LT.

@@ -227,6 +227,74 @@ def _youtube(cap: int) -> list[Signal]:
     return _parse_youtube(_get_json(url), cap)
 
 
+# ── TikTok Creative Center — trending hashtags & sounds in LT ────────────────
+# Best-effort: TikTok's Creative Center is a public (advertiser-facing) trends
+# surface, but it fights automated access and does not guarantee every country.
+# If it returns nothing, the source contributes nothing — no batch is harmed.
+# Confirm it works for you with `python -m arbus generate --dry-run`.
+
+_TIKTOK_BASE = "https://ads.tiktok.com/creative_radar_api/v1/popular_trend"
+_TIKTOK_HEADERS = {
+    "User-Agent": UA,
+    "Accept": "application/json",
+    "Referer": "https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en",
+}
+
+
+def _parse_tiktok_hashtags(payload: dict, cap: int) -> list[Signal]:
+    lst = payload.get("data", {}).get("list", []) or []
+    signals: list[Signal] = []
+    for row in lst:
+        name = (row.get("hashtag_name") or row.get("hashtag") or "").strip()
+        if not name:
+            continue
+        rank = row.get("rank") or row.get("rank_index") or len(signals) + 1
+        views = int(row.get("video_views", 0) or row.get("views", 0) or 0)
+        metric = (f"{views:,} vaizdo įrašų peržiūrų (TikTok #{rank})".replace(",", " ")
+                  if views else f"TikTok trending #{rank}")
+        signals.append(Signal("TikTok Trends LT", f"#{name}", metric, "tiktok",
+                              "https://www.tiktok.com/tag/" + name))
+        if len(signals) >= cap:
+            break
+    return signals
+
+
+def _parse_tiktok_sounds(payload: dict, cap: int) -> list[Signal]:
+    lst = (payload.get("data", {}).get("sound_list")
+           or payload.get("data", {}).get("list", []) or [])
+    signals: list[Signal] = []
+    for row in lst:
+        title = (row.get("title") or row.get("song_title") or "").strip()
+        if not title:
+            continue
+        author = (row.get("author") or row.get("singer") or "").strip()
+        rank = row.get("rank") or len(signals) + 1
+        label = f"{title} — {author}" if author else title
+        signals.append(Signal("TikTok Sounds LT", label,
+                              f"TikTok trending daina (#{rank})", "tiktok",
+                              row.get("link", "")))
+        if len(signals) >= cap:
+            break
+    return signals
+
+
+def _tiktok(cap: int) -> list[Signal]:
+    country = config.TIKTOK_COUNTRY
+    period = config.TIKTOK_PERIOD
+    out: list[Signal] = []
+    half = max(1, cap // 2)
+    for kind, parser in (("hashtag", _parse_tiktok_hashtags), ("sound", _parse_tiktok_sounds)):
+        try:
+            url = (f"{_TIKTOK_BASE}/{kind}/list?period={period}&page=1"
+                   f"&limit={half}&country_code={country}&sort_by=popular")
+            resp = requests.get(url, headers=_TIKTOK_HEADERS, timeout=25)
+            resp.raise_for_status()
+            out.extend(parser(resp.json(), half))
+        except Exception as exc:  # TikTok blocks / country unsupported / format drift
+            log.warning("tiktok %s failed: %s", kind, exc)
+    return out
+
+
 # ── Registry + public API ────────────────────────────────────────────────────
 
 # (label, fetcher). Add a source by appending one line. Keyed sources return []
@@ -235,6 +303,7 @@ SOURCES: list[tuple[str, "callable"]] = [
     ("Google Trends LT", _google_trends),
     ("Reddit", _reddit),
     ("Wikipedia LT", _wikipedia),
+    ("TikTok Creative Center", _tiktok),
     ("YouTube Trending LT", _youtube),
 ]
 

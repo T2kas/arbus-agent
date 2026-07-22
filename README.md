@@ -13,9 +13,10 @@ Reliability comes from deterministic scaffolding around the model:
  1. HARVEST    feedparser pulls LT headlines (LRT, Delfi, 15min, Lrytas, VŽ
                + sports feeds) from the last 4 days           [pure code]
  1b. PULSE     real attention signal news RSS misses — what LT is SEARCHING
-               (Google Trends LT), DISCUSSING (Reddit r/lietuva), and
-               LOOKING UP (Wikipedia LT), each with a checkable number,
-               + optional YouTube Trending LT with a key       [pure code]
+               (Google Trends LT), DISCUSSING (Reddit r/lietuva), LOOKING UP
+               (Wikipedia LT), and TRENDING on TikTok (Creative Center),
+               each with a checkable number; + optional YouTube Trending LT
+               with a free key                                 [pure code]
  2. DRAFT      web-grounded LLM scouts trends off BOTH signals and drafts N
                quick-mode candidates                              [LLM]
  3. STRUCTURE  structured output -> validated Pydantic schema     [LLM]
@@ -38,7 +39,27 @@ attention gate. Every source is fail-safe — a dead or rate-limited source is
 logged and skipped, and an empty pulse just means news-only for that run.
 Sources live in a registry in `arbus/pulse.py`; add one (e.g. Spotify Top 50)
 by writing a fetcher and appending it. Zero-auth sources need no keys; keyed
-sources (YouTube) stay inert until their key is set.
+sources (YouTube) stay inert until their key is set. TikTok (Creative Center)
+is best-effort — it fights automated access and may not cover Lithuania; if
+`--dry-run` shows no TikTok lines, adjust `TIKTOK_COUNTRY` in `config.py` or
+fall back to a paid scraper. It never breaks a batch when empty.
+
+## Teaching the bot (feedback loop)
+
+The bot improves from plain-language notes, no code required. `feedback.md` at
+the repo root is read before **every** batch and its bullets are injected into
+the draft prompt as hard rules that override the default category mix. Add a
+note three ways:
+
+```sh
+python -m arbus feedback "mažiau ekonomikos rinkų"   # from the terminal
+# or in Telegram:  /feedback daugiau TikTok temų
+# or just edit feedback.md in any text editor
+```
+
+Say "less economics", "stop the pension markets", "more culture like Dirkstys"
+— the next batch obeys. `#` heading lines and the `<!-- -->` instruction block
+are ignored, so only your bullets reach the model.
 
 ## Providers
 
@@ -80,6 +101,8 @@ python -m arbus list --status needs_review
 
 python -m arbus promote 12 17 23         # full-mode specs for launch picks
 
+python -m arbus feedback "mažiau ekonomikos rinkų"   # teach every future batch
+
 python -m arbus bot                      # Telegram bot (see below)
 ```
 
@@ -98,7 +121,8 @@ Generate batches by typing in Telegram:
 2. Run `python -m arbus bot`, message your bot `/id`, put the returned chat
    id into `.env` as `TELEGRAM_CHAT_ID`, restart the bot.
 3. Commands: `/markets`, `/markets 15`, `/markets 15 fast` (skips
-   verification), `/help`. The bot only obeys the configured chat.
+   verification), `/feedback <pastaba>` (teach the bot), `/help`. The bot only
+   obeys the configured chat.
 
 The bot is long-polling — it runs wherever you start it (your PC is fine)
 and needs no server or webhook.

@@ -3,6 +3,7 @@
     python -m arbus generate [--count 35] [--dry-run] [--skip-verify]
     python -m arbus promote <market_id> [<market_id> ...]
     python -m arbus list [--status candidate|needs_review|rejected|promoted]
+    python -m arbus feedback "mažiau ekonomikos rinkų"   # teach future batches
     python -m arbus bot            # Telegram long-polling bot (/markets)
 """
 
@@ -14,7 +15,7 @@ import logging
 import sys
 from datetime import date
 
-from . import config, harvest, llm, notify, pipeline, pulse, report, store
+from . import config, feedback, harvest, llm, notify, pipeline, pulse, report, store
 from .schemas import FullSpec
 
 log = logging.getLogger("arbus")
@@ -81,6 +82,17 @@ def cmd_list(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_feedback(args: argparse.Namespace) -> int:
+    note = " ".join(args.text)
+    line = feedback.append_feedback(note)
+    if not line:
+        print("Nothing to record (empty note).")
+        return 1
+    print(f"Saved to {feedback.FEEDBACK_PATH.name}: {line}")
+    print("This guidance applies to every future batch.")
+    return 0
+
+
 def cmd_bot(_args: argparse.Namespace) -> int:
     from . import bot
 
@@ -110,6 +122,10 @@ def main() -> int:
     ls = sub.add_parser("list", help="list stored markets")
     ls.add_argument("--status", choices=["candidate", "needs_review", "rejected", "promoted"])
     ls.set_defaults(func=cmd_list)
+
+    fb = sub.add_parser("feedback", help="record a note that guides every future batch")
+    fb.add_argument("text", nargs="+", help='e.g. arbus feedback "mažiau ekonomikos rinkų"')
+    fb.set_defaults(func=cmd_feedback)
 
     b = sub.add_parser("bot", help="run the Telegram bot (long polling)")
     b.set_defaults(func=cmd_bot)
