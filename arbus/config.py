@@ -40,6 +40,22 @@ FEEDS: list[dict] = [
 HARVEST_DAYS = 4          # look-back window for headlines
 HARVEST_MAX_HEADLINES = 120
 
+# ── PULSE: live social / attention signal (stage 1b) ────────────────────────
+# News RSS shows what newsrooms published; the pulse shows what Lithuanians are
+# actually searching, discussing and looking up — the culture/hype layer news
+# misses. Each source is resilient (a failure is logged and skipped) and every
+# signal carries a checkable attention number for the attention gate. See
+# arbus/pulse.py. Turn the whole stage off with PULSE_ENABLED=False.
+PULSE_ENABLED = True
+PULSE_MAX_PER_SOURCE = 12       # cap signals kept per source (keeps the prompt tight)
+GOOGLE_TRENDS_GEO = "LT"        # also used as YouTube regionCode
+REDDIT_SUBS = ["lietuva", "Lithuania"]  # lietuva = LT-language, Lithuania = mixed/expat
+
+# Optional keyed sources — inert until the key is set, so enabling them is safe.
+#   YOUTUBE_API_KEY  free from Google Cloud (YouTube Data API v3) -> Trending LT.
+# Spotify Top 50 Lietuva is a documented future source (client-credentials);
+# add a _spotify() fetcher to pulse.SOURCES when you wire a key.
+
 # ── Batch shape ─────────────────────────────────────────────────────────────
 DEFAULT_BATCH_SIZE = 35
 

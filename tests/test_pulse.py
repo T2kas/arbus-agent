@@ -1,0 +1,172 @@
+"""Offline tests for the pulse parsers — fixtures only, no network."""
+
+from arbus import pulse
+from arbus.pulse import Signal
+
+# ── Google Trends daily-trends RSS (ht: namespace) ───────────────────────────
+
+GOOGLE_TRENDS_RSS = b"""<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:ht="https://trends.google.com/trends/trendingsearches/daily" version="2.0">
+<channel>
+  <title>Daily Search Trends</title>
+  <item>
+    <title>Zalgiris Rytas</title>
+    <ht:approx_traffic>20 000+</ht:approx_traffic>
+    <link>https://trends.google.com/trends/x</link>
+    <ht:news_item>
+      <ht:news_item_title>Zalgiris nugalejo</ht:news_item_title>
+      <ht:news_item_url>https://www.lrt.lt/zalgiris</ht:news_item_url>
+      <ht:news_item_source>LRT</ht:news_item_source>
+    </ht:news_item>
+  </item>
+  <item>
+    <title>Jessica Shy</title>
+    <ht:approx_traffic>5 000+</ht:approx_traffic>
+    <ht:news_item>
+      <ht:news_item_title>Naujas singlas</ht:news_item_title>
+      <ht:news_item_url>https://www.15min.lt/shy</ht:news_item_url>
+    </ht:news_item>
+  </item>
+  <item>
+    <title>oras rytoj</title>
+  </item>
+</channel>
+</rss>"""
+
+
+def test_google_trends_parses_term_traffic_and_news_url():
+    sigs = pulse._parse_google_trends(GOOGLE_TRENDS_RSS, cap=10)
+    assert len(sigs) == 3
+    first = sigs[0]
+    assert first.title == "Zalgiris Rytas"
+    assert first.metric == "20 000+ paieškų"
+    assert first.kind == "search"
+    assert first.url == "https://www.lrt.lt/zalgiris"
+    assert first.source == "Google Trends LT"
+
+
+def test_google_trends_without_traffic_still_yields_signal():
+    sigs = pulse._parse_google_trends(GOOGLE_TRENDS_RSS, cap=10)
+    last = sigs[-1]
+    assert last.title == "oras rytoj"
+    assert last.metric == "trending paieška"
+    assert last.url == ""
+
+
+def test_google_trends_respects_cap():
+    assert len(pulse._parse_google_trends(GOOGLE_TRENDS_RSS, cap=1)) == 1
+
+
+# ── Reddit listing JSON ──────────────────────────────────────────────────────
+
+REDDIT_JSON = {
+    "data": {
+        "children": [
+            {"data": {"stickied": True, "title": "Subreddit rules",
+                      "score": 999, "num_comments": 0, "permalink": "/r/lietuva/rules"}},
+            {"data": {"title": "Kodel Vilniuje toks brangus busto nuomos?",
+                      "score": 312, "num_comments": 87, "permalink": "/r/lietuva/abc"}},
+            {"data": {"title": "", "score": 5, "num_comments": 1, "permalink": "/x"}},
+            {"data": {"title": "Naujas lietuviskas filmas", "score": 44,
+                      "num_comments": 12, "permalink": "/r/lietuva/def"}},
+        ]
+    }
+}
+
+
+def test_reddit_skips_stickied_and_empty_titles():
+    sigs = pulse._parse_reddit(REDDIT_JSON, "lietuva", cap=10)
+    titles = [s.title for s in sigs]
+    assert "Subreddit rules" not in titles  # stickied mod post dropped
+    assert titles == ["Kodel Vilniuje toks brangus busto nuomos?",
+                      "Naujas lietuviskas filmas"]  # empty-title row dropped
+
+
+def test_reddit_metric_and_url():
+    sigs = pulse._parse_reddit(REDDIT_JSON, "lietuva", cap=10)
+    s = sigs[0]
+    assert s.metric == "312 balsų, 87 komentarų (r/lietuva)"
+    assert s.url == "https://www.reddit.com/r/lietuva/abc"
+    assert s.kind == "discussion"
+    assert s.source == "Reddit r/lietuva"
+
+
+# ── Wikipedia LT top-pageviews JSON ──────────────────────────────────────────
+
+WIKI_JSON = {
+    "items": [{
+        "year": "2026", "month": "07", "day": "21",
+        "articles": [
+            {"article": "Pagrindinis_puslapis", "views": 90000, "rank": 1},
+            {"article": "Specialus:Paieška", "views": 40000, "rank": 2},
+            {"article": "Jonas_Valančiūnas", "views": 12500, "rank": 3},
+            {"article": "Eurovizija", "views": 8000, "rank": 4},
+        ],
+    }]
+}
+
+
+def test_wikipedia_filters_noise_pages():
+    sigs = pulse._parse_wikipedia(WIKI_JSON, cap=10)
+    titles = [s.title for s in sigs]
+    assert titles == ["Jonas Valančiūnas", "Eurovizija"]  # main page + special dropped
+
+
+def test_wikipedia_metric_and_url():
+    sigs = pulse._parse_wikipedia(WIKI_JSON, cap=10)
+    s = sigs[0]
+    assert s.metric == "12 500 peržiūrų (2026-07-21)"
+    assert s.url == "https://lt.wikipedia.org/wiki/Jonas_Valančiūnas"
+    assert s.kind == "pageview"
+
+
+# ── YouTube Trending JSON (keyed source) ─────────────────────────────────────
+
+YOUTUBE_JSON = {
+    "items": [
+        {"id": "abc123", "snippet": {"title": "Vaidas naujas vlogas",
+                                     "channelTitle": "Vaidas"},
+         "statistics": {"viewCount": "150000"}},
+        {"id": "def456", "snippet": {"title": "", "channelTitle": "X"},
+         "statistics": {"viewCount": "10"}},
+    ]
+}
+
+
+def test_youtube_parses_views_channel_and_skips_empty():
+    sigs = pulse._parse_youtube(YOUTUBE_JSON, cap=10)
+    assert len(sigs) == 1
+    s = sigs[0]
+    assert s.title == "Vaidas naujas vlogas"
+    assert s.metric == "150 000 peržiūrų, Vaidas"
+    assert s.url == "https://www.youtube.com/watch?v=abc123"
+    assert s.kind == "video"
+
+
+def test_youtube_inert_without_key(monkeypatch):
+    monkeypatch.delenv("YOUTUBE_API_KEY", raising=False)
+    assert pulse._youtube(cap=10) == []
+
+
+# ── pulse_block rendering ────────────────────────────────────────────────────
+
+def test_pulse_block_groups_by_source():
+    signals = [
+        Signal("Google Trends LT", "Zalgiris", "20 000+ paieškų", "search", "https://x"),
+        Signal("Reddit r/lietuva", "Busto nuoma", "312 balsų, 87 komentarų (r/lietuva)",
+               "discussion", "https://y"),
+    ]
+    block = pulse.pulse_block(signals)
+    assert "[Google Trends LT]" in block
+    assert "[Reddit r/lietuva]" in block
+    assert "Zalgiris — 20 000+ paieškų https://x" in block
+
+
+def test_pulse_block_empty_is_graceful():
+    block = pulse.pulse_block([])
+    assert "no live pulse signals" in block
+
+
+def test_pulse_disabled_returns_empty(monkeypatch):
+    monkeypatch.setattr(pulse.config, "PULSE_ENABLED", False)
+    assert pulse.pulse() == []

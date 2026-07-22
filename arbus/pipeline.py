@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from typing import Callable
 
-from . import config, harvest, llm, report, store, validate, verify
+from . import config, harvest, llm, pulse, report, store, validate, verify
 from .schemas import Candidate, CandidateBatch
 
 log = logging.getLogger(__name__)
@@ -57,6 +57,14 @@ def run_batch(
     if not items:
         raise RuntimeError("no headlines harvested — check feeds/network")
     headlines = harvest.headlines_block(items)
+
+    # Stage 1b — the pulse: real search / discussion / pageview signal that news
+    # RSS misses. Best-effort; an empty pulse just means news-only for this run.
+    progress("Reading the live pulse (searches, discussions, pageviews)...")
+    signals = pulse.pulse()
+    pulse_text = pulse.pulse_block(signals)
+    progress(f"Pulse: {len(signals)} live signals from social/search sources.")
+
     system = llm.load_prompt("system")
 
     # Draft + structure in chunks — one call can't reliably carry a full
@@ -84,6 +92,7 @@ def run_batch(
             today=today.isoformat(),
             count=str(n),
             headlines=headlines,
+            pulse=pulse_text,
             avoid=avoid,
             timing=timing,
         )

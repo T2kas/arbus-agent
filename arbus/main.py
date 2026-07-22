@@ -14,7 +14,7 @@ import logging
 import sys
 from datetime import date
 
-from . import config, harvest, llm, notify, pipeline, report, store
+from . import config, harvest, llm, notify, pipeline, pulse, report, store
 from .schemas import FullSpec
 
 log = logging.getLogger("arbus")
@@ -24,7 +24,10 @@ def cmd_generate(args: argparse.Namespace) -> int:
     if args.dry_run:
         items = harvest.harvest()
         print(harvest.headlines_block(items))
-        print(f"\n# {len(items)} headlines", file=sys.stderr)
+        signals = pulse.pulse()
+        print("\n\n=== PULSE (live social/search signal) ===\n")
+        print(pulse.pulse_block(signals))
+        print(f"\n# {len(items)} headlines, {len(signals)} pulse signals", file=sys.stderr)
         return 0
 
     result = pipeline.run_batch(count=args.count, skip_verify=args.skip_verify)
