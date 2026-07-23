@@ -149,6 +149,10 @@ SUBJECTIVE_OPTION_STEMS = [
     "padėta į stal",
     "padeta i stal",
     "pusiau",            # "pusiau paremti" and similar half-measures
+    "ant stabdž",        # "nuleisti ant stabdžių" — colloquial, unverifiable
+    "po kilimu",         # "nušluoti po kilimu"
+    "numarin",           # "numarinti tylomis"
+    "įšaldy", "išaldy", "užšaldy", "uzsaldy",  # "įšaldyti klausimą"
 ]
 
 # Undefined-superlative framings: "the main / primary <decision / stance /

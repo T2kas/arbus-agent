@@ -120,6 +120,11 @@ def validate_candidate(
     if vague:
         return None, f"vague headline wording: {', '.join(vague)}"
 
+    # Options get the same clarity bar as the headline — no vague filler.
+    vague_opts = lint_vague(" ".join(cand.options_lt))
+    if vague_opts:
+        return None, f"vague/unclear options: {', '.join(vague_opts)}"
+
     unresolvable = lint_unresolvable(cand.question_lt, cand.options_lt)
     if unresolvable:
         return None, f"unresolvable market: {', '.join(unresolvable)}"

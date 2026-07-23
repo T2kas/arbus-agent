@@ -171,6 +171,29 @@ def test_concrete_multi_options_still_pass():
     assert reason is None and fixed is not None
 
 
+def test_vague_options_rejected():
+    # Options must be as clear as the headline — no "panašus"/"pvz." filler.
+    cand = make(
+        question_lt="Kas laimės rinkimus 2026 m.?",
+        market_type="multi",
+        options_lt=["Partija A", "Partija B", "Panašus rezultatas kaip pernai"],
+        probabilities=[0.4, 0.4, 0.2],
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "options" in reason
+
+
+def test_slang_option_rejected():
+    cand = make(
+        question_lt="Ką Vyriausybė nuspręs dėl mokesčio 2026 m.?",
+        market_type="multi",
+        options_lt=["Priims mokestį", "Atmes mokestį", "Nuleis ant stabdžių"],
+        probabilities=[0.4, 0.4, 0.2],
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
 def test_pagrindinis_prizas_is_not_flagged():
     # "pagrindinis" near a non-stance noun must stay legal.
     assert validate.lint_unresolvable("Ar pagrindinis festivalio prizas atiteks X?", ["Taip", "Ne"]) == []

@@ -45,12 +45,17 @@ players (e.g. "kuriame klube Jonas Valančiūnas žais 2026-2027 sezone?"),
 Sabonis, Eurovizija, MAMA apdovanojimai and similar big award shows/events,
 top influencers and their feuds, big music releases and festivals, elections
 and scandals every outlet covers, prices everyone pays (degalai, maistas,
-šildymas), extreme weather, viral city stories.
+šildymas), extreme weather and official red-level alerts (LHMT „raudonas"
+pavojaus lygis), national-security and airspace incidents everyone talks about
+(drones or unidentified objects crossing into Lithuania, GPS jamming with real
+consequences), viral city stories.
 
 FAILS the gate: sports executives and functionaries (nobody knows who a GM
 or consultant is), niche industry events, procedural politics without drama,
 minor officials, B2B/business-press stories, anything only one outlet wrote
-one article about with 5 comments.
+one article about with 5 comments, AND trivial or short-lived disruptions with
+no lasting impact (a one-hour outage or service glitch nobody remembers the
+next day — too small and too rare to have an audience).
 
 MARKET ARCHETYPES — actively use these; at least a THIRD of every batch
 must be culture / influencers / internet-hype territory:
@@ -81,7 +86,7 @@ must be culture / influencers / internet-hype territory:
   kaina, elektros kaina (NordPool LT), infliacija, būsto paskolų palūkanos,
   viešojo transporto sprendimai.
 
-HEADLINE CLARITY — the question text is the product:
+HEADLINE & OPTION CLARITY — the question AND the options are the product:
 
 - A user must understand the question in ONE reading, instantly.
 - One clause where possible: "Ar [subjektas] [konkretus įvykis] iki
@@ -104,6 +109,16 @@ HEADLINE CLARITY — the question text is the product:
   registry, or a measurable threshold ("bent vieną dieną ≥30 °C Vilniuje"
   is fine). NEVER "bent vienas didelis / stambus / žinomas / populiarus X"
   — name the specific people/brands/events or define the exact threshold.
+- OPTIONS get the SAME bar as the question: short, concrete, formal, and
+  instantly understandable on their own. No slang, no colloquialisms, no
+  scare-quoted idioms («ant lėto», «padėta į stalčių», «ant stabdžių»), no
+  filler. If an option needs quotation marks to soften a vague phrase, it is
+  the wrong option — replace it with the concrete outcome.
+- PROFESSIONAL REGISTER everywhere: formal, neutral, precise Lithuanian. The
+  quality bar is Polymarket / Kalshi — a market must read like an exchange
+  listing a contract, not like a group-chat message, and must be fully
+  understandable WITHOUT opening the rules. No memes-as-wording, no irony, no
+  insider shorthand in the question or options.
 - Detailed edge-case language lives in the resolution hint / full-mode
   rules. Headline = instantly clear; rules = rigorous.
 
@@ -137,6 +152,11 @@ Editorial taste:
   batch.
 - Emotion-driven beats procedural: rivalries, milestones, "ar pagaliau?",
   price pain, national pride, drama.
+- Informative AND emotional beats trivial: favour markets that both teach
+  something and make people feel — security scares and airspace incidents,
+  red-alert weather, price pain, national pride — over minor, rare, low-impact
+  incidents. A market should matter to the reader, not just be technically
+  true.
 - Questions should be fun to disagree about: avoid near-certainties (>95%
   or <5%) and avoid questions nobody has an opinion on.
 - Binary questions start with "Ar ...?". Multi-outcome questions name 3-6
