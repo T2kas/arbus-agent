@@ -43,6 +43,26 @@ def lint_vague(question: str) -> list[str]:
     return [stem for stem in config.VAGUE_STEMS if stem in low]
 
 
+def lint_unresolvable(question: str, options: list[str]) -> list[str]:
+    """Return markers that a market cannot be objectively resolved.
+
+    Two failure modes, both resolution nightmares:
+      1. Multi-outcome options describing intent / tempo / tone / ambiguity
+         ("aktyviai stumti", "ant lėto", "padėta į stalčių") rather than
+         concrete, checkable outcomes.
+      2. "The main <decision/stance/message>" framings, where deciding which
+         outcome is 'the main' one is itself subjective.
+    """
+    hits: list[str] = []
+    opts_low = " || ".join(o.lower() for o in options)
+    for stem in config.SUBJECTIVE_OPTION_STEMS:
+        if stem in opts_low:
+            hits.append(f"subjective option: {stem!r}")
+    if config.MAIN_STANCE_RE.search(question):
+        hits.append("undefined 'pagrindinis sprendimas/pozicija' framing")
+    return hits
+
+
 def looks_lithuanian(text: str) -> bool:
     has_lt = any(c in LT_MARKERS for c in text.lower()) or bool(LT_WORDS.search(text))
     clearly_en = bool(EN_WORDS.search(text)) and not LT_WORDS.search(text)
@@ -99,6 +119,10 @@ def validate_candidate(
     vague = lint_vague(cand.question_lt)
     if vague:
         return None, f"vague headline wording: {', '.join(vague)}"
+
+    unresolvable = lint_unresolvable(cand.question_lt, cand.options_lt)
+    if unresolvable:
+        return None, f"unresolvable market: {', '.join(unresolvable)}"
 
     if not looks_lithuanian(cand.question_lt):
         return None, "question does not look Lithuanian"

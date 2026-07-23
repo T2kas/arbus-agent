@@ -131,6 +131,51 @@ def test_min_resolve_date_enforced():
     assert reason is None
 
 
+def test_105_style_subjective_options_rejected():
+    # The real #105 (Žemaitaitis): options are moods/tempo, not checkable outcomes.
+    cand = make(
+        question_lt="Kas iki spalio 1 d. bus konservatorių sprendimas R. Žemaitaičio atžvilgiu?",
+        market_type="multi",
+        options_lt=[
+            "Paremti apkaltos procesą ir aktyviai jį stumti",
+            "Paremti apkaltą, bet ją palikti „ant lėto“ be aktyvių veiksmų",
+            "Nebeparemti apkaltos ir ieškoti alternatyvaus sprendimo",
+            "Tema bus faktiškai „padėta į stalčių“ be aiškaus viešo sprendimo",
+        ],
+        probabilities=[0.45, 0.25, 0.15, 0.15],
+        resolve_by="2026-10-01",
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_main_stance_framing_rejected():
+    cand = make(
+        question_lt="Kas bus pagrindinis viešai įvardytas konservatorių (TS-LKD) "
+                    "sprendimas dėl apkaltos?",
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_concrete_multi_options_still_pass():
+    # Named, mutually exclusive, checkable winners — must NOT trip the linter.
+    cand = make(
+        question_lt="Kas 2026-08-05 bus aukščiausiai „Spotify Top 50 Lietuva“?",
+        market_type="multi",
+        options_lt=["Jessica Shy", "8 Kambarys", "Omerta", "Kita"],
+        probabilities=[0.3, 0.25, 0.2, 0.25],
+        resolve_by="2026-08-05",
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
+
+
+def test_pagrindinis_prizas_is_not_flagged():
+    # "pagrindinis" near a non-stance noun must stay legal.
+    assert validate.lint_unresolvable("Ar pagrindinis festivalio prizas atiteks X?", ["Taip", "Ne"]) == []
+
+
 def test_duplicate_detected_despite_wording():
     existing = ["Ar Žalgiris liepos 20 d. laimės LKL rungtynes prieš Rytą?"]
     assert validate.is_duplicate("Ar rungtynes prieš Rytą liepos 20 d. laimės Žalgiris?", existing)

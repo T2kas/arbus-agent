@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 
 
@@ -123,6 +124,43 @@ VAGUE_STEMS = [
     "bent viena žinoma",
     "bent vienas populiarus",
 ]
+
+# ── Unresolvable-option / subjective-premise linter ─────────────────────────
+# Multi-outcome options must be concrete, mutually exclusive, publicly
+# checkable outcomes. These stems mark options that instead describe intent,
+# tempo, tone, or degrees of ambiguity — you cannot verify "kept it slow" or
+# "quietly shelved" against any source, so the market can never resolve.
+# Matched case-insensitively inside OPTION text. Archetype this kills: a market
+# whose options were "actively push the impeachment" / "keep it on the slow
+# track" / "quietly put it in a drawer" — moods, not outcomes.
+SUBJECTIVE_OPTION_STEMS = [
+    "ant lėto",
+    "į stalčių",
+    "i stalčių",
+    "be aiškaus",
+    "be aiškių",
+    "be aktyvi",         # "be aktyvių veiksmų"
+    "faktiškai",
+    "de facto",
+    "neoficial",         # neoficialiai
+    "tyliai",
+    "aktyviai stum",     # aktyviai stumti
+    "palikti kaip yra",
+    "padėta į stal",
+    "padeta i stal",
+    "pusiau",            # "pusiau paremti" and similar half-measures
+]
+
+# Undefined-superlative framings: "the main / primary <decision / stance /
+# message / signal / reaction>" — who decides which is 'the main' one is itself
+# subjective, so the market is unresolvable. Match a "pagrindin*" superlative
+# close to a subjective-stance noun in the QUESTION. Kept narrow (proximity +
+# specific nouns) so legit uses like "pagrindinis prizas/favoritas" are safe.
+MAIN_STANCE_RE = re.compile(
+    r"pagrindin\w*(?:\W+\w+){0,6}?\W+"
+    r"(sprendim|pozicij|nuostat|žinut|zinut|signal|reakcij|krypt|žingsn|zingsn)",
+    re.IGNORECASE,
+)
 
 # ── Dedupe ──────────────────────────────────────────────────────────────────
 DEDUPE_SIMILARITY = 87        # rapidfuzz token_set_ratio threshold (0-100)

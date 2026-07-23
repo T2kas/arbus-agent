@@ -107,6 +107,29 @@ HEADLINE CLARITY — the question text is the product:
 - Detailed edge-case language lives in the resolution hint / full-mode
   rules. Headline = instantly clear; rules = rigorous.
 
+RESOLVABLE OPTIONS & PREMISES — the market must settle on a fact, not a mood:
+
+- Every multi-outcome option must be a CONCRETE, mutually exclusive outcome
+  tied to a discrete public event or a measured value — a named winner, a
+  yes/no event that happened, a number crossing a threshold, a specific person
+  chosen. On the resolution date you must be able to point at ONE source and
+  say "this option, objectively".
+- BANNED options: intent, tempo, tone, or degrees of ambiguity. Never
+  "aktyviai stumti" vs "palikti ant lėto" vs "tyliai padėti į stalčių" vs
+  "faktiškai be aiškaus sprendimo". Those describe how someone feels or how
+  fast they move, which no source reports — the market can never resolve.
+- BANNED premise: "the MAIN / primary decision / stance / message / signal /
+  reaction" of some actor ("koks bus pagrindinis X sprendimas/pozicija"). Who
+  decides which one is 'the main' one? Subjective — drop it.
+- If resolving a market would require reading between the lines, judging a
+  posture, or interpreting what someone 'really' meant, it is dead. Convert it
+  to the discrete EVENT underneath instead. Example: NOT "what will be the
+  conservatives' main stance on the impeachment?" but "Ar Seimas iki [data]
+  balsuos dėl [asmuo] apkaltos?" (binary, one checkable event) or "Kiek Seimo
+  narių balsuos UŽ [asmuo] apkaltą?" (a countable number).
+- This also reinforces the attention gate: a party's internal tactical posture
+  toward a process is procedural insider-baseball and fails the gate anyway.
+
 Editorial taste:
 
 - Weight toward what people actually argue about this week. Don't force an
