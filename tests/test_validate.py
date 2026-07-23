@@ -194,6 +194,31 @@ def test_slang_option_rejected():
     assert fixed is None and "unresolvable" in reason
 
 
+def test_parentheses_in_headline_rejected():
+    # #92: parenthetical detail must move to the rules.
+    cand = make(question_lt="Ar egzotinis gyvūnas (ne Lietuvai būdingas) bus "
+                            "užfiksuotas Lietuvoje iki 2026-09-30?",
+                resolve_by="2026-09-30")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_viesai_in_headline_rejected():
+    # #84/Oksana Pikul: "viešai" is rules-only noise in a headline.
+    cand = make(question_lt="Ar Oksana Pikul iki 2026-08-10 viešai paskelbs pareiškimą?",
+                resolve_by="2026-08-10")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_unmeasurable_image_and_mood_rejected():
+    # #85 "kardinaliai pakeistą įvaizdį" and #84 "emocinga reakcija" are unmeasurable.
+    for bad in ["Ar Vaidas Baumila išlaikys kardinaliai pakeistą įvaizdį iki 2026-09-01?",
+                "Ar Oksana Pikul paskelbs dar vieną emocingą reakciją iki 2026-08-10?"]:
+        fixed, reason = validate.validate_candidate(make(question_lt=bad, resolve_by="2026-09-01"), TODAY)
+        assert fixed is None and "vague" in reason, bad
+
+
 def test_pagrindinis_prizas_is_not_flagged():
     # "pagrindinis" near a non-stance noun must stay legal.
     assert validate.lint_unresolvable("Ar pagrindinis festivalio prizas atiteks X?", ["Taip", "Ne"]) == []

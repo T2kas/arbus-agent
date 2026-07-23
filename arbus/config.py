@@ -123,7 +123,18 @@ VAGUE_STEMS = [
     "bent vienas žinomas",
     "bent viena žinoma",
     "bent vienas populiarus",
+    "kardinaliai",      # "kardinaliai pakeistą įvaizdį" — unmeasurable intensifier
+    "įvaizd",           # "išlaikys įvaizdį" — a person's "image" is not checkable
+    "emocing",          # "emocinga reakcija" — mood, not a verifiable event
 ]
+
+# ── Headline-format linter ──────────────────────────────────────────────────
+# Detail that belongs in the RESOLUTION RULES must never clutter the QUESTION.
+# Parentheses are banned outright (parenthetical caveats go in the rules), and
+# these words are rules-only noise in a headline:
+#   "viešai" (publicly) — once a market resolves on an announcement it is public
+#   by definition; say "must be a public statement" in the rules instead.
+HEADLINE_NOISE_WORDS = ["viešai"]
 
 # ── Unresolvable-option / subjective-premise linter ─────────────────────────
 # Multi-outcome options must be concrete, mutually exclusive, publicly

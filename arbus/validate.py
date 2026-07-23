@@ -63,6 +63,23 @@ def lint_unresolvable(question: str, options: list[str]) -> list[str]:
     return hits
 
 
+def lint_headline_format(question: str) -> list[str]:
+    """Return headline-format violations: detail that belongs in the rules.
+
+    Parentheses are banned (parenthetical caveats go in the resolution rules),
+    as are rules-only qualifier words like "viešai" (public-by-definition once
+    something is announced).
+    """
+    problems: list[str] = []
+    if "(" in question or ")" in question:
+        problems.append("parentheses (move detail to the rules)")
+    low = question.lower()
+    for word in config.HEADLINE_NOISE_WORDS:
+        if re.search(rf"\b{re.escape(word)}\b", low):
+            problems.append(f"rules-only word {word!r}")
+    return problems
+
+
 def looks_lithuanian(text: str) -> bool:
     has_lt = any(c in LT_MARKERS for c in text.lower()) or bool(LT_WORDS.search(text))
     clearly_en = bool(EN_WORDS.search(text)) and not LT_WORDS.search(text)
@@ -128,6 +145,10 @@ def validate_candidate(
     unresolvable = lint_unresolvable(cand.question_lt, cand.options_lt)
     if unresolvable:
         return None, f"unresolvable market: {', '.join(unresolvable)}"
+
+    fmt = lint_headline_format(cand.question_lt)
+    if fmt:
+        return None, f"headline format: {', '.join(fmt)}"
 
     if not looks_lithuanian(cand.question_lt):
         return None, "question does not look Lithuanian"

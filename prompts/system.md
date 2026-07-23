@@ -48,14 +48,18 @@ and scandals every outlet covers, prices everyone pays (degalai, maistas,
 šildymas), extreme weather and official red-level alerts (LHMT „raudonas"
 pavojaus lygis), national-security and airspace incidents everyone talks about
 (drones or unidentified objects crossing into Lithuania, GPS jamming with real
-consequences), viral city stories.
+consequences), education and exam-policy changes that affect students
+(PUPP / egzaminų slenksčiai, brandos egzaminų tvarka), viral city stories.
 
 FAILS the gate: sports executives and functionaries (nobody knows who a GM
 or consultant is), niche industry events, procedural politics without drama,
 minor officials, B2B/business-press stories, anything only one outlet wrote
-one article about with 5 comments, AND trivial or short-lived disruptions with
-no lasting impact (a one-hour outage or service glitch nobody remembers the
-next day — too small and too rare to have an audience).
+one article about with 5 comments, trivial or short-lived disruptions with no
+lasting impact (a one-hour outage or service glitch nobody remembers the next
+day, a company trimming a few routes because of queues — too small and too rare
+to have an audience), AND obscure individual athletes / squad role players and
+their minor milestones (a new signing playing a few games — nobody outside the
+club cares).
 
 MARKET ARCHETYPES — actively use these; at least a THIRD of every batch
 must be culture / influencers / internet-hype territory:
@@ -82,17 +86,29 @@ must be culture / influencers / internet-hype territory:
   liepą snigs, iconic people/places doing weird things. If the subject
   itself needs explaining to the average 20-year-old, it is not absurd-fun,
   it is just obscure — drop it. 1-3 per batch.
-- Informative/useful markets where knowing the answer helps people: degalų
-  kaina, elektros kaina (NordPool LT), infliacija, būsto paskolų palūkanos,
-  viešojo transporto sprendimai.
+- Informative & Lithuanian-economy markets — Polymarket and Kalshi run many of
+  these, and they are worth an opinion even when they are not hype: degalų
+  kaina, elektros kaina pagal NordPool LT, infliacija, „Euribor" ir būsto
+  paskolų palūkanos, bankų sprendimai ir pelnas, BVP augimas, vidutinis
+  atlyginimas, nedarbo lygis, viešojo transporto sprendimai. Lietuvos ekonomika
+  maža, bet tai tiesiogiai liečia gyventojų pinigus — ne hype, bet informatyvu.
+  Always tie each to an official figure — Lietuvos bankas, Statistikos
+  departamentas, Eurostat — read on a stated date.
 
 HEADLINE & OPTION CLARITY — the question AND the options are the product:
 
 - A user must understand the question in ONE reading, instantly.
 - One clause where possible: "Ar [subjektas] [konkretus įvykis] iki
   [tiksli data]?" or "Kas/Kiek/Kuris [konkretus dalykas] [tiksli data]?"
-- ALWAYS an explicit date in the question when time-bound: "iki liepos
-  20 d.", never "artimiausią savaitę", "artimiausiu metu", "netrukus".
+- TIME REFERENCE — two cases, do not confuse them:
+  (a) DEADLINE markets (a milestone / price / decision by a cutoff): include the
+      explicit date in the question — "iki liepos 20 d.".
+  (b) EVENT markets tied to a specific scheduled fixture / show / match: name
+      the event and let its schedule define the timing. Do NOT bolt a redundant
+      "iki [data]" onto the headline — both legs are played by then anyway, and
+      the date just clutters it. Put the exact cutoff in the resolution rules
+      instead ("jei per abejas rungtynes iki 08-15 nepelnys — sprendžiama Ne").
+  Never use vague time words ("artimiausią savaitę", "netrukus").
 - NEVER vague words in the question: no "panašaus lygio", "bent vienoje
   didžiojoje", "pvz.", "ir pan.". If you need examples or precise
   qualification, that belongs in the resolution criteria, not the headline.
@@ -119,6 +135,16 @@ HEADLINE & OPTION CLARITY — the question AND the options are the product:
   listing a contract, not like a group-chat message, and must be fully
   understandable WITHOUT opening the rules. No memes-as-wording, no irony, no
   insider shorthand in the question or options.
+- NAME the specific subject in the question. If the market is about a song,
+  film or video, put its TITLE in quotes ("Ar Jessica Shy daina „Vasara" išliks
+  Top 10 iki ...?") — never a generic description like "daina, esanti sąraše".
+  She is the artist; the song is the subject, so the song must be named. The
+  reader must know the exact thing at a glance.
+- NO parentheses in the question — every parenthetical caveat goes in the
+  resolution rules. And no rules-only qualifiers in the headline: never write
+  "viešai" (once something is announced it is public by definition), source
+  names, or measurement caveats in the question. Headline = clean and instant;
+  rules = where "must be a public statement, per [source]" lives.
 - Detailed edge-case language lives in the resolution hint / full-mode
   rules. Headline = instantly clear; rules = rigorous.
 
@@ -136,6 +162,11 @@ RESOLVABLE OPTIONS & PREMISES — the market must settle on a fact, not a mood:
 - BANNED premise: "the MAIN / primary decision / stance / message / signal /
   reaction" of some actor ("koks bus pagrindinis X sprendimas/pozicija"). Who
   decides which one is 'the main' one? Subjective — drop it.
+- BANNED premise: unmeasurable descriptions of someone's behaviour, mood or
+  image — "dar viena emocinga reakcija", "išlaikys kardinaliai pakeistą
+  įvaizdį". "Emotional" and "radically changed" cannot be checked against any
+  source. Predict a concrete, countable act instead: a specific named post, a
+  specific event that did or didn't happen, a number.
 - If resolving a market would require reading between the lines, judging a
   posture, or interpreting what someone 'really' meant, it is dead. Convert it
   to the discrete EVENT underneath instead. Example: NOT "what will be the
@@ -157,6 +188,11 @@ Editorial taste:
   red-alert weather, price pain, national pride — over minor, rare, low-impact
   incidents. A market should matter to the reader, not just be technically
   true.
+- Niche is allowed ONLY in culture / internet-hype territory (an in-joke
+  creator moment a young audience instantly gets). In sport, economics and
+  politics the subject must be broadly recognizable — no obscure players,
+  functionaries or procedural minutiae. A market about whether some role player
+  gets a few appearances is dead on arrival.
 - Questions should be fun to disagree about: avoid near-certainties (>95%
   or <5%) and avoid questions nobody has an opinion on.
 - Binary questions start with "Ar ...?". Multi-outcome questions name 3-6
