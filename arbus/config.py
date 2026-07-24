@@ -183,7 +183,24 @@ MAIN_STANCE_RE = re.compile(
 # keeps the source of truth in the rules and the sources list, and the headline
 # just states the idea. Match "pagal ... <source-word>" in the question.
 SOURCE_ATTR_RE = re.compile(
-    r"pagal\b(?:\W+\w+){0,6}?\W+(duomen|kainoraš|rodikl)",
+    r"pagal\b(?:\W+\w+){0,6}?\W+(duomen|kainoraš|rodikl|skelbiam|tarnyb)",
+    re.IGNORECASE,
+)
+
+# Day-precision dates do not belong in a headline. The resolve_by field and the
+# rules carry exact timing; the headline may reference a MONTH or a season
+# ("rugpjūčio mėnesį", "šį rudenį") or nothing at all. This is the difference
+# between the bloated
+#   "Ar Vilniuje bent vieną dieną tarp 2026 m. rugpjūčio 1–31 d. oficialiai bus
+#    užfiksuotas ≥30 mm paros kritulių kiekis pagal LHMT duomenis?"
+# and the clean
+#   "Ar Vilniuje rugpjūčio mėnesį bus užfiksuotas ≥30 mm paros kritulių kiekis?"
+_LT_MONTHS = ("sausio|vasario|kovo|balandžio|gegužės|birželio|liepos|"
+              "rugpjūčio|rugsėjo|spalio|lapkričio|gruodžio")
+HEADLINE_DATE_RE = re.compile(
+    r"\d{4}-\d{2}-\d{2}"                                   # 2026-08-15
+    rf"|(?:{_LT_MONTHS})\s+\d{{1,2}}\s*(?:[–—-]\s*\d{{1,2}}\s*)?d\."  # rugpjūčio 15 d.
+    r"|\b\d{1,2}\s*d\.\s*(?:mėn\.)?\s*\d{4}",              # 15 d. 2026
     re.IGNORECASE,
 )
 

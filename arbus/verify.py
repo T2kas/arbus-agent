@@ -47,6 +47,17 @@ def _verify_prompt(cands: list[Candidate], today: date) -> str:
         "at 7k today) or the entity is niche/unknown to a mass audience, the verdict is WRONG.",
         "- OPEN: genuinely undecided and the setup is factually sound.",
         "- UNCLEAR: cannot verify.\n",
+        "MANDATORY FIRST STEP for every item: search the CURRENT status of each named "
+        "subject before judging — which club/team an athlete signed with most recently, "
+        "whether a company still operates or has already closed/exited the market, "
+        "whether an official already took or left a post, whether an event already took "
+        "place. Recent transfers, closures and resignations are the most common way a "
+        "market is born already dead: if a player has just signed elsewhere, a market "
+        "about him joining another club is WRONG, and if the shops in question have "
+        "already shut, a market asking whether they will shut is DECIDED.",
+        "Do NOT answer UNCLEAR merely because the future outcome is unknown — that is "
+        "what OPEN means. UNCLEAR is only for when you could not establish the CURRENT "
+        "facts. Prefer a decisive verdict whenever a search settles the present state.\n",
         "Answer with EXACTLY one line per item, format:",
         "N: OPEN|DECIDED|WRONG|UNCLEAR — short reason with source\n",
     ]

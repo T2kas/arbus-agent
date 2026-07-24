@@ -10,7 +10,7 @@ TODAY = date(2026, 7, 13)
 
 def make(**overrides) -> Candidate:
     base = dict(
-        question_lt="Ar Žalgiris liepos 20 d. laimės rungtynes prieš Rytą?",
+        question_lt="Ar Žalgiris laimės rungtynes prieš Rytą?",
         market_type="binary",
         options_lt=["Taip", "Ne"],
         probabilities=[0.6, 0.4],
@@ -104,7 +104,7 @@ def test_undefined_class_rejected_but_precise_threshold_allowed():
     bad = make(question_lt="Ar iki rugsėjo 15 d. bent vienas didelis influenceris paskelbs apie sugrįžimą?")
     fixed, reason = validate.validate_candidate(bad, TODAY)
     assert fixed is None and "vague" in reason
-    ok = make(question_lt="Ar iki rugsėjo 1 d. Vilniuje bent vieną dieną bus 30 laipsnių karščio?")
+    ok = make(question_lt="Ar Vilniuje rugpjūčio mėnesį bent vieną dieną bus 30 laipsnių karščio?")
     fixed, reason = validate.validate_candidate(ok, TODAY)
     assert reason is None
 
@@ -161,7 +161,7 @@ def test_main_stance_framing_rejected():
 def test_concrete_multi_options_still_pass():
     # Named, mutually exclusive, checkable winners — must NOT trip the linter.
     cand = make(
-        question_lt="Kas 2026-08-05 bus aukščiausiai „Spotify Top 50 Lietuva“?",
+        question_lt="Kas bus aukščiausiai „Spotify Top 50 Lietuva“?",
         market_type="multi",
         options_lt=["Jessica Shy", "8 Kambarys", "Omerta", "Kita"],
         probabilities=[0.3, 0.25, 0.2, 0.25],
@@ -235,6 +235,27 @@ def test_main_content_focus_rejected():
                 resolve_by="2026-09-15")
     fixed, reason = validate.validate_candidate(cand, TODAY)
     assert fixed is None and "unresolvable" in reason
+
+
+def test_day_precision_date_in_headline_rejected():
+    # #110/#111/#115/#116: exact dates belong in resolve_by + rules, not the headline.
+    for bad in [
+        "Ar Vilniuje bent vieną dieną tarp 2026 m. rugpjūčio 1–31 d. bus ≥30 mm kritulių?",
+        "Ar Jūros šventėje bus pranešta apie 0,5 mln. lankytojų iki 2026 m. rugpjūčio 15 d.?",
+        "Ar Airinė Palšytė iki 2026-10-31 įveiks 1,96 m aukštį?",
+    ]:
+        fixed, reason = validate.validate_candidate(
+            make(question_lt=bad, resolve_by="2026-10-31"), TODAY)
+        assert fixed is None and "headline format" in reason, bad
+
+
+def test_month_reference_in_headline_allowed():
+    # The user's own rewrite: a month is fine, a day-precision date is not.
+    cand = make(question_lt="Ar Vilniuje rugpjūčio mėnesį bus užfiksuotas ≥30 mm "
+                            "paros kritulių kiekis?",
+                resolve_by="2026-09-05")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
 
 
 def test_clean_title_headline_passes():

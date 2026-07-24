@@ -115,9 +115,13 @@ def run_batch(
     accepted_cands: list[Candidate] = []
     fixables: list[tuple[Candidate, str]] = []
 
+    # Wording problems are fixable — send them for a rewrite instead of binning
+    # a good idea. Factual/structural rejections are not repairable.
+    REPAIRABLE = ("vague headline", "headline format", "vague/unclear options")
+
     def admit(cand: Candidate, reason: str | None, repairable: bool) -> None:
         if reason:
-            if repairable and reason.startswith("vague headline"):
+            if repairable and reason.startswith(REPAIRABLE):
                 fixables.append((cand, reason))
             else:
                 result.rejected.append((cand, reason))
@@ -136,7 +140,7 @@ def run_batch(
     # A vague headline is a wording problem, not an idea problem — give those
     # candidates one LLM rewrite round before discarding them.
     if fixables:
-        progress(f"Repairing {len(fixables)} vague headlines...")
+        progress(f"Repairing {len(fixables)} badly worded headlines...")
         try:
             import json as _json
 

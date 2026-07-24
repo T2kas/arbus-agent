@@ -113,6 +113,34 @@ HEADLINE & OPTION CLARITY — the question AND the options are the product:
   and caveat in the rules.
 - One clause where possible: "Ar [subjektas] [konkretus įvykis]?" or
   "Kas/Kiek/Kuris [konkretus dalykas]?" — no date, no source unless essential.
+- Say each thing ONCE. No redundant or non-defining qualifiers: not "Vengrijos
+  „Grand Prix" etapą, vyksiantį Vengrijoje" (the country is already in the
+  name), not "iki [data]" on an event that has its own schedule.
+
+WORKED EXAMPLES — this is the standard, match it exactly:
+
+  BAD:  "Ar Vilniuje bent vieną dieną tarp 2026 m. rugpjūčio 1–31 d. oficialiai
+         bus užfiksuotas ≥30 mm paros kritulių kiekis pagal Lietuvos
+         hidrometeorologijos tarnybos duomenis?"
+  GOOD: "Ar Vilniuje rugpjūčio mėnesį bus užfiksuotas ≥30 mm paros kritulių
+         kiekis?"
+        (source, "bent vieną dieną" and the exact window → rules)
+
+  BAD:  "Ar 2026 m. Jūros šventėje Klaipėdoje oficialiai bus pranešta apie bent
+         0,5 mln. lankytojų iki 2026 m. rugpjūčio 15 d.?"
+  GOOD: "Ar Jūros šventė sulauks bent 0,5 mln. lankytojų?"
+
+  BAD:  "Ar pagal LAMA BPO duomenis iki 2026 m. rugpjūčio 31 d. bent 2 tūkst.
+         valstybės finansuojamų studijų vietų liks neužpildytos?"
+  GOOD: "Ar liks neužpildyta bent 2 tūkst. valstybės finansuojamų studijų
+         vietų?"
+
+  BAD:  "Ar Charlesas Leclercas laimės 2026 m. „Formulės-1" Vengrijos „Grand
+         Prix" etapą, vyksiantį Vengrijoje, iki 2026 m. rugpjūčio 10 d.?"
+  GOOD: "Ar Charlesas Leclercas laimės Vengrijos „Grand Prix"?"
+
+  Every headline you write must be as tight as the GOOD versions. If your
+  headline is longer than about 12 words, you are still putting rules in it.
 - TIME REFERENCE — DEFAULT IS NO DATE IN THE HEADLINE. The resolve_by field and
   the rules carry the timing; the headline stays clean. Put an explicit date in
   the question ONLY when it is genuinely essential:

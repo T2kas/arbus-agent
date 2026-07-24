@@ -75,6 +75,8 @@ def lint_headline_format(question: str) -> list[str]:
         problems.append("parentheses (move detail to the rules)")
     if config.SOURCE_ATTR_RE.search(question):
         problems.append("data-source attribution (move to rules)")
+    if config.HEADLINE_DATE_RE.search(question):
+        problems.append("day-precision date (use a month/event or drop it)")
     low = question.lower()
     for word in config.HEADLINE_NOISE_WORDS:
         if re.search(rf"\b{re.escape(word)}\b", low):
