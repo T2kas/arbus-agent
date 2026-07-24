@@ -32,6 +32,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import time
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import date, timedelta
@@ -185,7 +186,9 @@ def _reddit(cap: int) -> list[Signal]:
     out: list[Signal] = []
     per_sub = max(1, cap // max(1, len(config.REDDIT_SUBS)))
     headers = {"User-Agent": REDDIT_UA, "Accept": "application/json"}
-    for sub in config.REDDIT_SUBS:
+    for idx, sub in enumerate(config.REDDIT_SUBS):
+        if idx:
+            time.sleep(2)  # Reddit 429s back-to-back requests from one IP
         got: list[Signal] = []
         last: Exception | None = None
         # Preferred: JSON listings, which carry upvotes and comment counts.

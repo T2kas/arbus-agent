@@ -236,6 +236,13 @@ ZAI_BASE_URL = "https://api.z.ai/api/paas/v4/chat/completions"
 ZAI_MODEL = "glm-4.6"
 ZAI_STRUCTURE_MODEL = "glm-4.6"
 ZAI_WEB_SEARCH = True
+# GLM is verbose and truncated a 15-candidate batch at 8K, producing JSON that
+# ends mid-object. Give the structuring step room; the floor applies only to
+# this provider.
+ZAI_STRUCTURE_MIN_TOKENS = 20000
+# GLM also drifts from the schema on long batches, so it drafts in smaller
+# chunks than the search-native providers.
+ZAI_DRAFT_CHUNK_SIZE = 8
 
 PERPLEXITY_MODEL = "sonar-pro"            # research + verification (search-native)
 # sonar-pro for structuring too: the small "sonar" model corrupts Lithuanian

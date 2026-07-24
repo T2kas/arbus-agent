@@ -85,14 +85,12 @@ def _extract_json(text: str) -> str:
     return text[start : end + 1]
 
 
-def _json_objects(text: str) -> list[str]:
-    """Return every top-level balanced {...} block, ignoring braces in strings."""
-    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.M)
-    out: list[str] = []
+def _match_brace(text: str, start: int) -> int | None:
+    """Index of the `}` closing the `{` at `start`, or None if never closed."""
     depth = 0
-    start: int | None = None
     in_str = esc = False
-    for i, ch in enumerate(text):
+    for i in range(start, len(text)):
+        ch = text[i]
         if in_str:
             if esc:
                 esc = False
@@ -104,14 +102,33 @@ def _json_objects(text: str) -> list[str]:
         if ch == '"':
             in_str = True
         elif ch == "{":
-            if depth == 0:
-                start = i
             depth += 1
-        elif ch == "}" and depth > 0:
+        elif ch == "}":
             depth -= 1
-            if depth == 0 and start is not None:
-                out.append(text[start : i + 1])
-                start = None
+            if depth == 0:
+                return i
+    return None
+
+
+def _json_objects(text: str) -> list[str]:
+    """Every complete balanced {...} block, outermost first.
+
+    Scanning at any depth is what makes truncated output salvageable: when a
+    response is cut off mid-array the outer container never closes, so the
+    outer brace is skipped and the complete candidate objects inside are
+    recovered instead of losing the whole chunk.
+    """
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.M)
+    out: list[str] = []
+    i = 0
+    while i < len(text):
+        if text[i] == "{":
+            end = _match_brace(text, i)
+            if end is not None:
+                out.append(text[i : end + 1])
+                i = end + 1
+                continue
+        i += 1
     return out
 
 
@@ -322,6 +339,7 @@ def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:
         )
     if prov == "zai":
         return _structure_openai_compatible(
-            zai_chat, config.ZAI_STRUCTURE_MODEL, text, output_model, max_tokens
+            zai_chat, config.ZAI_STRUCTURE_MODEL, text, output_model,
+            max(max_tokens, config.ZAI_STRUCTURE_MIN_TOKENS),
         )
     return _structure_anthropic(text, output_model, max_tokens)

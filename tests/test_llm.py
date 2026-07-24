@@ -54,6 +54,26 @@ def test_validate_flexible_wraps_bare_objects():
     assert out.candidates[0].question_lt == "Ar Žalgiris laimės?"
 
 
+def test_validate_flexible_salvages_truncated_container():
+    """max_tokens cut the response mid-array — keep the complete candidates."""
+    from arbus.schemas import CandidateBatch
+    item = (
+        '{"question_lt": "Ar Žalgiris laimės?", "market_type": "binary",'
+        ' "options_lt": ["Taip", "Ne"], "probabilities": [0.6, 0.4],'
+        ' "category": "sports", "resolve_by": "2026-09-01",'
+        ' "duration_class": "long", "resolution_hint_lt": "Pagal LKL.",'
+        ' "sources": ["https://x.lt/a"], "rationale_en": "test"}'
+    )
+    truncated = '{"candidates": [' + item + ", " + item + ', {"question_lt": "Ar L'
+    out = llm._validate_flexible(truncated, CandidateBatch)
+    assert len(out.candidates) == 2  # the two complete ones survive
+
+
+def test_json_objects_skips_unclosed_outer_brace():
+    objs = llm._json_objects('{"candidates": [{"a": 1}, {"b": 2}')
+    assert objs == ['{"a": 1}', '{"b": 2}']
+
+
 def test_validate_flexible_raises_when_nothing_usable():
     from arbus.schemas import CandidateBatch
     with pytest.raises(ValueError):

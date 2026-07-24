@@ -73,8 +73,10 @@ def run_batch(
     # 35-candidate batch through an ~8K-token output cap.
     candidates: list[Candidate] = []
     remaining = count
+    chunk_size = (config.ZAI_DRAFT_CHUNK_SIZE if llm.provider() == "zai"
+                  else config.DRAFT_CHUNK_SIZE)
     while remaining > 0:
-        n = min(remaining, config.DRAFT_CHUNK_SIZE)
+        n = min(remaining, chunk_size)
         progress(f"Researching & drafting {n} candidates "
                  f"({len(candidates)} done, provider: {llm.provider()})...")
         avoid_parts = []
@@ -99,14 +101,28 @@ def run_batch(
             avoid=avoid,
             timing=timing,
         )
-        draft_text = llm.research(draft_prompt, system=system, max_uses=16, max_tokens=8000)
-        structure_prompt = llm.load_prompt("structure", draft=draft_text)
-        batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch, max_tokens=8000)
+        # A single unparseable chunk must not destroy an entire batch — the
+        # work already done is worth keeping, so log and move on.
+        try:
+            draft_text = llm.research(draft_prompt, system=system, max_uses=16, max_tokens=8000)
+            structure_prompt = llm.load_prompt("structure", draft=draft_text)
+            batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch,
+                                                  max_tokens=8000)
+        except Exception as exc:
+            log.warning("chunk failed (%s); skipping it and continuing", exc)
+            remaining -= n
+            continue
         if not batch.candidates:
             log.warning("chunk produced 0 structured candidates; stopping early")
             break
         candidates.extend(batch.candidates)
         remaining -= n
+
+    if not candidates:
+        raise RuntimeError(
+            "no candidates survived drafting/structuring — check the provider and the "
+            "warnings above (a model that ignores the JSON schema is the usual cause)"
+        )
 
     progress(f"Structured {len(candidates)} candidates. Validating...")
 
