@@ -92,7 +92,8 @@ def _ask(prompt: str, _unused: bool = False) -> str:
     verified via Perplexity even when LLM_PROVIDER selected another backend —
     so a provider comparison never actually compared the verification stage.
     """
-    return llm.research(prompt, system=SYSTEM, max_uses=10, max_tokens=8000)
+    return llm.research(prompt, system=SYSTEM, max_uses=config.SEARCH_MAX_USES_VERIFY,
+                        max_tokens=8000, stage="verify")
 
 
 def verify_candidates(cands: list[Candidate], today: date) -> list[tuple[str, str]]:
@@ -105,7 +106,7 @@ def verify_candidates(cands: list[Candidate], today: date) -> list[tuple[str, st
     rather than an editorial verdict.
     """
     results: list[tuple[str, str]] = []
-    use_perplexity = llm.provider() == "perplexity"
+    use_perplexity = llm.provider("verify") == "perplexity"
 
     for start in range(0, len(cands), config.VERIFY_CHUNK_SIZE):
         chunk = cands[start : start + config.VERIFY_CHUNK_SIZE]

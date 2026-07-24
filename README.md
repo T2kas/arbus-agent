@@ -82,6 +82,33 @@ Hard guarantees enforced in code (not just prompt):
 - **Already-decided rejection** via live web verification — the #1 failure
   mode of naive generators.
 
+## Cost control
+
+A full Opus batch with adaptive thinking and 16 searches per chunk costs about
+**$5**. The defaults now target a fraction of that, and the levers are:
+
+| Lever | Where | Effect |
+|---|---|---|
+| Model | `ANTHROPIC_MODEL` (default `claude-sonnet-5`) | Sonnet instead of Opus is the single biggest saving |
+| Per-stage provider | `LLM_PROVIDER_DRAFT` / `LLM_PROVIDER_VERIFY` | Draft cheap, verify sharp — see below |
+| Searches | `SEARCH_MAX_USES_DRAFT` (6), `SEARCH_MAX_USES_VERIFY` (4) | Each search costs money *and* injects pages into context |
+| Thinking | `ANTHROPIC_THINKING=off` | Thinking tokens are billed as output |
+| Prompt caching | automatic | The system prompt is cached across chunks |
+| Batch size | `--count 15` | Cost scales with candidates |
+
+**Recommended setup — cheap drafting, sharp verification.** Drafting is many
+long, search-heavy calls; verification is the short judgement call that decides
+whether a market is already dead. Put each where it belongs:
+
+```sh
+LLM_PROVIDER=perplexity          # drafting + structuring (cents)
+LLM_PROVIDER_VERIFY=anthropic    # only the fact-checking runs on Claude
+```
+
+That keeps the accuracy where it matters at a fraction of an all-Claude batch.
+Start small (`--count 15`) and check your Anthropic usage page after one run
+before scaling up.
+
 ## Setup
 
 ```sh

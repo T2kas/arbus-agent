@@ -23,6 +23,22 @@ def test_llm_provider_override_wins(monkeypatch):
     assert llm.provider() == "zai"
 
 
+def test_per_stage_provider_overrides_global(monkeypatch):
+    """The cheap-draft / sharp-verify split that keeps a batch affordable."""
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "p")
+    monkeypatch.setenv("LLM_PROVIDER", "perplexity")
+    monkeypatch.setenv("LLM_PROVIDER_VERIFY", "anthropic")
+    assert llm.provider("draft") == "perplexity"
+    assert llm.provider("verify") == "anthropic"
+    assert llm.provider() == "perplexity"
+
+
+def test_unknown_stage_value_falls_back(monkeypatch):
+    monkeypatch.setenv("LLM_PROVIDER", "perplexity")
+    monkeypatch.setenv("LLM_PROVIDER_VERIFY", "nonsense")
+    assert llm.provider("verify") == "perplexity"
+
+
 def test_provider_without_any_key_explains_all_options():
     with pytest.raises(RuntimeError, match="ZAI_API_KEY"):
         llm.provider()

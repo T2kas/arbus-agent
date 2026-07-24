@@ -30,7 +30,19 @@ PROMPT_DIR = Path(__file__).resolve().parent.parent / "prompts"
 T = TypeVar("T", bound=BaseModel)
 
 
-def provider() -> str:
+def provider(stage: str | None = None) -> str:
+    """Which backend runs a stage.
+
+    Stages can be pointed at different providers, which is what makes a batch
+    affordable: drafting is many long, search-heavy calls and is cheap on a
+    search-native provider, while verification is the short judgement call worth
+    paying a stronger model for. Set LLM_PROVIDER_DRAFT / LLM_PROVIDER_VERIFY to
+    override LLM_PROVIDER for one stage.
+    """
+    if stage:
+        per_stage = os.environ.get(f"LLM_PROVIDER_{stage.upper()}", "").strip().lower()
+        if per_stage in ("anthropic", "perplexity", "zai"):
+            return per_stage
     forced = os.environ.get("LLM_PROVIDER", "").strip().lower()
     if forced in ("anthropic", "perplexity", "zai"):
         return forced
@@ -293,19 +305,27 @@ def _web_search_tool(max_uses: int, with_location: bool = True) -> dict:
     return tool
 
 
-def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens: int) -> str:
+def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens: int,
+                        model: str | None = None) -> str:
     client = _anthropic_client()
     messages: list[dict] = [{"role": "user", "content": user_prompt}]
     with_location = True
+    # The system prompt is identical across every chunk and every verification
+    # call, so caching it turns repeated full-price input into cache reads.
+    system_blocks = [{"type": "text", "text": system,
+                      "cache_control": {"type": "ephemeral"}}]
+    kwargs: dict = {}
+    if config.ANTHROPIC_THINKING != "off":
+        kwargs["thinking"] = {"type": config.ANTHROPIC_THINKING}
     for attempt in range(6):
         try:
             with client.messages.stream(
-                model=config.MODEL,
+                model=model or config.MODEL,
                 max_tokens=max_tokens,
-                system=system,
-                thinking={"type": "adaptive"},
+                system=system_blocks,
                 tools=[_web_search_tool(max_uses, with_location)],
                 messages=messages,
+                **kwargs,
             ) as stream:
                 resp = stream.get_final_message()
         except Exception as exc:
@@ -347,9 +367,10 @@ def _structure_anthropic(text: str, output_model: Type[T], max_tokens: int) -> T
 
 # ── Public API ──────────────────────────────────────────────────────────────
 
-def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000) -> str:
+def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000,
+             stage: str | None = None) -> str:
     """Web-grounded free-text generation."""
-    prov = provider()
+    prov = provider(stage)
     if prov == "perplexity":
         return perplexity_chat(
             user_prompt, system=system, model=config.PERPLEXITY_MODEL, max_tokens=max_tokens
@@ -357,7 +378,8 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
     if prov == "zai":
         return zai_chat(user_prompt, system=system, model=config.ZAI_MODEL,
                         max_tokens=max_tokens, web_search=True)
-    return _research_anthropic(user_prompt, system, max_uses, max_tokens)
+    model = config.VERIFY_MODEL if (stage == "verify" and config.VERIFY_MODEL) else None
+    return _research_anthropic(user_prompt, system, max_uses, max_tokens, model=model)
 
 
 def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:

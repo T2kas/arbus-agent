@@ -22,7 +22,23 @@ def _load_dotenv() -> None:
 
 _load_dotenv()
 
-MODEL = "claude-opus-5"
+# Sonnet, not Opus: a full Opus batch with adaptive thinking and 16 searches per
+# chunk burned ~$5. Sonnet is several times cheaper and, with the same web
+# search and the same deterministic gates around it, loses very little here.
+# Override per run with ANTHROPIC_MODEL.
+MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
+# Verification is the one stage where judgement pays for itself. Leave empty to
+# reuse MODEL, or set ANTHROPIC_VERIFY_MODEL=claude-opus-5 to spend only there.
+VERIFY_MODEL = os.environ.get("ANTHROPIC_VERIFY_MODEL", "")
+
+# Extended thinking is charged as output. "off" removes it entirely; the
+# scaffolding around the model already does the reasoning we depend on.
+ANTHROPIC_THINKING = os.environ.get("ANTHROPIC_THINKING", "adaptive")
+
+# Each web search costs money AND injects fetched pages into the context, so
+# these are the biggest single cost lever in the batch.
+SEARCH_MAX_USES_DRAFT = 6
+SEARCH_MAX_USES_VERIFY = 4
 
 # Anthropic's web-search tool accepts `user_location` for only a few countries,
 # and "LT" is rejected with a 400 that aborts the batch. Empty = search without

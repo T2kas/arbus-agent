@@ -73,12 +73,12 @@ def run_batch(
     # 35-candidate batch through an ~8K-token output cap.
     candidates: list[Candidate] = []
     remaining = count
-    chunk_size = (config.ZAI_DRAFT_CHUNK_SIZE if llm.provider() == "zai"
+    chunk_size = (config.ZAI_DRAFT_CHUNK_SIZE if llm.provider("draft") == "zai"
                   else config.DRAFT_CHUNK_SIZE)
     while remaining > 0:
         n = min(remaining, chunk_size)
         progress(f"Researching & drafting {n} candidates "
-                 f"({len(candidates)} done, provider: {llm.provider()})...")
+                 f"({len(candidates)} done, provider: {llm.provider('draft')})...")
         avoid_parts = []
         if config.BLOCKED_SUBJECTS:
             avoid_parts.append(
@@ -104,7 +104,9 @@ def run_batch(
         # A single unparseable chunk must not destroy an entire batch — the
         # work already done is worth keeping, so log and move on.
         try:
-            draft_text = llm.research(draft_prompt, system=system, max_uses=16, max_tokens=8000)
+            draft_text = llm.research(draft_prompt, system=system,
+                                      max_uses=config.SEARCH_MAX_USES_DRAFT,
+                                      max_tokens=8000, stage="draft")
             structure_prompt = llm.load_prompt("structure", draft=draft_text)
             batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch,
                                                   max_tokens=8000)
