@@ -73,6 +73,8 @@ def lint_headline_format(question: str) -> list[str]:
     problems: list[str] = []
     if "(" in question or ")" in question:
         problems.append("parentheses (move detail to the rules)")
+    if config.SOURCE_ATTR_RE.search(question):
+        problems.append("data-source attribution (move to rules)")
     low = question.lower()
     for word in config.HEADLINE_NOISE_WORDS:
         if re.search(rf"\b{re.escape(word)}\b", low):
@@ -81,9 +83,11 @@ def lint_headline_format(question: str) -> list[str]:
 
 
 def looks_lithuanian(text: str) -> bool:
-    has_lt = any(c in LT_MARKERS for c in text.lower()) or bool(LT_WORDS.search(text))
+    # Reject only text that is CLEARLY English. Short Lithuanian titles without
+    # diacritics or function words ("Naujas Palangos meras") are legitimate now
+    # that headlines may be titles, so absence of LT markers is not a failure.
     clearly_en = bool(EN_WORDS.search(text)) and not LT_WORDS.search(text)
-    return has_lt and not clearly_en
+    return not clearly_en
 
 
 def classify_duration(resolve_by: date, today: date) -> str:

@@ -87,34 +87,53 @@ must be culture / influencers / internet-hype territory:
   itself needs explaining to the average 20-year-old, it is not absurd-fun,
   it is just obscure — drop it. 1-3 per batch.
 - Informative & Lithuanian-economy markets — Polymarket and Kalshi run many of
-  these, and they are worth an opinion even when they are not hype: degalų
-  kaina, elektros kaina pagal NordPool LT, infliacija, „Euribor" ir būsto
-  paskolų palūkanos, bankų sprendimai ir pelnas, BVP augimas, vidutinis
-  atlyginimas, nedarbo lygis, viešojo transporto sprendimai. Lietuvos ekonomika
-  maža, bet tai tiesiogiai liečia gyventojų pinigus — ne hype, bet informatyvu.
-  Always tie each to an official figure — Lietuvos bankas, Statistikos
-  departamentas, Eurostat — read on a stated date.
+  these, and they are worth an opinion even when they are not hype. Lead with
+  what hits people's wallets: vidutinis / minimalus atlyginimas, mokesčiai
+  (GPM, PVM, „Sodra"), pragyvenimo ir gyvenimo kokybės rodikliai, būsto
+  įperkamumas ir „Euribor" / būsto paskolų palūkanos, infliacija, degalų ir
+  elektros kaina, bankų pelnas, BVP augimas, nedarbo lygis. (Go light on public-
+  transport markets — one now and then is enough.) Lietuvos ekonomika maža, bet
+  tai tiesiogiai liečia gyventojų pinigus — ne hype, bet informatyvu. Tie each
+  to an official figure — Lietuvos bankas, Statistikos departamentas, Eurostat —
+  with the source kept in the rules, not the headline.
 
 HEADLINE & OPTION CLARITY — the question AND the options are the product:
 
-- A user must understand the question in ONE reading, instantly.
-- One clause where possible: "Ar [subjektas] [konkretus įvykis] iki
-  [tiksli data]?" or "Kas/Kiek/Kuris [konkretus dalykas] [tiksli data]?"
-- TIME REFERENCE — two cases, do not confuse them:
-  (a) DEADLINE markets (a milestone / price / decision by a cutoff): include the
-      explicit date in the question — "iki liepos 20 d.".
-  (b) EVENT markets tied to a specific scheduled fixture / show / match: name
-      the event and let its schedule define the timing. Do NOT bolt a redundant
-      "iki [data]" onto the headline — both legs are played by then anyway, and
-      the date just clutters it. Put the exact cutoff in the resolution rules
-      instead ("jei per abejas rungtynes iki 08-15 nepelnys — sprendžiama Ne").
-  Never use vague time words ("artimiausią savaitę", "netrukus").
+- A user must understand the headline in ONE reading, instantly. SHORTER IS
+  BETTER — cut every word that is not essential. Detail belongs in the rules.
+- The headline does NOT have to be an "Ar ...?" question. A clean title or
+  fragment is often better, Polymarket-style: "Naujas Palangos meras", "Ballon
+  d'Or nugalėtojas 2026", "Kiek Fed palūkanų karpymų 2026?". Use whatever is
+  shortest and clearest for the market type (binary → a short "Ar ...?" or a
+  yes/no statement; multi → a "Kas/Kiek/Kuris ..." title).
+- MODEL THE HEADLINE-VS-RULES SPLIT on Polymarket. Their market is literally
+  "Will Ronaldo cry at the 2026 World Cup?" — the headline is just the idea,
+  while the rules define what counts as crying, whether video proof is needed,
+  and where it must happen. Do the same: idea in the headline, every definition
+  and caveat in the rules.
+- One clause where possible: "Ar [subjektas] [konkretus įvykis]?" or
+  "Kas/Kiek/Kuris [konkretus dalykas]?" — no date, no source unless essential.
+- TIME REFERENCE — DEFAULT IS NO DATE IN THE HEADLINE. The resolve_by field and
+  the rules carry the timing; the headline stays clean. Put an explicit date in
+  the question ONLY when it is genuinely essential:
+  • the market has no natural end and the deadline itself is the whole point
+    (e.g. "ar iki [data] įvyks X, kuris kitaip neturi termino"), or
+  • you are explicitly speculating something happens EARLIER than its scheduled
+    time.
+  Event-scoped markets never get a date in the headline: a festival, a match, a
+  team's "first 5 games" already define their own window — name the event, and
+  put the exact cutoff in the rules ("jei per abejas rungtynes nepelnys —
+  sprendžiama Ne"). Never use vague time words ("artimiausią savaitę",
+  "netrukus"). Also drop qualifiers that do not define the market (whose coach,
+  which official body) — keep only what the market is actually about.
 - NEVER vague words in the question: no "panašaus lygio", "bent vienoje
   didžiojoje", "pvz.", "ir pan.". If you need examples or precise
   qualification, that belongs in the resolution criteria, not the headline.
-- Every measurable term in the question must be exact: name the exact
-  source, the exact threshold, the exact entity. "pagal LEA duomenis" only
-  if the criteria define which LEA data and when it is read.
+- The measurable terms (threshold, entity) must be exact, but the DATA SOURCE
+  does NOT belong in the question. Never write "pagal X duomenis / kainoraštį /
+  rodiklį" in the headline — the source of truth lives in the resolution rules
+  and the sources list (Polymarket-style). The headline states the idea; the
+  rules state exactly how and where it is checked.
 - NAMES: for coaches, athletes in formal contexts, politicians, officials
   and other serious-domain figures, use the proper form "V. Pavardė"
   ("S. Jasikevičiaus komanda", not "Šaro komanda") — no nicknames or
@@ -145,6 +164,11 @@ HEADLINE & OPTION CLARITY — the question AND the options are the product:
   "viešai" (once something is announced it is public by definition), source
   names, or measurement caveats in the question. Headline = clean and instant;
   rules = where "must be a public statement, per [source]" lives.
+- Use the term the audience actually uses, not the bureaucratic long form:
+  "PUPP", not "pagrindinio ugdymo pasiekimų patikrinimo kartelė". And ask the
+  BROAD, recognizable version of a question, not an over-specified legislative
+  sub-clause: "Ar bus pakeista PUPP kartelė?" beats "Ar Seimas priims Švietimo
+  įstatymo pataisas, numatančias ... atidėjimą iki 2029 m. rudens?".
 - Detailed edge-case language lives in the resolution hint / full-mode
   rules. Headline = instantly clear; rules = rigorous.
 

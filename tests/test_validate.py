@@ -219,6 +219,35 @@ def test_unmeasurable_image_and_mood_rejected():
         assert fixed is None and "vague" in reason, bad
 
 
+def test_source_attribution_in_headline_rejected():
+    # #97: "pagal ... duomenis" belongs in the rules, not the headline.
+    cand = make(question_lt="Ar Jūros šventėje Klaipėdoje pagal savivaldybės duomenis "
+                            "dalyvių skaičius viršys 300 tūkst.?",
+                resolve_by="2026-08-15")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_main_content_focus_rejected():
+    # #99: "pagrindiniu turinio akcentu" — an unmeasurable 'main focus'.
+    cand = make(question_lt="Ar Justas Pečeliūnas paskelbs projektą, kurio pagrindiniu "
+                            "turinio akcentu bus skyrybos?",
+                resolve_by="2026-09-15")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_clean_title_headline_passes():
+    # Polymarket-style title, no date, no source — must pass.
+    cand = make(question_lt="Naujas Palangos meras",
+                market_type="multi",
+                options_lt=["Kandidatas A", "Kandidatas B", "Kandidatas C"],
+                probabilities=[0.4, 0.35, 0.25],
+                resolve_by="2026-09-01")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
+
+
 def test_pagrindinis_prizas_is_not_flagged():
     # "pagrindinis" near a non-stance noun must stay legal.
     assert validate.lint_unresolvable("Ar pagrindinis festivalio prizas atiteks X?", ["Taip", "Ne"]) == []

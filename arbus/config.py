@@ -63,9 +63,10 @@ TIKTOK_PERIOD = 7               # trend window in days: 7, 30 or 120
 # ── Batch shape ─────────────────────────────────────────────────────────────
 DEFAULT_BATCH_SIZE = 35
 
-# App goes live in August — until then no market may resolve earlier than this.
+# App goes live ~mid-September 2026. Per team direction, generate markets that
+# resolve from 2026-08-10 onward (no market may resolve earlier than this).
 # Set to "" once live (then only "must be in the future" applies).
-MIN_RESOLVE_DATE = "2026-08-01"
+MIN_RESOLVE_DATE = "2026-08-10"
 # Duration mix targets (informational — enforced softly via prompt + report)
 DURATION_MIX = {"short": 0.30, "medium": 0.50, "long": 0.20}
 # Boundaries in days used to (re)classify duration from resolve_by
@@ -173,7 +174,16 @@ SUBJECTIVE_OPTION_STEMS = [
 # specific nouns) so legit uses like "pagrindinis prizas/favoritas" are safe.
 MAIN_STANCE_RE = re.compile(
     r"pagrindin\w*(?:\W+\w+){0,6}?\W+"
-    r"(sprendim|pozicij|nuostat|žinut|zinut|signal|reakcij|krypt|žingsn|zingsn)",
+    r"(sprendim|pozicij|nuostat|žinut|zinut|signal|reakcij|krypt|žingsn|zingsn|akcent|turin)",
+    re.IGNORECASE,
+)
+
+# Data-source attribution belongs in the resolution rules, not the QUESTION.
+# "pagal X duomenis / kainoraštį / rodiklį" in a headline is noise — Polymarket
+# keeps the source of truth in the rules and the sources list, and the headline
+# just states the idea. Match "pagal ... <source-word>" in the question.
+SOURCE_ATTR_RE = re.compile(
+    r"pagal\b(?:\W+\w+){0,6}?\W+(duomen|kainoraš|rodikl)",
     re.IGNORECASE,
 )
 

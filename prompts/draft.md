@@ -52,10 +52,12 @@ STEP 1 — SCOUT (use web search extensively, anchored to the two signals):
   URL (full https://... link, not just the outlet name).
 
 STEP 2 — DRAFT exactly {count} quick-mode market candidates:
-- Question wording follows HEADLINE CLARITY strictly: one instantly readable
-  clause, explicit date ("iki liepos 20 d."), exact entities and thresholds, no
-  "panašaus", no "pvz.", no "artimiausiu metu". Rigor goes into the resolution
-  hint, not the headline.
+- Wording follows HEADLINE & OPTION CLARITY strictly: as SHORT and simple as
+  possible, instantly readable, exact entities and thresholds, but NO data-
+  source attribution ("pagal X duomenis") and NO date in the headline unless
+  the date is genuinely essential. No "panašaus", "pvz.", "artimiausiu metu".
+  ALL rigor — source, exact date, edge cases — goes into the resolution hint /
+  rules, never the headline. A clean title ("Naujas Palangos meras") is fine.
 - Each candidate: Lithuanian question, options with rough probabilities,
   category, resolution date (YYYY-MM-DD), one-sentence Lithuanian resolution
   hint naming the checkable source, grounding URLs (full links), and a one-line
@@ -63,7 +65,9 @@ STEP 2 — DRAFT exactly {count} quick-mode market candidates:
   when the seed came from the pulse (e.g. "Google Trends LT: 20 000+ searches",
   "312 upvotes / 87 comments on r/lietuva"), otherwise a checked figure ("300+
   comments on Delfi", "every outlet covered it").
-- Roughly 70% binary ("Ar ...?" with Taip/Ne), 30% multi-outcome (3-6 options).
+- Roughly 70% binary (Taip/Ne — a short "Ar ...?" or a clear yes/no statement),
+  30% multi-outcome (3-6 options). Headlines may be clean titles, not only
+  questions.
 - Multi-outcome options must be factually valid and exhaustive AS OF TODAY —
   check the current state (who is still in the competition, who is actually
   participating) before writing options.
