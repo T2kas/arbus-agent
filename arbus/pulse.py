@@ -152,24 +152,71 @@ REDDIT_UA = "windows:arbus-market-agent:1.0 (by /u/arbus_bot)"
 REDDIT_HOSTS = ["https://old.reddit.com", "https://www.reddit.com"]
 
 
+def _parse_reddit_rss(xml_bytes: bytes, sub: str, cap: int) -> list[Signal]:
+    """Parse Reddit's Atom feed — the fallback when JSON listings are blocked.
+
+    RSS carries no score or comment count, so these signals say what is being
+    discussed without a magnitude. Still worth having: the draft stage treats
+    them as topics to investigate, not as proof of attention.
+    """
+    root = ET.fromstring(xml_bytes)
+    signals: list[Signal] = []
+    for entry in root.iter():
+        if _localname(entry.tag) != "entry":
+            continue
+        title = ""
+        link = ""
+        for child in entry:
+            name = _localname(child.tag)
+            if name == "title" and (child.text or "").strip():
+                title = child.text.strip()
+            elif name == "link":
+                link = child.attrib.get("href", "") or link
+        if not title:
+            continue
+        signals.append(Signal(f"Reddit r/{sub}", title,
+                              f"aktyvi diskusija (r/{sub})", "discussion", link))
+        if len(signals) >= cap:
+            break
+    return signals
+
+
 def _reddit(cap: int) -> list[Signal]:
     out: list[Signal] = []
     per_sub = max(1, cap // max(1, len(config.REDDIT_SUBS)))
     headers = {"User-Agent": REDDIT_UA, "Accept": "application/json"}
     for sub in config.REDDIT_SUBS:
+        got: list[Signal] = []
         last: Exception | None = None
+        # Preferred: JSON listings, which carry upvotes and comment counts.
         for host in REDDIT_HOSTS:
             try:
                 url = f"{host}/r/{sub}/hot.json?limit={per_sub * 2}&raw_json=1"
                 resp = requests.get(url, headers=headers, timeout=25, allow_redirects=True)
                 resp.raise_for_status()
-                out.extend(_parse_reddit(resp.json(), sub, per_sub))
+                got = _parse_reddit(resp.json(), sub, per_sub)
                 last = None
                 break
             except Exception as exc:  # try the next mirror before giving up
                 last = exc
-        if last is not None:
-            log.warning("reddit r/%s failed on all hosts: %s", sub, last)
+        # Fallback: the Atom feed, which is served where JSON is 403-blocked.
+        if not got:
+            for host in REDDIT_HOSTS:
+                try:
+                    resp = requests.get(f"{host}/r/{sub}/hot.rss?limit={per_sub * 2}",
+                                        headers={"User-Agent": REDDIT_UA},
+                                        timeout=25, allow_redirects=True)
+                    resp.raise_for_status()
+                    got = _parse_reddit_rss(resp.content, sub, per_sub)
+                    if got:
+                        log.info("reddit r/%s: JSON blocked, using RSS (no vote counts)", sub)
+                        last = None
+                        break
+                except Exception as exc:
+                    last = exc
+        out.extend(got)
+        if not got and last is not None:
+            log.warning("reddit r/%s failed (JSON and RSS): %s", sub, last)
     return out
 
 

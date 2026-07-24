@@ -36,6 +36,11 @@ FEEDS: list[dict] = [
     {"name": "Delfi Sportas","url": "https://www.delfi.lt/rss/feeds/sportas.xml"},
     {"name": "Lrytas",       "url": "https://www.lrytas.lt/rss"},
     {"name": "VZ",           "url": "https://www.vz.lt/rss"},
+    # Economy / business / geopolitics — the informative side of the batch.
+    {"name": "LRT Verslas",  "url": "https://www.lrt.lt/naujienos/verslas?rss"},
+    {"name": "15min Verslas","url": "https://www.15min.lt/rss/verslas"},
+    {"name": "Delfi Verslas","url": "https://www.delfi.lt/rss/feeds/verslas.xml"},
+    {"name": "LRT Pasaulis", "url": "https://www.lrt.lt/naujienos/pasaulyje?rss"},
 ]
 
 HARVEST_DAYS = 4          # look-back window for headlines
@@ -135,7 +140,20 @@ VAGUE_STEMS = [
 # these words are rules-only noise in a headline:
 #   "viešai" (publicly) — once a market resolves on an announcement it is public
 #   by definition; say "must be a public statement" in the rules instead.
-HEADLINE_NOISE_WORDS = ["viešai"]
+# Matched as stems (viešai, viešas; oficialiai, oficialus, oficialų...).
+#   "viešai"   — anything announced is public by definition
+#   "oficial*" — if a market resolves at all, it resolves on official facts;
+#                where "official" is defined belongs in the rules
+HEADLINE_NOISE_WORDS = ["viešai", "viešas", "oficial"]
+
+# Causal / speculative links cannot be verified: no source ever reports that
+# event A "encouraged" or "caused" event B. Predict the second event directly.
+# Kills: "Ar „Mere" uždarymas paskatins kito tinklo atėjimą?"
+CAUSAL_RE = re.compile(
+    r"\b(paskatins|paskatino|paskatintų|lems|nulems|nulemtų|sąlygos|sąlygotų"
+    r"|turės\s+įtakos|padarys\s+įtaką|dėl\s+to\s+bus)\b",
+    re.IGNORECASE,
+)
 
 # ── Unresolvable-option / subjective-premise linter ─────────────────────────
 # Multi-outcome options must be concrete, mutually exclusive, publicly

@@ -60,6 +60,8 @@ def lint_unresolvable(question: str, options: list[str]) -> list[str]:
             hits.append(f"subjective option: {stem!r}")
     if config.MAIN_STANCE_RE.search(question):
         hits.append("undefined 'pagrindinis sprendimas/pozicija' framing")
+    if config.CAUSAL_RE.search(question):
+        hits.append("unverifiable causal link (predict the event itself)")
     return hits
 
 
@@ -79,7 +81,7 @@ def lint_headline_format(question: str) -> list[str]:
         problems.append("day-precision date (use a month/event or drop it)")
     low = question.lower()
     for word in config.HEADLINE_NOISE_WORDS:
-        if re.search(rf"\b{re.escape(word)}\b", low):
+        if re.search(rf"\b{re.escape(word)}\w*", low):
             problems.append(f"rules-only word {word!r}")
     return problems
 
@@ -169,6 +171,13 @@ def validate_candidate(
         return None, f"resolve_by {cand.resolve_by} is before app launch ({min_resolve})"
     if resolve_by > today + timedelta(days=365):
         return None, f"resolve_by {cand.resolve_by} is more than a year out"
+
+    # A Taip/Ne market must ASK something. A bare statement headline
+    # ("LeBrono Jameso sezonas „76ers" klube") leaves "Taip" ambiguous — the
+    # title asserts the thing the user is supposed to be predicting. Title-style
+    # headlines stay legal for multi-outcome markets ("Naujas Palangos meras").
+    if cand.market_type == "binary" and "?" not in cand.question_lt:
+        return None, "binary market must be phrased as a question (missing '?')"
 
     if cand.market_type == "binary":
         if [o.strip().lower() for o in cand.options_lt] != ["taip", "ne"]:

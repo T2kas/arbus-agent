@@ -258,6 +258,35 @@ def test_month_reference_in_headline_allowed():
     assert reason is None and fixed is not None
 
 
+def test_causal_link_market_rejected():
+    # #109: "will X's closure encourage Y" — causation is never reported by a source.
+    cand = make(question_lt="Ar „Mere“ uždarymas paskatins kito žemų kainų tinklo atėjimą?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_oficialiai_in_headline_rejected():
+    # #111: "oficialų" is rules-only, like "viešai".
+    cand = make(question_lt="Ar rinktinė patirs oficialų žaidėjų boikotą?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_binary_statement_headline_rejected():
+    # #112: a statement + Taip/Ne makes "Taip" meaningless.
+    cand = make(question_lt="LeBrono Jameso sezonas Filadelfijos „76ers“ klube")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "question" in reason
+
+
+def test_multi_title_headline_still_allowed():
+    # Titles remain legal for multi-outcome markets.
+    cand = make(question_lt="Naujas Palangos meras", market_type="multi",
+                options_lt=["A", "B", "C"], probabilities=[0.4, 0.35, 0.25])
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
+
+
 def test_clean_title_headline_passes():
     # Polymarket-style title, no date, no source — must pass.
     cand = make(question_lt="Naujas Palangos meras",

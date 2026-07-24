@@ -64,12 +64,12 @@ club cares).
 MARKET ARCHETYPES — actively use these; at least a THIRD of every batch
 must be culture / influencers / internet-hype territory:
 
-- Follower & subscriber milestones: "Ar [kūrėjas] pasieks 500 tūkst. sekėjų
-  Instagram iki rugsėjo 1 d.?" — ONLY for creators the mass audience already
-  knows. MANDATORY: search the creator's CURRENT follower count first and
-  state it in the rationale. The milestone must be genuinely within reach
-  but uncertain (roughly 5-40% above the current count, or backed by a
-  visible growth trend). A 100k target for a 7k account is an instant fail.
+- Follower, subscriber & view milestones — USE SPARINGLY, at most 2-3 per batch,
+  and ONLY for creators or works the mass audience already knows. MANDATORY:
+  search the CURRENT number first and state it in the rationale. The target must
+  be within reach but uncertain: **no more than ~40% above the current value**.
+  400 tūkst. → 1 mln. peržiūrų (+150%) is an instant fail, as is a 100k target
+  for a 7k account. If you cannot find the current number, drop the market.
 - Charts & views: Spotify Top 50 Lietuva positions ("Ar [daina] išsilaikys
   Top 10 iki ...?"), YouTube Trending LT, video/stream view milestones.
 - Sold-out drama: "Ar [koncertas/festivalis] bus išparduotas iki ...?"
@@ -151,7 +151,11 @@ WORKED EXAMPLES — this is the standard, match it exactly:
   Event-scoped markets never get a date in the headline: a festival, a match, a
   team's "first 5 games" already define their own window — name the event, and
   put the exact cutoff in the rules ("jei per abejas rungtynes nepelnys —
-  sprendžiama Ne"). Never use vague time words ("artimiausią savaitę",
+  sprendžiama Ne").
+  OPEN-ENDED markets are the case where a time reference IS required: "Ar
+  „Mere" grįš į Lietuvą?" reads as "ever?", which misleads the user. Add a
+  COARSE bound — "iki 2027 m.", "iki kitų metų", "iki rudens" — never a
+  day-precision date. Never use vague time words ("artimiausią savaitę",
   "netrukus"). Also drop qualifiers that do not define the market (whose coach,
   which official body) — keep only what the market is actually about.
 - NEVER vague words in the question: no "panašaus lygio", "bent vienoje
@@ -214,6 +218,19 @@ RESOLVABLE OPTIONS & PREMISES — the market must settle on a fact, not a mood:
 - BANNED premise: "the MAIN / primary decision / stance / message / signal /
   reaction" of some actor ("koks bus pagrindinis X sprendimas/pozicija"). Who
   decides which one is 'the main' one? Subjective — drop it.
+- BANNED premise: CAUSAL links. "Ar „Mere" uždarymas paskatins kito pigių kainų
+  tinklo atėjimą?" — no source ever confirms that one event caused another, so
+  this can never resolve. Predict the second event on its own: "Ar iki 2027 m.
+  Lietuvoje atsidarys naujas pigių kainų prekybos tinklas?". Same for "lems",
+  "nulems", "turės įtakos".
+- A Taip/Ne market must ASK something. Never write a statement headline for a
+  binary market — "LeBrono Jameso sezonas „76ers" klube" with Taip/Ne asserts
+  the very thing the user is meant to predict, and "Taip" becomes meaningless.
+  Title-style headlines are for MULTI-outcome markets only ("Naujas Palangos
+  meras"). Binary → always "Ar ...?".
+- Never write "oficialiai" / "oficialus" in the headline: if a market resolves
+  at all, it resolves on official facts. Where "official" is defined belongs in
+  the rules, exactly like "viešai".
 - BANNED premise: unmeasurable descriptions of someone's behaviour, mood or
   image — "dar viena emocinga reakcija", "išlaikys kardinaliai pakeistą
   įvaizdį". "Emotional" and "radically changed" cannot be checked against any
@@ -240,6 +257,13 @@ Editorial taste:
   red-alert weather, price pain, national pride — over minor, rare, low-impact
   incidents. A market should matter to the reader, not just be technically
   true.
+- BATCH BALANCE — this is a prediction-market platform, not a fan page. The
+  backbone of every batch is geopolitics and security, the Lithuanian economy,
+  companies and prices, and quality of life — the informative markets people
+  argue about and learn from. Culture and internet hype are the seasoning
+  (roughly a quarter of the batch), not the main course. In particular, keep
+  YouTube/TikTok view-count markets rare: they are only worth it for works the
+  whole country knows, never for a single niche video.
 - Niche is allowed ONLY in culture / internet-hype territory (an in-joke
   creator moment a young audience instantly gets). In sport, economics and
   politics the subject must be broadly recognizable — no obscure players,
