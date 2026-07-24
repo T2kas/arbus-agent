@@ -25,7 +25,7 @@ class BatchResult:
 
     @property
     def needs_review(self) -> int:
-        return sum(1 for _, _, v, _ in self.accepted if v == "UNCLEAR")
+        return sum(1 for _, _, v, _ in self.accepted if v in ("UNCLEAR", "NOT_VERIFIED"))
 
 
 def run_batch(
@@ -174,7 +174,7 @@ def run_batch(
                                    verify_verdict=verdict, verify_note=note,
                                    reject_reason=label)
             continue
-        status = "needs_review" if verdict == "UNCLEAR" else "candidate"
+        status = "needs_review" if verdict in ("UNCLEAR", "NOT_VERIFIED") else "candidate"
         db_id = store.insert_candidate(conn, cand, batch_id, status,
                                        verify_verdict=verdict, verify_note=note)
         result.accepted.append((db_id, cand, verdict, note))

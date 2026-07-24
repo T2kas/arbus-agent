@@ -81,23 +81,50 @@ def _parse_verdicts(text: str, n: int) -> dict[int, tuple[str, str]]:
     return out
 
 
+def _ask(prompt: str, use_perplexity: bool) -> str:
+    if use_perplexity:
+        return llm.perplexity_chat(prompt, system=SYSTEM, max_tokens=4000)
+    return llm.research(prompt, system=SYSTEM, max_uses=10, max_tokens=8000)
+
+
 def verify_candidates(cands: list[Candidate], today: date) -> list[tuple[str, str]]:
-    """Return one (verdict, note) per candidate, in order."""
+    """Return one (verdict, note) per candidate, in order.
+
+    A silent parse failure used to look identical to a genuine "cannot verify",
+    which made a broken verification stage indistinguishable from an honestly
+    uncertain one. Now unparsed items get one strict retry and, if that also
+    fails, are labelled NOT_VERIFIED so the report shows a technical problem
+    rather than an editorial verdict.
+    """
     results: list[tuple[str, str]] = []
     use_perplexity = bool(os.environ.get("PERPLEXITY_API_KEY"))
 
     for start in range(0, len(cands), config.VERIFY_CHUNK_SIZE):
         chunk = cands[start : start + config.VERIFY_CHUNK_SIZE]
         prompt = _verify_prompt(chunk, today)
+        verdicts: dict[int, tuple[str, str]] = {}
         try:
-            if use_perplexity:
-                text = llm.perplexity_chat(prompt, system=SYSTEM, max_tokens=4000)
-            else:
-                text = llm.research(prompt, system=SYSTEM, max_uses=10, max_tokens=8000)
+            text = _ask(prompt, use_perplexity)
             verdicts = _parse_verdicts(text, len(chunk))
+            if len(verdicts) < len(chunk):
+                log.warning("verification: parsed %d/%d verdicts; retrying strictly. "
+                            "Raw head: %s", len(verdicts), len(chunk), text[:300])
+                strict = (
+                    prompt
+                    + "\n\nIMPORTANT: output ONLY the verdict lines, one per item, "
+                      "numbered 1.." + str(len(chunk)) + ", each starting with the "
+                      "number then a colon then one of OPEN/DECIDED/WRONG/UNCLEAR. "
+                      "No preamble, no summary, no extra prose."
+                )
+                retry = _parse_verdicts(_ask(strict, use_perplexity), len(chunk))
+                verdicts = {**retry, **verdicts}  # keep the first pass where it parsed
         except Exception as exc:
             log.warning("verification chunk failed: %s", exc)
-            verdicts = {}
+        missing = [i for i in range(1, len(chunk) + 1) if i not in verdicts]
+        if missing:
+            log.error("verification produced no verdict for %d item(s) in this chunk — "
+                      "these are flagged NOT_VERIFIED, not judged", len(missing))
         for i in range(1, len(chunk) + 1):
-            results.append(verdicts.get(i, ("UNCLEAR", "verification unavailable")))
+            results.append(verdicts.get(i, ("NOT_VERIFIED", "verification stage failed "
+                                                            "(technical, not an editorial verdict)")))
     return results

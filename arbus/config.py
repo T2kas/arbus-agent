@@ -183,7 +183,8 @@ MAIN_STANCE_RE = re.compile(
 # keeps the source of truth in the rules and the sources list, and the headline
 # just states the idea. Match "pagal ... <source-word>" in the question.
 SOURCE_ATTR_RE = re.compile(
-    r"pagal\b(?:\W+\w+){0,6}?\W+(duomen|kainoraš|rodikl|skelbiam|tarnyb)",
+    r"pagal\b(?:\W+\w+){0,6}?\W+"
+    r"(duomen|kainoraš|rodikl|skelbiam|tarnyb|skaičiav|skaiciav|apskaič|vertinim|statistik|ataskait)",
     re.IGNORECASE,
 )
 
