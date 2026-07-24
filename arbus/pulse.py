@@ -145,15 +145,31 @@ def _parse_reddit(payload: dict, sub: str, cap: int) -> list[Signal]:
     return signals
 
 
+# Reddit 403s generic user agents and increasingly gates www.reddit.com JSON.
+# A descriptive UA in Reddit's documented "platform:app:version (by /u/user)"
+# form plus the old.reddit.com mirror gets the public listing back.
+REDDIT_UA = "windows:arbus-market-agent:1.0 (by /u/arbus_bot)"
+REDDIT_HOSTS = ["https://old.reddit.com", "https://www.reddit.com"]
+
+
 def _reddit(cap: int) -> list[Signal]:
     out: list[Signal] = []
     per_sub = max(1, cap // max(1, len(config.REDDIT_SUBS)))
+    headers = {"User-Agent": REDDIT_UA, "Accept": "application/json"}
     for sub in config.REDDIT_SUBS:
-        try:
-            url = f"https://www.reddit.com/r/{sub}/hot.json?limit={per_sub * 2}"
-            out.extend(_parse_reddit(_get_json(url), sub, per_sub))
-        except Exception as exc:  # one dead sub must not sink the rest
-            log.warning("reddit r/%s failed: %s", sub, exc)
+        last: Exception | None = None
+        for host in REDDIT_HOSTS:
+            try:
+                url = f"{host}/r/{sub}/hot.json?limit={per_sub * 2}&raw_json=1"
+                resp = requests.get(url, headers=headers, timeout=25, allow_redirects=True)
+                resp.raise_for_status()
+                out.extend(_parse_reddit(resp.json(), sub, per_sub))
+                last = None
+                break
+            except Exception as exc:  # try the next mirror before giving up
+                last = exc
+        if last is not None:
+            log.warning("reddit r/%s failed on all hosts: %s", sub, last)
     return out
 
 
@@ -188,12 +204,29 @@ def _parse_wikipedia(payload: dict, cap: int) -> list[Signal]:
     return signals
 
 
+def _wiki_urls(today: date, days_back: int = 4) -> list[str]:
+    """Candidate URLs, newest first.
+
+    Wikimedia compiles the daily top list some hours after UTC midnight, so
+    yesterday can still 404 depending on the time of day and timezone. Walk
+    back a few days instead of giving up on the first miss.
+    """
+    urls = []
+    for back in range(1, days_back + 1):
+        d = today - timedelta(days=back)
+        urls.append("https://wikimedia.org/api/rest_v1/metrics/pageviews/top/"
+                    f"lt.wikipedia/all-access/{d.year}/{d.month:02d}/{d.day:02d}")
+    return urls
+
+
 def _wikipedia(cap: int) -> list[Signal]:
-    # Yesterday: today's top list is usually not compiled yet.
-    d = date.today() - timedelta(days=1)
-    url = ("https://wikimedia.org/api/rest_v1/metrics/pageviews/top/"
-           f"lt.wikipedia/all-access/{d.year}/{d.month:02d}/{d.day:02d}")
-    return _parse_wikipedia(_get_json(url), cap)
+    last: Exception | None = None
+    for url in _wiki_urls(date.today()):
+        try:
+            return _parse_wikipedia(_get_json(url), cap)
+        except Exception as exc:  # 404 until the day's data is compiled
+            last = exc
+    raise last if last else RuntimeError("wikipedia: no data")
 
 
 # ── YouTube Trending LT — optional, activates only with a free API key ───────
@@ -278,20 +311,39 @@ def _parse_tiktok_sounds(payload: dict, cap: int) -> list[Signal]:
     return signals
 
 
+def _tiktok_urls(kind: str, country: str, period: int, limit: int) -> list[str]:
+    """Known Creative Center endpoint shapes for a trend list, in order.
+
+    TikTok reshuffles these paths without notice, so try the documented radar
+    path and the older popular_trend path before giving up.
+    """
+    q = f"period={period}&page=1&limit={limit}&country_code={country}&sort_by=popular"
+    return [
+        f"{_TIKTOK_BASE}/{kind}/list?{q}",
+        f"https://ads.tiktok.com/creative_radar_api/v1/{kind}/list?{q}",
+        f"https://ads.tiktok.com/creative_radar_api/v1/popular_trend/{kind}?{q}",
+    ]
+
+
 def _tiktok(cap: int) -> list[Signal]:
     country = config.TIKTOK_COUNTRY
     period = config.TIKTOK_PERIOD
     out: list[Signal] = []
     half = max(1, cap // 2)
     for kind, parser in (("hashtag", _parse_tiktok_hashtags), ("sound", _parse_tiktok_sounds)):
-        try:
-            url = (f"{_TIKTOK_BASE}/{kind}/list?period={period}&page=1"
-                   f"&limit={half}&country_code={country}&sort_by=popular")
-            resp = requests.get(url, headers=_TIKTOK_HEADERS, timeout=25)
-            resp.raise_for_status()
-            out.extend(parser(resp.json(), half))
-        except Exception as exc:  # TikTok blocks / country unsupported / format drift
-            log.warning("tiktok %s failed: %s", kind, exc)
+        for url in _tiktok_urls(kind, country, period, half):
+            try:
+                resp = requests.get(url, headers=_TIKTOK_HEADERS, timeout=25)
+                resp.raise_for_status()
+                got = parser(resp.json(), half)
+                if got:
+                    out.extend(got)
+                    break
+            except Exception as exc:  # blocked / country unsupported / path moved
+                log.debug("tiktok %s endpoint failed (%s): %s", kind, url, exc)
+    if not out:
+        log.info("tiktok: no signals (Creative Center blocks automated access or "
+                 "does not cover %s) — optional source, batch continues", country)
     return out
 
 

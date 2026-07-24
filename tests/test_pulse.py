@@ -175,6 +175,21 @@ def test_tiktok_hashtags_parse_and_skip_empty():
     assert sigs[0].kind == "tiktok"
 
 
+def test_wiki_urls_walk_back_from_yesterday():
+    from datetime import date
+    urls = pulse._wiki_urls(date(2026, 7, 25), days_back=3)
+    assert len(urls) == 3
+    assert urls[0].endswith("/2026/07/24")   # yesterday first
+    assert urls[1].endswith("/2026/07/23")
+    assert "lt.wikipedia" in urls[0]
+
+
+def test_tiktok_urls_offer_fallback_paths():
+    urls = pulse._tiktok_urls("hashtag", "LT", 7, 6)
+    assert len(urls) >= 2
+    assert all("country_code=LT" in u and "hashtag" in u for u in urls)
+
+
 def test_tiktok_sounds_parse_and_skip_empty():
     sigs = pulse._parse_tiktok_sounds(TIKTOK_SOUNDS, cap=10)
     assert len(sigs) == 1
