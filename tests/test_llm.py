@@ -28,6 +28,24 @@ def test_provider_without_any_key_explains_all_options():
         llm.provider()
 
 
+def test_web_search_tool_omits_unsupported_location(monkeypatch):
+    # "LT" is not an accepted country code; default config must not send one.
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "")
+    tool = llm._web_search_tool(10)
+    assert "user_location" not in tool
+    assert tool["name"] == "web_search"
+
+
+def test_web_search_tool_includes_configured_location(monkeypatch):
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "US")
+    assert llm._web_search_tool(10)["user_location"]["country"] == "US"
+
+
+def test_web_search_tool_location_suppressed_on_retry(monkeypatch):
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "US")
+    assert "user_location" not in llm._web_search_tool(10, with_location=False)
+
+
 def test_json_objects_splits_concatenated_output():
     text = '{"a": 1}\n{"a": {"nested": "}"}}\n'
     assert llm._json_objects(text) == ['{"a": 1}', '{"a": {"nested": "}"}}']

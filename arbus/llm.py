@@ -270,33 +270,54 @@ def _anthropic_client():
     return anthropic.Anthropic()
 
 
-def _web_search_tool(max_uses: int) -> dict:
-    return {
+def _web_search_tool(max_uses: int, with_location: bool = True) -> dict:
+    """Anthropic's server-side web search.
+
+    `user_location` only accepts a short list of country codes and Lithuania is
+    not among them — passing it returns 400 "Country code LT is not supported"
+    and kills the whole batch. Localization is left off by default (the prompts
+    already instruct searching in Lithuanian) and can be re-enabled through
+    config for a supported country.
+    """
+    tool: dict = {
         "type": "web_search_20260209",
         "name": "web_search",
         "max_uses": max_uses,
-        "user_location": {
-            "type": "approximate",
-            "country": "LT",
-            "city": "Vilnius",
-            "timezone": "Europe/Vilnius",
-        },
     }
+    if with_location and config.ANTHROPIC_SEARCH_COUNTRY:
+        tool["user_location"] = {
+            "type": "approximate",
+            "country": config.ANTHROPIC_SEARCH_COUNTRY,
+            "timezone": config.ANTHROPIC_SEARCH_TIMEZONE,
+        }
+    return tool
 
 
 def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens: int) -> str:
     client = _anthropic_client()
     messages: list[dict] = [{"role": "user", "content": user_prompt}]
+    with_location = True
     for attempt in range(6):
-        with client.messages.stream(
-            model=config.MODEL,
-            max_tokens=max_tokens,
-            system=system,
-            thinking={"type": "adaptive"},
-            tools=[_web_search_tool(max_uses)],
-            messages=messages,
-        ) as stream:
-            resp = stream.get_final_message()
+        try:
+            with client.messages.stream(
+                model=config.MODEL,
+                max_tokens=max_tokens,
+                system=system,
+                thinking={"type": "adaptive"},
+                tools=[_web_search_tool(max_uses, with_location)],
+                messages=messages,
+            ) as stream:
+                resp = stream.get_final_message()
+        except Exception as exc:
+            # An unsupported user_location country is a configuration problem,
+            # not a reason to lose the batch — drop the hint and search globally.
+            text = str(exc)
+            if with_location and ("user_location" in text or "Country code" in text):
+                log.warning("web search rejected the configured location (%s); "
+                            "retrying without it", text[:120])
+                with_location = False
+                continue
+            raise
 
         if resp.stop_reason == "pause_turn":
             messages = [messages[0], {"role": "assistant", "content": resp.content}]

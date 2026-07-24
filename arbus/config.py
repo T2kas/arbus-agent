@@ -22,7 +22,13 @@ def _load_dotenv() -> None:
 
 _load_dotenv()
 
-MODEL = "claude-opus-4-8"
+MODEL = "claude-opus-5"
+
+# Anthropic's web-search tool accepts `user_location` for only a few countries,
+# and "LT" is rejected with a 400 that aborts the batch. Empty = search without
+# a location hint (the prompts already tell the model to search in Lithuanian).
+ANTHROPIC_SEARCH_COUNTRY = ""
+ANTHROPIC_SEARCH_TIMEZONE = "Europe/Vilnius"
 
 # ── RSS sources ─────────────────────────────────────────────────────────────
 # Harvest is resilient: a dead feed is logged and skipped, never fatal.
