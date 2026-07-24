@@ -85,6 +85,77 @@ def _extract_json(text: str) -> str:
     return text[start : end + 1]
 
 
+def _json_objects(text: str) -> list[str]:
+    """Return every top-level balanced {...} block, ignoring braces in strings."""
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.M)
+    out: list[str] = []
+    depth = 0
+    start: int | None = None
+    in_str = esc = False
+    for i, ch in enumerate(text):
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+        elif ch == "{":
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == "}" and depth > 0:
+            depth -= 1
+            if depth == 0 and start is not None:
+                out.append(text[start : i + 1])
+                start = None
+    return out
+
+
+def _list_field(output_model: Type[BaseModel]) -> str | None:
+    """Name of the model's single list field, if it has exactly one."""
+    names = [
+        name for name, field in output_model.model_fields.items()
+        if str(field.annotation).startswith(("list[", "typing.List["))
+    ]
+    return names[0] if len(names) == 1 else None
+
+
+def _validate_flexible(content: str, output_model: Type[T]) -> T:
+    """Validate model output, tolerating the shapes chat models actually emit.
+
+    Some models (GLM notably) ignore the container and stream one bare object
+    per item — "{...}\\n{...}" — which is not valid JSON as a whole and used to
+    fail with "trailing characters". Accept that by collecting the top-level
+    objects and wrapping them into the target model's list field.
+    """
+    objs = _json_objects(content)
+    if not objs:
+        raise ValueError("no JSON object found in model output")
+
+    first_error: Exception | None = None
+    try:
+        return output_model.model_validate_json(objs[0])
+    except ValidationError as exc:
+        first_error = exc
+
+    field = _list_field(output_model)
+    if field:
+        items = []
+        for obj in objs:
+            try:
+                items.append(json.loads(obj))
+            except json.JSONDecodeError:
+                continue
+        if items:
+            log.info("model emitted %d bare objects; wrapping into %r", len(items), field)
+            return output_model.model_validate({field: items})
+    raise first_error
+
+
 def _structure_openai_compatible(
     chat, model: str, text: str, output_model: Type[T], max_tokens: int
 ) -> T:
@@ -107,7 +178,7 @@ def _structure_openai_compatible(
             model=model, max_tokens=max_tokens,
         )
     try:
-        return output_model.model_validate_json(_extract_json(content))
+        return _validate_flexible(content, output_model)
     except (ValidationError, ValueError) as exc:
         # One repair round: show the model its own output and the error.
         log.warning("structure output invalid (%s); attempting one repair round", exc)
@@ -117,7 +188,7 @@ def _structure_openai_compatible(
             f"ERROR:\n{exc}\n\nJSON:\n{content}",
             model=model, max_tokens=max_tokens,
         )
-        return output_model.model_validate_json(_extract_json(repaired))
+        return _validate_flexible(repaired, output_model)
 
 
 # ── Z.AI (Zhipu GLM) backend ────────────────────────────────────────────────

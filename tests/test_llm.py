@@ -28,6 +28,38 @@ def test_provider_without_any_key_explains_all_options():
         llm.provider()
 
 
+def test_json_objects_splits_concatenated_output():
+    text = '{"a": 1}\n{"a": {"nested": "}"}}\n'
+    assert llm._json_objects(text) == ['{"a": 1}', '{"a": {"nested": "}"}}']
+
+
+def test_validate_flexible_accepts_proper_container():
+    from arbus.schemas import CandidateBatch
+    payload = '{"candidates": []}'
+    assert llm._validate_flexible(payload, CandidateBatch).candidates == []
+
+
+def test_validate_flexible_wraps_bare_objects():
+    """GLM emits one bare candidate per object instead of the batch container."""
+    from arbus.schemas import CandidateBatch
+    item = (
+        '{"question_lt": "Ar Žalgiris laimės?", "market_type": "binary",'
+        ' "options_lt": ["Taip", "Ne"], "probabilities": [0.6, 0.4],'
+        ' "category": "sports", "resolve_by": "2026-09-01",'
+        ' "duration_class": "long", "resolution_hint_lt": "Pagal LKL.",'
+        ' "sources": ["https://x.lt/a"], "rationale_en": "test"}'
+    )
+    out = llm._validate_flexible(f"```json\n{item}\n{item}\n```", CandidateBatch)
+    assert len(out.candidates) == 2
+    assert out.candidates[0].question_lt == "Ar Žalgiris laimės?"
+
+
+def test_validate_flexible_raises_when_nothing_usable():
+    from arbus.schemas import CandidateBatch
+    with pytest.raises(ValueError):
+        llm._validate_flexible("no json here", CandidateBatch)
+
+
 class _Resp:
     def __init__(self, status=200, content="ok"):
         self.status_code = status
