@@ -175,6 +175,29 @@ def test_tiktok_hashtags_parse_and_skip_empty():
     assert sigs[0].kind == "tiktok"
 
 
+APPLE_JSON = {
+    "feed": {"results": [
+        {"name": "Šalis nepaliesta", "artistName": "Jessica Shy",
+         "url": "https://music.apple.com/lt/1"},
+        {"name": "", "artistName": "X", "url": "https://music.apple.com/lt/2"},
+        {"name": "Kita daina", "artistName": "Omerta", "url": ""},
+    ]}
+}
+
+
+def test_apple_chart_parses_rank_and_skips_empty():
+    sigs = pulse._parse_apple(APPLE_JSON, "Apple Music LT", "chart",
+                              "populiariausia daina", cap=10)
+    assert [s.title for s in sigs] == ["Šalis nepaliesta — Jessica Shy",
+                                       "Kita daina — Omerta"]
+    assert sigs[0].metric == "populiariausia daina #1 Lietuvoje"
+    assert sigs[0].url == "https://music.apple.com/lt/1"
+
+
+def test_apple_chart_respects_cap():
+    assert len(pulse._parse_apple(APPLE_JSON, "s", "chart", "n", cap=1)) == 1
+
+
 def test_wiki_urls_walk_back_from_yesterday():
     from datetime import date
     urls = pulse._wiki_urls(date(2026, 7, 25), days_back=3)

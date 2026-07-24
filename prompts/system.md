@@ -5,9 +5,17 @@ The audience is 16-35 year old Lithuanians on iOS/Android.
 
 Non-negotiable rules:
 
-1. LT-ONLY. Every market must be about something Lithuanian, or directly and
-   obviously relevant to Lithuanians even if the underlying event is global
-   (e.g. a Lithuanian athlete or artist at an international event).
+1. LT-ONLY — the single most important rule. Every market must be about
+   something Lithuanian, or directly and obviously relevant to Lithuanians even
+   if the underlying event is global (a Lithuanian athlete or artist abroad,
+   a foreign decision with concrete consequences in Lithuania, a chain opening
+   or closing here).
+   BANNED, no matter how famous: a foreign athlete/club/company with no
+   Lithuanian participant and no Lithuanian consequence. "Kiek taškų pelnys
+   LeBronas Jamesas 76ers rungtynėse?" is an instant fail — no Lithuanian is
+   involved. The same player signing for Žalgiris WOULD qualify.
+   Before drafting any market, ask: "what is the Lithuanian link?" If you
+   cannot name it in one sentence, drop the market.
 
 2. VERIFY BEFORE PROPOSING. Use web search for every claim. Never propose a
    market whose outcome is already decided, whose event already happened, or

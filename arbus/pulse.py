@@ -397,6 +397,44 @@ def _tiktok(cap: int) -> list[Signal]:
     return out
 
 
+# ── Apple charts — what Lithuania listens to and installs ───────────────────
+# Apple's marketing RSS is public, key-free and genuinely country-scoped, which
+# makes it the most reliable chart signal available for Lithuania: Spotify's
+# chart pages now require a login, and Instagram/Threads expose no trend feed at
+# all. App rankings double as a culture signal — which apps a country is
+# installing this week is a real trend, not a proxy for one.
+
+_APPLE_BASE = "https://rss.applemarketingtools.com/api/v2"
+
+
+def _parse_apple(payload: dict, source: str, kind: str, noun: str, cap: int) -> list[Signal]:
+    results = payload.get("feed", {}).get("results", []) or []
+    signals: list[Signal] = []
+    for rank, row in enumerate(results, 1):
+        name = (row.get("name") or "").strip()
+        if not name:
+            continue
+        artist = (row.get("artistName") or "").strip()
+        label = f"{name} — {artist}" if artist else name
+        signals.append(Signal(source, label, f"{noun} #{rank} Lietuvoje", kind,
+                              row.get("url", "")))
+        if len(signals) >= cap:
+            break
+    return signals
+
+
+def _apple_music(cap: int) -> list[Signal]:
+    url = (f"{_APPLE_BASE}/{config.APPLE_STOREFRONT}/music/most-played/"
+           f"{max(cap, 10)}/songs.json")
+    return _parse_apple(_get_json(url), "Apple Music LT", "chart", "populiariausia daina", cap)
+
+
+def _apple_apps(cap: int) -> list[Signal]:
+    url = (f"{_APPLE_BASE}/{config.APPLE_STOREFRONT}/apps/top-free/"
+           f"{max(cap, 10)}/apps.json")
+    return _parse_apple(_get_json(url), "App Store LT", "app", "populiariausia programėlė", cap)
+
+
 # ── Registry + public API ────────────────────────────────────────────────────
 
 # (label, fetcher). Add a source by appending one line. Keyed sources return []
@@ -407,6 +445,8 @@ SOURCES: list[tuple[str, "callable"]] = [
     ("Wikipedia LT", _wikipedia),
     ("TikTok Creative Center", _tiktok),
     ("YouTube Trending LT", _youtube),
+    ("Apple Music LT", _apple_music),
+    ("App Store LT", _apple_apps),
 ]
 
 

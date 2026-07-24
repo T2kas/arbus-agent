@@ -250,7 +250,16 @@ def zai_chat(
         payload.pop("tools")
         resp = _post(payload)
     resp.raise_for_status()
-    return resp.json()["choices"][0]["message"]["content"]
+    msg = resp.json()["choices"][0]["message"]
+    # GLM returns None/"" in `content` when it answers as a reasoning trace or
+    # asks for an unresolved tool call. Falling through with None used to blow
+    # up the caller (verification then reported every item as NOT_VERIFIED), so
+    # take the reasoning text when that is all there is, and say so loudly.
+    content = msg.get("content") or msg.get("reasoning_content") or ""
+    if not content:
+        log.warning("z.ai returned an empty message (tool_calls=%s) — treating as "
+                    "no answer", bool(msg.get("tool_calls")))
+    return content
 
 
 # ── Anthropic backend ───────────────────────────────────────────────────────

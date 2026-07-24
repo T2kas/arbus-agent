@@ -41,6 +41,9 @@ FEEDS: list[dict] = [
     {"name": "15min Verslas","url": "https://www.15min.lt/rss/verslas"},
     {"name": "Delfi Verslas","url": "https://www.delfi.lt/rss/feeds/verslas.xml"},
     {"name": "LRT Pasaulis", "url": "https://www.lrt.lt/naujienos/pasaulyje?rss"},
+    # Aggregated top stories — catches what several outlets converge on.
+    {"name": "Google News LT",
+     "url": "https://news.google.com/rss?hl=lt&gl=LT&ceid=LT:lt"},
 ]
 
 HARVEST_DAYS = 4          # look-back window for headlines
@@ -59,6 +62,8 @@ REDDIT_SUBS = ["lietuva", "Lithuania"]  # lietuva = LT-language, Lithuania = mix
 # TikTok Creative Center (best-effort; may be empty if LT is unsupported there).
 TIKTOK_COUNTRY = "LT"           # try "" or a bigger market as a fallback if LT is empty
 TIKTOK_PERIOD = 7               # trend window in days: 7, 30 or 120
+# Apple's public marketing RSS: key-free, genuinely country-scoped charts.
+APPLE_STOREFRONT = "lt"
 
 # Optional keyed sources — inert until the key is set, so enabling them is safe.
 #   YOUTUBE_API_KEY  free from Google Cloud (YouTube Data API v3) -> Trending LT.

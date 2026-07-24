@@ -44,6 +44,11 @@ def _verify_prompt(cands: list[Candidate], today: date) -> str:
         "markets (followers, subscribers, views), look up the CURRENT metric value: if the "
         "target is implausible relative to it (e.g. 100k followers by autumn for an account "
         "at 7k today) or the entity is niche/unknown to a mass audience, the verdict is WRONG.",
+        "- WRONG also when the market has NO Lithuanian connection: this app is for a "
+        "Lithuanian audience, so a market about a foreign athlete, club or company with "
+        "no Lithuanian participant, team or direct consequence for Lithuania is invalid "
+        "no matter how famous the subject is (e.g. how many points a US player scores "
+        "for a US club is WRONG; the same player joining a Lithuanian club is fine).",
         "- OPEN: genuinely undecided and the setup is factually sound.",
         "- UNCLEAR: cannot verify.\n",
         "MANDATORY FIRST STEP for every item: search the CURRENT status of each named "
