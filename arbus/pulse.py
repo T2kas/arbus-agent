@@ -188,7 +188,7 @@ def _reddit(cap: int) -> list[Signal]:
     headers = {"User-Agent": REDDIT_UA, "Accept": "application/json"}
     for idx, sub in enumerate(config.REDDIT_SUBS):
         if idx:
-            time.sleep(2)  # Reddit 429s back-to-back requests from one IP
+            time.sleep(6)  # Reddit 429s closely spaced requests from one IP
         got: list[Signal] = []
         last: Exception | None = None
         # Preferred: JSON listings, which carry upvotes and comment counts.
