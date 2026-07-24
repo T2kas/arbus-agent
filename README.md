@@ -68,7 +68,8 @@ Auto-detected from which API key is set (force with `LLM_PROVIDER=`):
 | Provider | Models | Notes |
 |---|---|---|
 | **Perplexity** (default) | `sonar-pro` research/verify, `sonar` structuring | Search-native, cheap (~$0.10-0.30/batch). |
-| **Anthropic** | `claude-opus-4-8` + web search tool | Sharper editorial drafting; switch with `LLM_PROVIDER=anthropic` when quality matters more than cost. |
+| **Anthropic** | `claude-opus-4-8` + web search tool | Sharper editorial drafting and the strongest "is this already decided?" judgement; `LLM_PROVIDER=anthropic`. |
+| **Z.AI (GLM)** | `glm-4.6` | `LLM_PROVIDER=zai` + `ZAI_API_KEY`. **Not search-native** — grounding relies on Z.AI's server-side `web_search` tool, and if that tool is rejected the call is retried without it and the model answers from memory. Watch the batch for stale facts before trusting it. |
 
 Hard guarantees enforced in code (not just prompt):
 

@@ -13,7 +13,6 @@ Verdicts:
 from __future__ import annotations
 
 import logging
-import os
 import re
 from datetime import date
 
@@ -81,9 +80,13 @@ def _parse_verdicts(text: str, n: int) -> dict[int, tuple[str, str]]:
     return out
 
 
-def _ask(prompt: str, use_perplexity: bool) -> str:
-    if use_perplexity:
-        return llm.perplexity_chat(prompt, system=SYSTEM, max_tokens=4000)
+def _ask(prompt: str, _unused: bool = False) -> str:
+    """Route verification through the configured provider.
+
+    This used to branch on whether PERPLEXITY_API_KEY existed, which silently
+    verified via Perplexity even when LLM_PROVIDER selected another backend —
+    so a provider comparison never actually compared the verification stage.
+    """
     return llm.research(prompt, system=SYSTEM, max_uses=10, max_tokens=8000)
 
 
@@ -97,7 +100,7 @@ def verify_candidates(cands: list[Candidate], today: date) -> list[tuple[str, st
     rather than an editorial verdict.
     """
     results: list[tuple[str, str]] = []
-    use_perplexity = bool(os.environ.get("PERPLEXITY_API_KEY"))
+    use_perplexity = llm.provider() == "perplexity"
 
     for start in range(0, len(cands), config.VERIFY_CHUNK_SIZE):
         chunk = cands[start : start + config.VERIFY_CHUNK_SIZE]

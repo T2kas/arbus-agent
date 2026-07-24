@@ -32,13 +32,18 @@ T = TypeVar("T", bound=BaseModel)
 
 def provider() -> str:
     forced = os.environ.get("LLM_PROVIDER", "").strip().lower()
-    if forced in ("anthropic", "perplexity"):
+    if forced in ("anthropic", "perplexity", "zai"):
         return forced
     if os.environ.get("ANTHROPIC_API_KEY"):
         return "anthropic"
     if os.environ.get("PERPLEXITY_API_KEY"):
         return "perplexity"
-    raise RuntimeError("Set PERPLEXITY_API_KEY or ANTHROPIC_API_KEY (or LLM_PROVIDER + key)")
+    if os.environ.get("ZAI_API_KEY"):
+        return "zai"
+    raise RuntimeError(
+        "Set PERPLEXITY_API_KEY, ANTHROPIC_API_KEY or ZAI_API_KEY "
+        "(or LLM_PROVIDER + the matching key)"
+    )
 
 
 def load_prompt(name: str, **kwargs: str) -> str:
@@ -80,36 +85,84 @@ def _extract_json(text: str) -> str:
     return text[start : end + 1]
 
 
-def _structure_perplexity(text: str, output_model: Type[T], max_tokens: int) -> T:
+def _structure_openai_compatible(
+    chat, model: str, text: str, output_model: Type[T], max_tokens: int
+) -> T:
+    """Structure free text with any OpenAI-compatible chat endpoint.
+
+    Tries native schema-constrained decoding, falls back to plain JSON with the
+    schema inlined, then gives the model one round to repair invalid output.
+    Shared by the Perplexity and Z.AI backends.
+    """
     schema = output_model.model_json_schema()
     rf = {"type": "json_schema", "json_schema": {"schema": schema}}
     try:
-        content = perplexity_chat(
-            text, model=config.PERPLEXITY_STRUCTURE_MODEL,
-            max_tokens=max_tokens, response_format=rf,
-        )
+        content = chat(text, model=model, max_tokens=max_tokens, response_format=rf)
     except requests.HTTPError as exc:
-        log.warning("perplexity json_schema mode failed (%s); falling back to plain JSON", exc)
-        content = perplexity_chat(
+        log.warning("json_schema mode failed (%s); falling back to plain JSON", exc)
+        content = chat(
             text
             + "\n\nRespond with ONLY a JSON object (no prose, no code fences) matching this "
             + "JSON schema:\n" + json.dumps(schema),
-            model=config.PERPLEXITY_STRUCTURE_MODEL,
-            max_tokens=max_tokens,
+            model=model, max_tokens=max_tokens,
         )
     try:
         return output_model.model_validate_json(_extract_json(content))
     except (ValidationError, ValueError) as exc:
         # One repair round: show the model its own output and the error.
         log.warning("structure output invalid (%s); attempting one repair round", exc)
-        repaired = perplexity_chat(
+        repaired = chat(
             "Fix this JSON so it validates against the schema. Respond with ONLY the "
             f"corrected JSON object.\n\nSCHEMA:\n{json.dumps(schema)}\n\n"
             f"ERROR:\n{exc}\n\nJSON:\n{content}",
-            model=config.PERPLEXITY_STRUCTURE_MODEL,
-            max_tokens=max_tokens,
+            model=model, max_tokens=max_tokens,
         )
         return output_model.model_validate_json(_extract_json(repaired))
+
+
+# ── Z.AI (Zhipu GLM) backend ────────────────────────────────────────────────
+
+def zai_chat(
+    user: str,
+    system: str | None = None,
+    model: str = config.ZAI_MODEL,
+    max_tokens: int = 8000,
+    response_format: dict | None = None,
+    web_search: bool = False,
+) -> str:
+    """Call Z.AI's OpenAI-compatible endpoint.
+
+    GLM has no built-in search, so web grounding comes from the server-side
+    web_search tool. Older/other deployments reject that tool shape, so a 4xx
+    with tools attached is retried once without them rather than failing the
+    batch — the caller still gets an answer, just an ungrounded one.
+    """
+    messages = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": user}
+    ]
+    payload: dict = {"model": model, "messages": messages, "max_tokens": max_tokens}
+    if response_format:
+        payload["response_format"] = response_format
+    if web_search and config.ZAI_WEB_SEARCH:
+        payload["tools"] = [{"type": "web_search",
+                             "web_search": {"enable": True, "search_result": True}}]
+
+    def _post(body: dict) -> requests.Response:
+        return requests.post(
+            config.ZAI_BASE_URL,
+            headers={"Authorization": f"Bearer {os.environ['ZAI_API_KEY']}",
+                     "Content-Type": "application/json"},
+            json=body, timeout=600,
+        )
+
+    resp = _post(payload)
+    if resp.status_code >= 400 and "tools" in payload:
+        log.warning("z.ai rejected the web_search tool (%s); retrying WITHOUT web "
+                    "grounding — answers may be from memory", resp.status_code)
+        payload.pop("tools")
+        resp = _post(payload)
+    resp.raise_for_status()
+    return resp.json()["choices"][0]["message"]["content"]
 
 
 # ── Anthropic backend ───────────────────────────────────────────────────────
@@ -178,15 +231,26 @@ def _structure_anthropic(text: str, output_model: Type[T], max_tokens: int) -> T
 
 def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000) -> str:
     """Web-grounded free-text generation."""
-    if provider() == "perplexity":
+    prov = provider()
+    if prov == "perplexity":
         return perplexity_chat(
             user_prompt, system=system, model=config.PERPLEXITY_MODEL, max_tokens=max_tokens
         )
+    if prov == "zai":
+        return zai_chat(user_prompt, system=system, model=config.ZAI_MODEL,
+                        max_tokens=max_tokens, web_search=True)
     return _research_anthropic(user_prompt, system, max_uses, max_tokens)
 
 
 def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:
     """Convert free text into a validated instance of `output_model`."""
-    if provider() == "perplexity":
-        return _structure_perplexity(text, output_model, max_tokens)
+    prov = provider()
+    if prov == "perplexity":
+        return _structure_openai_compatible(
+            perplexity_chat, config.PERPLEXITY_STRUCTURE_MODEL, text, output_model, max_tokens
+        )
+    if prov == "zai":
+        return _structure_openai_compatible(
+            zai_chat, config.ZAI_STRUCTURE_MODEL, text, output_model, max_tokens
+        )
     return _structure_anthropic(text, output_model, max_tokens)

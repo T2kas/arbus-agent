@@ -229,6 +229,14 @@ DEDUPE_LOOKBACK_DAYS = 60     # compare against markets created in this window
 
 # ── Verification ────────────────────────────────────────────────────────────
 VERIFY_CHUNK_SIZE = 8         # candidates per verification LLM call
+# Z.AI (Zhipu) GLM — OpenAI-compatible endpoint. Unlike Perplexity it is NOT
+# search-native, so research/verification depend on the server-side web_search
+# tool below; without it GLM answers from memory and verification degrades.
+ZAI_BASE_URL = "https://api.z.ai/api/paas/v4/chat/completions"
+ZAI_MODEL = "glm-4.6"
+ZAI_STRUCTURE_MODEL = "glm-4.6"
+ZAI_WEB_SEARCH = True
+
 PERPLEXITY_MODEL = "sonar-pro"            # research + verification (search-native)
 # sonar-pro for structuring too: the small "sonar" model corrupts Lithuanian
 # diacritics when copying text (tested 2026-07-13).
