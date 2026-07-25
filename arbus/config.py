@@ -255,7 +255,9 @@ DEDUPE_SIMILARITY = 87        # rapidfuzz token_set_ratio threshold (0-100)
 DEDUPE_LOOKBACK_DAYS = 60     # compare against markets created in this window
 
 # ── Verification ────────────────────────────────────────────────────────────
-VERIFY_CHUNK_SIZE = 8         # candidates per verification LLM call
+# Candidates per verification call. Bigger chunks = fewer calls, and the system
+# prompt + tool setup is paid once per call rather than per candidate.
+VERIFY_CHUNK_SIZE = 12
 # Z.AI (Zhipu) GLM — OpenAI-compatible endpoint. Unlike Perplexity it is NOT
 # search-native, so research/verification depend on the server-side web_search
 # tool below; without it GLM answers from memory and verification degrades.

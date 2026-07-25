@@ -51,6 +51,12 @@ def _verify_prompt(cands: list[Candidate], today: date) -> str:
         "for a US club is WRONG; the same player joining a Lithuanian club is fine).",
         "- OPEN: genuinely undecided and the setup is factually sound.",
         "- UNCLEAR: cannot verify.\n",
+        "MANDATORY: READ THE SOURCES listed under each item BEFORE judging it, and take "
+        "the NEWEST reporting as the truth. A market is DECIDED whenever its own source "
+        "already reports the outcome — e.g. an article headlined 'X elected permanent "
+        "leader' means a market asking whether X will stay leader is DECIDED, not OPEN. "
+        "Never contradict the item's own source based on older knowledge; check each "
+        "article's publication date and prefer the most recent one.",
         "MANDATORY FIRST STEP for every item: search the CURRENT status of each named "
         "subject before judging — which club/team an athlete signed with most recently, "
         "whether a company still operates or has already closed/exited the market, "
@@ -73,6 +79,11 @@ def _verify_prompt(cands: list[Candidate], today: date) -> str:
             f"{i}. {c.question_lt} (resolution: {c.resolution_hint_lt}; "
             f"resolves by {c.resolve_by}{opts})"
         )
+        # The candidate's own sources are the fastest way to catch a market that
+        # is already decided — without them the checker searches blind and can
+        # contradict the very article the market was built from.
+        if c.sources:
+            lines.append(f"   sources: {' | '.join(c.sources[:3])}")
     return "\n".join(lines)
 
 

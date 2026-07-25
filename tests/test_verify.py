@@ -17,6 +17,14 @@ def _cand(q: str) -> Candidate:
     )
 
 
+def test_prompt_includes_candidate_sources():
+    """Without the sources the checker can contradict the market's own article."""
+    prompt = verify._verify_prompt([_cand("Ar X liks lyderiu?")], TODAY)
+    assert "https://example.lt/a" in prompt
+    assert "READ THE SOURCES" in prompt
+    assert "NEWEST reporting" in prompt
+
+
 def test_parses_plain_and_decorated_lines():
     text = (
         "1: OPEN — genuinely undecided\n"

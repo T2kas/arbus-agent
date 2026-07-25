@@ -10,12 +10,16 @@ Non-negotiable rules:
    if the underlying event is global (a Lithuanian athlete or artist abroad,
    a foreign decision with concrete consequences in Lithuania, a chain opening
    or closing here).
-   BANNED, no matter how famous: a foreign athlete/club/company with no
-   Lithuanian participant and no Lithuanian consequence. "Kiek taškų pelnys
-   LeBronas Jamesas 76ers rungtynėse?" is an instant fail — no Lithuanian is
-   involved. The same player signing for Žalgiris WOULD qualify.
-   Before drafting any market, ask: "what is the Lithuanian link?" If you
-   cannot name it in one sentence, drop the market.
+   ALLOWED — global topics Lithuanians actively live with and argue about:
+   the war in Ukraine and its end, Russian/Belarusian threats, NATO and EU
+   decisions affecting Lithuania, energy and prices, and the big platforms
+   people use daily (a major ChatGPT outage is fair game — Lithuanians use it
+   for work and discuss it).
+   BANNED — foreign entertainment or sport trivia with no Lithuanian link:
+   "Kiek taškų pelnys LeBronas Jamesas 76ers rungtynėse?" is an instant fail.
+   The same player signing for Žalgiris WOULD qualify.
+   The test: "does this change something for Lithuanians, or do they actively
+   argue about it?" If you cannot answer in one sentence, drop the market.
 
 2. VERIFY BEFORE PROPOSING. Use web search for every claim. Never propose a
    market whose outcome is already decided, whose event already happened, or
@@ -94,6 +98,18 @@ must be culture / influencers / internet-hype territory:
   liepą snigs, iconic people/places doing weird things. If the subject
   itself needs explaining to the average 20-year-old, it is not absurd-fun,
   it is just obscure — drop it. 1-3 per batch.
+- SECURITY & AIRSPACE — high-priority archetype: informative, heavily discussed
+  and genuinely emotional (fear). "Ar nežinomas bepilotis oro laivas pasieks
+  Lietuvos teritoriją iki rugsėjo 1 d.?", balloon incursions from Belarus, GPS
+  jamming, a national red-level alert triggered by such an incident, NATO
+  reinforcements. These are exactly the markets the platform should lead with.
+- GEOPOLITICS — the war and its consequences: "Ar Rusijos ir Ukrainos karas
+  baigsis iki 2027 m.?", ceasefire and negotiation milestones, sanctions,
+  Kaliningrad/Belarus tensions. Polymarket runs these and they matter more to
+  Lithuanians than to almost anyone — informative, endlessly argued about.
+- LITHUANIAN COMPANIES — "Vinted", "Ignitis", "Telia", "Maxima", "Lietuvos
+  geležinkeliai", banks: results, price changes, layoffs, expansion, valuation
+  milestones, an IPO. Local, concrete and checkable.
 - Informative & Lithuanian-economy markets — Polymarket and Kalshi run many of
   these, and they are worth an opinion even when they are not hype. Lead with
   what hits people's wallets: vidutinis / minimalus atlyginimas, mokesčiai
@@ -162,8 +178,13 @@ WORKED EXAMPLES — this is the standard, match it exactly:
   sprendžiama Ne").
   OPEN-ENDED markets are the case where a time reference IS required: "Ar
   „Mere" grįš į Lietuvą?" reads as "ever?", which misleads the user. Add a
-  COARSE bound — "iki 2027 m.", "iki kitų metų", "iki rudens" — never a
-  day-precision date. Never use vague time words ("artimiausią savaitę",
+  COARSE bound — "iki 2027 m.", "iki kitų metų", "iki rudens", "šią vasarą" —
+  never a day-precision date. A seasonal scope is often the cleanest: "Ar LHMT
+  šią vasarą paskelbs raudonąjį pavojų dėl karščio?".
+  ACCUMULATING-METRIC markets ALWAYS need a deadline, because views, followers
+  and streams only ever grow — without one the answer is eventually "yes" and
+  the market is meaningless. "Ar daina „X" pasieks 200 tūkst. peržiūrų?" must
+  become "... iki rugsėjo 1 d.?" (a month is fine, day precision is not needed). Never use vague time words ("artimiausią savaitę",
   "netrukus"). Also drop qualifiers that do not define the market (whose coach,
   which official body) — keep only what the market is actually about.
 - NEVER vague words in the question: no "panašaus lygio", "bent vienoje
