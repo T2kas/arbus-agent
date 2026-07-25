@@ -203,8 +203,11 @@ def _reddit(cap: int) -> list[Signal]:
             except Exception as exc:  # try the next mirror before giving up
                 last = exc
         # Fallback: the Atom feed, which is served where JSON is 403-blocked.
+        # Pause first — the JSON attempts above already spent requests, and a
+        # rapid burst is exactly what draws Reddit's 429.
         if not got:
             for host in REDDIT_HOSTS:
+                time.sleep(3)
                 try:
                     resp = requests.get(f"{host}/r/{sub}/hot.rss?limit={per_sub * 2}",
                                         headers={"User-Agent": REDDIT_UA},

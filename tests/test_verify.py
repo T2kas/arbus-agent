@@ -53,6 +53,36 @@ def test_parses_plain_and_decorated_lines():
     assert out[4][0] == "UNCLEAR"
 
 
+def test_parses_block_format_with_title_lines():
+    """The exact shape Claude produced live: bold numbered title, verdict below."""
+    text = (
+        "I'll research each item using web search to verify current facts."
+        "Based on my research, here are the verdicts:\n\n"
+        "**1. Ukraina Rafale naikintuvai iki 2026 pabaigos**\n"
+        "WRONG — Sources confirm this timeline is unrealistic. Paryžius paskelbė, "
+        "kad pirmieji keturi iš 16 „Dassault Rafale“ naikintuvų bus prist\n\n"
+        "**2. Ignitis akcijos**\n"
+        "OPEN — threshold plausible given the current price\n"
+    )
+    out = verify._parse_verdicts(text, 2)
+    assert out[1][0] == "WRONG"
+    assert out[1][1].startswith("Sources confirm this timeline")
+    assert out[2] == ("OPEN", "threshold plausible given the current price")
+
+
+def test_block_format_ignores_years_as_item_numbers():
+    # A wrapped line starting with "2026." must not split the block.
+    text = ("1. Klausimas apie karą\nSprendimas numatytas\n"
+            "2026. metais — todėl OPEN — genuinely undecided\n")
+    out = verify._parse_verdicts(text, 1)
+    assert out[1][0] == "OPEN"
+
+
+def test_same_line_format_still_wins():
+    out = verify._parse_verdicts("1: DECIDED — jau įvyko\n2: OPEN — dar ne\n", 2)
+    assert out == {1: ("DECIDED", "jau įvyko"), 2: ("OPEN", "dar ne")}
+
+
 def test_unparsed_items_become_not_verified(monkeypatch):
     # Model returns prose with no verdict lines, twice — must not be judged.
     monkeypatch.setattr(verify, "_ask", lambda *a, **k: "I could not complete this task.")

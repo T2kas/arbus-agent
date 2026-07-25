@@ -22,6 +22,13 @@ from .schemas import Candidate
 log = logging.getLogger(__name__)
 
 VERDICT_RE = re.compile(r"^\s*\**(\d+)\**\s*[:.\-]\s*\**(OPEN|DECIDED|WRONG|UNCLEAR)\b\**\s*[-—:]?\s*(.*)$", re.M)
+# Claude often answers in a two-line shape the single-line regex misses:
+#   **1. Ukraina Rafale naikintuvai iki 2026 pabaigos**
+#   WRONG — Sources confirm this timeline is unrealistic...
+# A numbered title line opens an item block; the verdict word appears somewhere
+# inside the block. Parsing this natively saves the paid strict-retry call.
+ITEM_HEAD_RE = re.compile(r"^\s*\**\s*(\d+)[.):]", re.M)
+VERDICT_WORD_RE = re.compile(r"\b(OPEN|DECIDED|WRONG|UNCLEAR)\b\s*[-—:]?\s*(.*)")
 
 SYSTEM = (
     "You are a fact-checker for a Lithuanian prediction-market app. "
@@ -106,6 +113,20 @@ def _parse_verdicts(text: str, n: int) -> dict[int, tuple[str, str]]:
         idx = int(m.group(1))
         if 1 <= idx <= n:
             out[idx] = (m.group(2), m.group(3).strip())
+    if len(out) == n:
+        return out
+    # Second pass: block format — numbered title line, verdict on a later line.
+    # Only plausible item numbers count as block heads, so a wrapped line that
+    # happens to start with a year ("2026.") cannot split a block.
+    heads = [m for m in ITEM_HEAD_RE.finditer(text) if 1 <= int(m.group(1)) <= n]
+    for i, head in enumerate(heads):
+        idx = int(head.group(1))
+        if idx in out:
+            continue
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+        vm = VERDICT_WORD_RE.search(text[head.end():end])
+        if vm:
+            out[idx] = (vm.group(1), vm.group(2).strip())
     return out
 
 
