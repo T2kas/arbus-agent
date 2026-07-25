@@ -38,11 +38,26 @@ CREATE TABLE IF NOT EXISTS full_specs (
 """
 
 
+# Columns added after the first release. Existing databases are migrated in
+# place on connect, so an old data/arbus.db keeps working without a manual step.
+_ADDED_COLUMNS = {
+    "image_url": "TEXT NOT NULL DEFAULT ''",
+    "image_source": "TEXT NOT NULL DEFAULT ''",
+    "published_at": "TEXT NOT NULL DEFAULT ''",
+    "publish_note": "TEXT NOT NULL DEFAULT ''",
+}
+
+
 def connect(db_path: str = config.DB_PATH) -> sqlite3.Connection:
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    have = {r["name"] for r in conn.execute("PRAGMA table_info(markets)")}
+    for name, decl in _ADDED_COLUMNS.items():
+        if name not in have:
+            conn.execute(f"ALTER TABLE markets ADD COLUMN {name} {decl}")
+    conn.commit()
     return conn
 
 
@@ -68,8 +83,9 @@ def insert_candidate(
         """INSERT INTO markets (batch_id, question_lt, market_type, options_json,
                probabilities_json, category, resolve_by, duration_class,
                resolution_hint_lt, sources_json, rationale_en,
-               verify_verdict, verify_note, status, reject_reason, created_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+               verify_verdict, verify_note, status, reject_reason, created_at,
+               image_url, image_source)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (
             batch_id,
             cand.question_lt,
@@ -87,6 +103,8 @@ def insert_candidate(
             status,
             reject_reason,
             datetime.now(timezone.utc).isoformat(),
+            getattr(cand, "image_url", ""),
+            getattr(cand, "image_source", ""),
         ),
     )
     return cur.lastrowid

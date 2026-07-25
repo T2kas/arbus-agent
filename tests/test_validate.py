@@ -309,6 +309,27 @@ def test_time_hint_or_event_scope_satisfies_the_gate():
         assert reason is None, (ok, reason)
 
 
+def test_relative_time_windows_accepted():
+    # Real markets lost to a false positive: these ARE time-bounded.
+    for ok in [
+        "Ar „Odisėja“ pirmą rodymo savaitgalį bus žiūrimiausias filmas Lietuvoje?",
+        "Ar daina per mėnesį surinks bent 300 tūkst. perklausų?",
+        "Ar nedarbo lygis kris III ketvirtį?",
+    ]:
+        fixed, reason = validate.validate_candidate(make(question_lt=ok), TODAY)
+        assert reason is None, (ok, reason)
+
+
+def test_category_normalized_to_canonical_set():
+    cand = make(category="Ekonomika & finansai (atlyginimai, valstybės statistika)",
+                question_lt="Ar nedarbo lygis viršys 7 % iki spalio?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed.category == "ekonomika"
+    # unknown category falls back to the question, then to "kita"
+    assert validate.normalize_category("blah", "Ar Žalgiris laimės rungtynes?") == "sportas"
+    assert validate.normalize_category("blah", "Ar rytoj lis?") == "kita"
+
+
 def test_sports_metaphor_rejected():
     cand = make(question_lt="Ar „Žalgiris“ atsities Konferencijų lygoje?")
     fixed, reason = validate.validate_candidate(cand, TODAY)

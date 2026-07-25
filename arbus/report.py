@@ -28,11 +28,18 @@ def write_batch_report(
         "",
     ]
 
+    illustrated = sum(1 for _, c, _, _ in accepted if getattr(c, "image_url", ""))
+    if illustrated:
+        lines.insert(4, f"**Images:** {illustrated}/{len(accepted)}")
+
     for db_id, c, verdict, note in accepted:
         flag = " ⚠️ NEEDS REVIEW" if verdict == "UNCLEAR" else ""
         probs = ", ".join(f"{o} {p:.0%}" for o, p in zip(c.options_lt, c.probabilities))
         lines += [
-            f"### #{db_id} — {c.question_lt}{flag}",
+            f"### #{db_id} — {c.question_lt}{flag}",]
+        if getattr(c, "image_url", ""):
+            lines.append(f"![]({c.image_url})")
+        lines += [
             f"- **Type:** {c.market_type} | **Category:** {c.category} | "
             f"**Resolves by:** {c.resolve_by} ({c.duration_class})",
             f"- **Estimates:** {probs}",

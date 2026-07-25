@@ -131,13 +131,16 @@ DRAFT_THEMES: list[tuple[str, float, str]] = [
      "concrete events like ambassadors returning), Seimas and presidential "
      "decisions, elections, party ratings."),
     ("ekonomika ir finansai", 0.30,
-     "ONLY draft markets about the economy, finance and state statistics: "
-     "prices (degalai, elektra, maistas), inflation, Euribor and mortgage "
-     "rates, wages, unemployment, GDP, demographics (gyventojų skaičius, "
-     "emigracija — official Statistikos departamento / Registrų centro "
-     "figures), Nasdaq Vilnius stocks from the pulse (threshold + coarse "
-     "deadline, current price in the rationale), Lithuanian companies "
-     "(Vinted, Ignitis, Telia, bankai: results, expansion, layoffs)."),
+     "ONLY draft markets about the economy, finance and state statistics. "
+     "PREFER THE SIMPLE, WIDELY UNDERSTOOD INDICATORS most of the batch: "
+     "nedarbo lygis, infliacija, degalų ir elektros kaina, minimali alga ir "
+     "vidutinis atlyginimas, mokesčių pakeitimai (GPM, PVM, „Sodra“), Euribor "
+     "ir būsto paskolų palūkanos, būsto kainos. A market a normal person "
+     "understands in one reading beats a technically impressive one. "
+     "Secondary: demographics (gyventojų skaičius, emigracija — Statistikos "
+     "departamentas), BVP, valstybės skola, Nasdaq Vilnius stocks from the "
+     "pulse (threshold + coarse deadline, current price in the rationale), "
+     "Lithuanian companies (Vinted, Ignitis, Telia, bankai)."),
     ("sportas", 0.20,
      "ONLY draft markets about Lithuanian sport: national teams, "
      "Žalgiris/Rytas in European competitions, LT athletes and their clubs, "
@@ -239,6 +242,10 @@ TIME_HINT_STEMS = [
     "gruodžio", "gruodzio", "gruodį",
     "šiemet", "siemet", "vasarą", "vasara", "rudenį", "rudeni", "ruden",
     "žiemą", "ziema", "pavasarį", "pavasari", "sezon", "iki 20", "per 20",
+    # Relative windows are time bounds too — "per mėnesį", "pirmą rodymo
+    # savaitgalį", "per 30 dienų", "ketvirtį", "metų pabaigoje".
+    "savaitgal", "savait", "mėnes", "menes", "ketvirt", "dienų", "dienu",
+    "per parą", "pabaigoje", "pradžioje", "pradzioje",
 ]
 EVENT_SCOPE_STEMS = [
     "rungtyn", "final", "čempionat", "cempionat", "turnyr", "lyg", "etap",
@@ -336,6 +343,31 @@ HEADLINE_DATE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# ── Categories ──────────────────────────────────────────────────────────────
+# Free-text categories produced labels like "Ekonomika & finansai (atlyginimai,
+# valstybės statistika)", which makes reports and any app-side filtering
+# useless. Model output is normalized to this fixed set (first keyword match
+# wins; anything unmatched becomes "kita").
+CATEGORIES: dict[str, list[str]] = {
+    "geopolitika":  ["geopolit", "karas", "ukrain", "rusij", "nato", "saugum",
+                     "gynyb", "dron", "oro erdv", "sankcij", "baltarus"],
+    "politika":     ["politik", "seim", "prezident", "vyriausyb", "rinkim",
+                     "partij", "įstatym", "svietim", "švietim", "education"],
+    "ekonomika":    ["ekonom", "finans", "kain", "infliac", "atlyginim", "mokes",
+                     "palūkan", "palukan", "bvp", "skol", "nedarb", "biudzet",
+                     "biudžet", "economy", "economics", "demograf", "gyventoj"],
+    "verslas":      ["versl", "įmon", "imon", "akcij", "birž", "birz", "bank",
+                     "company", "business", "stock"],
+    "sportas":      ["sport", "krepšin", "krepsin", "futbol", "žalgir", "zalgir",
+                     "rytas", "olimp", "rinktin"],
+    "kultura":      ["kultur", "kultūr", "muzik", "kin", "film", "festival",
+                     "renginy", "rengin", "tv", "culture"],
+    "influenceriai": ["influenc", "kūrėj", "kurej", "tiktok", "youtub",
+                      "instagram", "socialini"],
+    "orai":         ["ora", "weather", "karšt", "karst", "temperat", "lhmt"],
+}
+DEFAULT_CATEGORY = "kita"
+
 # ── Dedupe ──────────────────────────────────────────────────────────────────
 DEDUPE_SIMILARITY = 87        # rapidfuzz token_set_ratio threshold (0-100)
 DEDUPE_LOOKBACK_DAYS = 60     # compare against markets created in this window
@@ -367,6 +399,20 @@ PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
 # Draft in chunks: Perplexity output caps around 8K tokens, so one call can't
 # reliably carry 35 candidates through draft + structure.
 DRAFT_CHUNK_SIZE = 15
+
+# ── Market images ───────────────────────────────────────────────────────────
+# Each market gets a picture from its own source article's og:image tag. See
+# arbus/images.py for the rights caveat before showing these to users.
+IMAGES_ENABLED = True
+IMAGE_MAX_SOURCES = 3     # stop after this many source URLs per candidate
+IMAGE_TIMEOUT = 12
+
+# ── Publishing to the Arbus app ─────────────────────────────────────────────
+# Set ARBUS_API_URL + ARBUS_API_KEY in .env once the app endpoint exists.
+# `python -m arbus publish --dry-run` prints the payload without sending.
+ARBUS_API_URL = os.environ.get("ARBUS_API_URL", "")
+ARBUS_API_KEY = os.environ.get("ARBUS_API_KEY", "")
+ARBUS_API_TIMEOUT = 30
 
 # ── Paths (relative to repo root) ───────────────────────────────────────────
 DB_PATH = "data/arbus.db"

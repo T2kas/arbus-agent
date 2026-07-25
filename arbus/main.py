@@ -82,6 +82,43 @@ def cmd_list(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_publish(args: argparse.Namespace) -> int:
+    from . import publish
+
+    conn = store.connect()
+    exit_code = 0
+    for market_id in args.market_ids:
+        row = store.get_market(conn, market_id)
+        if row is None:
+            log.error("market #%d not found", market_id)
+            exit_code = 1
+            continue
+        if row["status"] == "rejected":
+            log.error("#%d was rejected — refusing to publish", market_id)
+            exit_code = 1
+            continue
+        if row["published_at"] and not args.force:
+            print(f"#{market_id} already published at {row['published_at']} "
+                  f"— use --force to send again")
+            continue
+
+        if args.dry_run:
+            print(json.dumps(publish.market_payload(row), ensure_ascii=False, indent=2))
+            continue
+
+        ok, detail = publish.publish_market(row)
+        if ok:
+            publish.mark_published(conn, market_id, detail)
+            conn.commit()
+            print(f"#{market_id} published ({detail})")
+        else:
+            log.error("#%d publish failed: %s", market_id, detail)
+            exit_code = 1
+
+    conn.close()
+    return exit_code
+
+
 def cmd_feedback(args: argparse.Namespace) -> int:
     note = " ".join(args.text)
     line = feedback.append_feedback(note)
@@ -122,6 +159,14 @@ def main() -> int:
     ls = sub.add_parser("list", help="list stored markets")
     ls.add_argument("--status", choices=["candidate", "needs_review", "rejected", "promoted"])
     ls.set_defaults(func=cmd_list)
+
+    pub = sub.add_parser("publish", help="push selected markets to the Arbus app API")
+    pub.add_argument("market_ids", type=int, nargs="+")
+    pub.add_argument("--dry-run", action="store_true",
+                     help="print the payload instead of sending it")
+    pub.add_argument("--force", action="store_true",
+                     help="publish again even if already published")
+    pub.set_defaults(func=cmd_publish)
 
     fb = sub.add_parser("feedback", help="record a note that guides every future batch")
     fb.add_argument("text", nargs="+", help='e.g. arbus feedback "mažiau ekonomikos rinkų"')

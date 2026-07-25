@@ -23,9 +23,18 @@ Reliability comes from deterministic scaffolding around the model:
  4. VALIDATE   gambling-language linter, Lithuanian check, date sanity,
                probability normalization, fuzzy dedupe vs SQLite  [pure code]
  5. VERIFY     "already decided?" live web check per candidate    [LLM]
- 6. OUTPUT     SQLite + reports/batch_*.md + exports/batch_*.json
+ 6. IMAGES     og:image pulled from each market's own source article
+               (relevant by construction, no key, no generation) [pure code]
+ 7. OUTPUT     SQLite + reports/batch_*.md + exports/batch_*.json
                + optional Telegram ping                        [pure code]
+ 8. PUBLISH    `arbus publish <id>` POSTs approved markets to the app
+               (manual, per-market, never automatic)           [pure code]
 ```
+
+Drafting is **themed**: each chunk carries a mandatory theme (state &
+geopolitics 30%, economy & finance 30%, sport 20%, culture 20%), so balance is
+enforced in code rather than requested in a prompt — a chunk mandated to state
+affairs cannot answer with a view-count market.
 
 ### Why the PULSE stage exists
 
@@ -43,6 +52,48 @@ sources (YouTube) stay inert until their key is set. TikTok (Creative Center)
 is best-effort — it fights automated access and may not cover Lithuania; if
 `--dry-run` shows no TikTok lines, adjust `TIKTOK_COUNTRY` in `config.py` or
 fall back to a paid scraper. It never breaks a batch when empty.
+
+## Market images
+
+Every market gets a picture from its own source article's `og:image` tag, so
+the image is about the exact subject with no generation cost and no API key.
+Markets whose sources expose no image simply carry none — a missing picture
+never costs you a market. Turn the stage off with `IMAGES_ENABLED = False`.
+
+> **Rights:** these are press photos owned by the outlet. Fine for internal
+> review; before showing them to users, clear usage with the outlet or swap in
+> your own artwork. `image_source` records the page each image came from.
+
+## Publishing to the app
+
+```sh
+python -m arbus publish 237 242 --dry-run   # print the exact payload
+python -m arbus publish 237 242             # POST to the app
+```
+
+Add the endpoint to `.env` when it exists:
+
+```sh
+ARBUS_API_URL=https://api.arbus.lt/markets
+ARBUS_API_KEY=...
+```
+
+Publishing is manual and per-market — markets go live only for ids you pass,
+never automatically at the end of a batch. Rejected markets are refused, and
+an already-published market is skipped unless you pass `--force`, so repeating
+the command cannot double-post. `--dry-run` works without any endpoint
+configured and prints the payload contract to hand to whoever builds the API:
+
+```json
+{
+  "external_id": "arbus-237", "question": "...", "type": "binary",
+  "options": ["Taip", "Ne"], "probabilities": [0.4, 0.6],
+  "category": "ekonomika", "resolve_by": "2026-10-01",
+  "duration_class": "long", "resolution_criteria": "...",
+  "sources": ["https://..."], "image_url": "https://...",
+  "language": "lt", "generated_at": "2026-07-25T13:53:00+00:00"
+}
+```
 
 ## Teaching the bot (feedback loop)
 

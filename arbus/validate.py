@@ -114,6 +114,20 @@ def looks_lithuanian(text: str) -> bool:
     return not clearly_en
 
 
+def normalize_category(category: str, question: str = "") -> str:
+    """Map free-text model categories onto config.CATEGORIES.
+
+    Models emit things like "Ekonomika & finansai (atlyginimai, valstybės
+    statistika)", which breaks report grouping and app-side filtering. Match on
+    the category text first, then fall back to the question itself.
+    """
+    for haystack in (category.lower(), question.lower()):
+        for canonical, keywords in config.CATEGORIES.items():
+            if any(kw in haystack for kw in keywords):
+                return canonical
+    return config.DEFAULT_CATEGORY
+
+
 def classify_duration(resolve_by: date, today: date) -> str:
     days = (resolve_by - today).days
     if days <= config.SHORT_MAX_DAYS:
@@ -222,6 +236,7 @@ def validate_candidate(
 
     # Recompute duration from the date — the model's label is advisory only.
     cand.duration_class = classify_duration(resolve_by, today)
+    cand.category = normalize_category(cand.category, cand.question_lt)
 
     # Sources must be actual links, not outlet names like "LRT"
     cand.sources = [s for s in cand.sources if s.startswith("http")]

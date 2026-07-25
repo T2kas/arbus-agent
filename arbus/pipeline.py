@@ -7,7 +7,8 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from typing import Callable
 
-from . import config, feedback, harvest, llm, pulse, report, store, validate, verify
+from . import (config, feedback, harvest, images, llm, pulse, report, store,
+               validate, verify)
 from .schemas import Candidate, CandidateBatch
 
 log = logging.getLogger(__name__)
@@ -156,7 +157,12 @@ def run_batch(
     progress(f"Structured {len(candidates)} candidates. Validating...")
 
     conn = store.connect()
-    existing = store.recent_questions(conn)
+    # Legacy questions that today's rules would reject must not block their own
+    # fixed replacements: "Ar Ignitis akcijos pasieks 24 €?" was stored before
+    # the time-bound rule existed and was rejecting the corrected
+    # "... iki spalio?" as a duplicate.
+    existing = [q for q in store.recent_questions(conn)
+                if not validate.lint_open_ended(q, "binary")]
     accepted_cands: list[Candidate] = []
     fixables: list[tuple[Candidate, str]] = []
 
@@ -218,6 +224,15 @@ def run_batch(
         )
         verdicts = verify.verify_candidates(accepted_cands, today, live_facts=live_facts,
                                             min_resolve=min_resolve)
+
+    # Images last, and only for candidates that survived every gate — no point
+    # fetching pictures for markets about to be discarded.
+    if config.IMAGES_ENABLED and accepted_cands:
+        keep = [c for c, (v, _) in zip(accepted_cands, verdicts)
+                if v not in ("DECIDED", "WRONG")]
+        progress(f"Fetching images for {len(keep)} markets...")
+        got = images.attach_images(keep)
+        progress(f"Images: {got}/{len(keep)} markets illustrated.")
 
     for cand, (verdict, note) in zip(accepted_cands, verdicts):
         if verdict in ("DECIDED", "WRONG"):
