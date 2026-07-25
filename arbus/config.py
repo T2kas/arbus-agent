@@ -92,6 +92,21 @@ TIKTOK_PERIOD = 7               # trend window in days: 7, 30 or 120
 # Apple's public marketing RSS: key-free, genuinely country-scoped charts.
 APPLE_STOREFRONT = "lt"
 
+# Nasdaq Vilnius watchlist — the household names whose share moves can seed
+# informative "Ar akcijų kaina viršys X?" markets. Quotes come from Yahoo
+# Finance's public chart JSON (key-free; ".VS" = Vilnius). A delisted or
+# renamed ticker just yields no signal — per-ticker failures never propagate.
+NASDAQ_VILNIUS_TICKERS: list[tuple[str, str]] = [
+    ("IGN1L.VS", "Ignitis grupė"),
+    ("TEL1L.VS", "Telia Lietuva"),
+    ("SAB1L.VS", "Artea bankas"),
+    ("APG1L.VS", "Apranga"),
+    ("KNF1L.VS", "KN Energies"),
+    ("GRG1L.VS", "Grigeo"),
+    ("NTU1L.VS", "Novaturas"),
+    ("AKO1L.VS", "AKOLA Group"),
+]
+
 # Optional keyed sources — inert until the key is set, so enabling them is safe.
 #   YOUTUBE_API_KEY  free from Google Cloud (YouTube Data API v3) -> Trending LT.
 # Spotify Top 50 Lietuva is a documented future source (client-credentials);

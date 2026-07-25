@@ -110,6 +110,12 @@ must be culture / influencers / internet-hype territory:
 - LITHUANIAN COMPANIES — "Vinted", "Ignitis", "Telia", "Maxima", "Lietuvos
   geležinkeliai", banks: results, price changes, layoffs, expansion, valuation
   milestones, an IPO. Local, concrete and checkable.
+  STOCKS: the pulse lists Nasdaq Vilnius shares with their weekly moves — a
+  stock that moved sharply is a ready-made market ("Ar „Ignitis grupė" akcijos
+  kaina viršys 22 € iki rugsėjo 1 d.?"). Threshold within a plausible range of
+  the current price (state the current price in the rationale), and resolution
+  ALWAYS via the official Nasdaq Baltic closing price on the stated date —
+  never a third-party quote site.
 - Informative & Lithuanian-economy markets — Polymarket and Kalshi run many of
   these, and they are worth an opinion even when they are not hype. Lead with
   what hits people's wallets: vidutinis / minimalus atlyginimas, mokesčiai

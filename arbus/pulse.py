@@ -429,6 +429,54 @@ def _apple_music(cap: int) -> list[Signal]:
     return _parse_apple(_get_json(url), "Apple Music LT", "chart", "populiariausia daina", cap)
 
 
+# ── Nasdaq Vilnius — Lithuanian listed companies, weekly moves ──────────────
+# Official Nasdaq Baltic pages export only Excel/HTML, so quotes come from
+# Yahoo Finance's public chart JSON (no key, ".VS" suffix = Vilnius). Markets
+# seeded from these must still resolve against the official Nasdaq Baltic
+# closing price — the pulse only says which stock moved enough to argue about.
+
+def _parse_yahoo_chart(payload: dict, name: str, ticker: str) -> Signal | None:
+    """One signal per ticker: last price + week change, or None if unusable."""
+    try:
+        result = payload["chart"]["result"][0]
+    except (KeyError, IndexError, TypeError):
+        return None
+    meta = result.get("meta", {})
+    closes = [c for c in (result.get("indicators", {}).get("quote", [{}])[0]
+                          .get("close") or []) if c is not None]
+    price = meta.get("regularMarketPrice") or (closes[-1] if closes else None)
+    if price is None:
+        return None
+    currency = "€" if meta.get("currency", "EUR") == "EUR" else meta.get("currency", "")
+    price_txt = f"{price:.2f}".replace(".", ",") + f" {currency}".rstrip()
+    metric = price_txt
+    if closes and closes[0]:
+        change = (price / closes[0] - 1) * 100
+        metric += f" · savaitė {change:+.1f} %".replace(".", ",")
+    return Signal("Nasdaq Vilnius", name, metric, "stock",
+                  f"https://finance.yahoo.com/quote/{ticker}")
+
+
+def _nasdaq_vilnius(cap: int) -> list[Signal]:
+    signals: list[Signal] = []
+    for idx, (ticker, name) in enumerate(config.NASDAQ_VILNIUS_TICKERS[:cap]):
+        if idx:
+            time.sleep(0.4)  # stay well under Yahoo's per-IP rate limit
+        sig = None
+        for host in ("query1", "query2"):
+            try:
+                url = (f"https://{host}.finance.yahoo.com/v8/finance/chart/"
+                       f"{ticker}?range=5d&interval=1d")
+                sig = _parse_yahoo_chart(_get_json(url), name, ticker)
+                if sig:
+                    break
+            except Exception as exc:  # one dead ticker must not sink the rest
+                log.debug("nasdaq %s via %s failed: %s", ticker, host, exc)
+        if sig:
+            signals.append(sig)
+    return signals
+
+
 # ── Registry + public API ────────────────────────────────────────────────────
 
 # (label, fetcher, cap). The cap keeps entertainment sources from flooding the
@@ -444,6 +492,7 @@ SOURCES: list[tuple[str, "callable", int | None]] = [
     ("TikTok Creative Center", _tiktok, None),
     ("YouTube Trending LT", _youtube, config.PULSE_ENTERTAINMENT_CAP),
     ("Apple Music LT", _apple_music, config.PULSE_ENTERTAINMENT_CAP),
+    ("Nasdaq Vilnius", _nasdaq_vilnius, None),
 ]
 
 

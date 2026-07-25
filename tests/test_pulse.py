@@ -198,6 +198,40 @@ def test_apple_chart_respects_cap():
     assert len(pulse._parse_apple(APPLE_JSON, "s", "chart", "n", cap=1)) == 1
 
 
+YAHOO_JSON = {
+    "chart": {"result": [{
+        "meta": {"regularMarketPrice": 21.85, "currency": "EUR"},
+        "indicators": {"quote": [{"close": [21.0, None, 21.4, 21.85]}]},
+    }]}
+}
+
+
+def test_yahoo_chart_parses_price_and_week_change():
+    sig = pulse._parse_yahoo_chart(YAHOO_JSON, "Ignitis grupė", "IGN1L.VS")
+    assert sig.source == "Nasdaq Vilnius"
+    assert sig.title == "Ignitis grupė"
+    assert sig.metric == "21,85 € · savaitė +4,0 %"
+    assert sig.kind == "stock"
+    assert sig.url.endswith("IGN1L.VS")
+
+
+def test_yahoo_chart_price_only_when_no_closes():
+    payload = {"chart": {"result": [{
+        "meta": {"regularMarketPrice": 3.10, "currency": "EUR"},
+        "indicators": {"quote": [{"close": []}]},
+    }]}}
+    sig = pulse._parse_yahoo_chart(payload, "Apranga", "APG1L.VS")
+    assert sig.metric == "3,10 €"          # no week change without history
+
+
+def test_yahoo_chart_unusable_payloads_return_none():
+    assert pulse._parse_yahoo_chart({}, "X", "X.VS") is None
+    assert pulse._parse_yahoo_chart({"chart": {"result": []}}, "X", "X.VS") is None
+    no_price = {"chart": {"result": [{"meta": {},
+                "indicators": {"quote": [{"close": []}]}}]}}
+    assert pulse._parse_yahoo_chart(no_price, "X", "X.VS") is None
+
+
 def test_registry_has_no_app_store_and_caps_entertainment():
     labels = {label for label, _, _ in pulse.SOURCES}
     assert "App Store LT" not in labels           # dropped per team review
@@ -205,6 +239,7 @@ def test_registry_has_no_app_store_and_caps_entertainment():
     assert caps["YouTube Trending LT"] == pulse.config.PULSE_ENTERTAINMENT_CAP
     assert caps["Apple Music LT"] == pulse.config.PULSE_ENTERTAINMENT_CAP
     assert caps["Google Trends LT"] is None       # news/search side uncapped
+    assert "Nasdaq Vilnius" in labels             # stocks feed the economy side
 
 
 def test_wiki_urls_walk_back_from_yesterday():
