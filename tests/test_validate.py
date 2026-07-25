@@ -291,6 +291,37 @@ def test_multi_title_headline_still_allowed():
     assert reason is None and fixed is not None
 
 
+def test_open_ended_binary_rejected():
+    # "Ar rinktinė paskelbs galutinį sąrašą?" — it will happen eventually.
+    cand = make(question_lt="Ar Lietuvos vyrų krepšinio rinktinė paskelbs galutinį "
+                            "kandidatų sąrašą?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "open-ended" in reason
+
+
+def test_time_hint_or_event_scope_satisfies_the_gate():
+    for ok in [
+        "Ar rinktinė paskelbs galutinį kandidatų sąrašą iki rugpjūčio?",
+        "Ar rinktinė paskelbs galutinį sąrašą šiemet?",
+        "Ar „Žalgiris“ pateks į kitą Konferencijų lygos etapą?",   # event scope
+    ]:
+        fixed, reason = validate.validate_candidate(make(question_lt=ok), TODAY)
+        assert reason is None, (ok, reason)
+
+
+def test_sports_metaphor_rejected():
+    cand = make(question_lt="Ar „Žalgiris“ atsities Konferencijų lygoje?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "vague" in reason
+
+
+def test_multi_title_exempt_from_open_ended_gate():
+    cand = make(question_lt="Naujas Palangos meras", market_type="multi",
+                options_lt=["A", "B", "C"], probabilities=[0.4, 0.35, 0.25])
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None
+
+
 def test_clean_title_headline_passes():
     # Polymarket-style title, no date, no source — must pass.
     cand = make(question_lt="Naujas Palangos meras",

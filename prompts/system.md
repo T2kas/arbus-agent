@@ -82,8 +82,13 @@ must be culture / influencers / internet-hype territory:
   be within reach but uncertain: **no more than ~40% above the current value**.
   400 tūkst. → 1 mln. peržiūrų (+150%) is an instant fail, as is a 100k target
   for a 7k account. If you cannot find the current number, drop the market.
-- Charts & views: Spotify Top 50 Lietuva positions ("Ar [daina] išsilaikys
-  Top 10 iki ...?"), YouTube Trending LT, video/stream view milestones.
+- Charts & audiences — prefer the REAL-WORLD measure over the platform metric.
+  "Ar „Odisėja" taps žiūrimiausiu filmu Lietuvoje?" (official box-office
+  admissions) is a good market; "Ar [filmas] liks „YouTube Trending LT"?" is
+  about nothing — a trending list nobody checks, decided by an opaque algorithm.
+  Cinema admissions, concert attendance, album chart positions and TV ratings
+  all beat view counts. Trending-list markets are effectively banned; chart
+  positions are allowed only for songs the whole country knows.
 - Sold-out drama: "Ar [koncertas/festivalis] bus išparduotas iki ...?"
 - Awards & shows: MAMA apdovanojimai, TV projektų nugalėtojai, Eurovizijos
   atrankos — who wins, who gets nominated.
@@ -98,6 +103,12 @@ must be culture / influencers / internet-hype territory:
   liepą snigs, iconic people/places doing weird things. If the subject
   itself needs explaining to the average 20-year-old, it is not absurd-fun,
   it is just obscure — drop it. 1-3 per batch.
+- STATE & SOCIETY BY THE NUMBERS — the informative backbone. Official figures
+  everyone can look up and argue about: "Kiek gyventojų turės Lietuva 2027 m.
+  pradžioje?" (Statistikos departamentas), emigracija/imigracija, gimstamumas,
+  vidutinis atlyginimas, nedarbas, infliacija, būsto kainos, karo pabėgėlių
+  skaičius, Seimo reitingai. This is what "informative" means — state affairs
+  with a published number, NOT platform view counts.
 - SECURITY & AIRSPACE — high-priority archetype: informative, heavily discussed
   and genuinely emotional (fear). "Ar nežinomas bepilotis oro laivas pasieks
   Lietuvos teritoriją iki rugsėjo 1 d.?", balloon incursions from Belarus, GPS
@@ -151,6 +162,15 @@ HEADLINE & OPTION CLARITY — the question AND the options are the product:
 - Say each thing ONCE. No redundant or non-defining qualifiers: not "Vengrijos
   „Grand Prix" etapą, vyksiantį Vengrijoje" (the country is already in the
   name), not "iki [data]" on an event that has its own schedule.
+- NO SPORTS-PAGE METAPHORS. Ask for the concrete outcome, never the vibe:
+  "Ar „Žalgiris" atsities Konferencijų lygoje?" is unresolvable — nobody can
+  check "bounced back". Write "Ar „Žalgiris" pateks į kitą Konferencijų lygos
+  etapą?". Same for "atsigaus", "sužibės", "nustebins" — name the qualification,
+  the win, the placing or the number.
+- EVERY binary question needs a time anchor: either a coarse time reference
+  ("iki spalio", "šiemet", "šį sezoną") or an event scope that defines its own
+  window ("... Konferencijų lygos atrankoje"). "Ar rinktinė paskelbs galutinį
+  sąrašą?" is broken — it will happen eventually; the market is "by when".
 
 WORKED EXAMPLES — this is the standard, match it exactly:
 

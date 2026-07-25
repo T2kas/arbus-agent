@@ -117,6 +117,43 @@ NASDAQ_VILNIUS_TICKERS: list[tuple[str, str]] = [
 # ── Batch shape ─────────────────────────────────────────────────────────────
 DEFAULT_BATCH_SIZE = 35
 
+# Drafting is THEMED: each chunk carries a mandatory theme, so the balance is
+# enforced structurally in code — the model cannot drift into view-count bait
+# when its chunk mandate is state affairs. (label, share, mandate-for-prompt).
+# The last theme absorbs rounding remainders.
+DRAFT_THEMES: list[tuple[str, float, str]] = [
+    ("valstybė ir geopolitika", 0.30,
+     "ONLY draft markets about state affairs and geopolitics: the war in "
+     "Ukraine and its milestones (ceasefire, negotiations, sanctions), security "
+     "and airspace incidents (drones, balloons, GPS jamming, red alerts), "
+     "NATO/EU decisions affecting Lithuania, Belarus/Kaliningrad tensions, "
+     "Lithuanian foreign-policy milestones (e.g. China relations measured by "
+     "concrete events like ambassadors returning), Seimas and presidential "
+     "decisions, elections, party ratings."),
+    ("ekonomika ir finansai", 0.30,
+     "ONLY draft markets about the economy, finance and state statistics: "
+     "prices (degalai, elektra, maistas), inflation, Euribor and mortgage "
+     "rates, wages, unemployment, GDP, demographics (gyventojų skaičius, "
+     "emigracija — official Statistikos departamento / Registrų centro "
+     "figures), Nasdaq Vilnius stocks from the pulse (threshold + coarse "
+     "deadline, current price in the rationale), Lithuanian companies "
+     "(Vinted, Ignitis, Telia, bankai: results, expansion, layoffs)."),
+    ("sportas", 0.20,
+     "ONLY draft markets about Lithuanian sport: national teams, "
+     "Žalgiris/Rytas in European competitions, LT athletes and their clubs, "
+     "transfers. Outcomes must be concrete and checkable — 'ar pateks į kitą "
+     "etapą?', 'ar laimės rungtynes?' — NEVER metaphors like 'atsities' or "
+     "'sužibės'."),
+    ("kultūra ir visuomenė", 0.20,
+     "ONLY draft markets about culture and society with MASS recognition: big "
+     "festivals and events (sold-out only if the event is 2+ weeks away), "
+     "kino box-office ('ar taps žiūrimiausiu filmu Lietuvoje pagal savaitgalio "
+     "žiūrovus?' — better than any view-count), TV shows and music releases, "
+     "top-tier influencers everyone knows (the Dirkstys tier). AT MOST ONE "
+     "views/followers/streams metric market in this chunk, only for something "
+     "the whole country knows."),
+]
+
 # App goes live ~mid-September 2026. Per team direction, generate markets that
 # resolve from 2026-08-10 onward (no market may resolve earlier than this).
 # Set to "" once live (then only "must be in the future" applies).
@@ -181,6 +218,33 @@ VAGUE_STEMS = [
     "kardinaliai",      # "kardinaliai pakeistą įvaizdį" — unmeasurable intensifier
     "įvaizd",           # "išlaikys įvaizdį" — a person's "image" is not checkable
     "emocing",          # "emocinga reakcija" — mood, not a verifiable event
+    # Sports-page metaphors — no source ever reports that a team "bounced
+    # back"; ask for the concrete outcome ("pateks į kitą etapą") instead.
+    "atsities",
+    "atsigaus",
+    "sužibės", "suzibes",
+    "nustebins",
+]
+
+# ── Open-ended binary questions need a time anchor ──────────────────────────
+# "Ar rinktinė paskelbs galutinį sąrašą?" WILL eventually happen — without a
+# time bound the question is meaningless. A binary headline must contain either
+# a coarse time reference or an event scope (the event then defines timing).
+TIME_HINT_STEMS = [
+    "sausio", "sausį", "sausi", "vasario", "vasarį", "vasari", "kovo", "kovą",
+    "balandžio", "balandi", "balandį", "gegužės", "geguzes", "gegužę",
+    "birželio", "birzelio", "birželį", "liepos", "liepą", "liepa",
+    "rugpjūčio", "rugpjucio", "rugpjūtį", "rugsėjo", "rugsejo", "rugsėjį",
+    "spalio", "spalį", "spali", "lapkričio", "lapkricio", "lapkritį",
+    "gruodžio", "gruodzio", "gruodį",
+    "šiemet", "siemet", "vasarą", "vasara", "rudenį", "rudeni", "ruden",
+    "žiemą", "ziema", "pavasarį", "pavasari", "sezon", "iki 20", "per 20",
+]
+EVENT_SCOPE_STEMS = [
+    "rungtyn", "final", "čempionat", "cempionat", "turnyr", "lyg", "etap",
+    "rinkim", "festival", "koncert", "apdovanojim", "olimp", "grand prix",
+    "švent", "svent", "atrank", "varžyb", "varzyb", "eurovizij", "pusfinal",
+    "ture", "tour",
 ]
 
 # ── Headline-format linter ──────────────────────────────────────────────────

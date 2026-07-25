@@ -28,6 +28,27 @@ class BatchResult:
         return sum(1 for _, _, v, _ in self.accepted if v in ("UNCLEAR", "NOT_VERIFIED"))
 
 
+def _theme_chunks(count: int, chunk_size: int) -> list[tuple[int, str, str]]:
+    """Allocate the batch across DRAFT_THEMES by share, split to chunk_size.
+
+    Rounding remainders go to the FIRST theme rather than the last: the shares
+    are ordered by priority, so a leftover slot should strengthen the
+    informative backbone, never inflate the culture tail.
+    Returns (n, label, mandate) triples in theme order.
+    """
+    themes = config.DRAFT_THEMES
+    counts = [min(int(count * share), count) for _, share, _ in themes]
+    counts[0] += count - sum(counts)          # remainder to the top priority
+
+    chunks: list[tuple[int, str, str]] = []
+    for (label, _, focus), n in zip(themes, counts):
+        while n > 0:
+            take = min(n, chunk_size)
+            chunks.append((take, label, focus))
+            n -= take
+    return chunks
+
+
 def run_batch(
     count: int = config.DEFAULT_BATCH_SIZE,
     skip_verify: bool = False,
@@ -74,15 +95,16 @@ def run_batch(
 
     system = llm.load_prompt("system")
 
-    # Draft + structure in chunks — one call can't reliably carry a full
-    # 35-candidate batch through an ~8K-token output cap.
+    # Draft + structure in THEMED chunks: every chunk carries a mandatory theme
+    # (state/geopolitics, economy, sport, culture), so batch balance is enforced
+    # structurally — the model cannot drift into view-count bait when its chunk
+    # mandate is state affairs. Chunking also keeps each call inside the ~8K
+    # output cap.
     candidates: list[Candidate] = []
-    remaining = count
     chunk_size = (config.ZAI_DRAFT_CHUNK_SIZE if llm.provider("draft") == "zai"
                   else config.DRAFT_CHUNK_SIZE)
-    while remaining > 0:
-        n = min(remaining, chunk_size)
-        progress(f"Researching & drafting {n} candidates "
+    for n, theme_label, theme_focus in _theme_chunks(count, chunk_size):
+        progress(f"Researching & drafting {n} candidates — {theme_label} "
                  f"({len(candidates)} done, provider: {llm.provider('draft')})...")
         avoid_parts = []
         if config.BLOCKED_SUBJECTS:
@@ -100,6 +122,7 @@ def run_batch(
             "draft",
             today=today.isoformat(),
             count=str(n),
+            focus=theme_focus,
             headlines=headlines,
             pulse=pulse_text,
             feedback=feedback_text,
@@ -117,13 +140,12 @@ def run_batch(
                                                   max_tokens=8000)
         except Exception as exc:
             log.warning("chunk failed (%s); skipping it and continuing", exc)
-            remaining -= n
             continue
         if not batch.candidates:
-            log.warning("chunk produced 0 structured candidates; stopping early")
-            break
+            log.warning("chunk (%s) produced 0 structured candidates; continuing",
+                        theme_label)
+            continue
         candidates.extend(batch.candidates)
-        remaining -= n
 
     if not candidates:
         raise RuntimeError(
@@ -140,7 +162,8 @@ def run_batch(
 
     # Wording problems are fixable — send them for a rewrite instead of binning
     # a good idea. Factual/structural rejections are not repairable.
-    REPAIRABLE = ("vague headline", "headline format", "vague/unclear options")
+    REPAIRABLE = ("vague headline", "headline format", "vague/unclear options",
+                  "open-ended question")
 
     def admit(cand: Candidate, reason: str | None, repairable: bool) -> None:
         if reason:

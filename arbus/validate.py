@@ -86,6 +86,26 @@ def lint_headline_format(question: str) -> list[str]:
     return problems
 
 
+def lint_open_ended(question: str, market_type: str) -> str | None:
+    """Reject binary questions with no time anchor at all.
+
+    "Ar rinktinė paskelbs galutinį sąrašą?" WILL happen eventually — the only
+    real question is "by when", so a headline without any time reference is
+    meaningless. Two anchors satisfy the rule: a coarse time hint (month,
+    season, "šiemet", "iki 20xx") or an event scope (rungtynės, čempionatas,
+    festivalis — the event defines its own window). Multi-outcome titles are
+    exempt: "Naujas Palangos meras" is scoped by the election itself.
+    """
+    if market_type != "binary":
+        return None
+    low = question.lower()
+    if any(stem in low for stem in config.TIME_HINT_STEMS):
+        return None
+    if any(stem in low for stem in config.EVENT_SCOPE_STEMS):
+        return None
+    return "open-ended question: add a coarse time bound (e.g. 'iki spalio', 'šiemet')"
+
+
 def looks_lithuanian(text: str) -> bool:
     # Reject only text that is CLEARLY English. Short Lithuanian titles without
     # diacritics or function words ("Naujas Palangos meras") are legitimate now
@@ -160,6 +180,10 @@ def validate_candidate(
 
     if not looks_lithuanian(cand.question_lt):
         return None, "question does not look Lithuanian"
+
+    open_ended = lint_open_ended(cand.question_lt, cand.market_type)
+    if open_ended:
+        return None, open_ended
 
     try:
         resolve_by = date.fromisoformat(cand.resolve_by)

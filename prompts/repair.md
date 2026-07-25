@@ -17,6 +17,14 @@ STRIP OUT of the question:
 - Redundant or non-defining qualifiers: "Vengrijos „Grand Prix" etapą,
   vyksiantį Vengrijoje" → "Vengrijos „Grand Prix"". Say each thing once.
 - Vague filler: "panašaus", "pvz.", "ir pan.", "artimiausiu metu".
+- Sports-page metaphors: "atsities", "atsigaus", "sužibės", "nustebins" →
+  replace with the concrete outcome ("pateks į kitą etapą", "laimės rungtynes").
+
+ADD when missing (rejection reason "open-ended question"): a binary question
+with no time anchor must gain a COARSE one — "iki spalio", "šiemet", "šį
+sezoną" — or name the event that scopes it ("... Konferencijų lygos
+atrankoje"). Never a day-precision date. Keep resolve_by consistent with the
+bound you add.
 - Unmeasurable descriptors ("emocinga reakcija", "kardinaliai pakeistą
   įvaizdį", "pagrindiniu turinio akcentu") → replace with a concrete,
   countable act, or restate the market around a checkable event.
