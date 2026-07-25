@@ -56,6 +56,12 @@ STEP 1 — SCOUT (use web search extensively, anchored to the two signals):
   URL (full https://... link, not just the outlet name).
 
 STEP 2 — DRAFT exactly {count} quick-mode market candidates:
+- COVERAGE QUOTA for this chunk: at least a THIRD of the candidates must come
+  from geopolitics/security, economy/finance (incl. Nasdaq Vilnius stocks) and
+  politics combined — these are the platform's backbone, and batches keep
+  under-delivering them. Sport gets 2-3. Culture/hype stays, but pick the TOP
+  names a mass audience follows (the Dirkstys tier — creators everyone
+  recognizes), not whoever happened to post yesterday.
 - Wording follows HEADLINE & OPTION CLARITY strictly: as SHORT and simple as
   possible, instantly readable, exact entities and thresholds, but NO data-
   source attribution ("pagal X duomenis") and NO date in the headline unless

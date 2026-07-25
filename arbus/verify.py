@@ -32,10 +32,20 @@ SYSTEM = (
 )
 
 
-def _verify_prompt(cands: list[Candidate], today: date) -> str:
+def _verify_prompt(cands: list[Candidate], today: date, live_facts: str = "") -> str:
     lines = [
         f"Today is {today.isoformat()}. For each numbered prediction-market question below, "
         "check the live web and decide:\n",
+    ]
+    if live_facts:
+        lines += [
+            "LIVE DATA fetched from primary sources THIS SESSION — treat these as the "
+            "current authoritative values; do NOT answer UNCLEAR about a value listed "
+            "here, and judge plausibility against it:",
+            live_facts,
+            "",
+        ]
+    lines += [
         "- DECIDED: the outcome is already known / the event already happened or was cancelled.",
         "- WRONG: the setup contradicts facts — e.g. the resolution date does not match the "
         "actual event schedule: ALWAYS look up the event's real date; if the event happens "
@@ -110,7 +120,8 @@ def _ask(prompt: str, _unused: bool = False) -> str:
                         max_tokens=8000, stage="verify")
 
 
-def verify_candidates(cands: list[Candidate], today: date) -> list[tuple[str, str]]:
+def verify_candidates(cands: list[Candidate], today: date,
+                      live_facts: str = "") -> list[tuple[str, str]]:
     """Return one (verdict, note) per candidate, in order.
 
     A silent parse failure used to look identical to a genuine "cannot verify",
@@ -124,7 +135,7 @@ def verify_candidates(cands: list[Candidate], today: date) -> list[tuple[str, st
 
     for start in range(0, len(cands), config.VERIFY_CHUNK_SIZE):
         chunk = cands[start : start + config.VERIFY_CHUNK_SIZE]
-        prompt = _verify_prompt(chunk, today)
+        prompt = _verify_prompt(chunk, today, live_facts)
         verdicts: dict[int, tuple[str, str]] = {}
         try:
             text = _ask(prompt, use_perplexity)

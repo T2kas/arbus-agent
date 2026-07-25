@@ -182,7 +182,13 @@ def run_batch(
         verdicts = [("UNCLEAR", "verification skipped")] * len(accepted_cands)
     else:
         progress(f"Verifying {len(accepted_cands)} candidates against the live web...")
-        verdicts = verify.verify_candidates(accepted_cands, today)
+        # The pulse already fetched hard numbers this session (stock closes,
+        # chart positions) — hand them to the verifier so it never answers
+        # UNCLEAR about a value we are holding in memory.
+        live_facts = "\n".join(
+            f"- {s.title}: {s.metric}" for s in signals if s.kind in ("stock", "chart")
+        )
+        verdicts = verify.verify_candidates(accepted_cands, today, live_facts=live_facts)
 
     for cand, (verdict, note) in zip(accepted_cands, verdicts):
         if verdict in ("DECIDED", "WRONG"):

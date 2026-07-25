@@ -25,6 +25,20 @@ def test_prompt_includes_candidate_sources():
     assert "NEWEST reporting" in prompt
 
 
+def test_prompt_includes_live_facts_when_given():
+    prompt = verify._verify_prompt([_cand("Ar akcijos pasieks 24 €?")], TODAY,
+                                   live_facts="- Ignitis grupė: 22,45 € · savaitė +1,2 %")
+    assert "22,45 €" in prompt
+    assert "do NOT answer UNCLEAR about a value listed here" in prompt
+    # the live-data block must come before the verdict instructions
+    assert prompt.index("22,45") < prompt.index("DECIDED")
+
+
+def test_prompt_has_no_live_block_by_default():
+    prompt = verify._verify_prompt([_cand("Ar X?")], TODAY)
+    assert "LIVE DATA" not in prompt
+
+
 def test_parses_plain_and_decorated_lines():
     text = (
         "1: OPEN — genuinely undecided\n"

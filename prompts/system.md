@@ -107,6 +107,11 @@ must be culture / influencers / internet-hype territory:
   baigsis iki 2027 m.?", ceasefire and negotiation milestones, sanctions,
   Kaliningrad/Belarus tensions. Polymarket runs these and they matter more to
   Lithuanians than to almost anyone — informative, endlessly argued about.
+  Soft questions must be converted to MEASURABLE MILESTONES: "ar santykiai su
+  Kinija pagerės?" is unresolvable as asked, but "Ar Lietuva ir Kinija
+  susitars dėl ambasadorių grąžinimo iki [terminas]?" or "Ar Kinija panaikins
+  prekybos ribojimus Lietuvai iki [terminas]?" resolve on a concrete public
+  event. Always find the checkable milestone underneath the vibe.
 - LITHUANIAN COMPANIES — "Vinted", "Ignitis", "Telia", "Maxima", "Lietuvos
   geležinkeliai", banks: results, price changes, layoffs, expansion, valuation
   milestones, an IPO. Local, concrete and checkable.
@@ -187,10 +192,17 @@ WORKED EXAMPLES — this is the standard, match it exactly:
   COARSE bound — "iki 2027 m.", "iki kitų metų", "iki rudens", "šią vasarą" —
   never a day-precision date. A seasonal scope is often the cleanest: "Ar LHMT
   šią vasarą paskelbs raudonąjį pavojų dėl karščio?".
-  ACCUMULATING-METRIC markets ALWAYS need a deadline, because views, followers
-  and streams only ever grow — without one the answer is eventually "yes" and
-  the market is meaningless. "Ar daina „X" pasieks 200 tūkst. peržiūrų?" must
-  become "... iki rugsėjo 1 d.?" (a month is fine, day precision is not needed). Never use vague time words ("artimiausią savaitę",
+  THRESHOLD MARKETS ON MOVING VALUES always need a time bound IN THE HEADLINE.
+  This covers two kinds:
+  • accumulating metrics (views, followers, streams) — they only ever grow, so
+    without a deadline the answer is eventually "yes";
+  • fluctuating values (stock price, fuel price, chart position, temperature) —
+    they cross any threshold repeatedly over time, so "Ar „Telia" akcijos
+    pakils virš 2,40 €?" without a bound is meaningless.
+  Use a COARSE bound: "iki spalio", "šiemet", "iki rudens", "rugsėjį" — the
+  exact cutoff date lives in resolve_by and the rules, day precision stays out
+  of the headline. "Ar „Ignitis grupė" akcijos pasieks 24 € iki spalio?" is the
+  model. Never use vague time words ("artimiausią savaitę",
   "netrukus"). Also drop qualifiers that do not define the market (whose coach,
   which official body) — keep only what the market is actually about.
 - NEVER vague words in the question: no "panašaus lygio", "bent vienoje
