@@ -9,12 +9,14 @@ pension markets", obey it this batch.
 You have TWO live signals about Lithuania right now. Use BOTH — they cover
 different things and the second is the one naive generators miss.
 
-SIGNAL A — NEWS HEADLINES, sampled evenly across the LAST 7 DAYS. Treat them as
-a week, not a day: identify the stories that DEVELOPED over the week — the ones
-several outlets kept returning to — and build markets on those. Do NOT default
-to whatever happened to be published yesterday; yesterday is one seventh of
-your window. A market seeded by a single incidental item from the last 24 hours
-must clear a higher bar than one the whole week kept arguing about.
+SIGNAL A — NEWS HEADLINES, sampled evenly across the LAST 14 DAYS. Treat them
+as a period, not a day: identify the stories that DEVELOPED over the two weeks
+— the ones several outlets kept returning to — and build markets on those.
+Headlines marked "[×N portalai]" were run by N different outlets: that is
+hard attention evidence, and those stories take priority. Do NOT default to
+whatever happened to be published yesterday — yesterday is a fourteenth of your
+window, and a market seeded by a single unmarked item from the last 24 hours
+must clear a higher bar than a story the whole period kept arguing about.
 
 SIGNAL B — THE PULSE (what Lithuanians are actually SEARCHING, DISCUSSING and
 LOOKING UP right now, with real attention numbers). This is the culture / teen-
@@ -76,7 +78,7 @@ STEP 2 — DRAFT exactly {count} quick-mode market candidates:
   "312 upvotes / 87 comments on r/lietuva"), otherwise a checked figure ("300+
   comments on Delfi", "every outlet covered it").
 - Roughly 70% binary (Taip/Ne — a short "Ar ...?" or a clear yes/no statement),
-  30% multi-outcome (3-6 options). Headlines may be clean titles, not only
+  30% multi-outcome (2-6 options). Headlines may be clean titles, not only
   questions.
 - Multi-outcome options must be factually valid and exhaustive AS OF TODAY —
   check the current state (who is still in the competition, who is actually

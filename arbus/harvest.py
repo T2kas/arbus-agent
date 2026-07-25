@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import calendar
 import logging
+import re
 import time
 from datetime import datetime, timedelta, timezone
 
@@ -67,7 +68,29 @@ def harvest(days: int = config.HARVEST_DAYS, cap: int = config.HARVEST_MAX_HEADL
         except Exception as exc:  # network errors, malformed XML, etc.
             log.warning("feed %s failed: %s", feed["name"], exc)
 
+    _annotate_coverage(items)
     return _balance_by_day(items, cap)
+
+
+def _annotate_coverage(items: list[dict]) -> None:
+    """Set item["coverage"] = how many distinct outlets ran a similar story.
+
+    Exact-duplicate titles are already dropped at harvest, but the same event
+    phrased differently by LRT, Delfi and 15min survives — and that overlap is
+    the only engagement signal RSS carries: a story every outlet picked up beat
+    editorial filters three times. Fuzzy-match titles across sources and count
+    distinct outlets per cluster.
+    """
+    from rapidfuzz import fuzz
+
+    norms = [re.sub(r"\W+", " ", it["title"].lower()).strip() for it in items]
+    for i, item in enumerate(items):
+        outlets = {item["source"]}
+        for j, other in enumerate(items):
+            if i != j and other["source"] not in outlets and \
+                    fuzz.token_set_ratio(norms[i], norms[j]) >= 80:
+                outlets.add(other["source"])
+        item["coverage"] = len(outlets)
 
 
 def _balance_by_day(items: list[dict], cap: int) -> list[dict]:
@@ -76,8 +99,9 @@ def _balance_by_day(items: list[dict], cap: int) -> list[dict]:
     A plain newest-first sort under a cap lets the last 24 hours crowd out the
     rest of the week, and the drafter then builds markets from whatever ran
     yesterday instead of the week's actually-significant stories. Round-robin
-    across days keeps every day of the window represented; within a day newer
-    items still come first. Undated items join at the end.
+    across days keeps every day of the window represented; within a day,
+    stories covered by more outlets come first (the engagement signal), newer
+    breaking ties. Undated items join at the end.
     """
     by_day: dict[str, list[dict]] = {}
     undated: list[dict] = []
@@ -85,7 +109,8 @@ def _balance_by_day(items: list[dict], cap: int) -> list[dict]:
         day = item["published"][:10]
         (by_day.setdefault(day, []) if day else undated).append(item)
     for bucket in by_day.values():
-        bucket.sort(key=lambda i: i["published"], reverse=True)
+        bucket.sort(key=lambda i: i["published"], reverse=True)   # newest first,
+        bucket.sort(key=lambda i: i.get("coverage", 1), reverse=True)  # coverage wins
 
     days = sorted(by_day, reverse=True)
     picked: list[dict] = []
@@ -110,6 +135,15 @@ def _balance_by_day(items: list[dict], cap: int) -> list[dict]:
 
 
 def headlines_block(items: list[dict]) -> str:
-    """Render harvested items as a compact block for the LLM prompt."""
-    lines = [f"- [{i['source']}] {i['title']} ({i['published'][:10]}) {i['link']}" for i in items]
+    """Render harvested items as a compact block for the LLM prompt.
+
+    Stories several outlets ran get a "×N portalai" marker — ready-made
+    attention-gate evidence the drafter is told to prioritize.
+    """
+    lines = []
+    for i in items:
+        cov = i.get("coverage", 1)
+        marker = f" [×{cov} portalai]" if cov > 1 else ""
+        lines.append(f"- [{i['source']}] {i['title']}{marker} "
+                     f"({i['published'][:10]}) {i['link']}")
     return "\n".join(lines)

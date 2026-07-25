@@ -68,10 +68,12 @@ FEEDS: list[dict] = [
      "url": "https://news.google.com/rss?hl=lt&gl=LT&ceid=LT:lt"},
 ]
 
-# A full week, sampled evenly per day (see harvest.harvest) — markets should
-# come from the WEEK'S biggest stories, not just whatever ran yesterday.
-HARVEST_DAYS = 7
-HARVEST_MAX_HEADLINES = 140
+# Two weeks, sampled evenly per day (see harvest.harvest) — markets should come
+# from the period's biggest stories, not just whatever ran yesterday. Within a
+# day, stories covered by several outlets rank first: multi-outlet coverage is
+# the one engagement signal RSS actually carries.
+HARVEST_DAYS = 14
+HARVEST_MAX_HEADLINES = 160
 
 # ── PULSE: live social / attention signal (stage 1b) ────────────────────────
 # News RSS shows what newsrooms published; the pulse shows what Lithuanians are

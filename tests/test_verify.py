@@ -34,6 +34,16 @@ def test_prompt_includes_live_facts_when_given():
     assert prompt.index("22,45") < prompt.index("DECIDED")
 
 
+def test_prompt_includes_launch_constraint_when_min_resolve_set():
+    from datetime import date as d
+    prompt = verify._verify_prompt([_cand("Ar šventė bus išparduota?")], TODAY,
+                                   min_resolve=d(2026, 8, 10))
+    assert "LAUNCH CONSTRAINT" in prompt and "2026-08-10" in prompt
+    assert "deciding event takes place BEFORE that date" in prompt
+    # absent without a launch floor
+    assert "LAUNCH CONSTRAINT" not in verify._verify_prompt([_cand("Ar X?")], TODAY)
+
+
 def test_prompt_has_no_live_block_by_default():
     prompt = verify._verify_prompt([_cand("Ar X?")], TODAY)
     assert "LIVE DATA" not in prompt

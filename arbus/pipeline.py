@@ -45,8 +45,13 @@ def run_batch(
     if min_resolve:
         timing = (
             f"- CRITICAL: the app goes live on {min_resolve.isoformat()}. Every market MUST "
-            f"resolve on {min_resolve.isoformat()} or later — never earlier. Spread the "
-            "dates: most within 2-3 weeks after that day, ~20% a month or more later."
+            f"resolve on {min_resolve.isoformat()} or later — never earlier — AND its "
+            f"outcome must still be genuinely UNKNOWN on that date: the deciding event "
+            f"itself must take place on {min_resolve.isoformat()} or later. NEVER draft a "
+            "market about an event happening before launch, and NEVER push resolve_by "
+            "later to smuggle one in — a market whose answer is already known at launch "
+            "is dead on arrival. Spread the dates: most within 2-3 weeks after launch, "
+            "~20% a month or more later."
         )
     else:
         timing = ("- Duration mix: ~30% resolving within 48 hours, ~50% within "
@@ -188,7 +193,8 @@ def run_batch(
         live_facts = "\n".join(
             f"- {s.title}: {s.metric}" for s in signals if s.kind in ("stock", "chart")
         )
-        verdicts = verify.verify_candidates(accepted_cands, today, live_facts=live_facts)
+        verdicts = verify.verify_candidates(accepted_cands, today, live_facts=live_facts,
+                                            min_resolve=min_resolve)
 
     for cand, (verdict, note) in zip(accepted_cands, verdicts):
         if verdict in ("DECIDED", "WRONG"):

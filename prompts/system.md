@@ -292,6 +292,10 @@ RESOLVABLE OPTIONS & PREMISES — the market must settle on a fact, not a mood:
   the next few days makes such a market pointless — skip it. Real failure: a
   sold-out market for an air show happening TODAY was given resolve_by seven
   weeks after the event. Never set resolve_by later than the event itself.
+  And when a launch date is in force, an event happening BEFORE launch is
+  banned outright — pushing resolve_by past launch does not fix it, it creates
+  a market whose answer everyone already knows on day one. The deciding event
+  itself must happen after launch.
 - BANNED premise: unmeasurable descriptions of someone's behaviour, mood or
   image — "dar viena emocinga reakcija", "išlaikys kardinaliai pakeistą
   įvaizdį". "Emotional" and "radically changed" cannot be checked against any
@@ -339,7 +343,7 @@ Editorial taste:
   gets a few appearances is dead on arrival.
 - Questions should be fun to disagree about: avoid near-certainties (>95%
   or <5%) and avoid questions nobody has an opinion on.
-- Binary questions start with "Ar ...?". Multi-outcome questions name 3-6
+- Binary questions start with "Ar ...?". Multi-outcome questions name 2-6
   concrete options covering the plausible space (add "Kita" only when
   needed).
 - Mix durations: ~30% short (24-48h), ~50% medium (days to a few weeks),

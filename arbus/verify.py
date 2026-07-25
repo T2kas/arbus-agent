@@ -39,7 +39,8 @@ SYSTEM = (
 )
 
 
-def _verify_prompt(cands: list[Candidate], today: date, live_facts: str = "") -> str:
+def _verify_prompt(cands: list[Candidate], today: date, live_facts: str = "",
+                   min_resolve: date | None = None) -> str:
     lines = [
         f"Today is {today.isoformat()}. For each numbered prediction-market question below, "
         "check the live web and decide:\n",
@@ -51,6 +52,15 @@ def _verify_prompt(cands: list[Candidate], today: date, live_facts: str = "") ->
             "here, and judge plausibility against it:",
             live_facts,
             "",
+        ]
+    if min_resolve:
+        lines += [
+            f"LAUNCH CONSTRAINT: the app goes live on {min_resolve.isoformat()}. If a "
+            "market's deciding event takes place BEFORE that date, its outcome will "
+            "already be publicly known at launch — verdict WRONG, no matter how far in "
+            "the future the stated resolve date is. Look up each event's actual date "
+            "(a festival happening this weekend with a resolve date next month is the "
+            "classic case).\n",
         ]
     lines += [
         "- DECIDED: the outcome is already known / the event already happened or was cancelled.",
@@ -141,8 +151,8 @@ def _ask(prompt: str, _unused: bool = False) -> str:
                         max_tokens=8000, stage="verify")
 
 
-def verify_candidates(cands: list[Candidate], today: date,
-                      live_facts: str = "") -> list[tuple[str, str]]:
+def verify_candidates(cands: list[Candidate], today: date, live_facts: str = "",
+                      min_resolve: date | None = None) -> list[tuple[str, str]]:
     """Return one (verdict, note) per candidate, in order.
 
     A silent parse failure used to look identical to a genuine "cannot verify",
@@ -156,7 +166,7 @@ def verify_candidates(cands: list[Candidate], today: date,
 
     for start in range(0, len(cands), config.VERIFY_CHUNK_SIZE):
         chunk = cands[start : start + config.VERIFY_CHUNK_SIZE]
-        prompt = _verify_prompt(chunk, today, live_facts)
+        prompt = _verify_prompt(chunk, today, live_facts, min_resolve)
         verdicts: dict[int, tuple[str, str]] = {}
         try:
             text = _ask(prompt, use_perplexity)

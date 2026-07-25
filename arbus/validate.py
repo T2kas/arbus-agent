@@ -185,8 +185,10 @@ def validate_candidate(
             if len(cand.probabilities) != 2:
                 return None, "binary market without 2 probabilities"
     else:
-        if not (3 <= len(cand.options_lt) <= 6):
-            return None, f"multi market needs 3-6 options, got {len(cand.options_lt)}"
+        # 2 named options are legitimate (head-to-head duels, "pakeis / paliks");
+        # only a degenerate single option or an unreadable pile is rejected.
+        if not (2 <= len(cand.options_lt) <= 6):
+            return None, f"multi market needs 2-6 options, got {len(cand.options_lt)}"
 
     if len(cand.probabilities) != len(cand.options_lt):
         return None, "probabilities/options length mismatch"

@@ -7,7 +7,7 @@ import types
 # but _balance_by_day never touches it, so a stub keeps these tests offline.
 sys.modules.setdefault("feedparser", types.ModuleType("feedparser"))
 
-from arbus.harvest import _balance_by_day  # noqa: E402
+from arbus.harvest import _annotate_coverage, _balance_by_day, headlines_block  # noqa: E402
 
 
 def _item(day: str, hour: int) -> dict:
@@ -31,6 +31,35 @@ def test_within_day_newest_first():
     picked = _balance_by_day(items, cap=3)
     assert [i["title"] for i in picked] == ["2026-07-24T09", "2026-07-24T06",
                                            "2026-07-24T03"]
+
+
+def test_coverage_counts_distinct_outlets_for_similar_titles():
+    items = [
+        {"source": "LRT", "title": "Vilniuje atidarytas naujas stadionas",
+         "link": "", "published": "2026-07-24T10:00:00+00:00"},
+        {"source": "Delfi", "title": "Naujas stadionas atidarytas Vilniuje",
+         "link": "", "published": "2026-07-24T11:00:00+00:00"},
+        {"source": "15min", "title": "Kaune lijo visą dieną",
+         "link": "", "published": "2026-07-24T09:00:00+00:00"},
+    ]
+    _annotate_coverage(items)
+    assert items[0]["coverage"] == 2 and items[1]["coverage"] == 2
+    assert items[2]["coverage"] == 1
+
+
+def test_multi_outlet_stories_rank_first_within_day():
+    solo = _item("2026-07-24", 23)                       # newest but one outlet
+    big = dict(_item("2026-07-24", 8), coverage=3)       # older, three outlets
+    picked = _balance_by_day([solo, big], cap=2)
+    assert picked[0] is big
+
+
+def test_headlines_block_marks_multi_outlet_coverage():
+    items = [dict(_item("2026-07-24", 10), coverage=3),
+             _item("2026-07-24", 11)]
+    block = headlines_block(items)
+    assert "[×3 portalai]" in block
+    assert block.count("portalai") == 1                  # solo item unmarked
 
 
 def test_cap_respected_and_undated_last():

@@ -80,14 +80,18 @@ def test_probabilities_normalized():
     assert all(0.02 <= p <= 0.98 for p in fixed.probabilities)
 
 
-def test_multi_needs_3_to_6_options():
-    cand = make(
-        market_type="multi",
-        options_lt=["A", "B"],
-        probabilities=[0.5, 0.5],
-    )
-    fixed, reason = validate.validate_candidate(cand, TODAY)
-    assert fixed is None and "3-6" in reason
+def test_multi_accepts_2_to_6_options():
+    # Two named options (a duel) are a valid multi market.
+    ok = make(market_type="multi", options_lt=["Pakeis", "Paliks"],
+              probabilities=[0.5, 0.5])
+    fixed, reason = validate.validate_candidate(ok, TODAY)
+    assert reason is None and fixed is not None
+    # One option or seven are still degenerate.
+    for opts in (["A"], ["A", "B", "C", "D", "E", "F", "G"]):
+        bad = make(market_type="multi", options_lt=opts,
+                   probabilities=[round(1 / len(opts), 3)] * len(opts))
+        fixed, reason = validate.validate_candidate(bad, TODAY)
+        assert fixed is None and "2-6" in reason
 
 
 def test_vague_headline_rejected():
