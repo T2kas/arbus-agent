@@ -38,7 +38,10 @@ def _verify_prompt(cands: list[Candidate], today: date) -> str:
         "check the live web and decide:\n",
         "- DECIDED: the outcome is already known / the event already happened or was cancelled.",
         "- WRONG: the setup contradicts facts — e.g. the resolution date does not match the "
-        "actual event schedule (event ends earlier or later), the listed options are not "
+        "actual event schedule: ALWAYS look up the event's real date; if the event happens "
+        "before the market's resolve date (a sold-out market for an event taking place "
+        "today, resolving weeks later), the verdict is WRONG. Also WRONG when the listed "
+        "options are not "
         "factually valid or exhaustive as of today (teams already eliminated, wrong "
         "participants, misnamed entities), or the premise is false. For social-metric "
         "markets (followers, subscribers, views), look up the CURRENT metric value: if the "

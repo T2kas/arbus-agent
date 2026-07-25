@@ -68,8 +68,10 @@ FEEDS: list[dict] = [
      "url": "https://news.google.com/rss?hl=lt&gl=LT&ceid=LT:lt"},
 ]
 
-HARVEST_DAYS = 4          # look-back window for headlines
-HARVEST_MAX_HEADLINES = 120
+# A full week, sampled evenly per day (see harvest.harvest) — markets should
+# come from the WEEK'S biggest stories, not just whatever ran yesterday.
+HARVEST_DAYS = 7
+HARVEST_MAX_HEADLINES = 140
 
 # ── PULSE: live social / attention signal (stage 1b) ────────────────────────
 # News RSS shows what newsrooms published; the pulse shows what Lithuanians are
@@ -79,6 +81,9 @@ HARVEST_MAX_HEADLINES = 120
 # arbus/pulse.py. Turn the whole stage off with PULSE_ENABLED=False.
 PULSE_ENABLED = True
 PULSE_MAX_PER_SOURCE = 12       # cap signals kept per source (keeps the prompt tight)
+# Entertainment charts (YouTube trending, Apple Music) are seasoning, not the
+# backbone — keep them from flooding the prompt with view-count bait.
+PULSE_ENTERTAINMENT_CAP = 5
 GOOGLE_TRENDS_GEO = "LT"        # also used as YouTube regionCode
 REDDIT_SUBS = ["lietuva", "Lithuania"]  # lietuva = LT-language, Lithuania = mixed/expat
 # TikTok Creative Center (best-effort; may be empty if LT is unsupported there).

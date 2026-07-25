@@ -198,6 +198,15 @@ def test_apple_chart_respects_cap():
     assert len(pulse._parse_apple(APPLE_JSON, "s", "chart", "n", cap=1)) == 1
 
 
+def test_registry_has_no_app_store_and_caps_entertainment():
+    labels = {label for label, _, _ in pulse.SOURCES}
+    assert "App Store LT" not in labels           # dropped per team review
+    caps = {label: cap for label, _, cap in pulse.SOURCES}
+    assert caps["YouTube Trending LT"] == pulse.config.PULSE_ENTERTAINMENT_CAP
+    assert caps["Apple Music LT"] == pulse.config.PULSE_ENTERTAINMENT_CAP
+    assert caps["Google Trends LT"] is None       # news/search side uncapped
+
+
 def test_wiki_urls_walk_back_from_yesterday():
     from datetime import date
     urls = pulse._wiki_urls(date(2026, 7, 25), days_back=3)

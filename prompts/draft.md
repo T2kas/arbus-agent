@@ -9,8 +9,12 @@ pension markets", obey it this batch.
 You have TWO live signals about Lithuania right now. Use BOTH — they cover
 different things and the second is the one naive generators miss.
 
-SIGNAL A — NEWS HEADLINES (what newsrooms published, last few days). A starting
-point, not the full picture.
+SIGNAL A — NEWS HEADLINES, sampled evenly across the LAST 7 DAYS. Treat them as
+a week, not a day: identify the stories that DEVELOPED over the week — the ones
+several outlets kept returning to — and build markets on those. Do NOT default
+to whatever happened to be published yesterday; yesterday is one seventh of
+your window. A market seeded by a single incidental item from the last 24 hours
+must clear a higher bar than one the whole week kept arguing about.
 
 SIGNAL B — THE PULSE (what Lithuanians are actually SEARCHING, DISCUSSING and
 LOOKING UP right now, with real attention numbers). This is the culture / teen-

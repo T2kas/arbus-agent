@@ -429,24 +429,21 @@ def _apple_music(cap: int) -> list[Signal]:
     return _parse_apple(_get_json(url), "Apple Music LT", "chart", "populiariausia daina", cap)
 
 
-def _apple_apps(cap: int) -> list[Signal]:
-    url = (f"{_APPLE_BASE}/{config.APPLE_STOREFRONT}/apps/top-free/"
-           f"{max(cap, 10)}/apps.json")
-    return _parse_apple(_get_json(url), "App Store LT", "app", "populiariausia programėlė", cap)
-
-
 # ── Registry + public API ────────────────────────────────────────────────────
 
-# (label, fetcher). Add a source by appending one line. Keyed sources return []
-# until their key is set, so they are safe to leave enabled.
-SOURCES: list[tuple[str, "callable"]] = [
-    ("Google Trends LT", _google_trends),
-    ("Reddit", _reddit),
-    ("Wikipedia LT", _wikipedia),
-    ("TikTok Creative Center", _tiktok),
-    ("YouTube Trending LT", _youtube),
-    ("Apple Music LT", _apple_music),
-    ("App Store LT", _apple_apps),
+# (label, fetcher, cap). The cap keeps entertainment sources from flooding the
+# prompt: charts and trending videos are seasoning, while search/discussion/
+# pageview signals carry the news-and-society topics the platform leads with.
+# App Store rankings were dropped entirely — which apps are being installed
+# almost never seeds a market (team review, 2026-07-25). A cap of None means
+# "use the default".
+SOURCES: list[tuple[str, "callable", int | None]] = [
+    ("Google Trends LT", _google_trends, None),
+    ("Reddit", _reddit, None),
+    ("Wikipedia LT", _wikipedia, None),
+    ("TikTok Creative Center", _tiktok, None),
+    ("YouTube Trending LT", _youtube, config.PULSE_ENTERTAINMENT_CAP),
+    ("Apple Music LT", _apple_music, config.PULSE_ENTERTAINMENT_CAP),
 ]
 
 
@@ -459,9 +456,9 @@ def pulse(cap_per_source: int = config.PULSE_MAX_PER_SOURCE) -> list[Signal]:
     if not config.PULSE_ENABLED:
         return []
     signals: list[Signal] = []
-    for label, fetch in SOURCES:
+    for label, fetch, cap in SOURCES:
         try:
-            got = fetch(cap_per_source)
+            got = fetch(cap or cap_per_source)
             signals.extend(got)
             log.info("pulse %s: %d signals", label, len(got))
         except Exception as exc:  # network, rate limit, format drift

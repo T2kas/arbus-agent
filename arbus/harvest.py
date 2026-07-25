@@ -67,8 +67,46 @@ def harvest(days: int = config.HARVEST_DAYS, cap: int = config.HARVEST_MAX_HEADL
         except Exception as exc:  # network errors, malformed XML, etc.
             log.warning("feed %s failed: %s", feed["name"], exc)
 
-    items.sort(key=lambda i: i["published"], reverse=True)
-    return items[:cap]
+    return _balance_by_day(items, cap)
+
+
+def _balance_by_day(items: list[dict], cap: int) -> list[dict]:
+    """Sample headlines evenly across the look-back window's days.
+
+    A plain newest-first sort under a cap lets the last 24 hours crowd out the
+    rest of the week, and the drafter then builds markets from whatever ran
+    yesterday instead of the week's actually-significant stories. Round-robin
+    across days keeps every day of the window represented; within a day newer
+    items still come first. Undated items join at the end.
+    """
+    by_day: dict[str, list[dict]] = {}
+    undated: list[dict] = []
+    for item in items:
+        day = item["published"][:10]
+        (by_day.setdefault(day, []) if day else undated).append(item)
+    for bucket in by_day.values():
+        bucket.sort(key=lambda i: i["published"], reverse=True)
+
+    days = sorted(by_day, reverse=True)
+    picked: list[dict] = []
+    round_idx = 0
+    while len(picked) < cap:
+        took_any = False
+        for day in days:
+            bucket = by_day[day]
+            if round_idx < len(bucket):
+                picked.append(bucket[round_idx])
+                took_any = True
+                if len(picked) >= cap:
+                    break
+        if not took_any:
+            break
+        round_idx += 1
+    for item in undated:
+        if len(picked) >= cap:
+            break
+        picked.append(item)
+    return picked
 
 
 def headlines_block(items: list[dict]) -> str:

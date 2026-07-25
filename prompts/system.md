@@ -260,6 +260,20 @@ RESOLVABLE OPTIONS & PREMISES — the market must settle on a fact, not a mood:
 - Never write "oficialiai" / "oficialus" in the headline: if a market resolves
   at all, it resolves on official facts. Where "official" is defined belongs in
   the rules, exactly like "viešai".
+- BANNED premise: INVENTED from an unrelated news item. The question must be
+  something the reporting actually raises, not your speculative leap from it.
+  Real failure: a politician shared that he lost a friend, and the generator
+  drafted "Ar [politikas] paskelbs apie pasitraukimą iš politikos?" — nothing
+  in the news mentioned resignation; the premise was fabricated. If no source
+  discusses the outcome you are asking about, the market has no basis — drop it
+  or price it as the near-impossibility it is.
+- EVENT-DATE SANITY — before drafting any market tied to an event (festival,
+  concert, match, show), SEARCH FOR THE EVENT'S ACTUAL DATE first and state it
+  in the rationale. resolve_by must fit the event's real schedule: a sold-out
+  market must resolve BEFORE the event starts, and an event happening within
+  the next few days makes such a market pointless — skip it. Real failure: a
+  sold-out market for an air show happening TODAY was given resolve_by seven
+  weeks after the event. Never set resolve_by later than the event itself.
 - BANNED premise: unmeasurable descriptions of someone's behaviour, mood or
   image — "dar viena emocinga reakcija", "išlaikys kardinaliai pakeistą
   įvaizdį". "Emotional" and "radically changed" cannot be checked against any
@@ -286,13 +300,20 @@ Editorial taste:
   red-alert weather, price pain, national pride — over minor, rare, low-impact
   incidents. A market should matter to the reader, not just be technically
   true.
-- BATCH BALANCE — this is a prediction-market platform, not a fan page. The
-  backbone of every batch is geopolitics and security, the Lithuanian economy,
-  companies and prices, and quality of life — the informative markets people
-  argue about and learn from. Culture and internet hype are the seasoning
-  (roughly a quarter of the batch), not the main course. In particular, keep
-  YouTube/TikTok view-count markets rare: they are only worth it for works the
-  whole country knows, never for a single niche video.
+- BATCH BALANCE — this is a prediction-market platform, not a fan page. Model
+  the category spread on Polymarket/Kalshi translated to Lithuania. A full
+  batch MUST cover, roughly in this order of weight:
+    1. geopolitics & security (the war, NATO, airspace incidents, sanctions)
+    2. economy & finance (kainos, palūkanos, infliacija, BVP, atlyginimai)
+    3. politics & elections (Seimas, prezidentas, partijos, reitingai, votes)
+    4. companies & markets (Vinted, Ignitis, Telia, bankai — results, stocks,
+       expansion, layoffs)
+    5. tech & platforms Lithuanians use daily
+    6. sport (rinktinės, Žalgiris/Rytas, LT athletes abroad)
+    7. culture & internet hype — the seasoning, roughly a quarter at most
+  A batch that is mostly categories 6-7 is a failed batch even if every market
+  passes the other gates. Keep YouTube/TikTok view-count markets rare: only for
+  works the whole country knows, never for a single niche video.
 - Niche is allowed ONLY in culture / internet-hype territory (an in-joke
   creator moment a young audience instantly gets). In sport, economics and
   politics the subject must be broadly recognizable — no obscure players,
