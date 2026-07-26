@@ -45,6 +45,13 @@ _ADDED_COLUMNS = {
     "image_source": "TEXT NOT NULL DEFAULT ''",
     "published_at": "TEXT NOT NULL DEFAULT ''",
     "publish_note": "TEXT NOT NULL DEFAULT ''",
+    # Job 2 — resolution monitoring.
+    "resolution_verdict": "TEXT NOT NULL DEFAULT ''",
+    "resolution_option": "TEXT NOT NULL DEFAULT ''",
+    "resolution_confidence": "TEXT NOT NULL DEFAULT ''",
+    "resolution_note": "TEXT NOT NULL DEFAULT ''",
+    "resolution_source": "TEXT NOT NULL DEFAULT ''",
+    "resolved_at": "TEXT NOT NULL DEFAULT ''",
 }
 
 

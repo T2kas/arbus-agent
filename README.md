@@ -2,8 +2,7 @@
 
 Standalone service that generates prediction-market candidates for **Arbus**,
 a Lithuanian prediction app (virtual credits / Arbukai, audience 16-35).
-This repo covers **Job 1 (market creation)** only; resolution monitoring
-(Job 2) plugs in later as a separate module.
+Covers **Job 1 (market creation)** and **Job 2 (resolution monitoring)**.
 
 ## Design: the LLM is one stage, not the whole agent
 
@@ -94,6 +93,35 @@ configured and prints the payload contract to hand to whoever builds the API:
   "language": "lt", "generated_at": "2026-07-25T13:53:00+00:00"
 }
 ```
+
+## Job 2 — resolution monitoring
+
+Job 1 opens markets; this closes them.
+
+```sh
+python -m arbus resolve            # dry run — shows verdicts, writes nothing
+python -m arbus resolve --apply    # record verdicts
+```
+
+It picks up markets whose `resolve_by` has passed (plus a grace day, since
+sources publish after the fact), checks the live web **against each market's own
+resolution criteria**, and returns one of:
+
+| Verdict | Meaning |
+|---|---|
+| `RESOLVED <option>` | Outcome is public and unambiguous |
+| `OPEN` | The world has not decided yet |
+| `VOID` | Can no longer resolve fairly (cancelled, source gone, options broken) |
+| `UNCLEAR` | Could not establish the facts this session |
+
+**A verdict is applied automatically only when it is `RESOLVED`, at `HIGH`
+confidence, with a cited source URL, naming an option that actually exists on
+the market.** Everything else is recorded and left for a human. Resolving
+wrongly takes credits from users who earned them — far harder to undo than
+resolving a day late — so the default is to wait.
+
+Nothing here writes to the app. Pushing resolutions is a separate step and
+lands once the app API exists (see "Publishing to the app").
 
 ## Backing up the database
 

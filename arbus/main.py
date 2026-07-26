@@ -3,6 +3,7 @@
     python -m arbus generate [--count 35] [--dry-run] [--skip-verify]
     python -m arbus promote <market_id> [<market_id> ...]
     python -m arbus list [--status candidate|needs_review|rejected|promoted]
+    python -m arbus resolve [--apply]                     # Job 2: close markets
     python -m arbus feedback "mažiau ekonomikos rinkų"   # teach future batches
     python -m arbus bot            # Telegram long-polling bot (/markets)
 """
@@ -78,6 +79,50 @@ def cmd_list(args: argparse.Namespace) -> int:
     for r in rows:
         flag = {"needs_review": "⚠️", "rejected": "✗", "promoted": "★"}.get(r["status"], " ")
         print(f"{flag} #{r['id']:>4} [{r['status']:<12}] {r['resolve_by']} {r['question_lt']}")
+    conn.close()
+    return 0
+
+
+def cmd_resolve(args: argparse.Namespace) -> int:
+    from . import resolve
+
+    today = date.today()
+    conn = store.connect()
+    rows = resolve.due_markets(conn, today, limit=args.limit)
+    if not rows:
+        print("No markets are due for resolution.")
+        conn.close()
+        return 0
+
+    print(f"Checking {len(rows)} market(s) due for resolution...\n")
+    verdicts = resolve.check_markets(rows, today)
+
+    applied = queued = 0
+    for i, row in enumerate(rows, 1):
+        v = verdicts[i]
+        options = json.loads(row["options_json"])
+        ok, detail = resolve.is_auto_applicable(v, options)
+        flag = "✅" if ok else "⏸️"
+        print(f"{flag} #{row['id']} {row['question_lt']}")
+        print(f"    {v['verdict']}"
+              + (f" → {detail}" if ok else "")
+              + f" | {v['confidence']} | {v['reason']}")
+        if v["source"]:
+            print(f"    source: {v['source']}")
+        if not ok:
+            print(f"    needs a human: {detail}")
+        if args.apply:
+            resolve.record(conn, row["id"], v, applied=ok, note=v["reason"])
+        applied += ok
+        queued += not ok
+        print()
+
+    if args.apply:
+        conn.commit()
+        print(f"Applied {applied}, left {queued} for review.")
+    else:
+        print(f"Dry run — nothing written. Would apply {applied}, "
+              f"queue {queued} for review. Re-run with --apply to record.")
     conn.close()
     return 0
 
@@ -170,6 +215,12 @@ def main() -> int:
     ls = sub.add_parser("list", help="list stored markets")
     ls.add_argument("--status", choices=["candidate", "needs_review", "rejected", "promoted"])
     ls.set_defaults(func=cmd_list)
+
+    rs = sub.add_parser("resolve", help="check markets whose resolution date has passed")
+    rs.add_argument("--apply", action="store_true",
+                    help="record verdicts (default is a dry run)")
+    rs.add_argument("--limit", type=int, default=25)
+    rs.set_defaults(func=cmd_resolve)
 
     rb = sub.add_parser("rebuild-db",
                         help="rebuild the duplicate-check history from exports/")

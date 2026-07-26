@@ -422,6 +422,17 @@ PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
 # reliably carry 35 candidates through draft + structure.
 DRAFT_CHUNK_SIZE = 15
 
+# ── Job 2: resolution monitoring ────────────────────────────────────────────
+# Sources publish after the fact, so a market resolving on the 1st may only be
+# checkable on the 3rd. Markets become due once their date has passed by this
+# many days.
+RESOLVE_GRACE_DAYS = 1
+RESOLVE_CHUNK_SIZE = 8      # markets per resolution LLM call
+# A verdict is applied automatically only at HIGH confidence with a cited
+# source; everything else waits for a human. Resolving wrongly takes credits
+# from users who earned them, which is much harder to undo than resolving late.
+RESOLVE_AUTO_APPLY_CONFIDENCE = "HIGH"
+
 # ── Market images ───────────────────────────────────────────────────────────
 # Each market gets a picture from its own source article's og:image tag. See
 # arbus/images.py for the rights caveat before showing these to users.
