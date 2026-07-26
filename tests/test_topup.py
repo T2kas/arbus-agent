@@ -141,6 +141,14 @@ def test_no_topup_when_every_theme_delivers(harness):
     assert state["calls"] == len(pipeline._theme_chunks(15, config.DRAFT_CHUNK_SIZE))
 
 
+def test_draft_call_ceiling_stops_runaway_cost(harness, monkeypatch):
+    """Every theme failing must not spiral into unbounded paid drafting calls."""
+    monkeypatch.setattr(config, "MAX_DRAFT_CALLS", 5)
+    state = _install_fake_llm(harness, lambda theme: theme == "kultūra ir visuomenė")
+    pipeline.run_batch(count=15)
+    assert state["calls"] <= 5
+
+
 def test_report_records_theme_yield(harness):
     _install_fake_llm(harness, lambda theme: True)
     result = pipeline.run_batch(count=15)

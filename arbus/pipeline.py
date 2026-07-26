@@ -145,8 +145,15 @@ def run_batch(
         accepted_cands.append(cand)
         result.accepted_by_theme[cand.theme] += 1
 
+    draft_calls = {"n": 0}
+
     def draft_chunk(n: int, label: str, focus: str) -> list[Candidate]:
         """Draft + structure one themed chunk. Failures cost the chunk, not the batch."""
+        if draft_calls["n"] >= config.MAX_DRAFT_CALLS:
+            log.warning("draft-call ceiling (%d) reached; finishing with what we have",
+                        config.MAX_DRAFT_CALLS)
+            return []
+        draft_calls["n"] += 1
         avoid_parts = []
         if config.BLOCKED_SUBJECTS:
             avoid_parts.append(

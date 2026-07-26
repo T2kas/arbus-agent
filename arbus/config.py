@@ -128,6 +128,10 @@ DEFAULT_BATCH_SIZE = 35
 # culture. After validation, themes below their target are re-drafted.
 TOPUP_ROUNDS = 2          # extra drafting rounds for under-delivered themes
 TOPUP_OVERDRAFT = 2.0     # draft this multiple of the deficit (some fail again)
+# Hard ceiling on drafting calls per batch. Top-ups cost real money, so a batch
+# where every theme keeps failing must not spiral: once this many draft calls
+# have been made, the batch finishes with whatever it has.
+MAX_DRAFT_CALLS = 12
 # Rejections from earlier in the same run are fed back into later chunk prompts
 # so the model stops repeating a mistake while the batch is still being drafted.
 REJECT_FEEDBACK_LIMIT = 8
