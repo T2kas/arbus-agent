@@ -260,8 +260,15 @@ TIME_HINT_STEMS = [
     # Relative windows are time bounds too — "per mėnesį", "pirmą rodymo
     # savaitgalį", "per 30 dienų", "ketvirtį", "metų pabaigoje".
     "savaitgal", "savait", "mėnes", "menes", "ketvirt", "dienų", "dienu",
-    "per parą", "pabaigoje", "pradžioje", "pradzioje",
+    # Stems, not full forms: "pabaigos"/"pabaigoje", "pradžios"/"pradžioje".
+    "per parą", "pabaig", "pradži", "pradzi", "metų gale", "metu gale",
 ]
+
+# A bare year is a time bound too — "Ar ES 2026 m. priims sankcijų paketą?" is
+# bounded, and rejecting it cost 11 good markets in one batch. Matched
+# separately from the stem list because a substring like "20" would fire on
+# thresholds ("20 tūkst.") and dates inside entity names.
+TIME_HINT_RE = re.compile(r"\b20\d{2}\b")
 EVENT_SCOPE_STEMS = [
     "rungtyn", "final", "čempionat", "cempionat", "turnyr", "lyg", "etap",
     "rinkim", "festival", "koncert", "apdovanojim", "olimp", "grand prix",

@@ -101,6 +101,8 @@ def lint_open_ended(question: str, market_type: str) -> str | None:
     low = question.lower()
     if any(stem in low for stem in config.TIME_HINT_STEMS):
         return None
+    if config.TIME_HINT_RE.search(question):
+        return None
     if any(stem in low for stem in config.EVENT_SCOPE_STEMS):
         return None
     return "open-ended question: add a coarse time bound (e.g. 'iki spalio', 'šiemet')"
@@ -121,7 +123,10 @@ def normalize_category(category: str, question: str = "") -> str:
     statistika)", which breaks report grouping and app-side filtering. Match on
     the category text first, then fall back to the question itself.
     """
-    for haystack in (category.lower(), question.lower()):
+    # The question is checked first: it states what the market is actually
+    # about, while the model's own label is often the themed-chunk name. A
+    # sanctions market drafted under the economy mandate is geopolitics.
+    for haystack in (question.lower(), category.lower()):
         for canonical, keywords in config.CATEGORIES.items():
             if any(kw in haystack for kw in keywords):
                 return canonical
@@ -149,12 +154,32 @@ def _norm_text(text: str) -> str:
     return re.sub(r"[^\w\s]", " ", text)
 
 
+_QUOTED_RE = re.compile(r"[„\"“']([^„\"“']{2,60})[\"“”']")
+
+
+def _quoted_titles(text: str) -> set[str]:
+    """Quoted names in a question — song titles, clubs, companies."""
+    return {m.strip().lower() for m in _QUOTED_RE.findall(text)}
+
+
 def is_duplicate(question: str, existing_questions: list[str]) -> str | None:
-    """Return the matching existing question if `question` is a near-duplicate."""
+    """Return the matching existing question if `question` is a near-duplicate.
+
+    Questions built from the same template about different named works read as
+    near-identical to a token-ratio check — two markets about different Jessica
+    Shy songs were rejected as duplicates of each other. When both questions
+    name quoted titles and none of them overlap, they are about different
+    things regardless of how similar the wording is.
+    """
     norm = _norm_text(question)
+    titles = _quoted_titles(question)
     for other in existing_questions:
-        if fuzz.token_set_ratio(norm, _norm_text(other)) >= config.DEDUPE_SIMILARITY:
-            return other
+        if fuzz.token_set_ratio(norm, _norm_text(other)) < config.DEDUPE_SIMILARITY:
+            continue
+        other_titles = _quoted_titles(other)
+        if titles and other_titles and not (titles & other_titles):
+            continue  # same shape, different named subject
+        return other
     return None
 
 

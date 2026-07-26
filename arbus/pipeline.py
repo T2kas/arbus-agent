@@ -118,7 +118,9 @@ def run_batch(
     # the time-bound rule existed and was rejecting the corrected
     # "... iki spalio?" as a duplicate.
     existing = [q for q in store.recent_questions(conn)
-                if not validate.lint_open_ended(q, "binary")]
+                if not validate.lint_open_ended(q, "binary")
+                and not validate.lint_vague(q)
+                and not validate.lint_headline_format(q)]
     accepted_cands: list[Candidate] = []
     drafted_questions: list[str] = []
 
@@ -274,8 +276,12 @@ def run_batch(
         # The pulse already fetched hard numbers this session (stock closes,
         # chart positions) — hand them to the verifier so it never answers
         # UNCLEAR about a value we are holding in memory.
+        # Anything the pulse measured this session counts as a known fact —
+        # including view counts, or a YouTube-metric market comes back UNCLEAR
+        # while the number sits in memory.
         live_facts = "\n".join(
-            f"- {s.title}: {s.metric}" for s in signals if s.kind in ("stock", "chart")
+            f"- {s.title}: {s.metric}" for s in signals
+            if s.kind in ("stock", "chart", "video", "pageview")
         )
         verdicts = verify.verify_candidates(accepted_cands, today, live_facts=live_facts,
                                             min_resolve=min_resolve)

@@ -330,6 +330,35 @@ def test_category_normalized_to_canonical_set():
     assert validate.normalize_category("blah", "Ar rytoj lis?") == "kita"
 
 
+def test_bare_year_and_period_end_are_time_bounds():
+    """These 11 real markets were lost to a false positive in one batch."""
+    for ok in [
+        "Ar ES 2026 m. priims naują sankcijų paketą Rusijai?",
+        "Ar Lietuva 2026 m. grąžins ambasadorių į Kiniją?",
+        "Ar Lietuva iki metų pabaigos kritikuos ES sankcijų politiką?",
+        "Ar JAV ir Iranas iki metų pabaigos pasirašys susitarimą?",
+    ]:
+        assert validate.lint_open_ended(ok, "binary") is None, ok
+    # genuinely unbounded questions must still be caught
+    assert validate.lint_open_ended("Ar „Mere“ grįš į Lietuvą?", "binary")
+
+
+def test_different_quoted_titles_are_not_duplicates():
+    existing = ["Jessica Shy „Kas Kaltas“: ar daina išliks Apple Music LT Top 5 iki rugsėjo?"]
+    other_song = "Ar Jessica Shy daina „Saulė Nesileis“ išliks Apple Music LT Top 5 iki rugsėjo?"
+    same_song = "Ar Jessica Shy daina „Kas Kaltas“ išliks Apple Music LT Top 3 iki rugsėjo?"
+    assert validate.is_duplicate(other_song, existing) is None
+    assert validate.is_duplicate(same_song, existing) == existing[0]
+
+
+def test_category_follows_the_question_not_the_theme_label():
+    # Drafted under the economy mandate, but the market is about sanctions.
+    cand = make(question_lt="Ar Seimas priims sankcijas rusams iki spalio?",
+                category="ekonomika ir finansai")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed.category == "geopolitika"
+
+
 def test_sports_metaphor_rejected():
     cand = make(question_lt="Ar „Žalgiris“ atsities Konferencijų lygoje?")
     fixed, reason = validate.validate_candidate(cand, TODAY)

@@ -74,6 +74,11 @@ def _verify_prompt(cands: list[Candidate], today: date, live_facts: str = "",
         "markets (followers, subscribers, views), look up the CURRENT metric value: if the "
         "target is implausible relative to it (e.g. 100k followers by autumn for an account "
         "at 7k today) or the entity is niche/unknown to a mass audience, the verdict is WRONG.",
+        "- THRESHOLD MARKETS ON PUBLISHED STATISTICS (vidutinis atlyginimas, infliacija, "
+        "nedarbas, BVP, kainos): ALWAYS look up the latest published figure before judging. "
+        "If the threshold has ALREADY been crossed by the most recent official reading, the "
+        "verdict is DECIDED — e.g. asking whether the average wage will exceed €2,400 when "
+        "the latest figure is already €2,554 is a dead market, not an open one.",
         "- WRONG also when the market has NO Lithuanian connection: this app is for a "
         "Lithuanian audience, so a market about a foreign athlete, club or company with "
         "no Lithuanian participant, team or direct consequence for Lithuania is invalid "
