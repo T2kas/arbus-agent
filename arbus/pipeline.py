@@ -121,6 +121,15 @@ def run_batch(
                 if not validate.lint_open_ended(q, "binary")
                 and not validate.lint_vague(q)
                 and not validate.lint_headline_format(q)]
+    # The app is the real source of truth for what users can already see: a
+    # market published by hand, or from another machine, is not in this DB.
+    # Fail-safe by design — an unreachable app costs dedupe, never the batch.
+    if config.ARBUS_API_URL and config.APP_DEDUPE:
+        from . import publish
+        live = publish.app_questions()
+        if live:
+            progress(f"App: {len(live)} live markets loaded for duplicate checking.")
+            existing += live
     accepted_cands: list[Candidate] = []
     drafted_questions: list[str] = []
 

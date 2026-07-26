@@ -169,6 +169,43 @@ def cmd_settle(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_app(args: argparse.Namespace) -> int:
+    """Show the markets the Arbus app itself is serving.
+
+    This is the connection test: if it lists your app's markets, the generator
+    can read the app, and every future batch will avoid duplicating them.
+    """
+    from . import publish
+
+    if not config.ARBUS_API_URL:
+        print("ARBUS_API_URL is not set in .env — nothing to connect to.")
+        return 1
+
+    rows, error = publish.fetch_app_markets(args.limit)
+    if error:
+        print(f"❌ Could not read the app: {error}")
+        return 1
+
+    print(f"✅ Connected. The app is serving {len(rows)} market(s).\n")
+    for row in rows:
+        question = publish.question_of(row) or "(no question field found)"
+        created = str(row.get("created_at", ""))[:10]
+        status = row.get("status") or row.get("state") or ""
+        options = row.get("market_options") or row.get("options") or []
+        print(f"· {created} {question}")
+        if status:
+            print(f"    status: {status}")
+        if isinstance(options, list) and options:
+            labels = [str(o.get("label") or o.get("name") or o.get("title") or o)
+                      if isinstance(o, dict) else str(o) for o in options]
+            print(f"    options: {' / '.join(labels[:6])}")
+
+    if rows and args.schema:
+        print("\nColumns the app returns (useful when wiring `arbus publish`):")
+        print("  " + ", ".join(sorted(rows[0].keys())))
+    return 0
+
+
 def cmd_feeds(_args: argparse.Namespace) -> int:
     """Show which news feeds are alive and how much each contributes."""
     rows = harvest.probe_feeds()
@@ -326,6 +363,12 @@ def main() -> int:
                         help="pay out decisions whose undo window has expired")
     st.add_argument("--dry-run", action="store_true")
     st.set_defaults(func=cmd_settle)
+
+    ap = sub.add_parser("app", help="list the markets the Arbus app is serving")
+    ap.add_argument("--limit", type=int, default=50)
+    ap.add_argument("--schema", action="store_true",
+                    help="also print the column names the app returns")
+    ap.set_defaults(func=cmd_app)
 
     fd = sub.add_parser("feeds", help="check which news feeds still work")
     fd.set_defaults(func=cmd_feeds)

@@ -63,19 +63,34 @@ never costs you a market. Turn the stage off with `IMAGES_ENABLED = False`.
 > review; before showing them to users, clear usage with the outlet or swap in
 > your own artwork. `image_source` records the page each image came from.
 
-## Publishing to the app
+## Talking to the app (Supabase)
 
 ```sh
+python -m arbus app                         # what the app is serving now
+python -m arbus app --schema                # + the column names it returns
 python -m arbus publish 237 242 --dry-run   # print the exact payload
 python -m arbus publish 237 242             # POST to the app
 ```
 
-Add the endpoint to `.env` when it exists:
+Point `.env` at the markets table:
 
 ```sh
-ARBUS_API_URL=https://api.arbus.lt/markets
-ARBUS_API_KEY=...
+ARBUS_API_URL=https://<project>.supabase.co/rest/v1/markets?select=*,market_options!market_id(*)&order=created_at.desc
+ARBUS_API_KEY=<key>
 ```
+
+Supabase needs the key in **both** `apikey` and `Authorization` — sending only
+the bearer token returns a 401 that reads like a wrong key. `publish.py` does
+that automatically when the URL is a `supabase.co` one.
+
+The **anon** key is public by design (it ships inside the app) and is enough to
+READ. Writing is normally blocked for it by row-level security, so publishing
+needs the **service_role** key — a real secret: `.env` only, never the repo.
+
+Reading is also used for deduplication: before drafting, the generator loads
+the questions the app is already serving so it cannot propose one users can
+already see (`APP_DEDUPE`). If the app is unreachable the batch continues
+without it — an API outage must never cost a batch.
 
 Publishing is manual and per-market — markets go live only for ids you pass,
 never automatically at the end of a batch. Rejected markets are refused, and

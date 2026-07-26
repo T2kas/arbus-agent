@@ -519,6 +519,9 @@ IMAGE_TIMEOUT = 12
 ARBUS_API_URL = os.environ.get("ARBUS_API_URL", "")
 ARBUS_API_KEY = os.environ.get("ARBUS_API_KEY", "")
 ARBUS_API_TIMEOUT = 30
+# Read the app's live markets before drafting, so the generator never proposes
+# something users can already see. Skipped silently when the app is unreachable.
+APP_DEDUPE = True
 
 # ── Paths (relative to repo root) ───────────────────────────────────────────
 DB_PATH = "data/arbus.db"
