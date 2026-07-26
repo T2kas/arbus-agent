@@ -30,6 +30,11 @@ MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 # Verification is the one stage where judgement pays for itself. Leave empty to
 # reuse MODEL, or set ANTHROPIC_VERIFY_MODEL=claude-opus-5 to spend only there.
 VERIFY_MODEL = os.environ.get("ANTHROPIC_VERIFY_MODEL", "")
+# The resolution check is the other place where being right is worth paying for,
+# and it runs a handful of times a day rather than 12 times a batch: the whole
+# difference between Sonnet and Opus here is a few cents against a payout that
+# cannot be clawed back. Set ANTHROPIC_AICHECK_MODEL="" to fall back to MODEL.
+AICHECK_MODEL = os.environ.get("ANTHROPIC_AICHECK_MODEL", "claude-opus-5")
 
 # Extended thinking is charged as output. "off" removes it entirely; the
 # scaffolding around the model already does the reasoning we depend on.

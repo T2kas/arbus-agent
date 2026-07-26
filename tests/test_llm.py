@@ -3,7 +3,7 @@
 import pytest
 import requests
 
-from arbus import llm
+from arbus import config, llm
 
 
 @pytest.fixture(autouse=True)
@@ -161,3 +161,22 @@ def test_zai_error_without_tools_still_raises(monkeypatch):
                         lambda *a, **k: _Resp(401))
     with pytest.raises(requests.HTTPError):
         llm.zai_chat("hi", web_search=False)
+
+
+def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
+    """Resolution checks decide payouts that cannot be clawed back, so they get
+    the accurate model even though drafting runs on the cheap one."""
+    seen = {}
+
+    def fake(prompt, system, max_uses, max_tokens, model=None):
+        seen["model"] = model
+        return "ok"
+
+    monkeypatch.setattr(llm, "_research_anthropic", fake)
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "anthropic")
+
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == config.AICHECK_MODEL == "claude-opus-5"
+
+    llm.research("p", system="s", stage="draft")
+    assert seen["model"] is None          # drafting stays on the cheap default
