@@ -39,6 +39,18 @@ STEP 1 — SCOUT (use web search extensively, anchored to the two signals):
 - Go beyond both: upcoming fixtures and events (basketball schedules, NBA
   Lithuanians, award shows like MAMA, releases, Seimas votes, festivals),
   ongoing debates. Search in Lithuanian.
+- SIGNAL C — THE DECISION CALENDAR (both signals only show what ALREADY
+  happened; this is what is about to). If your chunk is state affairs, politics
+  or the economy, spend ONE search on what is SCHEDULED in the coming 4-10
+  weeks and build at least two markets from it, not from last week's news:
+  Seimo balsavimai ir rudens sesija, biudžeto priėmimas, mokesčių pakeitimų
+  įsigaliojimas, pensijų indeksavimas ir pensijų kaupimo pakopų reforma,
+  „Sodros“ ir MMA sprendimai, ECB palūkanų posėdžiai ir naujų eurų banknotų
+  dizaino sprendimas, ES viršūnių susitikimai, VRK terminai, Lietuvos banko
+  prognozės, statistikos paskelbimo datos. These are the markets people argue
+  about at the kitchen table and they are the ones this generator keeps
+  missing — a scheduled decision is the single most resolvable market type
+  there is, because the date and the deciding body are known in advance.
 - GO DEEPER INTO SOCIAL MEDIA around the pulse seeds: what big Lithuanian
   TikTok/Instagram/YouTube creators are doing right now — the ACTUAL trending
   dramas with the actual people named (e.g. Viltė & Viktoras / viktorasbalykov

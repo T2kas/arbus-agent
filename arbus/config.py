@@ -63,6 +63,11 @@ FEEDS: list[dict] = [
     {"name": "Delfi Sportas","url": "https://www.delfi.lt/rss/feeds/sportas.xml"},
     {"name": "Lrytas",       "url": "https://www.lrytas.lt/rss"},
     {"name": "VZ",           "url": "https://www.vz.lt/rss"},
+    # TV3 publishes its RSS index at /rss; the per-category paths are not
+    # documented publicly, so both candidates are listed and the dead one is
+    # skipped silently. Run `python -m arbus feeds` to see which one delivers.
+    {"name": "TV3",          "url": "https://www.tv3.lt/rss"},
+    {"name": "TV3 Naujienos","url": "https://www.tv3.lt/rss/naujienos"},
     # Economy / business / geopolitics — the informative side of the batch.
     {"name": "LRT Verslas",  "url": "https://www.lrt.lt/naujienos/verslas?rss"},
     {"name": "15min Verslas","url": "https://www.15min.lt/rss/verslas"},
@@ -155,8 +160,13 @@ DRAFT_THEMES: list[tuple[str, float, str]] = [
      "PREFER THE SIMPLE, WIDELY UNDERSTOOD INDICATORS most of the batch: "
      "nedarbo lygis, infliacija, degalų ir elektros kaina, minimali alga ir "
      "vidutinis atlyginimas, mokesčių pakeitimai (GPM, PVM, „Sodra“), Euribor "
-     "ir būsto paskolų palūkanos, būsto kainos. A market a normal person "
-     "understands in one reading beats a technically impressive one. "
+     "ir būsto paskolų palūkanos, būsto kainos. EVERYDAY-MONEY DECISIONS "
+     "belong here and are currently under-represented: pensijos ir jų "
+     "indeksavimas, pensijų kaupimo pakopos ir jų reforma, „Sodra“, "
+     "kompensacijos, šildymo sezono kaina, ES/ECB sprendimai, kurie pasiekia "
+     "kiekvieno kišenę (palūkanų sprendimai, naujų eurų banknotų dizainas). "
+     "A market a normal person understands in one reading beats a technically "
+     "impressive one. "
      "Secondary: demographics (gyventojų skaičius, emigracija — Statistikos "
      "departamentas), BVP, valstybės skola, Nasdaq Vilnius stocks from the "
      "pulse (threshold + coarse deadline, current price in the rationale), "

@@ -7,6 +7,7 @@ import types
 # but _balance_by_day never touches it, so a stub keeps these tests offline.
 sys.modules.setdefault("feedparser", types.ModuleType("feedparser"))
 
+from arbus import config, harvest  # noqa: E402
 from arbus.harvest import _annotate_coverage, _balance_by_day, headlines_block  # noqa: E402
 
 
@@ -68,3 +69,26 @@ def test_cap_respected_and_undated_last():
     picked = _balance_by_day(items, cap=2)
     assert [i["title"] for i in picked] == ["2026-07-24T01", "no date"]
     assert len(_balance_by_day(items, cap=1)) == 1
+
+
+def test_probe_feeds_reports_dead_feeds_instead_of_hiding_them(monkeypatch):
+    """A feed that quietly dies just makes batches thinner; `arbus feeds` is
+    how that becomes visible."""
+    monkeypatch.setattr(config, "FEEDS", [
+        {"name": "Alive", "url": "https://ok.lt/rss"},
+        {"name": "Dead", "url": "https://gone.lt/rss"},
+    ])
+
+    def fake_fetch(url):
+        if "gone" in url:
+            raise RuntimeError("404 Not Found")
+        return b"<rss/>"
+
+    monkeypatch.setattr(harvest, "_fetch", fake_fetch)
+    monkeypatch.setattr(harvest.feedparser, "parse",
+                        lambda _b: type("P", (), {"entries": [{"title": "x"}]})(),
+                        raising=False)
+
+    rows = harvest.probe_feeds()
+    assert rows[0][0] == "Alive" and rows[0][2] == 1 and rows[0][3] == ""
+    assert rows[1][0] == "Dead" and rows[1][2] == 0 and "404" in rows[1][3]

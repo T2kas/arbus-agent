@@ -72,6 +72,33 @@ def harvest(days: int = config.HARVEST_DAYS, cap: int = config.HARVEST_MAX_HEADL
     return _balance_by_day(items, cap)
 
 
+def probe_feeds(days: int = config.HARVEST_DAYS) -> list[tuple[str, str, int, str]]:
+    """Check every configured feed one by one: (name, url, fresh items, error).
+
+    Feeds die quietly — an outlet changes its RSS path and the batch simply
+    gets thinner, with the reason buried in a log line. This makes the state of
+    every source visible in one command.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    out: list[tuple[str, str, int, str]] = []
+    for feed in config.FEEDS:
+        try:
+            parsed = feedparser.parse(_fetch(feed["url"]))
+            fresh = 0
+            for entry in parsed.entries:
+                ts = entry.get("published_parsed") or entry.get("updated_parsed")
+                published = (datetime.fromtimestamp(calendar.timegm(ts), tz=timezone.utc)
+                             if ts else None)
+                if published is None or published >= cutoff:
+                    fresh += 1
+            error = "" if parsed.entries else str(
+                parsed.get("bozo_exception", "no entries — wrong URL?"))
+            out.append((feed["name"], feed["url"], fresh, error))
+        except Exception as exc:
+            out.append((feed["name"], feed["url"], 0, str(exc)))
+    return out
+
+
 def _annotate_coverage(items: list[dict]) -> None:
     """Set item["coverage"] = how many distinct outlets ran a similar story.
 

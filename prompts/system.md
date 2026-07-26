@@ -355,6 +355,28 @@ Editorial taste:
   batch.
 - Emotion-driven beats procedural: rivalries, milestones, "ar pagaliau?",
   price pain, national pride, drama.
+- THE KITCHEN-TABLE TEST. Before writing a market, ask: is this something
+  Lithuanians are ACTUALLY arguing about — at home, at work, in the comments?
+  If yes, phrase it the way they argue about it, not the way a ministry press
+  release would. "Ar pensijos kitąmet kils daugiau nei 10 %?" is the market;
+  "Ar Sodros indeksavimo koeficientas viršys 1,1?" is the same fact written by
+  someone who has never had the argument. Same for taxes, heating bills, wages,
+  school rules, fuel. The subject must be the thing people feel; the precision
+  lives in the rules underneath.
+- THE STATE'S OWN DECISIONS are the most under-used market source, and they
+  are the most resolvable ones: the deciding body and the date are known in
+  advance. Pensijos ir pensijų kaupimo pakopos, mokesčių pakeitimai, biudžetas,
+  MMA, kompensacijos, šildymo kaina, ECB palūkanos ir naujų eurų banknotų
+  dizainas, ES sprendimai, kurie pasiekia kiekvieno kišenę. If a batch has none
+  of these, it is missing the half of the news that actually changes people's
+  lives.
+- WORLD CONFLICTS (Iran/US, Ukraine, Middle East) are legitimate and people do
+  want to predict them — keep them, but AT MOST ~2 per batch, and only for the
+  top-tier story everyone is following. Prefer the version that also touches
+  Lithuania (fuel and energy prices, NATO deployments here, airspace, sanctions
+  hitting LT business) over the pure foreign question: a copy of a Polymarket
+  contract is the one market where an international platform beats us, while
+  the Lithuanian angle is one nobody else lists.
 - Informative AND emotional beats trivial: favour markets that both teach
   something and make people feel — security scares and airspace incidents,
   red-alert weather, price pain, national pride — over minor, rare, low-impact

@@ -169,6 +169,20 @@ def cmd_settle(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_feeds(_args: argparse.Namespace) -> int:
+    """Show which news feeds are alive and how much each contributes."""
+    rows = harvest.probe_feeds()
+    for name, url, fresh, error in rows:
+        flag = "✓" if fresh else "✗"
+        print(f"{flag} {name:<16} {fresh:>4} straipsniai  {url}")
+        if error:
+            print(f"    {error[:120]}")
+    dead = [n for n, _, f, _ in rows if not f]
+    print(f"\n{len(rows) - len(dead)}/{len(rows)} feeds alive."
+          + (f" Dead: {', '.join(dead)}" if dead else ""))
+    return 0
+
+
 def cmd_check(args: argparse.Namespace) -> int:
     """Run the advisory AI check on frozen markets and alert Telegram.
 
@@ -312,6 +326,9 @@ def main() -> int:
                         help="pay out decisions whose undo window has expired")
     st.add_argument("--dry-run", action="store_true")
     st.set_defaults(func=cmd_settle)
+
+    fd = sub.add_parser("feeds", help="check which news feeds still work")
+    fd.set_defaults(func=cmd_feeds)
 
     ck = sub.add_parser("check",
                         help="AI-check frozen markets and alert Telegram")

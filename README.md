@@ -278,6 +278,7 @@ cp .env.example .env     # add PERPLEXITY_API_KEY (or ANTHROPIC_API_KEY)
 python -m arbus generate                 # full batch (default 35)
 python -m arbus generate --count 20      # smaller batch
 python -m arbus generate --dry-run       # harvest + pulse only, zero API cost
+python -m arbus feeds                    # which news feeds are alive
 python -m arbus generate --skip-verify   # skip stage 5 (cheaper, riskier)
 
 python -m arbus list                     # browse stored candidates
