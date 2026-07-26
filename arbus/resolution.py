@@ -48,6 +48,16 @@ CREATE TABLE IF NOT EXISTS resolution_requests (
     ai_checked_at TEXT NOT NULL DEFAULT '',
     alerted_at TEXT NOT NULL DEFAULT ''
 );
+-- Markets frozen in the APP have no row in this database at all, so their
+-- checks are tracked by the app's own id. Without this, every run would pay
+-- for the same AI check again and re-alert the group.
+CREATE TABLE IF NOT EXISTS app_checks (
+    app_market_id TEXT PRIMARY KEY,
+    question TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT '',
+    ai_summary TEXT NOT NULL DEFAULT '',
+    checked_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS challenges (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     request_id INTEGER NOT NULL,

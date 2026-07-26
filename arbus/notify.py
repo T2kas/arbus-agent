@@ -62,17 +62,51 @@ def notify_batch(batch_id: str, accepted: int, needs_review: int, report_path: s
     )
 
 
-def resolution_message(market: sqlite3.Row, request: sqlite3.Row | None,
+def market_view(market) -> dict:
+    """Normalize a local DB row or an app API record into the alert's fields.
+
+    A frozen market can come from either side — this repo's SQLite or the app's
+    own API — and the alert reads the same either way. Mapping the app's
+    changing schema happens here and nowhere else.
+    """
+    if isinstance(market, dict):
+        from . import app as app_api
+
+        raw = market.get("market_options") or market.get("options") or []
+        options = [str(o.get("label") or o.get("name") or o.get("title") or o.get("option") or "")
+                   if isinstance(o, dict) else str(o) for o in raw]
+        return {
+            "id": app_api.market_id_of(market),
+            "question": app_api.question_of(market),
+            "options": [o for o in options if o],
+            "resolve_by": str(app_api._pick(market, "resolve_by", "resolves_at",
+                                            "closes_at", "end_date", "deadline",
+                                            default="?")),
+            "rules": str(app_api._pick(market, "resolution_hint_lt", "resolution_criteria",
+                                       "rules", "description", default="")),
+            "freeze_reason": f"appo statusas: {app_api.status_of(market) or 'nenurodytas'}",
+        }
+    return {
+        "id": market["id"],
+        "question": market["question_lt"],
+        "options": json.loads(market["options_json"]),
+        "resolve_by": market["resolve_by"],
+        "rules": market["resolution_hint_lt"],
+        "freeze_reason": market["freeze_reason"],
+    }
+
+
+def resolution_message(market, request: sqlite3.Row | None,
                        ai_summary: str) -> str:
     """The text of a freeze alert. Split out from sending so it can be tested
     offline and reused by whatever front-end shows it next."""
-    options = " / ".join(json.loads(market["options_json"]))
+    view = market_view(market)
     lines = [
         "🧊 RINKA UŽŠALDYTA — reikia admino sprendimo",
         "",
-        f"#{market['id']} {market['question_lt']}",
-        f"Variantai: {options}",
-        f"Terminas: {market['resolve_by']}",
+        f"#{view['id']} {view['question']}",
+        f"Variantai: {' / '.join(view['options'])}",
+        f"Terminas: {view['resolve_by']}",
     ]
     if request is not None:
         lines += [
@@ -83,12 +117,12 @@ def resolution_message(market: sqlite3.Row, request: sqlite3.Row | None,
             f"Šaltinis: {request['source_url']}",
         ]
     else:
-        lines += ["", f"⚡ Priežastis: {market['freeze_reason'] or 'nenurodyta'}"]
+        lines += ["", f"⚡ Priežastis: {view['freeze_reason'] or 'nenurodyta'}"]
 
     lines += [
         "",
         "Taisyklės (pagal jas sprendžiama):",
-        market["resolution_hint_lt"] or "(nėra)",
+        view["rules"] or "(nėra)",
         "",
         "🤖 AI PATIKRA (patariamoji — AI nieko nesprendžia):",
         ai_summary or "(nepavyko)",

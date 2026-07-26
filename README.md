@@ -92,6 +92,31 @@ the questions the app is already serving so it cannot propose one users can
 already see (`APP_DEDUPE`). If the app is unreachable the batch continues
 without it — an API outage must never cost a batch.
 
+### What the bot reads from the app
+
+| Endpoint | Used for |
+|---|---|
+| `markets` (+ nested `market_options`) | dedupe, and **which markets the app has paused/stopped** |
+| `option_price_history` | the price swing half of the circuit breaker |
+| `rpc/admin_recent_trades` | the distinct-users half of the circuit breaker |
+| `rpc/admin_list_profiles` | reserved — reporter eligibility once bonds move to the app |
+
+A market paused in the dashboard has no row in this repo's database, so
+`arbus check` used to report "nothing frozen" while the app had stopped
+markets waiting. It now reads the app's own status (`APP_FROZEN_STATUSES`),
+runs the AI check on those, alerts the group, and records the check by the
+app's market id so the same market is never paid for twice (`--force`
+re-checks).
+
+```sh
+python -m arbus watch      # price swing + distinct users -> circuit breaker
+```
+
+`watch` is the breaker finally getting real data: it flags markets where the
+price moved ≥`CB_PRICE_MOVE` **and** ≥`CB_MIN_DISTINCT_USERS` different people
+pushed it inside the window, and alerts Telegram. It never stops a market —
+that is still a human's click in the dashboard, followed by `arbus check`.
+
 Publishing is manual and per-market — markets go live only for ids you pass,
 never automatically at the end of a batch. Rejected markets are refused, and
 an already-published market is skipped unless you pass `--force`, so repeating

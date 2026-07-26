@@ -522,6 +522,15 @@ ARBUS_API_TIMEOUT = 30
 # Read the app's live markets before drafting, so the generator never proposes
 # something users can already see. Skipped silently when the app is unreachable.
 APP_DEDUPE = True
+# Which market statuses in the APP mean "trading is stopped, an admin has to
+# decide". The app owns these strings, so the list is generous on purpose and
+# matched case-insensitively; `python -m arbus app --schema` shows the real
+# values in use.
+APP_FROZEN_STATUSES = {
+    "paused", "pristabdyta", "pristabdytas", "suspended",
+    "stopped", "sustabdyta", "sustabdytas", "halted",
+    "frozen", "uzsaldyta", "užšaldyta", "pending_resolution", "resolving",
+}
 
 # ── Paths (relative to repo root) ───────────────────────────────────────────
 DB_PATH = "data/arbus.db"

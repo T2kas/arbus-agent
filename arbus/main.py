@@ -200,9 +200,72 @@ def cmd_app(args: argparse.Namespace) -> int:
                       if isinstance(o, dict) else str(o) for o in options]
             print(f"    options: {' / '.join(labels[:6])}")
 
-    if rows and args.schema:
-        print("\nColumns the app returns (useful when wiring `arbus publish`):")
-        print("  " + ", ".join(sorted(rows[0].keys())))
+    if args.schema:
+        from . import app as app_api
+
+        print("\n── Columns each endpoint returns ──")
+        if rows:
+            print(f"markets: {', '.join(sorted(rows[0].keys()))}")
+            statuses = sorted({app_api.status_of(r) for r in rows if app_api.status_of(r)})
+            print(f"statuses in use: {', '.join(statuses) or '(none)'}")
+            frozen = ", ".join(sorted(config.APP_FROZEN_STATUSES & set(statuses))) or "(none)"
+            print(f"of those, treated as frozen: {frozen}")
+        for label, fetch in (("option_price_history", app_api.price_history),
+                             ("admin_recent_trades", app_api.recent_trades),
+                             ("admin_list_profiles", app_api.profiles)):
+            data, err = fetch()
+            if err:
+                print(f"{label}: ⚠️ {err}")
+            elif data:
+                print(f"{label}: {', '.join(sorted(data[0].keys()))}")
+            else:
+                print(f"{label}: (reachable, no rows yet)")
+    return 0
+
+
+def cmd_watch(args: argparse.Namespace) -> int:
+    """Circuit breaker against live app data.
+
+    The breaker logic existed but had nothing to look at — price history and
+    trades live in the app. This reads both, finds markets where the price
+    swung AND several distinct users pushed it, and tells the team. It changes
+    nothing in the app: stopping a market is still a human's click.
+    """
+    from . import app as app_api, notify
+
+    if not config.ARBUS_API_URL:
+        print("ARBUS_API_URL is not set in .env — no live data to watch.")
+        return 1
+
+    rows, error = app_api.breaker_candidates(window_minutes=args.window)
+    if error:
+        print(f"❌ {error}")
+        return 1
+    if not rows:
+        print(f"No price movement in the last {args.window} min.")
+        return 0
+
+    tripped = [r for r in rows if r["tripped"]]
+    for item in rows[:15]:
+        flag = "🚨" if item["tripped"] else "·"
+        question = app_api.question_of(item["market"]) or app_api.market_id_of(item["market"])
+        print(f"{flag} {item['move']:+.0%} move, {item['users']} user(s) — {question}")
+
+    print(f"\n{len(tripped)} market(s) trip the breaker "
+          f"(≥{config.CB_PRICE_MOVE:.0%} move AND ≥{config.CB_MIN_DISTINCT_USERS} users "
+          f"in {args.window} min).")
+
+    if tripped and not args.no_telegram:
+        lines = ["🚨 ĮTARTINAS SRAUTAS — verta sustabdyti prekybą", ""]
+        for item in tripped:
+            lines.append(f"· {item['move']:+.0%}, {item['users']} vartotojai — "
+                         f"{app_api.question_of(item['market'])}")
+        lines += ["", "Kainos šuolis + keli skirtingi vartotojai ta pačia kryptimi "
+                      "dažniausiai reiškia, kad kažkas jau žino rezultatą.",
+                  "Botas nieko nestabdo — sustabdyk dashboarde ir paleisk "
+                  "`arbus check`."]
+        notify.send("\n".join(lines))
+        print("Telegram alert sent.")
     return 0
 
 
@@ -240,8 +303,21 @@ def cmd_check(args: argparse.Namespace) -> int:
 
     freezes = [] if args.request_ids else aicheck.pending_freezes(conn, args.limit)
 
-    if not requests_ and not freezes:
+    # The app is the other half of the truth: an admin pausing a market in the
+    # dashboard leaves no trace in this database, which is why "nothing frozen"
+    # used to be printed while the app had stopped markets waiting.
+    app_frozen: list[dict] = []
+    if not args.request_ids and not args.no_app and config.ARBUS_API_URL:
+        app_frozen, app_error = aicheck.pending_app_markets(
+            conn, force=args.force, limit=args.limit)
+        if app_error:
+            print(f"⚠️  Could not read the app: {app_error}")
+
+    if not requests_ and not freezes and not app_frozen:
         print("Nothing frozen is waiting for a check.")
+        if not config.ARBUS_API_URL:
+            print("(ARBUS_API_URL is not set, so markets frozen in the app are "
+                  "invisible to this command — see README.)")
         conn.close()
         return 0
 
@@ -256,9 +332,17 @@ def cmd_check(args: argparse.Namespace) -> int:
         print(f"\n— market #{market['id']} frozen: {market['freeze_reason']}")
         print(aicheck.review_freeze(conn, market["id"], alert=alert))
 
+    from . import app as app_api
+    for market in app_frozen:
+        print(f"\n— app market {app_api.market_id_of(market)} "
+              f"[{app_api.status_of(market)}]: {app_api.question_of(market)}")
+        print(aicheck.review_app_market(conn, market, alert=alert))
+        conn.commit()
+
     conn.commit()
     conn.close()
-    print(f"\nChecked {len(requests_)} request(s) and {len(freezes)} freeze(s)."
+    print(f"\nChecked {len(requests_)} request(s), {len(freezes)} local freeze(s) "
+          f"and {len(app_frozen)} app-frozen market(s)."
           + ("" if alert else " Telegram alerts skipped (--no-telegram)."))
     return 0
 
@@ -380,7 +464,18 @@ def main() -> int:
     ck.add_argument("--limit", type=int, default=10)
     ck.add_argument("--no-telegram", action="store_true",
                     help="print the summary without sending it to the team")
+    ck.add_argument("--no-app", action="store_true",
+                    help="skip markets frozen in the app, check local ones only")
+    ck.add_argument("--force", action="store_true",
+                    help="re-check app markets that were already checked")
     ck.set_defaults(func=cmd_check)
+
+    wt = sub.add_parser("watch",
+                        help="scan live prices and trades for circuit-breaker hits")
+    wt.add_argument("--window", type=int, default=config.CB_WINDOW_MINUTES,
+                    help="minutes of history to consider")
+    wt.add_argument("--no-telegram", action="store_true")
+    wt.set_defaults(func=cmd_watch)
 
     rb = sub.add_parser("rebuild-db",
                         help="rebuild the duplicate-check history from exports/")

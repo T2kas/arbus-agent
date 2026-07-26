@@ -29,6 +29,25 @@ SYSTEM = (
 )
 
 
+def _run(question: str, options: str, criteria: str, proposed: str,
+         source: str, today: date | None = None, on_error: str = "") -> str:
+    """One advisory check. Never raises — a failed check must not block the
+    admin, and it must never read as evidence either way."""
+    prompt = llm.load_prompt(
+        "aicheck", today=(today or date.today()).isoformat(),
+        question=question, options=options, criteria=criteria,
+        proposed=proposed, source=source,
+    )
+    try:
+        return llm.research(prompt, system=SYSTEM,
+                            max_uses=config.AICHECK_MAX_SEARCHES,
+                            max_tokens=1200, stage="aicheck").strip()
+    except Exception as exc:
+        log.warning("AI check failed: %s", exc)
+        return on_error or ("AI patikra nepavyko (techninė klaida) — patikrink "
+                            "naujienas rankiniu būdu.")
+
+
 def check_request(conn: sqlite3.Connection, request_id: int,
                   today: date | None = None) -> str:
     """Return an admin-readable summary for one resolution request."""
@@ -41,25 +60,16 @@ def check_request(conn: sqlite3.Connection, request_id: int,
     if market is None:
         raise ValueError(f"market {req['market_id']} not found")
 
-    prompt = llm.load_prompt(
-        "aicheck",
-        today=(today or date.today()).isoformat(),
-        question=market["question_lt"],
-        options=" / ".join(json.loads(market["options_json"])),
-        criteria=market["resolution_hint_lt"],
-        proposed=req["proposed_option"],
-        source=req["source_url"],
-    )
-    try:
-        return llm.research(prompt, system=SYSTEM,
-                            max_uses=config.AICHECK_MAX_SEARCHES,
-                            max_tokens=1200, stage="aicheck").strip()
-    except Exception as exc:
-        # The admin still has to decide; a failed check must not block the
-        # dashboard or imply anything about the claim.
-        log.warning("AI check failed for request %d: %s", request_id, exc)
-        return ("AI patikra nepavyko (techninė klaida) — sprendimą priimk "
-                f"pagal šaltinį pats: {req['source_url']}")
+    return _run(question=market["question_lt"],
+                options=" / ".join(json.loads(market["options_json"])),
+                criteria=market["resolution_hint_lt"],
+                proposed=req["proposed_option"],
+                source=req["source_url"],
+                today=today,
+                # The admin still has to decide; a failed check must not block
+                # the dashboard or imply anything about the claim.
+                on_error=("AI patikra nepavyko (techninė klaida) — sprendimą "
+                          f"priimk pagal šaltinį pats: {req['source_url']}"))
 
 
 def check_freeze(conn: sqlite3.Connection, market_id: int,
@@ -69,22 +79,30 @@ def check_freeze(conn: sqlite3.Connection, market_id: int,
     market = conn.execute("SELECT * FROM markets WHERE id = ?", (market_id,)).fetchone()
     if market is None:
         raise ValueError(f"market {market_id} not found")
-    prompt = llm.load_prompt(
-        "aicheck",
-        today=(today or date.today()).isoformat(),
-        question=market["question_lt"],
-        options=" / ".join(json.loads(market["options_json"])),
-        criteria=market["resolution_hint_lt"],
-        proposed="(nenurodyta — rinka užšaldyta dėl įtartino srauto)",
-        source="(nėra — ieškok pats, ar yra naujiena, paaiškinanti judėjimą)",
-    )
-    try:
-        return llm.research(prompt, system=SYSTEM,
-                            max_uses=config.AICHECK_MAX_SEARCHES,
-                            max_tokens=1200, stage="aicheck").strip()
-    except Exception as exc:
-        log.warning("AI check failed for market %d: %s", market_id, exc)
-        return "AI patikra nepavyko (techninė klaida) — patikrink naujienas rankiniu būdu."
+    return _run(question=market["question_lt"],
+                options=" / ".join(json.loads(market["options_json"])),
+                criteria=market["resolution_hint_lt"],
+                proposed="(nenurodyta — rinka užšaldyta dėl įtartino srauto)",
+                source="(nėra — ieškok pats, ar yra naujiena, paaiškinanti judėjimą)",
+                today=today)
+
+
+def check_app_market(market: dict, today: date | None = None) -> str:
+    """Same check for a market frozen in the APP, where this repo has no row.
+
+    Markets paused by an admin in the dashboard never existed in the local
+    database, which is why `arbus check` used to report "nothing frozen" while
+    the app had stopped markets sitting there.
+    """
+    from . import notify
+
+    view = notify.market_view(market)
+    return _run(question=view["question"],
+                options=" / ".join(view["options"]),
+                criteria=view["rules"],
+                proposed="(nenurodyta — rinka sustabdyta appe)",
+                source="(nėra — patikrink, ar rezultatas jau žinomas viešai)",
+                today=today)
 
 
 # ── What the admin actually runs: check, store, and ping Telegram ───────────
@@ -143,6 +161,40 @@ def review_freeze(conn: sqlite3.Connection, market_id: int,
     """Same, for a market frozen without a user's claim."""
     summary = check_freeze(conn, market_id, today)
     market = conn.execute("SELECT * FROM markets WHERE id = ?", (market_id,)).fetchone()
+    if alert:
+        notify.notify_resolution(market, None, summary)
+    return summary
+
+
+# ── markets frozen in the app, which this database has never seen ───────────
+
+def pending_app_markets(conn: sqlite3.Connection, force: bool = False,
+                        limit: int = 20) -> tuple[list[dict], str]:
+    """Markets the app has paused/stopped and that we have not checked yet."""
+    from . import app as app_api
+
+    rows, error = app_api.frozen_markets()
+    if error:
+        return [], error
+    if not force:
+        seen = {r["app_market_id"] for r in conn.execute(
+            "SELECT app_market_id FROM app_checks")}
+        rows = [r for r in rows if app_api.market_id_of(r) not in seen]
+    return rows[:limit], ""
+
+
+def review_app_market(conn: sqlite3.Connection, market: dict,
+                      today: date | None = None, alert: bool = True) -> str:
+    """Check one app-frozen market, remember it, and alert the group."""
+    from . import app as app_api
+
+    summary = check_app_market(market, today)
+    conn.execute(
+        "INSERT OR REPLACE INTO app_checks (app_market_id, question, status,"
+        " ai_summary, checked_at) VALUES (?,?,?,?,?)",
+        (app_api.market_id_of(market), app_api.question_of(market),
+         app_api.status_of(market), summary,
+         datetime.now(timezone.utc).isoformat()))
     if alert:
         notify.notify_resolution(market, None, summary)
     return summary
