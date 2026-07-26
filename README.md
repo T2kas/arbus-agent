@@ -95,6 +95,21 @@ configured and prints the payload contract to hand to whoever builds the API:
 }
 ```
 
+## Backing up the database
+
+`data/arbus.db` is **local state, not source**, and is deliberately untracked.
+It holds every market ever generated and is what stops the bot repeating
+itself, so it is worth keeping — but it is rewritten by every batch, and a
+tracked binary file collides on every `git pull`.
+
+```sh
+copy data\arbus.db data\arbus.db.backup    # Windows
+cp data/arbus.db data/arbus.db.backup      # macOS / Linux
+```
+
+Losing it costs the dedupe history (the bot may re-propose old markets), not
+the reports — `reports/` and `exports/` are tracked as usual.
+
 ## Teaching the bot (feedback loop)
 
 The bot improves from plain-language notes, no code required. `feedback.md` at

@@ -2,3 +2,11 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Local state, not source. The SQLite DB is rewritten by every batch, so
+# tracking it guarantees a merge conflict on every `git pull` — and a binary
+# file cannot be merged. It lives on the machine that runs the batches; back it
+# up by copying the file (see README "Backing up the database").
+data/*.db
+data/*.db-journal
+data/*.db-wal
