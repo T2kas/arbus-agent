@@ -82,6 +82,17 @@ def cmd_list(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_rebuild_db(_args: argparse.Namespace) -> int:
+    conn = store.connect()
+    imported, skipped = store.rebuild_from_exports(conn)
+    total = conn.execute("SELECT COUNT(*) FROM markets").fetchone()[0]
+    conn.close()
+    print(f"Imported {imported} markets from exports/ ({skipped} skipped as "
+          f"already present or unreadable).")
+    print(f"Database now holds {total} markets for duplicate checking.")
+    return 0
+
+
 def cmd_publish(args: argparse.Namespace) -> int:
     from . import publish
 
@@ -159,6 +170,10 @@ def main() -> int:
     ls = sub.add_parser("list", help="list stored markets")
     ls.add_argument("--status", choices=["candidate", "needs_review", "rejected", "promoted"])
     ls.set_defaults(func=cmd_list)
+
+    rb = sub.add_parser("rebuild-db",
+                        help="rebuild the duplicate-check history from exports/")
+    rb.set_defaults(func=cmd_rebuild_db)
 
     pub = sub.add_parser("publish", help="push selected markets to the Arbus app API")
     pub.add_argument("market_ids", type=int, nargs="+")

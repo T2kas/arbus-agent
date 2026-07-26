@@ -110,6 +110,44 @@ def insert_candidate(
     return cur.lastrowid
 
 
+def rebuild_from_exports(conn: sqlite3.Connection, export_dir: str = config.EXPORT_DIR) -> tuple[int, int]:
+    """Recreate the dedupe corpus from exports/batch_*.json.
+
+    The database is local state and can be lost (a bad pull, a new machine).
+    Every batch also writes a JSON export containing the same candidates, so the
+    corpus is reconstructible: the exports are the backup. Questions already in
+    the database are skipped, making this safe to re-run.
+
+    Returns (imported, skipped).
+    """
+    known = {q for (q,) in conn.execute("SELECT question_lt FROM markets")}
+    imported = skipped = 0
+    for path in sorted(Path(export_dir).glob("batch_*.json")):
+        batch_id = path.stem.replace("batch_", "")
+        try:
+            rows = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for row in rows:
+            question = row.get("question_lt", "")
+            if not question or question in known:
+                skipped += 1
+                continue
+            try:
+                cand = Candidate(**{k: v for k, v in row.items()
+                                    if k in Candidate.model_fields})
+            except Exception:
+                skipped += 1
+                continue
+            insert_candidate(conn, cand, batch_id, "candidate",
+                             verify_verdict=row.get("verify_verdict", ""),
+                             verify_note=row.get("verify_note", ""))
+            known.add(question)
+            imported += 1
+    conn.commit()
+    return imported, skipped
+
+
 def get_market(conn: sqlite3.Connection, market_id: int) -> sqlite3.Row | None:
     return conn.execute("SELECT * FROM markets WHERE id = ?", (market_id,)).fetchone()
 
