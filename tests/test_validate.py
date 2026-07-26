@@ -392,3 +392,32 @@ def test_duplicate_detected_despite_wording():
     existing = ["Ar Žalgiris liepos 20 d. laimės LKL rungtynes prieš Rytą?"]
     assert validate.is_duplicate("Ar rungtynes prieš Rytą liepos 20 d. laimės Žalgiris?", existing)
     assert validate.is_duplicate("Ar Vilniuje liepą bus 35 laipsniai karščio?", existing) is None
+
+
+# ── no-event fallback: why a market never has to be voided ──────────────────
+
+def test_rules_without_a_cancellation_clause_get_the_default():
+    cand = make(resolution_hint_lt="Pagal Statistikos departamento duomenis")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None
+    assert "Statistikos departamento duomenis." in fixed.resolution_hint_lt
+    assert "„Ne“" in fixed.resolution_hint_lt          # binary default outcome
+
+
+def test_existing_cancellation_clause_is_left_alone():
+    hint = "Pagal organizatorių. Jei renginys bus atšauktas — rinka baigiasi „Taip“."
+    cand = make(resolution_hint_lt=hint)
+    fixed, _ = validate.validate_candidate(cand, TODAY)
+    assert fixed.resolution_hint_lt == hint           # the model's own rule wins
+
+
+def test_multi_markets_get_the_later_official_result_rule_not_ne():
+    # "Ne" is not an option on a multi-outcome market, so the default must not
+    # invent one — it points at the official result instead.
+    cand = make(question_lt="Naujas Palangos meras", market_type="multi",
+                options_lt=["Kandidatas A", "Kandidatas B"],
+                probabilities=[0.6, 0.4],
+                resolution_hint_lt="Pagal VRK rezultatus")
+    fixed, _ = validate.validate_candidate(cand, TODAY)
+    assert "pirmą oficialų rezultatą" in fixed.resolution_hint_lt
+    assert "„Ne“" not in fixed.resolution_hint_lt

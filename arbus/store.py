@@ -63,7 +63,12 @@ _ADDED_COLUMNS = {
 }
 
 
-def connect(db_path: str = config.DB_PATH) -> sqlite3.Connection:
+def connect(db_path: str = "") -> sqlite3.Connection:
+    # Read config.DB_PATH at call time, not at import time: a default argument
+    # would freeze the production path into the function, so a script that
+    # points config.DB_PATH at a scratch file would still write to the real
+    # database — which is exactly how the dedupe corpus got polluted before.
+    db_path = db_path or config.DB_PATH
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row

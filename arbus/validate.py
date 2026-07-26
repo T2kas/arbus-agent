@@ -183,6 +183,25 @@ def is_duplicate(question: str, existing_questions: list[str]) -> str | None:
     return None
 
 
+def ensure_fallback_clause(hint: str, market_type: str) -> str:
+    """Guarantee the rules say what happens if the event never happens.
+
+    A market whose rules are silent about cancellation is the reason
+    prediction markets end up voided, and a void means handing stakes back and
+    telling users the rules were incomplete. Polymarket and Kalshi write the
+    non-occurrence outcome into the rules instead; this appends our default
+    when the model forgot to.
+    """
+    if config.FALLBACK_RE.search(hint or ""):
+        return hint
+    default = (config.FALLBACK_BINARY if market_type == "binary"
+               else config.FALLBACK_MULTI)
+    hint = (hint or "").strip()
+    if hint and not hint.endswith((".", "!", "?")):
+        hint += "."
+    return f"{hint} {default}".strip()
+
+
 def validate_candidate(
     cand: Candidate, today: date, min_resolve: date | None = None
 ) -> tuple[Candidate | None, str | None]:
@@ -262,6 +281,9 @@ def validate_candidate(
     # Recompute duration from the date — the model's label is advisory only.
     cand.duration_class = classify_duration(resolve_by, today)
     cand.category = normalize_category(cand.category, cand.question_lt)
+
+    cand.resolution_hint_lt = ensure_fallback_clause(
+        cand.resolution_hint_lt, cand.market_type)
 
     # Sources must be actual links, not outlet names like "LRT"
     cand.sources = [s for s in cand.sources if s.startswith("http")]

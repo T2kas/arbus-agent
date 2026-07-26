@@ -271,6 +271,24 @@ WORKED EXAMPLES — this is the standard, match it exactly:
 - Detailed edge-case language lives in the resolution hint / full-mode
   rules. Headline = instantly clear; rules = rigorous.
 
+RESOLUTION RULES (resolution_hint_lt) — the contract that settles the market:
+
+- State WHERE the outcome is checked (the official source: Statistikos
+  departamentas, Nasdaq Baltic, VRK, LKL, the organiser) and the exact
+  threshold/cutoff. This is where the date precision and the source name live —
+  never in the headline.
+- ALWAYS state what happens if the event does NOT happen: cancelled, postponed
+  past the date, or simply never announced. Polymarket and Kalshi write this
+  into the rules up front, and so do we — a market must never need to be
+  cancelled after the fact, because cancelling one means returning stakes and
+  admitting the rules were incomplete. The default for a Taip/Ne market is
+  "Ne": "Jei renginys neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei
+  nurodyta data — rinka baigiasi „Ne"." For multi-outcome markets say which
+  official result decides if the announcement slips past the date.
+- Write it so that two strangers reading only the rules would settle the market
+  the same way. If the rules leave room for "it depends what they meant", the
+  market is not finished.
+
 RESOLVABLE OPTIONS & PREMISES — the market must settle on a fact, not a mood:
 
 - Every multi-outcome option must be a CONCRETE, mutually exclusive outcome

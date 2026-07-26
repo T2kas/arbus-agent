@@ -456,8 +456,25 @@ SETTLEMENT_DELAY_MINUTES = 5
 DEADLINE_SWEEP_GRACE_DAYS = 1
 
 # The advisory check runs on every freeze, so it must stay cheap enough that
-# nobody hesitates to freeze a market (~EUR 0.01 per check).
+# nobody hesitates to freeze a market (~EUR 0.05 per check: one call, three
+# searches at $0.01 each plus the tokens the search results add).
 AICHECK_MAX_SEARCHES = 3
+
+# ── No-event fallback: why VOID is not a normal outcome ─────────────────────
+# Polymarket and Kalshi settle "the event did not happen" from the market's own
+# rules — usually NO — rather than cancelling the market. Cancelling is their
+# last resort for a broken market, not their answer to a cancelled concert.
+# We copy that: every market's rules must say up front what happens if the
+# event is called off, postponed or never announced. If the model forgets, the
+# validator appends the default below, so no market can ship without the clause.
+FALLBACK_RE = re.compile(
+    r"neįvyk|neivyk|atšauk|atsauk|nukel|nepaskelb|nebus paskelb|nesutei", re.I
+)
+FALLBACK_BINARY = ("Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam "
+                   "laikui nei nurodyta data — rinka baigiasi „Ne“.")
+FALLBACK_MULTI = ("Jei iki nurodytos datos oficialus rezultatas nebus "
+                  "paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama "
+                  "pagal pirmą oficialų rezultatą, paskelbtą po tos datos.")
 
 # ── Job 2: resolution monitoring ────────────────────────────────────────────
 # Sources publish after the fact, so a market resolving on the 1st may only be

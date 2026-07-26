@@ -116,7 +116,19 @@ stops immediately.
 
 **The AI decides nothing.** `arbus.aicheck` reads the cited source and reports
 whether it says what the reporter claims, plus anything that should make the
-admin hesitate (~€0.01 per check). That summary is admin input, not a verdict.
+admin hesitate (~€0.05 per check: one call, three searches at $0.01 each plus
+the tokens the results add). That summary is admin input, not a verdict, and
+`python -m arbus check` pushes it straight to the team's Telegram group with
+the market, the claim, the source and the rules — so the decision happens on a
+phone, not after someone remembers to open the dashboard.
+
+**A market is never voided because an event was cancelled.** Every market's
+rules state up front what non-occurrence means — for a Taip/Ne market the
+default is "Ne" — the same way Polymarket and Kalshi write the edge case into
+the rules instead of cancelling afterwards. The validator appends that clause
+when the model forgets it, so no market can ship without one. `VOID` survives
+only as a last resort for a market whose rules cannot be applied at all, and
+`admin_decide` refuses it without an explicit `void_reason`.
 
 **Settlement waits.** The admin decides in the app dashboard; the payout lands
 `SETTLEMENT_DELAY_MINUTES` later, so a misclick can be cancelled. Once Arbucks
@@ -125,11 +137,17 @@ are paid there is no way back — which is why the delay exists.
 ```sh
 python -m arbus resolve            # sweep markets past their date (dry run)
 python -m arbus resolve --apply    # freeze the clearly-decided ones for review
+python -m arbus check              # AI-check frozen markets + Telegram alert
 python -m arbus settle             # pay out decisions whose undo window expired
 ```
 
 `settle` must run on a short schedule (every minute or two) — until it does, a
-decision is still reversible and nothing has been paid.
+decision is still reversible and nothing has been paid. It is pure local SQLite
+(“is any settle_at in the past? then pay”): **no LLM, no web search, no API
+cost** — running it every minute forever costs nothing but the process.
+
+`check` is the only step that spends money, and only when something is actually
+frozen: one call per waiting market, never on a schedule of its own.
 
 ### Economy (v1, from the spec)
 
@@ -145,6 +163,12 @@ it. A challenge is correct exactly when the proposal it disputed was wrong. On
 `VOID` or a return to `OPEN` **every bond is returned** — nobody was proven
 wrong, and punishing good-faith reports on hard markets would stop reporting
 altogether.
+
+For reference, Polymarket's equivalent is a **$750 proposer bond, a dispute
+bond of the same size, and a 2-hour challenge window**; the proposer's reward
+is a few dollars on that bond. Our window matches theirs; our reward is much
+more generous relative to the bond (30 on 200 = 15 %, vs well under 1 % there)
+because Arbucks are virtual and we need reporting to start at all.
 
 Balances live in this repo's SQLite (`arbus/ledger.py`) so the numbers can be
 tuned without app-backend work. The ledger is append-only: a balance is the sum
@@ -280,6 +304,10 @@ Generate batches by typing in Telegram:
 
 The bot is long-polling — it runs wherever you start it (your PC is fine)
 and needs no server or webhook.
+
+For a **team group** that receives the freeze alerts (`python -m arbus check`),
+follow [docs/telegram-grupe.md](docs/telegram-grupe.md) — create a group, add
+the bot, `/id`, and put the group's (negative) id into `TELEGRAM_CHAT_ID`.
 
 ## GitHub Actions (manual only)
 

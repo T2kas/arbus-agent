@@ -4,6 +4,8 @@
     python -m arbus promote <market_id> [<market_id> ...]
     python -m arbus list [--status candidate|needs_review|rejected|promoted]
     python -m arbus resolve [--apply]                     # Job 2: close markets
+    python -m arbus check                                 # AI-check + Telegram alert
+    python -m arbus settle                                # pay out after the undo window
     python -m arbus feedback "mažiau ekonomikos rinkų"   # teach future batches
     python -m arbus bot            # Telegram long-polling bot (/markets)
 """
@@ -167,6 +169,49 @@ def cmd_settle(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_check(args: argparse.Namespace) -> int:
+    """Run the advisory AI check on frozen markets and alert Telegram.
+
+    This is the step between "a user reported the outcome" and "the admin
+    decides": it reads the cited source and sends the team a summary with the
+    evidence. It decides nothing — the dashboard is where the decision happens.
+    """
+    from . import aicheck, resolution
+
+    conn = store.connect()
+    resolution.init(conn)          # picks up the ai_summary columns on old DBs
+    alert = not args.no_telegram
+
+    requests_ = ([conn.execute("SELECT * FROM resolution_requests WHERE id = ?",
+                               (rid,)).fetchone() for rid in args.request_ids]
+                 if args.request_ids else aicheck.pending_requests(conn, args.limit))
+    requests_ = [r for r in requests_ if r is not None]
+
+    freezes = [] if args.request_ids else aicheck.pending_freezes(conn, args.limit)
+
+    if not requests_ and not freezes:
+        print("Nothing frozen is waiting for a check.")
+        conn.close()
+        return 0
+
+    for req in requests_:
+        print(f"\n— request #{req['id']} on market #{req['market_id']} "
+              f"({req['user_id']} → {req['proposed_option']})")
+        summary = aicheck.review_request(conn, req["id"], alert=alert)
+        conn.commit()
+        print(summary)
+
+    for market in freezes:
+        print(f"\n— market #{market['id']} frozen: {market['freeze_reason']}")
+        print(aicheck.review_freeze(conn, market["id"], alert=alert))
+
+    conn.commit()
+    conn.close()
+    print(f"\nChecked {len(requests_)} request(s) and {len(freezes)} freeze(s)."
+          + ("" if alert else " Telegram alerts skipped (--no-telegram)."))
+    return 0
+
+
 def cmd_rebuild_db(_args: argparse.Namespace) -> int:
     conn = store.connect()
     imported, skipped = store.rebuild_from_exports(conn)
@@ -267,6 +312,15 @@ def main() -> int:
                         help="pay out decisions whose undo window has expired")
     st.add_argument("--dry-run", action="store_true")
     st.set_defaults(func=cmd_settle)
+
+    ck = sub.add_parser("check",
+                        help="AI-check frozen markets and alert Telegram")
+    ck.add_argument("request_ids", type=int, nargs="*",
+                    help="specific resolution request ids (default: all pending)")
+    ck.add_argument("--limit", type=int, default=10)
+    ck.add_argument("--no-telegram", action="store_true",
+                    help="print the summary without sending it to the team")
+    ck.set_defaults(func=cmd_check)
 
     rb = sub.add_parser("rebuild-db",
                         help="rebuild the duplicate-check history from exports/")

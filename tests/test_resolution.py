@@ -226,6 +226,26 @@ def test_wrong_challenger_loses_the_bond():
     assert ledger.reputation(conn, "u2")["false_challenges"] == 1
 
 
+def test_void_needs_an_explicit_reason():
+    """A cancelled or postponed event is settled by the market's own rules
+    (usually 'Ne'), the way Polymarket and Kalshi write it up front — voiding
+    must be a deliberate act, not the easy way out of a hard call."""
+    conn, mid = _conn_with_market()
+    _fund(conn, "u1")
+    resolution.submit_request(conn, mid, "u1", "Taip", "https://x.lt/a")
+    with pytest.raises(ValueError, match="void_reason"):
+        resolution.admin_decide(conn, mid, resolution.VOID)
+
+
+def test_void_records_the_reason_it_was_allowed():
+    conn, mid = _conn_with_market()
+    _fund(conn, "u1")
+    resolution.submit_request(conn, mid, "u1", "Taip", "https://x.lt/a")
+    resolution.admin_decide(conn, mid, resolution.VOID,
+                            void_reason="šaltinis nustojo egzistuoti")
+    assert "šaltinis nustojo" in store.get_market(conn, mid)["resolution_note"]
+
+
 def test_void_returns_every_bond():
     """Nobody was proven wrong, so nobody is punished — otherwise good-faith
     reporting on hard markets stops entirely."""
@@ -234,7 +254,8 @@ def test_void_returns_every_bond():
     _fund(conn, "u2")
     rid = resolution.submit_request(conn, mid, "u1", "Taip", "https://x.lt/a")
     resolution.submit_challenge(conn, rid, "u2", "neaišku")
-    resolution.admin_decide(conn, mid, resolution.VOID)
+    resolution.admin_decide(conn, mid, resolution.VOID,
+                            void_reason="rinkos taisyklės neįgyvendinamos")
     _settle_now(conn, mid)
     assert ledger.balance(conn, "u1") == 1000
     assert ledger.balance(conn, "u2") == 1000

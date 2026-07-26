@@ -15,9 +15,9 @@ from __future__ import annotations
 import json
 import logging
 import sqlite3
-from datetime import date
+from datetime import date, datetime, timezone
 
-from . import config, llm
+from . import config, llm, notify
 
 log = logging.getLogger(__name__)
 
@@ -85,3 +85,64 @@ def check_freeze(conn: sqlite3.Connection, market_id: int,
     except Exception as exc:
         log.warning("AI check failed for market %d: %s", market_id, exc)
         return "AI patikra nepavyko (techninė klaida) — patikrink naujienas rankiniu būdu."
+
+
+# ── What the admin actually runs: check, store, and ping Telegram ───────────
+
+def pending_requests(conn: sqlite3.Connection, limit: int = 10) -> list[sqlite3.Row]:
+    """Resolution requests that froze a market and have not been checked yet."""
+    return conn.execute(
+        """SELECT r.* FROM resolution_requests r
+             JOIN markets m ON m.id = r.market_id
+            WHERE r.outcome = '' AND r.ai_checked_at = ''
+              AND COALESCE(m.resolution_state, 'OPEN') IN ('PENDING', 'RESOLVING')
+            ORDER BY r.created_at
+            LIMIT ?""",
+        (limit,),
+    ).fetchall()
+
+
+def pending_freezes(conn: sqlite3.Connection, limit: int = 10) -> list[sqlite3.Row]:
+    """Markets frozen with nobody's claim attached — the circuit breaker or the
+    deadline sweep put them there, so there is no cited source to check."""
+    return conn.execute(
+        """SELECT m.* FROM markets m
+            WHERE m.resolution_state = 'PENDING'
+              AND NOT EXISTS (SELECT 1 FROM resolution_requests r
+                               WHERE r.market_id = m.id AND r.outcome = '')
+            ORDER BY m.frozen_at
+            LIMIT ?""",
+        (limit,),
+    ).fetchall()
+
+
+def review_request(conn: sqlite3.Connection, request_id: int,
+                   today: date | None = None, alert: bool = True) -> str:
+    """Check one request, store the summary, and alert Telegram.
+
+    The summary is stored so a failed or repeated run never costs a second
+    LLM call, and `alerted_at` records that the team was told — the alert is
+    the point, the dashboard is where they act on it.
+    """
+    summary = check_request(conn, request_id, today)
+    conn.execute(
+        "UPDATE resolution_requests SET ai_summary = ?, ai_checked_at = ? WHERE id = ?",
+        (summary, datetime.now(timezone.utc).isoformat(), request_id))
+    req = conn.execute("SELECT * FROM resolution_requests WHERE id = ?",
+                       (request_id,)).fetchone()
+    market = conn.execute("SELECT * FROM markets WHERE id = ?",
+                          (req["market_id"],)).fetchone()
+    if alert and notify.notify_resolution(market, req, summary):
+        conn.execute("UPDATE resolution_requests SET alerted_at = ? WHERE id = ?",
+                     (datetime.now(timezone.utc).isoformat(), request_id))
+    return summary
+
+
+def review_freeze(conn: sqlite3.Connection, market_id: int,
+                  today: date | None = None, alert: bool = True) -> str:
+    """Same, for a market frozen without a user's claim."""
+    summary = check_freeze(conn, market_id, today)
+    market = conn.execute("SELECT * FROM markets WHERE id = ?", (market_id,)).fetchone()
+    if alert:
+        notify.notify_resolution(market, None, summary)
+    return summary

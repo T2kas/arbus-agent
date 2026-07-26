@@ -43,7 +43,10 @@ CREATE TABLE IF NOT EXISTS resolution_requests (
     source_url TEXT NOT NULL,
     bond INTEGER NOT NULL,
     outcome TEXT NOT NULL DEFAULT '',   -- '' | correct | incorrect
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    ai_summary TEXT NOT NULL DEFAULT '',
+    ai_checked_at TEXT NOT NULL DEFAULT '',
+    alerted_at TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE IF NOT EXISTS challenges (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,8 +62,22 @@ CREATE TABLE IF NOT EXISTS challenges (
 """
 
 
+# Columns added after the first release. SQLite has no "ADD COLUMN IF NOT
+# EXISTS", so they are applied in place on every init — the tables already live
+# in a database that must not be rebuilt.
+_ADDED_REQUEST_COLUMNS = {
+    "ai_summary": "TEXT NOT NULL DEFAULT ''",
+    "ai_checked_at": "TEXT NOT NULL DEFAULT ''",
+    "alerted_at": "TEXT NOT NULL DEFAULT ''",
+}
+
+
 def init(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA)
+    have = {r["name"] for r in conn.execute("PRAGMA table_info(resolution_requests)")}
+    for column, decl in _ADDED_REQUEST_COLUMNS.items():
+        if column not in have:
+            conn.execute(f"ALTER TABLE resolution_requests ADD COLUMN {column} {decl}")
     ledger.init(conn)
 
 
@@ -196,19 +213,35 @@ def submit_challenge(conn: sqlite3.Connection, request_id: int, user_id: str,
 # ── Admin decision, with an undo window ─────────────────────────────────────
 
 def admin_decide(conn: sqlite3.Connection, market_id: int, decision: str,
-                 option: str = "", admin: str = "admin") -> datetime:
+                 option: str = "", admin: str = "admin",
+                 void_reason: str = "") -> datetime:
     """Record the admin's decision and schedule settlement.
 
     Settlement is not immediate: it lands after SETTLEMENT_DELAY_MINUTES so a
     misclick can still be cancelled. Once Arbucks are paid out, they cannot be
     taken back.
 
-    `decision` is RESOLVED, VOID (stake returned 50/50 when the truth cannot be
-    established) or OPEN (the event had not actually happened — trading
-    resumes).
+    There are normally only two decisions:
+
+    * RESOLVED — the winning option, per the market's own rules. A cancelled
+      concert or a postponed vote is NOT a reason to void: the rules already
+      say what non-occurrence means (usually "Ne"), the same way Polymarket and
+      Kalshi write it into the rules up front.
+    * OPEN — the event had not actually happened, the freeze was premature and
+      trading resumes.
+
+    VOID is a last resort for a market that is genuinely unusable (contradictory
+    rules, a resolution source that no longer exists). It requires
+    `void_reason`, so choosing it is deliberate and auditable rather than the
+    easy way out of a hard call.
     """
     if decision not in (RESOLVED, VOID, OPEN):
         raise ValueError(f"invalid decision: {decision}")
+    if decision == VOID and not void_reason:
+        raise ValueError(
+            "VOID needs void_reason — a cancelled or postponed event is settled "
+            "by the market's own rules (usually 'Ne'), not voided. Void only a "
+            "market whose rules cannot be applied at all.")
     state = _state(conn, market_id)
     if state not in (PENDING, RESOLVING):
         raise ValueError(f"market {market_id} is {state}; nothing to decide")
@@ -219,6 +252,8 @@ def admin_decide(conn: sqlite3.Connection, market_id: int, decision: str,
     _set(conn, market_id, resolution_state=RESOLVING, admin_decision=decision,
          resolution_option=option, decided_by=admin,
          decided_at=_now().isoformat(), settle_at=settle_at.isoformat())
+    if void_reason:
+        _set(conn, market_id, resolution_note=f"VOID: {void_reason}"[:300])
     return settle_at
 
 
