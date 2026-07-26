@@ -94,34 +94,66 @@ configured and prints the payload contract to hand to whoever builds the API:
 }
 ```
 
-## Job 2 — resolution monitoring
+## Job 2 — the resolution system
 
-Job 1 opens markets; this closes them.
+Implements the Notion spec *"Resolution logika (supaprastintas draft)"*. Arbus
+runs an AMM and takes the other side of user bets, so a market still trading
+after its outcome is knowable leaks money to whoever knows. Freezing is
+therefore instant; everything after it is deliberate.
 
-```sh
-python -m arbus resolve            # dry run — shows verdicts, writes nothing
-python -m arbus resolve --apply    # record verdicts
+```
+OPEN ──┬─ circuit breaker ──┐
+       └─ resolution request ┴──> PENDING ──> RESOLVING ──> RESOLVED / VOID
+                                    (admin)    (undo window)      or back to OPEN
 ```
 
-It picks up markets whose `resolve_by` has passed (plus a grace day, since
-sources publish after the fact), checks the live web **against each market's own
-resolution criteria**, and returns one of:
+**Two entry paths, one frozen state.** The circuit breaker watches for a price
+move of `CB_PRICE_MOVE` inside `CB_WINDOW_MINUTES` **made by at least
+`CB_MIN_DISTINCT_USERS` distinct users** — one whale betting big is prediction,
+not a leak, so both conditions are required. Separately, any eligible user
+(≥20 predictions) can stake a bond and report the outcome. Either way trading
+stops immediately.
 
-| Verdict | Meaning |
-|---|---|
-| `RESOLVED <option>` | Outcome is public and unambiguous |
-| `OPEN` | The world has not decided yet |
-| `VOID` | Can no longer resolve fairly (cancelled, source gone, options broken) |
-| `UNCLEAR` | Could not establish the facts this session |
+**The AI decides nothing.** `arbus.aicheck` reads the cited source and reports
+whether it says what the reporter claims, plus anything that should make the
+admin hesitate (~€0.01 per check). That summary is admin input, not a verdict.
 
-**A verdict is applied automatically only when it is `RESOLVED`, at `HIGH`
-confidence, with a cited source URL, naming an option that actually exists on
-the market.** Everything else is recorded and left for a human. Resolving
-wrongly takes credits from users who earned them — far harder to undo than
-resolving a day late — so the default is to wait.
+**Settlement waits.** The admin decides in the app dashboard; the payout lands
+`SETTLEMENT_DELAY_MINUTES` later, so a misclick can be cancelled. Once Arbucks
+are paid there is no way back — which is why the delay exists.
 
-Nothing here writes to the app. Pushing resolutions is a separate step and
-lands once the app API exists (see "Publishing to the app").
+```sh
+python -m arbus resolve            # sweep markets past their date (dry run)
+python -m arbus resolve --apply    # freeze the clearly-decided ones for review
+python -m arbus settle             # pay out decisions whose undo window expired
+```
+
+`settle` must run on a short schedule (every minute or two) — until it does, a
+decision is still reversible and nothing has been paid.
+
+### Economy (v1, from the spec)
+
+| | Arbucks |
+|---|---:|
+| Proposal bond (standard / important) | 200 / 450 |
+| Challenge bond | 450 |
+| Reward, correct report | +30 |
+| Reward, correct challenge | 50% of the proposal bond |
+
+A correct reporter gets their bond back plus the reward; a wrong one forfeits
+it. A challenge is correct exactly when the proposal it disputed was wrong. On
+`VOID` or a return to `OPEN` **every bond is returned** — nobody was proven
+wrong, and punishing good-faith reports on hard markets would stop reporting
+altogether.
+
+Balances live in this repo's SQLite (`arbus/ledger.py`) so the numbers can be
+tuned without app-backend work. The ledger is append-only: a balance is the sum
+of its entries, so every Arbuck has a row explaining why — which is what makes
+a disputed resolution auditable. Moving balances to the app later means
+rewriting that one file, not the engine.
+
+Reputation is accumulated and displayable only; per the spec it does **not**
+change bond or reward sizes in v1.
 
 ## Backing up the database
 

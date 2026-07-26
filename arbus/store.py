@@ -52,6 +52,14 @@ _ADDED_COLUMNS = {
     "resolution_note": "TEXT NOT NULL DEFAULT ''",
     "resolution_source": "TEXT NOT NULL DEFAULT ''",
     "resolved_at": "TEXT NOT NULL DEFAULT ''",
+    # Resolution state machine (see arbus/resolution.py).
+    "resolution_state": "TEXT NOT NULL DEFAULT 'OPEN'",
+    "freeze_reason": "TEXT NOT NULL DEFAULT ''",
+    "frozen_at": "TEXT NOT NULL DEFAULT ''",
+    "admin_decision": "TEXT NOT NULL DEFAULT ''",
+    "decided_by": "TEXT NOT NULL DEFAULT ''",
+    "decided_at": "TEXT NOT NULL DEFAULT ''",
+    "settle_at": "TEXT NOT NULL DEFAULT ''",
 }
 
 
@@ -64,6 +72,8 @@ def connect(db_path: str = config.DB_PATH) -> sqlite3.Connection:
     for name, decl in _ADDED_COLUMNS.items():
         if name not in have:
             conn.execute(f"ALTER TABLE markets ADD COLUMN {name} {decl}")
+    from . import resolution  # local import: resolution imports config, not store
+    resolution.init(conn)
     conn.commit()
     return conn
 

@@ -94,35 +94,75 @@ def cmd_resolve(args: argparse.Namespace) -> int:
         conn.close()
         return 0
 
-    print(f"Checking {len(rows)} market(s) due for resolution...\n")
+    print(f"Checking {len(rows)} market(s) whose resolution date has passed...\n")
     verdicts = resolve.check_markets(rows, today)
 
-    applied = queued = 0
+    freezing = leaving = 0
     for i, row in enumerate(rows, 1):
         v = verdicts[i]
         options = json.loads(row["options_json"])
-        ok, detail = resolve.is_auto_applicable(v, options)
-        flag = "✅" if ok else "⏸️"
+        freeze, detail = resolve.should_freeze(v, options)
+        flag = "🧊" if freeze else "·"
         print(f"{flag} #{row['id']} {row['question_lt']}")
         print(f"    {v['verdict']}"
-              + (f" → {detail}" if ok else "")
+              + (f" → {detail}" if freeze else "")
               + f" | {v['confidence']} | {v['reason']}")
         if v["source"]:
             print(f"    source: {v['source']}")
-        if not ok:
-            print(f"    needs a human: {detail}")
+        if not freeze:
+            print(f"    left trading: {detail}")
         if args.apply:
-            resolve.record(conn, row["id"], v, applied=ok, note=v["reason"])
-        applied += ok
-        queued += not ok
+            resolve.record(conn, row["id"], v, freeze=freeze, note=v["reason"])
+        freezing += freeze
+        leaving += not freeze
         print()
 
     if args.apply:
         conn.commit()
-        print(f"Applied {applied}, left {queued} for review.")
+        print(f"Froze {freezing} market(s) for admin review; left {leaving} trading.")
+        print("Nothing was settled — the admin decides in the dashboard, and "
+              "settlement waits for the undo window.")
     else:
-        print(f"Dry run — nothing written. Would apply {applied}, "
-              f"queue {queued} for review. Re-run with --apply to record.")
+        print(f"Dry run — nothing written. Would freeze {freezing}, "
+              f"leave {leaving} trading. Re-run with --apply.")
+    conn.close()
+    return 0
+
+
+def cmd_settle(args: argparse.Namespace) -> int:
+    """Pay out markets whose undo window has expired.
+
+    Run this on a short schedule (every minute or two). Until it runs, an
+    admin's decision is still reversible — which is the whole point of the
+    delay, but it also means settlement never happens without this.
+    """
+    from . import resolution
+
+    conn = store.connect()
+    pending = resolution.due_for_settlement(conn)
+    if not pending:
+        waiting = conn.execute(
+            "SELECT COUNT(*) FROM markets WHERE resolution_state = 'RESOLVING'"
+        ).fetchone()[0]
+        print(f"Nothing to settle. {waiting} market(s) still inside the "
+              f"{config.SETTLEMENT_DELAY_MINUTES}-minute undo window.")
+        conn.close()
+        return 0
+
+    if args.dry_run:
+        for row in pending:
+            print(f"would settle #{row['id']} — {row['admin_decision']} "
+                  f"{row['resolution_option']}: {row['question_lt']}")
+        conn.close()
+        return 0
+
+    for row in pending:
+        summary = resolution.settle(conn, row["id"])
+        paid = sum(amount for _, amount in summary["paid"])
+        lost = sum(amount for _, amount in summary["forfeited"])
+        print(f"#{row['id']} {summary['decision']} {summary['option']} — "
+              f"paid {paid} Arbucks, forfeited {lost}")
+    conn.commit()
     conn.close()
     return 0
 
@@ -216,11 +256,17 @@ def main() -> int:
     ls.add_argument("--status", choices=["candidate", "needs_review", "rejected", "promoted"])
     ls.set_defaults(func=cmd_list)
 
-    rs = sub.add_parser("resolve", help="check markets whose resolution date has passed")
+    rs = sub.add_parser("resolve",
+                        help="sweep markets past their date and freeze the decided ones")
     rs.add_argument("--apply", action="store_true",
-                    help="record verdicts (default is a dry run)")
+                    help="record findings and freeze (default is a dry run)")
     rs.add_argument("--limit", type=int, default=25)
     rs.set_defaults(func=cmd_resolve)
+
+    st = sub.add_parser("settle",
+                        help="pay out decisions whose undo window has expired")
+    st.add_argument("--dry-run", action="store_true")
+    st.set_defaults(func=cmd_settle)
 
     rb = sub.add_parser("rebuild-db",
                         help="rebuild the duplicate-check history from exports/")

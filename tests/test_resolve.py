@@ -33,13 +33,13 @@ def test_due_markets_respects_date_status_and_grace():
     assert ids == [due]                       # future and rejected excluded
 
 
-def test_already_resolved_markets_are_not_rechecked():
+def test_already_checked_markets_are_not_rechecked():
     conn = store.connect()
     mid = _market(conn, resolve_by="2026-09-01")
     conn.commit()
     resolve.record(conn, mid, {"verdict": "RESOLVED", "option": "Taip",
                                "confidence": "HIGH", "source": "https://x.lt/a"},
-                   applied=True, note="done")
+                   freeze=True, note="done")
     conn.commit()
     assert resolve.due_markets(conn, TODAY) == []
 
@@ -71,83 +71,85 @@ def test_missing_lines_become_unclear_not_resolved():
     assert rows == []
 
 
-# ── the safety gate: what may be applied without a human ────────────────────
+# ── the gate: what the sweep may FREEZE (it never settles) ──────────────────
 
 OPTIONS = ["Taip", "Ne"]
 
 
-def test_high_confidence_resolved_with_source_is_applicable():
-    ok, detail = resolve.is_auto_applicable(
+def test_high_confidence_resolved_with_source_freezes():
+    ok, detail = resolve.should_freeze(
         {"verdict": "RESOLVED", "option": "taip", "confidence": "HIGH",
          "source": "https://osp.stat.gov.lt/a"}, OPTIONS)
     assert ok and detail == "Taip"       # returns the canonical option casing
 
 
-def test_medium_and_low_confidence_are_queued():
+def test_medium_and_low_confidence_leave_the_market_trading():
     for conf in ("MEDIUM", "LOW"):
-        ok, detail = resolve.is_auto_applicable(
+        ok, detail = resolve.should_freeze(
             {"verdict": "RESOLVED", "option": "Taip", "confidence": conf,
              "source": "https://x.lt/a"}, OPTIONS)
         assert not ok and conf.lower() in detail.lower()
 
 
-def test_resolved_without_source_is_queued():
-    ok, detail = resolve.is_auto_applicable(
+def test_resolved_without_source_does_not_freeze():
+    ok, detail = resolve.should_freeze(
         {"verdict": "RESOLVED", "option": "Taip", "confidence": "HIGH",
          "source": ""}, OPTIONS)
     assert not ok and "source" in detail
 
 
-def test_option_not_on_the_market_is_queued():
-    ok, detail = resolve.is_auto_applicable(
+def test_option_not_on_the_market_does_not_freeze():
+    ok, detail = resolve.should_freeze(
         {"verdict": "RESOLVED", "option": "Gal būt", "confidence": "HIGH",
          "source": "https://x.lt/a"}, OPTIONS)
     assert not ok and "not one of" in detail
 
 
-def test_open_void_and_unclear_are_never_auto_applied():
+def test_open_void_and_unclear_never_freeze():
     for verdict in ("OPEN", "VOID", "UNCLEAR"):
-        ok, _ = resolve.is_auto_applicable(
+        ok, _ = resolve.should_freeze(
             {"verdict": verdict, "option": "Taip", "confidence": "HIGH",
              "source": "https://x.lt/a"}, OPTIONS)
         assert not ok
 
 
-# ── recording ───────────────────────────────────────────────────────────────
+# ── recording: the sweep freezes, it never settles ──────────────────────────
 
-def test_applied_verdict_marks_market_resolved():
+def test_freezing_stops_trading_without_settling():
     conn = store.connect()
     mid = _market(conn)
     conn.commit()
     resolve.record(conn, mid, {"verdict": "RESOLVED", "option": "Taip",
                                "confidence": "HIGH", "source": "https://x.lt/a"},
-                   applied=True, note="Nedarbas 7,2 %")
+                   freeze=True, note="Nedarbas 7,2 %")
     conn.commit()
     row = store.get_market(conn, mid)
-    assert row["status"] == "resolved"
+    assert row["resolution_state"] == "PENDING"   # admin now decides
+    assert row["status"] == "candidate"           # NOT settled
+    assert row["resolved_at"] == ""
     assert row["resolution_option"] == "Taip"
-    assert row["resolved_at"]
 
 
-def test_void_verdict_uses_void_status():
-    conn = store.connect()
-    mid = _market(conn)
-    conn.commit()
-    resolve.record(conn, mid, {"verdict": "VOID", "option": "", "confidence": "HIGH",
-                               "source": "https://x.lt/a"}, applied=True, note="atšaukta")
-    conn.commit()
-    assert store.get_market(conn, mid)["status"] == "void"
-
-
-def test_queued_verdict_records_without_changing_status():
+def test_weak_verdict_records_findings_but_leaves_state_open():
     conn = store.connect()
     mid = _market(conn)
     conn.commit()
     resolve.record(conn, mid, {"verdict": "RESOLVED", "option": "Taip",
                                "confidence": "LOW", "source": ""},
-                   applied=False, note="neaišku")
+                   freeze=False, note="neaišku")
     conn.commit()
     row = store.get_market(conn, mid)
-    assert row["status"] == "candidate"       # untouched
+    assert row["resolution_state"] == "OPEN"      # still trading
     assert row["resolution_verdict"] == "RESOLVED"
-    assert row["resolved_at"] == ""
+
+
+def test_freeze_does_not_override_an_already_frozen_market():
+    conn = store.connect()
+    mid = _market(conn)
+    conn.commit()
+    conn.execute("UPDATE markets SET resolution_state = 'RESOLVING' WHERE id = ?", (mid,))
+    resolve.record(conn, mid, {"verdict": "RESOLVED", "option": "Taip",
+                               "confidence": "HIGH", "source": "https://x.lt/a"},
+                   freeze=True, note="x")
+    conn.commit()
+    assert store.get_market(conn, mid)["resolution_state"] == "RESOLVING"

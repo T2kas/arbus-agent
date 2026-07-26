@@ -422,6 +422,43 @@ PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
 # reliably carry 35 candidates through draft + structure.
 DRAFT_CHUNK_SIZE = 15
 
+# ── Resolution system (see Notion "Resolution logika", v1) ──────────────────
+# Arbus runs an AMM and takes the other side of user bets, so a slow resolution
+# is a leak: whoever already knows the outcome can keep trading against a stale
+# price. Freezing is therefore immediate and cheap, and every later step is
+# deliberate.
+#
+# Economy (Arbucks). Start balance 250, max bet 10 000, 1 EUR ~ 400 Arbucks.
+# Bonds are deliberately large relative to the start balance so that being
+# wrong hurts a new user rather than costing something they do not miss.
+PROPOSAL_BOND_STANDARD = 200
+PROPOSAL_BOND_IMPORTANT = 450
+CHALLENGE_BOND = 450
+REWARD_CORRECT_PROPOSAL = 30
+CHALLENGE_REWARD_SHARE = 0.50      # of the proposal bond, to a correct challenger
+ELIGIBILITY_MIN_PREDICTIONS = 20   # before a user may propose a resolution
+CHALLENGE_WINDOW_HOURS = 2
+
+# Circuit breaker. A price move alone is not evidence of leaked information —
+# one whale simply predicting hard would trip it — so a move only counts when
+# several distinct users move the same way inside the window.
+CB_WINDOW_MINUTES = 10
+CB_PRICE_MOVE = 0.15               # 15 percentage points inside the window
+CB_MIN_DISTINCT_USERS = 3
+
+# Admin presses resolve in the app dashboard; settlement waits this long so a
+# misclick can be undone. Payouts cannot be clawed back once made.
+SETTLEMENT_DELAY_MINUTES = 5
+
+# Markets whose resolve_by has passed but which nobody reported would otherwise
+# sit open forever. This is an ADDITION to the two paths in the Notion spec —
+# set to 0 to disable it and rely only on the circuit breaker and user reports.
+DEADLINE_SWEEP_GRACE_DAYS = 1
+
+# The advisory check runs on every freeze, so it must stay cheap enough that
+# nobody hesitates to freeze a market (~EUR 0.01 per check).
+AICHECK_MAX_SEARCHES = 3
+
 # ── Job 2: resolution monitoring ────────────────────────────────────────────
 # Sources publish after the fact, so a market resolving on the 1st may only be
 # checkable on the 3rd. Markets become due once their date has passed by this

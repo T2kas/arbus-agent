@@ -66,6 +66,7 @@ def due_markets(conn: sqlite3.Connection, today: date,
            WHERE resolve_by <= ?
              AND status NOT IN ('rejected', 'resolved', 'void')
              AND (resolution_verdict IS NULL OR resolution_verdict = '')
+             AND COALESCE(resolution_state, 'OPEN') = 'OPEN'
            ORDER BY resolve_by
            LIMIT ?""",
         (cutoff, limit),
@@ -129,12 +130,18 @@ def check_markets(rows: list[sqlite3.Row], today: date) -> dict[int, dict]:
     return results
 
 
-def is_auto_applicable(verdict: dict, options: list[str]) -> tuple[bool, str]:
-    """Whether a verdict is safe to apply without a human.
+def should_freeze(verdict: dict, options: list[str]) -> tuple[bool, str]:
+    """Whether a sweep verdict is strong enough to FREEZE the market for review.
 
-    Requires a RESOLVED verdict, HIGH confidence, a cited source, and an option
-    that actually exists on the market. Anything else is queued for review —
-    a wrong resolution takes credits away from users who earned them.
+    The AI never resolves anything (see the Notion spec: "AI netrenkia
+    sprendimų"). The strongest action it can take on its own is to stop trading
+    and put the market in front of the admin — which is exactly what protects
+    the AMM, since the loss comes from trading on a stale price, not from the
+    verdict being recorded a few minutes later.
+
+    Freezing needs a RESOLVED verdict at HIGH confidence with a cited source
+    naming an option the market actually has; anything weaker is reported and
+    left alone.
     """
     if verdict["verdict"] != "RESOLVED":
         return False, f"verdict is {verdict['verdict']}"
@@ -150,18 +157,27 @@ def is_auto_applicable(verdict: dict, options: list[str]) -> tuple[bool, str]:
 
 
 def record(conn: sqlite3.Connection, market_id: int, verdict: dict,
-           applied: bool, note: str) -> None:
+           freeze: bool, note: str) -> None:
+    """Store the sweep's findings, and freeze the market when they warrant it.
+
+    Freezing stops trading and hands the market to the admin; it never settles
+    anything. Settlement happens only through resolution.admin_decide() plus
+    the undo window.
+    """
     conn.execute(
         """UPDATE markets
               SET resolution_verdict = ?, resolution_option = ?,
                   resolution_confidence = ?, resolution_note = ?,
-                  resolution_source = ?, resolved_at = ?,
-                  status = CASE WHEN ? THEN
-                      CASE WHEN ? = 'VOID' THEN 'void' ELSE 'resolved' END
-                      ELSE status END
+                  resolution_source = ?
             WHERE id = ?""",
         (verdict["verdict"], verdict["option"], verdict["confidence"],
-         note[:300], verdict["source"][:300],
-         datetime.now(timezone.utc).isoformat() if applied else "",
-         applied, verdict["verdict"], market_id),
+         note[:300], verdict["source"][:300], market_id),
     )
+    if freeze:
+        conn.execute(
+            """UPDATE markets
+                  SET resolution_state = 'PENDING', freeze_reason = ?, frozen_at = ?
+                WHERE id = ? AND resolution_state = 'OPEN'""",
+            (f"deadline sweep: {verdict['verdict']} {verdict['option']}".strip(),
+             datetime.now(timezone.utc).isoformat(), market_id),
+        )
