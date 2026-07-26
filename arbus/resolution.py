@@ -195,7 +195,9 @@ def submit_challenge(conn: sqlite3.Connection, request_id: int, user_id: str,
         raise ValueError("cannot challenge your own resolution request")
     if not challenge_window_open(conn, request_id):
         raise ValueError("challenge window has closed")
-    bond = config.CHALLENGE_BOND
+    # Same stake as the report being disputed (Polymarket's rule): standard
+    # against standard, important against important.
+    bond = req["bond"] or config.CHALLENGE_BOND
     if ledger.balance(conn, user_id) < bond:
         raise ValueError(f"insufficient balance for the {bond} Arbucks bond")
 

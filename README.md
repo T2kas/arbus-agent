@@ -154,7 +154,7 @@ frozen: one call per waiting market, never on a schedule of its own.
 | | Arbucks |
 |---|---:|
 | Proposal bond (standard / important) | 200 / 450 |
-| Challenge bond | 450 |
+| Challenge bond | same as the report it disputes (200 / 450) |
 | Reward, correct report | +30 |
 | Reward, correct challenge | 50% of the proposal bond |
 
@@ -166,9 +166,15 @@ altogether.
 
 For reference, Polymarket's equivalent is a **$750 proposer bond, a dispute
 bond of the same size, and a 2-hour challenge window**; the proposer's reward
-is a few dollars on that bond. Our window matches theirs; our reward is much
-more generous relative to the bond (30 on 200 = 15 %, vs well under 1 % there)
-because Arbucks are virtual and we need reporting to start at all.
+is a few dollars on that bond. Our window and our equal-bonds rule match
+theirs; our reward is much more generous relative to the bond (30 on 200 =
+15 %, vs well under 1 % there) because Arbucks are virtual and we need
+reporting to start at all.
+
+Equal bonds matter more than their size. A challenger forced to stake more than
+the proposer needs to be far more certain than the proposer ever was, so nobody
+disputes and false reports go unchallenged — which is the one thing the
+challenge mechanism exists to prevent.
 
 Balances live in this repo's SQLite (`arbus/ledger.py`) so the numbers can be
 tuned without app-backend work. The ledger is append-only: a balance is the sum

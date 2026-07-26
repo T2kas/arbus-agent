@@ -438,7 +438,13 @@ DRAFT_CHUNK_SIZE = 15
 # wrong hurts a new user rather than costing something they do not miss.
 PROPOSAL_BOND_STANDARD = 200
 PROPOSAL_BOND_IMPORTANT = 450
-CHALLENGE_BOND = 450
+# Polymarket's dispute bond equals the proposer's bond, and for good reason: a
+# challenger risking more than the proposer needs to be far more certain than
+# the proposer was, so nobody disputes and false reports go unchallenged. Ours
+# mirrors the bond of the request being challenged — 200 against a standard
+# report, 450 against an important one. CHALLENGE_BOND is only the fallback
+# when the original bond cannot be read.
+CHALLENGE_BOND = PROPOSAL_BOND_STANDARD
 REWARD_CORRECT_PROPOSAL = 30
 CHALLENGE_REWARD_SHARE = 0.50      # of the proposal bond, to a correct challenger
 ELIGIBILITY_MIN_PREDICTIONS = 20   # before a user may propose a resolution

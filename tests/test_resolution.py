@@ -1,8 +1,9 @@
 """Tests for the resolution engine: freeze, propose, challenge, settle.
 
 Numbers come from the Notion spec "Resolution logika (v1)": proposal bond
-200/450, challenge bond 450, +30 reward for a correct report, 50% of the
-proposal bond to a correct challenger.
+200/450, +30 reward for a correct report, 50% of the proposal bond to a correct
+challenger. The challenge bond mirrors the bond of the report it disputes
+(Polymarket's rule), so it is 200 or 450 accordingly.
 """
 
 from datetime import datetime, timedelta, timezone
@@ -112,7 +113,19 @@ def test_challenge_escrows_bond():
     _fund(conn, "u2")
     rid = resolution.submit_request(conn, mid, "u1", "Taip", "https://x.lt/a")
     resolution.submit_challenge(conn, rid, "u2", "šaltinis nesako to")
-    assert ledger.balance(conn, "u2") == 1000 - config.CHALLENGE_BOND
+    assert ledger.balance(conn, "u2") == 1000 - config.PROPOSAL_BOND_STANDARD
+
+
+def test_challenge_bond_matches_the_report_it_disputes():
+    """Polymarket's rule: the dispute bond equals the proposer's bond. A
+    challenger forced to risk more than the proposer simply never challenges."""
+    conn, mid = _conn_with_market()
+    _fund(conn, "u1")
+    _fund(conn, "u2")
+    rid = resolution.submit_request(conn, mid, "u1", "Taip", "https://x.lt/a",
+                                    is_important=True)
+    resolution.submit_challenge(conn, rid, "u2", "netikiu")
+    assert ledger.balance(conn, "u2") == 1000 - config.PROPOSAL_BOND_IMPORTANT
 
 
 def test_cannot_challenge_your_own_request():
@@ -222,7 +235,7 @@ def test_wrong_challenger_loses_the_bond():
     resolution.submit_challenge(conn, rid, "u2", "netikiu")
     resolution.admin_decide(conn, mid, resolution.RESOLVED, "Taip")  # proposer right
     _settle_now(conn, mid)
-    assert ledger.balance(conn, "u2") == 1000 - config.CHALLENGE_BOND
+    assert ledger.balance(conn, "u2") == 1000 - config.PROPOSAL_BOND_STANDARD
     assert ledger.reputation(conn, "u2")["false_challenges"] == 1
 
 
