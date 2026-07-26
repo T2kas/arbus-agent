@@ -81,7 +81,7 @@ def test_important_markets_take_the_larger_bond():
 
 def test_ineligible_user_cannot_report():
     conn, mid = _conn_with_market()
-    _fund(conn, "rookie", predictions=5)
+    _fund(conn, "rookie", predictions=2)
     with pytest.raises(ValueError, match="not eligible"):
         resolution.submit_request(conn, mid, "rookie", "Taip", "https://x.lt/a")
 

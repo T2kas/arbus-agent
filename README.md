@@ -108,14 +108,36 @@ runs the AI check on those, alerts the group, and records the check by the
 app's market id so the same market is never paid for twice (`--force`
 re-checks).
 
+`arbus check` also picks up markets whose **resolution date has passed while
+they are still trading** (`APP_CHECK_OVERDUE`). Nobody pauses those, so nothing
+would ever look at them — and a known outcome trading at a stale price is money
+leaving the house. That is the "Ar M. Sinkevičius taps premjeru?" case: decided
+weeks earlier, still `active`, invisible to every check.
+
+Because an admin freezing a market **cannot attach a source**, and a user who
+reports the right outcome may still cite a weak link, the check always searches
+the web itself rather than only reading a cited URL. "Cannot verify" is only
+acceptable after searching.
+
 ```sh
-python -m arbus watch      # price swing + distinct users -> circuit breaker
+python -m arbus watch                  # circuit breaker on live prices + trades
+python -m arbus watch --interval 120   # keep scanning every 2 minutes
+python -m arbus watch --freeze         # also stop trading (service_role key)
+python -m arbus stats                  # dead / important / overdue markets
+python -m arbus calibration            # our opening price vs the live price
 ```
 
 `watch` is the breaker finally getting real data: it flags markets where the
 price moved ≥`CB_PRICE_MOVE` **and** ≥`CB_MIN_DISTINCT_USERS` different people
-pushed it inside the window, and alerts Telegram. It never stops a market —
-that is still a human's click in the dashboard, followed by `arbus check`.
+pushed it inside the window. By default it only alerts — freezing writes to the
+app, which the anon key cannot do, so `--freeze` is opt-in and needs the
+service_role key.
+
+`stats` needs no LLM at all and therefore costs nothing: markets with fewer
+than `DEAD_MARKET_MIN_TRADES` bets in a week are dead (and `--teach` writes them
+into `feedback.md` so future batches stop generating that kind), markets over
+`IMPORTANT_VOLUME` Arbucks with `IMPORTANT_USERS`+ traders are worth promoting,
+and overdue markets are listed first because they cost the most.
 
 Publishing is manual and per-market — markets go live only for ids you pass,
 never automatically at the end of a batch. Rejected markets are refused, and

@@ -5,9 +5,12 @@ This module reads the source a user cited and reports whether it actually says
 what they claim. It writes no state and moves no Arbucks; the output is text
 for the admin to read before deciding in the dashboard.
 
-Kept deliberately cheap (~€0.01 per check, one call, few searches) because it
-runs on every freeze, and a freeze should never be something the team hesitates
-to trigger on cost grounds.
+It ALWAYS searches the web, whether or not a source was cited. An admin
+freezing a market in the dashboard cannot attach one, and a user who reports
+the right outcome may still cite a weak link — so "no usable source" must never
+turn into "cannot verify" when the fact is public. One check costs roughly
+EUR 0.05-0.12 depending on how much searching it takes; a wrong payout costs
+more than that and cannot be undone.
 """
 
 from __future__ import annotations
@@ -22,17 +25,24 @@ from . import config, llm, notify
 log = logging.getLogger(__name__)
 
 SYSTEM = (
-    "You verify sources for a Lithuanian prediction-market admin. You never "
-    "decide a market's outcome — you report what the cited source says, how it "
-    "compares with primary sources, and anything that should make a human "
-    "hesitate. Be brief and concrete; the admin reads this in a dashboard."
+    "You investigate outcomes for a Lithuanian prediction-market admin. Search "
+    "the web in Lithuanian, find what actually happened, and report it with the "
+    "official source and the date. You never decide the market — a human does — "
+    "but 'cannot verify' is only acceptable after you searched and the answer "
+    "genuinely is not public. Be brief and concrete; this is read in a dashboard."
 )
 
 
 def _run(question: str, options: str, criteria: str, proposed: str,
-         source: str, today: date | None = None, on_error: str = "") -> str:
+         source: str, today: date | None = None, on_error: str = "",
+         searches: int | None = None) -> str:
     """One advisory check. Never raises — a failed check must not block the
-    admin, and it must never read as evidence either way."""
+    admin, and it must never read as evidence either way.
+
+    `searches` is larger when nobody cited a source: then the model is not
+    verifying a link, it is finding out what happened, and the answer decides a
+    payout. That is worth a few cents more.
+    """
     prompt = llm.load_prompt(
         "aicheck", today=(today or date.today()).isoformat(),
         question=question, options=options, criteria=criteria,
@@ -40,7 +50,7 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     )
     try:
         return llm.research(prompt, system=SYSTEM,
-                            max_uses=config.AICHECK_MAX_SEARCHES,
+                            max_uses=searches or config.AICHECK_MAX_SEARCHES,
                             max_tokens=1200, stage="aicheck").strip()
     except Exception as exc:
         log.warning("AI check failed: %s", exc)
@@ -68,6 +78,7 @@ def check_request(conn: sqlite3.Connection, request_id: int,
                 today=today,
                 # The admin still has to decide; a failed check must not block
                 # the dashboard or imply anything about the claim.
+                searches=config.AICHECK_MAX_SEARCHES_OPEN,
                 on_error=("AI patikra nepavyko (techninė klaida) — sprendimą "
                           f"priimk pagal šaltinį pats: {req['source_url']}"))
 
@@ -83,8 +94,8 @@ def check_freeze(conn: sqlite3.Connection, market_id: int,
                 options=" / ".join(json.loads(market["options_json"])),
                 criteria=market["resolution_hint_lt"],
                 proposed="(nenurodyta — rinka užšaldyta dėl įtartino srauto)",
-                source="(nėra — ieškok pats, ar yra naujiena, paaiškinanti judėjimą)",
-                today=today)
+                source="(nėra — surask pats, kas įvyko)",
+                today=today, searches=config.AICHECK_MAX_SEARCHES_OPEN)
 
 
 def check_app_market(market: dict, today: date | None = None) -> str:
@@ -101,8 +112,8 @@ def check_app_market(market: dict, today: date | None = None) -> str:
                 options=" / ".join(view["options"]),
                 criteria=view["rules"],
                 proposed="(nenurodyta — rinka sustabdyta appe)",
-                source="(nėra — patikrink, ar rezultatas jau žinomas viešai)",
-                today=today)
+                source="(nėra — adminas negali prisegti šaltinio, todėl ieškok pats)",
+                today=today, searches=config.AICHECK_MAX_SEARCHES_OPEN)
 
 
 # ── What the admin actually runs: check, store, and ping Telegram ───────────
@@ -170,12 +181,30 @@ def review_freeze(conn: sqlite3.Connection, market_id: int,
 
 def pending_app_markets(conn: sqlite3.Connection, force: bool = False,
                         limit: int = 20) -> tuple[list[dict], str]:
-    """Markets the app has paused/stopped and that we have not checked yet."""
+    """App markets that need a decision: frozen ones AND overdue ones.
+
+    Overdue matters as much as frozen. "Ar M. Sinkevičius taps premjeru?" was
+    decided weeks ago, yet the market was still `active` with its date long
+    past — nobody had paused it, so nothing was looking at it, while the AMM
+    kept taking the other side of a known outcome. A market trading past its
+    own resolution date is exactly the case this check exists for.
+    """
     from . import app as app_api
 
-    rows, error = app_api.frozen_markets()
+    rows, error = app_api.markets(200)
     if error:
         return [], error
+
+    frozen = [r for r in rows if app_api.is_frozen(r)]
+    overdue = app_api.overdue_markets(rows) if config.APP_CHECK_OVERDUE else []
+    seen_ids: set[str] = set()
+    rows = []
+    for row in frozen + overdue:
+        mid = app_api.market_id_of(row)
+        if mid not in seen_ids:
+            seen_ids.add(mid)
+            rows.append(row)
+
     if not force:
         seen = {r["app_market_id"] for r in conn.execute(
             "SELECT app_market_id FROM app_checks")}

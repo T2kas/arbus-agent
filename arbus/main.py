@@ -237,6 +237,20 @@ def cmd_watch(args: argparse.Namespace) -> int:
         print("ARBUS_API_URL is not set in .env — no live data to watch.")
         return 1
 
+    if args.interval:
+        import time
+
+        print(f"Watching every {args.interval}s — Ctrl+C to stop.")
+        while True:
+            _watch_once(args)
+            time.sleep(args.interval)
+
+    return _watch_once(args)
+
+
+def _watch_once(args: argparse.Namespace) -> int:
+    from . import app as app_api, notify
+
     rows, error = app_api.breaker_candidates(window_minutes=args.window)
     if error:
         print(f"❌ {error}")
@@ -255,17 +269,167 @@ def cmd_watch(args: argparse.Namespace) -> int:
           f"(≥{config.CB_PRICE_MOVE:.0%} move AND ≥{config.CB_MIN_DISTINCT_USERS} users "
           f"in {args.window} min).")
 
+    frozen_now: list[str] = []
+    if tripped and args.freeze:
+        for item in tripped:
+            mid = app_api.market_id_of(item["market"])
+            ok, detail = app_api.set_status(mid, config.APP_FREEZE_STATUS)
+            print(f"   {'🧊' if ok else '❌'} {mid}: {detail}")
+            if ok:
+                frozen_now.append(mid)
+
     if tripped and not args.no_telegram:
         lines = ["🚨 ĮTARTINAS SRAUTAS — verta sustabdyti prekybą", ""]
         for item in tripped:
             lines.append(f"· {item['move']:+.0%}, {item['users']} vartotojai — "
                          f"{app_api.question_of(item['market'])}")
         lines += ["", "Kainos šuolis + keli skirtingi vartotojai ta pačia kryptimi "
-                      "dažniausiai reiškia, kad kažkas jau žino rezultatą.",
-                  "Botas nieko nestabdo — sustabdyk dashboarde ir paleisk "
-                  "`arbus check`."]
+                      "dažniausiai reiškia, kad kažkas jau žino rezultatą."]
+        lines.append(
+            f"🧊 Botas jau sustabdė {len(frozen_now)} rinką (-as) appe. "
+            "Paleisk `arbus check`."
+            if frozen_now else
+            "Botas nieko nestabdo — sustabdyk dashboarde ir paleisk `arbus check`.")
         notify.send("\n".join(lines))
         print("Telegram alert sent.")
+    return 0
+
+
+def cmd_stats(args: argparse.Namespace) -> int:
+    """Market health from the app's own trades. No LLM, no cost.
+
+    Four questions, all answerable from data the app already exposes:
+    which markets nobody bets on (and should therefore stop being generated),
+    which ones are big enough to promote, which are trading past their own
+    deadline (the expensive one under an AMM), and where our opening price was
+    far from where the market actually settled.
+    """
+    from . import app as app_api, notify
+
+    if not config.ARBUS_API_URL:
+        print("ARBUS_API_URL is not set in .env — no app data to read.")
+        return 1
+
+    market_rows, error = app_api.markets(200)
+    if error:
+        print(f"❌ Could not read the app: {error}")
+        return 1
+    trades, trade_error = app_api.recent_trades()
+    if trade_error:
+        print(f"⚠️  Trades unavailable ({trade_error}) — dead/important skipped.")
+    stats = app_api.trade_stats(trades, days=args.days)
+
+    dead, important = [], []
+    for row in market_rows:
+        if not app_api.is_open(row):
+            continue
+        stat = stats.get(app_api.market_id_of(row), {"trades": 0, "users": 0, "volume": 0.0})
+        if stat["volume"] >= config.IMPORTANT_VOLUME and stat["users"] >= config.IMPORTANT_USERS:
+            important.append((row, stat))
+        elif trades and stat["trades"] < config.DEAD_MARKET_MIN_TRADES:
+            dead.append((row, stat))
+
+    overdue = app_api.overdue_markets(market_rows)
+
+    print(f"🔥 SVARBIOS ({len(important)}) — ≥{config.IMPORTANT_VOLUME} Arbukų "
+          f"ir ≥{config.IMPORTANT_USERS} vartotojų")
+    for row, stat in important:
+        print(f"  · {stat['volume']:.0f} Arbukų, {stat['users']} vartotojų — "
+              f"{app_api.question_of(row)}")
+
+    print(f"\n💀 NEGYVOS ({len(dead)}) — <{config.DEAD_MARKET_MIN_TRADES} statymų "
+          f"per {args.days} d.")
+    for row, stat in dead[:15]:
+        print(f"  · {stat['trades']} statymai — {app_api.question_of(row)}")
+
+    print(f"\n⏰ PRAVĖLUOTOS ({len(overdue)}) — terminas praėjo, o prekyba vyksta")
+    for row in overdue:
+        print(f"  · {app_api._pick(row, 'resolve_by', 'closes_at', default='?')} "
+              f"{app_api.question_of(row)}")
+
+    if not args.no_telegram and (important or overdue or dead):
+        lines = ["📊 Arbus rinkų sveikata", ""]
+        if overdue:
+            lines.append(f"⏰ {len(overdue)} rinkos prekiauja po savo termino "
+                         f"— tai tiesioginis AMM nuostolis:")
+            lines += [f"  · {app_api.question_of(r)}" for r in overdue[:5]]
+        if important:
+            lines.append(f"\n🔥 {len(important)} rinkos verta iškelti į „breaking“:")
+            lines += [f"  · {s['volume']:.0f} Arbukų, {s['users']} vartotojų — "
+                      f"{app_api.question_of(r)}" for r, s in important[:5]]
+        if dead:
+            lines.append(f"\n💀 {len(dead)} rinkos be statymų per {args.days} d. "
+                         f"— tokių nebegeneruoti.")
+            lines += [f"  · {app_api.question_of(r)}" for r, _ in dead[:5]]
+        notify.send("\n".join(lines))
+        print("\nTelegram summary sent.")
+
+    if dead and args.teach:
+        note = ("Vengti temų, kurios negauna statymų: "
+                + "; ".join(app_api.question_of(r) for r, _ in dead[:5]))
+        feedback.append_feedback(note)
+        print("Dead markets recorded in feedback.md for future batches.")
+    return 0
+
+
+def cmd_calibration(args: argparse.Namespace) -> int:
+    """Where our opening probability sat versus the app's live price.
+
+    This is the generator's own score. A market we opened at 20% that trades at
+    80% was mispriced at birth, and the pattern across a batch says more about
+    the prompt than any single review does.
+    """
+    from . import app as app_api
+
+    if not config.ARBUS_API_URL:
+        print("ARBUS_API_URL is not set in .env.")
+        return 1
+
+    market_rows, error = app_api.markets(200)
+    if error:
+        print(f"❌ {error}")
+        return 1
+    history, hist_error = app_api.price_history(500)
+    if hist_error:
+        print(f"❌ price history unavailable: {hist_error}")
+        return 1
+    prices = app_api.latest_prices(history)
+
+    conn = store.connect()
+    ours = {q.strip().lower(): p for q, p in conn.execute(
+        "SELECT question_lt, probabilities_json FROM markets").fetchall()}
+    conn.close()
+
+    gaps = []
+    for row in market_rows:
+        question = app_api.question_of(row)
+        stored = ours.get(question.strip().lower())
+        if not stored:
+            continue
+        try:
+            opening = json.loads(stored)[0]
+        except (ValueError, IndexError):
+            continue
+        options = row.get("market_options") or row.get("options") or []
+        live = next((prices[str(o.get("id"))] for o in options
+                     if isinstance(o, dict) and str(o.get("id")) in prices), None)
+        if live is None:
+            continue
+        gaps.append((abs(live - opening), opening, live, question))
+
+    if not gaps:
+        print("No overlap yet between our stored markets and live prices.")
+        return 0
+
+    gaps.sort(reverse=True)
+    print(f"Comparing {len(gaps)} market(s); flagging gaps ≥ "
+          f"{config.CALIBRATION_GAP:.0%}\n")
+    for gap, opening, live, question in gaps[:args.limit]:
+        flag = "⚠️" if gap >= config.CALIBRATION_GAP else " ·"
+        print(f"{flag} mūsų {opening:.0%} → rinka {live:.0%}  ({gap:+.0%})  {question}")
+    average = sum(g for g, _, _, _ in gaps) / len(gaps)
+    print(f"\nAverage gap: {average:.1%} "
+          f"({sum(1 for g, *_ in gaps if g >= config.CALIBRATION_GAP)} flagged)")
     return 0
 
 
@@ -475,7 +639,23 @@ def main() -> int:
     wt.add_argument("--window", type=int, default=config.CB_WINDOW_MINUTES,
                     help="minutes of history to consider")
     wt.add_argument("--no-telegram", action="store_true")
+    wt.add_argument("--freeze", action="store_true",
+                    help="also stop trading in the app (needs a service_role key)")
+    wt.add_argument("--interval", type=int, default=0,
+                    help="keep running, scanning every N seconds (0 = once)")
     wt.set_defaults(func=cmd_watch)
+
+    stt = sub.add_parser("stats", help="market health: dead, important, overdue")
+    stt.add_argument("--days", type=int, default=config.DEAD_MARKET_DAYS)
+    stt.add_argument("--no-telegram", action="store_true")
+    stt.add_argument("--teach", action="store_true",
+                     help="write the dead markets into feedback.md")
+    stt.set_defaults(func=cmd_stats)
+
+    cal = sub.add_parser("calibration",
+                         help="our opening probability vs the app's live price")
+    cal.add_argument("--limit", type=int, default=20)
+    cal.set_defaults(func=cmd_calibration)
 
     rb = sub.add_parser("rebuild-db",
                         help="rebuild the duplicate-check history from exports/")

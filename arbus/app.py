@@ -18,7 +18,7 @@ prints the columns each endpoint actually returns.
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import requests
 
@@ -143,6 +143,20 @@ def markets(limit: int = 100) -> tuple[list[dict], str]:
     return _call("GET", url_with(f"limit={limit}"))
 
 
+def is_frozen(row: dict) -> bool:
+    """Trading stopped and nobody has been paid yet.
+
+    The frozen list is deliberately broad (the app owns these strings and they
+    vary: paused, pristabdyta, stopped, sustabdyta, closed...), so the settled
+    list is what keeps an already-resolved market from being re-checked and
+    re-billed on every run.
+    """
+    status = status_of(row)
+    if status in config.APP_SETTLED_STATUSES:
+        return False
+    return status in config.APP_FROZEN_STATUSES
+
+
 def frozen_markets(limit: int = 200) -> tuple[list[dict], str]:
     """Markets the app has paused/stopped — the ones an admin must decide.
 
@@ -152,7 +166,25 @@ def frozen_markets(limit: int = 200) -> tuple[list[dict], str]:
     rows, error = markets(limit)
     if error:
         return [], error
-    return [r for r in rows if status_of(r) in config.APP_FROZEN_STATUSES], ""
+    return [r for r in rows if is_frozen(r)], ""
+
+
+def set_status(market_id: str, status: str) -> tuple[bool, str]:
+    """Write a market's status back to the app (needs a service_role key).
+
+    This is the only write in this module and it is never called automatically:
+    `arbus watch --freeze` is opt-in, because stopping trading is a decision
+    with money attached. With the anon key row-level security will refuse it,
+    and the 401/403 is reported as-is rather than swallowed.
+    """
+    base = base_url()
+    if not base:
+        return False, "ARBUS_API_URL is not a /rest/v1/ URL"
+    rows, error = _call("PATCH", f"{base}markets?id=eq.{market_id}",
+                        json={"status": status})
+    if error:
+        return False, error
+    return True, f"status set to {status}" + (f" ({len(rows)} row)" if rows else "")
 
 
 def price_history(limit: int = 200) -> tuple[list[dict], str]:
@@ -230,6 +262,76 @@ def traders_per_market(trades: list[dict], window_minutes: int = config.CB_WINDO
         user = str(_pick(trade, "user_id", "profile_id", "username", default=""))
         if mid and user:
             out.setdefault(mid, set()).add(user)
+    return out
+
+
+# ── market health: dead, important, overdue, mispriced ──────────────────────
+
+def trade_stats(trades: list[dict], days: int = config.DEAD_MARKET_DAYS,
+                now: datetime | None = None) -> dict[str, dict]:
+    """{market id: {trades, users, volume}} over the window."""
+    cutoff = (now or datetime.now(timezone.utc)) - timedelta(days=days)
+    out: dict[str, dict] = {}
+    for trade in trades:
+        ts = _timestamp_of(trade)
+        if ts is not None and ts < cutoff:
+            continue
+        mid = str(_pick(trade, "market_id", default=""))
+        if not mid:
+            continue
+        stat = out.setdefault(mid, {"trades": 0, "users": set(), "volume": 0.0})
+        stat["trades"] += 1
+        user = _pick(trade, "user_id", "profile_id", "username", default="")
+        if user:
+            stat["users"].add(str(user))
+        try:
+            stat["volume"] += abs(float(_pick(trade, "amount", "arbucks", "stake",
+                                              "total", "shares", default=0) or 0))
+        except (TypeError, ValueError):
+            pass
+    return {mid: {"trades": s["trades"], "users": len(s["users"]),
+                  "volume": s["volume"]} for mid, s in out.items()}
+
+
+def latest_prices(history: list[dict]) -> dict[str, float]:
+    """{option id: most recent price}. History arrives newest-first."""
+    prices: dict[str, float] = {}
+    for row in history:
+        oid = str(_pick(row, "option_id", "id", default=""))
+        price = _pick(row, "price", "new_price", "value", "probability")
+        if oid and oid not in prices and price is not None:
+            try:
+                prices[oid] = float(price)
+            except (TypeError, ValueError):
+                continue
+    return prices
+
+
+def is_open(row: dict) -> bool:
+    status = status_of(row)
+    return (status not in config.APP_SETTLED_STATUSES
+            and status not in config.APP_FROZEN_STATUSES)
+
+
+def overdue_markets(market_rows: list[dict], today: date | None = None) -> list[dict]:
+    """Still trading after their own resolution date.
+
+    Under an AMM this is the most expensive state a market can be in: the
+    outcome may already be public while the price has not moved, and every
+    trade against that stale price is a loss taken by the house.
+    """
+    today = today or date.today()
+    out = []
+    for row in market_rows:
+        if not is_open(row):
+            continue
+        raw = str(_pick(row, "resolve_by", "resolves_at", "closes_at",
+                        "end_date", "deadline", default=""))[:10]
+        try:
+            if raw and date.fromisoformat(raw) < today:
+                out.append(row)
+        except ValueError:
+            continue
     return out
 
 

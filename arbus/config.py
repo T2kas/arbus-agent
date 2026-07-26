@@ -455,7 +455,8 @@ PROPOSAL_BOND_IMPORTANT = 450
 CHALLENGE_BOND = PROPOSAL_BOND_STANDARD
 REWARD_CORRECT_PROPOSAL = 30
 CHALLENGE_REWARD_SHARE = 0.50      # of the proposal bond, to a correct challenger
-ELIGIBILITY_MIN_PREDICTIONS = 20   # before a user may propose a resolution
+ELIGIBILITY_MIN_PREDICTIONS = 5    # before a user may propose a resolution
+                                   # (start low, raise once reporting works)
 CHALLENGE_WINDOW_HOURS = 2
 
 # Circuit breaker. A price move alone is not evidence of leaked information —
@@ -478,6 +479,10 @@ DEADLINE_SWEEP_GRACE_DAYS = 1
 # nobody hesitates to freeze a market (~EUR 0.05 per check: one call, three
 # searches at $0.01 each plus the tokens the search results add).
 AICHECK_MAX_SEARCHES = 3
+# When nobody cited a source — an admin freezing a market in the dashboard
+# cannot attach one — the check has to FIND the outcome, not just verify a
+# link. That takes more searches, and it is the case that decides payouts.
+AICHECK_MAX_SEARCHES_OPEN = 8
 
 # ── No-event fallback: why VOID is not a normal outcome ─────────────────────
 # Polymarket and Kalshi settle "the event did not happen" from the market's own
@@ -527,12 +532,47 @@ APP_DEDUPE = True
 # matched case-insensitively; `python -m arbus app --schema` shows the real
 # values in use.
 APP_FROZEN_STATUSES = {
-    "paused", "pristabdyta", "pristabdytas", "suspended",
-    "stopped", "sustabdyta", "sustabdytas", "halted",
-    "frozen", "uzsaldyta", "užšaldyta", "pending_resolution", "resolving",
+    # paused / pristabdyta
+    "paused", "pause", "pristabdyta", "pristabdytas", "suspended", "halted",
+    # stopped / sustabdyta — trading ended, outcome not paid yet
+    "stopped", "stop", "sustabdyta", "sustabdytas", "closed", "close",
+    "ended", "finished", "locked", "trading_closed", "expired", "baigta",
+    # explicitly waiting for a decision
+    "frozen", "uzsaldyta", "užšaldyta", "pending", "pending_resolution",
+    "awaiting_resolution", "resolving",
+}
+# ...but never re-check a market that is already settled. "closed" above is
+# deliberately broad, and without this a resolved market would be checked (and
+# paid for) on every run.
+APP_SETTLED_STATUSES = {
+    "resolved", "settled", "paid", "paid_out", "issprestas", "išspręstas",
+    "cancelled", "canceled", "void", "atsaukta", "atšaukta", "archived",
 }
 
 # ── Paths (relative to repo root) ───────────────────────────────────────────
 DB_PATH = "data/arbus.db"
 REPORT_DIR = "reports"
 EXPORT_DIR = "exports"
+
+
+# Also check markets whose resolution date has passed while they are still
+# trading. Nobody pauses those, so nothing would ever look at them — and under
+# an AMM a known outcome trading at a stale price is money leaving the house.
+APP_CHECK_OVERDUE = True
+
+# The status `arbus watch --freeze` writes back to stop trading. Must match a
+# value the app actually understands — check `arbus app --schema` first.
+APP_FREEZE_STATUS = os.environ.get("APP_FREEZE_STATUS", "paused")
+
+# ── Market health (arbus stats) ─────────────────────────────────────────────
+# A market nobody trades is a wasted slot and, more usefully, evidence about
+# what NOT to generate. A market everybody trades deserves promotion. Both are
+# read straight from the app's trades, with no LLM involved — these cost 0.
+DEAD_MARKET_DAYS = 7
+DEAD_MARKET_MIN_TRADES = 5      # fewer bets than this in the window = dead
+IMPORTANT_VOLUME = 15000        # Arbucks traded
+IMPORTANT_USERS = 10            # distinct users
+# How far our generated starting probability may sit from the market's live
+# price before it is worth a look. This is the generator's calibration score:
+# a market that opened at 20% and trades at 80% was mispriced at birth.
+CALIBRATION_GAP = 0.25

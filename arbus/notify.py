@@ -84,7 +84,9 @@ def market_view(market) -> dict:
                                             default="?")),
             "rules": str(app_api._pick(market, "resolution_hint_lt", "resolution_criteria",
                                        "rules", "description", default="")),
-            "freeze_reason": f"appo statusas: {app_api.status_of(market) or 'nenurodytas'}",
+            "freeze_reason": f"appo statusas: {app_api.status_of(market) or 'nenurodytas'}"
+                             + ("" if app_api.is_frozen(market)
+                                else " — TERMINAS JAU PRAĖJO, o prekyba tebevyksta"),
         }
     return {
         "id": market["id"],

@@ -1,6 +1,6 @@
 """Reading the Arbus app's own markets (Supabase/PostgREST or any JSON API)."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import pytest
 import requests
@@ -182,3 +182,71 @@ def test_alert_renders_from_an_app_market_record():
         None, "AI: rezultatas dar nepaskelbtas")
     assert "#abc" in text and "Taip / Ne" in text
     assert "sustabdyta" in text and "Pagal Statistiką." in text
+
+
+# ── health signals (arbus stats) ────────────────────────────────────────────
+
+def test_settled_markets_are_never_re_checked(monkeypatch):
+    """`closed` is in the frozen list on purpose, so without the settled list a
+    resolved market would be AI-checked and billed on every single run."""
+    _rows(monkeypatch, [
+        {"id": "a", "status": "closed"},
+        {"id": "b", "status": "resolved"},
+        {"id": "c", "status": "atšaukta"},
+    ])
+    frozen, _ = app.frozen_markets()
+    assert [app.market_id_of(m) for m in frozen] == ["a"]
+
+
+def test_trade_stats_count_volume_users_and_bets():
+    trades = [
+        {"market_id": "m1", "user_id": "a", "amount": 5000, "created_at": _at(60)},
+        {"market_id": "m1", "user_id": "b", "amount": 12000, "created_at": _at(120)},
+        {"market_id": "m1", "user_id": "a", "amount": -500, "created_at": _at(180)},
+        {"market_id": "m2", "user_id": "c", "amount": 10, "created_at": _at(60 * 24 * 30)},
+    ]
+    stats = app.trade_stats(trades, days=7, now=NOW)
+    assert stats["m1"] == {"trades": 3, "users": 2, "volume": 17500.0}
+    assert "m2" not in stats                   # older than the window
+
+
+def test_overdue_markets_are_the_ones_still_trading_past_their_date():
+    rows = [
+        {"id": "a", "status": "active", "resolve_by": "2026-07-01"},   # overdue
+        {"id": "b", "status": "active", "resolve_by": "2026-12-01"},
+        {"id": "c", "status": "paused", "resolve_by": "2026-07-01"},   # already stopped
+        {"id": "d", "status": "active", "resolve_by": "nonsense"},
+    ]
+    overdue = app.overdue_markets(rows, today=date(2026, 7, 26))
+    assert [r["id"] for r in overdue] == ["a"]
+
+
+def test_latest_price_wins_because_history_is_newest_first():
+    history = [{"option_id": "o1", "price": 0.71, "created_at": _at(1)},
+               {"option_id": "o1", "price": 0.20, "created_at": _at(500)}]
+    assert app.latest_prices(history) == {"o1": 0.71}
+
+
+def test_freezing_reports_what_the_app_said(monkeypatch):
+    monkeypatch.setattr(config, "ARBUS_API_URL", SUPABASE)
+    monkeypatch.setattr(requests, "request",
+                        lambda *a, **k: _Resp(None, 403, "row-level security"))
+    ok, detail = app.set_status("m1", "paused")
+    assert ok is False and "403" in detail     # anon key can read, not write
+
+
+def test_overdue_open_markets_are_checked_too(monkeypatch, tmp_path):
+    """The Sinkevičius case: decided weeks ago, nobody paused it, so nothing
+    was checking it while the AMM kept trading against a known outcome."""
+    from arbus import aicheck, store
+
+    _rows(monkeypatch, [
+        {"id": "old", "question": "Ar M. Sinkevičius taps premjeru?",
+         "status": "active", "resolve_by": "2020-01-01"},
+        {"id": "live", "question": "Ar Žalgiris laimės?", "status": "active",
+         "resolve_by": "2030-01-01"},
+    ])
+    conn = store.connect(str(tmp_path / "t.db"))
+    rows, error = aicheck.pending_app_markets(conn)
+    assert error == ""
+    assert [app.market_id_of(r) for r in rows] == ["old"]
