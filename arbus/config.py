@@ -121,6 +121,17 @@ DEFAULT_BATCH_SIZE = 35
 # enforced structurally in code — the model cannot drift into view-count bait
 # when its chunk mandate is state affairs. (label, share, mandate-for-prompt).
 # The last theme absorbs rounding remainders.
+# Themed quotas apply to the ACCEPTED batch, not just the drafted one. The
+# informative themes carry more factual constraints (launch date, already
+# decided, sources), so they lose more candidates at validation — without
+# top-ups a batch drifts back to whatever survives most easily, which is
+# culture. After validation, themes below their target are re-drafted.
+TOPUP_ROUNDS = 2          # extra drafting rounds for under-delivered themes
+TOPUP_OVERDRAFT = 2.0     # draft this multiple of the deficit (some fail again)
+# Rejections from earlier in the same run are fed back into later chunk prompts
+# so the model stops repeating a mistake while the batch is still being drafted.
+REJECT_FEEDBACK_LIMIT = 8
+
 DRAFT_THEMES: list[tuple[str, float, str]] = [
     ("valstybė ir geopolitika", 0.30,
      "ONLY draft markets about state affairs and geopolitics: the war in "

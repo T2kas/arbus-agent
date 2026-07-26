@@ -34,6 +34,9 @@ class Candidate(BaseModel):
     # the model — a hallucinated image URL is worse than no image.
     image_url: str = ""
     image_source: str = ""
+    # Which themed chunk produced this candidate. Set by the pipeline, not the
+    # model, so per-theme yield can be measured and topped up.
+    theme: str = ""
 
 
 class CandidateBatch(BaseModel):
