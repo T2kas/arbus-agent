@@ -63,11 +63,9 @@ FEEDS: list[dict] = [
     {"name": "Delfi Sportas","url": "https://www.delfi.lt/rss/feeds/sportas.xml"},
     {"name": "Lrytas",       "url": "https://www.lrytas.lt/rss"},
     {"name": "VZ",           "url": "https://www.vz.lt/rss"},
-    # TV3 publishes its RSS index at /rss; the per-category paths are not
-    # documented publicly, so both candidates are listed and the dead one is
-    # skipped silently. Run `python -m arbus feeds` to see which one delivers.
-    {"name": "TV3",          "url": "https://www.tv3.lt/rss"},
-    {"name": "TV3 Naujienos","url": "https://www.tv3.lt/rss/naujienos"},
+    # TV3: both /rss and /rss/naujienos return an HTML page, not a feed
+    # ("not well-formed (invalid token)"), so there is nothing to parse.
+    # Its stories still reach us through Google News LT below.
     # Economy / business / geopolitics — the informative side of the batch.
     {"name": "LRT Verslas",  "url": "https://www.lrt.lt/naujienos/verslas?rss"},
     {"name": "15min Verslas","url": "https://www.15min.lt/rss/verslas"},
