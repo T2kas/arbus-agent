@@ -483,6 +483,17 @@ AICHECK_MAX_SEARCHES = 3
 # cannot attach one — the check has to FIND the outcome, not just verify a
 # link. That takes more searches, and it is the case that decides payouts.
 AICHECK_MAX_SEARCHES_OPEN = 8
+# After the check, fetch every URL the model cited and confirm it actually
+# loads. Fabricated links (the model has invented eurovision.tv and nba.com URLs
+# that 404) are the clearest hallucination signal there is. A request that fails
+# outright is treated as "unknown", never as proof the link is fake — so the
+# sandbox, where all outbound calls fail, does not flag real sources.
+AICHECK_VERIFY_URLS = True
+
+# Optional keyless JSON feed of average fuel prices (LEA). There is no stable
+# public endpoint today; point this at one when the team has it and resolvers.py
+# will inject the real diesel/petrol price into fuel-market checks.
+FUEL_PRICE_URL = os.environ.get("FUEL_PRICE_URL", "")
 
 # ── No-event fallback: why VOID is not a normal outcome ─────────────────────
 # Polymarket and Kalshi settle "the event did not happen" from the market's own

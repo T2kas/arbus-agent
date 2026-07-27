@@ -130,6 +130,28 @@ reports the right outcome may still cite a weak link, the check always searches
 the web itself rather than only reading a cited URL. "Cannot verify" is only
 acceptable after searching.
 
+**Every check is guarded against hallucination**, because the model has invented
+confident answers three ways: a result with source "nerasta", a plausible URL
+that 404s, and the right event from the wrong year (2015 Eurovision for 2026).
+So each summary opens with a verdict the admin cannot misread — **✅ knows and
+the cited link actually loads / ❌ does not know / ⚠️ claims a result with no
+working source** — and the bot **fetches every cited URL** to confirm it opens
+(`AICHECK_VERIFY_URLS`); a fabricated link is flagged, while a request that
+simply fails is never treated as proof of a fake.
+
+**Authoritative feeds beat the model's memory** for the values markets settle
+on. `arbus/resolvers.py` fetches the real figure and hands it to the check as a
+fact, so the model reads a number instead of guessing one:
+
+| Market is about | Feed | Keyless |
+|---|---|---|
+| a Nasdaq Vilnius stock (Ignitis, Telia…) | Yahoo chart JSON — current price + period high | yes |
+| the day's temperature in a Lithuanian city | `api.meteo.lt` (official LHMT observations) | yes |
+| average fuel prices (LEA) | `FUEL_PRICE_URL` if set — no stable public endpoint yet | — |
+
+Add a feed by writing a `*_fact(question)` resolver and appending it to
+`_RESOLVERS`; each is fail-safe and returns "" when it does not apply.
+
 ```sh
 python -m arbus watch                  # circuit breaker on live prices + trades
 python -m arbus watch --interval 120   # keep scanning every 2 minutes

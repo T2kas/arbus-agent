@@ -35,40 +35,87 @@ SYSTEM = (
     "namesake or an event that has not happened yet. Never do either."
 )
 
-# The model is told (prompt rule 1) that a known result needs a real URL, but
-# it must not be trusted to obey — the Dirkstys case claimed a confirmed, high-
-# confidence win with source "nerasta". This is the deterministic backstop: if
-# the summary asserts a known result or high confidence yet contains no real
-# link, the admin sees a warning at the very top, before anything else.
-_HTTP_RE = re.compile(r"https?://\S+", re.I)
-_KNOWN_RE = re.compile(r"REZULTATAS\s+ŽINOMAS:\s*taip", re.I)
-_HIGH_RE = re.compile(r"PASITIK[ĖE]JIMAS:\s*aukšt", re.I)
+# The model is told (prompt rule 1) that a known result needs a real, working
+# URL, but it must not be trusted to obey: it has claimed confirmed results with
+# source "nerasta" (Dirkstys) AND cited plausible-looking URLs that 404 or point
+# at the wrong year (Eurovision, Sabonis). So every claim is checked against the
+# ONE thing that cannot be faked — whether the cited link actually loads.
+_HTTP_RE = re.compile(r"https?://[^\s\])>\"']+", re.I)
+_KNOWN_RE = re.compile(r"REZULTATAS(?:\s+ŽINOMAS)?:\s*(žinomas|taip)", re.I)
+_UNKNOWN_RE = re.compile(r"REZULTATAS(?:\s+ŽINOMAS)?:\s*(nežinomas|ne)\b", re.I)
 _OUTCOME_RE = re.compile(r"SIŪLOMA\s+BAIGTIS:\s*(.+)", re.I)
 
-_UNSUPPORTED_WARNING = (
-    "⚠️ DĖMESIO: AI nurodė žinomą rezultatą / aukštą pasitikėjimą, BET "
-    "nepateikė tikros nuorodos (URL). Be šaltinio tai NĖRA patvirtinta — "
-    "gali būti sumaišytas asmuo (pvz. tas pats pavardės inicialas) arba dar "
-    "neįvykęs įvykis. Patikrink rankiniu būdu prieš spręsdamas.\n"
-    + "─" * 20 + "\n"
-)
+_BAR = "─" * 22
 
 
-def _guard(text: str) -> str:
-    """Flag a summary that claims a result it cannot cite.
+def verify_url(url: str, timeout: int = 12) -> str:
+    """'ok' | 'broken' | 'unknown'.
 
-    The check is advisory, so this never changes the model's words — it only
-    prepends a warning the admin cannot miss when the confident-but-sourceless
-    pattern appears. A real https link anywhere in the summary clears it.
+    'broken' means the server answered 4xx/5xx — a fabricated link. 'unknown'
+    means the request itself failed (network/timeout), which must NOT be treated
+    as proof the link is fake: in the sandbox every outbound call fails, and we
+    would flag every real source. Only a definite bad status condemns a URL.
     """
-    if _HTTP_RE.search(text):
-        return text
+    try:
+        resp = requests.get(url, headers={"User-Agent": "ArbusResolver/1.0"},
+                            timeout=timeout, allow_redirects=True)
+    except Exception:
+        return "unknown"
+    return "broken" if resp.status_code >= 400 else "ok"
+
+
+def _claims_known(text: str) -> bool:
+    if _KNOWN_RE.search(text):
+        return True
     outcome = _OUTCOME_RE.search(text)
-    resolves_to_something = bool(
-        outcome and "neaišk" not in outcome.group(1).strip().lower())
-    if _KNOWN_RE.search(text) or _HIGH_RE.search(text) or resolves_to_something:
-        return _UNSUPPORTED_WARNING + text
-    return text
+    return bool(outcome and "neaišk" not in outcome.group(1).strip().lower())
+
+
+def _suggested_outcome(text: str) -> str:
+    m = _OUTCOME_RE.search(text)
+    return m.group(1).strip() if m else ""
+
+
+def _finalize(text: str, verify: bool = None) -> str:
+    """Prepend a can't-miss verdict header and vet every cited link.
+
+    The header is the first thing the admin reads: a green check only when the
+    AI claims a result AND a cited link actually loaded; a red cross when it
+    does not know; a warning when it claims a result it cannot back with a
+    working source. The model's own text is always kept underneath, unchanged.
+    """
+    if verify is None:
+        verify = config.AICHECK_VERIFY_URLS
+    urls = _HTTP_RE.findall(text)
+
+    statuses = [verify_url(u) for u in urls] if (verify and urls) else []
+    has_working = "ok" in statuses
+    has_broken = "broken" in statuses
+    unchecked = bool(urls) and not verify        # links present, not verified
+
+    knows = _claims_known(text)
+    outcome = _suggested_outcome(text)
+
+    if not knows or _UNKNOWN_RE.search(text):
+        header = ("❌ AI NEŽINO REZULTATO — dar neaišku, NESPRĘSK automatiškai. "
+                  "Palauk įvykio arba oficialaus šaltinio.")
+    elif has_broken or (knows and urls and verify and not has_working):
+        header = ("⚠️ GALIMA HALIUCINACIJA — AI teigia žinąs rezultatą, bet jo "
+                  "nurodyta nuoroda NEVEIKIA (4xx/5xx). Nepasitikėk — patikrink "
+                  "pats, ar tai teisingi metai ir tas pats įvykis/asmuo.")
+    elif knows and not urls:
+        header = ("⚠️ AI teigia žinąs rezultatą, BET nepateikė jokios nuorodos. "
+                  "Be šaltinio tai NĖRA patvirtinta — patikrink rankiniu būdu.")
+    elif has_working:
+        header = (f"✅ AI ŽINO REZULTATĄ ir nuoroda veikia — siūlo: {outcome}. "
+                  "Vis tiek įsitikink, kad metai ir įvykis sutampa.")
+    elif unchecked:
+        header = (f"ℹ️ AI siūlo: {outcome}. Nuoroda pateikta, bet nepatikrinta "
+                  "(URL tikrinimas išjungtas) — atidaryk ją pats.")
+    else:
+        header = f"ℹ️ AI siūlo: {outcome}."
+
+    return f"{header}\n{_BAR}\n{text}"
 
 
 def _run(question: str, options: str, criteria: str, proposed: str,
@@ -81,16 +128,20 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     verifying a link, it is finding out what happened, and the answer decides a
     payout. That is worth a few cents more.
     """
+    from . import resolvers
+
+    facts = resolvers.facts_for(question)
     prompt = llm.load_prompt(
         "aicheck", today=(today or date.today()).isoformat(),
         question=question, options=options, criteria=criteria,
         proposed=proposed, source=source,
+        facts=facts or "(nėra automatinių duomenų — ieškok pats)",
     )
     try:
         text = llm.research(prompt, system=SYSTEM,
                             max_uses=searches or config.AICHECK_MAX_SEARCHES,
                             max_tokens=1200, stage="aicheck").strip()
-        return _guard(text)
+        return _finalize(text)
     except Exception as exc:
         log.warning("AI check failed: %s", exc)
         return on_error or ("AI patikra nepavyko (techninė klaida) — patikrink "

@@ -66,42 +66,68 @@ def test_send_is_a_no_op_without_credentials(monkeypatch):
     assert notify.send("hello") is False   # never raises, never blocks resolution
 
 
-# ── the guard: never trust "known + confident" without a real URL ───────────
+# ── the verdict header + URL verification (kill hallucinations) ─────────────
 
-def test_guard_flags_a_confident_result_with_no_source():
+def test_no_source_confident_result_is_flagged(monkeypatch):
     from arbus import aicheck
 
-    # The real Dirkstys failure: claimed a confirmed win, source "nerasta".
+    # The Dirkstys failure: claimed a confirmed win, source "nerasta".
     dirkstys = (
-        "REZULTATAS ŽINOMAS: taip\n"
+        "REZULTATAS: žinomas\n"
         "KAS ĮVYKO: 2025-12-14 Deividas Dirkstys nugalėjo Maslabojevą.\n"
-        "ŠALTINIS: nerasta (reali nuoroda neleidžiama, bet pranešimas patvirtina)\n"
+        "ŠALTINIS: nerasta\n"
         "SIŪLOMA BAIGTIS: TAIP\n"
         "PASITIKĖJIMAS: aukštas")
-    flagged = aicheck._guard(dirkstys)
-    assert flagged.startswith("⚠️ DĖMESIO")
-    assert dirkstys in flagged                       # the model's text is kept
+    out = aicheck._finalize(dirkstys, verify=False)
+    assert out.startswith("⚠️") and "nepateikė jokios nuorodos" in out
+    assert dirkstys in out                           # model text kept
 
 
-def test_guard_leaves_a_properly_sourced_result_alone():
+def test_broken_url_is_caught_as_hallucination(monkeypatch):
+    """The Eurovision/Sabonis failure: a plausible URL that 404s."""
     from arbus import aicheck
 
-    good = (
-        "REZULTATAS ŽINOMAS: taip\n"
-        "KAS ĮVYKO: 2026-07-20 paskirtas premjeru.\n"
-        "ŠALTINIS: https://www.lrs.lt/sip/portal.show?p_r=1\n"
-        "SIŪLOMA BAIGTIS: TAIP\n"
+    monkeypatch.setattr(aicheck, "verify_url", lambda u, **k: "broken")
+    text = (
+        "REZULTATAS: žinomas\n"
+        "KAS ĮVYKO: 2026 m. Lietuva pateko į finalą.\n"
+        "ŠALTINIS: https://eurovision.tv/story/made-up-2026\n"
+        "SIŪLOMA BAIGTIS: Taip\n"
         "PASITIKĖJIMAS: aukštas")
-    assert aicheck._guard(good) == good              # a real URL clears it
+    out = aicheck._finalize(text, verify=True)
+    assert out.startswith("⚠️ GALIMA HALIUCINACIJA") and "NEVEIKIA" in out
 
 
-def test_guard_leaves_an_honest_unknown_alone():
+def test_working_url_earns_the_green_check(monkeypatch):
+    from arbus import aicheck
+
+    monkeypatch.setattr(aicheck, "verify_url", lambda u, **k: "ok")
+    text = (
+        "REZULTATAS: žinomas\n"
+        "KAS ĮVYKO: 2026-07-20 M. Sinkevičius paskirtas premjeru.\n"
+        "ŠALTINIS: https://www.lrs.lt/x\n"
+        "SIŪLOMA BAIGTIS: Taip\n"
+        "PASITIKĖJIMAS: aukštas")
+    out = aicheck._finalize(text, verify=True)
+    assert out.startswith("✅ AI ŽINO REZULTATĄ") and "Taip" in out
+
+
+def test_honest_unknown_gets_the_red_cross():
     from arbus import aicheck
 
     unknown = (
-        "REZULTATAS ŽINOMAS: ne\n"
+        "REZULTATAS: nežinomas\n"
         "KAS ĮVYKO: dar neįvyko — kova numatyta rugsėjį.\n"
         "ŠALTINIS: nerasta\n"
         "SIŪLOMA BAIGTIS: dar neaišku\n"
         "PASITIKĖJIMAS: žemas")
-    assert aicheck._guard(unknown) == unknown        # no claim, no warning
+    out = aicheck._finalize(unknown, verify=False)
+    assert out.startswith("❌ AI NEŽINO")
+
+
+def test_unknown_verification_does_not_condemn_a_link():
+    """In the sandbox every fetch fails; a real source must not be called fake
+    just because the network is down."""
+    from arbus import aicheck
+
+    assert aicheck.verify_url("https://definitely-not-resolvable.invalid") == "unknown"
