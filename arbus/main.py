@@ -475,8 +475,7 @@ def cmd_check(args: argparse.Namespace) -> int:
     # used to be printed while the app had stopped markets waiting.
     app_frozen: list[dict] = []
     if not args.request_ids and not args.no_app and config.ARBUS_API_URL:
-        app_frozen, app_error = aicheck.pending_app_markets(
-            conn, force=args.force, limit=args.limit)
+        app_frozen, app_error = aicheck.pending_app_markets(conn, limit=args.limit)
         if app_error:
             print(f"⚠️  Could not read the app: {app_error}")
 
@@ -633,8 +632,6 @@ def main() -> int:
                     help="print the summary without sending it to the team")
     ck.add_argument("--no-app", action="store_true",
                     help="skip markets frozen in the app, check local ones only")
-    ck.add_argument("--force", action="store_true",
-                    help="re-check app markets that were already checked")
     ck.set_defaults(func=cmd_check)
 
     wt = sub.add_parser("watch",

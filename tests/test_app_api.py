@@ -252,6 +252,30 @@ def test_overdue_open_markets_are_checked_too(monkeypatch, tmp_path):
     assert [app.market_id_of(r) for r in rows] == ["old"]
 
 
+def test_check_does_not_skip_a_market_it_checked_before(monkeypatch, tmp_path):
+    """`arbus check` is manual and deliberate — it must always show what is
+    frozen now, not go quiet because a previous run recorded the market. That
+    silence was the "arbus app shows it closed, but check says nothing" bug."""
+    from arbus import aicheck, store
+
+    _rows(monkeypatch, [
+        {"id": "m1", "title": "Ar OG VERSION koncertuos?", "status": "closed",
+         "closes_at": "2030-01-01"},
+    ])
+    conn = store.connect(str(tmp_path / "t.db"))
+
+    first, _ = aicheck.pending_app_markets(conn)
+    assert [app.market_id_of(r) for r in first] == ["m1"]
+
+    # record a check, exactly as review_app_market would
+    conn.execute("INSERT OR REPLACE INTO app_checks (app_market_id, checked_at) "
+                 "VALUES ('m1', '2026-07-27T00:00:00+00:00')")
+    conn.commit()
+
+    again, _ = aicheck.pending_app_markets(conn)
+    assert [app.market_id_of(r) for r in again] == ["m1"]   # still checked
+
+
 # ── the app's REAL schema (from `arbus app --schema`) ───────────────────────
 # markets: title, closes_at, rules, volume_credits, status, market_options, ...
 # option_price_history: market_id, option_id, probability, created_at

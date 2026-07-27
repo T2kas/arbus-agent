@@ -179,15 +179,22 @@ def review_freeze(conn: sqlite3.Connection, market_id: int,
 
 # ── markets frozen in the app, which this database has never seen ───────────
 
-def pending_app_markets(conn: sqlite3.Connection, force: bool = False,
-                        limit: int = 20) -> tuple[list[dict], str]:
+def pending_app_markets(conn: sqlite3.Connection, limit: int = 20
+                        ) -> tuple[list[dict], str]:
     """App markets that need a decision: frozen ones AND overdue ones.
 
+    `arbus check` is a deliberate, manual command, so it always returns
+    everything that is currently frozen or trading past its date — it does NOT
+    skip markets it checked before. Skipping caused exactly the confusing case
+    where a paused/closed market showed in `arbus app` but `check` said
+    "nothing frozen", because a prior run had recorded it. A fresh check is
+    cheap next to a wrong resolution, and re-reading the live outcome is often
+    the point.
+
     Overdue matters as much as frozen. "Ar M. Sinkevičius taps premjeru?" was
-    decided weeks ago, yet the market was still `active` with its date long
-    past — nobody had paused it, so nothing was looking at it, while the AMM
-    kept taking the other side of a known outcome. A market trading past its
-    own resolution date is exactly the case this check exists for.
+    decided weeks ago, yet the market was still `open` with its date long past —
+    nobody paused it, so nothing looked at it while the AMM kept taking the
+    other side of a known outcome.
     """
     from . import app as app_api
 
@@ -198,18 +205,13 @@ def pending_app_markets(conn: sqlite3.Connection, force: bool = False,
     frozen = [r for r in rows if app_api.is_frozen(r)]
     overdue = app_api.overdue_markets(rows) if config.APP_CHECK_OVERDUE else []
     seen_ids: set[str] = set()
-    rows = []
+    out = []
     for row in frozen + overdue:
         mid = app_api.market_id_of(row)
-        if mid not in seen_ids:
+        if mid not in seen_ids:            # de-dupe within THIS run only
             seen_ids.add(mid)
-            rows.append(row)
-
-    if not force:
-        seen = {r["app_market_id"] for r in conn.execute(
-            "SELECT app_market_id FROM app_checks")}
-        rows = [r for r in rows if app_api.market_id_of(r) not in seen]
-    return rows[:limit], ""
+            out.append(row)
+    return out[:limit], ""
 
 
 def review_app_market(conn: sqlite3.Connection, market: dict,
