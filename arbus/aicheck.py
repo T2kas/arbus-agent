@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import sqlite3
 from datetime import date, datetime, timezone
 
@@ -29,8 +30,45 @@ SYSTEM = (
     "the web in Lithuanian, find what actually happened, and report it with the "
     "official source and the date. You never decide the market — a human does — "
     "but 'cannot verify' is only acceptable after you searched and the answer "
-    "genuinely is not public. Be brief and concrete; this is read in a dashboard."
+    "genuinely is not public. Two things are worse than not knowing: claiming a "
+    "result you cannot paste a real URL for, and resolving on a same-surname "
+    "namesake or an event that has not happened yet. Never do either."
 )
+
+# The model is told (prompt rule 1) that a known result needs a real URL, but
+# it must not be trusted to obey — the Dirkstys case claimed a confirmed, high-
+# confidence win with source "nerasta". This is the deterministic backstop: if
+# the summary asserts a known result or high confidence yet contains no real
+# link, the admin sees a warning at the very top, before anything else.
+_HTTP_RE = re.compile(r"https?://\S+", re.I)
+_KNOWN_RE = re.compile(r"REZULTATAS\s+ŽINOMAS:\s*taip", re.I)
+_HIGH_RE = re.compile(r"PASITIK[ĖE]JIMAS:\s*aukšt", re.I)
+_OUTCOME_RE = re.compile(r"SIŪLOMA\s+BAIGTIS:\s*(.+)", re.I)
+
+_UNSUPPORTED_WARNING = (
+    "⚠️ DĖMESIO: AI nurodė žinomą rezultatą / aukštą pasitikėjimą, BET "
+    "nepateikė tikros nuorodos (URL). Be šaltinio tai NĖRA patvirtinta — "
+    "gali būti sumaišytas asmuo (pvz. tas pats pavardės inicialas) arba dar "
+    "neįvykęs įvykis. Patikrink rankiniu būdu prieš spręsdamas.\n"
+    + "─" * 20 + "\n"
+)
+
+
+def _guard(text: str) -> str:
+    """Flag a summary that claims a result it cannot cite.
+
+    The check is advisory, so this never changes the model's words — it only
+    prepends a warning the admin cannot miss when the confident-but-sourceless
+    pattern appears. A real https link anywhere in the summary clears it.
+    """
+    if _HTTP_RE.search(text):
+        return text
+    outcome = _OUTCOME_RE.search(text)
+    resolves_to_something = bool(
+        outcome and "neaišk" not in outcome.group(1).strip().lower())
+    if _KNOWN_RE.search(text) or _HIGH_RE.search(text) or resolves_to_something:
+        return _UNSUPPORTED_WARNING + text
+    return text
 
 
 def _run(question: str, options: str, criteria: str, proposed: str,
@@ -49,9 +87,10 @@ def _run(question: str, options: str, criteria: str, proposed: str,
         proposed=proposed, source=source,
     )
     try:
-        return llm.research(prompt, system=SYSTEM,
+        text = llm.research(prompt, system=SYSTEM,
                             max_uses=searches or config.AICHECK_MAX_SEARCHES,
                             max_tokens=1200, stage="aicheck").strip()
+        return _guard(text)
     except Exception as exc:
         log.warning("AI check failed: %s", exc)
         return on_error or ("AI patikra nepavyko (techninė klaida) — patikrink "

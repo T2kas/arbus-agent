@@ -64,3 +64,44 @@ def test_send_is_a_no_op_without_credentials(monkeypatch):
     monkeypatch.delenv("TELEGRAM_BOT_TOKEN", raising=False)
     monkeypatch.delenv("TELEGRAM_CHAT_ID", raising=False)
     assert notify.send("hello") is False   # never raises, never blocks resolution
+
+
+# ── the guard: never trust "known + confident" without a real URL ───────────
+
+def test_guard_flags_a_confident_result_with_no_source():
+    from arbus import aicheck
+
+    # The real Dirkstys failure: claimed a confirmed win, source "nerasta".
+    dirkstys = (
+        "REZULTATAS ŽINOMAS: taip\n"
+        "KAS ĮVYKO: 2025-12-14 Deividas Dirkstys nugalėjo Maslabojevą.\n"
+        "ŠALTINIS: nerasta (reali nuoroda neleidžiama, bet pranešimas patvirtina)\n"
+        "SIŪLOMA BAIGTIS: TAIP\n"
+        "PASITIKĖJIMAS: aukštas")
+    flagged = aicheck._guard(dirkstys)
+    assert flagged.startswith("⚠️ DĖMESIO")
+    assert dirkstys in flagged                       # the model's text is kept
+
+
+def test_guard_leaves_a_properly_sourced_result_alone():
+    from arbus import aicheck
+
+    good = (
+        "REZULTATAS ŽINOMAS: taip\n"
+        "KAS ĮVYKO: 2026-07-20 paskirtas premjeru.\n"
+        "ŠALTINIS: https://www.lrs.lt/sip/portal.show?p_r=1\n"
+        "SIŪLOMA BAIGTIS: TAIP\n"
+        "PASITIKĖJIMAS: aukštas")
+    assert aicheck._guard(good) == good              # a real URL clears it
+
+
+def test_guard_leaves_an_honest_unknown_alone():
+    from arbus import aicheck
+
+    unknown = (
+        "REZULTATAS ŽINOMAS: ne\n"
+        "KAS ĮVYKO: dar neįvyko — kova numatyta rugsėjį.\n"
+        "ŠALTINIS: nerasta\n"
+        "SIŪLOMA BAIGTIS: dar neaišku\n"
+        "PASITIKĖJIMAS: žemas")
+    assert aicheck._guard(unknown) == unknown        # no claim, no warning
