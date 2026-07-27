@@ -94,12 +94,23 @@ without it — an API outage must never cost a batch.
 
 ### What the bot reads from the app
 
-| Endpoint | Used for |
-|---|---|
-| `markets` (+ nested `market_options`) | dedupe, and **which markets the app has paused/stopped** |
-| `option_price_history` | the price swing half of the circuit breaker |
-| `rpc/admin_recent_trades` | the distinct-users half of the circuit breaker |
-| `rpc/admin_list_profiles` | reserved — reporter eligibility once bonds move to the app |
+| Endpoint | Key fields read | Used for |
+|---|---|---|
+| `markets` (+ nested `market_options`) | `title`, `closes_at`, `rules`, `status`, `volume_credits` | dedupe, frozen/overdue markets, importance |
+| `option_price_history` | `market_id`, `option_id`, `probability` | the price-swing half of the circuit breaker, calibration |
+| `rpc/admin_recent_trades` | `market_title`, `username`, `amount_credits` | the distinct-users half of the breaker, dead/important markets |
+| `rpc/admin_list_profiles` | `username`, `credits_balance` | reserved — reporter eligibility/balances once bonds move to the app |
+
+Field names are matched leniently (the app owns the schema), but two quirks are
+load-bearing: **price history keys markets by `market_id`, while the trade feed
+keys them only by `market_title`** — the breaker joins the two by title, so a
+market renamed after trades exist would lose that link. And the market's
+lifetime volume is `volume_credits` **on the market row**, not summed from
+trades.
+
+> **Note:** `closes_at` is the resolution deadline, and the team has not filled
+> it in for every market yet. Until it is set, overdue detection and any
+> deadline-based logic skip those markets — add the dates in the app.
 
 A market paused in the dashboard has no row in this repo's database, so
 `arbus check` used to report "nothing frozen" while the app had stopped

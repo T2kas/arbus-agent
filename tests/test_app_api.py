@@ -250,3 +250,64 @@ def test_overdue_open_markets_are_checked_too(monkeypatch, tmp_path):
     rows, error = aicheck.pending_app_markets(conn)
     assert error == ""
     assert [app.market_id_of(r) for r in rows] == ["old"]
+
+
+# ── the app's REAL schema (from `arbus app --schema`) ───────────────────────
+# markets: title, closes_at, rules, volume_credits, status, market_options, ...
+# option_price_history: market_id, option_id, probability, created_at
+# admin_recent_trades: amount_credits, username, market_title, side, created_at
+# admin_list_profiles: credits_balance, username, display_name, ...
+
+def test_real_market_fields_are_read():
+    market = {"id": "m1", "title": "Ar nedarbas viršys 7 %?", "closes_at": "2026-10-01",
+              "rules": "Pagal Statistiką.", "volume_credits": 18000, "status": "open",
+              "market_options": [{"id": "o1", "label": "Taip"}]}
+    assert app.question_of(market) == "Ar nedarbas viršys 7 %?"
+    assert app.volume_of(market) == 18000.0
+    assert app.is_open(market) and not app.is_frozen(market)
+
+
+def test_real_price_history_uses_probability_and_market_id():
+    history = [
+        {"market_id": "m1", "option_id": "o1", "probability": 0.30, "created_at": _at(1)},
+        {"market_id": "m1", "option_id": "o1", "probability": 0.62, "created_at": _at(5)},
+    ]
+    moves = app.price_moves(history, window_minutes=10, now=NOW)   # no option map needed
+    assert round(moves["m1"], 2) == 0.32
+    assert app.latest_prices(history) == {"o1": 0.30}              # newest first
+
+
+def test_real_trades_key_by_title_and_use_amount_credits():
+    trades = [
+        {"market_title": "Ar Žalgiris laimės?", "username": "a",
+         "amount_credits": 9000, "side": "buy", "created_at": _at(60)},
+        {"market_title": "Ar Žalgiris laimės?", "username": "b",
+         "amount_credits": 8000, "side": "sell", "created_at": _at(120)},
+        {"market_title": "Ar Žalgiris laimės?", "username": "a",
+         "amount_credits": 100, "side": "buy", "created_at": _at(180)},
+    ]
+    stats = app.trade_stats(trades, days=7, now=NOW)
+    key = "ar žalgiris laimės?"
+    assert stats[key] == {"trades": 3, "users": 2, "volume": 17100.0}
+
+    market = {"id": "m9", "title": "Ar Žalgiris laimės?"}
+    assert app.market_stat(stats, market)["users"] == 2   # matched by title, not id
+
+
+def test_breaker_joins_title_keyed_trades_to_id_keyed_prices(monkeypatch):
+    """The real feeds key differently — prices by market_id, trades by title.
+    The breaker must still line them up on the same market."""
+    market = {"id": "m1", "title": "Ar X laimės?"}
+    monkeypatch.setattr(app, "markets", lambda *a, **k: ([market], ""))
+    monkeypatch.setattr(app, "price_history", lambda *a, **k: (
+        [{"market_id": "m1", "option_id": "o1", "probability": 0.20, "created_at": _at(1)},
+         {"market_id": "m1", "option_id": "o1", "probability": 0.55, "created_at": _at(5)}], ""))
+    monkeypatch.setattr(app, "recent_trades", lambda *a, **k: (
+        [{"market_title": "Ar X laimės?", "username": u, "created_at": _at(2)}
+         for u in ("a", "b", "c")], ""))
+    rows, _ = app.breaker_candidates(window_minutes=10, now=NOW)
+    assert rows[0]["users"] == 3 and rows[0]["tripped"] is True
+
+
+def test_real_profile_balance_is_read():
+    assert app.balance_of({"username": "x", "credits_balance": 1250}) == 1250.0

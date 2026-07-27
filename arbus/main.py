@@ -323,9 +323,12 @@ def cmd_stats(args: argparse.Namespace) -> int:
     for row in market_rows:
         if not app_api.is_open(row):
             continue
-        stat = stats.get(app_api.market_id_of(row), {"trades": 0, "users": 0, "volume": 0.0})
-        if stat["volume"] >= config.IMPORTANT_VOLUME and stat["users"] >= config.IMPORTANT_USERS:
-            important.append((row, stat))
+        stat = app_api.market_stat(stats, row)
+        # Lifetime volume lives on the market itself; recent bet count comes
+        # from the trade window. Important = a lot of money AND many people.
+        lifetime_volume = app_api.volume_of(row)
+        if lifetime_volume >= config.IMPORTANT_VOLUME and stat["users"] >= config.IMPORTANT_USERS:
+            important.append((row, {**stat, "volume": lifetime_volume}))
         elif trades and stat["trades"] < config.DEAD_MARKET_MIN_TRADES:
             dead.append((row, stat))
 

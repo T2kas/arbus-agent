@@ -112,8 +112,26 @@ def _pick(row: dict, *names, default=None):
 
 
 def question_of(row: dict) -> str:
-    value = _pick(row, "question_lt", "question", "title", "name", "text", default="")
+    # The app's markets table calls it `title`; our own DB rows call it
+    # `question_lt`. Both, plus a few fallbacks, so one lookup fits either side.
+    value = _pick(row, "title", "question_lt", "question", "name", "text", default="")
     return value.strip() if isinstance(value, str) else ""
+
+
+def volume_of(row: dict) -> float:
+    """Credits traded on a market. The app tracks this on the market itself
+    (`volume_credits`), so it needs no summing over the trade feed."""
+    try:
+        return float(_pick(row, "volume_credits", "volume", "total_volume", default=0) or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def balance_of(profile: dict) -> float:
+    try:
+        return float(_pick(profile, "credits_balance", "balance", "credits", default=0) or 0)
+    except (TypeError, ValueError):
+        return 0.0
 
 
 def status_of(row: dict) -> str:
@@ -217,51 +235,72 @@ def option_to_market(market_rows: list[dict]) -> dict[str, str]:
     return mapping
 
 
-def price_moves(history: list[dict], option_map: dict[str, str],
+def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
                 window_minutes: int = config.CB_WINDOW_MINUTES,
                 now: datetime | None = None) -> dict[str, float]:
     """Largest price swing per market inside the window.
 
-    History is per option and newest-first. The swing that matters is the whole
-    range inside the window, not last-minus-first: a price pushed up and partly
-    released still says someone knew something.
+    The app's `option_price_history` carries `market_id` on every row, so that
+    is used directly; `option_map` is only a fallback for a feed that gives just
+    the option id. The swing that matters is the whole range inside the window,
+    not last-minus-first: a price pushed up and partly released still says
+    someone knew something.
     """
+    option_map = option_map or {}
     cutoff = (now or datetime.now(timezone.utc)) - timedelta(minutes=window_minutes)
-    per_option: dict[str, list[float]] = {}
+    per_market: dict[str, list[float]] = {}
     for row in history:
         ts = _timestamp_of(row)
         if ts is None or ts < cutoff:
             continue
-        price = _pick(row, "price", "new_price", "value", "probability")
+        price = _pick(row, "probability", "price", "new_price", "value")
         oid = str(_pick(row, "option_id", "id", default=""))
-        if price is None or not oid:
+        mid = str(_pick(row, "market_id", default="")) or option_map.get(oid, oid)
+        if price is None or not mid:
             continue
         try:
-            per_option.setdefault(oid, []).append(float(price))
+            per_market.setdefault(mid, []).append(float(price))
         except (TypeError, ValueError):
             continue
 
-    moves: dict[str, float] = {}
-    for oid, prices in per_option.items():
-        mid = option_map.get(oid, oid)
-        swing = max(prices) - min(prices)
-        moves[mid] = max(moves.get(mid, 0.0), swing)
-    return moves
+    return {mid: max(prices) - min(prices) for mid, prices in per_market.items()}
+
+
+def trade_market_key(trade: dict) -> str:
+    """How a trade names its market.
+
+    The app's `admin_recent_trades` feed gives only `market_title`, not an id,
+    so trades are keyed by the (lower-cased) title and matched to markets by
+    title. A feed that does carry `market_id` is used directly.
+    """
+    mid = str(_pick(trade, "market_id", default=""))
+    if mid:
+        return mid
+    title = str(_pick(trade, "market_title", "title", default="")).strip().lower()
+    return title
+
+
+def trade_user(trade: dict) -> str:
+    return str(_pick(trade, "username", "user_id", "profile_id", "user", default=""))
 
 
 def traders_per_market(trades: list[dict], window_minutes: int = config.CB_WINDOW_MINUTES,
                        now: datetime | None = None) -> dict[str, set[str]]:
-    """{market id: distinct user ids who traded inside the window}."""
+    """{market key: distinct users who traded inside the window}.
+
+    The key is a market id when the feed has one, otherwise the lower-cased
+    market title — see `trade_market_key`.
+    """
     cutoff = (now or datetime.now(timezone.utc)) - timedelta(minutes=window_minutes)
     out: dict[str, set[str]] = {}
     for trade in trades:
         ts = _timestamp_of(trade)
         if ts is not None and ts < cutoff:
             continue
-        mid = str(_pick(trade, "market_id", default=""))
-        user = str(_pick(trade, "user_id", "profile_id", "username", default=""))
-        if mid and user:
-            out.setdefault(mid, set()).add(user)
+        key = trade_market_key(trade)
+        user = trade_user(trade)
+        if key and user:
+            out.setdefault(key, set()).add(user)
     return out
 
 
@@ -269,28 +308,41 @@ def traders_per_market(trades: list[dict], window_minutes: int = config.CB_WINDO
 
 def trade_stats(trades: list[dict], days: int = config.DEAD_MARKET_DAYS,
                 now: datetime | None = None) -> dict[str, dict]:
-    """{market id: {trades, users, volume}} over the window."""
+    """{market key: {trades, users, volume}} over the window.
+
+    Keyed by `trade_market_key` (market id, else lower-cased title) because the
+    app's trade feed identifies markets by title. `volume` comes from
+    `amount_credits`; for the market's own lifetime volume use `volume_of`.
+    """
     cutoff = (now or datetime.now(timezone.utc)) - timedelta(days=days)
     out: dict[str, dict] = {}
     for trade in trades:
         ts = _timestamp_of(trade)
         if ts is not None and ts < cutoff:
             continue
-        mid = str(_pick(trade, "market_id", default=""))
-        if not mid:
+        key = trade_market_key(trade)
+        if not key:
             continue
-        stat = out.setdefault(mid, {"trades": 0, "users": set(), "volume": 0.0})
+        stat = out.setdefault(key, {"trades": 0, "users": set(), "volume": 0.0})
         stat["trades"] += 1
-        user = _pick(trade, "user_id", "profile_id", "username", default="")
+        user = trade_user(trade)
         if user:
-            stat["users"].add(str(user))
+            stat["users"].add(user)
         try:
-            stat["volume"] += abs(float(_pick(trade, "amount", "arbucks", "stake",
-                                              "total", "shares", default=0) or 0))
+            stat["volume"] += abs(float(_pick(trade, "amount_credits", "amount",
+                                              "arbucks", "stake", "total",
+                                              default=0) or 0))
         except (TypeError, ValueError):
             pass
-    return {mid: {"trades": s["trades"], "users": len(s["users"]),
-                  "volume": s["volume"]} for mid, s in out.items()}
+    return {key: {"trades": s["trades"], "users": len(s["users"]),
+                  "volume": s["volume"]} for key, s in out.items()}
+
+
+def market_stat(stats: dict[str, dict], market: dict) -> dict:
+    """Look a market up in trade_stats by whichever key the feed used."""
+    return (stats.get(market_id_of(market))
+            or stats.get(question_of(market).strip().lower())
+            or {"trades": 0, "users": 0, "volume": 0.0})
 
 
 def latest_prices(history: list[dict]) -> dict[str, float]:
@@ -298,7 +350,7 @@ def latest_prices(history: list[dict]) -> dict[str, float]:
     prices: dict[str, float] = {}
     for row in history:
         oid = str(_pick(row, "option_id", "id", default=""))
-        price = _pick(row, "price", "new_price", "value", "probability")
+        price = _pick(row, "probability", "price", "new_price", "value")
         if oid and oid not in prices and price is not None:
             try:
                 prices[oid] = float(price)
@@ -360,11 +412,19 @@ def breaker_candidates(window_minutes: int = config.CB_WINDOW_MINUTES,
     traders = traders_per_market(trades, window_minutes, now)
     by_id = {market_id_of(m): m for m in market_rows}
 
+    def users_for(market: dict, mid: str) -> int:
+        # Price history keys by market id; the trade feed keys by title. Try
+        # both so the two halves of the breaker actually meet.
+        by_market_id = traders.get(mid, set())
+        by_title = traders.get(question_of(market).strip().lower(), set())
+        return len(by_market_id | by_title)
+
     out = []
     for mid, move in moves.items():
-        users = len(traders.get(mid, ()))
+        market = by_id.get(mid, {"id": mid})
+        users = users_for(market, mid)
         out.append({
-            "market": by_id.get(mid, {"id": mid}),
+            "market": market,
             "move": move,
             "users": users,
             "tripped": resolution.circuit_breaker_tripped(move, users),
