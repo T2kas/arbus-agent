@@ -97,10 +97,37 @@ _STATION_BY_CITY = {
     "šiaul": "siauliu-ams", "siaul": "siauliu-ams", "panevėž": "panevezio-ams",
     "paneve": "panevezio-ams",
 }
-_DATE_RE = re.compile(r"(20\d{2})[-.\s]?(\d{1,2})[-.\s]?(\d{1,2})")
+# Lithuanian month names in the genitive, as they appear in questions
+# ("liepos 25"). Index 1..12.
+_LT_MONTHS = {
+    "sausio": 1, "vasario": 2, "kovo": 3, "balandžio": 4, "balandzio": 4,
+    "gegužės": 5, "geguzes": 5, "birželio": 6, "birzelio": 6, "liepos": 7,
+    "rugpjūčio": 8, "rugpjucio": 8, "rugsėjo": 9, "rugsejo": 9, "spalio": 10,
+    "lapkričio": 11, "lapkricio": 11, "gruodžio": 12, "gruodzio": 12,
+}
+_ISO_RE = re.compile(r"(20\d{2})[-.](\d{1,2})[-.](\d{1,2})")
+_LT_DATE_RE = re.compile(
+    r"(" + "|".join(_LT_MONTHS) + r")\s+(\d{1,2})\D{0,8}(20\d{2})", re.I)
 
 
-def _weather_target(question: str) -> tuple[str, str] | None:
+def _parse_date(text: str, fallback_iso: str = "") -> str:
+    """Find a date in the question, ISO ('2026-07-25') or Lithuanian
+    ('liepos 25, 2026'). Falls back to the market's closes_at if given."""
+    m = _ISO_RE.search(text)
+    if m:
+        y, mo, d = m.groups()
+    else:
+        m = _LT_DATE_RE.search(text)
+        if not m:
+            return fallback_iso[:10]
+        mo, d, y = _LT_MONTHS[m.group(1).lower()], m.group(2), m.group(3)
+    try:
+        return date(int(y), int(mo), int(d)).isoformat()
+    except (ValueError, TypeError):
+        return fallback_iso[:10]
+
+
+def _weather_target(question: str, closes_at: str = "") -> tuple[str, str] | None:
     """(station code, ISO date) if this is a Lithuanian temperature market."""
     q = question.lower()
     if "temperat" not in q and "°c" not in q and "karšt" not in q and "šalt" not in q:
@@ -108,14 +135,8 @@ def _weather_target(question: str) -> tuple[str, str] | None:
     station = next((code for key, code in _STATION_BY_CITY.items() if key in q), None)
     if station is None:
         return None
-    m = _DATE_RE.search(question)
-    if not m:
-        return None
-    try:
-        iso = date(int(m.group(1)), int(m.group(2)), int(m.group(3))).isoformat()
-    except ValueError:
-        return None
-    return station, iso
+    iso = _parse_date(question, closes_at)
+    return (station, iso) if iso else None
 
 
 def parse_weather(payload: dict, iso_date: str) -> str:
@@ -131,12 +152,12 @@ def parse_weather(payload: dict, iso_date: str) -> str:
             f"(suapvalinta {round(hi)} °C). Šaltinis: LHMT / api.meteo.lt.").strip()
 
 
-def weather_fact(question: str) -> str:
-    target = _weather_target(question)
+def weather_fact(question: str, closes_at: str = "") -> str:
+    target = _weather_target(question, closes_at)
     if not target:
         return ""
     station, iso = target
-    if iso > date.today().isoformat():        # the day is not over yet
+    if not iso or iso > date.today().isoformat():   # no date, or day not over yet
         return ""
     try:
         url = f"https://api.meteo.lt/v1/stations/{station}/observations/{iso}"
@@ -146,55 +167,93 @@ def weather_fact(question: str) -> str:
         return ""
 
 
-# ── Fuel: LHMT/LEA publish no keyless JSON feed we can rely on yet ───────────
-# Fuel-price markets (LEA average diesel/petrol) are common and the model cannot
-# read the LEA portal, so it hallucinates "no data". There is no stable open
-# endpoint today; FUEL_PRICE_URL can point at one when the team finds/builds it
-# (e.g. an internal scrape), and the parser is ready for a {"diesel":.., "petrol":..}
-# shape. Until then this returns "" and the check falls back to searching.
+# ── Fuel: official source is LEA / ena.lt (daily averages), no clean JSON API ─
+# The LEA portal (ena.lt/degalu-kainos-degalinese) is the authoritative source
+# the markets cite and updates every working day, but it bot-blocks simple
+# fetchers and exposes no documented JSON. Two paths, in order:
+#   1. FUEL_PRICE_URL — a JSON feed the team points us at (an internal scrape,
+#      or an aggregator like degalu-kaina.lt if it exposes one). parse_fuel
+#      reads {"diesel":.., "petrol":..} or the Lithuanian keys.
+#   2. Best-effort scrape of the LEA page with a browser User-Agent, pulling the
+#      average diesel/petrol price out of the HTML with a regex.
+# Either way the fact cites LEA, and a failure just falls back to searching.
 
 def parse_fuel(payload: dict) -> str:
     parts = []
     for key, label in (("diesel", "dyzelinas"), ("petrol", "benzinas"),
-                       ("dyzelinas", "dyzelinas"), ("benzinas", "benzinas")):
+                       ("dyzelinas", "dyzelinas"), ("benzinas", "benzinas"),
+                       ("gasoline", "benzinas")):
         val = payload.get(key)
-        if isinstance(val, (int, float)):
+        if isinstance(val, (int, float)) and label not in " ".join(parts):
             parts.append(f"{label} {val:.3f} €/l")
     if not parts:
         return ""
     return ("Vidutinės degalų kainos (LEA): " + ", ".join(parts)
-            + ". Šaltinis: Lietuvos energetikos agentūra.")
+            + ". Šaltinis: Lietuvos energetikos agentūra (ena.lt).")
+
+
+# "Dyzelinas 1,832 €/l", "95 benzinas – 1,723 EUR" etc. on the LEA page.
+_FUEL_HTML_RE = re.compile(
+    r"(dyzelin|benzin|95|98|dujo|lpg)[^0-9]{0,40}?(\d[.,]\d{2,3})\s*(?:€|eur)",
+    re.I)
+
+
+def parse_fuel_html(html: str) -> str:
+    found: dict[str, float] = {}
+    for kind, num in _FUEL_HTML_RE.findall(html):
+        k = kind.lower()
+        label = ("dyzelinas" if "dyzel" in k
+                 else "dujos/LPG" if ("duj" in k or "lpg" in k)
+                 else "benzinas")
+        val = float(num.replace(",", "."))
+        if 0.3 < val < 5 and label not in found:      # sane €/l range
+            found[label] = val
+    if not found:
+        return ""
+    parts = ", ".join(f"{lbl} {val:.3f} €/l" for lbl, val in found.items())
+    return (f"Vidutinės degalų kainos (LEA): {parts}. "
+            "Šaltinis: Lietuvos energetikos agentūra (ena.lt).")
 
 
 def fuel_fact(question: str) -> str:
     q = question.lower()
-    if "degal" not in q and "dyzel" not in q and "benzin" not in q:
+    if "degal" not in q and "dyzel" not in q and "benzin" not in q and "kuro" not in q:
         return ""
-    if not config.FUEL_PRICE_URL:
-        return ""
+    if config.FUEL_PRICE_URL:
+        try:
+            return parse_fuel(_get_json(config.FUEL_PRICE_URL))
+        except Exception as exc:
+            log.debug("fuel JSON feed failed: %s", exc)
     try:
-        return parse_fuel(_get_json(config.FUEL_PRICE_URL))
+        resp = requests.get(config.FUEL_LEA_URL,
+                            headers={"User-Agent": UA}, timeout=20)
+        resp.raise_for_status()
+        return parse_fuel_html(resp.text)
     except Exception as exc:
-        log.debug("fuel fact failed: %s", exc)
+        log.debug("fuel LEA scrape failed: %s", exc)
         return ""
 
 
 # ── Public API ───────────────────────────────────────────────────────────────
 
-_RESOLVERS = (stock_fact, weather_fact, fuel_fact)
-
-
-def facts_for(question: str) -> str:
+def facts_for(question: str, closes_at: str = "") -> str:
     """Authoritative facts relevant to this market, newline-joined ('' if none).
 
     Never raises: a data feed being down must not stop a resolution check.
+    `closes_at` (the market's deadline) helps date-based feeds when the question
+    itself is vague.
     """
+    resolvers = (
+        lambda q: stock_fact(q),
+        lambda q: weather_fact(q, closes_at),
+        lambda q: fuel_fact(q),
+    )
     facts = []
-    for resolver in _RESOLVERS:
+    for resolver in resolvers:
         try:
             fact = resolver(question)
         except Exception as exc:               # defensive: this runs live
-            log.debug("resolver %s failed: %s", resolver.__name__, exc)
+            log.debug("resolver failed: %s", exc)
             fact = ""
         if fact:
             facts.append(fact)

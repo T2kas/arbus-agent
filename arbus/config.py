@@ -45,10 +45,14 @@ ANTHROPIC_THINKING = os.environ.get("ANTHROPIC_THINKING", "adaptive")
 SEARCH_MAX_USES_DRAFT = 6
 SEARCH_MAX_USES_VERIFY = 4
 
-# Anthropic's web-search tool accepts `user_location` for only a few countries,
-# and "LT" is rejected with a 400 that aborts the batch. Empty = search without
-# a location hint (the prompts already tell the model to search in Lithuanian).
-ANTHROPIC_SEARCH_COUNTRY = ""
+# Localize Anthropic web search to Lithuania. The `country` field rejects "LT"
+# with a 400 that aborts the call, but `city`/`region`/`timezone` are free-form
+# and Lithuania can use them — and localizing is what makes the tool return
+# LRT/Delfi pages instead of US results (the reason resolution missed findable
+# M.A.M.A./Eurovision outcomes). Leave COUNTRY empty; a bad code kills the call.
+ANTHROPIC_SEARCH_CITY = os.environ.get("ANTHROPIC_SEARCH_CITY", "Vilnius")
+ANTHROPIC_SEARCH_REGION = os.environ.get("ANTHROPIC_SEARCH_REGION", "Vilnius")
+ANTHROPIC_SEARCH_COUNTRY = os.environ.get("ANTHROPIC_SEARCH_COUNTRY", "")
 ANTHROPIC_SEARCH_TIMEZONE = "Europe/Vilnius"
 
 # ── RSS sources ─────────────────────────────────────────────────────────────
@@ -494,6 +498,10 @@ AICHECK_VERIFY_URLS = True
 # public endpoint today; point this at one when the team has it and resolvers.py
 # will inject the real diesel/petrol price into fuel-market checks.
 FUEL_PRICE_URL = os.environ.get("FUEL_PRICE_URL", "")
+# The official LEA daily fuel-price page. No JSON API, so resolvers.py scrapes
+# the average diesel/petrol price out of the HTML as a fallback.
+FUEL_LEA_URL = os.environ.get(
+    "FUEL_LEA_URL", "https://www.ena.lt/degalu-kainos-degalinese/")
 
 # ── No-event fallback: why VOID is not a normal outcome ─────────────────────
 # Polymarket and Kalshi settle "the event did not happen" from the market's own

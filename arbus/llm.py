@@ -285,23 +285,30 @@ def _anthropic_client():
 def _web_search_tool(max_uses: int, with_location: bool = True) -> dict:
     """Anthropic's server-side web search.
 
-    `user_location` only accepts a short list of country codes and Lithuania is
-    not among them — passing it returns 400 "Country code LT is not supported"
-    and kills the whole batch. Localization is left off by default (the prompts
-    already instruct searching in Lithuanian) and can be re-enabled through
-    config for a supported country.
+    Localizing the search to Lithuania matters a lot for resolution: without it
+    the tool returns US-centric results and misses LRT/Delfi pages that Google
+    surfaces instantly (M.A.M.A., Eurovision LT results). `user_location` fields
+    are all optional, and only the `country` field rejects unsupported codes
+    ("Country code LT is not supported", which kills the batch) — so we localize
+    with CITY and timezone, which Lithuania is free to use, and only add country
+    when config names a supported one.
     """
     tool: dict = {
         "type": "web_search_20260209",
         "name": "web_search",
         "max_uses": max_uses,
     }
+    loc: dict = {"type": "approximate"}
+    if with_location and config.ANTHROPIC_SEARCH_CITY:
+        loc["city"] = config.ANTHROPIC_SEARCH_CITY
+    if with_location and config.ANTHROPIC_SEARCH_REGION:
+        loc["region"] = config.ANTHROPIC_SEARCH_REGION
     if with_location and config.ANTHROPIC_SEARCH_COUNTRY:
-        tool["user_location"] = {
-            "type": "approximate",
-            "country": config.ANTHROPIC_SEARCH_COUNTRY,
-            "timezone": config.ANTHROPIC_SEARCH_TIMEZONE,
-        }
+        loc["country"] = config.ANTHROPIC_SEARCH_COUNTRY
+    if with_location and config.ANTHROPIC_SEARCH_TIMEZONE:
+        loc["timezone"] = config.ANTHROPIC_SEARCH_TIMEZONE
+    if len(loc) > 1:                       # more than just the type
+        tool["user_location"] = loc
     return tool
 
 

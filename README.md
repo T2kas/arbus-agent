@@ -149,8 +149,21 @@ fact, so the model reads a number instead of guessing one:
 | the day's temperature in a Lithuanian city | `api.meteo.lt` (official LHMT observations) | yes |
 | average fuel prices (LEA) | `FUEL_PRICE_URL` if set — no stable public endpoint yet | — |
 
-Add a feed by writing a `*_fact(question)` resolver and appending it to
-`_RESOLVERS`; each is fail-safe and returns "" when it does not apply.
+Add a feed by writing a `*_fact(question)` resolver and appending it to the
+list in `facts_for`; each is fail-safe and returns "" when it does not apply.
+
+**Search quality is the other half.** For events with no numeric feed
+(M.A.M.A., Eurovision, appointments), the check depends on web search actually
+finding the LRT/Delfi page. Two levers, both applied:
+
+* **Localization.** Anthropic web search is pointed at Vilnius
+  (`ANTHROPIC_SEARCH_CITY`) so it returns Lithuanian results instead of US ones
+  — the country field still can't be "LT", but city/timezone can, and that is
+  what was making it miss findable LT outcomes.
+* **A search-native backend.** If you have a Perplexity key, route just the
+  resolution check to it — `LLM_PROVIDER_AICHECK=perplexity` — it is markedly
+  better at Lithuanian factual lookup and cites real URLs, which the verifier
+  then confirms.
 
 ```sh
 python -m arbus watch                  # circuit breaker on live prices + trades

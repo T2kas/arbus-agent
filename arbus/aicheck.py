@@ -21,9 +21,13 @@ import re
 import sqlite3
 from datetime import date, datetime, timezone
 
+import requests
+
 from . import config, llm, notify
 
 log = logging.getLogger(__name__)
+
+UA = "Mozilla/5.0 (compatible; ArbusMarketAgent/1.0; +https://arbus.lt)"
 
 SYSTEM = (
     "You investigate outcomes for a Lithuanian prediction-market admin. Search "
@@ -48,27 +52,29 @@ _OUTCOME_RE = re.compile(r"SIŪLOMA\s+BAIGTIS:\s*(.+)", re.I)
 _BAR = "─" * 22
 
 
+# Only "page does not exist" reliably means a fabricated link. Real sources
+# routinely answer 403/401/429/503 to a bot (nasdaqbaltic.com does — it blocked
+# a correct Ignitis answer and got it flagged as a hallucination). Those are
+# "the site refused us", not "the URL is fake", so they must NOT condemn a link.
+_URL_GONE = {404, 410}
+
+
 def verify_url(url: str, timeout: int = 12) -> str:
     """'ok' | 'broken' | 'unknown'.
 
-    'broken' means the server answered 4xx/5xx — a fabricated link. 'unknown'
-    means the request itself failed (network/timeout), which must NOT be treated
-    as proof the link is fake: in the sandbox every outbound call fails, and we
-    would flag every real source. Only a definite bad status condemns a URL.
+    'broken' means the server said the page does not exist (404/410) — a
+    fabricated link. 'unknown' means the request failed or the site refused us
+    (403/429/timeout, or the sandbox blocking every call): those never prove a
+    link is fake, so a real source is never wrongly flagged.
     """
     try:
-        resp = requests.get(url, headers={"User-Agent": "ArbusResolver/1.0"},
+        resp = requests.get(url, headers={"User-Agent": UA},
                             timeout=timeout, allow_redirects=True)
     except Exception:
         return "unknown"
-    return "broken" if resp.status_code >= 400 else "ok"
-
-
-def _claims_known(text: str) -> bool:
-    if _KNOWN_RE.search(text):
-        return True
-    outcome = _OUTCOME_RE.search(text)
-    return bool(outcome and "neaišk" not in outcome.group(1).strip().lower())
+    if resp.status_code in _URL_GONE:
+        return "broken"
+    return "ok" if resp.status_code < 400 else "unknown"
 
 
 def _suggested_outcome(text: str) -> str:
@@ -91,36 +97,37 @@ def _finalize(text: str, verify: bool = None) -> str:
     statuses = [verify_url(u) for u in urls] if (verify and urls) else []
     has_working = "ok" in statuses
     has_broken = "broken" in statuses
-    unchecked = bool(urls) and not verify        # links present, not verified
 
-    knows = _claims_known(text)
     outcome = _suggested_outcome(text)
+    # The actionable question is "is there a concrete outcome to act on", so the
+    # header keys off SIŪLOMA BAIGTIS, not REZULTATAS. This resolves the case
+    # where the model wrote "REZULTATAS: žinomas" but "SIŪLOMA BAIGTIS: dar
+    # neaišku" (Ignitis, a future threshold): no actionable outcome → ❌.
+    has_outcome = bool(outcome) and "neaišk" not in outcome.lower()
 
-    if not knows or _UNKNOWN_RE.search(text):
-        header = ("❌ AI NEŽINO REZULTATO — dar neaišku, NESPRĘSK automatiškai. "
+    if not has_outcome:
+        header = ("❌ AI NEŽINO / DAR NEAIŠKU — NESPRĘSK automatiškai. "
                   "Palauk įvykio arba oficialaus šaltinio.")
-    elif has_broken or (knows and urls and verify and not has_working):
-        header = ("⚠️ GALIMA HALIUCINACIJA — AI teigia žinąs rezultatą, bet jo "
-                  "nurodyta nuoroda NEVEIKIA (4xx/5xx). Nepasitikėk — patikrink "
-                  "pats, ar tai teisingi metai ir tas pats įvykis/asmuo.")
-    elif knows and not urls:
-        header = ("⚠️ AI teigia žinąs rezultatą, BET nepateikė jokios nuorodos. "
-                  "Be šaltinio tai NĖRA patvirtinta — patikrink rankiniu būdu.")
+    elif has_broken:
+        header = ("⚠️ GALIMA HALIUCINACIJA — AI siūlo baigtį, bet jo nurodyta "
+                  "nuoroda NEEGZISTUOJA (404). Nepasitikėk — patikrink pats, ar "
+                  "tai teisingi metai ir tas pats įvykis/asmuo.")
+    elif not urls:
+        header = (f"⚠️ AI siūlo: {outcome} — BET be jokios nuorodos. Be šaltinio "
+                  "tai NĖRA patvirtinta, patikrink rankiniu būdu.")
     elif has_working:
-        header = (f"✅ AI ŽINO REZULTATĄ ir nuoroda veikia — siūlo: {outcome}. "
-                  "Vis tiek įsitikink, kad metai ir įvykis sutampa.")
-    elif unchecked:
-        header = (f"ℹ️ AI siūlo: {outcome}. Nuoroda pateikta, bet nepatikrinta "
-                  "(URL tikrinimas išjungtas) — atidaryk ją pats.")
-    else:
-        header = f"ℹ️ AI siūlo: {outcome}."
+        header = (f"✅ AI SIŪLO: {outcome} — ir nuoroda veikia. Vis tiek "
+                  "įsitikink, kad metai ir įvykis sutampa.")
+    else:  # links present but unverified (verify off) or site refused us
+        header = (f"ℹ️ AI siūlo: {outcome}. Nuoroda pateikta, bet nepatvirtinta "
+                  "— atidaryk ją pats ir patikrink metus.")
 
     return f"{header}\n{_BAR}\n{text}"
 
 
 def _run(question: str, options: str, criteria: str, proposed: str,
          source: str, today: date | None = None, on_error: str = "",
-         searches: int | None = None) -> str:
+         searches: int | None = None, closes_at: str = "") -> str:
     """One advisory check. Never raises — a failed check must not block the
     admin, and it must never read as evidence either way.
 
@@ -130,7 +137,7 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     """
     from . import resolvers
 
-    facts = resolvers.facts_for(question)
+    facts = resolvers.facts_for(question, closes_at)
     prompt = llm.load_prompt(
         "aicheck", today=(today or date.today()).isoformat(),
         question=question, options=options, criteria=criteria,
@@ -165,7 +172,7 @@ def check_request(conn: sqlite3.Connection, request_id: int,
                 criteria=market["resolution_hint_lt"],
                 proposed=req["proposed_option"],
                 source=req["source_url"],
-                today=today,
+                today=today, closes_at=market["resolve_by"],
                 # The admin still has to decide; a failed check must not block
                 # the dashboard or imply anything about the claim.
                 searches=config.AICHECK_MAX_SEARCHES_OPEN,
@@ -185,7 +192,8 @@ def check_freeze(conn: sqlite3.Connection, market_id: int,
                 criteria=market["resolution_hint_lt"],
                 proposed="(nenurodyta — rinka užšaldyta dėl įtartino srauto)",
                 source="(nėra — surask pats, kas įvyko)",
-                today=today, searches=config.AICHECK_MAX_SEARCHES_OPEN)
+                today=today, closes_at=market["resolve_by"],
+                searches=config.AICHECK_MAX_SEARCHES_OPEN)
 
 
 def check_app_market(market: dict, today: date | None = None) -> str:
@@ -203,7 +211,8 @@ def check_app_market(market: dict, today: date | None = None) -> str:
                 criteria=view["rules"],
                 proposed="(nenurodyta — rinka sustabdyta appe)",
                 source="(nėra — adminas negali prisegti šaltinio, todėl ieškok pats)",
-                today=today, searches=config.AICHECK_MAX_SEARCHES_OPEN)
+                today=today, closes_at=view["resolve_by"],
+                searches=config.AICHECK_MAX_SEARCHES_OPEN)
 
 
 # ── What the admin actually runs: check, store, and ping Telegram ───────────

@@ -79,7 +79,7 @@ def test_no_source_confident_result_is_flagged(monkeypatch):
         "SIŪLOMA BAIGTIS: TAIP\n"
         "PASITIKĖJIMAS: aukštas")
     out = aicheck._finalize(dirkstys, verify=False)
-    assert out.startswith("⚠️") and "nepateikė jokios nuorodos" in out
+    assert out.startswith("⚠️") and "be jokios nuorodos" in out
     assert dirkstys in out                           # model text kept
 
 
@@ -95,7 +95,39 @@ def test_broken_url_is_caught_as_hallucination(monkeypatch):
         "SIŪLOMA BAIGTIS: Taip\n"
         "PASITIKĖJIMAS: aukštas")
     out = aicheck._finalize(text, verify=True)
-    assert out.startswith("⚠️ GALIMA HALIUCINACIJA") and "NEVEIKIA" in out
+    assert out.startswith("⚠️ GALIMA HALIUCINACIJA") and "NEEGZISTUOJA" in out
+
+
+def test_dar_neaisku_is_never_a_hallucination_even_with_a_bad_url(monkeypatch):
+    """The Ignitis case: a future threshold, correctly 'dar neaišku'. Even
+    though nasdaqbaltic.com refused the fetch, this is not a hallucination —
+    there is simply no actionable outcome yet, so it is ❌, not ⚠️."""
+    from arbus import aicheck
+
+    monkeypatch.setattr(aicheck, "verify_url", lambda u, **k: "broken")
+    text = (
+        "REZULTATAS: žinomas\n"
+        "KAS ĮVYKO: iki šiol maksimumas 22,70 €, žemiau 23 €.\n"
+        "ŠALTINIS: https://nasdaqbaltic.com/statistics/lt/shares/vilnius/IGN1L\n"
+        "SIŪLOMA BAIGTIS: dar neaišku\n"
+        "PASITIKĖJIMAS: vidutinis")
+    out = aicheck._finalize(text, verify=True)
+    assert out.startswith("❌ AI NEŽINO")
+
+
+def test_site_that_refuses_the_bot_is_not_called_fake(monkeypatch):
+    """403/429/timeout is 'the site blocked us', not 'the link is fabricated'."""
+    from arbus import aicheck
+
+    class R:
+        status_code = 403
+    monkeypatch.setattr(aicheck.requests, "get", lambda *a, **k: R())
+    assert aicheck.verify_url("https://nasdaqbaltic.com/x") == "unknown"
+
+    class G:
+        status_code = 404
+    monkeypatch.setattr(aicheck.requests, "get", lambda *a, **k: G())
+    assert aicheck.verify_url("https://eurovision.tv/made-up") == "broken"
 
 
 def test_working_url_earns_the_green_check(monkeypatch):
@@ -109,7 +141,7 @@ def test_working_url_earns_the_green_check(monkeypatch):
         "SIŪLOMA BAIGTIS: Taip\n"
         "PASITIKĖJIMAS: aukštas")
     out = aicheck._finalize(text, verify=True)
-    assert out.startswith("✅ AI ŽINO REZULTATĄ") and "Taip" in out
+    assert out.startswith("✅ AI SIŪLO: Taip") and "nuoroda veikia" in out
 
 
 def test_honest_unknown_gets_the_red_cross():

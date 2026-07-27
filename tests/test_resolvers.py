@@ -38,12 +38,11 @@ def test_weather_parser_takes_the_daily_high():
 
 
 def test_weather_target_needs_city_date_and_a_temperature_topic():
-    assert resolvers._weather_target(
-        "Kokia bus aukščiausia temperatūra Vilniuje liepos 25, 2026?") is None
-    # explicit ISO-style date is what the parser keys on
     hit = resolvers._weather_target("Aukščiausia temperatūra Vilniuje 2026-07-25?")
     assert hit == ("vilniaus-ams", "2026-07-25")
     assert resolvers._weather_target("Ar Žalgiris laimės 2026-07-30?") is None  # no temp
+    # temperature topic + city but no date anywhere → cannot resolve
+    assert resolvers._weather_target("Ar Vilniuje bus karšta?") is None
 
 
 def test_weather_parser_with_no_readings_is_empty():
@@ -61,3 +60,40 @@ def test_fuel_parser_formats_available_prices():
 
 def test_facts_for_never_raises_and_returns_empty_when_nothing_matches():
     assert resolvers.facts_for("Ar Seimas priims biudžetą iki gruodžio?") == ""
+
+
+# ── Lithuanian date parsing (the weather bug) ───────────────────────────────
+
+def test_weather_target_parses_lithuanian_month_dates():
+    # "liepos 25, 2026" is how the market actually phrased it — not ISO.
+    hit = resolvers._weather_target(
+        "Kokia bus aukščiausia temperatūra Vilniuje liepos 25, 2026?")
+    assert hit == ("vilniaus-ams", "2026-07-25")
+
+
+def test_weather_target_falls_back_to_closes_at():
+    hit = resolvers._weather_target(
+        "Kokia bus aukščiausia temperatūra Kaune?", closes_at="2026-08-01T21:00:00Z")
+    assert hit == ("kauno-ams", "2026-08-01")
+
+
+def test_parse_date_handles_both_formats():
+    assert resolvers._parse_date("2026-07-25") == "2026-07-25"
+    assert resolvers._parse_date("rugpjūčio 3, 2026") == "2026-08-03"
+    assert resolvers._parse_date("no date", "2026-09-09T00:00:00Z") == "2026-09-09"
+
+
+# ── fuel: LEA HTML scrape (no clean API) ────────────────────────────────────
+
+def test_fuel_html_parser_pulls_averages_out_of_the_page():
+    html = ("<td>Dyzelinas</td><td>1,832 €</td>"
+            "<td>95 benzinas</td><td>1,723 EUR</td>"
+            "<td>Dujos (LPG)</td><td>0,772 €</td>")
+    fact = resolvers.parse_fuel_html(html)
+    assert "dyzelinas 1.832 €/l" in fact
+    assert "benzinas 1.723 €/l" in fact
+    assert "LEA" in fact
+
+
+def test_fuel_html_parser_ignores_nonsense_numbers():
+    assert resolvers.parse_fuel_html("<p>Dyzelinas pabrango 15 %</p>") == ""

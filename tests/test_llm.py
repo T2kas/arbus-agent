@@ -44,20 +44,25 @@ def test_provider_without_any_key_explains_all_options():
         llm.provider()
 
 
-def test_web_search_tool_omits_unsupported_location(monkeypatch):
-    # "LT" is not an accepted country code; default config must not send one.
+def test_web_search_tool_localizes_by_city_never_by_bad_country(monkeypatch):
+    # "LT" is not an accepted country code, but city/timezone are free-form and
+    # localize the search to Lithuania — the fix for missed LRT/Delfi results.
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_CITY", "Vilnius")
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_REGION", "Vilnius")
     monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "")
-    tool = llm._web_search_tool(10)
-    assert "user_location" not in tool
-    assert tool["name"] == "web_search"
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_TIMEZONE", "Europe/Vilnius")
+    loc = llm._web_search_tool(10)["user_location"]
+    assert loc["city"] == "Vilnius" and "country" not in loc
+    assert loc["timezone"] == "Europe/Vilnius"
 
 
-def test_web_search_tool_includes_configured_location(monkeypatch):
+def test_web_search_tool_adds_country_only_when_supported(monkeypatch):
     monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "US")
     assert llm._web_search_tool(10)["user_location"]["country"] == "US"
 
 
 def test_web_search_tool_location_suppressed_on_retry(monkeypatch):
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_CITY", "Vilnius")
     monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "US")
     assert "user_location" not in llm._web_search_tool(10, with_location=False)
 
