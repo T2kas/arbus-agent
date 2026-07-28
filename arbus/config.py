@@ -441,13 +441,16 @@ PERPLEXITY_MODEL = os.environ.get("PERPLEXITY_MODEL", "sonar-pro")  # draft + ve
 # sonar-pro for structuring too: the small "sonar" model corrupts Lithuanian
 # diacritics when copying text (tested 2026-07-13).
 PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
-# Resolution checks need REASONING, not just search — the "wrong year / wrong
-# namesake" errors are reasoning failures, and plain sonar/sonar-pro just
-# summarise. A reasoning model is worth the extra cents on the one call that
-# decides a payout. Override to try others:
-#   sonar-reasoning        (cheaper reasoning)
-#   sonar-reasoning-pro    (default — sharper)
-#   sonar-deep-research    (heaviest, slow/pricey; for hard lookups only)
+# NOTE (tested 2026-07-28): for RESOLUTION, Anthropic web search beats
+# Perplexity decisively — side by side, Opus found the exact LRT article, score
+# and return-leg date for a Žalgiris tie while Perplexity (even
+# sonar-reasoning-pro) returned "nerasta" for the same market and for Eurovision.
+# The differentiator is the SEARCH BACKEND, not the model: Anthropic's
+# web_search, localized to Vilnius, surfaces LRT/Delfi; Perplexity's does not.
+# So prefer LLM_PROVIDER_AICHECK=anthropic. The sweet spot is Sonnet 5, which
+# uses the SAME Anthropic search as Opus at about half the cost; Opus only for
+# maximum reasoning on ambiguous cases. This Perplexity model applies only if
+# you still route the check through Perplexity.
 PERPLEXITY_AICHECK_MODEL = os.environ.get(
     "PERPLEXITY_AICHECK_MODEL", "sonar-reasoning-pro")
 
