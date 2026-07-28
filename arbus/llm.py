@@ -85,7 +85,10 @@ def perplexity_chat(
         timeout=600,
     )
     resp.raise_for_status()
-    return resp.json()["choices"][0]["message"]["content"]
+    content = resp.json()["choices"][0]["message"]["content"]
+    # Reasoning models (sonar-reasoning*) prepend a <think>...</think> block;
+    # it is internal chain-of-thought, not the answer, so drop it.
+    return re.sub(r"<think>.*?</think>\s*", "", content, flags=re.S).strip()
 
 
 def _extract_json(text: str) -> str:
@@ -392,8 +395,12 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
     configured provider (used by aicheck to fall back when the primary fails)."""
     prov = force_provider or provider(stage)
     if prov == "perplexity":
+        # The resolution check gets a reasoning model; drafting/verify stay on
+        # the cheaper search model.
+        px_model = (config.PERPLEXITY_AICHECK_MODEL if stage == "aicheck"
+                    else config.PERPLEXITY_MODEL)
         return perplexity_chat(
-            user_prompt, system=system, model=config.PERPLEXITY_MODEL, max_tokens=max_tokens
+            user_prompt, system=system, model=px_model, max_tokens=max_tokens
         )
     if prov == "zai":
         return zai_chat(user_prompt, system=system, model=config.ZAI_MODEL,

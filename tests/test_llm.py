@@ -185,3 +185,37 @@ def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
 
     llm.research("p", system="s", stage="draft")
     assert seen["model"] is None          # drafting stays on the cheap default
+
+
+def test_aicheck_uses_a_perplexity_reasoning_model(monkeypatch):
+    """Resolution needs reasoning (wrong-year/namesake errors); drafting stays
+    on the cheaper search model."""
+    seen = {}
+
+    def fake_px(user, system=None, model=None, max_tokens=8000, **k):
+        seen["model"] = model
+        return "ok"
+
+    monkeypatch.setattr(llm, "perplexity_chat", fake_px)
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "perplexity")
+
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == config.PERPLEXITY_AICHECK_MODEL == "sonar-reasoning-pro"
+
+    llm.research("p", system="s", stage="draft")
+    assert seen["model"] == config.PERPLEXITY_MODEL      # cheaper, for drafting
+
+
+def test_perplexity_strips_reasoning_think_block(monkeypatch):
+    class Resp:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self):
+            return {"choices": [{"message": {"content":
+                "<think>let me search and reason about this</think>\n"
+                "REZULTATAS: žinomas\nSIŪLOMA BAIGTIS: Taip"}}]}
+
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "pplx-x")
+    monkeypatch.setattr(llm.requests, "post", lambda *a, **k: Resp())
+    out = llm.perplexity_chat("q", model="sonar-reasoning-pro")
+    assert "<think>" not in out and out.startswith("REZULTATAS")

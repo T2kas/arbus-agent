@@ -437,10 +437,19 @@ ZAI_STRUCTURE_MIN_TOKENS = 20000
 # chunks than the search-native providers.
 ZAI_DRAFT_CHUNK_SIZE = 8
 
-PERPLEXITY_MODEL = "sonar-pro"            # research + verification (search-native)
+PERPLEXITY_MODEL = os.environ.get("PERPLEXITY_MODEL", "sonar-pro")  # draft + verify
 # sonar-pro for structuring too: the small "sonar" model corrupts Lithuanian
 # diacritics when copying text (tested 2026-07-13).
 PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
+# Resolution checks need REASONING, not just search — the "wrong year / wrong
+# namesake" errors are reasoning failures, and plain sonar/sonar-pro just
+# summarise. A reasoning model is worth the extra cents on the one call that
+# decides a payout. Override to try others:
+#   sonar-reasoning        (cheaper reasoning)
+#   sonar-reasoning-pro    (default — sharper)
+#   sonar-deep-research    (heaviest, slow/pricey; for hard lookups only)
+PERPLEXITY_AICHECK_MODEL = os.environ.get(
+    "PERPLEXITY_AICHECK_MODEL", "sonar-reasoning-pro")
 
 # Draft in chunks: Perplexity output caps around 8K tokens, so one call can't
 # reliably carry 35 candidates through draft + structure.
