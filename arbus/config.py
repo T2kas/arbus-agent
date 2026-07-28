@@ -454,6 +454,20 @@ PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
 PERPLEXITY_AICHECK_MODEL = os.environ.get(
     "PERPLEXITY_AICHECK_MODEL", "sonar-reasoning-pro")
 
+# ── OpenRouter: one key → OpenAI / DeepSeek / Gemini / … + web search ────────
+# An OpenAI-compatible gateway for trying cheaper reasoning models than Opus.
+# Web search (Exa) is added by appending ":online" to the model id, so any model
+# can ground answers in current sources. Pick a model per stage by its id.
+#   Resolution (reasoning matters): openai/gpt-5 (default), openai/o4-mini,
+#     deepseek/deepseek-r1 (cheapest reasoning), google/gemini-2.5-pro.
+#   Search engine: "exa" ($0.005/search) or "parallel" ($0.001, cheapest).
+OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "openai/gpt-5")
+OPENROUTER_AICHECK_MODEL = os.environ.get("OPENROUTER_AICHECK_MODEL", "openai/gpt-5")
+OPENROUTER_STRUCTURE_MODEL = os.environ.get(
+    "OPENROUTER_STRUCTURE_MODEL", "openai/gpt-5")
+OPENROUTER_SEARCH_ENGINE = os.environ.get("OPENROUTER_SEARCH_ENGINE", "exa")
+OPENROUTER_SEARCH_RESULTS = int(os.environ.get("OPENROUTER_SEARCH_RESULTS", "5"))
+
 # Draft in chunks: Perplexity output caps around 8K tokens, so one call can't
 # reliably carry 35 candidates through draft + structure.
 DRAFT_CHUNK_SIZE = 15

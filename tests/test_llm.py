@@ -8,7 +8,8 @@ from arbus import config, llm
 
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch):
-    for var in ("LLM_PROVIDER", "ANTHROPIC_API_KEY", "PERPLEXITY_API_KEY", "ZAI_API_KEY"):
+    for var in ("LLM_PROVIDER", "ANTHROPIC_API_KEY", "PERPLEXITY_API_KEY",
+                "ZAI_API_KEY", "OPENROUTER_API_KEY"):
         monkeypatch.delenv(var, raising=False)
 
 
@@ -219,3 +220,47 @@ def test_perplexity_strips_reasoning_think_block(monkeypatch):
     monkeypatch.setattr(llm.requests, "post", lambda *a, **k: Resp())
     out = llm.perplexity_chat("q", model="sonar-reasoning-pro")
     assert "<think>" not in out and out.startswith("REZULTATAS")
+
+
+# ── OpenRouter backend (OpenAI/DeepSeek/… + web search via one key) ─────────
+
+def test_openrouter_adds_online_suffix_and_search_plugin(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-x")
+    monkeypatch.setattr(llm.config, "OPENROUTER_SEARCH_ENGINE", "exa")
+    seen = {}
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        seen["url"] = url; seen["json"] = json; seen["headers"] = headers
+        return _Resp(content="REZULTATAS: žinomas")
+
+    monkeypatch.setattr(llm.requests, "post", fake_post)
+    out = llm.openrouter_chat("q", model="openai/gpt-5", web_search=True)
+    assert "openrouter.ai" in seen["url"]
+    assert seen["json"]["model"] == "openai/gpt-5:online"      # web search on
+    assert seen["json"]["plugins"][0]["engine"] == "exa"
+    assert seen["headers"]["Authorization"] == "Bearer or-x"
+    assert out == "REZULTATAS: žinomas"
+
+
+def test_openrouter_strips_reasoning_block(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-x")
+    monkeypatch.setattr(llm.requests, "post", lambda *a, **k: _Resp(
+        content="<think>deepseek reasoning...</think>\nSIŪLOMA BAIGTIS: Taip"))
+    out = llm.openrouter_chat("q", model="deepseek/deepseek-r1")
+    assert "<think>" not in out and out.startswith("SIŪLOMA BAIGTIS")
+
+
+def test_research_routes_aicheck_to_openrouter_model(monkeypatch):
+    seen = {}
+    monkeypatch.setattr(llm, "openrouter_chat",
+                        lambda *a, model=None, web_search=False, **k: seen.update(
+                            model=model, web_search=web_search) or "ok")
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "openrouter")
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == config.OPENROUTER_AICHECK_MODEL and seen["web_search"]
+
+
+def test_provider_detects_openrouter_key(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-x")
+    assert llm.provider() == "openrouter"
+    assert "openrouter" in llm.available_providers()

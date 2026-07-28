@@ -39,22 +39,25 @@ def provider(stage: str | None = None) -> str:
     paying a stronger model for. Set LLM_PROVIDER_DRAFT / LLM_PROVIDER_VERIFY to
     override LLM_PROVIDER for one stage.
     """
+    known = ("anthropic", "perplexity", "zai", "openrouter")
     if stage:
         per_stage = os.environ.get(f"LLM_PROVIDER_{stage.upper()}", "").strip().lower()
-        if per_stage in ("anthropic", "perplexity", "zai"):
+        if per_stage in known:
             return per_stage
     forced = os.environ.get("LLM_PROVIDER", "").strip().lower()
-    if forced in ("anthropic", "perplexity", "zai"):
+    if forced in known:
         return forced
     if os.environ.get("ANTHROPIC_API_KEY"):
         return "anthropic"
     if os.environ.get("PERPLEXITY_API_KEY"):
         return "perplexity"
+    if os.environ.get("OPENROUTER_API_KEY"):
+        return "openrouter"
     if os.environ.get("ZAI_API_KEY"):
         return "zai"
     raise RuntimeError(
-        "Set PERPLEXITY_API_KEY, ANTHROPIC_API_KEY or ZAI_API_KEY "
-        "(or LLM_PROVIDER + the matching key)"
+        "Set ANTHROPIC_API_KEY, PERPLEXITY_API_KEY, OPENROUTER_API_KEY or "
+        "ZAI_API_KEY (or LLM_PROVIDER + the matching key)"
     )
 
 
@@ -85,10 +88,58 @@ def perplexity_chat(
         timeout=600,
     )
     resp.raise_for_status()
-    content = resp.json()["choices"][0]["message"]["content"]
-    # Reasoning models (sonar-reasoning*) prepend a <think>...</think> block;
-    # it is internal chain-of-thought, not the answer, so drop it.
-    return re.sub(r"<think>.*?</think>\s*", "", content, flags=re.S).strip()
+    return _strip_reasoning(resp.json()["choices"][0]["message"]["content"])
+
+
+def _strip_reasoning(content: str) -> str:
+    """Drop a reasoning model's internal <think>...</think> chain-of-thought so
+    only the answer reaches the admin/parsers."""
+    return re.sub(r"<think>.*?</think>\s*", "", content or "", flags=re.S).strip()
+
+
+# ── OpenRouter backend (one key → OpenAI, DeepSeek, Gemini, … + web search) ──
+# OpenRouter is an OpenAI-compatible gateway: the same request shape reaches any
+# of 400+ models by id ("openai/gpt-5", "deepseek/deepseek-r1"). Appending
+# ":online" to the model id turns on a server-side web search (Exa), so any
+# model — including cheap reasoning ones — can ground answers in current LT
+# sources. This is the knob for trying OpenAI-style reasoning cheaper than Opus.
+
+def openrouter_chat(
+    user: str,
+    system: str | None = None,
+    model: str = "openai/gpt-5",
+    max_tokens: int = 8000,
+    web_search: bool = False,
+    response_format: dict | None = None,
+) -> str:
+    messages = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": user}
+    ]
+    # ":online" is OpenRouter's shorthand for "add web search to this model".
+    if web_search and not model.endswith(":online"):
+        model = f"{model}:online"
+    payload: dict = {"model": model, "messages": messages, "max_tokens": max_tokens}
+    if web_search and config.OPENROUTER_SEARCH_ENGINE:
+        payload["plugins"] = [{
+            "id": "web",
+            "engine": config.OPENROUTER_SEARCH_ENGINE,     # "exa" or "parallel"
+            "max_results": config.OPENROUTER_SEARCH_RESULTS,
+        }]
+    if response_format:
+        payload["response_format"] = response_format
+    resp = requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}",
+            # OpenRouter asks callers to identify themselves; harmless if ignored.
+            "HTTP-Referer": "https://arbus.lt",
+            "X-Title": "Arbus market resolver",
+        },
+        json=payload,
+        timeout=600,
+    )
+    resp.raise_for_status()
+    return _strip_reasoning(resp.json()["choices"][0]["message"]["content"])
 
 
 def _extract_json(text: str) -> str:
@@ -378,10 +429,16 @@ def _structure_anthropic(text: str, output_model: Type[T], max_tokens: int) -> T
 # ── Public API ──────────────────────────────────────────────────────────────
 
 def available_providers() -> list[str]:
-    """Providers whose API key is actually configured, in preference order."""
+    """Providers whose API key is actually configured, in preference order.
+
+    Anthropic first: for resolution its web search finds Lithuanian sources the
+    others miss, so it is the safest fallback when a preferred provider fails.
+    """
     out = []
     if os.environ.get("ANTHROPIC_API_KEY"):
         out.append("anthropic")
+    if os.environ.get("OPENROUTER_API_KEY"):
+        out.append("openrouter")
     if os.environ.get("PERPLEXITY_API_KEY"):
         out.append("perplexity")
     if os.environ.get("ZAI_API_KEY"):
@@ -402,6 +459,11 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
         return perplexity_chat(
             user_prompt, system=system, model=px_model, max_tokens=max_tokens
         )
+    if prov == "openrouter":
+        or_model = (config.OPENROUTER_AICHECK_MODEL if stage == "aicheck"
+                    else config.OPENROUTER_MODEL)
+        return openrouter_chat(user_prompt, system=system, model=or_model,
+                               max_tokens=max_tokens, web_search=True)
     if prov == "zai":
         return zai_chat(user_prompt, system=system, model=config.ZAI_MODEL,
                         max_tokens=max_tokens, web_search=True)
@@ -424,5 +486,10 @@ def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:
         return _structure_openai_compatible(
             zai_chat, config.ZAI_STRUCTURE_MODEL, text, output_model,
             max(max_tokens, config.ZAI_STRUCTURE_MIN_TOKENS),
+        )
+    if prov == "openrouter":
+        return _structure_openai_compatible(
+            openrouter_chat, config.OPENROUTER_STRUCTURE_MODEL, text, output_model,
+            max_tokens,
         )
     return _structure_anthropic(text, output_model, max_tokens)
