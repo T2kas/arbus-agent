@@ -22,11 +22,18 @@ def _load_dotenv() -> None:
 
 _load_dotenv()
 
-# Sonnet, not Opus: a full Opus batch with adaptive thinking and 16 searches per
-# chunk burned ~$5. Sonnet is several times cheaper and, with the same web
-# search and the same deterministic gates around it, loses very little here.
-# Override per run with ANTHROPIC_MODEL.
-MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
+def _flag(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in ("1", "on", "true", "yes")
+
+
+# Generation model. Sonnet by default: a full Opus batch with adaptive thinking
+# and many searches per chunk burned ~$5, and with the same web search and
+# deterministic gates around it Sonnet loses very little. Easy toggle to compare:
+#   ARBUS_OPUS=on   -> generate with Opus 5 (sharper, pricier)
+#   ARBUS_OPUS=off  -> Sonnet 5 (default, cheaper)
+# An explicit ANTHROPIC_MODEL always wins over the toggle.
+MODEL = os.environ.get("ANTHROPIC_MODEL") or (
+    "claude-opus-5" if _flag("ARBUS_OPUS") else "claude-sonnet-5")
 # Verification is the one stage where judgement pays for itself. Leave empty to
 # reuse MODEL, or set ANTHROPIC_VERIFY_MODEL=claude-opus-5 to spend only there.
 VERIFY_MODEL = os.environ.get("ANTHROPIC_VERIFY_MODEL", "")
