@@ -374,10 +374,23 @@ def _structure_anthropic(text: str, output_model: Type[T], max_tokens: int) -> T
 
 # ── Public API ──────────────────────────────────────────────────────────────
 
+def available_providers() -> list[str]:
+    """Providers whose API key is actually configured, in preference order."""
+    out = []
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        out.append("anthropic")
+    if os.environ.get("PERPLEXITY_API_KEY"):
+        out.append("perplexity")
+    if os.environ.get("ZAI_API_KEY"):
+        out.append("zai")
+    return out
+
+
 def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000,
-             stage: str | None = None) -> str:
-    """Web-grounded free-text generation."""
-    prov = provider(stage)
+             stage: str | None = None, force_provider: str | None = None) -> str:
+    """Web-grounded free-text generation. `force_provider` overrides the stage's
+    configured provider (used by aicheck to fall back when the primary fails)."""
+    prov = force_provider or provider(stage)
     if prov == "perplexity":
         return perplexity_chat(
             user_prompt, system=system, model=config.PERPLEXITY_MODEL, max_tokens=max_tokens

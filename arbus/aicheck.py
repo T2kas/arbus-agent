@@ -23,7 +23,7 @@ from datetime import date, datetime, timezone
 
 import requests
 
-from . import config, llm, notify
+from . import config, llm, notify, resolvers
 
 log = logging.getLogger(__name__)
 
@@ -82,6 +82,20 @@ def _suggested_outcome(text: str) -> str:
     return m.group(1).strip() if m else ""
 
 
+def _explain(exc: Exception | None) -> str:
+    """A human-readable cause, so a config problem does not read as a bug."""
+    msg = str(exc or "")
+    if "401" in msg or "Unauthorized" in msg:
+        return ("API raktas neteisingas arba nenustatytas (401) — patikrink "
+                ".env (pvz. PERPLEXITY_API_KEY, jei nustatytas "
+                "LLM_PROVIDER_AICHECK=perplexity)")
+    if "429" in msg:
+        return "pasiektas API limitas (429) — pabandyk vėliau"
+    if "timeout" in msg.lower() or "connection" in msg.lower():
+        return "tinklo klaida — nepavyko pasiekti API"
+    return f"techninė klaida ({msg[:120]})" if msg else "techninė klaida"
+
+
 def _finalize(text: str, verify: bool = None) -> str:
     """Prepend a can't-miss verdict header and vet every cited link.
 
@@ -135,8 +149,6 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     verifying a link, it is finding out what happened, and the answer decides a
     payout. That is worth a few cents more.
     """
-    from . import resolvers
-
     facts = resolvers.facts_for(question, closes_at)
     prompt = llm.load_prompt(
         "aicheck", today=(today or date.today()).isoformat(),
@@ -144,15 +156,30 @@ def _run(question: str, options: str, criteria: str, proposed: str,
         proposed=proposed, source=source,
         facts=facts or "(nėra automatinių duomenų — ieškok pats)",
     )
-    try:
-        text = llm.research(prompt, system=SYSTEM,
-                            max_uses=searches or config.AICHECK_MAX_SEARCHES,
-                            max_tokens=1200, stage="aicheck").strip()
-        return _finalize(text)
-    except Exception as exc:
-        log.warning("AI check failed: %s", exc)
-        return on_error or ("AI patikra nepavyko (techninė klaida) — patikrink "
-                            "naujienas rankiniu būdu.")
+
+    # Try the configured provider first, then any OTHER provider that has a key.
+    # A wrong or expired second key (the classic LLM_PROVIDER_AICHECK=perplexity
+    # with no valid PERPLEXITY_API_KEY → 401) must never take the whole check
+    # down when a working Anthropic key is right there.
+    primary = llm.provider("aicheck")
+    chain = [primary] + [p for p in llm.available_providers() if p != primary]
+    last_exc = None
+    for i, prov in enumerate(chain):
+        try:
+            text = llm.research(prompt, system=SYSTEM,
+                                max_uses=searches or config.AICHECK_MAX_SEARCHES,
+                                max_tokens=1200, stage="aicheck",
+                                force_provider=prov).strip()
+            if i:                                    # a fallback was used
+                text += (f"\n(pastaba: {primary} nepavyko, "
+                         f"patikra atlikta su {prov})")
+            return _finalize(text)
+        except Exception as exc:
+            last_exc = exc
+            log.warning("AI check via %s failed: %s", prov, _explain(exc))
+
+    return on_error or (f"AI patikra nepavyko: {_explain(last_exc)}. "
+                        "Patikrink naujienas rankiniu būdu.")
 
 
 def check_request(conn: sqlite3.Connection, request_id: int,

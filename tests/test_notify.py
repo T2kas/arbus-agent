@@ -163,3 +163,49 @@ def test_unknown_verification_does_not_condemn_a_link():
     from arbus import aicheck
 
     assert aicheck.verify_url("https://definitely-not-resolvable.invalid") == "unknown"
+
+
+# ── provider fallback: a bad second key must not kill the check ──────────────
+
+def test_aicheck_falls_back_to_a_working_provider(monkeypatch):
+    """LLM_PROVIDER_AICHECK=perplexity with no valid key returned 401 and took
+    the whole check down. It must fall back to the Anthropic key that works."""
+    import requests
+    from arbus import aicheck, llm
+
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "perplexity")
+    monkeypatch.setattr(llm, "available_providers", lambda: ["anthropic", "perplexity"])
+
+    calls = []
+
+    def fake_research(*a, force_provider=None, **k):
+        calls.append(force_provider)
+        if force_provider == "perplexity":
+            raise requests.HTTPError("401 Client Error: Unauthorized")
+        return ("REZULTATAS: žinomas\nŠALTINIS: https://lrt.lt/x\n"
+                "SIŪLOMA BAIGTIS: Taip")
+
+    monkeypatch.setattr(llm, "research", fake_research)
+    monkeypatch.setattr(aicheck, "verify_url", lambda u, **k: "ok")
+    monkeypatch.setattr(aicheck.resolvers, "facts_for", lambda *a, **k: "")
+
+    out = aicheck._run("q", "Taip / Ne", "rules", "Taip", "src", verify=None) \
+        if False else aicheck._run("q", "Taip / Ne", "rules", "Taip", "src")
+    assert calls == ["perplexity", "anthropic"]        # tried primary, then fell back
+    assert "anthropic" in out and out.startswith("✅")   # note + real verdict
+
+
+def test_aicheck_reports_a_401_as_a_key_problem(monkeypatch):
+    import requests
+    from arbus import aicheck, llm
+
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "perplexity")
+    monkeypatch.setattr(llm, "available_providers", lambda: ["perplexity"])
+    monkeypatch.setattr(aicheck.resolvers, "facts_for", lambda *a, **k: "")
+
+    def boom(*a, **k):
+        raise requests.HTTPError("401 Client Error: Unauthorized for url: ...")
+
+    monkeypatch.setattr(llm, "research", boom)
+    out = aicheck._run("q", "Taip / Ne", "rules", "Taip", "src")
+    assert "401" in out and "raktas" in out            # names the real cause
