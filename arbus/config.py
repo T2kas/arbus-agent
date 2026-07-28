@@ -479,14 +479,15 @@ SETTLEMENT_DELAY_MINUTES = 5
 # set to 0 to disable it and rely only on the circuit breaker and user reports.
 DEADLINE_SWEEP_GRACE_DAYS = 1
 
-# The advisory check runs on every freeze, so it must stay cheap enough that
-# nobody hesitates to freeze a market (~EUR 0.05 per check: one call, three
-# searches at $0.01 each plus the tokens the search results add).
-AICHECK_MAX_SEARCHES = 3
-# When nobody cited a source — an admin freezing a market in the dashboard
-# cannot attach one — the check has to FIND the outcome, not just verify a
-# link. That takes more searches, and it is the case that decides payouts.
-AICHECK_MAX_SEARCHES_OPEN = 8
+# Search budget = the main cost lever. Each web search injects a full page of
+# tokens, so on Opus 8 searches is what pushed a check to ~EUR 0.28. Two tiers:
+# when a resolver already handed us the deciding number (a stock price, a
+# temperature), the model only has to read it, so a few searches suffice; when
+# nobody cited a source and there is no feed (M.A.M.A., Eurovision), it has to
+# FIND the outcome and needs more. `_run` picks the tier from whether facts
+# were injected.
+AICHECK_MAX_SEARCHES = 3          # we already have the data — just confirm it
+AICHECK_MAX_SEARCHES_OPEN = 5     # searching from scratch (was 8; 5 is enough)
 # After the check, fetch every URL the model cited and confirm it actually
 # loads. Fabricated links (the model has invented eurovision.tv and nba.com URLs
 # that 404) are the clearest hallucination signal there is. A request that fails

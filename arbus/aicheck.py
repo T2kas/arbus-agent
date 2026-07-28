@@ -8,9 +8,15 @@ for the admin to read before deciding in the dashboard.
 It ALWAYS searches the web, whether or not a source was cited. An admin
 freezing a market in the dashboard cannot attach one, and a user who reports
 the right outcome may still cite a weak link — so "no usable source" must never
-turn into "cannot verify" when the fact is public. One check costs roughly
-EUR 0.05-0.12 depending on how much searching it takes; a wrong payout costs
-more than that and cannot be undone.
+turn into "cannot verify" when the fact is public.
+
+Cost scales with the search budget (each web search injects a page of tokens).
+On Opus 5, ~5 searches is ~EUR 0.15 a check, and a stock/weather market whose
+number a resolver already fetched drops to ~3 searches (~EUR 0.08). Cheaper
+still: ANTHROPIC_AICHECK_MODEL=claude-sonnet-5 halves it, and a search-native
+Perplexity key (LLM_PROVIDER_AICHECK=perplexity) is cheaper again because the
+search is bundled, not billed per Anthropic token. A wrong payout costs more
+than any of these and cannot be undone.
 """
 
 from __future__ import annotations
@@ -150,6 +156,11 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     payout. That is worth a few cents more.
     """
     facts = resolvers.facts_for(question, closes_at)
+    # Cheap tier when a resolver already handed us the number to read; the
+    # search-from-scratch tier only when there is no feed and no cited source.
+    if searches is None:
+        searches = (config.AICHECK_MAX_SEARCHES if facts
+                    else config.AICHECK_MAX_SEARCHES_OPEN)
     prompt = llm.load_prompt(
         "aicheck", today=(today or date.today()).isoformat(),
         question=question, options=options, criteria=criteria,
@@ -202,7 +213,6 @@ def check_request(conn: sqlite3.Connection, request_id: int,
                 today=today, closes_at=market["resolve_by"],
                 # The admin still has to decide; a failed check must not block
                 # the dashboard or imply anything about the claim.
-                searches=config.AICHECK_MAX_SEARCHES_OPEN,
                 on_error=("AI patikra nepavyko (techninė klaida) — sprendimą "
                           f"priimk pagal šaltinį pats: {req['source_url']}"))
 
@@ -219,8 +229,7 @@ def check_freeze(conn: sqlite3.Connection, market_id: int,
                 criteria=market["resolution_hint_lt"],
                 proposed="(nenurodyta — rinka užšaldyta dėl įtartino srauto)",
                 source="(nėra — surask pats, kas įvyko)",
-                today=today, closes_at=market["resolve_by"],
-                searches=config.AICHECK_MAX_SEARCHES_OPEN)
+                today=today, closes_at=market["resolve_by"])
 
 
 def check_app_market(market: dict, today: date | None = None) -> str:
@@ -238,8 +247,7 @@ def check_app_market(market: dict, today: date | None = None) -> str:
                 criteria=view["rules"],
                 proposed="(nenurodyta — rinka sustabdyta appe)",
                 source="(nėra — adminas negali prisegti šaltinio, todėl ieškok pats)",
-                today=today, closes_at=view["resolve_by"],
-                searches=config.AICHECK_MAX_SEARCHES_OPEN)
+                today=today, closes_at=view["resolve_by"])
 
 
 # ── What the admin actually runs: check, store, and ping Telegram ───────────
