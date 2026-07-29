@@ -111,6 +111,28 @@ def _pick(row: dict, *names, default=None):
     return default
 
 
+def _as_fraction(value) -> float | None:
+    """Normalize a price/probability to a 0-1 fraction.
+
+    Live-confirmed the app's `option_price_history.probability` (and the
+    embedded `market_options[].probability`) is on a 0-100 scale — pairs sum to
+    100 (e.g. 55.0/45.0), not 1 (0.55/0.45). Our own stored probabilities are
+    0-1. Comparing the two scales directly is what turned a real price into
+    "5500%" in calibration, and would make the circuit breaker's 0.15 (15
+    percentage points) threshold trip on almost any nonzero move, since a
+    genuine few-point swing (e.g. 3.0 on the 0-100 scale) already clears 0.15.
+    A valid probability can never exceed 1, so anything bigger is assumed to be
+    on the 0-100 scale and divided down; values already <=1 pass through.
+    """
+    if value is None:
+        return None
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return None
+    return value / 100 if value > 1 else value
+
+
 def question_of(row: dict) -> str:
     # The app's markets table calls it `title`; our own DB rows call it
     # `question_lt`. Both, plus a few fallbacks, so one lookup fits either side.
@@ -253,15 +275,12 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
         ts = _timestamp_of(row)
         if ts is None or ts < cutoff:
             continue
-        price = _pick(row, "probability", "price", "new_price", "value")
+        price = _as_fraction(_pick(row, "probability", "price", "new_price", "value"))
         oid = str(_pick(row, "option_id", "id", default=""))
         mid = str(_pick(row, "market_id", default="")) or option_map.get(oid, oid)
         if price is None or not mid:
             continue
-        try:
-            per_market.setdefault(mid, []).append(float(price))
-        except (TypeError, ValueError):
-            continue
+        per_market.setdefault(mid, []).append(price)
 
     return {mid: max(prices) - min(prices) for mid, prices in per_market.items()}
 
@@ -350,12 +369,9 @@ def latest_prices(history: list[dict]) -> dict[str, float]:
     prices: dict[str, float] = {}
     for row in history:
         oid = str(_pick(row, "option_id", "id", default=""))
-        price = _pick(row, "probability", "price", "new_price", "value")
+        price = _as_fraction(_pick(row, "probability", "price", "new_price", "value"))
         if oid and oid not in prices and price is not None:
-            try:
-                prices[oid] = float(price)
-            except (TypeError, ValueError):
-                continue
+            prices[oid] = price
     return prices
 
 

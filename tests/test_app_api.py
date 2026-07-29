@@ -292,6 +292,9 @@ def test_real_market_fields_are_read():
 
 
 def test_real_price_history_uses_probability_and_market_id():
+    # Live-confirmed scale: option_price_history.probability is 0-100, not 0-1
+    # (real pairs summed to exactly 100 — 55.0/45.0, 44.23/55.77, 60/40). Values
+    # here are already <=1 to check the pass-through path specifically.
     history = [
         {"market_id": "m1", "option_id": "o1", "probability": 0.30, "created_at": _at(1)},
         {"market_id": "m1", "option_id": "o1", "probability": 0.62, "created_at": _at(5)},
@@ -299,6 +302,29 @@ def test_real_price_history_uses_probability_and_market_id():
     moves = app.price_moves(history, window_minutes=10, now=NOW)   # no option map needed
     assert round(moves["m1"], 2) == 0.32
     assert app.latest_prices(history) == {"o1": 0.30}              # newest first
+
+
+def test_real_app_scale_is_0_to_100_not_a_fraction(monkeypatch):
+    """The actual bug: a market's two options were {'probability': 55.0} and
+    {'probability': 45.0} live — summing to 100. Read as a raw fraction, that
+    made calibration report a live price of "5500%", and would make the
+    circuit breaker's 0.15 (15-point) threshold trip on almost any nonzero
+    move, since even a 1-point real swing (1.0 on this scale) already clears
+    0.15 taken literally."""
+    history = [
+        {"market_id": "m1", "option_id": "o1", "probability": 45.0, "created_at": _at(1)},
+        {"market_id": "m1", "option_id": "o1", "probability": 55.0, "created_at": _at(5)},
+    ]
+    assert app.latest_prices(history) == {"o1": 0.45}       # normalized to a fraction
+    moves = app.price_moves(history, window_minutes=10, now=NOW)
+    assert round(moves["m1"], 2) == 0.10                    # a real 10pp move, not 10.0
+
+
+def test_as_fraction_passes_through_values_already_in_range():
+    assert app._as_fraction(0.42) == 0.42
+    assert app._as_fraction(1.0) == 1.0                     # boundary: a sure thing
+    assert app._as_fraction(None) is None
+    assert app._as_fraction("not a number") is None
 
 
 def test_real_trades_key_by_title_and_use_amount_credits():
