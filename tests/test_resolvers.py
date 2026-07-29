@@ -99,6 +99,85 @@ def test_fuel_html_parser_ignores_nonsense_numbers():
     assert resolvers.parse_fuel_html("<p>Dyzelinas pabrango 15 %</p>") == ""
 
 
+# ── fuel: the LEA daily bulletin (real ena.lt post text, live-verified) ─────
+
+# Real sentence shape from https://www.ena.lt/Naujiena/ndk-20260727/ — the
+# comparison clause ("... nei penktadienį ..., kai buvo 1,979 Eur/l") must NOT
+# be picked up as the average.
+_BULLETIN_TEXT = (
+    "<p>Lietuvoje pirmadienio rytą, palyginti su penktadieniu, vidutinės "
+    "dyzelino ir SND kainos padidėjo.</p>"
+    "<p>Dyzelino kainos degalinėse pirmadienio rytą svyravo nuo 1,820 Eur/l "
+    "iki 2,127 Eur/l, o vidutinė dyzelino kaina siekė 1,982 Eur/l, arba 0,15 "
+    "proc. daugiau nei penktadienį (liepos 24 d.), kai buvo 1,979 Eur/l.</p>"
+    "<p>Benzino kainos pirmadienio rytą degalinėse svyravo nuo 1,659 Eur/l iki "
+    "1,920 Eur/l, o vidutinė benzino kaina sudarė 1,773 Eur/l, arba 0,34 proc. "
+    "mažiau nei penktadienį.</p>"
+    "<p>SND kainos degalinėse svyravo nuo 0,660 Eur/l iki 0,909 Eur/l, o "
+    "vidutinė SND kaina siekė 0,762 Eur/l.</p>"
+)
+
+
+def test_bulletin_parser_reads_the_average_not_the_comparison_figure():
+    fact = resolvers.parse_fuel_bulletin(_BULLETIN_TEXT)
+    assert "dyzelinas 1.982 €/l" in fact
+    assert "benzinas 1.773 €/l" in fact
+    assert "SND (dujos) 0.762 €/l" in fact
+    assert "1.979" not in fact             # the day-over-day comparison figure
+
+
+def test_bulletin_parser_empty_when_the_sentence_shape_is_absent():
+    assert resolvers.parse_fuel_bulletin("<p>Elektros kainos padidėjo.</p>") == ""
+
+
+def test_recent_naujiena_urls_sorts_by_lastmod_descending():
+    sitemap = (
+        "<url><loc>https://www.ena.lt/Naujiena/old-electricity/</loc>"
+        "<lastmod>2026-07-20</lastmod></url>"
+        "<url><loc>https://www.ena.lt/Naujiena/fresh-fuel-post/</loc>"
+        "<lastmod>2026-07-29</lastmod></url>"
+        "<url><loc>https://www.ena.lt/apie-mus/</loc>"          # not a Naujiena URL
+        "<lastmod>2026-07-29</lastmod></url>"
+    )
+    urls = resolvers.recent_naujiena_urls(sitemap)
+    assert urls[0].endswith("fresh-fuel-post/")
+    assert all("/Naujiena/" in u for u in urls)
+
+
+def test_fuel_bulletin_fact_picks_the_freshest_matching_post(monkeypatch):
+    """The real bug: a fixed URL guess (ndk-YYYYMMDD) can read a day-old post
+    while a fresher bulletin exists under a different, unpredictable slug —
+    live-confirmed on 2026-07-27 vs the 2026-07-28 post. The sitemap walk must
+    try the freshest candidates first and stop at the first real match."""
+    sitemap_xml = (
+        "<url><loc>https://www.ena.lt/Naujiena/unrelated-2026-07-29/</loc>"
+        "<lastmod>2026-07-29</lastmod></url>"
+        "<url><loc>https://www.ena.lt/Naujiena/fuel-post-2026-07-28/</loc>"
+        "<lastmod>2026-07-28</lastmod></url>"
+        "<url><loc>https://www.ena.lt/Naujiena/ndk-20260727/</loc>"
+        "<lastmod>2026-07-27</lastmod></url>"
+    )
+
+    class _R:
+        def __init__(self, text, status=200):
+            self.text, self.status_code = text, status
+        def raise_for_status(self):
+            pass
+
+    def fake_get(url, **kw):
+        if url.endswith("sitemap.xml"):
+            return _R(sitemap_xml)
+        if "unrelated" in url:
+            return _R("<p>Elektros kainos.</p>")             # no match, skipped
+        if "fuel-post-2026-07-28" in url:
+            return _R(_BULLETIN_TEXT.replace("liepos 24 d.", "liepos 28 d."))
+        raise AssertionError(f"should not fetch the stale {url}")
+
+    monkeypatch.setattr(resolvers.requests, "get", fake_get)
+    fact = resolvers.fuel_bulletin_fact()
+    assert "1.982" in fact and "fuel-post-2026-07-28" in fact
+
+
 # ── diagnose(): the arbus-facts visibility that ends the guessing ───────────
 
 def test_diagnose_reports_a_network_failure_not_silent_empty(monkeypatch):

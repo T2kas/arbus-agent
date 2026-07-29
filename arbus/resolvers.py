@@ -168,15 +168,31 @@ def weather_fact(question: str, closes_at: str = "") -> str:
 
 
 # ── Fuel: official source is LEA / ena.lt (daily averages), no clean JSON API ─
-# The LEA portal (ena.lt/degalu-kainos-degalinese) is the authoritative source
-# the markets cite and updates every working day, but it bot-blocks simple
-# fetchers and exposes no documented JSON. Two paths, in order:
-#   1. FUEL_PRICE_URL — a JSON feed the team points us at (an internal scrape,
-#      or an aggregator like degalu-kaina.lt if it exposes one). parse_fuel
-#      reads {"diesel":.., "petrol":..} or the Lithuanian keys.
-#   2. Best-effort scrape of the LEA page with a browser User-Agent, pulling the
-#      average diesel/petrol price out of the HTML with a regex.
-# Either way the fact cites LEA, and a failure just falls back to searching.
+# The LEA "tool" page (ena.lt/degalu-kainos-degalinese, ena.lt/dk-irankis) turned
+# out to be a Power BI iframe with zero static price text — regex-scraping it can
+# never work, confirmed live (0 matches for "dyzel"/"benzin" in the page HTML).
+#
+# What DOES work: LEA publishes a plain-text daily bulletin as a news post,
+# stating the averages in plain sentences ("vidutinė dyzelino kaina siekė
+# 1,982 Eur/l"). But the URL slug is NOT one predictable pattern — some days it
+# is "ndk-YYYYMMDD" (e.g. ndk-20260727), other days a descriptive Lithuanian
+# slug ("antradienio-ryta-didejo-visu-degalu-vidutines-kainos", i.e. "Tuesday
+# morning, all fuel prices rose") — confirmed live: the ndk- post for a given
+# date can lag a day behind the actual latest bulletin, which uses the
+# descriptive slug instead. Guessing one pattern therefore risks reading a
+# stale day and missing that a threshold was already crossed.
+#
+# The reliable fix: ena.lt/sitemap.xml lists every URL with its <lastmod> date.
+# Sorting Naujiena entries by lastmod descending and trying each until one
+# matches the bulletin sentence finds the ACTUAL most recent fuel-price post,
+# regardless of which slug style it used that day (confirmed live: found
+# 2026-07-29's post this way when the ndk- guess would have returned 07-27's).
+#
+# Three paths, in order:
+#   1. FUEL_PRICE_URL — a JSON feed the team points us at, if they ever get one.
+#   2. The sitemap walk above.
+#   3. A generic regex scrape of FUEL_LEA_URL, kept only in case the team points
+#      it at some other (genuinely static) HTML page later.
 
 def parse_fuel(payload: dict) -> str:
     parts = []
@@ -192,7 +208,100 @@ def parse_fuel(payload: dict) -> str:
             + ". Šaltinis: Lietuvos energetikos agentūra (ena.lt).")
 
 
-# "Dyzelinas 1,832 €/l", "95 benzinas – 1,723 EUR" etc. on the LEA page.
+# "vidutinė dyzelino kaina siekė 1,982 Eur/l" / "vidutinė benzino kaina sudarė
+# 1,773 Eur/l" — the bulletin's own summary sentence. Anchoring on "vidutinė ...
+# kaina (siekė|sudarė)" is what skips the day-over-day comparison figure that
+# follows in the same paragraph ("... nei penktadienį ..., kai buvo 1,979 Eur/l").
+_FUEL_BULLETIN_RE = re.compile(
+    r"vidutin\w*\s+(dyzelino|benzino|SND)\s+kaina\s+(?:siek[ėe]|sudar[ėe])\s+"
+    r"([\d]+,[\d]+)\s*Eur/l", re.I)
+_SITEMAP_NAUJIENA_RE = re.compile(
+    r"<url><loc>(https://www\.ena\.lt/Naujiena/[^<]+)</loc><lastmod>([\d-]+)</lastmod>")
+
+
+def parse_fuel_bulletin(html: str) -> str:
+    labels = {"dyzelino": "dyzelinas", "benzino": "benzinas", "snd": "SND (dujos)"}
+    found: dict[str, float] = {}
+    for kind, num in _FUEL_BULLETIN_RE.findall(html):
+        label = labels.get(kind.lower(), kind)
+        if label not in found:
+            found[label] = float(num.replace(",", "."))
+    if not found:
+        return ""
+    parts = ", ".join(f"{lbl} {val:.3f} €/l" for lbl, val in found.items())
+    return f"Vidutinės degalų kainos: {parts}."
+
+
+def recent_naujiena_urls(sitemap_xml: str, limit: int = 20) -> list[str]:
+    """Naujiena (news post) URLs from the sitemap, most recently modified first."""
+    entries = _SITEMAP_NAUJIENA_RE.findall(sitemap_xml)
+    entries.sort(key=lambda e: e[1], reverse=True)
+    return [url for url, _ in entries[:limit]]
+
+
+def fuel_bulletin_fact(candidates: int = 12) -> str:
+    """Find LEA's actual most recent fuel-price bulletin via the sitemap and
+    parse it. Tries the freshest posts first regardless of which URL slug style
+    that day used — a fixed URL guess can silently read a stale day.
+
+    Returns only the LATEST day's average, not a period maximum. A market
+    asking "did it cross X at least once by <deadline>" needs the running high
+    over the whole window, and LEA's daily post does not expose history — that
+    would mean parsing every working day back to market creation, which is
+    disproportionate for how rare fuel-threshold markets are. The check's own
+    web search covers that gap; this just gives it a fresh, sourced anchor
+    instead of nothing.
+    """
+    resp = requests.get("https://www.ena.lt/sitemap.xml",
+                        headers={"User-Agent": UA}, timeout=20)
+    resp.raise_for_status()
+    for url in recent_naujiena_urls(resp.text, candidates):
+        try:
+            page = requests.get(url, headers={"User-Agent": UA}, timeout=20)
+        except Exception as exc:
+            log.debug("fuel bulletin candidate %s failed: %s", url, exc)
+            continue
+        if page.status_code != 200:
+            continue
+        fact = parse_fuel_bulletin(page.text)
+        if fact:
+            date_m = re.search(r"(sausio|vasario|kovo|balandžio|gegužės|"
+                               r"birželio|liepos|rugpjūčio|rugsėjo|spalio|"
+                               r"lapkričio|gruodžio)\s+\d+\s+d\.", page.text, re.I)
+            when = f" ({date_m.group(0)})" if date_m else ""
+            return f"{fact}{when} Šaltinis: Lietuvos energetikos agentūra, {url}"
+    return ""
+
+
+def fuel_fact(question: str) -> str:
+    q = question.lower()
+    if "degal" not in q and "dyzel" not in q and "benzin" not in q and "kuro" not in q:
+        return ""
+    if config.FUEL_PRICE_URL:
+        try:
+            fact = parse_fuel(_get_json(config.FUEL_PRICE_URL))
+            if fact:
+                return fact
+        except Exception as exc:
+            log.debug("fuel JSON feed failed: %s", exc)
+    try:
+        fact = fuel_bulletin_fact()
+        if fact:
+            return fact
+    except Exception as exc:
+        log.debug("fuel bulletin walk failed: %s", exc)
+    try:
+        resp = requests.get(config.FUEL_LEA_URL,
+                            headers={"User-Agent": UA}, timeout=20)
+        resp.raise_for_status()
+        return parse_fuel_html(resp.text)
+    except Exception as exc:
+        log.debug("fuel LEA scrape failed: %s", exc)
+        return ""
+
+
+# Kept for a generic HTML aggregator FUEL_LEA_URL might point at later — the
+# ena.lt "tool" page itself is a Power BI iframe and will never match this.
 _FUEL_HTML_RE = re.compile(
     r"(dyzelin|benzin|95|98|dujo|lpg)[^0-9]{0,40}?(\d[.,]\d{2,3})\s*(?:€|eur)",
     re.I)
@@ -213,25 +322,6 @@ def parse_fuel_html(html: str) -> str:
     parts = ", ".join(f"{lbl} {val:.3f} €/l" for lbl, val in found.items())
     return (f"Vidutinės degalų kainos (LEA): {parts}. "
             "Šaltinis: Lietuvos energetikos agentūra (ena.lt).")
-
-
-def fuel_fact(question: str) -> str:
-    q = question.lower()
-    if "degal" not in q and "dyzel" not in q and "benzin" not in q and "kuro" not in q:
-        return ""
-    if config.FUEL_PRICE_URL:
-        try:
-            return parse_fuel(_get_json(config.FUEL_PRICE_URL))
-        except Exception as exc:
-            log.debug("fuel JSON feed failed: %s", exc)
-    try:
-        resp = requests.get(config.FUEL_LEA_URL,
-                            headers={"User-Agent": UA}, timeout=20)
-        resp.raise_for_status()
-        return parse_fuel_html(resp.text)
-    except Exception as exc:
-        log.debug("fuel LEA scrape failed: %s", exc)
-        return ""
 
 
 # ── Public API ───────────────────────────────────────────────────────────────
