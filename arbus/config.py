@@ -478,6 +478,10 @@ OPENAI_STRUCTURE_MODEL = os.environ.get("OPENAI_STRUCTURE_MODEL", "gpt-5")
 OPENAI_SEARCH_COUNTRY = os.environ.get("OPENAI_SEARCH_COUNTRY", "LT")
 # Reasoning models spend output budget thinking; floor the visible-answer room.
 OPENAI_MIN_OUTPUT_TOKENS = int(os.environ.get("OPENAI_MIN_OUTPUT_TOKENS", "4000"))
+# Reasoning effort for GPT-5 / o-series: "minimal" | "low" | "medium" | "high".
+# Default "low" — GPT-5's default effort billed ~1 EUR for one check; low keeps
+# the wrong-year/namesake reasoning at a fraction of the cost. "" omits it.
+OPENAI_REASONING_EFFORT = os.environ.get("OPENAI_REASONING_EFFORT", "low")
 
 # Draft in chunks: Perplexity output caps around 8K tokens, so one call can't
 # reliably carry 35 candidates through draft + structure.

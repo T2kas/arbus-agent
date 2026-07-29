@@ -97,3 +97,37 @@ def test_fuel_html_parser_pulls_averages_out_of_the_page():
 
 def test_fuel_html_parser_ignores_nonsense_numbers():
     assert resolvers.parse_fuel_html("<p>Dyzelinas pabrango 15 %</p>") == ""
+
+
+# ── diagnose(): the arbus-facts visibility that ends the guessing ───────────
+
+def test_diagnose_reports_a_network_failure_not_silent_empty(monkeypatch):
+    """The Ignitis case: the feed applies, but Yahoo refused — that must show as
+    an error, not as 'no feed'."""
+    def boom(url, **k):
+        raise Exception("403 Forbidden")
+    monkeypatch.setattr(resolvers, "_get_json", boom)
+    rows = resolvers.diagnose("Ar Ignitis grupė akcija pakils virš 23 Eur?")
+    assert len(rows) == 1
+    feed, fact, error = rows[0]
+    assert feed == "akcijos" and fact == "" and "403" in error
+
+
+def test_diagnose_returns_the_fact_when_the_feed_works(monkeypatch):
+    payload = {"chart": {"result": [{
+        "meta": {"symbol": "IGN1L.VS", "currency": "EUR", "regularMarketPrice": 22.7},
+        "indicators": {"quote": [{"close": [21.0, 22.7]}]}}]}}
+    monkeypatch.setattr(resolvers, "_get_json", lambda url, **k: payload)
+    rows = resolvers.diagnose("Ar Ignitis grupė akcija pakils virš 23 Eur?")
+    assert rows[0][0] == "akcijos" and "22.70" in rows[0][1] and rows[0][2] == ""
+
+
+def test_diagnose_weather_reports_meteo_failure(monkeypatch):
+    monkeypatch.setattr(resolvers, "_get_json",
+                        lambda url, **k: (_ for _ in ()).throw(Exception("timeout")))
+    rows = resolvers.diagnose("Aukščiausia temperatūra Vilniuje 2020-07-25?")
+    assert rows[0][0] == "oras" and "timeout" in rows[0][2]
+
+
+def test_diagnose_empty_when_no_feed_applies():
+    assert resolvers.diagnose("Ar Seimas priims biudžetą?") == []

@@ -236,6 +236,56 @@ def fuel_fact(question: str) -> str:
 
 # ── Public API ───────────────────────────────────────────────────────────────
 
+def diagnose(question: str, closes_at: str = "") -> list[tuple[str, str, str]]:
+    """Per-feed status for one market: (feed, fact, error).
+
+    `facts_for` hides failures as empty strings; this exposes them so `arbus
+    facts` can tell "this feed does not apply" from "meteo.lt/Yahoo refused the
+    request" — the difference between a design gap and a network problem.
+    """
+    out: list[tuple[str, str, str]] = []
+
+    hit = _ticker_for(question)
+    if hit:
+        ticker, name = hit
+        fact, err = "", ""
+        for host in ("query1", "query2"):
+            try:
+                fact = parse_stock(_get_json(
+                    f"https://{host}.finance.yahoo.com/v8/finance/chart/"
+                    f"{ticker}?range=1y&interval=1d"), name)
+                if fact:
+                    break
+            except Exception as exc:
+                err = f"{type(exc).__name__}: {exc}"
+        out.append(("akcijos", fact, "" if fact else (err or "atsakyme nebuvo kainos")))
+
+    target = _weather_target(question, closes_at)
+    if target:
+        station, iso = target
+        fact, err = "", ""
+        if iso > date.today().isoformat():
+            err = f"data {iso} dar ateityje"
+        else:
+            try:
+                fact = parse_weather(_get_json(
+                    f"https://api.meteo.lt/v1/stations/{station}/observations/{iso}"), iso)
+            except Exception as exc:
+                err = f"{type(exc).__name__}: {exc}"
+        out.append(("oras", fact, "" if fact else (err or "nėra matavimų tą dieną")))
+
+    if any(k in question.lower() for k in ("degal", "dyzel", "benzin", "kuro")):
+        try:
+            fact = fuel_fact(question)
+        except Exception as exc:
+            fact = f""
+            out.append(("degalai", "", f"{type(exc).__name__}: {exc}"))
+        else:
+            out.append(("degalai", fact, "" if fact else "LEA neatidavė duomenų"))
+
+    return out
+
+
 def facts_for(question: str, closes_at: str = "") -> str:
     """Authoritative facts relevant to this market, newline-joined ('' if none).
 

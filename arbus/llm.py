@@ -183,6 +183,11 @@ def openai_chat(
         # or the visible answer can come back empty/truncated.
         "max_output_tokens": max(max_tokens, config.OPENAI_MIN_OUTPUT_TOKENS),
     }
+    # GPT-5 with default reasoning burned ~1 EUR on one check (reasoning tokens
+    # bill at output rates). "low" keeps enough reasoning for the wrong-year /
+    # namesake checks at a fraction of the cost.
+    if config.OPENAI_REASONING_EFFORT:
+        payload["reasoning"] = {"effort": config.OPENAI_REASONING_EFFORT}
     if web_search:
         tool: dict = {"type": "web_search"}
         loc = {"type": "approximate"}

@@ -436,6 +436,35 @@ def cmd_calibration(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_facts(args: argparse.Namespace) -> int:
+    """Show what the deterministic data feeds return for a market question.
+
+    This is the diagnostic for "the check said it couldn't find the Ignitis
+    price / Vilnius temperature": those should come from a feed, not the model.
+    A ✅ means the number is fetched and will be handed to the check; a ❌ with
+    an error means the feed is unreachable from here (then it is a network/URL
+    problem, not the model's fault).
+    """
+    from . import resolvers
+
+    question = " ".join(args.question)
+    rows = resolvers.diagnose(question)
+    if not rows:
+        print("Nė vienas duomenų feed'as netinka šiai rinkai — "
+              "bus ieškoma per modelį (akcijos/oras/degalai netaikomi).")
+        return 0
+    for feed, fact, error in rows:
+        if fact:
+            print(f"✅ {feed}: {fact}")
+        else:
+            print(f"❌ {feed}: NEPAVYKO — {error}")
+    ok = sum(1 for _, fact, _ in rows if fact)
+    print(f"\n{ok}/{len(rows)} feed'ai atidavė duomenis. "
+          + ("Šie faktai bus paduoti patikrai." if ok else
+             "Nė vienas nepavyko — patikrink internetą/URL (žr. klaidą aukščiau)."))
+    return 0
+
+
 def cmd_feeds(_args: argparse.Namespace) -> int:
     """Show which news feeds are alive and how much each contributes."""
     rows = harvest.probe_feeds()
@@ -629,6 +658,12 @@ def main() -> int:
 
     fd = sub.add_parser("feeds", help="check which news feeds still work")
     fd.set_defaults(func=cmd_feeds)
+
+    ft = sub.add_parser("facts",
+                        help="show what the data feeds return for a market question")
+    ft.add_argument("question", nargs="+",
+                    help='e.g. arbus facts "Ar Ignitis akcija pakils virš 23 Eur?"')
+    ft.set_defaults(func=cmd_facts)
 
     ck = sub.add_parser("check",
                         help="AI-check frozen markets and alert Telegram")

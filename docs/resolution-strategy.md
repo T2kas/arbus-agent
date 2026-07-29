@@ -5,15 +5,38 @@ jau žinomas, ir koks**. Testuojant paaiškėjo, kad svarbiausias dalykas yra ne
 modelis, o **paieškos variklis** — ar jis randa lietuviškus šaltinius (LRT,
 Delfi, eurovision.tv, LKL, UEFA).
 
-## Ką parodė testai (2026-07-28)
+## Ką parodė testai (2026-07-28…30)
 
-| Sistema | Rado LT šaltinius? | Rezultatas |
-|---|---|---|
-| **Anthropic web_search + Opus/Sonnet** | ✅ taip | Rado tikslų LRT straipsnį, rezultatą, datą |
-| Perplexity sonar / sonar-reasoning-pro | ❌ ne | „ŠALTINIS: nerasta" net kai LRT turi atsakymą |
+| Sistema | Rado LT šaltinius? | Kaina/patikra | Rezultatas |
+|---|---|---|---|
+| **Anthropic web_search + Opus** | ✅ taip | ~0,15 € | Tikslus LRT straipsnis, rezultatas, data, net pastebėjo Vilnius/Kaunas painiavą |
+| Anthropic web_search + Sonnet | ✅ taip | ~0,05 € | Ta pati paieška, kiek silpnesnis protavimas |
+| **OpenAI GPT-5 + web search** | dalinai | **~1,00 €** ❗ | Euroviziją atsakė NETEISINGAI („nepateko"), brangu |
+| Perplexity sonar / reasoning-pro | ❌ ne | ~0,05 € | „nerasta" net kai LRT turi atsakymą |
 
-Išvada: **Perplexity paieška nemato lietuviškų šaltinių** — netinka rezoliucijai.
-Anthropic paieška (lokalizuota į Vilnių) juos randa.
+**Aiški išvada: Anthropic yra tiksliausias IR protingos kainos.** GPT-5 pasirodė
+ir brangesnis, ir mažiau tikslus (Eurovizija). Perplexita nemato LT šaltinių.
+Modelio keitimas (GPT-5.6 Terra ir pan.) šito neišspręs, nes problema yra
+**paieška**, ne protavimas.
+
+### Bet svarbiausia: nepriklausyk nuo modelio paieškos ten, kur nereikia
+
+Akcijos ir oras **neturi** būti ieškomi modelio — jie ateina iš `resolvers.py`
+(Yahoo, meteo.lt) kaip faktas. Jei patikra sako „neradau Ignitis kainos / Vilniaus
+temperatūros" — tai reiškia, kad **feed'as nesuveikė**, ne modelis kaltas.
+Patikrink tai tiesiogiai:
+
+```
+python -m arbus facts "Ar Ignitis grupė akcija pakils virš 23 Eur?"
+python -m arbus facts "Kokia bus aukščiausia temperatūra Vilniuje liepos 25, 2026?"
+```
+
+- **✅** = kaina/temperatūra gauta ir bus paduota patikrai (modeliui nereikia ieškoti).
+- **❌ NEPAVYKO — <klaida>** = feed'as neprieinamas iš tavo tinklo (pvz. Yahoo blokuoja
+  IP). Tada matysi tikslią klaidą ir galėsim pataisyti šaltinį.
+
+Tai atskiria „modelis blogai ieško" nuo „duomenų feed'as neveikia" — dažniausiai
+tai antra, ir sprendžiama be jokio modelio.
 
 ## Modelis ≠ paieška
 
