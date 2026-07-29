@@ -7,6 +7,23 @@ import re
 from pathlib import Path
 
 
+def _clean_env_value(value: str) -> str:
+    """Strip an inline `# comment` and surrounding quotes from a .env value.
+
+    Without this, a line like `ANTHROPIC_AICHECK_MODEL=claude-sonnet-5  # cheaper`
+    sets the value to "claude-sonnet-5  # cheaper" — a garbage model name that
+    the API rejects with a 404. An inline comment is any `#` preceded by
+    whitespace; a `#` inside a quoted value or with no space before it (e.g. a
+    URL fragment) is kept.
+    """
+    value = value.strip()
+    if value and value[0] not in ("'", '"'):
+        value = re.split(r"\s+#", value, maxsplit=1)[0].strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        value = value[1:-1]
+    return value
+
+
 def _load_dotenv() -> None:
     """Minimal .env loader (repo root); real env vars always win."""
     env_path = Path(__file__).resolve().parent.parent / ".env"
@@ -16,8 +33,9 @@ def _load_dotenv() -> None:
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             key, _, value = line.partition("=")
-            if value.strip():
-                os.environ.setdefault(key.strip(), value.strip())
+            value = _clean_env_value(value)
+            if value:
+                os.environ.setdefault(key.strip(), value)
 
 
 _load_dotenv()

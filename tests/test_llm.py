@@ -332,3 +332,15 @@ def test_aicheck_target_shows_provider_and_model(monkeypatch):
 
     monkeypatch.setenv("LLM_PROVIDER_AICHECK", "openai")       # the fix
     assert llm.aicheck_target() == ("openai", config.OPENAI_AICHECK_MODEL)
+
+
+def test_env_loader_strips_inline_comments_and_quotes():
+    """The Sonnet 404: `ANTHROPIC_AICHECK_MODEL=claude-sonnet-5  # cheaper`
+    became the model name, comment and all, and the API rejected it."""
+    clean = config._clean_env_value
+    assert clean("claude-sonnet-5   # → per pusę pigiau") == "claude-sonnet-5"
+    assert clean("off          # → Opus 5") == "off"
+    assert clean('"sk-ant-xyz"') == "sk-ant-xyz"          # surrounding quotes
+    assert clean("sk-ant-xyz") == "sk-ant-xyz"            # untouched when clean
+    # a '#' with no space before it (URL fragment) is kept
+    assert clean("https://x.lt/a#frag") == "https://x.lt/a#frag"
