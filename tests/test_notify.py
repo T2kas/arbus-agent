@@ -240,3 +240,50 @@ def test_search_ratelimit_gives_up_gracefully_after_retries(monkeypatch):
                         lambda p, **k: "ĮSPĖJIMAI: rate limit\nSIŪLOMA BAIGTIS: dar neaišku")
     out = aicheck._research_with_search_retry("p", 5, "anthropic")
     assert "dar neaišku" in out                       # never crashes
+
+
+# ── truncated (max_tokens) responses: retry, never surface as a real answer ──
+
+def test_truncated_response_missing_the_verdict_line_is_retried(monkeypatch):
+    """Anthropic silently returns partial text when max_tokens is hit — no
+    exception, just a log warning. A response cut off before its final
+    SIŪLOMA BAIGTIS line must not be read as a considered 'unknown' or, worse,
+    have some other line misparsed as the verdict."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SEARCH_BACKOFF_SECONDS", 0)
+    calls = []
+
+    def fake_research(prompt, **k):
+        calls.append(1)
+        if len(calls) == 1:
+            # cut off mid-answer, before SIŪLOMA BAIGTIS ever appears
+            return ("REZULTATAS: žinomas\nKAS ĮVYKO: 2026-07-30 Vilniuje vyks "
+                    "atsakomosios rungtynės su Tbilisio")
+        return ("REZULTATAS: žinomas\nŠALTINIS: https://uefa.com/x\n"
+                "SIŪLOMA BAIGTIS: dar neaišku")
+
+    monkeypatch.setattr(aicheck.llm, "research", fake_research)
+    out = aicheck._research_with_search_retry("p", 5, "anthropic")
+    assert len(calls) == 2 and "SIŪLOMA BAIGTIS: dar neaišku" in out
+
+
+def test_truncated_response_never_returned_as_final_answer(monkeypatch):
+    """If every retry is still truncated, fall back to the honest unknown
+    rather than surfacing a cut-off fragment as if it were complete."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SEARCH_BACKOFF_SECONDS", 0)
+    monkeypatch.setattr(aicheck.llm, "research",
+                        lambda p, **k: "REZULTATAS: žinomas\nKAS ĮVYKO: dar rašau")
+    out = aicheck._research_with_search_retry("p", 5, "anthropic")
+    assert out == aicheck._FALLBACK_UNKNOWN
+    assert "dar rašau" not in out                     # the fragment is discarded
+
+
+def test_complete_response_with_a_real_unknown_is_not_treated_as_truncated():
+    from arbus import aicheck
+
+    text = ("REZULTATAS: nežinomas\nKAS ĮVYKO: dar neįvyko\nŠALTINIS: nerasta\n"
+            "SIŪLOMA BAIGTIS: dar neaišku\nPASITIKĖJIMAS: žemas")
+    assert aicheck._looks_incomplete(text) is False

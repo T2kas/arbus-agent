@@ -200,21 +200,42 @@ _SEARCH_FAIL_RE = re.compile(
     r"rate.?limit|search.{0,20}(unavailable|failed|exceeded)", re.I)
 
 
+def _looks_incomplete(text: str) -> bool:
+    """True if the response was cut off before its final field.
+
+    Anthropic silently returns whatever text it managed to generate when
+    max_tokens is hit mid-answer (`llm._research_anthropic` only logs a
+    warning) — live-observed on a search-heavy market. A response missing its
+    terminal SIŪLOMA BAIGTIS line is not a considered "I don't know", it is a
+    truncated one, and must not be read as either.
+    """
+    return not _OUTCOME_RE.search(text)
+
+
+_FALLBACK_UNKNOWN = "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
+
+
 def _research_with_search_retry(prompt: str, searches: int, prov: str) -> str:
     import time
 
+    text = ""
     for attempt in range(config.AICHECK_SEARCH_RETRIES + 1):
         text = llm.research(prompt, system=SYSTEM,
                             max_uses=searches or config.AICHECK_MAX_SEARCHES,
-                            max_tokens=1200, stage="aicheck",
+                            max_tokens=config.AICHECK_MAX_TOKENS, stage="aicheck",
                             force_provider=prov).strip()
-        if text and not _SEARCH_FAIL_RE.search(text):
+        bad = bool(text) and (_SEARCH_FAIL_RE.search(text) or _looks_incomplete(text))
+        if text and not bad:
             return text
         if attempt < config.AICHECK_SEARCH_RETRIES:
             wait = config.AICHECK_SEARCH_BACKOFF_SECONDS * (attempt + 1)
-            log.warning("search tool rate-limited (%s); retrying in %ds", prov, wait)
+            reason = ("rate-limited" if (text and _SEARCH_FAIL_RE.search(text))
+                     else "truncated/empty")
+            log.warning("aicheck response %s (%s); retrying in %ds", reason, prov, wait)
             time.sleep(wait)
-    return text or "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
+    # Every attempt was empty, rate-limited or truncated: never surface that
+    # partial/garbage text as if it were a considered answer.
+    return _FALLBACK_UNKNOWN
 
 
 def check_request(conn: sqlite3.Connection, request_id: int,

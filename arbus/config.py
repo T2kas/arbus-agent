@@ -557,9 +557,17 @@ DEADLINE_SWEEP_GRACE_DAYS = 1
 # were injected.
 AICHECK_MAX_SEARCHES = 3          # we already have the data — just confirm it
 AICHECK_MAX_SEARCHES_OPEN = 5     # searching from scratch (was 8; 5 is enough)
+# Output budget for the aicheck call itself. Anthropic silently returns
+# whatever it managed to generate when max_tokens is hit mid-answer (only a log
+# warning, no error) — live-observed truncating the response before its final
+# SIŪLOMA BAIGTIS line on a search-heavy market, which then read as "doesn't
+# know" when the model had actually found the answer. 1200 was too tight once
+# extended thinking + multiple search round-trips share the same budget.
+AICHECK_MAX_TOKENS = int(os.environ.get("AICHECK_MAX_TOKENS", "4000"))
 # The web-search tool gets rate-limited when many markets run in a burst (the
 # request returns 200 but the model reports "limit exceeded" and finds nothing).
-# Retry that single market after a backoff, and pace the checks so it is rarer.
+# Retry that single market after a backoff (also covers a truncated response),
+# and pace the checks so it is rarer.
 AICHECK_SEARCH_RETRIES = 1
 AICHECK_SEARCH_BACKOFF_SECONDS = 20
 APP_CHECK_DELAY_SECONDS = 4       # pause between markets to spread search calls
