@@ -9,7 +9,7 @@ from arbus import config, llm
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch):
     for var in ("LLM_PROVIDER", "ANTHROPIC_API_KEY", "PERPLEXITY_API_KEY",
-                "ZAI_API_KEY", "OPENROUTER_API_KEY"):
+                "ZAI_API_KEY", "OPENROUTER_API_KEY", "OPENAI_API_KEY"):
         monkeypatch.delenv(var, raising=False)
 
 
@@ -264,3 +264,59 @@ def test_provider_detects_openrouter_key(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "or-x")
     assert llm.provider() == "openrouter"
     assert "openrouter" in llm.available_providers()
+
+
+# ── OpenAI backend (native key, Responses API + web search) ─────────────────
+
+def test_openai_uses_responses_api_with_localized_web_search(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-oa")
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_CITY", "Vilnius")
+    monkeypatch.setattr(llm.config, "OPENAI_SEARCH_COUNTRY", "LT")
+    seen = {}
+
+    class R:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self):
+            return {"output_text": "REZULTATAS: žinomas\nSIŪLOMA BAIGTIS: Taip"}
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        seen["url"] = url; seen["json"] = json; seen["headers"] = headers
+        return R()
+
+    monkeypatch.setattr(llm.requests, "post", fake_post)
+    out = llm.openai_chat("q", system="s", model="gpt-5", max_tokens=1200,
+                          web_search=True)
+    assert seen["url"].endswith("/v1/responses")
+    assert seen["json"]["tools"][0]["type"] == "web_search"
+    assert seen["json"]["tools"][0]["user_location"]["country"] == "LT"
+    assert seen["json"]["tools"][0]["user_location"]["city"] == "Vilnius"
+    assert seen["json"]["max_output_tokens"] >= 4000        # reasoning floor
+    assert seen["headers"]["Authorization"] == "Bearer sk-oa"
+    assert out.startswith("REZULTATAS")
+
+
+def test_openai_output_text_falls_back_to_output_array():
+    data = {"output": [
+        {"type": "reasoning", "content": []},
+        {"type": "web_search_call"},
+        {"type": "message", "content": [
+            {"type": "output_text", "text": "SIŪLOMA BAIGTIS: Ne"}]},
+    ]}
+    assert llm._openai_output_text(data) == "SIŪLOMA BAIGTIS: Ne"
+
+
+def test_research_routes_aicheck_to_openai_model(monkeypatch):
+    seen = {}
+    monkeypatch.setattr(llm, "openai_chat",
+                        lambda *a, model=None, web_search=False, **k: seen.update(
+                            model=model, web_search=web_search) or "ok")
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "openai")
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == config.OPENAI_AICHECK_MODEL and seen["web_search"]
+
+
+def test_provider_detects_openai_key(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-oa")
+    assert llm.provider() == "openai"
+    assert "openai" in llm.available_providers()

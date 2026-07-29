@@ -468,6 +468,17 @@ OPENROUTER_STRUCTURE_MODEL = os.environ.get(
 OPENROUTER_SEARCH_ENGINE = os.environ.get("OPENROUTER_SEARCH_ENGINE", "exa")
 OPENROUTER_SEARCH_RESULTS = int(os.environ.get("OPENROUTER_SEARCH_RESULTS", "5"))
 
+# ── OpenAI (native key, Responses API + built-in web search) ─────────────────
+# Direct OpenAI, for testing GPT-5 / o-series on their own credits. Swap the
+# model to compare: gpt-5 (default), gpt-5-mini (cheaper), o4-mini (reasoning).
+# OpenAI's web search accepts a Lithuania country code, so it is localized here.
+OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-5")
+OPENAI_AICHECK_MODEL = os.environ.get("OPENAI_AICHECK_MODEL", "gpt-5")
+OPENAI_STRUCTURE_MODEL = os.environ.get("OPENAI_STRUCTURE_MODEL", "gpt-5")
+OPENAI_SEARCH_COUNTRY = os.environ.get("OPENAI_SEARCH_COUNTRY", "LT")
+# Reasoning models spend output budget thinking; floor the visible-answer room.
+OPENAI_MIN_OUTPUT_TOKENS = int(os.environ.get("OPENAI_MIN_OUTPUT_TOKENS", "4000"))
+
 # Draft in chunks: Perplexity output caps around 8K tokens, so one call can't
 # reliably carry 35 candidates through draft + structure.
 DRAFT_CHUNK_SIZE = 15

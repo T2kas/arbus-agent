@@ -39,7 +39,7 @@ def provider(stage: str | None = None) -> str:
     paying a stronger model for. Set LLM_PROVIDER_DRAFT / LLM_PROVIDER_VERIFY to
     override LLM_PROVIDER for one stage.
     """
-    known = ("anthropic", "perplexity", "zai", "openrouter")
+    known = ("anthropic", "perplexity", "zai", "openrouter", "openai")
     if stage:
         per_stage = os.environ.get(f"LLM_PROVIDER_{stage.upper()}", "").strip().lower()
         if per_stage in known:
@@ -51,13 +51,15 @@ def provider(stage: str | None = None) -> str:
         return "anthropic"
     if os.environ.get("PERPLEXITY_API_KEY"):
         return "perplexity"
+    if os.environ.get("OPENAI_API_KEY"):
+        return "openai"
     if os.environ.get("OPENROUTER_API_KEY"):
         return "openrouter"
     if os.environ.get("ZAI_API_KEY"):
         return "zai"
     raise RuntimeError(
-        "Set ANTHROPIC_API_KEY, PERPLEXITY_API_KEY, OPENROUTER_API_KEY or "
-        "ZAI_API_KEY (or LLM_PROVIDER + the matching key)"
+        "Set ANTHROPIC_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY, "
+        "OPENROUTER_API_KEY or ZAI_API_KEY (or LLM_PROVIDER + the matching key)"
     )
 
 
@@ -140,6 +142,75 @@ def openrouter_chat(
     )
     resp.raise_for_status()
     return _strip_reasoning(resp.json()["choices"][0]["message"]["content"])
+
+
+# ── OpenAI backend (native key, Responses API + built-in web search) ─────────
+# Uses the Responses API (/v1/responses), not Chat Completions, because that is
+# where GPT-5 / o-series get the built-in `web_search` tool and where reasoning
+# models handle their own token budget cleanly. The search is localized to
+# Vilnius so it returns Lithuanian sources (OpenAI, unlike Anthropic, accepts a
+# country code for Lithuania).
+
+def _openai_output_text(data: dict) -> str:
+    """Pull the assistant's text out of a Responses API result, skipping the
+    reasoning and web_search_call items."""
+    if isinstance(data.get("output_text"), str) and data["output_text"].strip():
+        return data["output_text"].strip()
+    parts: list[str] = []
+    for item in data.get("output", []):
+        if item.get("type") == "message":
+            for chunk in item.get("content", []):
+                if chunk.get("type") in ("output_text", "text") and chunk.get("text"):
+                    parts.append(chunk["text"])
+    return "\n".join(parts).strip()
+
+
+def openai_chat(
+    user: str,
+    system: str | None = None,
+    model: str = "gpt-5",
+    max_tokens: int = 8000,
+    web_search: bool = False,
+    response_format: dict | None = None,
+) -> str:
+    input_items = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": user}
+    ]
+    payload: dict = {
+        "model": model,
+        "input": input_items,
+        # Reasoning models spend part of the budget thinking, so give a floor
+        # or the visible answer can come back empty/truncated.
+        "max_output_tokens": max(max_tokens, config.OPENAI_MIN_OUTPUT_TOKENS),
+    }
+    if web_search:
+        tool: dict = {"type": "web_search"}
+        loc = {"type": "approximate"}
+        if config.ANTHROPIC_SEARCH_CITY:
+            loc["city"] = config.ANTHROPIC_SEARCH_CITY
+        if config.ANTHROPIC_SEARCH_REGION:
+            loc["region"] = config.ANTHROPIC_SEARCH_REGION
+        if config.OPENAI_SEARCH_COUNTRY:
+            loc["country"] = config.OPENAI_SEARCH_COUNTRY
+        if len(loc) > 1:
+            tool["user_location"] = loc
+        payload["tools"] = [tool]
+    if response_format:
+        # Translate a Chat-Completions-style response_format into the Responses
+        # API's text.format shape, so structuring can reuse the shared helper.
+        schema = (response_format.get("json_schema", {}).get("schema")
+                  or response_format.get("schema"))
+        if schema:
+            payload["text"] = {"format": {"type": "json_schema",
+                                          "name": "result", "schema": schema}}
+    resp = requests.post(
+        "https://api.openai.com/v1/responses",
+        headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"},
+        json=payload,
+        timeout=600,
+    )
+    resp.raise_for_status()
+    return _strip_reasoning(_openai_output_text(resp.json()))
 
 
 def _extract_json(text: str) -> str:
@@ -437,6 +508,8 @@ def available_providers() -> list[str]:
     out = []
     if os.environ.get("ANTHROPIC_API_KEY"):
         out.append("anthropic")
+    if os.environ.get("OPENAI_API_KEY"):
+        out.append("openai")
     if os.environ.get("OPENROUTER_API_KEY"):
         out.append("openrouter")
     if os.environ.get("PERPLEXITY_API_KEY"):
@@ -464,6 +537,11 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
                     else config.OPENROUTER_MODEL)
         return openrouter_chat(user_prompt, system=system, model=or_model,
                                max_tokens=max_tokens, web_search=True)
+    if prov == "openai":
+        oa_model = (config.OPENAI_AICHECK_MODEL if stage == "aicheck"
+                    else config.OPENAI_MODEL)
+        return openai_chat(user_prompt, system=system, model=oa_model,
+                           max_tokens=max_tokens, web_search=True)
     if prov == "zai":
         return zai_chat(user_prompt, system=system, model=config.ZAI_MODEL,
                         max_tokens=max_tokens, web_search=True)
@@ -490,6 +568,11 @@ def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:
     if prov == "openrouter":
         return _structure_openai_compatible(
             openrouter_chat, config.OPENROUTER_STRUCTURE_MODEL, text, output_model,
+            max_tokens,
+        )
+    if prov == "openai":
+        return _structure_openai_compatible(
+            openai_chat, config.OPENAI_STRUCTURE_MODEL, text, output_model,
             max_tokens,
         )
     return _structure_anthropic(text, output_model, max_tokens)

@@ -44,8 +44,21 @@ Todėl pigesnis modelis su ta pačia gera paieška randa tuos pačius šaltinius
 
 ## Rekomenduojama sistema (nuo pigiausio prie tiksliausio)
 
-Botas dabar palaiko **4 tiekėjus** ir kiekvieną gali pajungti tik rezoliucijai,
-per `.env`, be kodo keitimo. Testuok šia tvarka:
+Botas dabar palaiko **5 tiekėjus** (Anthropic, OpenAI, OpenRouter, Perplexity,
+Z.AI) ir kiekvieną gali pajungti tik rezoliucijai, per `.env`, be kodo keitimo.
+
+### Greita atmintinė — kaip pajungti kiekvieną (tik patikrai)
+
+| Tiekėjas | `.env` eilutės |
+|---|---|
+| **OpenAI** (savo raktas) | `OPENAI_API_KEY=sk-...`<br>`LLM_PROVIDER_AICHECK=openai`<br>`OPENAI_AICHECK_MODEL=gpt-5` (arba `gpt-5-mini`, `o4-mini`) |
+| **OpenRouter** (vienas raktas, daug modelių) | `OPENROUTER_API_KEY=sk-or-...`<br>`LLM_PROVIDER_AICHECK=openrouter`<br>`OPENROUTER_AICHECK_MODEL=openai/gpt-5` |
+| **Anthropic** (patikrinta) | `LLM_PROVIDER_AICHECK=anthropic`<br>`ANTHROPIC_AICHECK_MODEL=claude-sonnet-5` (arba `claude-opus-5`) |
+| **Perplexity** | `LLM_PROVIDER_AICHECK=perplexity`<br>`PERPLEXITY_AICHECK_MODEL=sonar-reasoning-pro` |
+
+Keiti tik tas eilutes, kitko neliesk. Po kiekvieno keitimo — `python -m arbus check --no-telegram`.
+
+Testuok šia tvarka:
 
 1. **Pigiausias, ką verta bandyti — GPT-5 + Exa (OpenRouter).**
    ```
