@@ -320,3 +320,15 @@ def test_provider_detects_openai_key(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "sk-oa")
     assert llm.provider() == "openai"
     assert "openai" in llm.available_providers()
+
+
+def test_aicheck_target_shows_provider_and_model(monkeypatch):
+    """The line that catches OPENAI_AICHECK_MODEL set but LLM_PROVIDER_AICHECK
+    still perplexity — the provider decides, the model just names the variant."""
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-oa")
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "pplx")
+    monkeypatch.setenv("LLM_PROVIDER_AICHECK", "perplexity")   # the mismatch
+    assert llm.aicheck_target() == ("perplexity", config.PERPLEXITY_AICHECK_MODEL)
+
+    monkeypatch.setenv("LLM_PROVIDER_AICHECK", "openai")       # the fix
+    assert llm.aicheck_target() == ("openai", config.OPENAI_AICHECK_MODEL)

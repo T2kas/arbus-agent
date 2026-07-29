@@ -457,7 +457,14 @@ def cmd_check(args: argparse.Namespace) -> int:
     decides": it reads the cited source and sends the team a summary with the
     evidence. It decides nothing — the dashboard is where the decision happens.
     """
-    from . import aicheck, resolution
+    from . import aicheck, llm, resolution
+
+    # Show exactly which provider + model will run the check. This is the line
+    # that catches the classic mix-up: setting OPENAI_AICHECK_MODEL but leaving
+    # LLM_PROVIDER_AICHECK=perplexity means the check still runs on Perplexity.
+    prov, model = llm.aicheck_target()
+    print(f"🔎 Resolution check: provider={prov}, model={model} "
+          f"(set by LLM_PROVIDER_AICHECK / {prov.upper()}_AICHECK_MODEL)\n")
 
     conn = store.connect()
     resolution.init(conn)          # picks up the ai_summary columns on old DBs
