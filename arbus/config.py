@@ -554,15 +554,17 @@ SETTLEMENT_DELAY_MINUTES = 5
 # set to 0 to disable it and rely only on the circuit breaker and user reports.
 DEADLINE_SWEEP_GRACE_DAYS = 1
 
-# Search budget = the main cost lever. Each web search injects a full page of
-# tokens, so on Opus 8 searches is what pushed a check to ~EUR 0.28. Two tiers:
-# when a resolver already handed us the deciding number (a stock price, a
-# temperature), the model only has to read it, so a few searches suffice; when
-# nobody cited a source and there is no feed (M.A.M.A., Eurovision), it has to
-# FIND the outcome and needs more. `_run` picks the tier from whether facts
-# were injected.
-AICHECK_MAX_SEARCHES = 3          # we already have the data — just confirm it
-AICHECK_MAX_SEARCHES_OPEN = 5     # searching from scratch (was 8; 5 is enough)
+# Search budget = the main lever for BOTH cost and latency. Each web search is a
+# separate server-side round-trip (Anthropic emits a `pause_turn` and we make
+# another streaming call per search), so on a slow tier 5 searches meant ~5-6
+# sequential calls and minutes per market — live-measured. Two tiers: when a
+# resolver already handed us the deciding number (a stock price, a temperature)
+# the model only has to read it, so a couple of searches suffice; when nobody
+# cited a source and there is no feed (M.A.M.A., Eurovision) it has to FIND the
+# outcome. `_run` picks the tier from whether facts were injected. Both are
+# env-tunable — raise for thoroughness on hard events, lower for speed.
+AICHECK_MAX_SEARCHES = int(os.environ.get("AICHECK_MAX_SEARCHES", "2"))
+AICHECK_MAX_SEARCHES_OPEN = int(os.environ.get("AICHECK_MAX_SEARCHES_OPEN", "3"))
 # Output budget for the aicheck call itself. Anthropic silently returns
 # whatever it managed to generate when max_tokens is hit mid-answer (only a log
 # warning, no error) — live-observed truncating the response before its final
