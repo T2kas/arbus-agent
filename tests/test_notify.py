@@ -232,6 +232,30 @@ def test_search_ratelimit_is_retried_then_succeeds(monkeypatch):
     assert len(calls) == 2 and "žinomas" in out      # retried past the rate limit
 
 
+def test_too_many_web_search_calls_is_retried(monkeypatch):
+    """Live-observed: the model reports "You have called the web_search tool too
+    many times this turn" when it wants more than max_uses. That is a hit cap,
+    not a considered unknown — it must retry with a fresh budget, not be trusted.
+    The regex missing this phrasing let it fall through to "dar neaišku"."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SEARCH_BACKOFF_SECONDS", 0)
+    calls = []
+
+    def fake_research(prompt, **k):
+        calls.append(1)
+        if len(calls) == 1:
+            return ("REZULTATAS: nežinomas\nĮSPĖJIMAI: Paieškos įrankis buvo "
+                    "užblokuotas (You have called the web_search tool too many "
+                    "times this turn)\nSIŪLOMA BAIGTIS: dar neaišku")
+        return ("REZULTATAS: žinomas\nŠALTINIS: https://eurovision.tv/x\n"
+                "SIŪLOMA BAIGTIS: Taip")
+
+    monkeypatch.setattr(aicheck.llm, "research", fake_research)
+    out = aicheck._research_with_search_retry("p", 3, "anthropic")
+    assert len(calls) == 2 and "Taip" in out
+
+
 def test_search_ratelimit_gives_up_gracefully_after_retries(monkeypatch):
     from arbus import aicheck, config
 

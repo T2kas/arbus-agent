@@ -190,14 +190,18 @@ def _run(question: str, options: str, criteria: str, proposed: str,
                         "Patikrink naujienas rankiniu būdu.")
 
 
-# The web-search TOOL can be rate-limited even when the request returns 200: the
-# model then reports "paieškos įrankio limitas išnaudotas / limit exceeded" and
-# gives up, which is a transient infra failure, NOT a genuine "unknown". Running
-# many markets in a burst is what triggers it. We detect that phrasing and retry
-# the same market after a short backoff.
+# The web-search TOOL can be exhausted even when the request returns 200: the
+# model then reports it could not search and gives up, which is a transient
+# infra limit, NOT a genuine "unknown". Two live-observed variants: a rate limit
+# ("paieškos įrankio limitas išnaudotas / limit exceeded") and the per-turn cap
+# ("You have called the web_search tool too many times this turn" — the model
+# wanted more than max_uses). Both mean "no real answer this attempt", so both
+# must trigger a retry with a fresh search budget rather than be trusted.
 _SEARCH_FAIL_RE = re.compile(
     r"limit\s*exceeded|paieškos įrankio limit|nepavyko atlikti paieškos|"
-    r"rate.?limit|search.{0,20}(unavailable|failed|exceeded)", re.I)
+    r"rate.?limit|search.{0,20}(unavailable|failed|exceeded)|"
+    r"too\s+many\s+(times|web[_ ]?search|search)|web[_ ]?search.{0,20}too\s+many|"
+    r"apribot|užblokuot|uzblokuot", re.I)
 
 
 def _looks_incomplete(text: str) -> bool:
