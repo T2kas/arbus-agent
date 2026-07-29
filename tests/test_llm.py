@@ -172,6 +172,10 @@ def test_zai_error_without_tools_still_raises(monkeypatch):
 def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
     """Resolution checks decide payouts that cannot be clawed back, so they get
     the accurate model even though drafting runs on the cheap one."""
+    # AICHECK_MODEL is read from ANTHROPIC_AICHECK_MODEL at import time, so a
+    # real .env on the dev machine (e.g. set to claude-sonnet-5 to save cost)
+    # must not make this test's hardcoded expectation fail — patch it directly.
+    monkeypatch.setattr(config, "AICHECK_MODEL", "claude-opus-5")
     seen = {}
 
     def fake(prompt, system, max_uses, max_tokens, model=None):
@@ -182,7 +186,7 @@ def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
     monkeypatch.setattr(llm, "provider", lambda stage=None: "anthropic")
 
     llm.research("p", system="s", stage="aicheck")
-    assert seen["model"] == config.AICHECK_MODEL == "claude-opus-5"
+    assert seen["model"] == "claude-opus-5"
 
     llm.research("p", system="s", stage="draft")
     assert seen["model"] is None          # drafting stays on the cheap default
