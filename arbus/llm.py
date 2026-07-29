@@ -443,7 +443,7 @@ def _web_search_tool(max_uses: int, with_location: bool = True) -> dict:
 
 
 def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens: int,
-                        model: str | None = None) -> str:
+                        model: str | None = None, thinking: str | None = None) -> str:
     client = _anthropic_client()
     messages: list[dict] = [{"role": "user", "content": user_prompt}]
     with_location = True
@@ -452,8 +452,9 @@ def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens
     system_blocks = [{"type": "text", "text": system,
                       "cache_control": {"type": "ephemeral"}}]
     kwargs: dict = {}
-    if config.ANTHROPIC_THINKING != "off":
-        kwargs["thinking"] = {"type": config.ANTHROPIC_THINKING}
+    thinking = config.ANTHROPIC_THINKING if thinking is None else thinking
+    if thinking != "off":
+        kwargs["thinking"] = {"type": thinking}
     for attempt in range(6):
         try:
             with client.messages.stream(
@@ -565,11 +566,20 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
         return zai_chat(user_prompt, system=system, model=config.ZAI_MODEL,
                         max_tokens=max_tokens, web_search=True)
     model = None
+    thinking = None
     if stage == "verify" and config.VERIFY_MODEL:
         model = config.VERIFY_MODEL
-    elif stage == "aicheck" and config.AICHECK_MODEL:
-        model = config.AICHECK_MODEL
-    return _research_anthropic(user_prompt, system, max_uses, max_tokens, model=model)
+    elif stage == "aicheck":
+        if config.AICHECK_MODEL:
+            model = config.AICHECK_MODEL
+        # Extended thinking is the resolution check's latency killer: Sonnet
+        # generated a full reasoning trace before EACH of its search round-trips
+        # (~10 API calls, ~6 min for 5 markets, live-measured). The aicheck
+        # prompt already enforces the reasoning steps explicitly, so thinking
+        # buys little here and costs minutes and output tokens per market.
+        thinking = config.AICHECK_THINKING
+    return _research_anthropic(user_prompt, system, max_uses, max_tokens,
+                               model=model, thinking=thinking)
 
 
 def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:

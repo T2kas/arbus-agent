@@ -178,7 +178,7 @@ def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
     monkeypatch.setattr(config, "AICHECK_MODEL", "claude-opus-5")
     seen = {}
 
-    def fake(prompt, system, max_uses, max_tokens, model=None):
+    def fake(prompt, system, max_uses, max_tokens, model=None, thinking=None):
         seen["model"] = model
         return "ok"
 
@@ -190,6 +190,55 @@ def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
 
     llm.research("p", system="s", stage="draft")
     assert seen["model"] is None          # drafting stays on the cheap default
+
+
+def test_aicheck_disables_extended_thinking_but_generation_keeps_it(monkeypatch):
+    """Thinking-on made the check ~6 min/market (a reasoning trace before each
+    search round-trip). aicheck turns it off; drafting/verify keep the default."""
+    monkeypatch.setattr(config, "AICHECK_THINKING", "off")
+    monkeypatch.setattr(config, "ANTHROPIC_THINKING", "adaptive")
+    seen = {}
+
+    def fake(prompt, system, max_uses, max_tokens, model=None, thinking=None):
+        seen["thinking"] = thinking
+        return "ok"
+
+    monkeypatch.setattr(llm, "_research_anthropic", fake)
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "anthropic")
+
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["thinking"] == "off"
+
+    llm.research("p", system="s", stage="draft")
+    assert seen["thinking"] is None          # None -> _research_anthropic uses the default
+
+
+def test_research_anthropic_thinking_override(monkeypatch):
+    """thinking=None uses config; an explicit value overrides it."""
+    monkeypatch.setattr(config, "ANTHROPIC_THINKING", "adaptive")
+    captured = {}
+
+    class _Stream:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def get_final_message(self):
+            class M:
+                stop_reason = "end_turn"
+                content = []
+            return M()
+
+    class _Client:
+        class messages:
+            @staticmethod
+            def stream(**kw):
+                captured.update(kw)
+                return _Stream()
+
+    monkeypatch.setattr(llm, "_anthropic_client", lambda: _Client())
+    llm._research_anthropic("p", "s", 5, 1000, thinking="off")
+    assert "thinking" not in captured                  # off -> omitted entirely
+    llm._research_anthropic("p", "s", 5, 1000, thinking=None)
+    assert captured.get("thinking") == {"type": "adaptive"}   # falls back to config
 
 
 def test_aicheck_uses_a_perplexity_reasoning_model(monkeypatch):

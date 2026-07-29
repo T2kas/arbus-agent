@@ -64,6 +64,12 @@ AICHECK_MODEL = os.environ.get("ANTHROPIC_AICHECK_MODEL", "claude-opus-5")
 # Extended thinking is charged as output. "off" removes it entirely; the
 # scaffolding around the model already does the reasoning we depend on.
 ANTHROPIC_THINKING = os.environ.get("ANTHROPIC_THINKING", "adaptive")
+# ...but the resolution check keeps it OFF: with thinking on, Sonnet produced a
+# reasoning trace before each of its search round-trips, making a 9-market check
+# take ~6 min per market (live-measured). The aicheck prompt already spells out
+# the reasoning steps, so "off" is far faster and cheaper with little accuracy
+# cost. Set ANTHROPIC_AICHECK_THINKING=adaptive to turn it back on.
+AICHECK_THINKING = os.environ.get("ANTHROPIC_AICHECK_THINKING", "off")
 
 # Each web search costs money AND injects fetched pages into the context, so
 # these are the biggest single cost lever in the batch.
