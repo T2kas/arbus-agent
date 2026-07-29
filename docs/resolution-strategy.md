@@ -132,3 +132,33 @@ neįvyko. Pigiausias variantas, kuris tai daro patikimai, ir yra optimaliausias.
 - **Nuorodų tikrinimas**: kiekviena cituota nuoroda parsisiunčiama; 404 = pažymima
   kaip haliucinacija.
 - **Aiški antraštė** ✅/❌/⚠️ ir „ne tie metai / ne tas žmogus" apsaugos prompte.
+
+## Realiai patikrinta ir sutvarkyta (2026-07-29, gyvai su tikrais raktais)
+
+Šie trys buvo tikri bug'ai, ne modelio kaltė — visi patvirtinti gyvu testavimu
+prieš tikrą ena.lt/app API, ne spėjimu:
+
+- **Degalų feed'as niekada neveikė.** `FUEL_LEA_URL` (ena.lt „įrankio" puslapis)
+  yra Power BI iframe — jame apskritai nėra jokio „dyzelin"/„benzin" teksto,
+  regex neturėjo ko rasti. Realus veikiantis šaltinis: ena.lt kasdien publikuoja
+  paprasto teksto biuletenį kaip naujienos įrašą, bet **ne vienu nuspėjamu URL**
+  — kartais `ndk-YYYYMMDD`, kartais aprašomasis slug'as, ir aprašomasis kartais
+  būna VIENA DIENA ŠVIEŽESNIS už datinį (patikrinta gyvai: `ndk-20260727` turėjo
+  pirmadienio kainą, kai jau buvo paskelbtas antradienio įrašas su kitu slug'u —
+  ir būtent antradienio kaina peršoko rinkos ribą). Sprendimas: `sitemap.xml`
+  turi `<lastmod>` kiekvienam URL — rikiuojam pagal datą ir bandome, kol vienas
+  atsakymas atitinka biuletenio sakinio formą. Dabar visada randa tikrai
+  naujausią įrašą, nepriklausomai nuo slug'o stiliaus.
+- **Nukirstas atsakymas buvo skaitomas kaip „nežino".** Anthropic tyliai
+  grąžina dalinį tekstą, kai `max_tokens` pasibaigia viduryje atsakymo (tik
+  perspėjimas loge, ne klaida) — pastebėta gyvai ant sudėtingos paieškos rinkos.
+  1200 tokenų buvo per mažai su išplėstiniu mąstymu ir keliomis paieškomis.
+  Pakelta iki 4000 (`AICHECK_MAX_TOKENS`), ir atsakymas be `SIŪLOMA BAIGTIS`
+  eilutės dabar aptinkamas kaip nukirstas ir bandomas iš naujo, o ne priimamas
+  kaip apgalvotas „nežinau".
+- **App'o tikimybės skalė — 0-100, ne 0-1.** Tikra rinka gyvai turėjo
+  `probability: 55.0` / `45.0` (suma = 100). `arbus calibration` dėl to rodė
+  „5500%", o circuit breaker'io 0,15 riba (15 procentinių punktų) būtų
+  suveikusi beveik nuo bet kokio realaus kainos judesio, nes net 1 punkto
+  judesys šioje skalėje jau yra „1.0", kas viršija 0.15. Pridėtas `_as_fraction()`
+  normalizavimas: bet kuri reikšmė >1 laikoma 0-100 skale ir dalinama iš 100.
