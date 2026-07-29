@@ -514,6 +514,13 @@ def cmd_check(args: argparse.Namespace) -> int:
         app_frozen, app_error = aicheck.pending_app_markets(conn, limit=args.limit)
         if app_error:
             print(f"⚠️  Could not read the app: {app_error}")
+        if args.match:
+            from . import app as app_api
+            needle = args.match.lower()
+            app_frozen = [m for m in app_frozen
+                          if needle in app_api.question_of(m).lower()]
+            print(f"(--match {args.match!r}: checking {len(app_frozen)} matching "
+                  "market(s))")
 
     if not requests_ and not freezes and not app_frozen:
         print("Nothing frozen is waiting for a check.")
@@ -679,6 +686,10 @@ def main() -> int:
                     help="print the summary without sending it to the team")
     ck.add_argument("--no-app", action="store_true",
                     help="skip markets frozen in the app, check local ones only")
+    ck.add_argument("--match", metavar="TEXT",
+                    help="only check app markets whose title contains TEXT "
+                         '(case-insensitive), e.g. --match Eurovizij — much '
+                         "faster than checking every frozen market")
     ck.set_defaults(func=cmd_check)
 
     wt = sub.add_parser("watch",
