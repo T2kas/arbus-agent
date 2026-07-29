@@ -177,10 +177,7 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     last_exc = None
     for i, prov in enumerate(chain):
         try:
-            text = llm.research(prompt, system=SYSTEM,
-                                max_uses=searches or config.AICHECK_MAX_SEARCHES,
-                                max_tokens=1200, stage="aicheck",
-                                force_provider=prov).strip()
+            text = _research_with_search_retry(prompt, searches, prov)
             if i:                                    # a fallback was used
                 text += (f"\n(pastaba: {primary} nepavyko, "
                          f"patikra atlikta su {prov})")
@@ -191,6 +188,33 @@ def _run(question: str, options: str, criteria: str, proposed: str,
 
     return on_error or (f"AI patikra nepavyko: {_explain(last_exc)}. "
                         "Patikrink naujienas rankiniu būdu.")
+
+
+# The web-search TOOL can be rate-limited even when the request returns 200: the
+# model then reports "paieškos įrankio limitas išnaudotas / limit exceeded" and
+# gives up, which is a transient infra failure, NOT a genuine "unknown". Running
+# many markets in a burst is what triggers it. We detect that phrasing and retry
+# the same market after a short backoff.
+_SEARCH_FAIL_RE = re.compile(
+    r"limit\s*exceeded|paieškos įrankio limit|nepavyko atlikti paieškos|"
+    r"rate.?limit|search.{0,20}(unavailable|failed|exceeded)", re.I)
+
+
+def _research_with_search_retry(prompt: str, searches: int, prov: str) -> str:
+    import time
+
+    for attempt in range(config.AICHECK_SEARCH_RETRIES + 1):
+        text = llm.research(prompt, system=SYSTEM,
+                            max_uses=searches or config.AICHECK_MAX_SEARCHES,
+                            max_tokens=1200, stage="aicheck",
+                            force_provider=prov).strip()
+        if text and not _SEARCH_FAIL_RE.search(text):
+            return text
+        if attempt < config.AICHECK_SEARCH_RETRIES:
+            wait = config.AICHECK_SEARCH_BACKOFF_SECONDS * (attempt + 1)
+            log.warning("search tool rate-limited (%s); retrying in %ds", prov, wait)
+            time.sleep(wait)
+    return text or "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
 
 
 def check_request(conn: sqlite3.Connection, request_id: int,

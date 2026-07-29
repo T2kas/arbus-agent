@@ -494,8 +494,11 @@ OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-5")
 OPENAI_AICHECK_MODEL = os.environ.get("OPENAI_AICHECK_MODEL", "gpt-5")
 OPENAI_STRUCTURE_MODEL = os.environ.get("OPENAI_STRUCTURE_MODEL", "gpt-5")
 OPENAI_SEARCH_COUNTRY = os.environ.get("OPENAI_SEARCH_COUNTRY", "LT")
-# Reasoning models spend output budget thinking; floor the visible-answer room.
-OPENAI_MIN_OUTPUT_TOKENS = int(os.environ.get("OPENAI_MIN_OUTPUT_TOKENS", "4000"))
+# Reasoning models spend output budget thinking; floor the visible-answer room
+# generously, or GPT-5 can burn the whole budget reasoning and return an empty
+# message (the weather market came back <no output>). Unused tokens are not
+# billed, so a high cap is free insurance.
+OPENAI_MIN_OUTPUT_TOKENS = int(os.environ.get("OPENAI_MIN_OUTPUT_TOKENS", "8000"))
 # Reasoning effort for GPT-5 / o-series: "minimal" | "low" | "medium" | "high".
 # Default "low" — GPT-5's default effort billed ~1 EUR for one check; low keeps
 # the wrong-year/namesake reasoning at a fraction of the cost. "" omits it.
@@ -554,6 +557,12 @@ DEADLINE_SWEEP_GRACE_DAYS = 1
 # were injected.
 AICHECK_MAX_SEARCHES = 3          # we already have the data — just confirm it
 AICHECK_MAX_SEARCHES_OPEN = 5     # searching from scratch (was 8; 5 is enough)
+# The web-search tool gets rate-limited when many markets run in a burst (the
+# request returns 200 but the model reports "limit exceeded" and finds nothing).
+# Retry that single market after a backoff, and pace the checks so it is rarer.
+AICHECK_SEARCH_RETRIES = 1
+AICHECK_SEARCH_BACKOFF_SECONDS = 20
+APP_CHECK_DELAY_SECONDS = 4       # pause between markets to spread search calls
 # After the check, fetch every URL the model cited and confirm it actually
 # loads. Fabricated links (the model has invented eurovision.tv and nba.com URLs
 # that 404) are the clearest hallucination signal there is. A request that fails

@@ -209,3 +209,34 @@ def test_aicheck_reports_a_401_as_a_key_problem(monkeypatch):
     monkeypatch.setattr(llm, "research", boom)
     out = aicheck._run("q", "Taip / Ne", "rules", "Taip", "src")
     assert "401" in out and "raktas" in out            # names the real cause
+
+
+# ── search-tool rate limit: retry, don't record it as a real "unknown" ──────
+
+def test_search_ratelimit_is_retried_then_succeeds(monkeypatch):
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SEARCH_BACKOFF_SECONDS", 0)
+    calls = []
+
+    def fake_research(prompt, **k):
+        calls.append(1)
+        if len(calls) == 1:
+            return ("REZULTATAS: nežinomas\nĮSPĖJIMAI: paieškos įrankio limitas "
+                    "išnaudotas (limit exceeded)\nSIŪLOMA BAIGTIS: dar neaišku")
+        return ("REZULTATAS: žinomas\nŠALTINIS: https://lrt.lt/x\n"
+                "SIŪLOMA BAIGTIS: Taip")
+
+    monkeypatch.setattr(aicheck.llm, "research", fake_research)
+    out = aicheck._research_with_search_retry("p", 5, "anthropic")
+    assert len(calls) == 2 and "žinomas" in out      # retried past the rate limit
+
+
+def test_search_ratelimit_gives_up_gracefully_after_retries(monkeypatch):
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SEARCH_BACKOFF_SECONDS", 0)
+    monkeypatch.setattr(aicheck.llm, "research",
+                        lambda p, **k: "ĮSPĖJIMAI: rate limit\nSIŪLOMA BAIGTIS: dar neaišku")
+    out = aicheck._research_with_search_retry("p", 5, "anthropic")
+    assert "dar neaišku" in out                       # never crashes

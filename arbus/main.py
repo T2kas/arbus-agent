@@ -535,7 +535,12 @@ def cmd_check(args: argparse.Namespace) -> int:
         print(aicheck.review_freeze(conn, market["id"], alert=alert))
 
     from . import app as app_api
-    for market in app_frozen:
+    import time
+    for idx, market in enumerate(app_frozen):
+        # Pace the checks: firing every market's web searches back-to-back
+        # rate-limits the search tool (later markets come back "limit exceeded").
+        if idx and config.APP_CHECK_DELAY_SECONDS:
+            time.sleep(config.APP_CHECK_DELAY_SECONDS)
         print(f"\n— app market {app_api.market_id_of(market)} "
               f"[{app_api.status_of(market)}]: {app_api.question_of(market)}")
         print(aicheck.review_app_market(conn, market, alert=alert))
