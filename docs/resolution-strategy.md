@@ -162,3 +162,26 @@ prieš tikrą ena.lt/app API, ne spėjimu:
   suveikusi beveik nuo bet kokio realaus kainos judesio, nes net 1 punkto
   judesys šioje skalėje jau yra „1.0", kas viršija 0.15. Pridėtas `_as_fraction()`
   normalizavimas: bet kuri reikšmė >1 laikoma 0-100 skale ir dalinama iš 100.
+
+## Greitis — 5 min → 2 min vienai rinkai (2026-07-30, gyvai)
+
+Eurovizijos patikra su Sonnet užtruko **5 min 20 s** — ir tai buvo švaistymas, ne
+tikras darbas. Logas parodė: modelis norėjo daugiau paieškų nei leido biudžetas
+(3), pasiekė **savo eilės (per-turn) paieškos limitą**, ir pasakė, kad negalėjo
+baigti. `_research_with_search_retry` tai palaikė rate-limit'u: palaukė 20 s ir
+**pakartojo visą paieškų seką iš naujo su tuo pačiu biudžetu 3** — dar ~2,5 min
+už nieką.
+
+Tas biudžeto sumažinimas 5→3 (dėl greičio/kainos) atsuko atgal: sukėlė limito
+pataikymą, o pilnas retry yra LĖTESNIS nei viena 4 paieškų eiga. Pataisyta:
+
+- **OPEN biudžetas 3→4** (`AICHECK_MAX_SEARCHES_OPEN`) — paieškai imli rinka
+  baigia per vieną eigą.
+- **Limito pataikymas ≠ rate-limit.** Kai modelis pasiekia savo eilės paieškos
+  cap'ą (norėjo daugiau), retry vyksta **iš karto** (be 20 s) ir su **didesniu**
+  biudžetu (+2, `AICHECK_SEARCH_CAP_BUMP`). 20 s backoff paliktas tik tikram
+  rate-limit'ui.
+
+Rezultatas gyvai: ta pati Eurovizijos rinka, tas pats teisingas ✅ atsakymas
+(LRT + eurodiena.lt, 8 vieta, teisingi metai), bet **2 min 8 s** — vienas API
+kvietimas, jokio retry. ~60 % greičiau ir pigiau (perpus mažiau paieškų).

@@ -563,8 +563,15 @@ DEADLINE_SWEEP_GRACE_DAYS = 1
 # cited a source and there is no feed (M.A.M.A., Eurovision) it has to FIND the
 # outcome. `_run` picks the tier from whether facts were injected. Both are
 # env-tunable — raise for thoroughness on hard events, lower for speed.
+#
+# NOTE on the OPEN tier: 3 was measured too tight. A search-heavy market
+# (Eurovision, live) wanted a 4th search, hit the per-turn cap, and the model
+# announced it could not finish — which _research_with_search_retry then treated
+# as a failure and RE-RAN the whole sequence after a 20s wait (~5 min total). A
+# single 4-search pass (~3 min) is both faster and cheaper than 3 + retry, and
+# the cap-hit retry below bumps the budget instead of wasting a same-budget turn.
 AICHECK_MAX_SEARCHES = int(os.environ.get("AICHECK_MAX_SEARCHES", "2"))
-AICHECK_MAX_SEARCHES_OPEN = int(os.environ.get("AICHECK_MAX_SEARCHES_OPEN", "3"))
+AICHECK_MAX_SEARCHES_OPEN = int(os.environ.get("AICHECK_MAX_SEARCHES_OPEN", "4"))
 # Output budget for the aicheck call. Anthropic silently returns whatever it
 # generated when this is hit mid-answer (only a log warning, no error), so a too-
 # tight cap truncates the response before its SIŪLOMA BAIGTIS line — which then
@@ -582,6 +589,10 @@ AICHECK_MAX_TOKENS = int(os.environ.get("AICHECK_MAX_TOKENS", "16000"))
 # and pace the checks so it is rarer.
 AICHECK_SEARCH_RETRIES = 1
 AICHECK_SEARCH_BACKOFF_SECONDS = 20
+# When the failure is the model hitting its per-turn search cap (it wanted MORE
+# searches, not a rate limit), a backoff buys nothing — retry immediately with
+# this many extra searches so the second turn can actually finish.
+AICHECK_SEARCH_CAP_BUMP = int(os.environ.get("AICHECK_SEARCH_CAP_BUMP", "2"))
 APP_CHECK_DELAY_SECONDS = 4       # pause between markets to spread search calls
 # After the check, fetch every URL the model cited and confirm it actually
 # loads. Fabricated links (the model has invented eurovision.tv and nba.com URLs

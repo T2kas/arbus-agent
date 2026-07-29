@@ -256,6 +256,59 @@ def test_too_many_web_search_calls_is_retried(monkeypatch):
     assert len(calls) == 2 and "Taip" in out
 
 
+def test_search_cap_hit_bumps_the_budget_and_skips_the_backoff(monkeypatch):
+    """A per-turn cap hit means the model wanted MORE searches, not that we are
+    rate-limited. So the retry must (a) not waste a backoff and (b) hand the
+    model a bigger budget — retrying with the same small budget just burned
+    another full search sequence for nothing (live-seen ~5 min on Eurovision)."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SEARCH_CAP_BUMP", 2)
+    slept = []
+    monkeypatch.setattr(aicheck.time, "sleep", lambda s: slept.append(s))
+    budgets = []
+
+    def fake_research(prompt, **k):
+        budgets.append(k["max_uses"])
+        if len(budgets) == 1:
+            return ("REZULTATAS: nežinomas\nĮSPĖJIMAI: You have called the "
+                    "web_search tool too many times this turn\n"
+                    "SIŪLOMA BAIGTIS: dar neaišku")
+        return ("REZULTATAS: žinomas\nŠALTINIS: https://lrt.lt/x\n"
+                "SIŪLOMA BAIGTIS: Taip")
+
+    monkeypatch.setattr(aicheck.llm, "research", fake_research)
+    out = aicheck._research_with_search_retry("p", 4, "anthropic")
+    assert budgets == [4, 6]        # second turn got the +2 bump
+    assert slept == []              # no backoff on a cap hit
+    assert "Taip" in out
+
+
+def test_real_ratelimit_still_backs_off_without_bumping(monkeypatch):
+    """The opposite case: a genuine rate limit is NOT a cap hit, so it keeps the
+    backoff and does not inflate the budget."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SEARCH_CAP_BUMP", 2)
+    slept = []
+    monkeypatch.setattr(aicheck.time, "sleep", lambda s: slept.append(s))
+    budgets = []
+
+    def fake_research(prompt, **k):
+        budgets.append(k["max_uses"])
+        if len(budgets) == 1:
+            return ("REZULTATAS: nežinomas\nĮSPĖJIMAI: rate limit exceeded\n"
+                    "SIŪLOMA BAIGTIS: dar neaišku")
+        return ("REZULTATAS: žinomas\nŠALTINIS: https://lrt.lt/x\n"
+                "SIŪLOMA BAIGTIS: Taip")
+
+    monkeypatch.setattr(aicheck.llm, "research", fake_research)
+    out = aicheck._research_with_search_retry("p", 4, "anthropic")
+    assert budgets == [4, 4]        # budget unchanged
+    assert slept and slept[0] > 0   # a real rate limit still waits
+    assert "Taip" in out
+
+
 def test_search_ratelimit_gives_up_gracefully_after_retries(monkeypatch):
     from arbus import aicheck, config
 

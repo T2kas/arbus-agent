@@ -25,6 +25,7 @@ import json
 import logging
 import re
 import sqlite3
+import time
 from datetime import date, datetime, timezone
 
 import requests
@@ -203,6 +204,15 @@ _SEARCH_FAIL_RE = re.compile(
     r"too\s+many\s+(times|web[_ ]?search|search)|web[_ ]?search.{0,20}too\s+many|"
     r"apribot|užblokuot|uzblokuot", re.I)
 
+# A subset of the above: the model hit its per-turn search CAP (it wanted more
+# searches than max_uses allowed and said so). This is not a rate limit and not
+# a real failure — the fix is more budget, not a backoff. Retrying with the same
+# small budget after 20s just burned another ~2.5 min for nothing (live-seen on
+# Eurovision). So this case retries immediately with a bumped search budget.
+_SEARCH_CAP_RE = re.compile(
+    r"too\s+many\s+(times|web[_ ]?search|search)|web[_ ]?search.{0,20}too\s+many|"
+    r"per\s+daug\s+(kart|paie[šs]k)", re.I)
+
 
 def _looks_incomplete(text: str) -> bool:
     """True if the response was cut off before its final field.
@@ -220,18 +230,24 @@ _FALLBACK_UNKNOWN = "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
 
 
 def _research_with_search_retry(prompt: str, searches: int, prov: str) -> str:
-    import time
-
     text = ""
+    budget = searches or config.AICHECK_MAX_SEARCHES
     for attempt in range(config.AICHECK_SEARCH_RETRIES + 1):
-        text = llm.research(prompt, system=SYSTEM,
-                            max_uses=searches or config.AICHECK_MAX_SEARCHES,
+        text = llm.research(prompt, system=SYSTEM, max_uses=budget,
                             max_tokens=config.AICHECK_MAX_TOKENS, stage="aicheck",
                             force_provider=prov).strip()
+        cap_hit = bool(text) and bool(_SEARCH_CAP_RE.search(text))
         bad = bool(text) and (_SEARCH_FAIL_RE.search(text) or _looks_incomplete(text))
         if text and not bad:
             return text
         if attempt < config.AICHECK_SEARCH_RETRIES:
+            if cap_hit:
+                # The model wanted more searches, not a rate limit: a backoff
+                # buys nothing. Give it more budget and retry immediately.
+                budget += config.AICHECK_SEARCH_CAP_BUMP
+                log.warning("aicheck hit its search cap (%s); retrying now with "
+                            "%d searches", prov, budget)
+                continue
             wait = config.AICHECK_SEARCH_BACKOFF_SECONDS * (attempt + 1)
             reason = ("rate-limited" if (text and _SEARCH_FAIL_RE.search(text))
                      else "truncated/empty")
