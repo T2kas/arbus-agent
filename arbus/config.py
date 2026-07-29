@@ -565,13 +565,17 @@ DEADLINE_SWEEP_GRACE_DAYS = 1
 # env-tunable — raise for thoroughness on hard events, lower for speed.
 AICHECK_MAX_SEARCHES = int(os.environ.get("AICHECK_MAX_SEARCHES", "2"))
 AICHECK_MAX_SEARCHES_OPEN = int(os.environ.get("AICHECK_MAX_SEARCHES_OPEN", "3"))
-# Output budget for the aicheck call itself. Anthropic silently returns
-# whatever it managed to generate when max_tokens is hit mid-answer (only a log
-# warning, no error) — live-observed truncating the response before its final
-# SIŪLOMA BAIGTIS line on a search-heavy market, which then read as "doesn't
-# know" when the model had actually found the answer. 1200 was too tight once
-# extended thinking + multiple search round-trips share the same budget.
-AICHECK_MAX_TOKENS = int(os.environ.get("AICHECK_MAX_TOKENS", "4000"))
+# Output budget for the aicheck call. Anthropic silently returns whatever it
+# generated when this is hit mid-answer (only a log warning, no error), so a too-
+# tight cap truncates the response before its SIŪLOMA BAIGTIS line — which then
+# triggered a full retry that RE-RAN every web search, paying for them twice.
+# You are billed for tokens the model actually generates, NOT for this cap, so a
+# generous ceiling is essentially free: a short verdict still costs ~300 tokens,
+# the cap only lets the model reach the end of it after its inline reasoning
+# across several searches. Set high enough that truncation (and the wasteful
+# re-search retry) effectively never happens; it stays well under Sonnet's
+# per-response maximum.
+AICHECK_MAX_TOKENS = int(os.environ.get("AICHECK_MAX_TOKENS", "16000"))
 # The web-search tool gets rate-limited when many markets run in a burst (the
 # request returns 200 but the model reports "limit exceeded" and finds nothing).
 # Retry that single market after a backoff (also covers a truncated response),
