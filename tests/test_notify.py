@@ -323,6 +323,17 @@ def test_a_fact_market_does_not_search(monkeypatch):
     assert seen["searches"] == 0                        # fact tier: no search
 
 
+def test_prompt_tells_the_model_not_to_fake_a_search_when_it_cannot(monkeypatch):
+    """With 0 searches the model had no tool yet wrote 'ieškojau LEA archyvų'
+    (live). The directive must switch to 'you have no search tool' so it reasons
+    from the facts instead of fabricating a search."""
+    from arbus import aicheck
+
+    assert "SEARCH THE WEB" in aicheck._search_directive(4)
+    off = aicheck._search_directive(0)
+    assert "NO SEARCH TOOL" in off and "Do NOT claim you searched" in off
+
+
 # ── search-tool rate limit: retry, don't record it as a real "unknown" ──────
 
 def test_search_ratelimit_is_retried_then_succeeds(monkeypatch):

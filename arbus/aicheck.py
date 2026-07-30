@@ -192,6 +192,33 @@ def _finalize(text: str, verify: bool = None) -> str:
     return f"{header}\n{_BAR}\n{text}"
 
 
+_SEARCH_ON = (
+    "SEARCH THE WEB. Always — including when a source is cited, and especially "
+    "when none is. An admin freezing a market cannot attach a source, and a user "
+    "may cite a weak or wrong link, so judge the FACT, not the URL. Search in "
+    "Lithuanian using the market's own words and find the official confirmation "
+    "(LKL/UEFA/organiser, eurovision.tv, nba.com, lrs.lt, VRK, Nasdaq Baltic, "
+    "Statistikos departamentas, LHMT)."
+)
+_SEARCH_OFF = (
+    "YOU HAVE NO SEARCH TOOL THIS RUN — an authoritative feed already gave you "
+    "the number above. Do NOT claim you searched, and do NOT describe archives or "
+    "pages you did not open. Reason ONLY from the AUTHORITATIVE DATA and the "
+    "market text. If they do not fully settle the market — e.g. a market asking "
+    "whether a threshold was crossed at least once, when you were given only the "
+    "latest value — say exactly that in ĮSPĖJIMAI and set SIŪLOMA BAIGTIS: dar "
+    "neaišku. The one link you may cite is the source shown in the data above."
+)
+
+
+def _search_directive(searches: int) -> str:
+    """Match the prompt to reality: telling the model to 'search the web' when it
+    has no search tool made it fabricate a search it never ran (live: a fuel
+    market 'ieškojau LEA archyvų' with 0 searches). When searching is off, tell
+    it so and to reason only from the injected facts."""
+    return _SEARCH_ON if searches > 0 else _SEARCH_OFF
+
+
 def _run(question: str, options: str, criteria: str, proposed: str,
          source: str, today: date | None = None, on_error: str = "",
          searches: int | None = None, closes_at: str = "") -> str:
@@ -225,6 +252,7 @@ def _run(question: str, options: str, criteria: str, proposed: str,
         question=question, options=options, criteria=criteria,
         proposed=proposed, source=source,
         facts=facts or "(nėra automatinių duomenų — ieškok pats)",
+        search_directive=_search_directive(searches),
     )
 
     # Try the configured provider first, then any OTHER provider that has a key.
