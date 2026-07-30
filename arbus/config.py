@@ -599,6 +599,25 @@ AICHECK_SEARCH_BACKOFF_SECONDS = 20
 # (Eurovision finished in ~2 min) always completes; only the pathological
 # unresolved case is cut off. Env-tunable for a faster interactive run.
 AICHECK_TIMEOUT_SECONDS = int(os.environ.get("AICHECK_TIMEOUT_SECONDS", "300"))
+# Prices for the per-check cost line (Anthropic list prices, USD per 1M tokens;
+# search is per request). Rough on purpose — a "3 vs 15 cents" signal, not a
+# bill. Defaults are Claude Sonnet 5 + web_search ($10/1000). Override per .env
+# if you switch model or Anthropic changes prices.
+AICHECK_PRICE_INPUT_PER_M = float(os.environ.get("AICHECK_PRICE_INPUT_PER_M", "3.0"))
+AICHECK_PRICE_OUTPUT_PER_M = float(os.environ.get("AICHECK_PRICE_OUTPUT_PER_M", "15.0"))
+AICHECK_PRICE_CACHE_READ_PER_M = float(os.environ.get("AICHECK_PRICE_CACHE_READ_PER_M", "0.30"))
+AICHECK_PRICE_CACHE_WRITE_PER_M = float(os.environ.get("AICHECK_PRICE_CACHE_WRITE_PER_M", "3.75"))
+AICHECK_PRICE_SEARCH = float(os.environ.get("AICHECK_PRICE_SEARCH", "0.01"))
+AICHECK_EUR_PER_USD = float(os.environ.get("AICHECK_EUR_PER_USD", "0.92"))
+
+# When a market cites a source, fetching that page ourselves (a free HTTP GET)
+# and injecting its text lets the model READ the source instead of paying to
+# web-search for it — each search pulls a full page (~5-15k tokens) into the
+# input at input-token price, so this is the single biggest cost lever. With a
+# real source in hand the model needs at most a confirming search, not a hunt.
+AICHECK_SOURCE_FETCH = os.environ.get("AICHECK_SOURCE_FETCH", "on").strip().lower() != "off"
+AICHECK_SOURCE_MAX_CHARS = int(os.environ.get("AICHECK_SOURCE_MAX_CHARS", "6000"))
+AICHECK_MAX_SEARCHES_WITH_SOURCE = int(os.environ.get("AICHECK_MAX_SEARCHES_WITH_SOURCE", "1"))
 # When the failure is the model hitting its per-turn search cap (it wanted MORE
 # searches, not a rate limit), a backoff buys nothing — retry immediately with
 # this many extra searches so the second turn can actually finish.

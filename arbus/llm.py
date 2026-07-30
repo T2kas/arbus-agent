@@ -30,6 +30,61 @@ PROMPT_DIR = Path(__file__).resolve().parent.parent / "prompts"
 T = TypeVar("T", bound=BaseModel)
 
 
+# ── Usage / cost accounting ─────────────────────────────────────────────────
+# The resolution check's cost is dominated by web-search result tokens, not by
+# reasoning, and the CLI printed nothing about it — so a check that quietly cost
+# 15 cents looked the same as one that cost 3. We accumulate Anthropic's own
+# reported usage across every call a single market makes (retries and pause_turn
+# continuations included) so `arbus check` can show a real per-market cost.
+_USAGE = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "searches": 0}
+
+
+def reset_usage() -> None:
+    for k in _USAGE:
+        _USAGE[k] = 0
+
+
+def usage_snapshot() -> dict:
+    return dict(_USAGE)
+
+
+def _accumulate_usage(resp) -> None:
+    u = getattr(resp, "usage", None)
+    if u is None:
+        return
+    _USAGE["input"] += getattr(u, "input_tokens", 0) or 0
+    _USAGE["output"] += getattr(u, "output_tokens", 0) or 0
+    _USAGE["cache_read"] += getattr(u, "cache_read_input_tokens", 0) or 0
+    _USAGE["cache_write"] += getattr(u, "cache_creation_input_tokens", 0) or 0
+    stu = getattr(u, "server_tool_use", None)
+    if stu is not None:
+        _USAGE["searches"] += getattr(stu, "web_search_requests", 0) or 0
+
+
+def usage_cost_eur(snap: dict | None = None) -> float:
+    """Rough EUR cost of the accumulated usage. Order-of-magnitude by design —
+    a "3 vs 15 cents" signal, not a billing figure. Prices are Anthropic list
+    prices (config), converted to EUR."""
+    s = snap if snap is not None else _USAGE
+    usd = (s["input"] / 1e6 * config.AICHECK_PRICE_INPUT_PER_M
+           + s["output"] / 1e6 * config.AICHECK_PRICE_OUTPUT_PER_M
+           + s["cache_read"] / 1e6 * config.AICHECK_PRICE_CACHE_READ_PER_M
+           + s["cache_write"] / 1e6 * config.AICHECK_PRICE_CACHE_WRITE_PER_M
+           + s["searches"] * config.AICHECK_PRICE_SEARCH)
+    return usd * config.AICHECK_EUR_PER_USD
+
+
+def usage_line() -> str:
+    """One-line per-market cost summary, or '' when nothing was measured (e.g. a
+    non-Anthropic provider that does not report usage this way)."""
+    s = usage_snapshot()
+    if not any(s.values()):
+        return ""
+    return (f"💶 kaina ~{usage_cost_eur(s):.2f} € "
+            f"({s['searches']} paieškos, {s['input'] // 1000}k in / "
+            f"{s['output'] // 1000}k out)")
+
+
 def provider(stage: str | None = None) -> str:
     """Which backend runs a stage.
 
@@ -466,6 +521,7 @@ def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens
                 **kwargs,
             ) as stream:
                 resp = stream.get_final_message()
+            _accumulate_usage(resp)          # count every turn, pause_turns too
         except Exception as exc:
             # An unsupported user_location country is a configuration problem,
             # not a reason to lose the batch — drop the hint and search globally.

@@ -397,3 +397,63 @@ def test_env_loader_strips_inline_comments_and_quotes():
     assert clean("sk-ant-xyz") == "sk-ant-xyz"            # untouched when clean
     # a '#' with no space before it (URL fragment) is kept
     assert clean("https://x.lt/a#frag") == "https://x.lt/a#frag"
+
+
+# ── per-market cost accounting ──────────────────────────────────────────────
+
+class _FakeSrvTool:
+    def __init__(self, searches):
+        self.web_search_requests = searches
+
+
+class _FakeUsage:
+    def __init__(self, inp=0, out=0, cread=0, cwrite=0, searches=0):
+        self.input_tokens = inp
+        self.output_tokens = out
+        self.cache_read_input_tokens = cread
+        self.cache_creation_input_tokens = cwrite
+        self.server_tool_use = _FakeSrvTool(searches)
+
+
+class _FakeResp:
+    def __init__(self, usage):
+        self.usage = usage
+
+
+def test_usage_accumulates_across_calls(monkeypatch):
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=10000, out=500, searches=2)))
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=5000, out=300, searches=1)))
+    snap = llm.usage_snapshot()
+    assert snap["input"] == 15000 and snap["output"] == 800
+    assert snap["searches"] == 3
+
+
+def test_reset_usage_clears_the_counters(monkeypatch):
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=1, out=1, searches=1)))
+    llm.reset_usage()
+    assert not any(llm.usage_snapshot().values())
+
+
+def test_cost_reflects_searches_and_tokens(monkeypatch):
+    """Search-result input tokens are the real cost driver: a check with the
+    same output but many searches must cost visibly more."""
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=40000, out=1000, searches=4)))
+    heavy = llm.usage_cost_eur()
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=4000, out=1000, searches=1)))
+    light = llm.usage_cost_eur()
+    assert heavy > light > 0
+
+
+def test_usage_line_empty_when_nothing_measured():
+    llm.reset_usage()
+    assert llm.usage_line() == ""
+
+
+def test_usage_line_shows_cost_and_search_count():
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=30000, out=1000, searches=2)))
+    line = llm.usage_line()
+    assert "€" in line and "2 paieškos" in line

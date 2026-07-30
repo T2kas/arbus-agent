@@ -213,6 +213,88 @@ def test_aicheck_reports_a_401_as_a_key_problem(monkeypatch):
     assert "401" in out and "raktas" in out            # names the real cause
 
 
+# ── source fetch: read the cited page instead of paying to search for it ────
+
+class _FakeGet:
+    def __init__(self, status, text):
+        self.status_code = status
+        self.text = text
+
+
+def test_source_text_strips_html_to_readable_text(monkeypatch):
+    from arbus import aicheck
+
+    html = ("<html><head><style>.x{}</style></head><body><nav>Meniu</nav>"
+            "<article>Žalgiris laimėjo 89:80 antradienį.</article>"
+            "<script>track()</script></body></html>")
+    monkeypatch.setattr(aicheck.requests, "get", lambda *a, **k: _FakeGet(200, html))
+    text = aicheck.fetch_source_text("https://lrt.lt/x")
+    assert "Žalgiris laimėjo 89:80" in text
+    assert "track()" not in text and "<article>" not in text
+
+
+def test_source_text_empty_on_http_error(monkeypatch):
+    from arbus import aicheck
+
+    monkeypatch.setattr(aicheck.requests, "get", lambda *a, **k: _FakeGet(404, "gone"))
+    assert aicheck.fetch_source_text("https://lrt.lt/missing") == ""
+
+
+def test_source_facts_fetches_each_cited_url(monkeypatch):
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SOURCE_FETCH", True)
+    body = "x" * 300                                   # substantial content
+    monkeypatch.setattr(aicheck.requests, "get", lambda *a, **k: _FakeGet(200, body))
+    facts = aicheck.source_facts("Šaltinis: https://lrt.lt/a", "taisyklės https://delfi.lt/b")
+    assert "https://lrt.lt/a" in facts and "https://delfi.lt/b" in facts
+
+
+def test_source_facts_skips_thin_pages(monkeypatch):
+    """A page with almost no text (a redirect stub, a paywall) is not worth
+    injecting — better to let the model search."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SOURCE_FETCH", True)
+    monkeypatch.setattr(aicheck.requests, "get", lambda *a, **k: _FakeGet(200, "<p>hi</p>"))
+    assert aicheck.source_facts("https://lrt.lt/thin") == ""
+
+
+def test_source_facts_off_switch(monkeypatch):
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_SOURCE_FETCH", False)
+    called = []
+    monkeypatch.setattr(aicheck.requests, "get",
+                        lambda *a, **k: called.append(1) or _FakeGet(200, "x" * 300))
+    assert aicheck.source_facts("https://lrt.lt/a") == ""
+    assert not called                                  # no fetch when disabled
+
+
+def test_a_fetched_source_drops_the_search_budget(monkeypatch):
+    """The cost win: with the source text in hand, the run asks for only the
+    with-source (cheapest) search budget, not the full open-market hunt."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_MAX_SEARCHES_WITH_SOURCE", 1)
+    monkeypatch.setattr(config, "AICHECK_MAX_SEARCHES_OPEN", 4)
+    monkeypatch.setattr(aicheck.resolvers, "facts_for", lambda *a, **k: "")
+    monkeypatch.setattr(aicheck, "source_facts", lambda *a, **k: "Pateiktas šaltinis (...): ...")
+    monkeypatch.setattr(aicheck.llm, "reset_usage", lambda: None)
+    monkeypatch.setattr(aicheck.llm, "usage_line", lambda: "")
+    monkeypatch.setattr(aicheck.llm, "provider", lambda s: "anthropic")
+    monkeypatch.setattr(aicheck.llm, "available_providers", lambda: ["anthropic"])
+    seen = {}
+
+    def fake_retry(prompt, searches, prov):
+        seen["searches"] = searches
+        return "REZULTATAS: žinomas\nŠALTINIS: https://lrt.lt/x\nSIŪLOMA BAIGTIS: Taip"
+
+    monkeypatch.setattr(aicheck, "_research_with_search_retry", fake_retry)
+    aicheck._run("Ar X?", "Taip/Ne", "kriterijai", "(nenurodyta)", "https://lrt.lt/x")
+    assert seen["searches"] == 1                        # with-source budget, not 4
+
+
 # ── search-tool rate limit: retry, don't record it as a real "unknown" ──────
 
 def test_search_ratelimit_is_retried_then_succeeds(monkeypatch):

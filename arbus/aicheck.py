@@ -28,6 +28,7 @@ import sqlite3
 import threading
 import time
 from datetime import date, datetime, timezone
+from html import unescape as _html_unescape
 
 import requests
 
@@ -83,6 +84,50 @@ def verify_url(url: str, timeout: int = 12) -> str:
     if resp.status_code in _URL_GONE:
         return "broken"
     return "ok" if resp.status_code < 400 else "unknown"
+
+
+# Crude HTML → text: drop scripts/styles, strip tags, collapse whitespace. Not a
+# parser — just enough that the article body reaches the model. The model reads
+# past the nav/menu noise; the point is to hand it the source text so it does not
+# pay to web-search for a page we already have.
+_SCRIPT_RE = re.compile(r"<(script|style|noscript)\b[^>]*>.*?</\1>", re.I | re.S)
+_TAG_RE = re.compile(r"<[^>]+>")
+_WS_RE = re.compile(r"\s+")
+
+
+def fetch_source_text(url: str, max_chars: int | None = None, timeout: int = 12) -> str:
+    """Fetch a cited URL and return its readable text (''on any failure).
+
+    A market's own source is the cheapest possible evidence: one free GET versus
+    several billed web searches. Failure is never fatal — we just fall back to
+    letting the model search."""
+    if max_chars is None:
+        max_chars = config.AICHECK_SOURCE_MAX_CHARS
+    try:
+        resp = requests.get(url, headers={"User-Agent": UA},
+                            timeout=timeout, allow_redirects=True)
+    except Exception:
+        return ""
+    if resp.status_code >= 400:
+        return ""
+    stripped = _TAG_RE.sub(" ", _SCRIPT_RE.sub(" ", resp.text))
+    text = _WS_RE.sub(" ", _html_unescape(stripped)).strip()
+    return text[:max_chars]
+
+
+def source_facts(*fields: str) -> str:
+    """Fetch every URL cited in the given market fields (source, rules, …) and
+    return their text as facts. Empty when fetching is off, no URL is present, or
+    nothing substantial came back."""
+    if not config.AICHECK_SOURCE_FETCH:
+        return ""
+    urls = _HTTP_RE.findall("\n".join(f for f in fields if f))
+    out = []
+    for url in dict.fromkeys(urls):                  # de-dupe, keep order
+        text = fetch_source_text(url)
+        if len(text) >= 200:                         # substantial content only
+            out.append(f"Pateiktas šaltinis ({url}):\n{text}")
+    return "\n\n".join(out)
 
 
 def _suggested_outcome(text: str) -> str:
@@ -157,12 +202,24 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     verifying a link, it is finding out what happened, and the answer decides a
     payout. That is worth a few cents more.
     """
-    facts = resolvers.facts_for(question, closes_at)
-    # Cheap tier when a resolver already handed us the number to read; the
-    # search-from-scratch tier only when there is no feed and no cited source.
+    resolver_facts = resolvers.facts_for(question, closes_at)
+    # A cited source is the cheapest evidence there is: fetch it ourselves (free
+    # GET) and hand the model the text, so it does not pay to web-search for a
+    # page we already have. This is the biggest cost lever when markets carry a
+    # source — each avoided search is a full page of billed input tokens.
+    fetched = source_facts(source, criteria)
+    facts = "\n\n".join(f for f in (resolver_facts, fetched) if f)
+
+    # Search budget, cheapest tier first: with the source text in hand a single
+    # confirming search is enough; a resolver number needs a couple; only a
+    # market with neither feed nor source pays for the full hunt.
     if searches is None:
-        searches = (config.AICHECK_MAX_SEARCHES if facts
-                    else config.AICHECK_MAX_SEARCHES_OPEN)
+        if fetched:
+            searches = config.AICHECK_MAX_SEARCHES_WITH_SOURCE
+        elif resolver_facts:
+            searches = config.AICHECK_MAX_SEARCHES
+        else:
+            searches = config.AICHECK_MAX_SEARCHES_OPEN
     prompt = llm.load_prompt(
         "aicheck", today=(today or date.today()).isoformat(),
         question=question, options=options, criteria=criteria,
@@ -174,6 +231,7 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     # A wrong or expired second key (the classic LLM_PROVIDER_AICHECK=perplexity
     # with no valid PERPLEXITY_API_KEY → 401) must never take the whole check
     # down when a working Anthropic key is right there.
+    llm.reset_usage()                                # per-market cost accounting
     primary = llm.provider("aicheck")
     chain = [primary] + [p for p in llm.available_providers() if p != primary]
     last_exc = None
@@ -183,13 +241,19 @@ def _run(question: str, options: str, criteria: str, proposed: str,
             if i:                                    # a fallback was used
                 text += (f"\n(pastaba: {primary} nepavyko, "
                          f"patikra atlikta su {prov})")
-            return _finalize(text)
+            return _append_cost(_finalize(text))
         except Exception as exc:
             last_exc = exc
             log.warning("AI check via %s failed: %s", prov, _explain(exc))
 
     return on_error or (f"AI patikra nepavyko: {_explain(last_exc)}. "
                         "Patikrink naujienas rankiniu būdu.")
+
+
+def _append_cost(summary: str) -> str:
+    """Add the per-market cost line, when usage was measured."""
+    line = llm.usage_line()
+    return f"{summary}\n{_BAR}\n{line}" if line else summary
 
 
 # The web-search TOOL can be exhausted even when the request returns 200: the
