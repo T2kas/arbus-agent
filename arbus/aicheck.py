@@ -25,6 +25,7 @@ import json
 import logging
 import re
 import sqlite3
+import threading
 import time
 from datetime import date, datetime, timezone
 
@@ -229,13 +230,53 @@ def _looks_incomplete(text: str) -> bool:
 _FALLBACK_UNKNOWN = "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
 
 
+def _run_bounded(fn, timeout: int):
+    """Run fn() but stop waiting after `timeout` seconds.
+
+    A resolution check on a live, still-unresolved event searches all the way to
+    its budget and STILL lands on "dar neaišku" — live-measured at ~10 min on a
+    Conference League qualifier that had not been played yet. That verdict is
+    correct (never invent an outcome), but 10 min for it stalls a 9-market batch.
+    Anthropic streams keep-alive pings, so an httpx read timeout will not bound
+    the wall clock; and signal.alarm does not exist on Windows. So the call runs
+    on a daemon thread we simply stop waiting on: the abandoned request winds
+    down on its own and cannot delay process exit.
+    """
+    box: dict = {}
+
+    def worker():
+        try:
+            box["value"] = fn()
+        except Exception as exc:            # re-raised on the caller's thread
+            box["error"] = exc
+
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+    t.join(timeout)
+    if t.is_alive():
+        raise TimeoutError(f"aicheck exceeded {timeout}s")
+    if "error" in box:
+        raise box["error"]
+    return box["value"]
+
+
 def _research_with_search_retry(prompt: str, searches: int, prov: str) -> str:
     text = ""
     budget = searches or config.AICHECK_MAX_SEARCHES
     for attempt in range(config.AICHECK_SEARCH_RETRIES + 1):
-        text = llm.research(prompt, system=SYSTEM, max_uses=budget,
-                            max_tokens=config.AICHECK_MAX_TOKENS, stage="aicheck",
-                            force_provider=prov).strip()
+        try:
+            text = _run_bounded(
+                lambda: llm.research(prompt, system=SYSTEM, max_uses=budget,
+                                     max_tokens=config.AICHECK_MAX_TOKENS,
+                                     stage="aicheck", force_provider=prov),
+                config.AICHECK_TIMEOUT_SECONDS).strip()
+        except TimeoutError:
+            # Searched to the limit without a confirmable result: that IS "dar
+            # neaišku". Return it now rather than hang the batch or fall through
+            # to a weaker provider that will not find LT sources either.
+            log.warning("aicheck timed out after %ds (%s); returning unknown",
+                        config.AICHECK_TIMEOUT_SECONDS, prov)
+            return _FALLBACK_UNKNOWN
         cap_hit = bool(text) and bool(_SEARCH_CAP_RE.search(text))
         bad = bool(text) and (_SEARCH_FAIL_RE.search(text) or _looks_incomplete(text))
         if text and not bad:

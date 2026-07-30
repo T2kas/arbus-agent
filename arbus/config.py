@@ -589,6 +589,16 @@ AICHECK_MAX_TOKENS = int(os.environ.get("AICHECK_MAX_TOKENS", "16000"))
 # and pace the checks so it is rarer.
 AICHECK_SEARCH_RETRIES = 1
 AICHECK_SEARCH_BACKOFF_SECONDS = 20
+# Hard wall-clock bound per check. A market whose event has not resolved yet
+# (a live Conference League qualifier, live-measured) searches all the way to
+# its budget and still lands on "dar neaišku" — the right verdict, but it took
+# ~10 min to reach it and would stall a 9-market batch. Anthropic's keep-alive
+# pings defeat an httpx read timeout and Windows has no signal.alarm, so the
+# check runs on a daemon thread we stop waiting on after this many seconds and
+# return the same honest unknown. Generous enough that a resolvable market
+# (Eurovision finished in ~2 min) always completes; only the pathological
+# unresolved case is cut off. Env-tunable for a faster interactive run.
+AICHECK_TIMEOUT_SECONDS = int(os.environ.get("AICHECK_TIMEOUT_SECONDS", "300"))
 # When the failure is the model hitting its per-turn search cap (it wanted MORE
 # searches, not a rate limit), a backoff buys nothing — retry immediately with
 # this many extra searches so the second turn can actually finish.

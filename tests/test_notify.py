@@ -5,6 +5,8 @@ the team sees before deciding — if a field is missing there, the decision is
 made without it.
 """
 
+import time
+
 from arbus import ledger, notify, resolution, store
 from arbus.schemas import Candidate
 
@@ -307,6 +309,38 @@ def test_real_ratelimit_still_backs_off_without_bumping(monkeypatch):
     assert budgets == [4, 4]        # budget unchanged
     assert slept and slept[0] > 0   # a real rate limit still waits
     assert "Taip" in out
+
+
+def test_a_check_that_runs_too_long_is_cut_off_to_the_honest_unknown(monkeypatch):
+    """A live/unresolved event searches to its budget and still can't confirm an
+    outcome; live it took ~10 min to land on 'dar neaišku'. The wall-clock bound
+    must return that same unknown quickly instead of hanging the whole batch."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_TIMEOUT_SECONDS", 1)
+
+    def slow_research(prompt, **k):
+        time.sleep(5)                                 # longer than the 1s bound
+        return "REZULTATAS: žinomas\nSIŪLOMA BAIGTIS: Taip"
+
+    monkeypatch.setattr(aicheck.llm, "research", slow_research)
+    started = time.monotonic()
+    out = aicheck._research_with_search_retry("p", 4, "anthropic")
+    assert out == aicheck._FALLBACK_UNKNOWN
+    assert time.monotonic() - started < 4             # did not wait for the call
+
+
+def test_a_fast_check_is_not_affected_by_the_timeout(monkeypatch):
+    """The bound must not touch a normal, quick check — it returns its real
+    answer, not the fallback unknown."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_TIMEOUT_SECONDS", 30)
+    monkeypatch.setattr(aicheck.llm, "research",
+                        lambda p, **k: "REZULTATAS: žinomas\n"
+                                       "ŠALTINIS: https://lrt.lt/x\nSIŪLOMA BAIGTIS: Taip")
+    out = aicheck._research_with_search_retry("p", 4, "anthropic")
+    assert "Taip" in out and out != aicheck._FALLBACK_UNKNOWN
 
 
 def test_search_ratelimit_gives_up_gracefully_after_retries(monkeypatch):
