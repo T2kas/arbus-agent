@@ -37,18 +37,32 @@ T = TypeVar("T", bound=BaseModel)
 # reported usage across every call a single market makes (retries and pause_turn
 # continuations included) so `arbus check` can show a real per-market cost.
 _USAGE = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "searches": 0}
+# Bumped on every reset_usage(). A research call captures the generation when it
+# starts and its usage is dropped if a reset happened meanwhile — so an abandoned
+# call (a market cut off by the wall-clock timeout) cannot land its cost on the
+# NEXT market's tab when it finally returns on its daemon thread.
+_USAGE_GEN = 0
 
 
-def reset_usage() -> None:
+def reset_usage() -> int:
+    global _USAGE_GEN
+    _USAGE_GEN += 1
     for k in _USAGE:
         _USAGE[k] = 0
+    return _USAGE_GEN
+
+
+def _usage_generation() -> int:
+    return _USAGE_GEN
 
 
 def usage_snapshot() -> dict:
     return dict(_USAGE)
 
 
-def _accumulate_usage(resp) -> None:
+def _accumulate_usage(resp, gen: int | None = None) -> None:
+    if gen is not None and gen != _USAGE_GEN:
+        return                     # a reset happened since this call began: stale
     u = getattr(resp, "usage", None)
     if u is None:
         return
@@ -510,18 +524,24 @@ def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens
     thinking = config.ANTHROPIC_THINKING if thinking is None else thinking
     if thinking != "off":
         kwargs["thinking"] = {"type": thinking}
+    gen = _usage_generation()                # tag this call's usage
     for attempt in range(6):
+        # max_uses <= 0 means "answer from the facts you were given, do not
+        # search": a resolver already fetched the deciding number (a stock price,
+        # a temperature), so paying for a web search would only burn tokens and
+        # the shared search rate limit that the next market needs.
+        tools = ([_web_search_tool(max_uses, with_location)] if max_uses > 0 else [])
         try:
             with client.messages.stream(
                 model=model or config.MODEL,
                 max_tokens=max_tokens,
                 system=system_blocks,
-                tools=[_web_search_tool(max_uses, with_location)],
+                tools=tools,
                 messages=messages,
                 **kwargs,
             ) as stream:
                 resp = stream.get_final_message()
-            _accumulate_usage(resp)          # count every turn, pause_turns too
+            _accumulate_usage(resp, gen)     # count every turn, pause_turns too
         except Exception as exc:
             # An unsupported user_location country is a configuration problem,
             # not a reason to lose the batch — drop the hint and search globally.

@@ -326,7 +326,9 @@ def _run_bounded(fn, timeout: int):
 
 def _research_with_search_retry(prompt: str, searches: int, prov: str) -> str:
     text = ""
-    budget = searches or config.AICHECK_MAX_SEARCHES
+    # `searches` may legitimately be 0 (a fact market that must not search), so a
+    # falsy `or` fallback would wrongly turn 0 into the default — be explicit.
+    budget = config.AICHECK_MAX_SEARCHES if searches is None else searches
     for attempt in range(config.AICHECK_SEARCH_RETRIES + 1):
         try:
             text = _run_bounded(

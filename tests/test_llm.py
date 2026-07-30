@@ -457,3 +457,19 @@ def test_usage_line_shows_cost_and_search_count():
     llm._accumulate_usage(_FakeResp(_FakeUsage(inp=30000, out=1000, searches=2)))
     line = llm.usage_line()
     assert "€" in line and "2 paieškos" in line
+
+
+def test_stale_usage_from_an_abandoned_call_is_dropped(monkeypatch):
+    """A market cut off by the wall-clock timeout leaves its API call running on
+    a daemon thread; when it finally returns it must NOT bill the next market.
+    The generation captured at call start no longer matches after reset."""
+    gen = llm.reset_usage()                       # market A starts
+    llm.reset_usage()                             # market B starts (A abandoned)
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=99999, out=9999, searches=4)), gen)
+    assert not any(llm.usage_snapshot().values())  # A's late usage did not land
+
+
+def test_current_generation_usage_is_still_counted():
+    gen = llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=1000, out=100, searches=1)), gen)
+    assert llm.usage_snapshot()["input"] == 1000

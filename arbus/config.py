@@ -561,16 +561,22 @@ DEADLINE_SWEEP_GRACE_DAYS = 1
 # resolver already handed us the deciding number (a stock price, a temperature)
 # the model only has to read it, so a couple of searches suffice; when nobody
 # cited a source and there is no feed (M.A.M.A., Eurovision) it has to FIND the
-# outcome. `_run` picks the tier from whether facts were injected. Both are
+# outcome. `_run` picks the tier from whether facts were injected. All are
 # env-tunable — raise for thoroughness on hard events, lower for speed.
 #
-# NOTE on the OPEN tier: 3 was measured too tight. A search-heavy market
-# (Eurovision, live) wanted a 4th search, hit the per-turn cap, and the model
-# announced it could not finish — which _research_with_search_retry then treated
-# as a failure and RE-RAN the whole sequence after a 20s wait (~5 min total). A
-# single 4-search pass (~3 min) is both faster and cheaper than 3 + retry, and
-# the cap-hit retry below bumps the budget instead of wasting a same-budget turn.
-AICHECK_MAX_SEARCHES = int(os.environ.get("AICHECK_MAX_SEARCHES", "2"))
+# FACT tier = 0: when a resolver already fetched the deciding number (Ignitis
+# price, Vilnius temperature, diesel price) the model must READ it, not search.
+# Live, it was searching anyway despite the injected fact, burning credits AND
+# the shared web_search rate limit — which then rate-limited the LATER markets in
+# the same run. 0 searches (no search tool at all) makes a fact market answer
+# straight from the feed: ~0.02 EUR, no rate-limit, no cascade. Bump to 1 only if
+# a fact ever needs a confirming search.
+#
+# OPEN tier: 3 was measured too tight — a search-heavy market (Eurovision) wanted
+# a 4th search, hit the per-turn cap, and _research_with_search_retry re-ran the
+# whole sequence after a 20s wait (~5 min). A single 4-search pass is faster and
+# cheaper, and the cap-hit retry below bumps the budget instead of wasting a turn.
+AICHECK_MAX_SEARCHES = int(os.environ.get("AICHECK_MAX_SEARCHES", "0"))
 AICHECK_MAX_SEARCHES_OPEN = int(os.environ.get("AICHECK_MAX_SEARCHES_OPEN", "4"))
 # Output budget for the aicheck call. Anthropic silently returns whatever it
 # generated when this is hit mid-answer (only a log warning, no error), so a too-
@@ -588,7 +594,11 @@ AICHECK_MAX_TOKENS = int(os.environ.get("AICHECK_MAX_TOKENS", "16000"))
 # Retry that single market after a backoff (also covers a truncated response),
 # and pace the checks so it is rarer.
 AICHECK_SEARCH_RETRIES = 1
-AICHECK_SEARCH_BACKOFF_SECONDS = 20
+# 20s did not reliably clear Anthropic's web_search rate limit (it is a rolling
+# per-minute window), so a retry hit the same wall. 40s clears it. Rare now that
+# fact markets do 0 searches — most of the search load (and the cascade that
+# rate-limited later markets in a run) is gone.
+AICHECK_SEARCH_BACKOFF_SECONDS = 40
 # Hard wall-clock bound per check. A market whose event has not resolved yet
 # (a live Conference League qualifier, live-measured) searches all the way to
 # its budget and still lands on "dar neaišku" — the right verdict, but it took

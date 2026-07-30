@@ -295,6 +295,34 @@ def test_a_fetched_source_drops_the_search_budget(monkeypatch):
     assert seen["searches"] == 1                        # with-source budget, not 4
 
 
+def test_a_fact_market_does_not_search(monkeypatch):
+    """The core complaint: a market whose number a resolver already fetched
+    (Ignitis price, temperature) was still web-searching, burning credits and
+    the shared rate limit. With a fact in hand the budget must be 0 — read it,
+    don't search."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_MAX_SEARCHES", 0)
+    monkeypatch.setattr(config, "AICHECK_MAX_SEARCHES_OPEN", 4)
+    monkeypatch.setattr(aicheck.resolvers, "facts_for",
+                        lambda *a, **k: "akcijos: Ignitis 22,70 €")
+    monkeypatch.setattr(aicheck, "source_facts", lambda *a, **k: "")
+    monkeypatch.setattr(aicheck.llm, "reset_usage", lambda: None)
+    monkeypatch.setattr(aicheck.llm, "usage_line", lambda: "")
+    monkeypatch.setattr(aicheck.llm, "provider", lambda s: "anthropic")
+    monkeypatch.setattr(aicheck.llm, "available_providers", lambda: ["anthropic"])
+    seen = {}
+
+    def fake_retry(prompt, searches, prov):
+        seen["searches"] = searches
+        return "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
+
+    monkeypatch.setattr(aicheck, "_research_with_search_retry", fake_retry)
+    aicheck._run("Ar Ignitis > 23 €?", "Taip/Ne", "kriterijai", "(nenurodyta)",
+                 "(nėra)")
+    assert seen["searches"] == 0                        # fact tier: no search
+
+
 # ── search-tool rate limit: retry, don't record it as a real "unknown" ──────
 
 def test_search_ratelimit_is_retried_then_succeeds(monkeypatch):
