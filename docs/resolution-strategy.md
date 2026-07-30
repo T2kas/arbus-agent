@@ -28,6 +28,33 @@ ir brangesnis, ir mažiau tikslus (Eurovizija). Perplexita nemato LT šaltinių.
 Modelio keitimas (GPT-5.6 Terra ir pan.) šito neišspręs, nes problema yra
 **paieška**, ne protavimas.
 
+### Pigiausias variantas: duok botui šaltinį (2026-07-30)
+
+Kadangi kaštas — tai **paieškų rezultatų tokenai** (kiekviena web_search įterpia
+visą puslapį), didžiausia ekonomija yra **neieškoti**. Jei rinka turi nurodytą
+šaltinį (jį pridedi kurdamas rinką), botas jį **pats parsisiunčia (nemokamas GET)**
+ir įterpia tekstą kaip faktą — modelis skaito šaltinį tiesiogiai, o ne moka už
+paiešką jo ieškodamas. Tada paieškų biudžetas nukrenta iki
+`AICHECK_MAX_SEARCHES_WITH_SOURCE` (numatyta 1 — patvirtinamoji paieška; nustatyk
+`0`, kai šaltiniu visiškai pasitiki).
+
+| Scenarijus | Paieškos | ~input tokenai | ~kaina |
+|---|---|---|---|
+| Be šaltinio (ieško pats) | 4 | ~40k | ~0,12–0,15 € |
+| **Su šaltiniu + 1 patvirtinimas** | 1 | ~13k | **~0,06 €** |
+| Su šaltiniu, 0 paieškų (`=0`) | 0 | ~3k | **~0,02 €** |
+
+Praktinė rekomendacija: **kurdami rinką pridėkite 1–2 tiksliausius šaltinius**
+(kur bus skelbiama naujiena apie tą įvykį — LRT/Delfi straipsnis, UEFA/eurovision
+puslapis, LEA biuletenis). URL'ai imami ir iš „šaltinio", ir iš „taisyklių" laukų.
+Jei parsisiuntimas nepavyksta (paywall, 404) — botas tyliai grįžta prie paieškos,
+tikslumas nenukenčia. Išjungti: `AICHECK_SOURCE_FETCH=off`.
+
+**Kaštai dabar matomi.** Po kiekvienos patikros spausdinama eilutė:
+`💶 kaina ~0,0X € (N paieškos, Xk in / Yk out)` — iš tikrų Anthropic `usage`
+laukų. Apytikslė (kainos iš config), bet parodo „3 ar 15 centų" skirtumą, kurio
+anksčiau nesimatė.
+
 ### Bet svarbiausia: nepriklausyk nuo modelio paieškos ten, kur nereikia
 
 Akcijos ir oras **neturi** būti ieškomi modelio — jie ateina iš `resolvers.py`
