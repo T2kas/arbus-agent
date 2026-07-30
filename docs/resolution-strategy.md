@@ -5,6 +5,24 @@ jau žinomas, ir koks**. Testuojant paaiškėjo, kad svarbiausias dalykas yra ne
 modelis, o **paieškos variklis** — ar jis randa lietuviškus šaltinius (LRT,
 Delfi, eurovision.tv, LKL, UEFA).
 
+## Pelningumo taisyklė (2026-07-30): default'as PIGUS, brangi paieška tik svarbioms
+
+Prie ~200 rinkų ir ~15 freeze'ų per dieną paieška po ~0,15–0,30 € kiekvienai
+rinkai daro botą nuostolingą — ir tos rinkos vis tiek dažniausiai grąžina „dar
+neaišku" (ateities įvykis). Todėl `arbus check` dabar dirba taip:
+
+| Rinka turi… | Ką daro | Kaina |
+|---|---|---|
+| **feed'o faktą** (akcijos/oras/degalai) | atsako iš fakto, 0 paieškų | ~0,01–0,02 € |
+| **pridėtą šaltinį** (URL taisyklėse/šaltinyje) | pats parsisiunčia, 1 paieška | ~0,06 € |
+| **nei vieno** | **PRALEIDŽIAMA** su „patikrink rankiniu" žinute, LLM nekviečiamas | **0 €** |
+| nei vieno, bet svarbi → `--deep` | pilna web paieška | ~0,15–0,30 € |
+
+Taigi pilnas 9 rinkų runas kainuoja **~0,06 €** (tik fact rinkos), ne ~1 €.
+Svarbias rinkas atpigini **pridėdamas šaltinį kuriant rinką** — tada jos
+tikrinamos automatiškai ir pigiai. Vienkartinei gilesnei patikrai:
+`arbus check --match "…" --deep`.
+
 ## Ką parodė testai (2026-07-28…30)
 
 | Sistema | Rado LT šaltinius? | Kaina/patikra | Rezultatas |
