@@ -219,13 +219,31 @@ _SITEMAP_NAUJIENA_RE = re.compile(
     r"<url><loc>(https://www\.ena\.lt/Naujiena/[^<]+)</loc><lastmod>([\d-]+)</lastmod>")
 
 
-def parse_fuel_bulletin(html: str) -> str:
-    labels = {"dyzelino": "dyzelinas", "benzino": "benzinas", "snd": "SND (dujos)"}
+_FUEL_LABELS = {"dyzelino": "dyzelinas", "benzino": "benzinas", "snd": "SND (dujos)"}
+_FUEL_URL_RE = re.compile(r"degal|dyzelin|benzin", re.I)
+# The LT month + day a bulletin is about ("liepos 28 d."), used to date a price.
+_BULLETIN_DATE_RE = re.compile(
+    r"(sausio|vasario|kovo|balandžio|gegužės|birželio|liepos|rugpjūčio|"
+    r"rugsėjo|spalio|lapkričio|gruodžio)\s+\d+\s+d\.", re.I)
+
+
+def _fuel_prices(html: str) -> dict[str, float]:
+    """{'dyzelinas': 2.069, ...} from one bulletin, or {} if it is not one."""
     found: dict[str, float] = {}
     for kind, num in _FUEL_BULLETIN_RE.findall(html):
-        label = labels.get(kind.lower(), kind)
+        label = _FUEL_LABELS.get(kind.lower(), kind)
         if label not in found:
             found[label] = float(num.replace(",", "."))
+    return found
+
+
+def _bulletin_date(html: str) -> str:
+    m = _BULLETIN_DATE_RE.search(html)
+    return m.group(0) if m else ""
+
+
+def parse_fuel_bulletin(html: str) -> str:
+    found = _fuel_prices(html)
     if not found:
         return ""
     parts = ", ".join(f"{lbl} {val:.3f} €/l" for lbl, val in found.items())
@@ -239,23 +257,40 @@ def recent_naujiena_urls(sitemap_xml: str, limit: int = 20) -> list[str]:
     return [url for url, _ in entries[:limit]]
 
 
-def fuel_bulletin_fact(candidates: int = 12) -> str:
-    """Find LEA's actual most recent fuel-price bulletin via the sitemap and
-    parse it. Tries the freshest posts first regardless of which URL slug style
-    that day used — a fixed URL guess can silently read a stale day.
+def recent_fuel_bulletin_urls(sitemap_xml: str, limit: int) -> list[str]:
+    """Just the fuel-price bulletin URLs, newest first — so we can read a run of
+    days without fetching every unrelated news post."""
+    urls = recent_naujiena_urls(sitemap_xml, 5000)
+    fuel = [u for u in urls if _FUEL_URL_RE.search(u) and "kain" in u.lower()]
+    return fuel[:limit]
 
-    Returns only the LATEST day's average, not a period maximum. A market
-    asking "did it cross X at least once by <deadline>" needs the running high
-    over the whole window, and LEA's daily post does not expose history — that
-    would mean parsing every working day back to market creation, which is
-    disproportionate for how rare fuel-threshold markets are. The check's own
-    web search covers that gap; this just gives it a fresh, sourced anchor
-    instead of nothing.
+
+def fuel_bulletin_fact(candidates: int | None = None) -> str:
+    """LEA fuel prices as a fact, WITH the period high — not just today.
+
+    Fuel-threshold markets ask "did the average reach X at least once by
+    <deadline>", so the latest day alone gives a wrong answer: diesel read 2,030
+    €/l on liepos 30 but had hit 2,069 on liepos 28, so a ≥2,05 market is already
+    "Taip", not "dar neaišku". The daily post exposes no history, but the sitemap
+    lists ~75 past bulletins — so we walk the freshest `candidates` of them and
+    report the running high (with the day it occurred), the way the stock feed
+    reports the year's high. That lets a fact-only check (0 searches) resolve the
+    threshold correctly instead of missing an earlier crossing.
+
+    Coverage is the recent window the sitemap exposes, not all history — enough
+    for the weeks-long windows these markets use; stated in the fact so it is not
+    mistaken for the all-time high.
     """
+    if candidates is None:
+        candidates = config.FUEL_BULLETIN_LOOKBACK
     resp = requests.get("https://www.ena.lt/sitemap.xml",
                         headers={"User-Agent": UA}, timeout=20)
     resp.raise_for_status()
-    for url in recent_naujiena_urls(resp.text, candidates):
+
+    latest: tuple[str, dict[str, float], str] | None = None
+    highs: dict[str, tuple[float, str, str]] = {}       # label -> (price, date, url)
+    days = 0
+    for url in recent_fuel_bulletin_urls(resp.text, candidates):
         try:
             page = requests.get(url, headers={"User-Agent": UA}, timeout=20)
         except Exception as exc:
@@ -263,14 +298,30 @@ def fuel_bulletin_fact(candidates: int = 12) -> str:
             continue
         if page.status_code != 200:
             continue
-        fact = parse_fuel_bulletin(page.text)
-        if fact:
-            date_m = re.search(r"(sausio|vasario|kovo|balandžio|gegužės|"
-                               r"birželio|liepos|rugpjūčio|rugsėjo|spalio|"
-                               r"lapkričio|gruodžio)\s+\d+\s+d\.", page.text, re.I)
-            when = f" ({date_m.group(0)})" if date_m else ""
-            return f"{fact}{when} Šaltinis: Lietuvos energetikos agentūra, {url}"
-    return ""
+        prices = _fuel_prices(page.text)
+        if not prices:
+            continue
+        when = _bulletin_date(page.text)
+        if latest is None:                              # first hit = newest day
+            latest = (when, prices, url)
+        for label, val in prices.items():
+            if label not in highs or val > highs[label][0]:
+                highs[label] = (val, when, url)         # remember WHERE the high is
+        days += 1
+
+    if latest is None:
+        return ""
+    when, prices, url = latest
+    now_str = ", ".join(f"{lbl} {v:.3f} €/l" for lbl, v in prices.items())
+    # Each high carries its own bulletin URL, so a threshold verdict cites the day
+    # that actually shows the high — not the latest day, which may be back below it.
+    high_str = "; ".join(
+        f"{lbl} {v:.3f} €/l ({d or 'data nenurodyta'}, {u})"
+        for lbl, (v, d, u) in highs.items())
+    return (f"Vidutinės degalų kainos — naujausia{f' ({when})' if when else ''}: "
+            f"{now_str} (šaltinis {url}). Laikotarpio (pastarosios ~{days} "
+            f"paskelbtos dienos) aukščiausios kainos: {high_str}. "
+            f"Šaltinis: Lietuvos energetikos agentūra (ena.lt).")
 
 
 def fuel_fact(question: str) -> str:

@@ -144,18 +144,25 @@ def test_recent_naujiena_urls_sorts_by_lastmod_descending():
     assert all("/Naujiena/" in u for u in urls)
 
 
-def test_fuel_bulletin_fact_picks_the_freshest_matching_post(monkeypatch):
-    """The real bug: a fixed URL guess (ndk-YYYYMMDD) can read a day-old post
-    while a fresher bulletin exists under a different, unpredictable slug —
-    live-confirmed on 2026-07-27 vs the 2026-07-28 post. The sitemap walk must
-    try the freshest candidates first and stop at the first real match."""
+def _bulletin(diesel: str, day: str) -> str:
+    return (f"<p>Vidutinė dyzelino kaina siekė {diesel} Eur/l ({day}).</p>"
+            "<p>Vidutinė benzino kaina sudarė 1,773 Eur/l.</p>")
+
+
+def test_fuel_fact_reports_the_period_high_not_only_today(monkeypatch):
+    """The live bug the user caught: diesel read 2,030 today but had hit 2,069
+    days earlier, so a '≥2,05 at least once' market is already Taip — not 'dar
+    neaišku'. The fact must walk recent bulletins and surface the running high
+    with the day (and URL) it occurred, like the stock feed's period high."""
     sitemap_xml = (
-        "<url><loc>https://www.ena.lt/Naujiena/unrelated-2026-07-29/</loc>"
-        "<lastmod>2026-07-29</lastmod></url>"
-        "<url><loc>https://www.ena.lt/Naujiena/fuel-post-2026-07-28/</loc>"
+        "<url><loc>https://www.ena.lt/Naujiena/degalu-kainos-liepos-30/</loc>"
+        "<lastmod>2026-07-30</lastmod></url>"
+        "<url><loc>https://www.ena.lt/Naujiena/dyzelino-kainos-liepos-28/</loc>"
         "<lastmod>2026-07-28</lastmod></url>"
-        "<url><loc>https://www.ena.lt/Naujiena/ndk-20260727/</loc>"
-        "<lastmod>2026-07-27</lastmod></url>"
+        "<url><loc>https://www.ena.lt/Naujiena/benzino-kainos-liepos-24/</loc>"
+        "<lastmod>2026-07-24</lastmod></url>"
+        "<url><loc>https://www.ena.lt/Naujiena/apie-elektra/</loc>"   # not fuel
+        "<lastmod>2026-07-31</lastmod></url>"
     )
 
     class _R:
@@ -164,18 +171,25 @@ def test_fuel_bulletin_fact_picks_the_freshest_matching_post(monkeypatch):
         def raise_for_status(self):
             pass
 
+    pages = {
+        "degalu-kainos-liepos-30": _bulletin("2,030", "liepos 30 d."),
+        "dyzelino-kainos-liepos-28": _bulletin("2,069", "liepos 28 d."),
+        "benzino-kainos-liepos-24": _bulletin("1,982", "liepos 24 d."),
+    }
+
     def fake_get(url, **kw):
         if url.endswith("sitemap.xml"):
             return _R(sitemap_xml)
-        if "unrelated" in url:
-            return _R("<p>Elektros kainos.</p>")             # no match, skipped
-        if "fuel-post-2026-07-28" in url:
-            return _R(_BULLETIN_TEXT.replace("liepos 24 d.", "liepos 28 d."))
-        raise AssertionError(f"should not fetch the stale {url}")
+        for slug, html in pages.items():
+            if slug in url:
+                return _R(html)
+        raise AssertionError(f"unexpected fetch (non-fuel URL?): {url}")
 
     monkeypatch.setattr(resolvers.requests, "get", fake_get)
     fact = resolvers.fuel_bulletin_fact()
-    assert "1.982" in fact and "fuel-post-2026-07-28" in fact
+    assert "naujausia (liepos 30 d.): dyzelinas 2.030" in fact   # latest day
+    assert "2.069 €/l (liepos 28 d." in fact                     # period high
+    assert "dyzelino-kainos-liepos-28" in fact                   # high's own URL
 
 
 # ── diagnose(): the arbus-facts visibility that ends the guessing ───────────

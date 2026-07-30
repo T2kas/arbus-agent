@@ -648,6 +648,11 @@ FUEL_PRICE_URL = os.environ.get("FUEL_PRICE_URL", "")
 # the average diesel/petrol price out of the HTML as a fallback.
 FUEL_LEA_URL = os.environ.get(
     "FUEL_LEA_URL", "https://www.ena.lt/degalu-kainos-degalinese/")
+# How many recent daily LEA bulletins to walk for the period HIGH — a fuel
+# threshold market ("reached X at least once by <date>") needs the running max,
+# not just today. ~30 covers the weeks-long windows these markets use; each is
+# one free HTTP GET. Raise for a longer window, lower for speed.
+FUEL_BULLETIN_LOOKBACK = int(os.environ.get("FUEL_BULLETIN_LOOKBACK", "30"))
 
 # ── No-event fallback: why VOID is not a normal outcome ─────────────────────
 # Polymarket and Kalshi settle "the event did not happen" from the market's own
