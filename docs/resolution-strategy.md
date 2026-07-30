@@ -9,10 +9,19 @@ Delfi, eurovision.tv, LKL, UEFA).
 
 | Sistema | Rado LT šaltinius? | Kaina/patikra | Rezultatas |
 |---|---|---|---|
-| **Anthropic web_search + Opus** | ✅ taip | ~0,15 € | Tikslus LRT straipsnis, rezultatas, data, net pastebėjo Vilnius/Kaunas painiavą |
-| Anthropic web_search + Sonnet | ✅ taip | ~0,05 € | Ta pati paieška, kiek silpnesnis protavimas |
+| **Anthropic web_search + Opus** | ✅ taip | ~0,20–0,30 € | Tikslus LRT straipsnis, rezultatas, data, net pastebėjo Vilnius/Kaunas painiavą |
+| Anthropic web_search + Sonnet | ✅ taip | ~0,12–0,15 € | Ta pati paieška, kiek silpnesnis protavimas |
 | **OpenAI GPT-5 + web search** | dalinai | **~1,00 €** ❗ | Euroviziją atsakė NETEISINGAI („nepateko"), brangu |
 | Perplexity sonar / reasoning-pro | ❌ ne | ~0,05 € | „nerasta" net kai LRT turi atsakymą |
+
+**Kaštų realybė (sąžiningai, 2026-07-30).** Ankstesnis „~0,05 €" Sonnet įvertis
+buvo per mažas. Tikras kaštas Sonnet + 4 paieškos: **~0,12–0,15 €/rinka**, o su
+rate-limit retry (2 pilnos eigos) — **iki ~0,25–0,30 €**. Pagrindinis kaštas NE
+modelio protavimas, o **paieškų rezultatų tokenai**: kiekviena web_search įterpia
+visą puslapį (~5–15k tokenų) kaip input'ą po $3/M. Botas KOL KAS nespausdina
+kaštų per patikrą, todėl juos reikia vertinti, ne matuoti — tai būtų vertas
+sekantis patobulinimas (Anthropic atsako `usage` laukus su input/output/search
+skaičiais). Greitas 9 rinkų runas ≈ **~1,2–1,5 €**, jei nė viena nerate-limit'inama.
 
 **Aiški išvada: Anthropic yra tiksliausias IR protingos kainos.** GPT-5 pasirodė
 ir brangesnis, ir mažiau tikslus (Eurovizija). Perplexita nemato LT šaltinių.
