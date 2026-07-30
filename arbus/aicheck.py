@@ -342,6 +342,11 @@ def _looks_incomplete(text: str) -> bool:
 
 
 _FALLBACK_UNKNOWN = "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
+_FALLBACK_TIMEOUT = (
+    "REZULTATAS: nežinomas\n"
+    "ĮSPĖJIMAI: patikra nutraukta pasiekus laiko limitą — įvykis greičiausiai "
+    "dar neišspręstas (paieška nerado galutinio rezultato per skirtą laiką)\n"
+    "SIŪLOMA BAIGTIS: dar neaišku")
 
 
 def _run_bounded(fn, timeout: int):
@@ -389,10 +394,12 @@ def _research_with_search_retry(prompt: str, searches: int, prov: str) -> str:
         except TimeoutError:
             # Searched to the limit without a confirmable result: that IS "dar
             # neaišku". Return it now rather than hang the batch or fall through
-            # to a weaker provider that will not find LT sources either.
-            log.warning("aicheck timed out after %ds (%s); returning unknown",
-                        config.AICHECK_TIMEOUT_SECONDS, prov)
-            return _FALLBACK_UNKNOWN
+            # to a weaker provider that will not find LT sources either. This is a
+            # normal outcome for a --deep hunt on an unresolved event, not an
+            # error — so it is logged calmly and the note explains itself.
+            log.info("aicheck reached its %ds time budget (%s); returning "
+                     "'dar neaišku'", config.AICHECK_TIMEOUT_SECONDS, prov)
+            return _FALLBACK_TIMEOUT
         cap_hit = bool(text) and bool(_SEARCH_CAP_RE.search(text))
         bad = bool(text) and (_SEARCH_FAIL_RE.search(text) or _looks_incomplete(text))
         if text and not bad:

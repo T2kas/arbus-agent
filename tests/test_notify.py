@@ -485,7 +485,8 @@ def test_a_check_that_runs_too_long_is_cut_off_to_the_honest_unknown(monkeypatch
     monkeypatch.setattr(aicheck.llm, "research", slow_research)
     started = time.monotonic()
     out = aicheck._research_with_search_retry("p", 4, "anthropic")
-    assert out == aicheck._FALLBACK_UNKNOWN
+    assert out == aicheck._FALLBACK_TIMEOUT              # honest unknown + reason
+    assert "dar neaišku" in out and "laiko limit" in out
     assert time.monotonic() - started < 4             # did not wait for the call
 
 
