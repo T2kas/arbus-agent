@@ -550,7 +550,8 @@ def cmd_check(args: argparse.Namespace) -> int:
             time.sleep(config.APP_CHECK_DELAY_SECONDS)
         print(f"\n— app market {app_api.market_id_of(market)} "
               f"[{app_api.status_of(market)}]: {app_api.question_of(market)}")
-        print(aicheck.review_app_market(conn, market, alert=alert))
+        print(aicheck.review_app_market(conn, market, alert=alert,
+                                        deep=args.deep))
         conn.commit()
 
     conn.commit()
@@ -690,6 +691,11 @@ def main() -> int:
                     help="only check app markets whose title contains TEXT "
                          '(case-insensitive), e.g. --match Eurovizij — much '
                          "faster than checking every frozen market")
+    ck.add_argument("--deep", action="store_true",
+                    help="pay for the web hunt on markets with no feed and no "
+                         "source (~0.15-0.30 EUR each). Default off: such markets "
+                         "are skipped with a manual-check note. Use it for the "
+                         "few important markets, usually with --match")
     ck.set_defaults(func=cmd_check)
 
     wt = sub.add_parser("watch",

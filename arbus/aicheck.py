@@ -219,15 +219,31 @@ def _search_directive(searches: int) -> str:
     return _SEARCH_ON if searches > 0 else _SEARCH_OFF
 
 
+_NO_DATA_ADVICE = (
+    "⏭️ PRALEISTA — nėra automatinių duomenų. Šiai rinkai nėra nei feed'o "
+    "(akcijos/oras/degalai), nei pridėto šaltinio, todėl AI paieška kainuotų "
+    "~0,15–0,30 € ir dažniausiai vis tiek grąžintų „dar neaišku“. Patikrink "
+    "rankiniu būdu. Jei rinka svarbi ir nori AI paieškos: "
+    "arbus check --match \"…\" --deep"
+)
+
+
 def _run(question: str, options: str, criteria: str, proposed: str,
          source: str, today: date | None = None, on_error: str = "",
-         searches: int | None = None, closes_at: str = "") -> str:
+         searches: int | None = None, closes_at: str = "",
+         deep: bool = False) -> str:
     """One advisory check. Never raises — a failed check must not block the
     admin, and it must never read as evidence either way.
 
     `searches` is larger when nobody cited a source: then the model is not
     verifying a link, it is finding out what happened, and the answer decides a
     payout. That is worth a few cents more.
+
+    `deep` enables the paid web hunt for a market with NO feed and NO source.
+    Default off: that hunt costs ~0.15-0.30 EUR and usually still lands on "dar
+    neaišku" for a future event — at 200 markets and 15 freezes a day that is
+    the difference between profitable and not. A no-data market is skipped with a
+    manual-check note unless it is flagged important (`--deep`).
     """
     resolver_facts = resolvers.facts_for(question, closes_at)
     # A cited source is the cheapest evidence there is: fetch it ourselves (free
@@ -237,9 +253,15 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     fetched = source_facts(source, criteria)
     facts = "\n\n".join(f for f in (resolver_facts, fetched) if f)
 
+    # No feed, no source, not flagged important: do NOT pay to search. Tell the
+    # admin to check it by hand (or re-run it with --deep). This is what keeps a
+    # full sweep cheap — only fact/source markets cost anything by default.
+    if not facts and not deep and searches is None:
+        return _NO_DATA_ADVICE
+
     # Search budget, cheapest tier first: with the source text in hand a single
     # confirming search is enough; a resolver number needs a couple; only a
-    # market with neither feed nor source pays for the full hunt.
+    # market with neither feed nor source (and --deep) pays for the full hunt.
     if searches is None:
         if fetched:
             searches = config.AICHECK_MAX_SEARCHES_WITH_SOURCE
@@ -432,12 +454,17 @@ def check_freeze(conn: sqlite3.Connection, market_id: int,
                 today=today, closes_at=market["resolve_by"])
 
 
-def check_app_market(market: dict, today: date | None = None) -> str:
+def check_app_market(market: dict, today: date | None = None,
+                     deep: bool = False) -> str:
     """Same check for a market frozen in the APP, where this repo has no row.
 
     Markets paused by an admin in the dashboard never existed in the local
     database, which is why `arbus check` used to report "nothing frozen" while
     the app had stopped markets sitting there.
+
+    `deep` (from `--deep`) allows the paid web hunt on a market with no feed and
+    no source; without it such a market is skipped with a manual-check note so a
+    full sweep stays cheap.
     """
     from . import notify
 
@@ -447,7 +474,7 @@ def check_app_market(market: dict, today: date | None = None) -> str:
                 criteria=view["rules"],
                 proposed="(nenurodyta — rinka sustabdyta appe)",
                 source="(nėra — adminas negali prisegti šaltinio, todėl ieškok pats)",
-                today=today, closes_at=view["resolve_by"])
+                today=today, closes_at=view["resolve_by"], deep=deep)
 
 
 # ── What the admin actually runs: check, store, and ping Telegram ───────────
@@ -549,11 +576,12 @@ def pending_app_markets(conn: sqlite3.Connection, limit: int = 20
 
 
 def review_app_market(conn: sqlite3.Connection, market: dict,
-                      today: date | None = None, alert: bool = True) -> str:
+                      today: date | None = None, alert: bool = True,
+                      deep: bool = False) -> str:
     """Check one app-frozen market, remember it, and alert the group."""
     from . import app as app_api
 
-    summary = check_app_market(market, today)
+    summary = check_app_market(market, today, deep=deep)
     conn.execute(
         "INSERT OR REPLACE INTO app_checks (app_market_id, question, status,"
         " ai_summary, checked_at) VALUES (?,?,?,?,?)",

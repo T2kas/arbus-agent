@@ -191,8 +191,7 @@ def test_aicheck_falls_back_to_a_working_provider(monkeypatch):
     monkeypatch.setattr(aicheck, "verify_url", lambda u, **k: "ok")
     monkeypatch.setattr(aicheck.resolvers, "facts_for", lambda *a, **k: "")
 
-    out = aicheck._run("q", "Taip / Ne", "rules", "Taip", "src", verify=None) \
-        if False else aicheck._run("q", "Taip / Ne", "rules", "Taip", "src")
+    out = aicheck._run("q", "Taip / Ne", "rules", "Taip", "src", deep=True)
     assert calls == ["perplexity", "anthropic"]        # tried primary, then fell back
     assert "anthropic" in out and out.startswith("✅")   # note + real verdict
 
@@ -209,7 +208,7 @@ def test_aicheck_reports_a_401_as_a_key_problem(monkeypatch):
         raise requests.HTTPError("401 Client Error: Unauthorized for url: ...")
 
     monkeypatch.setattr(llm, "research", boom)
-    out = aicheck._run("q", "Taip / Ne", "rules", "Taip", "src")
+    out = aicheck._run("q", "Taip / Ne", "rules", "Taip", "src", deep=True)
     assert "401" in out and "raktas" in out            # names the real cause
 
 
@@ -321,6 +320,45 @@ def test_a_fact_market_does_not_search(monkeypatch):
     aicheck._run("Ar Ignitis > 23 €?", "Taip/Ne", "kriterijai", "(nenurodyta)",
                  "(nėra)")
     assert seen["searches"] == 0                        # fact tier: no search
+
+
+def test_no_data_market_is_skipped_without_paying_for_a_search(monkeypatch):
+    """The profitability fix: a market with no feed and no source must NOT trigger
+    the ~0.15-0.30 EUR web hunt by default — it is skipped with a manual-check
+    note and the LLM is never called."""
+    from arbus import aicheck
+
+    monkeypatch.setattr(aicheck.resolvers, "facts_for", lambda *a, **k: "")
+    monkeypatch.setattr(aicheck, "source_facts", lambda *a, **k: "")
+    called = []
+    monkeypatch.setattr(aicheck, "_research_with_search_retry",
+                        lambda *a, **k: called.append(1) or "x")
+    out = aicheck._run("Ar X įvyks?", "Taip/Ne", "rules", "(nenurodyta)", "(nėra)")
+    assert not called                                   # LLM never invoked
+    assert "PRALEISTA" in out and "--deep" in out
+
+
+def test_deep_flag_lets_an_important_no_data_market_search(monkeypatch):
+    """With --deep the same no-data market DOES run the web hunt."""
+    from arbus import aicheck, config
+
+    monkeypatch.setattr(config, "AICHECK_MAX_SEARCHES_OPEN", 4)
+    monkeypatch.setattr(aicheck.resolvers, "facts_for", lambda *a, **k: "")
+    monkeypatch.setattr(aicheck, "source_facts", lambda *a, **k: "")
+    monkeypatch.setattr(aicheck.llm, "reset_usage", lambda: None)
+    monkeypatch.setattr(aicheck.llm, "usage_line", lambda: "")
+    monkeypatch.setattr(aicheck.llm, "provider", lambda s: "anthropic")
+    monkeypatch.setattr(aicheck.llm, "available_providers", lambda: ["anthropic"])
+    seen = {}
+
+    def fake_retry(prompt, searches, prov):
+        seen["searches"] = searches
+        return "REZULTATAS: nežinomas\nSIŪLOMA BAIGTIS: dar neaišku"
+
+    monkeypatch.setattr(aicheck, "_research_with_search_retry", fake_retry)
+    out = aicheck._run("Ar X įvyks?", "Taip/Ne", "rules", "(nenurodyta)", "(nėra)",
+                       deep=True)
+    assert seen["searches"] == 4 and "PRALEISTA" not in out
 
 
 def test_prompt_tells_the_model_not_to_fake_a_search_when_it_cannot(monkeypatch):
