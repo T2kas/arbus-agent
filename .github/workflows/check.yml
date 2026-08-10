@@ -1,0 +1,58 @@
+name: resolution-check
+
+# The advisory resolution checker: for markets frozen or past their date, gather
+# evidence (feeds, cited sources) and post a suggested outcome to Telegram. It
+# decides nothing — the admin resolves in the dashboard.
+#
+# Cost model: fact/source markets cost ~0.01-0.06 EUR; a market with no feed and
+# no source is SKIPPED with a manual-check note (0 EUR). The paid web hunt runs
+# only with --deep, which this schedule does NOT pass — so an automatic sweep is
+# cheap. Deep-check important markets by hand: `arbus check --match "…" --deep`.
+#
+# TOGGLE (no code edit): Settings → Secrets and variables → Actions → Variables
+#   CHECK_ENABLED = true   → the schedule runs. Set false to pause it.
+#   CHECK_DEEP    = true   → allow the paid web hunt on no-data markets (pricey).
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"           # every 6 hours
+  workflow_dispatch:
+    inputs:
+      deep:
+        description: "Pay for the web hunt on no-data markets (this run only)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    if: github.event_name == 'workflow_dispatch' || vars.CHECK_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Run the resolution check
+        env:
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_PROVIDER_AICHECK: anthropic
+          ANTHROPIC_AICHECK_MODEL: claude-sonnet-5
+          ANTHROPIC_AICHECK_THINKING: "off"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          DEEP=""
+          if [ "${{ github.event.inputs.deep }}" = "true" ] || [ "${{ vars.CHECK_DEEP }}" = "true" ]; then
+            DEEP="--deep"
+          fi
+          python -m arbus check $DEEP

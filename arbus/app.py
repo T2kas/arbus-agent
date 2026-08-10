@@ -33,17 +33,19 @@ def configured() -> bool:
     return bool(config.ARBUS_API_URL)
 
 
-def headers() -> dict[str, str]:
-    """Auth headers.
+def headers(key: str = "") -> dict[str, str]:
+    """Auth headers. `key` overrides the default anon key — set for the freeze
+    write, which needs the privileged service_role key.
 
     Supabase's PostgREST wants the key in BOTH `apikey` and `Authorization`;
     sending only the bearer token returns a 401 that reads like a bad key.
     """
+    key = key or config.ARBUS_API_KEY
     out = {"Content-Type": "application/json"}
-    if config.ARBUS_API_KEY:
-        out["Authorization"] = f"Bearer {config.ARBUS_API_KEY}"
+    if key:
+        out["Authorization"] = f"Bearer {key}"
         if "supabase.co" in config.ARBUS_API_URL:
-            out["apikey"] = config.ARBUS_API_KEY
+            out["apikey"] = key
             out["Prefer"] = "return=representation"
     return out
 
@@ -72,9 +74,9 @@ def _unwrap(data):
     return data if isinstance(data, list) else []
 
 
-def _call(method: str, url: str, **kwargs) -> tuple[list[dict], str]:
+def _call(method: str, url: str, key: str = "", **kwargs) -> tuple[list[dict], str]:
     try:
-        resp = requests.request(method, url, headers=headers(),
+        resp = requests.request(method, url, headers=headers(key),
                                 timeout=config.ARBUS_API_TIMEOUT, **kwargs)
     except requests.RequestException as exc:
         return [], f"network error: {exc}"
@@ -220,8 +222,9 @@ def set_status(market_id: str, status: str) -> tuple[bool, str]:
     base = base_url()
     if not base:
         return False, "ARBUS_API_URL is not a /rest/v1/ URL"
+    # Freeze with the privileged key when provided; RLS refuses the anon key.
     rows, error = _call("PATCH", f"{base}markets?id=eq.{market_id}",
-                        json={"status": status})
+                        key=config.ARBUS_WRITE_KEY, json={"status": status})
     if error:
         return False, error
     return True, f"status set to {status}" + (f" ({len(rows)} row)" if rows else "")

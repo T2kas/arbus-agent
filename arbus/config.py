@@ -44,6 +44,27 @@ def _flag(name: str) -> bool:
     return os.environ.get(name, "").strip().lower() in ("1", "on", "true", "yes")
 
 
+def _env_int(name: str, default: int) -> int:
+    """int() from the env, but an unset OR EMPTY OR unparseable value → default.
+
+    GitHub Actions passes an undefined `${{ vars.X }}` as an empty string, which
+    would make a bare int(os.environ[...]) crash at import. This keeps a missing
+    repo variable harmless."""
+    raw = os.environ.get(name, "").strip()
+    try:
+        return int(raw)
+    except ValueError:
+        return default
+
+
+def _env_float(name: str, default: float) -> float:
+    raw = os.environ.get(name, "").strip()
+    try:
+        return float(raw)
+    except ValueError:
+        return default
+
+
 # Generation model. Sonnet by default: a full Opus batch with adaptive thinking
 # and many searches per chunk burned ~$5, and with the same web search and
 # deterministic gates around it Sonnet loses very little. Easy toggle to compare:
@@ -540,10 +561,12 @@ CHALLENGE_WINDOW_HOURS = 2
 
 # Circuit breaker. A price move alone is not evidence of leaked information —
 # one whale simply predicting hard would trip it — so a move only counts when
-# several distinct users move the same way inside the window.
-CB_WINDOW_MINUTES = 10
-CB_PRICE_MOVE = 0.15               # 15 percentage points inside the window
-CB_MIN_DISTINCT_USERS = 3
+# several distinct users move the same way inside the window. All three are
+# env-tunable so the threshold can change without a code edit (and `arbus watch`
+# prints them each run, so the active setting is never a guess).
+CB_WINDOW_MINUTES = _env_int("CB_WINDOW_MINUTES", 10)
+CB_PRICE_MOVE = _env_float("CB_PRICE_MOVE", 0.20)               # 20 pct points
+CB_MIN_DISTINCT_USERS = _env_int("CB_MIN_DISTINCT_USERS", 3)
 
 # Admin presses resolve in the app dashboard; settlement waits this long so a
 # misclick can be undone. Payouts cannot be clawed back once made.
@@ -693,6 +716,13 @@ IMAGE_TIMEOUT = 12
 # `python -m arbus publish --dry-run` prints the payload without sending.
 ARBUS_API_URL = os.environ.get("ARBUS_API_URL", "")
 ARBUS_API_KEY = os.environ.get("ARBUS_API_KEY", "")
+# Separate key for the ONE write the bot makes — freezing a market
+# (`arbus watch --freeze`). Reads use the public anon ARBUS_API_KEY; freezing
+# needs a privileged (service_role) key that row-level security accepts. Keep it
+# distinct so the anon key can stay public and only this one power is gated. If
+# unset, freezing falls back to ARBUS_API_KEY (works if that is itself a
+# service key). Provide it as a secret; never commit it.
+ARBUS_WRITE_KEY = os.environ.get("ARBUS_WRITE_KEY", "")
 ARBUS_API_TIMEOUT = 30
 # Read the app's live markets before drafting, so the generator never proposes
 # something users can already see. Skipped silently when the app is unreachable.

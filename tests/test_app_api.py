@@ -361,3 +361,36 @@ def test_breaker_joins_title_keyed_trades_to_id_keyed_prices(monkeypatch):
 
 def test_real_profile_balance_is_read():
     assert app.balance_of({"username": "x", "credits_balance": 1250}) == 1250.0
+
+
+# ── freeze uses the privileged write key; env helpers tolerate empty vars ─────
+
+def test_headers_default_to_the_anon_key(monkeypatch):
+    monkeypatch.setattr(config, "ARBUS_API_KEY", "anon-key")
+    monkeypatch.setattr(config, "ARBUS_API_URL",
+                        "https://x.supabase.co/rest/v1/markets?select=*")
+    h = app.headers()
+    assert h["Authorization"] == "Bearer anon-key"
+
+
+def test_headers_use_the_write_key_when_given(monkeypatch):
+    """Freezing passes the service_role key so RLS accepts the write, without
+    exposing it for ordinary reads."""
+    monkeypatch.setattr(config, "ARBUS_API_KEY", "anon-key")
+    monkeypatch.setattr(config, "ARBUS_API_URL",
+                        "https://x.supabase.co/rest/v1/markets?select=*")
+    h = app.headers("service-key")
+    assert h["Authorization"] == "Bearer service-key" and h["apikey"] == "service-key"
+
+
+def test_env_int_and_float_fall_back_on_empty_or_bad(monkeypatch):
+    """GitHub Actions passes an unset `${{ vars.X }}` as '' — that must not crash
+    config import; it falls back to the default."""
+    monkeypatch.setenv("CB_TEST_INT", "")
+    assert config._env_int("CB_TEST_INT", 10) == 10
+    monkeypatch.setenv("CB_TEST_INT", "7")
+    assert config._env_int("CB_TEST_INT", 10) == 7
+    monkeypatch.setenv("CB_TEST_FLOAT", "not-a-number")
+    assert config._env_float("CB_TEST_FLOAT", 0.20) == 0.20
+    monkeypatch.setenv("CB_TEST_FLOAT", "0.35")
+    assert config._env_float("CB_TEST_FLOAT", 0.20) == 0.35

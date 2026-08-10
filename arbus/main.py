@@ -237,6 +237,14 @@ def cmd_watch(args: argparse.Namespace) -> int:
         print("ARBUS_API_URL is not set in .env — no live data to watch.")
         return 1
 
+    # Remind the active thresholds every run, so the setting is never a guess.
+    freeze_state = ("ĮJUNGTAS" if args.freeze else "išjungtas (tik įspėja)")
+    print(f"⚙️  Circuit breaker: ≥{config.CB_PRICE_MOVE:.0%} kainos judesys IR "
+          f"≥{config.CB_MIN_DISTINCT_USERS} vartotojai per {args.window} min. "
+          f"| Auto-stabdymas: {freeze_state}")
+    print("   (keisk .env: CB_PRICE_MOVE / CB_MIN_DISTINCT_USERS / "
+          "CB_WINDOW_MINUTES; stabdymui reikia --freeze + ARBUS_WRITE_KEY)\n")
+
     if args.interval:
         import time
 
