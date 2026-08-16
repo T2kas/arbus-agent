@@ -519,6 +519,12 @@ def _save_ledger(ids: set[str]) -> None:
     path.write_text(json.dumps(sorted(ids), indent=0), encoding="utf-8")
 
 
+def _proposal_key(proposal: dict) -> str:
+    """Identity of a proposal for the ledger: id + created_at, so a re-proposal
+    (same market, after a reopen) is a distinct key and gets checked again."""
+    return f"{proposal.get('id')}:{proposal.get('created_at', '')}"
+
+
 def cmd_check(args: argparse.Namespace) -> int:
     """Run the advisory AI check on frozen markets and alert Telegram.
 
@@ -541,14 +547,15 @@ def cmd_check(args: argparse.Namespace) -> int:
 
     # --proposals: check ONLY markets a user proposed a resolution for (the cheap,
     # targeted trigger), letting the AI see the claimed outcome + cited source.
-    # Each proposal is checked once — the ledger is keyed by proposal id.
+    # Each proposal is checked once — keyed by id AND created_at, so a FRESH
+    # proposal for the same market (after the admin reopened it) is a new key and
+    # gets re-checked, whether the app writes a new row or updates the old one.
     if args.proposals:
         items, perr = aicheck.pending_app_proposals(args.limit)
         if perr:
             print(f"⚠️  Could not read proposals: {perr}")
         ledger = _load_ledger()
-        new = [it for it in items
-               if str(it["proposal"].get("id")) not in ledger]
+        new = [it for it in items if _proposal_key(it["proposal"]) not in ledger]
         print(f"{len(new)} naujas pasiūlymas iš {len(items)} "
               "(kiti jau tikrinti).")
         import time
@@ -559,7 +566,7 @@ def cmd_check(args: argparse.Namespace) -> int:
             print(f"\n— proposal {it['proposal'].get('id')} on "
                   f"{app_api.question_of(it['market']) if it['market'] else it['proposal'].get('market_id')}")
             print(aicheck.review_app_proposal(it, alert=alert, deep=args.deep))
-            ledger.add(str(it["proposal"].get("id")))
+            ledger.add(_proposal_key(it["proposal"]))
         if new:
             _save_ledger(ledger)
         conn.close()
