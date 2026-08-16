@@ -361,6 +361,49 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
     return {mid: max(prices) - min(prices) for mid, prices in per_market.items()}
 
 
+def option_windows(history: list[dict], window_minutes: int = config.CB_WINDOW_MINUTES,
+                   now: datetime | None = None) -> dict[str, tuple[float, float]]:
+    """{option id: (start, end)} prices inside the window, as 0-1 fractions.
+
+    History is newest-first, so per option the FIRST row seen is the latest
+    price (end) and the LAST is the earliest (start). Lets the alert show
+    "TAIP 60%→20%" instead of a bare magnitude."""
+    cutoff = (now or datetime.now(timezone.utc)) - timedelta(minutes=window_minutes)
+    ends: dict[str, float] = {}
+    starts: dict[str, float] = {}
+    for row in history:
+        ts = _timestamp_of(row)
+        if ts is None or ts < cutoff:
+            continue
+        oid = str(_pick(row, "option_id", "id", default=""))
+        price = _as_fraction(_pick(row, "probability", "price", "new_price", "value"))
+        if not oid or price is None:
+            continue
+        ends.setdefault(oid, price)      # newest-first: first seen = end
+        starts[oid] = price              # last seen in window = start
+    return {oid: (starts[oid], ends[oid]) for oid in ends}
+
+
+def option_move_lines(market: dict, windows: dict[str, tuple[float, float]]) -> list[dict]:
+    """Per-option {label, start, end} for a market, in the app's own order, for
+    options that actually moved in the window."""
+    out = []
+    options = market.get("market_options") or market.get("options") or []
+    for opt in sorted(options, key=lambda o: _pick(o, "sort_order", default=0)):
+        oid = str(_pick(opt, "id", "option_id", default=""))
+        if oid in windows:
+            start, end = windows[oid]
+            out.append({"label": _pick(opt, "label", "name", "title", default=oid),
+                        "start": start, "end": end})
+    return out
+
+
+def format_option_moves(lines: list[dict]) -> str:
+    """'TAIP 60%→20% · NE 40%→80%' from option_move_lines output."""
+    return " · ".join(f"{o['label']} {o['start'] * 100:.0f}%→{o['end'] * 100:.0f}%"
+                      for o in lines)
+
+
 def trade_market_key(trade: dict) -> str:
     """How a trade names its market.
 
@@ -501,6 +544,7 @@ def breaker_candidates(window_minutes: int = config.CB_WINDOW_MINUTES,
         trades = []
 
     moves = price_moves(history, option_to_market(market_rows), window_minutes, now)
+    windows = option_windows(history, window_minutes, now)
     traders = traders_per_market(trades, window_minutes, now)
     by_id = {market_id_of(m): m for m in market_rows}
 
@@ -519,6 +563,7 @@ def breaker_candidates(window_minutes: int = config.CB_WINDOW_MINUTES,
             "market": market,
             "move": move,
             "users": users,
+            "options": option_move_lines(market, windows),
             "tripped": resolution.circuit_breaker_tripped(move, users),
         })
     out.sort(key=lambda item: item["move"], reverse=True)

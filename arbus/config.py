@@ -760,10 +760,11 @@ EXPORT_DIR = "exports"
 # an AMM a known outcome trading at a stale price is money leaving the house.
 APP_CHECK_OVERDUE = True
 
-# The status the direct-write freeze fallback sets to stop / resume trading. Must
-# match a value the app understands — check `arbus app --schema` first
-# (open / paused / closed confirmed live).
-APP_FREEZE_STATUS = os.environ.get("APP_FREEZE_STATUS", "paused")
+# The status the freeze sets to stop / resume trading. `closed` is the app's
+# "sustabdyti" (what the admin dashboard does); `paused` reads as "užšaldyti",
+# which is not what the circuit breaker means. Values confirmed live
+# (open / paused / closed / resolved). Override via APP_FREEZE_STATUS if needed.
+APP_FREEZE_STATUS = os.environ.get("APP_FREEZE_STATUS", "closed")
 APP_UNFREEZE_STATUS = os.environ.get("APP_UNFREEZE_STATUS", "open")
 
 # How the app halts trading: a POST to rpc/<name> with {<param>: market_id}.

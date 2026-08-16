@@ -135,6 +135,27 @@ def test_price_moves_use_the_window_and_the_full_swing():
     assert round(moves["m1"], 2) == 0.25
 
 
+def test_option_windows_report_start_and_end_per_option():
+    """For the alert: TAIP went 60%→20%, NE 40%→80% inside the window."""
+    history = [                                       # newest-first
+        {"option_id": "yes", "probability": 20, "created_at": _at(1)},   # end
+        {"option_id": "no", "probability": 80, "created_at": _at(1)},
+        {"option_id": "yes", "probability": 60, "created_at": _at(8)},   # start
+        {"option_id": "no", "probability": 40, "created_at": _at(8)},
+        {"option_id": "yes", "probability": 99, "created_at": _at(60)},  # out of window
+    ]
+    w = app.option_windows(history, window_minutes=10, now=NOW)
+    assert w["yes"] == (0.60, 0.20) and w["no"] == (0.40, 0.80)
+
+
+def test_format_option_moves_reads_from_the_yes_side():
+    market = {"market_options": [
+        {"id": "yes", "label": "TAIP", "sort_order": 0},
+        {"id": "no", "label": "NE", "sort_order": 1}]}
+    lines = app.option_move_lines(market, {"yes": (0.60, 0.20), "no": (0.40, 0.80)})
+    assert app.format_option_moves(lines) == "TAIP 60%→20% · NE 40%→80%"
+
+
 def test_breaker_needs_the_users_too(monkeypatch):
     markets = [{"id": "m1", "question": "Ar X?",
                 "market_options": [{"id": "o1"}, {"id": "o2"}]}]

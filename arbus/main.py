@@ -275,7 +275,8 @@ def _watch_once(args: argparse.Namespace) -> int:
     for item in rows[:15]:
         flag = "🚨" if item["tripped"] else "·"
         question = app_api.question_of(item["market"]) or app_api.market_id_of(item["market"])
-        print(f"{flag} {item['move']:+.0%} move, {item['users']} user(s) — {question}")
+        moves = app_api.format_option_moves(item.get("options")) or f"{item['move']:+.0%}"
+        print(f"{flag} {moves} | {item['users']} user(s) — {question}")
 
     print(f"\n{len(tripped)} market(s) trip the breaker "
           f"(≥{config.CB_PRICE_MOVE:.0%} move AND ≥{config.CB_MIN_DISTINCT_USERS} users "
@@ -296,8 +297,11 @@ def _watch_once(args: argparse.Namespace) -> int:
     if tripped and not args.no_telegram:
         lines = ["🚨 ĮTARTINAS SRAUTAS", ""]
         for item in tripped:
-            lines.append(f"· {item['move']:+.0%}, {item['users']} vartotojai — "
-                         f"{app_api.question_of(item['market'])}")
+            moves = app_api.format_option_moves(item.get("options"))
+            if not moves:
+                moves = f"{item['move']:+.0%} judesys"
+            lines.append(f"· {app_api.question_of(item['market'])}")
+            lines.append(f"  {moves} | {item['users']} vartotojai")
         lines += ["", "Kainos šuolis + keli skirtingi vartotojai ta pačia kryptimi "
                       "dažniausiai reiškia, kad kažkas jau žino rezultatą."]
         # Say what the bot ACTUALLY did — froze, tried-and-failed, or only alerts.
