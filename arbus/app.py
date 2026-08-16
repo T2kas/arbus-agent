@@ -182,6 +182,15 @@ def _timestamp_of(row: dict) -> datetime | None:
 def markets(limit: int = 100) -> tuple[list[dict], str]:
     if not configured():
         return [], "ARBUS_API_URL is not set"
+    # Common misconfig: ARBUS_API_URL set to the RPC base (.../rest/v1/rpc) — the
+    # freeze endpoint — instead of the markets URL. Reading then GETs the `rpc`
+    # path as if it were a table ("Could not find the table 'public.rpc'").
+    # Catch it with a clear message; the freeze RPC is derived from this URL, so
+    # it must be the markets URL, not the rpc one.
+    if config.ARBUS_API_URL.rstrip("/").endswith("/rest/v1/rpc"):
+        return [], ("ARBUS_API_URL rodo į RPC endpoint'ą (.../rest/v1/rpc). Jis "
+                    "turi būti MARKETS URL (.../rest/v1/markets?select=...). Freeze "
+                    "RPC iš jo išvedamas automatiškai — atskiro rpc URL nereikia.")
     return _call("GET", url_with(f"limit={limit}"))
 
 
