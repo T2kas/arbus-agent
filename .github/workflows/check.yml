@@ -14,8 +14,11 @@ name: resolution-check
 #   CHECK_DEEP    = true   → allow the paid web hunt on no-data markets (pricey).
 
 on:
-  schedule:
-    - cron: "0 */6 * * *"           # every 6 hours
+  # IŠJUNGTA automatinė eiga (kad neestų kreditų). Veikia TIK rankiniu būdu:
+  # Actions → resolution-check → Run workflow. Kai norėsi automatinio tikrinimo,
+  # atkomentuok `schedule` bloką žemiau (kas 6 val.).
+  # schedule:
+  #   - cron: "0 */6 * * *"
   workflow_dispatch:
     inputs:
       deep:
