@@ -764,6 +764,14 @@ APP_CHECK_OVERDUE = True
 # value the app actually understands — check `arbus app --schema` first.
 APP_FREEZE_STATUS = os.environ.get("APP_FREEZE_STATUS", "paused")
 
+# How the app halts trading: a POST to rpc/<name> with {<param>: market_id}.
+# The app exposes admin_freeze_market / admin_unfreeze_market. If the SQL
+# function's parameter is not called `market_id` (e.g. `p_market_id`), set
+# APP_FREEZE_RPC_PARAM — otherwise the call 404s "function not found".
+APP_FREEZE_RPC = os.environ.get("APP_FREEZE_RPC", "admin_freeze_market")
+APP_UNFREEZE_RPC = os.environ.get("APP_UNFREEZE_RPC", "admin_unfreeze_market")
+APP_FREEZE_RPC_PARAM = os.environ.get("APP_FREEZE_RPC_PARAM", "market_id")
+
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about
 # what NOT to generate. A market everybody trades deserves promotion. Both are

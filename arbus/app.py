@@ -97,11 +97,11 @@ def _endpoint(path: str, query: str = "") -> tuple[list[dict], str]:
     return _call("GET", f"{base}{path}" + (f"?{query}" if query else ""))
 
 
-def _rpc(name: str, payload: dict | None = None) -> tuple[list[dict], str]:
+def _rpc(name: str, payload: dict | None = None, key: str = "") -> tuple[list[dict], str]:
     base = base_url()
     if not base:
         return [], "ARBUS_API_URL is not a /rest/v1/ URL — RPC unavailable"
-    return _call("POST", f"{base}rpc/{name}", json=payload or {})
+    return _call("POST", f"{base}rpc/{name}", key=key, json=payload or {})
 
 
 # ── field lookup: the app owns the schema, so never assume one name ─────────
@@ -211,23 +211,31 @@ def frozen_markets(limit: int = 200) -> tuple[list[dict], str]:
     return [r for r in rows if is_frozen(r)], ""
 
 
-def set_status(market_id: str, status: str) -> tuple[bool, str]:
-    """Write a market's status back to the app (needs a service_role key).
+def freeze_market(market_id: str) -> tuple[bool, str]:
+    """Halt trading on a market via the app's admin RPC (needs the write key).
 
-    This is the only write in this module and it is never called automatically:
-    `arbus watch --freeze` is opt-in, because stopping trading is a decision
-    with money attached. With the anon key row-level security will refuse it,
-    and the 401/403 is reported as-is rather than swallowed.
+    The app exposes freezing as a POST to `rpc/admin_freeze_market`, not a raw
+    table write — the function name and its parameter are configurable so this
+    matches whatever the SQL function is called. Never called automatically:
+    `arbus watch --freeze` is opt-in, because stopping trading is a decision with
+    money attached, and the anon key cannot do it (403 reported as-is).
     """
-    base = base_url()
-    if not base:
-        return False, "ARBUS_API_URL is not a /rest/v1/ URL"
-    # Freeze with the privileged key when provided; RLS refuses the anon key.
-    rows, error = _call("PATCH", f"{base}markets?id=eq.{market_id}",
-                        key=config.ARBUS_WRITE_KEY, json={"status": status})
+    rows, error = _rpc(config.APP_FREEZE_RPC,
+                       {config.APP_FREEZE_RPC_PARAM: market_id},
+                       key=config.ARBUS_WRITE_KEY)
     if error:
         return False, error
-    return True, f"status set to {status}" + (f" ({len(rows)} row)" if rows else "")
+    return True, "frozen"
+
+
+def unfreeze_market(market_id: str) -> tuple[bool, str]:
+    """Resume trading — the inverse RPC, for undoing a false-alarm freeze."""
+    rows, error = _rpc(config.APP_UNFREEZE_RPC,
+                       {config.APP_FREEZE_RPC_PARAM: market_id},
+                       key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, error
+    return True, "unfrozen"
 
 
 def price_history(limit: int = 200) -> tuple[list[dict], str]:

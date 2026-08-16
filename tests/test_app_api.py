@@ -231,8 +231,30 @@ def test_freezing_reports_what_the_app_said(monkeypatch):
     monkeypatch.setattr(config, "ARBUS_API_URL", SUPABASE)
     monkeypatch.setattr(requests, "request",
                         lambda *a, **k: _Resp(None, 403, "row-level security"))
-    ok, detail = app.set_status("m1", "paused")
+    ok, detail = app.freeze_market("m1")
     assert ok is False and "403" in detail     # anon key can read, not write
+
+
+def test_freeze_calls_the_admin_rpc_with_the_market_id(monkeypatch):
+    """Freezing hits the app's rpc/admin_freeze_market with the market id and the
+    privileged write key, not a raw table PATCH."""
+    monkeypatch.setattr(config, "ARBUS_API_URL", SUPABASE)
+    monkeypatch.setattr(config, "ARBUS_WRITE_KEY", "service-key")
+    monkeypatch.setattr(config, "APP_FREEZE_RPC", "admin_freeze_market")
+    monkeypatch.setattr(config, "APP_FREEZE_RPC_PARAM", "market_id")
+    seen = {}
+
+    def fake_request(method, url, **k):
+        seen["method"], seen["url"] = method, url
+        seen["json"], seen["headers"] = k.get("json"), k.get("headers")
+        return _Resp([{"ok": True}], 200)
+
+    monkeypatch.setattr(requests, "request", fake_request)
+    ok, detail = app.freeze_market("m-42")
+    assert ok is True
+    assert seen["method"] == "POST" and seen["url"].endswith("/rpc/admin_freeze_market")
+    assert seen["json"] == {"market_id": "m-42"}
+    assert seen["headers"]["Authorization"] == "Bearer service-key"
 
 
 def test_overdue_open_markets_are_checked_too(monkeypatch, tmp_path):

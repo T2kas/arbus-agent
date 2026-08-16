@@ -281,7 +281,7 @@ def _watch_once(args: argparse.Namespace) -> int:
     if tripped and args.freeze:
         for item in tripped:
             mid = app_api.market_id_of(item["market"])
-            ok, detail = app_api.set_status(mid, config.APP_FREEZE_STATUS)
+            ok, detail = app_api.freeze_market(mid)
             print(f"   {'🧊' if ok else '❌'} {mid}: {detail}")
             if ok:
                 frozen_now.append(mid)
