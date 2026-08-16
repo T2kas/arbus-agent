@@ -80,6 +80,58 @@ AI **giliai** patikrintų konkrečią svarbią rinką:
 python -m arbus check --match "Eurovizij" --deep
 ```
 
+## Kaina ir dažnis — kiek galim be pinigų
+
+Pats circuit breaker ir check **jokių LLM/API pinigų nekainuoja** watch'ui (nėra
+LLM; Supabase skaitymai nemokami). Kainuoja tik **GitHub Actions minutės**, ir
+tik jei repo **privatus** (nemokamai ~2000 min/mėn). Paleidimas lengvas
+(`requirements.txt` – 5 bibliotekos), tad vienas paleidimas ~1 min.
+
+| Repo | Kas 2 min | Kas 15 min | Kas 30 min | Kas 6 val. (check) |
+|---|---|---|---|---|
+| **Privatus** | ~€150/mėn ❌ | šiek tiek viršija | **nemokama ✅** | nemokama ✅ |
+| **Viešas** | **nemokama ✅** | nemokama ✅ | nemokama ✅ | nemokama ✅ |
+
+**Išvada:** privačiam repo laikykis **~kas 30 min** (numatyta) — nemokama. Jei
+nori **kas 2 min** be pinigų — padaryk repo **viešą** (žr. žemiau) arba naudok
+atskirą always-on procesą.
+
+### Ar saugu padaryti repo viešą?
+
+- **Actions tampa nemokamos ir neribotos** → kas 2 min OK.
+- **Secrets LIEKA slapti** — GitHub jų niekada nerodo viešuose repo (užšifruoti,
+  užmaskuoti loguose). API raktai saugūs.
+- **Bet** visas kodas (logika, prompt'ai, rezoliucijos taisyklės) tampa viešai
+  matomas. Prediction market'ui tai reiškia, kad vartotojai galėtų matyti, kaip
+  botas sprendžia — apsvarstyk, ar tai OK. Slaptų raktų istorijoje nėra (`.env`
+  git'e niekada nebuvo).
+
+## Kaip testuoti (ir ar jau veikia)
+
+**Taip, jau veikia** — kai pridėjai `ARBUS_API_KEY`, botas skaito gyvus duomenis
+(patikrinta: aptinka realius kainų judesius). Kaip pačiam pasitikrinti:
+
+1. **Rankiniu būdu iš karto** (nelaukiant tvarkaraščio): Actions → **circuit-breaker**
+   → **Run workflow**. Atsidaryk log'ą — pamatysi „⚙️ Circuit breaker: ≥20%…" ir
+   arba „No price movement", arba 🚨 aptiktas judesys.
+2. **Kad pamatytum, kaip atrodo aptikimas:** laikinai Variables nustatyk jautrius
+   parametrus (`CB_PRICE_MOVE=0.02`, `CB_MIN_DISTINCT_USERS=1`, `CB_WINDOW_MINUTES=1440`),
+   paleisk rankiniu būdu — pamatysi 🚨. Po to grąžink į `0.20 / 3 / 10`.
+3. **Lokaliai** (jei nori): `python -m arbus watch --no-telegram`.
+
+## Circuit breaker parametrai — keisk per Variables (be kodo)
+
+Settings → Secrets and variables → Actions → **Variables**:
+
+| Variable | Ką reiškia | Numatyta |
+|---|---|---|
+| `CB_PRICE_MOVE` | kiek kaina turi pajudėti (0.20 = 20 %) | 0.20 |
+| `CB_MIN_DISTINCT_USERS` | kiek skirtingų vartotojų ta pačia kryptimi | 3 |
+| `CB_WINDOW_MINUTES` | per kiek minučių tai turi įvykti | 10 |
+
+Pakeitei → įsigalioja nuo kito paleidimo. Dažnį (kas kiek min) keiti
+`watch.yml` `cron` eilutėje (žr. komentarą ten).
+
 ## Santrauka — kas ką sprendžia
 
 - **Circuit breaker** = automatinis **sargas**: pastebi įtartiną prekybą,

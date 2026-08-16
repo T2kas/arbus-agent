@@ -14,7 +14,12 @@ name: circuit-breaker
 
 on:
   schedule:
-    - cron: "*/15 * * * *"          # every 15 min (GitHub's practical minimum)
+    # DAŽNIS. Šitą vienintelę eilutę keisk rankiniu būdu (cron negali būti
+    # variable). Privačiam repo nemokamos ~2000 min/mėn:
+    #   "*/30 * * * *"  kas 30 min — telpa nemokamai (numatyta)
+    #   "*/15 * * * *"  kas 15 min — jau šiek tiek viršija nemokamą ribą
+    #   "*/2  * * * *"  kas 2 min  — TIK jei repo VIEŠAS (tada Actions nemokamos)
+    - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
       freeze:
