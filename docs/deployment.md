@@ -92,9 +92,11 @@ tik jei repo **privatus** (nemokamai ~2000 min/mėn). Paleidimas lengvas
 | **Privatus** | ~€150/mėn ❌ | šiek tiek viršija | **nemokama ✅** | nemokama ✅ |
 | **Viešas** | **nemokama ✅** | nemokama ✅ | nemokama ✅ | nemokama ✅ |
 
-**Išvada:** privačiam repo laikykis **~kas 30 min** (numatyta) — nemokama. Jei
-nori **kas 2 min** be pinigų — padaryk repo **viešą** (žr. žemiau) arba naudok
-atskirą always-on procesą.
+**Dabartinis nustatymas:** repo viešas, `watch` paleidžiamas **kas 5 min**
+(vienas švarus paleidimas — GitHub'o realus scheduled minimumas, ir 10-min langui
+to visiškai gana). Viešame repo tai nemokama. Nori dažniau/rečiau — keisk `cron`
+eilutę `watch.yml`. Tikram 2-min dažniui reiktų always-on proceso (atskiro
+hosto), bet circuit breakeriui 5 min pakanka.
 
 ### Ar saugu padaryti repo viešą?
 
