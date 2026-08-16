@@ -598,3 +598,54 @@ def review_app_market(conn: sqlite3.Connection, market: dict,
     if alert:
         notify.notify_resolution(market, None, summary)
     return summary
+
+
+# ── resolution PROPOSALS: check only what a user proposed, seeing the claim ──
+
+def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
+    """User-submitted resolution proposals, each paired with its market.
+
+    This is the cheap, targeted trigger the team wants: check ONLY markets
+    someone proposed a resolution for — not every closed market — and let the AI
+    see the claimed outcome and the cited source."""
+    from . import app as app_api
+
+    proposals, error = app_api.resolution_proposals(limit)
+    if error:
+        return [], error
+    markets, m_err = app_api.markets(200)
+    by_id = {} if m_err else {app_api.market_id_of(m): m for m in markets}
+    out = [{"proposal": p, "market": by_id.get(str(p.get("market_id")), {})}
+           for p in proposals]
+    return out, ""
+
+
+def check_app_proposal(proposal: dict, market: dict, today: date | None = None,
+                       deep: bool = True) -> str:
+    """Verify one user's proposed resolution: does the cited source (and a search)
+    support the outcome they claim? The claim and source are handed to the model,
+    and a cited URL is fetched for free, so this is both targeted and cheap."""
+    from . import app as app_api, notify
+
+    view = notify.market_view(market) if market else {}
+    proposed = app_api.option_label(market, proposal.get("proposed_option_id"))
+    source = proposal.get("source") or "(vartotojas nenurodė šaltinio)"
+    summary = _run(
+        question=view.get("question") or "(rinka nerasta app'e)",
+        options=" / ".join(view.get("options") or []),
+        criteria=view.get("rules") or "",
+        proposed=f"vartotojas siūlo baigtį: {proposed}",
+        source=source, today=today,
+        closes_at=view.get("resolve_by", ""), deep=deep)
+    header = (f"👤 Vartotojo pasiūlyta baigtis: {proposed}\n"
+              f"🔗 Pateiktas šaltinis: {source}\n{_BAR}\n")
+    return header + summary
+
+
+def review_app_proposal(item: dict, today: date | None = None,
+                        alert: bool = True, deep: bool = True) -> str:
+    """Check one proposal and post the summary to Telegram."""
+    summary = check_app_proposal(item["proposal"], item["market"], today, deep)
+    if alert:
+        notify.notify_resolution(item["market"] or {}, None, summary)
+    return summary

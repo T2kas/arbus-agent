@@ -539,6 +539,32 @@ def cmd_check(args: argparse.Namespace) -> int:
     resolution.init(conn)          # picks up the ai_summary columns on old DBs
     alert = not args.no_telegram
 
+    # --proposals: check ONLY markets a user proposed a resolution for (the cheap,
+    # targeted trigger), letting the AI see the claimed outcome + cited source.
+    # Each proposal is checked once — the ledger is keyed by proposal id.
+    if args.proposals:
+        items, perr = aicheck.pending_app_proposals(args.limit)
+        if perr:
+            print(f"⚠️  Could not read proposals: {perr}")
+        ledger = _load_ledger()
+        new = [it for it in items
+               if str(it["proposal"].get("id")) not in ledger]
+        print(f"{len(new)} naujas pasiūlymas iš {len(items)} "
+              "(kiti jau tikrinti).")
+        import time
+        for idx, it in enumerate(new):
+            if idx and config.APP_CHECK_DELAY_SECONDS:
+                time.sleep(config.APP_CHECK_DELAY_SECONDS)
+            from . import app as app_api
+            print(f"\n— proposal {it['proposal'].get('id')} on "
+                  f"{app_api.question_of(it['market']) if it['market'] else it['proposal'].get('market_id')}")
+            print(aicheck.review_app_proposal(it, alert=alert, deep=args.deep))
+            ledger.add(str(it["proposal"].get("id")))
+        if new:
+            _save_ledger(ledger)
+        conn.close()
+        return 0
+
     requests_ = ([conn.execute("SELECT * FROM resolution_requests WHERE id = ?",
                                (rid,)).fetchone() for rid in args.request_ids]
                  if args.request_ids else aicheck.pending_requests(conn, args.limit))
@@ -765,6 +791,10 @@ def main() -> int:
                          "source (~0.15-0.30 EUR each). Default off: such markets "
                          "are skipped with a manual-check note. Use it for the "
                          "few important markets, usually with --match")
+    ck.add_argument("--proposals", action="store_true",
+                    help="check ONLY markets a user proposed a resolution for "
+                         "(market_resolution_proposals), letting the AI see the "
+                         "claimed outcome + source. Each proposal checked once.")
     ck.add_argument("--only-new", action="store_true",
                     help="check only markets not already in the ledger — for a "
                          "scheduled run so newly proposed/closed markets are "

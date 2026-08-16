@@ -1,13 +1,12 @@
 name: resolution-check
 
-# When a user proposes a resolution, the app closes the market. This picks up
-# newly closed/frozen markets, has the AI verify the outcome, and posts a
-# Telegram summary. It decides nothing — the admin resolves in the dashboard.
+# When a user proposes a resolution (market_resolution_proposals), the AI verifies
+# the CLAIMED outcome against the cited source and posts a Telegram summary. It
+# checks ONLY proposed markets — not every closed market — so it only costs when
+# someone actually proposed. It decides nothing; the admin resolves in the app.
 #
-# Only NEW markets are checked (--only-new): a committed ledger
-# (state/checked_markets.json) remembers what was already handled, so a stateless
-# CI run does not re-check (and re-bill) the whole backlog every time. Baseline it
-# once locally with `arbus check --mark-seen` before enabling.
+# Each proposal is checked once: a committed ledger (state/checked_markets.json)
+# remembers handled proposal ids, so a stateless CI run does not re-check.
 #
 # TOGGLE: Settings → Variables → CHECK_ENABLED = true runs the schedule.
 
@@ -57,7 +56,7 @@ jobs:
         run: |
           DEEP="--deep"
           if [ "${{ github.event.inputs.deep }}" = "false" ]; then DEEP=""; fi
-          python -m arbus check --only-new $DEEP
+          python -m arbus check --proposals $DEEP
 
       - name: Commit the ledger if it changed
         run: |

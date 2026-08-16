@@ -491,3 +491,11 @@ def test_env_int_and_float_fall_back_on_empty_or_bad(monkeypatch):
     assert config._env_float("CB_TEST_FLOAT", 0.20) == 0.20
     monkeypatch.setenv("CB_TEST_FLOAT", "0.35")
     assert config._env_float("CB_TEST_FLOAT", 0.20) == 0.35
+
+
+def test_option_label_resolves_the_proposed_option():
+    """A proposal cites proposed_option_id; the alert needs the human label."""
+    market = {"market_options": [{"id": "a", "label": "TAIP"},
+                                 {"id": "b", "label": "NE"}]}
+    assert app.option_label(market, "b") == "NE"
+    assert app.option_label(market, "zzz") == "zzz"      # unknown id passes through

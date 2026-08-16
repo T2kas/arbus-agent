@@ -303,6 +303,22 @@ def unfreeze_market(market_id: str) -> tuple[bool, str]:
     return ok, detail
 
 
+def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:
+    """Resolution proposals users submitted (market_resolution_proposals): which
+    market, the option they claim won (`proposed_option_id`), their cited
+    `source`, `status`, and `created_at`. Newest first."""
+    return _endpoint("market_resolution_proposals",
+                     f"select=*&order=created_at.desc&limit={limit}")
+
+
+def option_label(market: dict, option_id) -> str:
+    """The human label (TAIP/NE/…) for an option id, from the market's options."""
+    for opt in (market.get("market_options") or market.get("options") or []):
+        if str(_pick(opt, "id", "option_id", default="")) == str(option_id):
+            return str(_pick(opt, "label", "name", "title", default=option_id))
+    return str(option_id)
+
+
 def price_history(limit: int = 200) -> tuple[list[dict], str]:
     return _endpoint("option_price_history",
                      f"select=*&order=created_at.desc&limit={limit}")
