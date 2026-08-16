@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import logging
+from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
+from math import ceil
 from typing import Callable
 
-from . import config, harvest, llm, report, store, validate, verify
+from . import (config, feedback, harvest, images, llm, pulse, report, store,
+               validate, verify)
 from .schemas import Candidate, CandidateBatch
 
 log = logging.getLogger(__name__)
@@ -22,10 +25,37 @@ class BatchResult:
     rejected: list[tuple[Candidate, str]] = field(default_factory=list)
     report_path: str = ""
     export_path: str = ""
+    # Per-theme accounting: how many each theme was asked for, drafted and got
+    # through the gates. Drives the top-up rounds and the report diagnostics.
+    target_by_theme: Counter = field(default_factory=Counter)
+    drafted_by_theme: Counter = field(default_factory=Counter)
+    accepted_by_theme: Counter = field(default_factory=Counter)
+    reject_reasons: Counter = field(default_factory=Counter)
 
     @property
     def needs_review(self) -> int:
-        return sum(1 for _, _, v, _ in self.accepted if v == "UNCLEAR")
+        return sum(1 for _, _, v, _ in self.accepted if v in ("UNCLEAR", "NOT_VERIFIED"))
+
+
+def _theme_chunks(count: int, chunk_size: int) -> list[tuple[int, str, str]]:
+    """Allocate the batch across DRAFT_THEMES by share, split to chunk_size.
+
+    Rounding remainders go to the FIRST theme rather than the last: the shares
+    are ordered by priority, so a leftover slot should strengthen the
+    informative backbone, never inflate the culture tail.
+    Returns (n, label, mandate) triples in theme order.
+    """
+    themes = config.DRAFT_THEMES
+    counts = [min(int(count * share), count) for _, share, _ in themes]
+    counts[0] += count - sum(counts)          # remainder to the top priority
+
+    chunks: list[tuple[int, str, str]] = []
+    for (label, _, focus), n in zip(themes, counts):
+        while n > 0:
+            take = min(n, chunk_size)
+            chunks.append((take, label, focus))
+            n -= take
+    return chunks
 
 
 def run_batch(
@@ -45,8 +75,13 @@ def run_batch(
     if min_resolve:
         timing = (
             f"- CRITICAL: the app goes live on {min_resolve.isoformat()}. Every market MUST "
-            f"resolve on {min_resolve.isoformat()} or later — never earlier. Spread the "
-            "dates: most within 2-3 weeks after that day, ~20% a month or more later."
+            f"resolve on {min_resolve.isoformat()} or later — never earlier — AND its "
+            f"outcome must still be genuinely UNKNOWN on that date: the deciding event "
+            f"itself must take place on {min_resolve.isoformat()} or later. NEVER draft a "
+            "market about an event happening before launch, and NEVER push resolve_by "
+            "later to smuggle one in — a market whose answer is already known at launch "
+            "is dead on arrival. Spread the dates: most within 2-3 weeks after launch, "
+            "~20% a month or more later."
         )
     else:
         timing = ("- Duration mix: ~30% resolving within 48 hours, ~50% within "
@@ -57,98 +92,217 @@ def run_batch(
     if not items:
         raise RuntimeError("no headlines harvested — check feeds/network")
     headlines = harvest.headlines_block(items)
+
+    # Stage 1b — the pulse: real search / discussion / pageview signal that news
+    # RSS misses. Best-effort; an empty pulse just means news-only for this run.
+    progress("Reading the live pulse (searches, discussions, pageviews)...")
+    signals = pulse.pulse()
+    pulse_text = pulse.pulse_block(signals)
+    progress(f"Pulse: {len(signals)} live signals from social/search sources.")
+
+    feedback_text = feedback.feedback_block(feedback.load_feedback())
+
     system = llm.load_prompt("system")
 
-    # Draft + structure in chunks — one call can't reliably carry a full
-    # 35-candidate batch through an ~8K-token output cap.
-    candidates: list[Candidate] = []
-    remaining = count
-    while remaining > 0:
-        n = min(remaining, config.DRAFT_CHUNK_SIZE)
-        progress(f"Researching & drafting {n} candidates "
-                 f"({len(candidates)} done, provider: {llm.provider()})...")
+    # Draft + structure in THEMED chunks: every chunk carries a mandatory theme
+    # (state/geopolitics, economy, sport, culture), so batch balance is enforced
+    # structurally — the model cannot drift into view-count bait when its chunk
+    # mandate is state affairs. Chunking also keeps each call inside the ~8K
+    # output cap.
+    chunk_size = (config.ZAI_DRAFT_CHUNK_SIZE if llm.provider("draft") == "zai"
+                  else config.DRAFT_CHUNK_SIZE)
+
+    conn = store.connect()
+    # Legacy questions that today's rules would reject must not block their own
+    # fixed replacements: "Ar Ignitis akcijos pasieks 24 €?" was stored before
+    # the time-bound rule existed and was rejecting the corrected
+    # "... iki spalio?" as a duplicate.
+    existing = [q for q in store.recent_questions(conn)
+                if not validate.lint_open_ended(q, "binary")
+                and not validate.lint_vague(q)
+                and not validate.lint_headline_format(q)]
+    # The app is the real source of truth for what users can already see: a
+    # market published by hand, or from another machine, is not in this DB.
+    # Fail-safe by design — an unreachable app costs dedupe, never the batch.
+    if config.ARBUS_API_URL and config.APP_DEDUPE:
+        from . import publish
+        live = publish.app_questions()
+        if live:
+            progress(f"App: {len(live)} live markets loaded for duplicate checking.")
+            existing += live
+    accepted_cands: list[Candidate] = []
+    drafted_questions: list[str] = []
+
+    # Wording problems are fixable — send them for a rewrite instead of binning
+    # a good idea. Factual/structural rejections are not repairable.
+    REPAIRABLE = ("vague headline", "headline format", "vague/unclear options",
+                  "open-ended question")
+
+    def admit(cand: Candidate, reason: str | None, repairable: bool,
+              fixables: list[tuple[Candidate, str]]) -> None:
+        if reason:
+            if repairable and reason.startswith(REPAIRABLE):
+                fixables.append((cand, reason))
+            else:
+                result.rejected.append((cand, reason))
+                result.reject_reasons[reason.split(":")[0]] += 1
+            return
+        dup = validate.is_duplicate(cand.question_lt, existing)
+        if dup:
+            result.rejected.append((cand, f"duplicate of existing market: {dup!r}"))
+            result.reject_reasons["duplicate of existing market"] += 1
+            return
+        existing.append(cand.question_lt)  # dedupe within the batch too
+        accepted_cands.append(cand)
+        result.accepted_by_theme[cand.theme] += 1
+
+    draft_calls = {"n": 0}
+
+    def draft_chunk(n: int, label: str, focus: str) -> list[Candidate]:
+        """Draft + structure one themed chunk. Failures cost the chunk, not the batch."""
+        if draft_calls["n"] >= config.MAX_DRAFT_CALLS:
+            log.warning("draft-call ceiling (%d) reached; finishing with what we have",
+                        config.MAX_DRAFT_CALLS)
+            return []
+        draft_calls["n"] += 1
         avoid_parts = []
         if config.BLOCKED_SUBJECTS:
             avoid_parts.append(
                 "NEVER propose markets about these subjects (team-blocked): "
                 + ", ".join(config.BLOCKED_SUBJECTS)
             )
-        if candidates:
+        if drafted_questions:
             avoid_parts.append(
                 "ALREADY DRAFTED — do NOT duplicate these questions or topics:\n"
-                + "\n".join(f"- {c.question_lt}" for c in candidates)
+                + "\n".join(f"- {q}" for q in drafted_questions)
+            )
+        # Mistakes made earlier in THIS run are the most relevant teaching
+        # material available — feed them back so the model stops repeating them
+        # while the batch is still being drafted.
+        if result.rejected:
+            recent = result.rejected[-config.REJECT_FEEDBACK_LIMIT:]
+            avoid_parts.append(
+                "REJECTED EARLIER IN THIS RUN — do not repeat these mistakes:\n"
+                + "\n".join(f"- {c.question_lt} -> {r}" for c, r in recent)
             )
         avoid = ("\n" + "\n".join(avoid_parts)) if avoid_parts else ""
         draft_prompt = llm.load_prompt(
-            "draft",
-            today=today.isoformat(),
-            count=str(n),
-            headlines=headlines,
-            avoid=avoid,
-            timing=timing,
+            "draft", today=today.isoformat(), count=str(n), focus=focus,
+            headlines=headlines, pulse=pulse_text, feedback=feedback_text,
+            avoid=avoid, timing=timing,
         )
-        draft_text = llm.research(draft_prompt, system=system, max_uses=16, max_tokens=8000)
-        structure_prompt = llm.load_prompt("structure", draft=draft_text)
-        batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch, max_tokens=8000)
-        if not batch.candidates:
-            log.warning("chunk produced 0 structured candidates; stopping early")
-            break
-        candidates.extend(batch.candidates)
-        remaining -= n
-
-    progress(f"Structured {len(candidates)} candidates. Validating...")
-
-    conn = store.connect()
-    existing = store.recent_questions(conn)
-    accepted_cands: list[Candidate] = []
-    fixables: list[tuple[Candidate, str]] = []
-
-    def admit(cand: Candidate, reason: str | None, repairable: bool) -> None:
-        if reason:
-            if repairable and reason.startswith("vague headline"):
-                fixables.append((cand, reason))
-            else:
-                result.rejected.append((cand, reason))
-            return
-        dup = validate.is_duplicate(cand.question_lt, existing)
-        if dup:
-            result.rejected.append((cand, f"duplicate of existing market: {dup!r}"))
-            return
-        existing.append(cand.question_lt)  # dedupe within the batch too
-        accepted_cands.append(cand)
-
-    for cand in candidates:
-        fixed, reason = validate.validate_candidate(cand, today, min_resolve=min_resolve)
-        admit(fixed or cand, reason, repairable=True)
-
-    # A vague headline is a wording problem, not an idea problem — give those
-    # candidates one LLM rewrite round before discarding them.
-    if fixables:
-        progress(f"Repairing {len(fixables)} vague headlines...")
         try:
-            import json as _json
-
-            items = _json.dumps(
-                [{"rejection_reason": r, **c.model_dump()} for c, r in fixables],
-                ensure_ascii=False, indent=1,
-            )
-            repaired = llm.structure(
-                llm.load_prompt("repair", items=items), CandidateBatch, max_tokens=8000
-            )
-            for cand in repaired.candidates:
-                fixed, reason = validate.validate_candidate(cand, today, min_resolve=min_resolve)
-                admit(fixed or cand, f"repair failed: {reason}" if reason else None,
-                      repairable=False)
+            draft_text = llm.research(draft_prompt, system=system,
+                                      max_uses=config.SEARCH_MAX_USES_DRAFT,
+                                      max_tokens=8000, stage="draft")
+            structure_prompt = llm.load_prompt("structure", draft=draft_text)
+            batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch,
+                                                  max_tokens=8000)
         except Exception as exc:
-            log.warning("repair round failed: %s", exc)
-            for cand, reason in fixables:
-                result.rejected.append((cand, reason))
+            log.warning("chunk (%s) failed (%s); skipping it and continuing", label, exc)
+            return []
+        for cand in batch.candidates:
+            cand.theme = label
+            drafted_questions.append(cand.question_lt)
+        result.drafted_by_theme[label] += len(batch.candidates)
+        return batch.candidates
+
+    def run_round(chunks: list[tuple[int, str, str]]) -> None:
+        """Draft, validate and repair one round of themed chunks."""
+        fixables: list[tuple[Candidate, str]] = []
+        for n, label, focus in chunks:
+            progress(f"Researching & drafting {n} candidates — {label} "
+                     f"({len(accepted_cands)} accepted so far, "
+                     f"provider: {llm.provider('draft')})...")
+            for cand in draft_chunk(n, label, focus):
+                fixed, reason = validate.validate_candidate(
+                    cand, today, min_resolve=min_resolve)
+                admit(fixed or cand, reason, True, fixables)
+
+        # A vague headline is a wording problem, not an idea problem — give
+        # those candidates one LLM rewrite before discarding them.
+        if fixables:
+            progress(f"Repairing {len(fixables)} badly worded headlines...")
+            try:
+                import json as _json
+
+                items = _json.dumps(
+                    [{"rejection_reason": r, **c.model_dump()} for c, r in fixables],
+                    ensure_ascii=False, indent=1,
+                )
+                repaired = llm.structure(
+                    llm.load_prompt("repair", items=items), CandidateBatch,
+                    max_tokens=8000,
+                )
+                themes = [c.theme for c, _ in fixables]
+                for i, cand in enumerate(repaired.candidates):
+                    cand.theme = cand.theme or (themes[i] if i < len(themes) else "")
+                    fixed, reason = validate.validate_candidate(
+                        cand, today, min_resolve=min_resolve)
+                    admit(fixed or cand, f"repair failed: {reason}" if reason else None,
+                          False, fixables)
+            except Exception as exc:
+                log.warning("repair round failed: %s", exc)
+                for cand, reason in fixables:
+                    result.rejected.append((cand, reason))
+
+    plan = _theme_chunks(count, chunk_size)
+    for n, label, _ in plan:
+        result.target_by_theme[label] += n
+    run_round(plan)
+
+    # Top-up: quotas govern the ACCEPTED batch, so any theme that lost
+    # candidates to validation gets re-drafted rather than silently ceding its
+    # share to whichever theme survives most easily.
+    focus_by_label = {label: focus for label, _, focus in config.DRAFT_THEMES}
+    for _ in range(config.TOPUP_ROUNDS):
+        deficits = {label: target - result.accepted_by_theme[label]
+                    for label, target in result.target_by_theme.items()
+                    if target > result.accepted_by_theme[label]}
+        if not deficits:
+            break
+        topup = [
+            (min(chunk_size, max(2, ceil(missing * config.TOPUP_OVERDRAFT))),
+             label, focus_by_label[label])
+            for label, missing in deficits.items() if label in focus_by_label
+        ]
+        if not topup:
+            break
+        progress("Topping up under-delivered themes: "
+                 + ", ".join(f"{label} needs {n}" for label, n in deficits.items()))
+        run_round(topup)
+
+    if not accepted_cands:
+        raise RuntimeError(
+            "no candidates survived drafting/validation — check the provider and the "
+            "warnings above (a model that ignores the JSON schema is the usual cause)"
+        )
 
     if skip_verify:
         verdicts = [("UNCLEAR", "verification skipped")] * len(accepted_cands)
     else:
         progress(f"Verifying {len(accepted_cands)} candidates against the live web...")
-        verdicts = verify.verify_candidates(accepted_cands, today)
+        # The pulse already fetched hard numbers this session (stock closes,
+        # chart positions) — hand them to the verifier so it never answers
+        # UNCLEAR about a value we are holding in memory.
+        # Anything the pulse measured this session counts as a known fact —
+        # including view counts, or a YouTube-metric market comes back UNCLEAR
+        # while the number sits in memory.
+        live_facts = "\n".join(
+            f"- {s.title}: {s.metric}" for s in signals
+            if s.kind in ("stock", "chart", "video", "pageview")
+        )
+        verdicts = verify.verify_candidates(accepted_cands, today, live_facts=live_facts,
+                                            min_resolve=min_resolve)
+
+    # Images last, and only for candidates that survived every gate — no point
+    # fetching pictures for markets about to be discarded.
+    if config.IMAGES_ENABLED and accepted_cands:
+        keep = [c for c, (v, _) in zip(accepted_cands, verdicts)
+                if v not in ("DECIDED", "WRONG")]
+        progress(f"Fetching images for {len(keep)} markets...")
+        got = images.attach_images(keep)
+        progress(f"Images: {got}/{len(keep)} markets illustrated.")
 
     for cand, (verdict, note) in zip(accepted_cands, verdicts):
         if verdict in ("DECIDED", "WRONG"):
@@ -158,7 +312,7 @@ def run_batch(
                                    verify_verdict=verdict, verify_note=note,
                                    reject_reason=label)
             continue
-        status = "needs_review" if verdict == "UNCLEAR" else "candidate"
+        status = "needs_review" if verdict in ("UNCLEAR", "NOT_VERIFIED") else "candidate"
         db_id = store.insert_candidate(conn, cand, batch_id, status,
                                        verify_verdict=verdict, verify_note=note)
         result.accepted.append((db_id, cand, verdict, note))
@@ -169,7 +323,13 @@ def run_batch(
     conn.commit()
     conn.close()
 
-    result.report_path = str(report.write_batch_report(batch_id, result.accepted, result.rejected))
+    theme_stats = {
+        label: (target, result.drafted_by_theme[label], result.accepted_by_theme[label])
+        for label, target in result.target_by_theme.items()
+    }
+    result.report_path = str(report.write_batch_report(
+        batch_id, result.accepted, result.rejected,
+        theme_stats=theme_stats, reject_reasons=dict(result.reject_reasons)))
     result.export_path = str(report.write_batch_export(batch_id, result.accepted))
     progress(f"Done: {len(result.accepted)} accepted ({result.needs_review} need review), "
              f"{len(result.rejected)} rejected.")

@@ -17,7 +17,7 @@ import traceback
 
 import requests
 
-from . import config, pipeline
+from . import config, feedback, pipeline
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +27,7 @@ HELP = (
     f"{config.DEFAULT_BATCH_SIZE})\n"
     "/markets 15 — generate 15 candidates\n"
     "/markets 15 fast — skip web verification (cheaper, riskier)\n"
+    "/feedback <pastaba> — teach the bot (e.g. /feedback mažiau ekonomikos)\n"
     "/id — show this chat's id\n"
     "/help — this message"
 )
@@ -91,6 +92,14 @@ def _handle(token: str, chat_id: str, text: str) -> None:
             progress=lambda msg: log.info("%s", msg),
         )
         _send(token, chat_id, _format_batch(result))
+    elif cmd == "/feedback":
+        note = text[len("/feedback"):].strip()
+        if not note:
+            _send(token, chat_id,
+                  "Parašyk pastabą po komandos, pvz.:\n/feedback mažiau ekonomikos rinkų")
+        else:
+            line = feedback.append_feedback(note)
+            _send(token, chat_id, f"✍️ Įrašyta, į tai atsižvelgsiu kitose partijose:\n{line}")
     elif cmd in ("/help", "/start"):
         _send(token, chat_id, HELP)
     # unknown commands are ignored silently

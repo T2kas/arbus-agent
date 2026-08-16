@@ -30,6 +30,13 @@ class Candidate(BaseModel):
     rationale_en: str = Field(
         description="Internal note in English: why 16-35yo Lithuanians would argue about this right now"
     )
+    # Filled in deterministically after validation (arbus/images.py), never by
+    # the model — a hallucinated image URL is worse than no image.
+    image_url: str = ""
+    image_source: str = ""
+    # Which themed chunk produced this candidate. Set by the pipeline, not the
+    # model, so per-theme yield can be measured and topped up.
+    theme: str = ""
 
 
 class CandidateBatch(BaseModel):

@@ -10,7 +10,7 @@ TODAY = date(2026, 7, 13)
 
 def make(**overrides) -> Candidate:
     base = dict(
-        question_lt="Ar Žalgiris liepos 20 d. laimės rungtynes prieš Rytą?",
+        question_lt="Ar Žalgiris laimės rungtynes prieš Rytą?",
         market_type="binary",
         options_lt=["Taip", "Ne"],
         probabilities=[0.6, 0.4],
@@ -80,14 +80,18 @@ def test_probabilities_normalized():
     assert all(0.02 <= p <= 0.98 for p in fixed.probabilities)
 
 
-def test_multi_needs_3_to_6_options():
-    cand = make(
-        market_type="multi",
-        options_lt=["A", "B"],
-        probabilities=[0.5, 0.5],
-    )
-    fixed, reason = validate.validate_candidate(cand, TODAY)
-    assert fixed is None and "3-6" in reason
+def test_multi_accepts_2_to_6_options():
+    # Two named options (a duel) are a valid multi market.
+    ok = make(market_type="multi", options_lt=["Pakeis", "Paliks"],
+              probabilities=[0.5, 0.5])
+    fixed, reason = validate.validate_candidate(ok, TODAY)
+    assert reason is None and fixed is not None
+    # One option or seven are still degenerate.
+    for opts in (["A"], ["A", "B", "C", "D", "E", "F", "G"]):
+        bad = make(market_type="multi", options_lt=opts,
+                   probabilities=[round(1 / len(opts), 3)] * len(opts))
+        fixed, reason = validate.validate_candidate(bad, TODAY)
+        assert fixed is None and "2-6" in reason
 
 
 def test_vague_headline_rejected():
@@ -104,7 +108,7 @@ def test_undefined_class_rejected_but_precise_threshold_allowed():
     bad = make(question_lt="Ar iki rugsėjo 15 d. bent vienas didelis influenceris paskelbs apie sugrįžimą?")
     fixed, reason = validate.validate_candidate(bad, TODAY)
     assert fixed is None and "vague" in reason
-    ok = make(question_lt="Ar iki rugsėjo 1 d. Vilniuje bent vieną dieną bus 30 laipsnių karščio?")
+    ok = make(question_lt="Ar Vilniuje rugpjūčio mėnesį bent vieną dieną bus 30 laipsnių karščio?")
     fixed, reason = validate.validate_candidate(ok, TODAY)
     assert reason is None
 
@@ -131,7 +135,289 @@ def test_min_resolve_date_enforced():
     assert reason is None
 
 
+def test_105_style_subjective_options_rejected():
+    # The real #105 (Žemaitaitis): options are moods/tempo, not checkable outcomes.
+    cand = make(
+        question_lt="Kas iki spalio 1 d. bus konservatorių sprendimas R. Žemaitaičio atžvilgiu?",
+        market_type="multi",
+        options_lt=[
+            "Paremti apkaltos procesą ir aktyviai jį stumti",
+            "Paremti apkaltą, bet ją palikti „ant lėto“ be aktyvių veiksmų",
+            "Nebeparemti apkaltos ir ieškoti alternatyvaus sprendimo",
+            "Tema bus faktiškai „padėta į stalčių“ be aiškaus viešo sprendimo",
+        ],
+        probabilities=[0.45, 0.25, 0.15, 0.15],
+        resolve_by="2026-10-01",
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_main_stance_framing_rejected():
+    cand = make(
+        question_lt="Kas bus pagrindinis viešai įvardytas konservatorių (TS-LKD) "
+                    "sprendimas dėl apkaltos?",
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_concrete_multi_options_still_pass():
+    # Named, mutually exclusive, checkable winners — must NOT trip the linter.
+    cand = make(
+        question_lt="Kas bus aukščiausiai „Spotify Top 50 Lietuva“?",
+        market_type="multi",
+        options_lt=["Jessica Shy", "8 Kambarys", "Omerta", "Kita"],
+        probabilities=[0.3, 0.25, 0.2, 0.25],
+        resolve_by="2026-08-05",
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
+
+
+def test_vague_options_rejected():
+    # Options must be as clear as the headline — no "panašus"/"pvz." filler.
+    cand = make(
+        question_lt="Kas laimės rinkimus 2026 m.?",
+        market_type="multi",
+        options_lt=["Partija A", "Partija B", "Panašus rezultatas kaip pernai"],
+        probabilities=[0.4, 0.4, 0.2],
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "options" in reason
+
+
+def test_slang_option_rejected():
+    cand = make(
+        question_lt="Ką Vyriausybė nuspręs dėl mokesčio 2026 m.?",
+        market_type="multi",
+        options_lt=["Priims mokestį", "Atmes mokestį", "Nuleis ant stabdžių"],
+        probabilities=[0.4, 0.4, 0.2],
+    )
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_parentheses_in_headline_rejected():
+    # #92: parenthetical detail must move to the rules.
+    cand = make(question_lt="Ar egzotinis gyvūnas (ne Lietuvai būdingas) bus "
+                            "užfiksuotas Lietuvoje iki 2026-09-30?",
+                resolve_by="2026-09-30")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_viesai_in_headline_rejected():
+    # #84/Oksana Pikul: "viešai" is rules-only noise in a headline.
+    cand = make(question_lt="Ar Oksana Pikul iki 2026-08-10 viešai paskelbs pareiškimą?",
+                resolve_by="2026-08-10")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_unmeasurable_image_and_mood_rejected():
+    # #85 "kardinaliai pakeistą įvaizdį" and #84 "emocinga reakcija" are unmeasurable.
+    for bad in ["Ar Vaidas Baumila išlaikys kardinaliai pakeistą įvaizdį iki 2026-09-01?",
+                "Ar Oksana Pikul paskelbs dar vieną emocingą reakciją iki 2026-08-10?"]:
+        fixed, reason = validate.validate_candidate(make(question_lt=bad, resolve_by="2026-09-01"), TODAY)
+        assert fixed is None and "vague" in reason, bad
+
+
+def test_source_attribution_in_headline_rejected():
+    # #97: "pagal ... duomenis" belongs in the rules, not the headline.
+    cand = make(question_lt="Ar Jūros šventėje Klaipėdoje pagal savivaldybės duomenis "
+                            "dalyvių skaičius viršys 300 tūkst.?",
+                resolve_by="2026-08-15")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_main_content_focus_rejected():
+    # #99: "pagrindiniu turinio akcentu" — an unmeasurable 'main focus'.
+    cand = make(question_lt="Ar Justas Pečeliūnas paskelbs projektą, kurio pagrindiniu "
+                            "turinio akcentu bus skyrybos?",
+                resolve_by="2026-09-15")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_day_precision_date_in_headline_rejected():
+    # #110/#111/#115/#116: exact dates belong in resolve_by + rules, not the headline.
+    for bad in [
+        "Ar Vilniuje bent vieną dieną tarp 2026 m. rugpjūčio 1–31 d. bus ≥30 mm kritulių?",
+        "Ar Jūros šventėje bus pranešta apie 0,5 mln. lankytojų iki 2026 m. rugpjūčio 15 d.?",
+        "Ar Airinė Palšytė iki 2026-10-31 įveiks 1,96 m aukštį?",
+    ]:
+        fixed, reason = validate.validate_candidate(
+            make(question_lt=bad, resolve_by="2026-10-31"), TODAY)
+        assert fixed is None and "headline format" in reason, bad
+
+
+def test_month_reference_in_headline_allowed():
+    # The user's own rewrite: a month is fine, a day-precision date is not.
+    cand = make(question_lt="Ar Vilniuje rugpjūčio mėnesį bus užfiksuotas ≥30 mm "
+                            "paros kritulių kiekis?",
+                resolve_by="2026-09-05")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
+
+
+def test_causal_link_market_rejected():
+    # #109: "will X's closure encourage Y" — causation is never reported by a source.
+    cand = make(question_lt="Ar „Mere“ uždarymas paskatins kito žemų kainų tinklo atėjimą?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "unresolvable" in reason
+
+
+def test_oficialiai_in_headline_rejected():
+    # #111: "oficialų" is rules-only, like "viešai".
+    cand = make(question_lt="Ar rinktinė patirs oficialų žaidėjų boikotą?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "headline format" in reason
+
+
+def test_binary_statement_headline_rejected():
+    # #112: a statement + Taip/Ne makes "Taip" meaningless.
+    cand = make(question_lt="LeBrono Jameso sezonas Filadelfijos „76ers“ klube")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "question" in reason
+
+
+def test_multi_title_headline_still_allowed():
+    # Titles remain legal for multi-outcome markets.
+    cand = make(question_lt="Naujas Palangos meras", market_type="multi",
+                options_lt=["A", "B", "C"], probabilities=[0.4, 0.35, 0.25])
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
+
+
+def test_open_ended_binary_rejected():
+    # "Ar rinktinė paskelbs galutinį sąrašą?" — it will happen eventually.
+    cand = make(question_lt="Ar Lietuvos vyrų krepšinio rinktinė paskelbs galutinį "
+                            "kandidatų sąrašą?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "open-ended" in reason
+
+
+def test_time_hint_or_event_scope_satisfies_the_gate():
+    for ok in [
+        "Ar rinktinė paskelbs galutinį kandidatų sąrašą iki rugpjūčio?",
+        "Ar rinktinė paskelbs galutinį sąrašą šiemet?",
+        "Ar „Žalgiris“ pateks į kitą Konferencijų lygos etapą?",   # event scope
+    ]:
+        fixed, reason = validate.validate_candidate(make(question_lt=ok), TODAY)
+        assert reason is None, (ok, reason)
+
+
+def test_relative_time_windows_accepted():
+    # Real markets lost to a false positive: these ARE time-bounded.
+    for ok in [
+        "Ar „Odisėja“ pirmą rodymo savaitgalį bus žiūrimiausias filmas Lietuvoje?",
+        "Ar daina per mėnesį surinks bent 300 tūkst. perklausų?",
+        "Ar nedarbo lygis kris III ketvirtį?",
+    ]:
+        fixed, reason = validate.validate_candidate(make(question_lt=ok), TODAY)
+        assert reason is None, (ok, reason)
+
+
+def test_category_normalized_to_canonical_set():
+    cand = make(category="Ekonomika & finansai (atlyginimai, valstybės statistika)",
+                question_lt="Ar nedarbo lygis viršys 7 % iki spalio?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed.category == "ekonomika"
+    # unknown category falls back to the question, then to "kita"
+    assert validate.normalize_category("blah", "Ar Žalgiris laimės rungtynes?") == "sportas"
+    assert validate.normalize_category("blah", "Ar rytoj lis?") == "kita"
+
+
+def test_bare_year_and_period_end_are_time_bounds():
+    """These 11 real markets were lost to a false positive in one batch."""
+    for ok in [
+        "Ar ES 2026 m. priims naują sankcijų paketą Rusijai?",
+        "Ar Lietuva 2026 m. grąžins ambasadorių į Kiniją?",
+        "Ar Lietuva iki metų pabaigos kritikuos ES sankcijų politiką?",
+        "Ar JAV ir Iranas iki metų pabaigos pasirašys susitarimą?",
+    ]:
+        assert validate.lint_open_ended(ok, "binary") is None, ok
+    # genuinely unbounded questions must still be caught
+    assert validate.lint_open_ended("Ar „Mere“ grįš į Lietuvą?", "binary")
+
+
+def test_different_quoted_titles_are_not_duplicates():
+    existing = ["Jessica Shy „Kas Kaltas“: ar daina išliks Apple Music LT Top 5 iki rugsėjo?"]
+    other_song = "Ar Jessica Shy daina „Saulė Nesileis“ išliks Apple Music LT Top 5 iki rugsėjo?"
+    same_song = "Ar Jessica Shy daina „Kas Kaltas“ išliks Apple Music LT Top 3 iki rugsėjo?"
+    assert validate.is_duplicate(other_song, existing) is None
+    assert validate.is_duplicate(same_song, existing) == existing[0]
+
+
+def test_category_follows_the_question_not_the_theme_label():
+    # Drafted under the economy mandate, but the market is about sanctions.
+    cand = make(question_lt="Ar Seimas priims sankcijas rusams iki spalio?",
+                category="ekonomika ir finansai")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed.category == "geopolitika"
+
+
+def test_sports_metaphor_rejected():
+    cand = make(question_lt="Ar „Žalgiris“ atsities Konferencijų lygoje?")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert fixed is None and "vague" in reason
+
+
+def test_multi_title_exempt_from_open_ended_gate():
+    cand = make(question_lt="Naujas Palangos meras", market_type="multi",
+                options_lt=["A", "B", "C"], probabilities=[0.4, 0.35, 0.25])
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None
+
+
+def test_clean_title_headline_passes():
+    # Polymarket-style title, no date, no source — must pass.
+    cand = make(question_lt="Naujas Palangos meras",
+                market_type="multi",
+                options_lt=["Kandidatas A", "Kandidatas B", "Kandidatas C"],
+                probabilities=[0.4, 0.35, 0.25],
+                resolve_by="2026-09-01")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None and fixed is not None
+
+
+def test_pagrindinis_prizas_is_not_flagged():
+    # "pagrindinis" near a non-stance noun must stay legal.
+    assert validate.lint_unresolvable("Ar pagrindinis festivalio prizas atiteks X?", ["Taip", "Ne"]) == []
+
+
 def test_duplicate_detected_despite_wording():
     existing = ["Ar Žalgiris liepos 20 d. laimės LKL rungtynes prieš Rytą?"]
     assert validate.is_duplicate("Ar rungtynes prieš Rytą liepos 20 d. laimės Žalgiris?", existing)
     assert validate.is_duplicate("Ar Vilniuje liepą bus 35 laipsniai karščio?", existing) is None
+
+
+# ── no-event fallback: why a market never has to be voided ──────────────────
+
+def test_rules_without_a_cancellation_clause_get_the_default():
+    cand = make(resolution_hint_lt="Pagal Statistikos departamento duomenis")
+    fixed, reason = validate.validate_candidate(cand, TODAY)
+    assert reason is None
+    assert "Statistikos departamento duomenis." in fixed.resolution_hint_lt
+    assert "„Ne“" in fixed.resolution_hint_lt          # binary default outcome
+
+
+def test_existing_cancellation_clause_is_left_alone():
+    hint = "Pagal organizatorių. Jei renginys bus atšauktas — rinka baigiasi „Taip“."
+    cand = make(resolution_hint_lt=hint)
+    fixed, _ = validate.validate_candidate(cand, TODAY)
+    assert fixed.resolution_hint_lt == hint           # the model's own rule wins
+
+
+def test_multi_markets_get_the_later_official_result_rule_not_ne():
+    # "Ne" is not an option on a multi-outcome market, so the default must not
+    # invent one — it points at the official result instead.
+    cand = make(question_lt="Naujas Palangos meras", market_type="multi",
+                options_lt=["Kandidatas A", "Kandidatas B"],
+                probabilities=[0.6, 0.4],
+                resolution_hint_lt="Pagal VRK rezultatus")
+    fixed, _ = validate.validate_candidate(cand, TODAY)
+    assert "pirmą oficialų rezultatą" in fixed.resolution_hint_lt
+    assert "„Ne“" not in fixed.resolution_hint_lt

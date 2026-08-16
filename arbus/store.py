@@ -38,11 +38,48 @@ CREATE TABLE IF NOT EXISTS full_specs (
 """
 
 
-def connect(db_path: str = config.DB_PATH) -> sqlite3.Connection:
+# Columns added after the first release. Existing databases are migrated in
+# place on connect, so an old data/arbus.db keeps working without a manual step.
+_ADDED_COLUMNS = {
+    "image_url": "TEXT NOT NULL DEFAULT ''",
+    "image_source": "TEXT NOT NULL DEFAULT ''",
+    "published_at": "TEXT NOT NULL DEFAULT ''",
+    "publish_note": "TEXT NOT NULL DEFAULT ''",
+    # Job 2 — resolution monitoring.
+    "resolution_verdict": "TEXT NOT NULL DEFAULT ''",
+    "resolution_option": "TEXT NOT NULL DEFAULT ''",
+    "resolution_confidence": "TEXT NOT NULL DEFAULT ''",
+    "resolution_note": "TEXT NOT NULL DEFAULT ''",
+    "resolution_source": "TEXT NOT NULL DEFAULT ''",
+    "resolved_at": "TEXT NOT NULL DEFAULT ''",
+    # Resolution state machine (see arbus/resolution.py).
+    "resolution_state": "TEXT NOT NULL DEFAULT 'OPEN'",
+    "freeze_reason": "TEXT NOT NULL DEFAULT ''",
+    "frozen_at": "TEXT NOT NULL DEFAULT ''",
+    "admin_decision": "TEXT NOT NULL DEFAULT ''",
+    "decided_by": "TEXT NOT NULL DEFAULT ''",
+    "decided_at": "TEXT NOT NULL DEFAULT ''",
+    "settle_at": "TEXT NOT NULL DEFAULT ''",
+}
+
+
+def connect(db_path: str = "") -> sqlite3.Connection:
+    # Read config.DB_PATH at call time, not at import time: a default argument
+    # would freeze the production path into the function, so a script that
+    # points config.DB_PATH at a scratch file would still write to the real
+    # database — which is exactly how the dedupe corpus got polluted before.
+    db_path = db_path or config.DB_PATH
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    have = {r["name"] for r in conn.execute("PRAGMA table_info(markets)")}
+    for name, decl in _ADDED_COLUMNS.items():
+        if name not in have:
+            conn.execute(f"ALTER TABLE markets ADD COLUMN {name} {decl}")
+    from . import resolution  # local import: resolution imports config, not store
+    resolution.init(conn)
+    conn.commit()
     return conn
 
 
@@ -68,8 +105,9 @@ def insert_candidate(
         """INSERT INTO markets (batch_id, question_lt, market_type, options_json,
                probabilities_json, category, resolve_by, duration_class,
                resolution_hint_lt, sources_json, rationale_en,
-               verify_verdict, verify_note, status, reject_reason, created_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+               verify_verdict, verify_note, status, reject_reason, created_at,
+               image_url, image_source)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (
             batch_id,
             cand.question_lt,
@@ -87,9 +125,49 @@ def insert_candidate(
             status,
             reject_reason,
             datetime.now(timezone.utc).isoformat(),
+            getattr(cand, "image_url", ""),
+            getattr(cand, "image_source", ""),
         ),
     )
     return cur.lastrowid
+
+
+def rebuild_from_exports(conn: sqlite3.Connection, export_dir: str = config.EXPORT_DIR) -> tuple[int, int]:
+    """Recreate the dedupe corpus from exports/batch_*.json.
+
+    The database is local state and can be lost (a bad pull, a new machine).
+    Every batch also writes a JSON export containing the same candidates, so the
+    corpus is reconstructible: the exports are the backup. Questions already in
+    the database are skipped, making this safe to re-run.
+
+    Returns (imported, skipped).
+    """
+    known = {q for (q,) in conn.execute("SELECT question_lt FROM markets")}
+    imported = skipped = 0
+    for path in sorted(Path(export_dir).glob("batch_*.json")):
+        batch_id = path.stem.replace("batch_", "")
+        try:
+            rows = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for row in rows:
+            question = row.get("question_lt", "")
+            if not question or question in known:
+                skipped += 1
+                continue
+            try:
+                cand = Candidate(**{k: v for k, v in row.items()
+                                    if k in Candidate.model_fields})
+            except Exception:
+                skipped += 1
+                continue
+            insert_candidate(conn, cand, batch_id, "candidate",
+                             verify_verdict=row.get("verify_verdict", ""),
+                             verify_note=row.get("verify_note", ""))
+            known.add(question)
+            imported += 1
+    conn.commit()
+    return imported, skipped
 
 
 def get_market(conn: sqlite3.Connection, market_id: int) -> sqlite3.Row | None:

@@ -30,15 +30,106 @@ PROMPT_DIR = Path(__file__).resolve().parent.parent / "prompts"
 T = TypeVar("T", bound=BaseModel)
 
 
-def provider() -> str:
+# ── Usage / cost accounting ─────────────────────────────────────────────────
+# The resolution check's cost is dominated by web-search result tokens, not by
+# reasoning, and the CLI printed nothing about it — so a check that quietly cost
+# 15 cents looked the same as one that cost 3. We accumulate Anthropic's own
+# reported usage across every call a single market makes (retries and pause_turn
+# continuations included) so `arbus check` can show a real per-market cost.
+_USAGE = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "searches": 0}
+# Bumped on every reset_usage(). A research call captures the generation when it
+# starts and its usage is dropped if a reset happened meanwhile — so an abandoned
+# call (a market cut off by the wall-clock timeout) cannot land its cost on the
+# NEXT market's tab when it finally returns on its daemon thread.
+_USAGE_GEN = 0
+
+
+def reset_usage() -> int:
+    global _USAGE_GEN
+    _USAGE_GEN += 1
+    for k in _USAGE:
+        _USAGE[k] = 0
+    return _USAGE_GEN
+
+
+def _usage_generation() -> int:
+    return _USAGE_GEN
+
+
+def usage_snapshot() -> dict:
+    return dict(_USAGE)
+
+
+def _accumulate_usage(resp, gen: int | None = None) -> None:
+    if gen is not None and gen != _USAGE_GEN:
+        return                     # a reset happened since this call began: stale
+    u = getattr(resp, "usage", None)
+    if u is None:
+        return
+    _USAGE["input"] += getattr(u, "input_tokens", 0) or 0
+    _USAGE["output"] += getattr(u, "output_tokens", 0) or 0
+    _USAGE["cache_read"] += getattr(u, "cache_read_input_tokens", 0) or 0
+    _USAGE["cache_write"] += getattr(u, "cache_creation_input_tokens", 0) or 0
+    stu = getattr(u, "server_tool_use", None)
+    if stu is not None:
+        _USAGE["searches"] += getattr(stu, "web_search_requests", 0) or 0
+
+
+def usage_cost_eur(snap: dict | None = None) -> float:
+    """Rough EUR cost of the accumulated usage. Order-of-magnitude by design —
+    a "3 vs 15 cents" signal, not a billing figure. Prices are Anthropic list
+    prices (config), converted to EUR."""
+    s = snap if snap is not None else _USAGE
+    usd = (s["input"] / 1e6 * config.AICHECK_PRICE_INPUT_PER_M
+           + s["output"] / 1e6 * config.AICHECK_PRICE_OUTPUT_PER_M
+           + s["cache_read"] / 1e6 * config.AICHECK_PRICE_CACHE_READ_PER_M
+           + s["cache_write"] / 1e6 * config.AICHECK_PRICE_CACHE_WRITE_PER_M
+           + s["searches"] * config.AICHECK_PRICE_SEARCH)
+    return usd * config.AICHECK_EUR_PER_USD
+
+
+def usage_line() -> str:
+    """One-line per-market cost summary, or '' when nothing was measured (e.g. a
+    non-Anthropic provider that does not report usage this way)."""
+    s = usage_snapshot()
+    if not any(s.values()):
+        return ""
+    return (f"💶 kaina ~{usage_cost_eur(s):.2f} € "
+            f"({s['searches']} paieškos, {s['input'] // 1000}k in / "
+            f"{s['output'] // 1000}k out)")
+
+
+def provider(stage: str | None = None) -> str:
+    """Which backend runs a stage.
+
+    Stages can be pointed at different providers, which is what makes a batch
+    affordable: drafting is many long, search-heavy calls and is cheap on a
+    search-native provider, while verification is the short judgement call worth
+    paying a stronger model for. Set LLM_PROVIDER_DRAFT / LLM_PROVIDER_VERIFY to
+    override LLM_PROVIDER for one stage.
+    """
+    known = ("anthropic", "perplexity", "zai", "openrouter", "openai")
+    if stage:
+        per_stage = os.environ.get(f"LLM_PROVIDER_{stage.upper()}", "").strip().lower()
+        if per_stage in known:
+            return per_stage
     forced = os.environ.get("LLM_PROVIDER", "").strip().lower()
-    if forced in ("anthropic", "perplexity"):
+    if forced in known:
         return forced
     if os.environ.get("ANTHROPIC_API_KEY"):
         return "anthropic"
     if os.environ.get("PERPLEXITY_API_KEY"):
         return "perplexity"
-    raise RuntimeError("Set PERPLEXITY_API_KEY or ANTHROPIC_API_KEY (or LLM_PROVIDER + key)")
+    if os.environ.get("OPENAI_API_KEY"):
+        return "openai"
+    if os.environ.get("OPENROUTER_API_KEY"):
+        return "openrouter"
+    if os.environ.get("ZAI_API_KEY"):
+        return "zai"
+    raise RuntimeError(
+        "Set ANTHROPIC_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY, "
+        "OPENROUTER_API_KEY or ZAI_API_KEY (or LLM_PROVIDER + the matching key)"
+    )
 
 
 def load_prompt(name: str, **kwargs: str) -> str:
@@ -68,7 +159,132 @@ def perplexity_chat(
         timeout=600,
     )
     resp.raise_for_status()
-    return resp.json()["choices"][0]["message"]["content"]
+    return _strip_reasoning(resp.json()["choices"][0]["message"]["content"])
+
+
+def _strip_reasoning(content: str) -> str:
+    """Drop a reasoning model's internal <think>...</think> chain-of-thought so
+    only the answer reaches the admin/parsers."""
+    return re.sub(r"<think>.*?</think>\s*", "", content or "", flags=re.S).strip()
+
+
+# ── OpenRouter backend (one key → OpenAI, DeepSeek, Gemini, … + web search) ──
+# OpenRouter is an OpenAI-compatible gateway: the same request shape reaches any
+# of 400+ models by id ("openai/gpt-5", "deepseek/deepseek-r1"). Appending
+# ":online" to the model id turns on a server-side web search (Exa), so any
+# model — including cheap reasoning ones — can ground answers in current LT
+# sources. This is the knob for trying OpenAI-style reasoning cheaper than Opus.
+
+def openrouter_chat(
+    user: str,
+    system: str | None = None,
+    model: str = "openai/gpt-5",
+    max_tokens: int = 8000,
+    web_search: bool = False,
+    response_format: dict | None = None,
+) -> str:
+    messages = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": user}
+    ]
+    # ":online" is OpenRouter's shorthand for "add web search to this model".
+    if web_search and not model.endswith(":online"):
+        model = f"{model}:online"
+    payload: dict = {"model": model, "messages": messages, "max_tokens": max_tokens}
+    if web_search and config.OPENROUTER_SEARCH_ENGINE:
+        payload["plugins"] = [{
+            "id": "web",
+            "engine": config.OPENROUTER_SEARCH_ENGINE,     # "exa" or "parallel"
+            "max_results": config.OPENROUTER_SEARCH_RESULTS,
+        }]
+    if response_format:
+        payload["response_format"] = response_format
+    resp = requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}",
+            # OpenRouter asks callers to identify themselves; harmless if ignored.
+            "HTTP-Referer": "https://arbus.lt",
+            "X-Title": "Arbus market resolver",
+        },
+        json=payload,
+        timeout=600,
+    )
+    resp.raise_for_status()
+    return _strip_reasoning(resp.json()["choices"][0]["message"]["content"])
+
+
+# ── OpenAI backend (native key, Responses API + built-in web search) ─────────
+# Uses the Responses API (/v1/responses), not Chat Completions, because that is
+# where GPT-5 / o-series get the built-in `web_search` tool and where reasoning
+# models handle their own token budget cleanly. The search is localized to
+# Vilnius so it returns Lithuanian sources (OpenAI, unlike Anthropic, accepts a
+# country code for Lithuania).
+
+def _openai_output_text(data: dict) -> str:
+    """Pull the assistant's text out of a Responses API result, skipping the
+    reasoning and web_search_call items."""
+    if isinstance(data.get("output_text"), str) and data["output_text"].strip():
+        return data["output_text"].strip()
+    parts: list[str] = []
+    for item in data.get("output", []):
+        if item.get("type") == "message":
+            for chunk in item.get("content", []):
+                if chunk.get("type") in ("output_text", "text") and chunk.get("text"):
+                    parts.append(chunk["text"])
+    return "\n".join(parts).strip()
+
+
+def openai_chat(
+    user: str,
+    system: str | None = None,
+    model: str = "gpt-5",
+    max_tokens: int = 8000,
+    web_search: bool = False,
+    response_format: dict | None = None,
+) -> str:
+    input_items = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": user}
+    ]
+    payload: dict = {
+        "model": model,
+        "input": input_items,
+        # Reasoning models spend part of the budget thinking, so give a floor
+        # or the visible answer can come back empty/truncated.
+        "max_output_tokens": max(max_tokens, config.OPENAI_MIN_OUTPUT_TOKENS),
+    }
+    # GPT-5 with default reasoning burned ~1 EUR on one check (reasoning tokens
+    # bill at output rates). "low" keeps enough reasoning for the wrong-year /
+    # namesake checks at a fraction of the cost.
+    if config.OPENAI_REASONING_EFFORT:
+        payload["reasoning"] = {"effort": config.OPENAI_REASONING_EFFORT}
+    if web_search:
+        tool: dict = {"type": "web_search"}
+        loc = {"type": "approximate"}
+        if config.ANTHROPIC_SEARCH_CITY:
+            loc["city"] = config.ANTHROPIC_SEARCH_CITY
+        if config.ANTHROPIC_SEARCH_REGION:
+            loc["region"] = config.ANTHROPIC_SEARCH_REGION
+        if config.OPENAI_SEARCH_COUNTRY:
+            loc["country"] = config.OPENAI_SEARCH_COUNTRY
+        if len(loc) > 1:
+            tool["user_location"] = loc
+        payload["tools"] = [tool]
+    if response_format:
+        # Translate a Chat-Completions-style response_format into the Responses
+        # API's text.format shape, so structuring can reuse the shared helper.
+        schema = (response_format.get("json_schema", {}).get("schema")
+                  or response_format.get("schema"))
+        if schema:
+            payload["text"] = {"format": {"type": "json_schema",
+                                          "name": "result", "schema": schema}}
+    resp = requests.post(
+        "https://api.openai.com/v1/responses",
+        headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"},
+        json=payload,
+        timeout=600,
+    )
+    resp.raise_for_status()
+    return _strip_reasoning(_openai_output_text(resp.json()))
 
 
 def _extract_json(text: str) -> str:
@@ -80,36 +296,181 @@ def _extract_json(text: str) -> str:
     return text[start : end + 1]
 
 
-def _structure_perplexity(text: str, output_model: Type[T], max_tokens: int) -> T:
+def _match_brace(text: str, start: int) -> int | None:
+    """Index of the `}` closing the `{` at `start`, or None if never closed."""
+    depth = 0
+    in_str = esc = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+    return None
+
+
+def _json_objects(text: str) -> list[str]:
+    """Every complete balanced {...} block, outermost first.
+
+    Scanning at any depth is what makes truncated output salvageable: when a
+    response is cut off mid-array the outer container never closes, so the
+    outer brace is skipped and the complete candidate objects inside are
+    recovered instead of losing the whole chunk.
+    """
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.M)
+    out: list[str] = []
+    i = 0
+    while i < len(text):
+        if text[i] == "{":
+            end = _match_brace(text, i)
+            if end is not None:
+                out.append(text[i : end + 1])
+                i = end + 1
+                continue
+        i += 1
+    return out
+
+
+def _list_field(output_model: Type[BaseModel]) -> str | None:
+    """Name of the model's single list field, if it has exactly one."""
+    names = [
+        name for name, field in output_model.model_fields.items()
+        if str(field.annotation).startswith(("list[", "typing.List["))
+    ]
+    return names[0] if len(names) == 1 else None
+
+
+def _validate_flexible(content: str, output_model: Type[T]) -> T:
+    """Validate model output, tolerating the shapes chat models actually emit.
+
+    Some models (GLM notably) ignore the container and stream one bare object
+    per item — "{...}\\n{...}" — which is not valid JSON as a whole and used to
+    fail with "trailing characters". Accept that by collecting the top-level
+    objects and wrapping them into the target model's list field.
+    """
+    objs = _json_objects(content)
+    if not objs:
+        raise ValueError("no JSON object found in model output")
+
+    first_error: Exception | None = None
+    try:
+        return output_model.model_validate_json(objs[0])
+    except ValidationError as exc:
+        first_error = exc
+
+    field = _list_field(output_model)
+    if field:
+        items = []
+        for obj in objs:
+            try:
+                items.append(json.loads(obj))
+            except json.JSONDecodeError:
+                continue
+        if items:
+            log.info("model emitted %d bare objects; wrapping into %r", len(items), field)
+            return output_model.model_validate({field: items})
+    raise first_error
+
+
+def _structure_openai_compatible(
+    chat, model: str, text: str, output_model: Type[T], max_tokens: int
+) -> T:
+    """Structure free text with any OpenAI-compatible chat endpoint.
+
+    Tries native schema-constrained decoding, falls back to plain JSON with the
+    schema inlined, then gives the model one round to repair invalid output.
+    Shared by the Perplexity and Z.AI backends.
+    """
     schema = output_model.model_json_schema()
     rf = {"type": "json_schema", "json_schema": {"schema": schema}}
     try:
-        content = perplexity_chat(
-            text, model=config.PERPLEXITY_STRUCTURE_MODEL,
-            max_tokens=max_tokens, response_format=rf,
-        )
+        content = chat(text, model=model, max_tokens=max_tokens, response_format=rf)
     except requests.HTTPError as exc:
-        log.warning("perplexity json_schema mode failed (%s); falling back to plain JSON", exc)
-        content = perplexity_chat(
+        log.warning("json_schema mode failed (%s); falling back to plain JSON", exc)
+        content = chat(
             text
             + "\n\nRespond with ONLY a JSON object (no prose, no code fences) matching this "
             + "JSON schema:\n" + json.dumps(schema),
-            model=config.PERPLEXITY_STRUCTURE_MODEL,
-            max_tokens=max_tokens,
+            model=model, max_tokens=max_tokens,
         )
     try:
-        return output_model.model_validate_json(_extract_json(content))
+        return _validate_flexible(content, output_model)
     except (ValidationError, ValueError) as exc:
         # One repair round: show the model its own output and the error.
         log.warning("structure output invalid (%s); attempting one repair round", exc)
-        repaired = perplexity_chat(
+        repaired = chat(
             "Fix this JSON so it validates against the schema. Respond with ONLY the "
             f"corrected JSON object.\n\nSCHEMA:\n{json.dumps(schema)}\n\n"
             f"ERROR:\n{exc}\n\nJSON:\n{content}",
-            model=config.PERPLEXITY_STRUCTURE_MODEL,
-            max_tokens=max_tokens,
+            model=model, max_tokens=max_tokens,
         )
-        return output_model.model_validate_json(_extract_json(repaired))
+        return _validate_flexible(repaired, output_model)
+
+
+# ── Z.AI (Zhipu GLM) backend ────────────────────────────────────────────────
+
+def zai_chat(
+    user: str,
+    system: str | None = None,
+    model: str = config.ZAI_MODEL,
+    max_tokens: int = 8000,
+    response_format: dict | None = None,
+    web_search: bool = False,
+) -> str:
+    """Call Z.AI's OpenAI-compatible endpoint.
+
+    GLM has no built-in search, so web grounding comes from the server-side
+    web_search tool. Older/other deployments reject that tool shape, so a 4xx
+    with tools attached is retried once without them rather than failing the
+    batch — the caller still gets an answer, just an ungrounded one.
+    """
+    messages = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": user}
+    ]
+    payload: dict = {"model": model, "messages": messages, "max_tokens": max_tokens}
+    if response_format:
+        payload["response_format"] = response_format
+    if web_search and config.ZAI_WEB_SEARCH:
+        payload["tools"] = [{"type": "web_search",
+                             "web_search": {"enable": True, "search_result": True}}]
+
+    def _post(body: dict) -> requests.Response:
+        return requests.post(
+            config.ZAI_BASE_URL,
+            headers={"Authorization": f"Bearer {os.environ['ZAI_API_KEY']}",
+                     "Content-Type": "application/json"},
+            json=body, timeout=600,
+        )
+
+    resp = _post(payload)
+    if resp.status_code >= 400 and "tools" in payload:
+        log.warning("z.ai rejected the web_search tool (%s); retrying WITHOUT web "
+                    "grounding — answers may be from memory", resp.status_code)
+        payload.pop("tools")
+        resp = _post(payload)
+    resp.raise_for_status()
+    msg = resp.json()["choices"][0]["message"]
+    # GLM returns None/"" in `content` when it answers as a reasoning trace or
+    # asks for an unresolved tool call. Falling through with None used to blow
+    # up the caller (verification then reported every item as NOT_VERIFIED), so
+    # take the reasoning text when that is all there is, and say so loudly.
+    content = msg.get("content") or msg.get("reasoning_content") or ""
+    if not content:
+        log.warning("z.ai returned an empty message (tool_calls=%s) — treating as "
+                    "no answer", bool(msg.get("tool_calls")))
+    return content
 
 
 # ── Anthropic backend ───────────────────────────────────────────────────────
@@ -120,33 +481,77 @@ def _anthropic_client():
     return anthropic.Anthropic()
 
 
-def _web_search_tool(max_uses: int) -> dict:
-    return {
+def _web_search_tool(max_uses: int, with_location: bool = True) -> dict:
+    """Anthropic's server-side web search.
+
+    Localizing the search to Lithuania matters a lot for resolution: without it
+    the tool returns US-centric results and misses LRT/Delfi pages that Google
+    surfaces instantly (M.A.M.A., Eurovision LT results). `user_location` fields
+    are all optional, and only the `country` field rejects unsupported codes
+    ("Country code LT is not supported", which kills the batch) — so we localize
+    with CITY and timezone, which Lithuania is free to use, and only add country
+    when config names a supported one.
+    """
+    tool: dict = {
         "type": "web_search_20260209",
         "name": "web_search",
         "max_uses": max_uses,
-        "user_location": {
-            "type": "approximate",
-            "country": "LT",
-            "city": "Vilnius",
-            "timezone": "Europe/Vilnius",
-        },
     }
+    loc: dict = {"type": "approximate"}
+    if with_location and config.ANTHROPIC_SEARCH_CITY:
+        loc["city"] = config.ANTHROPIC_SEARCH_CITY
+    if with_location and config.ANTHROPIC_SEARCH_REGION:
+        loc["region"] = config.ANTHROPIC_SEARCH_REGION
+    if with_location and config.ANTHROPIC_SEARCH_COUNTRY:
+        loc["country"] = config.ANTHROPIC_SEARCH_COUNTRY
+    if with_location and config.ANTHROPIC_SEARCH_TIMEZONE:
+        loc["timezone"] = config.ANTHROPIC_SEARCH_TIMEZONE
+    if len(loc) > 1:                       # more than just the type
+        tool["user_location"] = loc
+    return tool
 
 
-def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens: int) -> str:
+def _research_anthropic(user_prompt: str, system: str, max_uses: int, max_tokens: int,
+                        model: str | None = None, thinking: str | None = None) -> str:
     client = _anthropic_client()
     messages: list[dict] = [{"role": "user", "content": user_prompt}]
+    with_location = True
+    # The system prompt is identical across every chunk and every verification
+    # call, so caching it turns repeated full-price input into cache reads.
+    system_blocks = [{"type": "text", "text": system,
+                      "cache_control": {"type": "ephemeral"}}]
+    kwargs: dict = {}
+    thinking = config.ANTHROPIC_THINKING if thinking is None else thinking
+    if thinking != "off":
+        kwargs["thinking"] = {"type": thinking}
+    gen = _usage_generation()                # tag this call's usage
     for attempt in range(6):
-        with client.messages.stream(
-            model=config.MODEL,
-            max_tokens=max_tokens,
-            system=system,
-            thinking={"type": "adaptive"},
-            tools=[_web_search_tool(max_uses)],
-            messages=messages,
-        ) as stream:
-            resp = stream.get_final_message()
+        # max_uses <= 0 means "answer from the facts you were given, do not
+        # search": a resolver already fetched the deciding number (a stock price,
+        # a temperature), so paying for a web search would only burn tokens and
+        # the shared search rate limit that the next market needs.
+        tools = ([_web_search_tool(max_uses, with_location)] if max_uses > 0 else [])
+        try:
+            with client.messages.stream(
+                model=model or config.MODEL,
+                max_tokens=max_tokens,
+                system=system_blocks,
+                tools=tools,
+                messages=messages,
+                **kwargs,
+            ) as stream:
+                resp = stream.get_final_message()
+            _accumulate_usage(resp, gen)     # count every turn, pause_turns too
+        except Exception as exc:
+            # An unsupported user_location country is a configuration problem,
+            # not a reason to lose the batch — drop the hint and search globally.
+            text = str(exc)
+            if with_location and ("user_location" in text or "Country code" in text):
+                log.warning("web search rejected the configured location (%s); "
+                            "retrying without it", text[:120])
+                with_location = False
+                continue
+            raise
 
         if resp.stop_reason == "pause_turn":
             messages = [messages[0], {"role": "assistant", "content": resp.content}]
@@ -176,17 +581,103 @@ def _structure_anthropic(text: str, output_model: Type[T], max_tokens: int) -> T
 
 # ── Public API ──────────────────────────────────────────────────────────────
 
-def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000) -> str:
-    """Web-grounded free-text generation."""
-    if provider() == "perplexity":
+def aicheck_target() -> tuple[str, str]:
+    """(provider, model) the resolution check will actually use — for display,
+    so a provider/model mismatch in .env is visible before the run."""
+    prov = provider("aicheck")
+    model = {
+        "anthropic": config.AICHECK_MODEL or config.MODEL,
+        "openai": config.OPENAI_AICHECK_MODEL,
+        "openrouter": config.OPENROUTER_AICHECK_MODEL,
+        "perplexity": config.PERPLEXITY_AICHECK_MODEL,
+        "zai": config.ZAI_MODEL,
+    }.get(prov, "?")
+    return prov, model
+
+
+def available_providers() -> list[str]:
+    """Providers whose API key is actually configured, in preference order.
+
+    Anthropic first: for resolution its web search finds Lithuanian sources the
+    others miss, so it is the safest fallback when a preferred provider fails.
+    """
+    out = []
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        out.append("anthropic")
+    if os.environ.get("OPENAI_API_KEY"):
+        out.append("openai")
+    if os.environ.get("OPENROUTER_API_KEY"):
+        out.append("openrouter")
+    if os.environ.get("PERPLEXITY_API_KEY"):
+        out.append("perplexity")
+    if os.environ.get("ZAI_API_KEY"):
+        out.append("zai")
+    return out
+
+
+def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int = 32000,
+             stage: str | None = None, force_provider: str | None = None) -> str:
+    """Web-grounded free-text generation. `force_provider` overrides the stage's
+    configured provider (used by aicheck to fall back when the primary fails)."""
+    prov = force_provider or provider(stage)
+    if prov == "perplexity":
+        # The resolution check gets a reasoning model; drafting/verify stay on
+        # the cheaper search model.
+        px_model = (config.PERPLEXITY_AICHECK_MODEL if stage == "aicheck"
+                    else config.PERPLEXITY_MODEL)
         return perplexity_chat(
-            user_prompt, system=system, model=config.PERPLEXITY_MODEL, max_tokens=max_tokens
+            user_prompt, system=system, model=px_model, max_tokens=max_tokens
         )
-    return _research_anthropic(user_prompt, system, max_uses, max_tokens)
+    if prov == "openrouter":
+        or_model = (config.OPENROUTER_AICHECK_MODEL if stage == "aicheck"
+                    else config.OPENROUTER_MODEL)
+        return openrouter_chat(user_prompt, system=system, model=or_model,
+                               max_tokens=max_tokens, web_search=True)
+    if prov == "openai":
+        oa_model = (config.OPENAI_AICHECK_MODEL if stage == "aicheck"
+                    else config.OPENAI_MODEL)
+        return openai_chat(user_prompt, system=system, model=oa_model,
+                           max_tokens=max_tokens, web_search=True)
+    if prov == "zai":
+        return zai_chat(user_prompt, system=system, model=config.ZAI_MODEL,
+                        max_tokens=max_tokens, web_search=True)
+    model = None
+    thinking = None
+    if stage == "verify" and config.VERIFY_MODEL:
+        model = config.VERIFY_MODEL
+    elif stage == "aicheck":
+        if config.AICHECK_MODEL:
+            model = config.AICHECK_MODEL
+        # Extended thinking is the resolution check's latency killer: Sonnet
+        # generated a full reasoning trace before EACH of its search round-trips
+        # (~10 API calls, ~6 min for 5 markets, live-measured). The aicheck
+        # prompt already enforces the reasoning steps explicitly, so thinking
+        # buys little here and costs minutes and output tokens per market.
+        thinking = config.AICHECK_THINKING
+    return _research_anthropic(user_prompt, system, max_uses, max_tokens,
+                               model=model, thinking=thinking)
 
 
 def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:
     """Convert free text into a validated instance of `output_model`."""
-    if provider() == "perplexity":
-        return _structure_perplexity(text, output_model, max_tokens)
+    prov = provider()
+    if prov == "perplexity":
+        return _structure_openai_compatible(
+            perplexity_chat, config.PERPLEXITY_STRUCTURE_MODEL, text, output_model, max_tokens
+        )
+    if prov == "zai":
+        return _structure_openai_compatible(
+            zai_chat, config.ZAI_STRUCTURE_MODEL, text, output_model,
+            max(max_tokens, config.ZAI_STRUCTURE_MIN_TOKENS),
+        )
+    if prov == "openrouter":
+        return _structure_openai_compatible(
+            openrouter_chat, config.OPENROUTER_STRUCTURE_MODEL, text, output_model,
+            max_tokens,
+        )
+    if prov == "openai":
+        return _structure_openai_compatible(
+            openai_chat, config.OPENAI_STRUCTURE_MODEL, text, output_model,
+            max_tokens,
+        )
     return _structure_anthropic(text, output_model, max_tokens)

@@ -1,0 +1,64 @@
+name: circuit-breaker
+
+# The circuit breaker: scan live prices + trades, alert Telegram on suspicious
+# flow, and (optionally) stop trading on the tripped markets. No LLM, so it is
+# cheap to run often.
+#
+# TOGGLE (no code edit): Settings → Secrets and variables → Actions → Variables
+#   WATCH_ENABLED = true   → the schedule runs. Set to false to pause it while
+#                            you are testing. Manual "Run workflow" always works.
+#   WATCH_FREEZE  = true   → also stop trading on tripped markets (needs the
+#                            ARBUS_WRITE_KEY secret). Leave unset to only alert.
+#   CB_PRICE_MOVE / CB_MIN_DISTINCT_USERS / CB_WINDOW_MINUTES → override the
+#                            thresholds (defaults: 0.20 / 3 / 10). Unset = default.
+
+on:
+  schedule:
+    # Startuoja kas 10 min, o VIDUJE (žr. žemiau) sukasi kas 2 min — nes GitHub
+    # cron minimumas realiai ~5 min, tad tikrą 2-min dažnį duoda vidinis ciklas.
+    # Viešame repo Actions nemokamos, tad ilgas darbas nieko nekainuoja.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+    inputs:
+      freeze:
+        description: "Also stop trading on tripped markets (this run only)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    # Scheduled runs obey the WATCH_ENABLED toggle; a manual run always proceeds.
+    if: github.event_name == 'workflow_dispatch' || vars.WATCH_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Run the circuit breaker every 2 min for ~9 min
+        env:
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CB_PRICE_MOVE: ${{ vars.CB_PRICE_MOVE }}
+          CB_MIN_DISTINCT_USERS: ${{ vars.CB_MIN_DISTINCT_USERS }}
+          CB_WINDOW_MINUTES: ${{ vars.CB_WINDOW_MINUTES }}
+        run: |
+          FREEZE=""
+          if [ "${{ github.event.inputs.freeze }}" = "true" ] || [ "${{ vars.WATCH_FREEZE }}" = "true" ]; then
+            FREEZE="--freeze"
+          fi
+          # --interval 120 loops every 2 min; `timeout 540` (9 min) ends the job
+          # cleanly before the next scheduled run (10 min), so coverage is
+          # continuous. `|| true` keeps the SIGTERM exit from failing the run.
+          timeout 540 python -m arbus watch --interval 120 $FREEZE || true

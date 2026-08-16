@@ -1,0 +1,475 @@
+"""Offline tests for provider selection and the Z.AI backend."""
+
+import pytest
+import requests
+
+from arbus import config, llm
+
+
+@pytest.fixture(autouse=True)
+def clean_env(monkeypatch):
+    for var in ("LLM_PROVIDER", "ANTHROPIC_API_KEY", "PERPLEXITY_API_KEY",
+                "ZAI_API_KEY", "OPENROUTER_API_KEY", "OPENAI_API_KEY"):
+        monkeypatch.delenv(var, raising=False)
+
+
+def test_provider_detects_zai_key(monkeypatch):
+    monkeypatch.setenv("ZAI_API_KEY", "k")
+    assert llm.provider() == "zai"
+
+
+def test_llm_provider_override_wins(monkeypatch):
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "p")
+    monkeypatch.setenv("LLM_PROVIDER", "zai")
+    assert llm.provider() == "zai"
+
+
+def test_per_stage_provider_overrides_global(monkeypatch):
+    """The cheap-draft / sharp-verify split that keeps a batch affordable."""
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "p")
+    monkeypatch.setenv("LLM_PROVIDER", "perplexity")
+    monkeypatch.setenv("LLM_PROVIDER_VERIFY", "anthropic")
+    assert llm.provider("draft") == "perplexity"
+    assert llm.provider("verify") == "anthropic"
+    assert llm.provider() == "perplexity"
+
+
+def test_unknown_stage_value_falls_back(monkeypatch):
+    monkeypatch.setenv("LLM_PROVIDER", "perplexity")
+    monkeypatch.setenv("LLM_PROVIDER_VERIFY", "nonsense")
+    assert llm.provider("verify") == "perplexity"
+
+
+def test_provider_without_any_key_explains_all_options():
+    with pytest.raises(RuntimeError, match="ZAI_API_KEY"):
+        llm.provider()
+
+
+def test_web_search_tool_localizes_by_city_never_by_bad_country(monkeypatch):
+    # "LT" is not an accepted country code, but city/timezone are free-form and
+    # localize the search to Lithuania — the fix for missed LRT/Delfi results.
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_CITY", "Vilnius")
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_REGION", "Vilnius")
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "")
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_TIMEZONE", "Europe/Vilnius")
+    loc = llm._web_search_tool(10)["user_location"]
+    assert loc["city"] == "Vilnius" and "country" not in loc
+    assert loc["timezone"] == "Europe/Vilnius"
+
+
+def test_web_search_tool_adds_country_only_when_supported(monkeypatch):
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "US")
+    assert llm._web_search_tool(10)["user_location"]["country"] == "US"
+
+
+def test_web_search_tool_location_suppressed_on_retry(monkeypatch):
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_CITY", "Vilnius")
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_COUNTRY", "US")
+    assert "user_location" not in llm._web_search_tool(10, with_location=False)
+
+
+def test_json_objects_splits_concatenated_output():
+    text = '{"a": 1}\n{"a": {"nested": "}"}}\n'
+    assert llm._json_objects(text) == ['{"a": 1}', '{"a": {"nested": "}"}}']
+
+
+def test_validate_flexible_accepts_proper_container():
+    from arbus.schemas import CandidateBatch
+    payload = '{"candidates": []}'
+    assert llm._validate_flexible(payload, CandidateBatch).candidates == []
+
+
+def test_validate_flexible_wraps_bare_objects():
+    """GLM emits one bare candidate per object instead of the batch container."""
+    from arbus.schemas import CandidateBatch
+    item = (
+        '{"question_lt": "Ar Žalgiris laimės?", "market_type": "binary",'
+        ' "options_lt": ["Taip", "Ne"], "probabilities": [0.6, 0.4],'
+        ' "category": "sports", "resolve_by": "2026-09-01",'
+        ' "duration_class": "long", "resolution_hint_lt": "Pagal LKL.",'
+        ' "sources": ["https://x.lt/a"], "rationale_en": "test"}'
+    )
+    out = llm._validate_flexible(f"```json\n{item}\n{item}\n```", CandidateBatch)
+    assert len(out.candidates) == 2
+    assert out.candidates[0].question_lt == "Ar Žalgiris laimės?"
+
+
+def test_validate_flexible_salvages_truncated_container():
+    """max_tokens cut the response mid-array — keep the complete candidates."""
+    from arbus.schemas import CandidateBatch
+    item = (
+        '{"question_lt": "Ar Žalgiris laimės?", "market_type": "binary",'
+        ' "options_lt": ["Taip", "Ne"], "probabilities": [0.6, 0.4],'
+        ' "category": "sports", "resolve_by": "2026-09-01",'
+        ' "duration_class": "long", "resolution_hint_lt": "Pagal LKL.",'
+        ' "sources": ["https://x.lt/a"], "rationale_en": "test"}'
+    )
+    truncated = '{"candidates": [' + item + ", " + item + ', {"question_lt": "Ar L'
+    out = llm._validate_flexible(truncated, CandidateBatch)
+    assert len(out.candidates) == 2  # the two complete ones survive
+
+
+def test_json_objects_skips_unclosed_outer_brace():
+    objs = llm._json_objects('{"candidates": [{"a": 1}, {"b": 2}')
+    assert objs == ['{"a": 1}', '{"b": 2}']
+
+
+def test_validate_flexible_raises_when_nothing_usable():
+    from arbus.schemas import CandidateBatch
+    with pytest.raises(ValueError):
+        llm._validate_flexible("no json here", CandidateBatch)
+
+
+class _Resp:
+    def __init__(self, status=200, content="ok"):
+        self.status_code = status
+        self._content = content
+
+    def json(self):
+        return {"choices": [{"message": {"content": self._content}}]}
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise requests.HTTPError(f"{self.status_code}")
+
+
+def test_zai_sends_web_search_tool(monkeypatch):
+    monkeypatch.setenv("ZAI_API_KEY", "k")
+    seen = {}
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        seen.update(json)
+        return _Resp()
+
+    monkeypatch.setattr(llm.requests, "post", fake_post)
+    llm.zai_chat("hi", web_search=True)
+    assert seen["tools"][0]["type"] == "web_search"
+
+
+def test_zai_retries_without_tools_when_rejected(monkeypatch):
+    monkeypatch.setenv("ZAI_API_KEY", "k")
+    calls = []
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        calls.append(dict(json))
+        # first call (with tools) is rejected, second succeeds
+        return _Resp(400) if "tools" in json else _Resp(content="fallback")
+
+    monkeypatch.setattr(llm.requests, "post", fake_post)
+    out = llm.zai_chat("hi", web_search=True)
+    assert out == "fallback"
+    assert len(calls) == 2 and "tools" not in calls[1]
+
+
+def test_zai_error_without_tools_still_raises(monkeypatch):
+    monkeypatch.setenv("ZAI_API_KEY", "k")
+    monkeypatch.setattr(llm.requests, "post",
+                        lambda *a, **k: _Resp(401))
+    with pytest.raises(requests.HTTPError):
+        llm.zai_chat("hi", web_search=False)
+
+
+def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
+    """Resolution checks decide payouts that cannot be clawed back, so they get
+    the accurate model even though drafting runs on the cheap one."""
+    # AICHECK_MODEL is read from ANTHROPIC_AICHECK_MODEL at import time, so a
+    # real .env on the dev machine (e.g. set to claude-sonnet-5 to save cost)
+    # must not make this test's hardcoded expectation fail — patch it directly.
+    monkeypatch.setattr(config, "AICHECK_MODEL", "claude-opus-5")
+    seen = {}
+
+    def fake(prompt, system, max_uses, max_tokens, model=None, thinking=None):
+        seen["model"] = model
+        return "ok"
+
+    monkeypatch.setattr(llm, "_research_anthropic", fake)
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "anthropic")
+
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == "claude-opus-5"
+
+    llm.research("p", system="s", stage="draft")
+    assert seen["model"] is None          # drafting stays on the cheap default
+
+
+def test_aicheck_disables_extended_thinking_but_generation_keeps_it(monkeypatch):
+    """Thinking-on made the check ~6 min/market (a reasoning trace before each
+    search round-trip). aicheck turns it off; drafting/verify keep the default."""
+    monkeypatch.setattr(config, "AICHECK_THINKING", "off")
+    monkeypatch.setattr(config, "ANTHROPIC_THINKING", "adaptive")
+    seen = {}
+
+    def fake(prompt, system, max_uses, max_tokens, model=None, thinking=None):
+        seen["thinking"] = thinking
+        return "ok"
+
+    monkeypatch.setattr(llm, "_research_anthropic", fake)
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "anthropic")
+
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["thinking"] == "off"
+
+    llm.research("p", system="s", stage="draft")
+    assert seen["thinking"] is None          # None -> _research_anthropic uses the default
+
+
+def test_research_anthropic_thinking_override(monkeypatch):
+    """thinking=None uses config; an explicit value overrides it."""
+    monkeypatch.setattr(config, "ANTHROPIC_THINKING", "adaptive")
+    captured = {}
+
+    class _Stream:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def get_final_message(self):
+            class M:
+                stop_reason = "end_turn"
+                content = []
+            return M()
+
+    class _Client:
+        class messages:
+            @staticmethod
+            def stream(**kw):
+                captured.update(kw)
+                return _Stream()
+
+    monkeypatch.setattr(llm, "_anthropic_client", lambda: _Client())
+    llm._research_anthropic("p", "s", 5, 1000, thinking="off")
+    assert "thinking" not in captured                  # off -> omitted entirely
+    llm._research_anthropic("p", "s", 5, 1000, thinking=None)
+    assert captured.get("thinking") == {"type": "adaptive"}   # falls back to config
+
+
+def test_aicheck_uses_a_perplexity_reasoning_model(monkeypatch):
+    """Resolution needs reasoning (wrong-year/namesake errors); drafting stays
+    on the cheaper search model."""
+    seen = {}
+
+    def fake_px(user, system=None, model=None, max_tokens=8000, **k):
+        seen["model"] = model
+        return "ok"
+
+    monkeypatch.setattr(llm, "perplexity_chat", fake_px)
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "perplexity")
+
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == config.PERPLEXITY_AICHECK_MODEL == "sonar-reasoning-pro"
+
+    llm.research("p", system="s", stage="draft")
+    assert seen["model"] == config.PERPLEXITY_MODEL      # cheaper, for drafting
+
+
+def test_perplexity_strips_reasoning_think_block(monkeypatch):
+    class Resp:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self):
+            return {"choices": [{"message": {"content":
+                "<think>let me search and reason about this</think>\n"
+                "REZULTATAS: žinomas\nSIŪLOMA BAIGTIS: Taip"}}]}
+
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "pplx-x")
+    monkeypatch.setattr(llm.requests, "post", lambda *a, **k: Resp())
+    out = llm.perplexity_chat("q", model="sonar-reasoning-pro")
+    assert "<think>" not in out and out.startswith("REZULTATAS")
+
+
+# ── OpenRouter backend (OpenAI/DeepSeek/… + web search via one key) ─────────
+
+def test_openrouter_adds_online_suffix_and_search_plugin(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-x")
+    monkeypatch.setattr(llm.config, "OPENROUTER_SEARCH_ENGINE", "exa")
+    seen = {}
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        seen["url"] = url; seen["json"] = json; seen["headers"] = headers
+        return _Resp(content="REZULTATAS: žinomas")
+
+    monkeypatch.setattr(llm.requests, "post", fake_post)
+    out = llm.openrouter_chat("q", model="openai/gpt-5", web_search=True)
+    assert "openrouter.ai" in seen["url"]
+    assert seen["json"]["model"] == "openai/gpt-5:online"      # web search on
+    assert seen["json"]["plugins"][0]["engine"] == "exa"
+    assert seen["headers"]["Authorization"] == "Bearer or-x"
+    assert out == "REZULTATAS: žinomas"
+
+
+def test_openrouter_strips_reasoning_block(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-x")
+    monkeypatch.setattr(llm.requests, "post", lambda *a, **k: _Resp(
+        content="<think>deepseek reasoning...</think>\nSIŪLOMA BAIGTIS: Taip"))
+    out = llm.openrouter_chat("q", model="deepseek/deepseek-r1")
+    assert "<think>" not in out and out.startswith("SIŪLOMA BAIGTIS")
+
+
+def test_research_routes_aicheck_to_openrouter_model(monkeypatch):
+    seen = {}
+    monkeypatch.setattr(llm, "openrouter_chat",
+                        lambda *a, model=None, web_search=False, **k: seen.update(
+                            model=model, web_search=web_search) or "ok")
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "openrouter")
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == config.OPENROUTER_AICHECK_MODEL and seen["web_search"]
+
+
+def test_provider_detects_openrouter_key(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-x")
+    assert llm.provider() == "openrouter"
+    assert "openrouter" in llm.available_providers()
+
+
+# ── OpenAI backend (native key, Responses API + web search) ─────────────────
+
+def test_openai_uses_responses_api_with_localized_web_search(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-oa")
+    monkeypatch.setattr(llm.config, "ANTHROPIC_SEARCH_CITY", "Vilnius")
+    monkeypatch.setattr(llm.config, "OPENAI_SEARCH_COUNTRY", "LT")
+    seen = {}
+
+    class R:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self):
+            return {"output_text": "REZULTATAS: žinomas\nSIŪLOMA BAIGTIS: Taip"}
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        seen["url"] = url; seen["json"] = json; seen["headers"] = headers
+        return R()
+
+    monkeypatch.setattr(llm.requests, "post", fake_post)
+    out = llm.openai_chat("q", system="s", model="gpt-5", max_tokens=1200,
+                          web_search=True)
+    assert seen["url"].endswith("/v1/responses")
+    assert seen["json"]["tools"][0]["type"] == "web_search"
+    assert seen["json"]["tools"][0]["user_location"]["country"] == "LT"
+    assert seen["json"]["tools"][0]["user_location"]["city"] == "Vilnius"
+    assert seen["json"]["max_output_tokens"] >= 4000        # reasoning floor
+    assert seen["headers"]["Authorization"] == "Bearer sk-oa"
+    assert out.startswith("REZULTATAS")
+
+
+def test_openai_output_text_falls_back_to_output_array():
+    data = {"output": [
+        {"type": "reasoning", "content": []},
+        {"type": "web_search_call"},
+        {"type": "message", "content": [
+            {"type": "output_text", "text": "SIŪLOMA BAIGTIS: Ne"}]},
+    ]}
+    assert llm._openai_output_text(data) == "SIŪLOMA BAIGTIS: Ne"
+
+
+def test_research_routes_aicheck_to_openai_model(monkeypatch):
+    seen = {}
+    monkeypatch.setattr(llm, "openai_chat",
+                        lambda *a, model=None, web_search=False, **k: seen.update(
+                            model=model, web_search=web_search) or "ok")
+    monkeypatch.setattr(llm, "provider", lambda stage=None: "openai")
+    llm.research("p", system="s", stage="aicheck")
+    assert seen["model"] == config.OPENAI_AICHECK_MODEL and seen["web_search"]
+
+
+def test_provider_detects_openai_key(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-oa")
+    assert llm.provider() == "openai"
+    assert "openai" in llm.available_providers()
+
+
+def test_aicheck_target_shows_provider_and_model(monkeypatch):
+    """The line that catches OPENAI_AICHECK_MODEL set but LLM_PROVIDER_AICHECK
+    still perplexity — the provider decides, the model just names the variant."""
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-oa")
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "pplx")
+    monkeypatch.setenv("LLM_PROVIDER_AICHECK", "perplexity")   # the mismatch
+    assert llm.aicheck_target() == ("perplexity", config.PERPLEXITY_AICHECK_MODEL)
+
+    monkeypatch.setenv("LLM_PROVIDER_AICHECK", "openai")       # the fix
+    assert llm.aicheck_target() == ("openai", config.OPENAI_AICHECK_MODEL)
+
+
+def test_env_loader_strips_inline_comments_and_quotes():
+    """The Sonnet 404: `ANTHROPIC_AICHECK_MODEL=claude-sonnet-5  # cheaper`
+    became the model name, comment and all, and the API rejected it."""
+    clean = config._clean_env_value
+    assert clean("claude-sonnet-5   # → per pusę pigiau") == "claude-sonnet-5"
+    assert clean("off          # → Opus 5") == "off"
+    assert clean('"sk-ant-xyz"') == "sk-ant-xyz"          # surrounding quotes
+    assert clean("sk-ant-xyz") == "sk-ant-xyz"            # untouched when clean
+    # a '#' with no space before it (URL fragment) is kept
+    assert clean("https://x.lt/a#frag") == "https://x.lt/a#frag"
+
+
+# ── per-market cost accounting ──────────────────────────────────────────────
+
+class _FakeSrvTool:
+    def __init__(self, searches):
+        self.web_search_requests = searches
+
+
+class _FakeUsage:
+    def __init__(self, inp=0, out=0, cread=0, cwrite=0, searches=0):
+        self.input_tokens = inp
+        self.output_tokens = out
+        self.cache_read_input_tokens = cread
+        self.cache_creation_input_tokens = cwrite
+        self.server_tool_use = _FakeSrvTool(searches)
+
+
+class _FakeResp:
+    def __init__(self, usage):
+        self.usage = usage
+
+
+def test_usage_accumulates_across_calls(monkeypatch):
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=10000, out=500, searches=2)))
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=5000, out=300, searches=1)))
+    snap = llm.usage_snapshot()
+    assert snap["input"] == 15000 and snap["output"] == 800
+    assert snap["searches"] == 3
+
+
+def test_reset_usage_clears_the_counters(monkeypatch):
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=1, out=1, searches=1)))
+    llm.reset_usage()
+    assert not any(llm.usage_snapshot().values())
+
+
+def test_cost_reflects_searches_and_tokens(monkeypatch):
+    """Search-result input tokens are the real cost driver: a check with the
+    same output but many searches must cost visibly more."""
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=40000, out=1000, searches=4)))
+    heavy = llm.usage_cost_eur()
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=4000, out=1000, searches=1)))
+    light = llm.usage_cost_eur()
+    assert heavy > light > 0
+
+
+def test_usage_line_empty_when_nothing_measured():
+    llm.reset_usage()
+    assert llm.usage_line() == ""
+
+
+def test_usage_line_shows_cost_and_search_count():
+    llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=30000, out=1000, searches=2)))
+    line = llm.usage_line()
+    assert "€" in line and "2 paieškos" in line
+
+
+def test_stale_usage_from_an_abandoned_call_is_dropped(monkeypatch):
+    """A market cut off by the wall-clock timeout leaves its API call running on
+    a daemon thread; when it finally returns it must NOT bill the next market.
+    The generation captured at call start no longer matches after reset."""
+    gen = llm.reset_usage()                       # market A starts
+    llm.reset_usage()                             # market B starts (A abandoned)
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=99999, out=9999, searches=4)), gen)
+    assert not any(llm.usage_snapshot().values())  # A's late usage did not land
+
+
+def test_current_generation_usage_is_still_counted():
+    gen = llm.reset_usage()
+    llm._accumulate_usage(_FakeResp(_FakeUsage(inp=1000, out=100, searches=1)), gen)
+    assert llm.usage_snapshot()["input"] == 1000

@@ -14,8 +14,24 @@ def write_batch_report(
     batch_id: str,
     accepted: list[tuple[int, Candidate, str, str]],  # (db_id, cand, verdict, note)
     rejected: list[tuple[Candidate, str]],            # (cand, reason)
+    theme_stats: dict | None = None,   # {label: (target, drafted, accepted)}
+    reject_reasons: dict | None = None,
 ) -> Path:
     lines = [f"# Arbus batch {batch_id}", ""]
+
+    # Yield per theme makes an unbalanced batch self-explaining: if a theme was
+    # asked for 5, drafted 9 and landed 1, the problem is the gates for that
+    # theme, not the quota.
+    if theme_stats:
+        lines += ["## Yield per theme", "",
+                  "| Tema | Užsakyta | Sukurta | Priimta |", "|---|---:|---:|---:|"]
+        for label, (target, drafted, acc) in theme_stats.items():
+            lines.append(f"| {label} | {target} | {drafted} | {acc} |")
+        lines.append("")
+    if reject_reasons:
+        top = sorted(reject_reasons.items(), key=lambda kv: -kv[1])[:8]
+        lines += ["**Dažniausios atmetimo priežastys:** "
+                  + ", ".join(f"{k} ×{v}" for k, v in top), ""]
 
     durations = Counter(c.duration_class for _, c, _, _ in accepted)
     cats = Counter(c.category for _, c, _, _ in accepted)
@@ -28,11 +44,18 @@ def write_batch_report(
         "",
     ]
 
+    illustrated = sum(1 for _, c, _, _ in accepted if getattr(c, "image_url", ""))
+    if illustrated:
+        lines.insert(4, f"**Images:** {illustrated}/{len(accepted)}")
+
     for db_id, c, verdict, note in accepted:
         flag = " ⚠️ NEEDS REVIEW" if verdict == "UNCLEAR" else ""
         probs = ", ".join(f"{o} {p:.0%}" for o, p in zip(c.options_lt, c.probabilities))
         lines += [
-            f"### #{db_id} — {c.question_lt}{flag}",
+            f"### #{db_id} — {c.question_lt}{flag}",]
+        if getattr(c, "image_url", ""):
+            lines.append(f"![]({c.image_url})")
+        lines += [
             f"- **Type:** {c.market_type} | **Category:** {c.category} | "
             f"**Resolves by:** {c.resolve_by} ({c.duration_class})",
             f"- **Estimates:** {probs}",
