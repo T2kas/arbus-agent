@@ -14,10 +14,10 @@ name: circuit-breaker
 
 on:
   schedule:
-    # Startuoja kas 10 min, o VIDUJE (žr. žemiau) sukasi kas 2 min — nes GitHub
-    # cron minimumas realiai ~5 min, tad tikrą 2-min dažnį duoda vidinis ciklas.
-    # Viešame repo Actions nemokamos, tad ilgas darbas nieko nekainuoja.
-    - cron: "*/10 * * * *"
+    # Kas 5 min — GitHub'o realus scheduled minimumas, ir 10-min langui to visiškai
+    # gana. Vienas švarus paleidimas kaskart (log'as aiškus, output'as išplaunamas
+    # normaliai). Nori dažniau/rečiau — keisk šitą eilutę (pvz. "*/15 * * * *").
+    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       freeze:
@@ -34,7 +34,7 @@ jobs:
     # Scheduled runs obey the WATCH_ENABLED toggle; a manual run always proceeds.
     if: github.event_name == 'workflow_dispatch' || vars.WATCH_ENABLED == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -43,8 +43,9 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
 
-      - name: Run the circuit breaker every 2 min for ~9 min
+      - name: Run the circuit breaker
         env:
+          PYTHONUNBUFFERED: "1"        # output shows in the log, not buffered
           ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
           ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
           ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
@@ -58,7 +59,6 @@ jobs:
           if [ "${{ github.event.inputs.freeze }}" = "true" ] || [ "${{ vars.WATCH_FREEZE }}" = "true" ]; then
             FREEZE="--freeze"
           fi
-          # --interval 120 loops every 2 min; `timeout 540` (9 min) ends the job
-          # cleanly before the next scheduled run (10 min), so coverage is
-          # continuous. `|| true` keeps the SIGTERM exit from failing the run.
-          timeout 540 python -m arbus watch --interval 120 $FREEZE || true
+          # One clean pass per scheduled run — the process exits normally, so its
+          # output flushes to the log every time.
+          python -m arbus watch $FREEZE
