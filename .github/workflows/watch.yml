@@ -45,6 +45,7 @@ jobs:
 
       - name: Run the circuit breaker every 2 min for ~9 min
         env:
+          PYTHONUNBUFFERED: "1"        # stream each pass to the log live, not at the end
           ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
           ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
           ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}

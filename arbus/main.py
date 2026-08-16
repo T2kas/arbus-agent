@@ -247,10 +247,14 @@ def cmd_watch(args: argparse.Namespace) -> int:
 
     if args.interval:
         import time
+        from datetime import datetime, timezone
 
-        print(f"Watching every {args.interval}s — Ctrl+C to stop.")
+        print(f"Watching every {args.interval}s — Ctrl+C to stop.", flush=True)
         while True:
+            stamp = datetime.now(timezone.utc).strftime("%H:%M:%S")
+            print(f"\n⏱️  {stamp} UTC — tikrinu…", flush=True)
             _watch_once(args)
+            sys.stdout.flush()          # stream each pass live (CI pipes buffer)
             time.sleep(args.interval)
 
     return _watch_once(args)
