@@ -244,7 +244,20 @@ def _call_freeze_rpc(fn: str, market_id: str) -> tuple[bool, str]:
         last = error
         if "PGRST202" not in error and "404" not in error:
             break                       # not a param mismatch — real failure
-    return False, last
+    return False, _with_auth_hint(last)
+
+
+def _with_auth_hint(error: str) -> str:
+    """When the RPC rejects the caller as unauthenticated, point at the fix: the
+    admin function needs a privileged caller, so ARBUS_WRITE_KEY must hold the
+    service_role key (the anon key authenticates as nobody)."""
+    low = error.lower()
+    if not config.ARBUS_WRITE_KEY and (
+            "not authenticated" in low or "P0001" in error
+            or "401" in error or "permission" in low or "jwt" in low):
+        return (f"{error} — reikia service_role rakto: nustatyk ARBUS_WRITE_KEY "
+                "secret'ą (anon raktas neautentifikuotas).")
+    return error
 
 
 def freeze_market(market_id: str) -> tuple[bool, str]:
