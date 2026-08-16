@@ -503,6 +503,22 @@ def cmd_feeds(_args: argparse.Namespace) -> int:
     return 0
 
 
+def _load_ledger() -> set[str]:
+    """Market ids already AI-checked (persisted across stateless CI runs)."""
+    from pathlib import Path
+    try:
+        return set(json.loads(Path(config.CHECK_LEDGER_PATH).read_text("utf-8")))
+    except (FileNotFoundError, ValueError):
+        return set()
+
+
+def _save_ledger(ids: set[str]) -> None:
+    from pathlib import Path
+    path = Path(config.CHECK_LEDGER_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(sorted(ids), indent=0), encoding="utf-8")
+
+
 def cmd_check(args: argparse.Namespace) -> int:
     """Run the advisory AI check on frozen markets and alert Telegram.
 
@@ -546,6 +562,31 @@ def cmd_check(args: argparse.Namespace) -> int:
             print(f"(--match {args.match!r}: checking {len(app_frozen)} matching "
                   "market(s))")
 
+    # --mark-seen: record the current closed/frozen markets as handled WITHOUT
+    # checking them, to baseline before scheduling --only-new (so the existing
+    # backlog is not re-checked on the first automated run).
+    if args.mark_seen:
+        from . import app as app_api
+        seen = _load_ledger()
+        seen.update(app_api.market_id_of(m) for m in app_frozen)
+        _save_ledger(seen)
+        print(f"Baseline: {len(app_frozen)} rinka(-os) pažymėta kaip matyta "
+              f"(netikrinta). Ledger: {len(seen)} iš viso.")
+        conn.close()
+        return 0
+
+    # --only-new: skip markets already in the ledger, so a scheduled run only
+    # checks freshly proposed/closed markets. Stateless CI keeps the ledger in a
+    # committed file (config.CHECK_LEDGER_PATH).
+    ledger = _load_ledger() if args.only_new else set()
+    if args.only_new:
+        from . import app as app_api
+        before = len(app_frozen)
+        app_frozen = [m for m in app_frozen
+                      if app_api.market_id_of(m) not in ledger]
+        print(f"(--only-new: {len(app_frozen)} nauja(-os) iš {before} "
+              "užšaldytų/uždarytų — kitos jau tikrintos)")
+
     if not requests_ and not freezes and not app_frozen:
         print("Nothing frozen is waiting for a check.")
         if not config.ARBUS_API_URL:
@@ -577,6 +618,10 @@ def cmd_check(args: argparse.Namespace) -> int:
         print(aicheck.review_app_market(conn, market, alert=alert,
                                         deep=args.deep))
         conn.commit()
+        ledger.add(app_api.market_id_of(market))
+
+    if args.only_new and app_frozen:
+        _save_ledger(ledger)               # remember what we just handled
 
     conn.commit()
     conn.close()
@@ -720,6 +765,13 @@ def main() -> int:
                          "source (~0.15-0.30 EUR each). Default off: such markets "
                          "are skipped with a manual-check note. Use it for the "
                          "few important markets, usually with --match")
+    ck.add_argument("--only-new", action="store_true",
+                    help="check only markets not already in the ledger — for a "
+                         "scheduled run so newly proposed/closed markets are "
+                         "checked once, not the whole backlog every time")
+    ck.add_argument("--mark-seen", action="store_true",
+                    help="record the current closed/frozen markets as handled "
+                         "WITHOUT checking them (baseline before --only-new)")
     ck.set_defaults(func=cmd_check)
 
     wt = sub.add_parser("watch",

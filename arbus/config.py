@@ -773,6 +773,11 @@ APP_UNFREEZE_STATUS = os.environ.get("APP_UNFREEZE_STATUS", "open")
 # also falls back through other common names on a mismatch.
 # `.strip() or default` so an unset GitHub `${{ vars.X }}` (empty string) does
 # not blank out the name and POST to rpc/ with no function.
+# A committed JSON ledger of app markets already AI-checked, so a scheduled
+# `arbus check --only-new` on stateless CI does not re-check (and re-bill) the
+# whole closed backlog every run — only markets proposed/closed since last time.
+CHECK_LEDGER_PATH = os.environ.get("CHECK_LEDGER_PATH", "state/checked_markets.json")
+
 APP_FREEZE_RPC = os.environ.get("APP_FREEZE_RPC", "").strip() or "admin_freeze_market"
 APP_UNFREEZE_RPC = os.environ.get("APP_UNFREEZE_RPC", "").strip() or "admin_unfreeze_market"
 APP_FREEZE_RPC_PARAM = os.environ.get("APP_FREEZE_RPC_PARAM", "").strip() or "p_market_id"

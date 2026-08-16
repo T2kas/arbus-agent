@@ -1,30 +1,28 @@
 name: resolution-check
 
-# The advisory resolution checker: for markets frozen or past their date, gather
-# evidence (feeds, cited sources) and post a suggested outcome to Telegram. It
-# decides nothing — the admin resolves in the dashboard.
+# When a user proposes a resolution, the app closes the market. This picks up
+# newly closed/frozen markets, has the AI verify the outcome, and posts a
+# Telegram summary. It decides nothing — the admin resolves in the dashboard.
 #
-# Cost model: fact/source markets cost ~0.01-0.06 EUR; a market with no feed and
-# no source is SKIPPED with a manual-check note (0 EUR). The paid web hunt runs
-# only with --deep, which this schedule does NOT pass — so an automatic sweep is
-# cheap. Deep-check important markets by hand: `arbus check --match "…" --deep`.
+# Only NEW markets are checked (--only-new): a committed ledger
+# (state/checked_markets.json) remembers what was already handled, so a stateless
+# CI run does not re-check (and re-bill) the whole backlog every time. Baseline it
+# once locally with `arbus check --mark-seen` before enabling.
 #
-# TOGGLE (no code edit): Settings → Secrets and variables → Actions → Variables
-#   CHECK_ENABLED = true   → the schedule runs. Set false to pause it.
-#   CHECK_DEEP    = true   → allow the paid web hunt on no-data markets (pricey).
+# TOGGLE: Settings → Variables → CHECK_ENABLED = true runs the schedule.
 
 on:
-  # IŠJUNGTA automatinė eiga (kad neestų kreditų). Veikia TIK rankiniu būdu:
-  # Actions → resolution-check → Run workflow. Kai norėsi automatinio tikrinimo,
-  # atkomentuok `schedule` bloką žemiau (kas 6 val.).
-  # schedule:
-  #   - cron: "0 */6 * * *"
+  schedule:
+    - cron: "*/15 * * * *"          # pick up proposals within ~15 min
   workflow_dispatch:
     inputs:
       deep:
         description: "Pay for the web hunt on no-data markets (this run only)"
         type: boolean
-        default: false
+        default: true
+
+permissions:
+  contents: write                    # to commit the ledger back
 
 concurrency:
   group: check
@@ -43,19 +41,29 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
 
-      - name: Run the resolution check
+      - name: Check newly proposed/closed markets
         env:
+          PYTHONUNBUFFERED: "1"
           ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
           ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          # Resolution check on Perplexity (search-native, cheap) with its
+          # reasoning model. Switch back to Anthropic by setting these Variables.
+          LLM_PROVIDER_AICHECK: ${{ vars.LLM_PROVIDER_AICHECK || 'perplexity' }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          PERPLEXITY_AICHECK_MODEL: ${{ vars.PERPLEXITY_AICHECK_MODEL || 'sonar-reasoning-pro' }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          LLM_PROVIDER_AICHECK: anthropic
-          ANTHROPIC_AICHECK_MODEL: claude-sonnet-5
-          ANTHROPIC_AICHECK_THINKING: "off"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          DEEP=""
-          if [ "${{ github.event.inputs.deep }}" = "true" ] || [ "${{ vars.CHECK_DEEP }}" = "true" ]; then
-            DEEP="--deep"
-          fi
-          python -m arbus check $DEEP
+          DEEP="--deep"
+          if [ "${{ github.event.inputs.deep }}" = "false" ]; then DEEP=""; fi
+          python -m arbus check --only-new $DEEP
+
+      - name: Commit the ledger if it changed
+        run: |
+          git config user.name "arbus-bot"
+          git config user.email "arbus-bot@users.noreply.github.com"
+          git add state/checked_markets.json
+          git diff --cached --quiet || git commit -m "check ledger $(date -u +%FT%TZ) [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push || true
