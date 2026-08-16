@@ -257,6 +257,38 @@ def test_freeze_calls_the_admin_rpc_with_the_market_id(monkeypatch):
     assert seen["headers"]["Authorization"] == "Bearer service-key"
 
 
+def test_freeze_tries_other_param_names_when_market_id_is_wrong(monkeypatch):
+    """Live: admin_freeze_market has a param that is NOT `market_id`, so the
+    first call returns PGRST202. The next common name must be tried instead of
+    giving up."""
+    monkeypatch.setattr(config, "ARBUS_API_URL", SUPABASE)
+    monkeypatch.setattr(config, "APP_FREEZE_RPC_PARAM", "market_id")
+    bodies = []
+
+    def fake_request(method, url, **k):
+        body = k.get("json")
+        bodies.append(body)
+        if "market_id" in body:                      # wrong name → PGRST202/404
+            return _Resp({"code": "PGRST202"}, 404, "PGRST202: no matches found")
+        return _Resp([{"ok": True}], 200)            # p_market_id accepted
+
+    monkeypatch.setattr(requests, "request", fake_request)
+    ok, detail = app.freeze_market("m-9")
+    assert ok is True and "p_market_id" in detail
+    assert bodies[0] == {"market_id": "m-9"} and bodies[1] == {"p_market_id": "m-9"}
+
+
+def test_freeze_stops_on_a_real_error_not_a_param_mismatch(monkeypatch):
+    """A 403 (no permission) is not a param problem — do not try every name, just
+    report it."""
+    monkeypatch.setattr(config, "ARBUS_API_URL", SUPABASE)
+    calls = []
+    monkeypatch.setattr(requests, "request",
+                        lambda *a, **k: calls.append(1) or _Resp(None, 403, "RLS"))
+    ok, detail = app.freeze_market("m-1")
+    assert ok is False and "403" in detail and len(calls) == 1   # tried once
+
+
 def test_overdue_open_markets_are_checked_too(monkeypatch, tmp_path):
     """The Sinkevičius case: decided weeks ago, nobody paused it, so nothing
     was checking it while the AMM kept trading against a known outcome."""

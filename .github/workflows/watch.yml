@@ -54,6 +54,11 @@ jobs:
           CB_PRICE_MOVE: ${{ vars.CB_PRICE_MOVE }}
           CB_MIN_DISTINCT_USERS: ${{ vars.CB_MIN_DISTINCT_USERS }}
           CB_WINDOW_MINUTES: ${{ vars.CB_WINDOW_MINUTES }}
+          # Jei freeze RPC vardas/parametras kitoks — nustatyk šiuos Variables
+          # (kitaip naudoja numatytus: admin_freeze_market / market_id).
+          APP_FREEZE_RPC: ${{ vars.APP_FREEZE_RPC }}
+          APP_UNFREEZE_RPC: ${{ vars.APP_UNFREEZE_RPC }}
+          APP_FREEZE_RPC_PARAM: ${{ vars.APP_FREEZE_RPC_PARAM }}
         run: |
           FREEZE=""
           if [ "${{ github.event.inputs.freeze }}" = "true" ] || [ "${{ vars.WATCH_FREEZE }}" = "true" ]; then

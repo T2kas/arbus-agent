@@ -282,6 +282,7 @@ def _watch_once(args: argparse.Namespace) -> int:
           f"in {args.window} min).")
 
     frozen_now: list[str] = []
+    freeze_errors: list[str] = []
     if tripped and args.freeze:
         for item in tripped:
             mid = app_api.market_id_of(item["market"])
@@ -289,19 +290,26 @@ def _watch_once(args: argparse.Namespace) -> int:
             print(f"   {'🧊' if ok else '❌'} {mid}: {detail}")
             if ok:
                 frozen_now.append(mid)
+            else:
+                freeze_errors.append(detail)
 
     if tripped and not args.no_telegram:
-        lines = ["🚨 ĮTARTINAS SRAUTAS — verta sustabdyti prekybą", ""]
+        lines = ["🚨 ĮTARTINAS SRAUTAS", ""]
         for item in tripped:
             lines.append(f"· {item['move']:+.0%}, {item['users']} vartotojai — "
                          f"{app_api.question_of(item['market'])}")
         lines += ["", "Kainos šuolis + keli skirtingi vartotojai ta pačia kryptimi "
                       "dažniausiai reiškia, kad kažkas jau žino rezultatą."]
-        lines.append(
-            f"🧊 Botas jau sustabdė {len(frozen_now)} rinką (-as) appe. "
-            "Paleisk `arbus check`."
-            if frozen_now else
-            "Botas nieko nestabdo — sustabdyk dashboarde ir paleisk `arbus check`.")
+        # Say what the bot ACTUALLY did — froze, tried-and-failed, or only alerts.
+        if frozen_now:
+            lines.append(f"🧊 Botas SUSTABDĖ {len(frozen_now)} rinką (-as). "
+                         "Paleisk `arbus check`.")
+        elif args.freeze and freeze_errors:
+            lines.append(f"⚠️ Botas BANDĖ sustabdyti, bet NEPAVYKO: "
+                         f"{freeze_errors[0][:160]}. Sustabdyk rankiniu būdu.")
+        else:
+            lines.append("ℹ️ Auto-stabdymas išjungtas — sustabdyk dashboarde "
+                         "ir paleisk `arbus check`.")
         notify.send("\n".join(lines))
         print("Telegram alert sent.")
     return 0

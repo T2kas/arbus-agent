@@ -220,31 +220,46 @@ def frozen_markets(limit: int = 200) -> tuple[list[dict], str]:
     return [r for r in rows if is_frozen(r)], ""
 
 
+# PostgREST answers a wrong RPC parameter name with PGRST202 ("no matches found
+# in the schema cache"). We do not know the exact SQL signature, so try the
+# configured name first, then the common conventions, until one is accepted.
+_FREEZE_PARAM_FALLBACKS = (
+    "market_id", "p_market_id", "_market_id", "market_uuid", "id", "mid", "market")
+
+
+def _call_freeze_rpc(fn: str, market_id: str) -> tuple[bool, str]:
+    """Call an admin freeze/unfreeze RPC, trying parameter-name variants.
+
+    Only a param-name mismatch (PGRST202/404) is retried with the next name; a
+    real error (403 no permission, network) stops immediately and is returned as
+    is — trying more names would not help and hides the true cause.
+    """
+    names = [config.APP_FREEZE_RPC_PARAM] + [
+        p for p in _FREEZE_PARAM_FALLBACKS if p != config.APP_FREEZE_RPC_PARAM]
+    last = ""
+    for name in names:
+        rows, error = _rpc(fn, {name: market_id}, key=config.ARBUS_WRITE_KEY)
+        if not error:
+            return True, f"ok (param '{name}')"
+        last = error
+        if "PGRST202" not in error and "404" not in error:
+            break                       # not a param mismatch — real failure
+    return False, last
+
+
 def freeze_market(market_id: str) -> tuple[bool, str]:
     """Halt trading on a market via the app's admin RPC (needs the write key).
 
     The app exposes freezing as a POST to `rpc/admin_freeze_market`, not a raw
-    table write — the function name and its parameter are configurable so this
-    matches whatever the SQL function is called. Never called automatically:
-    `arbus watch --freeze` is opt-in, because stopping trading is a decision with
-    money attached, and the anon key cannot do it (403 reported as-is).
-    """
-    rows, error = _rpc(config.APP_FREEZE_RPC,
-                       {config.APP_FREEZE_RPC_PARAM: market_id},
-                       key=config.ARBUS_WRITE_KEY)
-    if error:
-        return False, error
-    return True, "frozen"
+    table write. Never called automatically: `arbus watch --freeze` is opt-in,
+    because stopping trading is a decision with money attached, and the anon key
+    cannot do it (403 reported as-is)."""
+    return _call_freeze_rpc(config.APP_FREEZE_RPC, market_id)
 
 
 def unfreeze_market(market_id: str) -> tuple[bool, str]:
     """Resume trading — the inverse RPC, for undoing a false-alarm freeze."""
-    rows, error = _rpc(config.APP_UNFREEZE_RPC,
-                       {config.APP_FREEZE_RPC_PARAM: market_id},
-                       key=config.ARBUS_WRITE_KEY)
-    if error:
-        return False, error
-    return True, "unfrozen"
+    return _call_freeze_rpc(config.APP_UNFREEZE_RPC, market_id)
 
 
 def price_history(limit: int = 200) -> tuple[list[dict], str]:

@@ -768,9 +768,11 @@ APP_FREEZE_STATUS = os.environ.get("APP_FREEZE_STATUS", "paused")
 # The app exposes admin_freeze_market / admin_unfreeze_market. If the SQL
 # function's parameter is not called `market_id` (e.g. `p_market_id`), set
 # APP_FREEZE_RPC_PARAM — otherwise the call 404s "function not found".
-APP_FREEZE_RPC = os.environ.get("APP_FREEZE_RPC", "admin_freeze_market")
-APP_UNFREEZE_RPC = os.environ.get("APP_UNFREEZE_RPC", "admin_unfreeze_market")
-APP_FREEZE_RPC_PARAM = os.environ.get("APP_FREEZE_RPC_PARAM", "market_id")
+# `.strip() or default` so an unset GitHub `${{ vars.X }}` (empty string) does
+# not blank out the name and POST to rpc/ with no function.
+APP_FREEZE_RPC = os.environ.get("APP_FREEZE_RPC", "").strip() or "admin_freeze_market"
+APP_UNFREEZE_RPC = os.environ.get("APP_UNFREEZE_RPC", "").strip() or "admin_unfreeze_market"
+APP_FREEZE_RPC_PARAM = os.environ.get("APP_FREEZE_RPC_PARAM", "").strip() or "market_id"
 
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about
