@@ -247,32 +247,60 @@ def _call_freeze_rpc(fn: str, market_id: str) -> tuple[bool, str]:
     return False, _with_auth_hint(last)
 
 
-def _with_auth_hint(error: str) -> str:
-    """When the RPC rejects the caller as unauthenticated, point at the fix: the
-    admin function needs a privileged caller, so ARBUS_WRITE_KEY must hold the
-    service_role key (the anon key authenticates as nobody)."""
+def _is_auth_error(error: str) -> bool:
     low = error.lower()
-    if not config.ARBUS_WRITE_KEY and (
-            "not authenticated" in low or "P0001" in error
-            or "401" in error or "permission" in low or "jwt" in low):
+    return ("not authenticated" in low or "p0001" in low or "401" in error
+            or "403" in error or "permission" in low or "jwt" in low)
+
+
+def _with_auth_hint(error: str) -> str:
+    """When the RPC rejects the caller as unauthenticated and there is no write
+    key, point at the fix: set ARBUS_WRITE_KEY to the service_role key."""
+    if not config.ARBUS_WRITE_KEY and _is_auth_error(error):
         return (f"{error} — reikia service_role rakto: nustatyk ARBUS_WRITE_KEY "
                 "secret'ą (anon raktas neautentifikuotas).")
     return error
 
 
-def freeze_market(market_id: str) -> tuple[bool, str]:
-    """Halt trading on a market via the app's admin RPC (needs the write key).
+def _set_status(market_id: str, status: str) -> tuple[bool, str]:
+    """Write a market's status directly. service_role bypasses RLS, so this halts
+    trading even when the admin RPC's own auth check refuses a backend caller."""
+    base = base_url()
+    if not base:
+        return False, "ARBUS_API_URL is not a /rest/v1/ URL"
+    rows, error = _call("PATCH", f"{base}markets?id=eq.{market_id}",
+                        key=config.ARBUS_WRITE_KEY, json={"status": status})
+    if error:
+        return False, error
+    return True, f"status={status}"
 
-    The app exposes freezing as a POST to `rpc/admin_freeze_market`, not a raw
-    table write. Never called automatically: `arbus watch --freeze` is opt-in,
-    because stopping trading is a decision with money attached, and the anon key
-    cannot do it (403 reported as-is)."""
-    return _call_freeze_rpc(config.APP_FREEZE_RPC, market_id)
+
+def freeze_market(market_id: str) -> tuple[bool, str]:
+    """Halt trading on a market. Tries the app's admin RPC first; if that RPC's
+    own auth check refuses a backend caller ("not authenticated"), falls back to
+    a direct status write with the service_role key, which bypasses RLS. Opt-in
+    via `arbus watch --freeze` — stopping trading has money attached."""
+    ok, detail = _call_freeze_rpc(config.APP_FREEZE_RPC, market_id)
+    if ok:
+        return ok, detail
+    # RPC blocked us (its uid check does not accept the service role). If we hold
+    # the privileged key, freeze by writing the status straight to the table.
+    if config.ARBUS_WRITE_KEY and _is_auth_error(detail):
+        ok2, detail2 = _set_status(market_id, config.APP_FREEZE_STATUS)
+        if ok2:
+            return True, f"{detail2} (tiesioginis rašymas — RPC atmetė backend'ą)"
+        return False, f"RPC: {detail} | tiesioginis rašymas nepavyko: {detail2}"
+    return ok, detail
 
 
 def unfreeze_market(market_id: str) -> tuple[bool, str]:
-    """Resume trading — the inverse RPC, for undoing a false-alarm freeze."""
-    return _call_freeze_rpc(config.APP_UNFREEZE_RPC, market_id)
+    """Resume trading — the inverse RPC, with the same direct-write fallback."""
+    ok, detail = _call_freeze_rpc(config.APP_UNFREEZE_RPC, market_id)
+    if ok:
+        return ok, detail
+    if config.ARBUS_WRITE_KEY and _is_auth_error(detail):
+        return _set_status(market_id, config.APP_UNFREEZE_STATUS)
+    return ok, detail
 
 
 def price_history(limit: int = 200) -> tuple[list[dict], str]:

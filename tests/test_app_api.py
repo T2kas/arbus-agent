@@ -280,13 +280,35 @@ def test_freeze_tries_other_param_names_when_market_id_is_wrong(monkeypatch):
 
 def test_freeze_stops_on_a_real_error_not_a_param_mismatch(monkeypatch):
     """A 403 (no permission) is not a param problem — do not try every name, just
-    report it."""
+    report it. With no write key there is no direct-write fallback either."""
     monkeypatch.setattr(config, "ARBUS_API_URL", SUPABASE)
+    monkeypatch.setattr(config, "ARBUS_WRITE_KEY", "")
     calls = []
     monkeypatch.setattr(requests, "request",
                         lambda *a, **k: calls.append(1) or _Resp(None, 403, "RLS"))
     ok, detail = app.freeze_market("m-1")
     assert ok is False and "403" in detail and len(calls) == 1   # tried once
+
+
+def test_freeze_falls_back_to_a_direct_status_write_when_rpc_rejects_backend(monkeypatch):
+    """Live: admin_freeze_market raises 'not authenticated' because it checks a
+    user uid the service role does not have. With the service_role key we can
+    halt trading by writing the status straight to the table (bypasses RLS)."""
+    monkeypatch.setattr(config, "ARBUS_API_URL", SUPABASE)
+    monkeypatch.setattr(config, "ARBUS_WRITE_KEY", "service-key")
+    monkeypatch.setattr(config, "APP_FREEZE_STATUS", "paused")
+    seen = []
+
+    def fake_request(method, url, **k):
+        seen.append((method, url))
+        if "/rpc/" in url:
+            return _Resp({"code": "P0001"}, 400, "P0001: not authenticated")
+        return _Resp([{"id": "m-1", "status": "paused"}], 200)   # direct PATCH ok
+
+    monkeypatch.setattr(requests, "request", fake_request)
+    ok, detail = app.freeze_market("m-1")
+    assert ok is True and "status=paused" in detail
+    assert any(m == "PATCH" and "markets?id=eq.m-1" in u for m, u in seen)
 
 
 def test_overdue_open_markets_are_checked_too(monkeypatch, tmp_path):
