@@ -12,7 +12,11 @@ name: resolution-check
 
 on:
   schedule:
-    - cron: "*/15 * * * *"          # pick up proposals within ~15 min
+    # Kas ~5 min (GitHub'as planuotus paleidimus dažnai vėlina, tad realiai gali
+    # būti kas 5–15 min). Proposal checkas kainuoja tik kai kažkas pasiūlė, tad
+    # dažnesnis paleidimas be naujų pasiūlymų nieko nekainuoja. Reikės tikslesnio
+    # laiko — kaip watch, junk per cron-job.org (workflow_dispatch).
+    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       deep:
