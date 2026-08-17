@@ -564,14 +564,8 @@ def _save_breaker_watermarks(marks: dict) -> None:
 
 def _proposal_key(proposal: dict) -> str:
     """Identity of a proposal for the ledger: id + created_at, so a re-proposal
-    (same market, after a reopen) is a distinct key and gets checked again.
-
-    A frozen market that reaches the check without a proposal row has no id, so
-    it is keyed by market id + its frozen status — enough to check it once while
-    it stays frozen, and to re-check if it is reopened and frozen again."""
-    if proposal.get("id") is not None:
-        return f"{proposal.get('id')}:{proposal.get('created_at', '')}"
-    return f"frozen:{proposal.get('market_id', '')}:{proposal.get('frozen_status', '')}"
+    (same market, after a reopen) is a distinct key and gets checked again."""
+    return f"{proposal.get('id')}:{proposal.get('created_at', '')}"
 
 
 def cmd_check(args: argparse.Namespace) -> int:
@@ -600,22 +594,16 @@ def cmd_check(args: argparse.Namespace) -> int:
     # proposal for the same market (after the admin reopened it) is a new key and
     # gets re-checked, whether the app writes a new row or updates the old one.
     if args.proposals:
+        # Only a user's resolution proposal triggers the AI check. A market that
+        # is merely closed or frozen without a proposal is NOT checked — the check
+        # costs money and is wanted only when someone actually claimed an outcome.
         items, perr = aicheck.pending_app_proposals(args.limit)
         if perr:
             print(f"⚠️  Could not read proposals: {perr}")
-        # A proposal freezes the market, but the freeze itself must also trigger a
-        # check — so a market frozen in the app without a proposal row is picked up
-        # too. Proposals (which carry the claimed outcome) take priority per market.
-        proposed_mids = {str(it["proposal"].get("market_id")) for it in items}
-        frozen_items, ferr = aicheck.pending_frozen_proposals(proposed_mids, args.limit)
-        if ferr:
-            print(f"⚠️  Could not read frozen markets: {ferr}")
-        items = items + frozen_items
         ledger = _load_ledger()
         new = [it for it in items if _proposal_key(it["proposal"]) not in ledger]
-        print(f"{len(new)} nauja(-s) tikrinimui iš {len(items)} "
-              f"({len(items) - len(frozen_items)} pasiūlyta, {len(frozen_items)} "
-              "užšaldyta be pasiūlymo; kiti jau tikrinti).")
+        print(f"{len(new)} naujas pasiūlymas iš {len(items)} "
+              "(kiti jau tikrinti).")
         import time
         for idx, it in enumerate(new):
             if idx and config.APP_CHECK_DELAY_SECONDS:
