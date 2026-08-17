@@ -279,6 +279,23 @@ def test_resolved_market_settlement_jump_is_not_a_candidate(monkeypatch):
     assert error == "" and rows == []          # resolved market filtered out entirely
 
 
+def test_proposals_on_resolved_markets_are_dropped(monkeypatch):
+    """A proposal whose market is already resolved is not returned — the admin
+    decided it, so re-checking would just cost money."""
+    from arbus import aicheck
+    proposals = [
+        {"id": "p1", "market_id": "m1", "proposed_option_id": "yes"},   # still open
+        {"id": "p2", "market_id": "m2", "proposed_option_id": "yes"},   # resolved
+        {"id": "p3", "market_id": "gone", "proposed_option_id": "yes"},  # unknown → kept
+    ]
+    markets = [{"id": "m1", "status": "closed"}, {"id": "m2", "status": "resolved"}]
+    monkeypatch.setattr(app, "resolution_proposals", lambda *a, **k: (proposals, ""))
+    monkeypatch.setattr(app, "markets", lambda *a, **k: (markets, ""))
+    items, err = aicheck.pending_app_proposals(50)
+    ids = {it["proposal"]["id"] for it in items}
+    assert err == "" and ids == {"p1", "p3"}     # p2 (resolved) dropped
+
+
 def test_only_a_proposal_triggers_the_check_not_a_bare_freeze():
     """The AI check runs only on user proposals. A market that is merely frozen
     or closed, with no proposal, is not turned into a check item."""

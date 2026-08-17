@@ -607,7 +607,13 @@ def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
 
     This is the cheap, targeted trigger the team wants: check ONLY markets
     someone proposed a resolution for — not every closed market — and let the AI
-    see the claimed outcome and the cited source."""
+    see the claimed outcome and the cited source.
+
+    A proposal whose market is already RESOLVED (settled/paid/cancelled) is
+    dropped: the admin already decided it, so re-reading it costs money for
+    nothing. This also keeps a fresh, empty ledger from re-billing the whole
+    historical backlog — only proposals on markets still awaiting a decision are
+    returned. A market that is not found in the app feed is kept (can't tell)."""
     from . import app as app_api
 
     proposals, error = app_api.resolution_proposals(limit)
@@ -615,8 +621,12 @@ def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
         return [], error
     markets, m_err = app_api.markets(200)
     by_id = {} if m_err else {app_api.market_id_of(m): m for m in markets}
-    out = [{"proposal": p, "market": by_id.get(str(p.get("market_id")), {})}
-           for p in proposals]
+    out = []
+    for p in proposals:
+        market = by_id.get(str(p.get("market_id")), {})
+        if market and app_api.status_of(market) in config.APP_SETTLED_STATUSES:
+            continue                       # already decided — no check needed
+        out.append({"proposal": p, "market": market})
     return out, ""
 
 
