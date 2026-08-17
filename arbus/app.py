@@ -359,10 +359,16 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
     the option id. The swing that matters is the whole range inside the window,
     not last-minus-first: a price pushed up and partly released still says
     someone knew something.
+
+    The range is measured **per option**, then the market's move is the largest
+    of its options' swings. A binary market sitting stable at TAIP 70 / NE 30
+    holds two prices whose spread is 0.40 — but neither option *moved*, so
+    lumping both options together would falsely read that spread as a 40% swing
+    and trip the breaker on a market that never changed.
     """
     option_map = option_map or {}
     cutoff = (now or datetime.now(timezone.utc)) - timedelta(minutes=window_minutes)
-    per_market: dict[str, list[float]] = {}
+    per_option: dict[tuple[str, str], list[float]] = {}
     for row in history:
         ts = _timestamp_of(row)
         if ts is None or ts < cutoff:
@@ -372,9 +378,12 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
         mid = str(_pick(row, "market_id", default="")) or option_map.get(oid, oid)
         if price is None or not mid:
             continue
-        per_market.setdefault(mid, []).append(price)
+        per_option.setdefault((mid, oid), []).append(price)
 
-    return {mid: max(prices) - min(prices) for mid, prices in per_market.items()}
+    per_market: dict[str, float] = {}
+    for (mid, _oid), prices in per_option.items():
+        per_market[mid] = max(per_market.get(mid, 0.0), max(prices) - min(prices))
+    return per_market
 
 
 def option_windows(history: list[dict], window_minutes: int = config.CB_WINDOW_MINUTES,

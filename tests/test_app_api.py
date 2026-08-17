@@ -135,6 +135,31 @@ def test_price_moves_use_the_window_and_the_full_swing():
     assert round(moves["m1"], 2) == 0.25
 
 
+def test_stable_binary_market_is_not_a_move():
+    """TAIP 70 / NE 30, dead flat: the 0.40 spread between the two options must
+    not read as movement. Each option's own swing is 0, so the market's is 0."""
+    history = [
+        {"option_id": "yes", "market_id": "m1", "price": 0.70, "created_at": _at(1)},
+        {"option_id": "no", "market_id": "m1", "price": 0.30, "created_at": _at(1)},
+        {"option_id": "yes", "market_id": "m1", "price": 0.70, "created_at": _at(6)},
+        {"option_id": "no", "market_id": "m1", "price": 0.30, "created_at": _at(6)},
+    ]
+    moves = app.price_moves(history, window_minutes=10, now=NOW)
+    assert moves["m1"] == 0.0
+
+
+def test_single_option_swing_counts_even_in_a_binary_market():
+    """A real 20pp push on the TAIP side still trips, unaffected by the NE side."""
+    history = [
+        {"option_id": "yes", "market_id": "m1", "price": 0.70, "created_at": _at(1)},
+        {"option_id": "no", "market_id": "m1", "price": 0.30, "created_at": _at(1)},
+        {"option_id": "yes", "market_id": "m1", "price": 0.50, "created_at": _at(6)},
+        {"option_id": "no", "market_id": "m1", "price": 0.50, "created_at": _at(6)},
+    ]
+    moves = app.price_moves(history, window_minutes=10, now=NOW)
+    assert round(moves["m1"], 2) == 0.20
+
+
 def test_option_windows_report_start_and_end_per_option():
     """For the alert: TAIP went 60%→20%, NE 40%→80% inside the window."""
     history = [                                       # newest-first
