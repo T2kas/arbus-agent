@@ -124,15 +124,26 @@ def _at(minutes_ago):
     return (NOW - timedelta(minutes=minutes_ago)).isoformat()
 
 
-def test_price_moves_use_the_window_and_the_full_swing():
+def test_price_moves_use_the_full_swing_inside_the_window():
     history = [
         {"option_id": "o1", "price": 0.30, "created_at": _at(1)},
-        {"option_id": "o1", "price": 0.55, "created_at": _at(4)},   # +25pp swing
-        {"option_id": "o1", "price": 0.31, "created_at": _at(9)},
-        {"option_id": "o1", "price": 0.90, "created_at": _at(60)},  # outside window
+        {"option_id": "o1", "price": 0.55, "created_at": _at(4)},   # peak
+        {"option_id": "o1", "price": 0.31, "created_at": _at(9)},   # window opens at 0.31
     ]
     moves = app.price_moves(history, {"o1": "m1"}, window_minutes=10, now=NOW)
     assert round(moves["m1"], 2) == 0.25
+
+
+def test_price_moves_measure_a_jump_from_before_the_window():
+    """The user's case: 15% before the window, jumped to 62% one minute ago.
+    Only the 62% row sits inside the window; the 15% is the entry baseline, so
+    the swing is 0.47 — not the 0.0 that within-window min/max would give."""
+    history = [
+        {"option_id": "o1", "market_id": "m1", "price": 0.62, "created_at": _at(1)},
+        {"option_id": "o1", "market_id": "m1", "price": 0.15, "created_at": _at(40)},
+    ]
+    moves = app.price_moves(history, window_minutes=10, now=NOW)
+    assert round(moves["m1"], 2) == 0.47
 
 
 def test_stable_binary_market_is_not_a_move():
@@ -167,10 +178,20 @@ def test_option_windows_report_start_and_end_per_option():
         {"option_id": "no", "probability": 80, "created_at": _at(1)},
         {"option_id": "yes", "probability": 60, "created_at": _at(8)},   # start
         {"option_id": "no", "probability": 40, "created_at": _at(8)},
-        {"option_id": "yes", "probability": 99, "created_at": _at(60)},  # out of window
     ]
     w = app.option_windows(history, window_minutes=10, now=NOW)
     assert w["yes"] == (0.60, 0.20) and w["no"] == (0.40, 0.80)
+
+
+def test_option_windows_start_from_the_pre_window_price():
+    """A jump just before the run shows 15%→62%, not 62%→62%: the start is the
+    last price from before the window, not the first row inside it."""
+    history = [
+        {"option_id": "yes", "probability": 62, "created_at": _at(1)},
+        {"option_id": "yes", "probability": 15, "created_at": _at(40)},  # before window
+    ]
+    w = app.option_windows(history, window_minutes=10, now=NOW)
+    assert w["yes"] == (0.15, 0.62)
 
 
 def test_format_option_moves_reads_from_the_yes_side():

@@ -319,7 +319,11 @@ def option_label(market: dict, option_id) -> str:
     return str(option_id)
 
 
-def price_history(limit: int = 200) -> tuple[list[dict], str]:
+def price_history(limit: int = 1000) -> tuple[list[dict], str]:
+    # Newest-first, across all markets. The breaker seeds each option with its
+    # last price from before the window as a baseline, so the fetch has to reach
+    # far enough back to include that row for a market that has been quiet — a
+    # tight limit would drop it and hide a real jump.
     return _endpoint("option_price_history",
                      f"select=*&order=created_at.desc&limit={limit}")
 
@@ -365,24 +369,38 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
     holds two prices whose spread is 0.40 — but neither option *moved*, so
     lumping both options together would falsely read that spread as a 40% swing
     and trip the breaker on a market that never changed.
+
+    Each option is also seeded with the price it carried **entering** the window
+    — its most recent row from before the cutoff. A single jump (15% → 62% just
+    before the run) leaves only the 62% row inside the window; without the entry
+    price its range would read 0. The entry price is the baseline the jump is
+    measured against.
     """
     option_map = option_map or {}
-    cutoff = (now or datetime.now(timezone.utc)) - timedelta(minutes=window_minutes)
+    now = now or datetime.now(timezone.utc)
+    cutoff = now - timedelta(minutes=window_minutes)
     per_option: dict[tuple[str, str], list[float]] = {}
-    for row in history:
-        ts = _timestamp_of(row)
-        if ts is None or ts < cutoff:
-            continue
+    baseline: dict[tuple[str, str], float] = {}   # last price before the window
+    for row in history:                            # newest-first
         price = _as_fraction(_pick(row, "probability", "price", "new_price", "value"))
         oid = str(_pick(row, "option_id", "id", default=""))
         mid = str(_pick(row, "market_id", default="")) or option_map.get(oid, oid)
         if price is None or not mid:
             continue
-        per_option.setdefault((mid, oid), []).append(price)
+        ts = _timestamp_of(row)
+        if ts is None:
+            continue
+        key = (mid, oid)
+        if ts < cutoff:
+            baseline.setdefault(key, price)        # first sub-cutoff = most recent before window
+        else:
+            per_option.setdefault(key, []).append(price)
 
     per_market: dict[str, float] = {}
-    for (mid, _oid), prices in per_option.items():
-        per_market[mid] = max(per_market.get(mid, 0.0), max(prices) - min(prices))
+    for key, prices in per_option.items():
+        pts = prices + ([baseline[key]] if key in baseline else [])
+        mid = key[0]
+        per_market[mid] = max(per_market.get(mid, 0.0), max(pts) - min(pts))
     return per_market
 
 
@@ -392,21 +410,30 @@ def option_windows(history: list[dict], window_minutes: int = config.CB_WINDOW_M
 
     History is newest-first, so per option the FIRST row seen is the latest
     price (end) and the LAST is the earliest (start). Lets the alert show
-    "TAIP 60%→20%" instead of a bare magnitude."""
+    "TAIP 60%→20%" instead of a bare magnitude.
+
+    The start is the price the option carried entering the window — its most
+    recent row from before the cutoff — falling back to the earliest in-window
+    price when there is none. Without that a single jump just before the run
+    would show "62%→62%" instead of the "15%→62%" that actually happened."""
     cutoff = (now or datetime.now(timezone.utc)) - timedelta(minutes=window_minutes)
     ends: dict[str, float] = {}
     starts: dict[str, float] = {}
-    for row in history:
-        ts = _timestamp_of(row)
-        if ts is None or ts < cutoff:
-            continue
+    baseline: dict[str, float] = {}
+    for row in history:                  # newest-first
         oid = str(_pick(row, "option_id", "id", default=""))
         price = _as_fraction(_pick(row, "probability", "price", "new_price", "value"))
         if not oid or price is None:
             continue
+        ts = _timestamp_of(row)
+        if ts is None:
+            continue
+        if ts < cutoff:
+            baseline.setdefault(oid, price)   # first sub-cutoff = most recent before window
+            continue
         ends.setdefault(oid, price)      # newest-first: first seen = end
         starts[oid] = price              # last seen in window = start
-    return {oid: (starts[oid], ends[oid]) for oid in ends}
+    return {oid: (baseline.get(oid, starts[oid]), ends[oid]) for oid in ends}
 
 
 def option_move_lines(market: dict, windows: dict[str, tuple[float, float]]) -> list[dict]:
