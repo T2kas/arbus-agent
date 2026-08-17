@@ -632,6 +632,11 @@ def breaker_candidates(window_minutes: int = config.CB_WINDOW_MINUTES,
     out = []
     for mid, move in moves.items():
         market = by_id.get(mid, {"id": mid})
+        # Only live markets can trip. A resolved market's price snaps to 100/0 —
+        # that is the settlement, not suspicious flow — and an already
+        # closed/frozen one is out of the breaker's hands. Skip both.
+        if not is_open(market):
+            continue
         users = users_for(market, mid)
         out.append({
             "market": market,

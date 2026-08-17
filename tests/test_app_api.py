@@ -264,6 +264,21 @@ def test_breaker_needs_the_users_too(monkeypatch):
     assert rows[0]["users"] == 3 and rows[0]["tripped"] is True
 
 
+def test_resolved_market_settlement_jump_is_not_a_candidate(monkeypatch):
+    """When a market resolves the price snaps to 100/0 — a 100pp 'move'. That is
+    the settlement, not suspicious flow, so a resolved market never appears."""
+    markets = [{"id": "m1", "question": "Ar X?", "status": "resolved",
+                "market_options": [{"id": "o1"}, {"id": "o2"}]}]
+    history = [{"option_id": "o1", "market_id": "m1", "price": 1.0, "created_at": _at(1)},
+               {"option_id": "o1", "market_id": "m1", "price": 0.30, "created_at": _at(5)}]
+    monkeypatch.setattr(app, "markets", lambda *a, **k: (markets, ""))
+    monkeypatch.setattr(app, "price_history", lambda *a, **k: (history, ""))
+    monkeypatch.setattr(app, "recent_trades", lambda *a, **k: (
+        [{"market_id": "m1", "user_id": u, "created_at": _at(2)} for u in "abc"], ""))
+    rows, error = app.breaker_candidates(window_minutes=10, now=NOW)
+    assert error == "" and rows == []          # resolved market filtered out entirely
+
+
 def test_missing_trades_endpoint_still_reports_moves(monkeypatch):
     monkeypatch.setattr(app, "markets", lambda *a, **k: ([{"id": "m1"}], ""))
     monkeypatch.setattr(app, "price_history", lambda *a, **k: (
