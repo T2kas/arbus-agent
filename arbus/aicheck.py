@@ -633,14 +633,42 @@ def check_app_proposal(proposal: dict, market: dict, today: date | None = None,
     view = notify.market_view(market) if market else {}
     proposed = app_api.option_label(market, proposal.get("proposed_option_id"))
     source = proposal.get("source") or "(vartotojas nenurodė šaltinio)"
+    # A market can reach the check two ways: a user proposal (carries the claimed
+    # outcome) or just being frozen in the app (no claim yet). With no claim, the
+    # AI still reads the source/searches and reports the real outcome.
+    proposed_line = (f"vartotojas siūlo baigtį: {proposed}" if proposed
+                     else "vartotojas baigties nenurodė — nustatyk faktinį rezultatą")
     summary = _run(
         question=view.get("question") or "(rinka nerasta app'e)",
         options=" / ".join(view.get("options") or []),
         criteria=view.get("rules") or "",
-        proposed=f"vartotojas siūlo baigtį: {proposed}",
+        proposed=proposed_line,
         source=source, today=today,
         closes_at=view.get("resolve_by", ""), deep=deep)
-    return {"proposed": proposed, "source": source, "summary": summary}
+    return {"proposed": proposed or "(nenurodyta)", "source": source, "summary": summary}
+
+
+def pending_frozen_proposals(exclude_market_ids: set, limit: int = 50
+                             ) -> tuple[list[dict], str]:
+    """Frozen app markets with no proposal row, shaped like proposal items.
+
+    A user proposal freezes the market (soon: closes it). The proposal row is the
+    richest trigger — it carries the claimed outcome — but the freeze itself must
+    also trigger a check, so a market frozen without a matching proposal is still
+    read by the AI. `exclude_market_ids` are markets a proposal already covers."""
+    from . import app as app_api
+
+    frozen, error = app_api.frozen_markets(200)
+    if error:
+        return [], error
+    out = []
+    for m in frozen[:limit]:
+        mid = app_api.market_id_of(m)
+        if mid and mid not in exclude_market_ids:
+            out.append({"proposal": {"market_id": mid,
+                                     "frozen_status": app_api.status_of(m)},
+                        "market": m})
+    return out, ""
 
 
 def review_app_proposal(item: dict, today: date | None = None,

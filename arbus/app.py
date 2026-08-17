@@ -313,6 +313,8 @@ def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:
 
 def option_label(market: dict, option_id) -> str:
     """The human label (TAIP/NE/…) for an option id, from the market's options."""
+    if option_id in (None, ""):
+        return ""
     for opt in (market.get("market_options") or market.get("options") or []):
         if str(_pick(opt, "id", "option_id", default="")) == str(option_id):
             return str(_pick(opt, "label", "name", "title", default=option_id))

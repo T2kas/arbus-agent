@@ -279,6 +279,35 @@ def test_resolved_market_settlement_jump_is_not_a_candidate(monkeypatch):
     assert error == "" and rows == []          # resolved market filtered out entirely
 
 
+def test_frozen_market_without_a_proposal_becomes_a_check_item(monkeypatch):
+    """A market frozen in the app (no proposal row) must still trigger the AI
+    check — the freeze itself is the trigger, not only the proposals table."""
+    from arbus import aicheck
+    frozen = [{"id": "m9", "status": "užšaldyta", "question": "Ar Y?",
+               "market_options": [{"id": "yes", "label": "TAIP"}]}]
+    monkeypatch.setattr(app, "markets", lambda *a, **k: (frozen, ""))
+    items, err = aicheck.pending_frozen_proposals(set(), limit=50)
+    assert err == "" and len(items) == 1
+    assert items[0]["market"]["id"] == "m9"
+    assert items[0]["proposal"] == {"market_id": "m9", "frozen_status": "užšaldyta"}
+
+
+def test_frozen_item_is_skipped_when_a_proposal_already_covers_it(monkeypatch):
+    from arbus import aicheck
+    frozen = [{"id": "m9", "status": "užšaldyta"}]
+    monkeypatch.setattr(app, "markets", lambda *a, **k: (frozen, ""))
+    items, _ = aicheck.pending_frozen_proposals({"m9"}, limit=50)
+    assert items == []                       # proposal takes priority for that market
+
+
+def test_proposal_key_distinguishes_proposals_from_freezes():
+    from arbus import main
+    assert main._proposal_key({"id": 7, "created_at": "t1"}) == "7:t1"
+    # No proposal id: keyed by market + frozen status, so a re-freeze re-checks.
+    assert main._proposal_key({"market_id": "m9", "frozen_status": "užšaldyta"}) \
+        == "frozen:m9:užšaldyta"
+
+
 def test_missing_trades_endpoint_still_reports_moves(monkeypatch):
     monkeypatch.setattr(app, "markets", lambda *a, **k: ([{"id": "m1"}], ""))
     monkeypatch.setattr(app, "price_history", lambda *a, **k: (
