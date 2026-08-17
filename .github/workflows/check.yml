@@ -49,6 +49,9 @@ jobs:
           PYTHONUNBUFFERED: "1"
           ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
           ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          # Proposals live behind RLS; the service_role key reads them (anon sees
+          # nothing, so the check would find "no proposals" and never alert).
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
           # Resolution check on Perplexity (search-native, cheap) with its
           # reasoning model. Switch back to Anthropic by setting these Variables.
           LLM_PROVIDER_AICHECK: ${{ vars.LLM_PROVIDER_AICHECK || 'perplexity' }}

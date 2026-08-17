@@ -597,9 +597,16 @@ def cmd_check(args: argparse.Namespace) -> int:
         # Only a user's resolution proposal triggers the AI check. A market that
         # is merely closed or frozen without a proposal is NOT checked — the check
         # costs money and is wanted only when someone actually claimed an outcome.
+        key_kind = "service_role (ARBUS_WRITE_KEY)" if config.ARBUS_WRITE_KEY else "anon"
+        print(f"Skaitau market_resolution_proposals su {key_kind} raktu…")
         items, perr = aicheck.pending_app_proposals(args.limit)
         if perr:
             print(f"⚠️  Could not read proposals: {perr}")
+        elif not items:
+            print("ℹ️  Rasta 0 pasiūlymų. Jei vartotojai tikrai siūlė baigtis, "
+                  "greičiausiai RLS slepia eilutes nuo šio rakto — įsitikink, kad "
+                  "ARBUS_WRITE_KEY (service_role) yra secrets'uose, arba kad "
+                  "lentelė ir stulpeliai vadinasi būtent taip.")
         ledger = _load_ledger()
         new = [it for it in items if _proposal_key(it["proposal"]) not in ledger]
         print(f"{len(new)} naujas pasiūlymas iš {len(items)} "

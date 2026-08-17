@@ -90,11 +90,11 @@ def _call(method: str, url: str, key: str = "", **kwargs) -> tuple[list[dict], s
         return [], f"response is not JSON: {resp.text[:120]}"
 
 
-def _endpoint(path: str, query: str = "") -> tuple[list[dict], str]:
+def _endpoint(path: str, query: str = "", key: str = "") -> tuple[list[dict], str]:
     base = base_url()
     if not base:
         return [], "ARBUS_API_URL is not a /rest/v1/ URL — extra endpoints unavailable"
-    return _call("GET", f"{base}{path}" + (f"?{query}" if query else ""))
+    return _call("GET", f"{base}{path}" + (f"?{query}" if query else ""), key=key)
 
 
 def _rpc(name: str, payload: dict | None = None, key: str = "") -> tuple[list[dict], str]:
@@ -306,9 +306,16 @@ def unfreeze_market(market_id: str) -> tuple[bool, str]:
 def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:
     """Resolution proposals users submitted (market_resolution_proposals): which
     market, the option they claim won (`proposed_option_id`), their cited
-    `source`, `status`, and `created_at`. Newest first."""
+    `source`, `status`, and `created_at`. Newest first.
+
+    Read with the service_role key (ARBUS_WRITE_KEY) when it is set: this table
+    is almost always behind RLS that only lets the proposing user or an admin
+    read a row, so the anon key sees nothing and the check finds "no proposals"
+    even though users submitted them. service_role bypasses RLS. Falls back to
+    the anon key when no write key is configured."""
     return _endpoint("market_resolution_proposals",
-                     f"select=*&order=created_at.desc&limit={limit}")
+                     f"select=*&order=created_at.desc&limit={limit}",
+                     key=config.ARBUS_WRITE_KEY)
 
 
 def option_label(market: dict, option_id) -> str:
