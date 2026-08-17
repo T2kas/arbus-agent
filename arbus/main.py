@@ -261,9 +261,13 @@ def cmd_watch(args: argparse.Namespace) -> int:
 
 
 def _watch_once(args: argparse.Namespace) -> int:
+    from datetime import datetime, timezone
     from . import app as app_api, notify
 
-    rows, error = app_api.breaker_candidates(window_minutes=args.window)
+    now = datetime.now(timezone.utc)
+    watermarks = _load_breaker_watermarks()
+    rows, error = app_api.breaker_candidates(window_minutes=args.window, now=now,
+                                             since=watermarks)
     if error:
         print(f"❌ {error}")
         return 1
@@ -316,6 +320,16 @@ def _watch_once(args: argparse.Namespace) -> int:
                          "ir paleisk `arbus check`.")
         notify.send("\n".join(lines))
         print("Telegram alert sent.")
+
+    if tripped:
+        # Remember this jump so a later run — after an admin reopens the market —
+        # does not close it again on the same movement. Only a fresh jump, after
+        # this watermark, will trip it next time.
+        for item in tripped:
+            watermarks[app_api.market_id_of(item["market"])] = now
+        _save_breaker_watermarks(watermarks)
+        print(f"Watermark saved for {len(tripped)} market(s) "
+              f"→ {config.BREAKER_LEDGER_PATH}")
     return 0
 
 
@@ -517,6 +531,35 @@ def _save_ledger(ids: set[str]) -> None:
     path = Path(config.CHECK_LEDGER_PATH)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(sorted(ids), indent=0), encoding="utf-8")
+
+
+def _load_breaker_watermarks() -> dict:
+    """{market id: aware datetime} the breaker last acted on a jump.
+
+    Persisted (config.BREAKER_LEDGER_PATH) so a stateless CI run remembers what
+    it already closed and does not re-close a reopened market on the same jump.
+    """
+    from pathlib import Path
+    from datetime import datetime
+    try:
+        raw = json.loads(Path(config.BREAKER_LEDGER_PATH).read_text("utf-8"))
+    except (FileNotFoundError, ValueError):
+        return {}
+    out = {}
+    for mid, iso in raw.items():
+        try:
+            out[mid] = datetime.fromisoformat(iso)
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+def _save_breaker_watermarks(marks: dict) -> None:
+    from pathlib import Path
+    path = Path(config.BREAKER_LEDGER_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    serialisable = {mid: ts.isoformat() for mid, ts in marks.items()}
+    path.write_text(json.dumps(serialisable, indent=0, sort_keys=True), encoding="utf-8")
 
 
 def _proposal_key(proposal: dict) -> str:

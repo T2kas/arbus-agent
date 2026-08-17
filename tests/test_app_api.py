@@ -171,6 +171,43 @@ def test_single_option_swing_counts_even_in_a_binary_market():
     assert round(moves["m1"], 2) == 0.20
 
 
+def test_price_moves_ignores_a_jump_already_acted_on():
+    """After the breaker closed on the 15%->62% jump, a reopen must not re-trip:
+    with the watermark set just after that jump, the old rows are baseline only,
+    so the market shows no fresh move."""
+    history = [
+        {"option_id": "o1", "market_id": "m1", "price": 0.62, "created_at": _at(6)},
+        {"option_id": "o1", "market_id": "m1", "price": 0.15, "created_at": _at(9)},
+    ]
+    since = {"m1": NOW - timedelta(minutes=5)}     # we acted 5 min ago
+    moves = app.price_moves(history, window_minutes=10, now=NOW, since=since)
+    assert moves.get("m1", 0.0) == 0.0
+
+
+def test_price_moves_trips_on_a_fresh_jump_after_the_watermark():
+    """A new 20pp jump AFTER the watermark still trips — reopen + new movement."""
+    history = [
+        {"option_id": "o1", "market_id": "m1", "price": 0.85, "created_at": _at(1)},  # fresh
+        {"option_id": "o1", "market_id": "m1", "price": 0.62, "created_at": _at(6)},  # acted
+        {"option_id": "o1", "market_id": "m1", "price": 0.15, "created_at": _at(9)},  # acted
+    ]
+    since = {"m1": NOW - timedelta(minutes=5)}     # acted 5 min ago (after the 62% row)
+    moves = app.price_moves(history, window_minutes=10, now=NOW, since=since)
+    assert round(moves["m1"], 2) == 0.23           # 62% baseline -> 85%, not 15%->85%
+
+
+def test_option_windows_start_from_the_watermark_after_a_reopen():
+    """The reopen alert shows the fresh jump (62%->85%), not the old 15%->85%."""
+    history = [
+        {"option_id": "o1", "market_id": "m1", "probability": 85, "created_at": _at(1)},
+        {"option_id": "o1", "market_id": "m1", "probability": 62, "created_at": _at(6)},
+        {"option_id": "o1", "market_id": "m1", "probability": 15, "created_at": _at(9)},
+    ]
+    since = {"m1": NOW - timedelta(minutes=5)}
+    w = app.option_windows(history, window_minutes=10, now=NOW, since=since)
+    assert w["o1"] == (0.62, 0.85)
+
+
 def test_option_windows_report_start_and_end_per_option():
     """For the alert: TAIP went 60%→20%, NE 40%→80% inside the window."""
     history = [                                       # newest-first

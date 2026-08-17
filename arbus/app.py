@@ -355,7 +355,8 @@ def option_to_market(market_rows: list[dict]) -> dict[str, str]:
 
 def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
                 window_minutes: int = config.CB_WINDOW_MINUTES,
-                now: datetime | None = None) -> dict[str, float]:
+                now: datetime | None = None,
+                since: dict[str, datetime] | None = None) -> dict[str, float]:
     """Largest price swing per market inside the window.
 
     The app's `option_price_history` carries `market_id` on every row, so that
@@ -375,12 +376,18 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
     before the run) leaves only the 62% row inside the window; without the entry
     price its range would read 0. The entry price is the baseline the jump is
     measured against.
+
+    `since` is a per-market watermark: rows at or before `since[mid]` are movement
+    the breaker already acted on, so they count only as baseline, never as a fresh
+    swing. That is what stops a reopened market from being closed again on the same
+    old jump — only a new jump, after the watermark, trips it.
     """
     option_map = option_map or {}
+    since = since or {}
     now = now or datetime.now(timezone.utc)
     cutoff = now - timedelta(minutes=window_minutes)
     per_option: dict[tuple[str, str], list[float]] = {}
-    baseline: dict[tuple[str, str], float] = {}   # last price before the window
+    baseline: dict[tuple[str, str], float] = {}   # most recent non-movement price
     for row in history:                            # newest-first
         price = _as_fraction(_pick(row, "probability", "price", "new_price", "value"))
         oid = str(_pick(row, "option_id", "id", default=""))
@@ -391,8 +398,9 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
         if ts is None:
             continue
         key = (mid, oid)
-        if ts < cutoff:
-            baseline.setdefault(key, price)        # first sub-cutoff = most recent before window
+        acted = mid in since and ts <= since[mid]
+        if ts < cutoff or acted:
+            baseline.setdefault(key, price)        # newest non-movement = what it entered at
         else:
             per_option.setdefault(key, []).append(price)
 
@@ -405,7 +413,8 @@ def price_moves(history: list[dict], option_map: dict[str, str] | None = None,
 
 
 def option_windows(history: list[dict], window_minutes: int = config.CB_WINDOW_MINUTES,
-                   now: datetime | None = None) -> dict[str, tuple[float, float]]:
+                   now: datetime | None = None, option_map: dict[str, str] | None = None,
+                   since: dict[str, datetime] | None = None) -> dict[str, tuple[float, float]]:
     """{option id: (start, end)} prices inside the window, as 0-1 fractions.
 
     History is newest-first, so per option the FIRST row seen is the latest
@@ -415,7 +424,13 @@ def option_windows(history: list[dict], window_minutes: int = config.CB_WINDOW_M
     The start is the price the option carried entering the window — its most
     recent row from before the cutoff — falling back to the earliest in-window
     price when there is none. Without that a single jump just before the run
-    would show "62%→62%" instead of the "15%→62%" that actually happened."""
+    would show "62%→62%" instead of the "15%→62%" that actually happened.
+
+    `since` mirrors `price_moves`: rows at or before a market's watermark are
+    already-acted movement, shown as the start baseline, not the move — so a
+    reopened market's alert shows only the fresh jump."""
+    option_map = option_map or {}
+    since = since or {}
     cutoff = (now or datetime.now(timezone.utc)) - timedelta(minutes=window_minutes)
     ends: dict[str, float] = {}
     starts: dict[str, float] = {}
@@ -428,8 +443,10 @@ def option_windows(history: list[dict], window_minutes: int = config.CB_WINDOW_M
         ts = _timestamp_of(row)
         if ts is None:
             continue
-        if ts < cutoff:
-            baseline.setdefault(oid, price)   # first sub-cutoff = most recent before window
+        mid = str(_pick(row, "market_id", default="")) or option_map.get(oid, oid)
+        acted = mid in since and ts <= since[mid]
+        if ts < cutoff or acted:
+            baseline.setdefault(oid, price)   # newest non-movement = most recent before the move
             continue
         ends.setdefault(oid, price)      # newest-first: first seen = end
         starts[oid] = price              # last seen in window = start
@@ -575,12 +592,16 @@ def overdue_markets(market_rows: list[dict], today: date | None = None) -> list[
 
 
 def breaker_candidates(window_minutes: int = config.CB_WINDOW_MINUTES,
-                       now: datetime | None = None) -> tuple[list[dict], str]:
+                       now: datetime | None = None,
+                       since: dict[str, datetime] | None = None) -> tuple[list[dict], str]:
     """Markets whose live flow trips the circuit breaker.
 
     This is where `resolution.circuit_breaker_tripped` finally gets real data:
     a price swing AND several distinct users behind it. Returns one dict per
     market: {market, move, users, tripped}.
+
+    `since` is the per-market watermark of movement already acted on (see
+    `price_moves`), so a reopened market only re-trips on a fresh jump.
     """
     from . import resolution
 
@@ -595,8 +616,9 @@ def breaker_candidates(window_minutes: int = config.CB_WINDOW_MINUTES,
         log.warning("recent trades unavailable (%s) — user counts will be 0", trade_error)
         trades = []
 
-    moves = price_moves(history, option_to_market(market_rows), window_minutes, now)
-    windows = option_windows(history, window_minutes, now)
+    option_map = option_to_market(market_rows)
+    moves = price_moves(history, option_map, window_minutes, now, since)
+    windows = option_windows(history, window_minutes, now, option_map, since)
     traders = traders_per_market(trades, window_minutes, now)
     by_id = {market_id_of(m): m for m in market_rows}
 

@@ -778,6 +778,12 @@ APP_UNFREEZE_STATUS = os.environ.get("APP_UNFREEZE_STATUS", "open")
 # whole closed backlog every run — only markets proposed/closed since last time.
 CHECK_LEDGER_PATH = os.environ.get("CHECK_LEDGER_PATH", "state/checked_markets.json")
 
+# The circuit breaker remembers, per market, the run time at which it last acted
+# on a price jump. Movement from before that watermark is already-handled, so a
+# reopened market is not closed again on the same old jump — only a fresh jump
+# after the watermark trips it. Persisted so a stateless CI run keeps the memory.
+BREAKER_LEDGER_PATH = os.environ.get("BREAKER_LEDGER_PATH", "state/breaker_watermarks.json")
+
 APP_FREEZE_RPC = os.environ.get("APP_FREEZE_RPC", "").strip() or "admin_freeze_market"
 APP_UNFREEZE_RPC = os.environ.get("APP_UNFREEZE_RPC", "").strip() or "admin_unfreeze_market"
 APP_FREEZE_RPC_PARAM = os.environ.get("APP_FREEZE_RPC_PARAM", "").strip() or "p_market_id"
