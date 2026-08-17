@@ -138,3 +138,36 @@ def resolution_message(market, request: sqlite3.Row | None,
 def notify_resolution(market: sqlite3.Row, request: sqlite3.Row | None,
                       ai_summary: str) -> bool:
     return send(resolution_message(market, request, ai_summary))
+
+
+def proposal_message(market, proposed: str, source: str, ai_summary: str) -> str:
+    """Alert for a user-submitted resolution proposal.
+
+    A proposal closes the market in the app, so the wording is SUSTABDYTA
+    (closed), and the claimed outcome + source lead — that is what the admin is
+    being asked to confirm — with the advisory AI check underneath."""
+    view = market_view(market) if market else {}
+    lines = [
+        "🛑 RINKA SUSTABDYTA — kažkas pasiūlė rezultatą",
+        "",
+        f"#{view.get('id', '?')} {view.get('question', '(rinka nerasta app’e)')}",
+        f"Variantai: {' / '.join(view.get('options') or []) or '?'}",
+        f"Terminas: {view.get('resolve_by', '?')}",
+        "",
+        f"👤 Pasiūlyta baigtis: {proposed}",
+        f"🔗 Šaltinis: {source}",
+        "",
+        "Taisyklės (pagal jas sprendžiama):",
+        view.get("rules") or "(nėra)",
+        "",
+        "🤖 AI PATIKRA (patariamoji — AI nieko nesprendžia):",
+        ai_summary or "(nepavyko)",
+        "",
+        "Sprendimą priima adminas dashboarde. Po paspaudimo išmokėjimas "
+        "įvyksta ne iš karto — lieka undo langas.",
+    ]
+    return "\n".join(lines)
+
+
+def notify_proposal(market, proposed: str, source: str, ai_summary: str) -> bool:
+    return send(proposal_message(market, proposed, source, ai_summary))

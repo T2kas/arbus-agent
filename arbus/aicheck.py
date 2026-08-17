@@ -621,10 +621,13 @@ def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
 
 
 def check_app_proposal(proposal: dict, market: dict, today: date | None = None,
-                       deep: bool = True) -> str:
+                       deep: bool = True) -> dict:
     """Verify one user's proposed resolution: does the cited source (and a search)
     support the outcome they claim? The claim and source are handed to the model,
-    and a cited URL is fetched for free, so this is both targeted and cheap."""
+    and a cited URL is fetched for free, so this is both targeted and cheap.
+
+    Returns {proposed, source, summary}: the claimed outcome, the cited source,
+    and the advisory AI body — kept apart so the alert can lead with the claim."""
     from . import app as app_api, notify
 
     view = notify.market_view(market) if market else {}
@@ -637,15 +640,17 @@ def check_app_proposal(proposal: dict, market: dict, today: date | None = None,
         proposed=f"vartotojas siūlo baigtį: {proposed}",
         source=source, today=today,
         closes_at=view.get("resolve_by", ""), deep=deep)
-    header = (f"👤 Vartotojo pasiūlyta baigtis: {proposed}\n"
-              f"🔗 Pateiktas šaltinis: {source}\n{_BAR}\n")
-    return header + summary
+    return {"proposed": proposed, "source": source, "summary": summary}
 
 
 def review_app_proposal(item: dict, today: date | None = None,
                         alert: bool = True, deep: bool = True) -> str:
-    """Check one proposal and post the summary to Telegram."""
-    summary = check_app_proposal(item["proposal"], item["market"], today, deep)
+    """Check one proposal and post a SUSTABDYTA alert (claimed outcome + source +
+    AI check) to Telegram. Returns the console-friendly text."""
+    res = check_app_proposal(item["proposal"], item["market"], today, deep)
     if alert:
-        notify.notify_resolution(item["market"] or {}, None, summary)
-    return summary
+        notify.notify_proposal(item["market"] or {}, res["proposed"],
+                               res["source"], res["summary"])
+    header = (f"👤 Vartotojo pasiūlyta baigtis: {res['proposed']}\n"
+              f"🔗 Pateiktas šaltinis: {res['source']}\n{_BAR}\n")
+    return header + res["summary"]

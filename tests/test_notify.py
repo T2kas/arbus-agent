@@ -62,6 +62,27 @@ def test_breaker_freeze_alert_says_why_without_a_reporter():
     assert "Pranešė" not in text          # nobody claimed anything
 
 
+def test_proposal_alert_leads_with_the_claim_and_says_closed():
+    """A user proposal closes the market: the alert says SUSTABDYTA, shows the
+    claimed outcome + source up top, then the advisory AI check."""
+    market = {
+        "id": "m-42",
+        "question": "Ar Ignitis akcija viršys 20 €?",
+        "market_options": [{"label": "TAIP"}, {"label": "NE"}],
+        "resolve_by": "2026-09-01",
+        "resolution_criteria": "Pagal Nasdaq Baltic uždarymo kainą.",
+    }
+    text = notify.proposal_message(market, "TAIP", "https://nasdaqbaltic.com/x", AI)
+
+    assert "SUSTABDYTA" in text and "UŽŠALDYTA" not in text   # closed, not frozen
+    assert "Pasiūlyta baigtis: TAIP" in text                  # the claim leads
+    assert "https://nasdaqbaltic.com/x" in text               # the cited source
+    assert "Ignitis akcija" in text                           # the market
+    assert "Nasdaq Baltic" in text                            # deciding rules
+    assert "nedarbas rugpjūtį" in text                        # the AI body is included
+    assert "AI nieko nesprendžia" in text                     # advisory, always
+
+
 def test_send_is_a_no_op_without_credentials(monkeypatch):
     monkeypatch.delenv("TELEGRAM_BOT_TOKEN", raising=False)
     monkeypatch.delenv("TELEGRAM_CHAT_ID", raising=False)
