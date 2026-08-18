@@ -568,6 +568,16 @@ CB_WINDOW_MINUTES = _env_int("CB_WINDOW_MINUTES", 10)
 CB_PRICE_MOVE = _env_float("CB_PRICE_MOVE", 0.20)               # 20 pct points
 CB_MIN_DISTINCT_USERS = _env_int("CB_MIN_DISTINCT_USERS", 3)
 
+# Stricter breaker for a market a user has PROPOSED a result for. Such a market
+# is close to resolving, so leaked information is more likely and cheaper to act
+# on — we watch a longer window for a smaller move. These apply only while the
+# proposal is live and the market is still open (once it closes, the breaker
+# can't touch it anyway). Reading proposals needs ARBUS_WRITE_KEY (service_role);
+# without it every market just uses the default thresholds above.
+CB_PROPOSED_WINDOW_MINUTES = _env_int("CB_PROPOSED_WINDOW_MINUTES", 30)
+CB_PROPOSED_PRICE_MOVE = _env_float("CB_PROPOSED_PRICE_MOVE", 0.10)   # 10 pct points
+CB_PROPOSED_MIN_DISTINCT_USERS = _env_int("CB_PROPOSED_MIN_DISTINCT_USERS", 3)
+
 # Admin presses resolve in the app dashboard; settlement waits this long so a
 # misclick can be undone. Payouts cannot be clawed back once made.
 SETTLEMENT_DELAY_MINUTES = 5

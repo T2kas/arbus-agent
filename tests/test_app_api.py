@@ -264,6 +264,36 @@ def test_breaker_needs_the_users_too(monkeypatch):
     assert rows[0]["users"] == 3 and rows[0]["tripped"] is True
 
 
+def test_proposed_market_gets_the_stricter_breaker(monkeypatch):
+    """A market a user proposed a result for is watched harder: a 12% move over
+    ~20 min from 3 users is below the default (20% / 10 min) but trips the
+    stricter proposed profile (10% / 30 min)."""
+    markets = [{"id": "m1", "question": "Ar X?",
+                "market_options": [{"id": "o1"}, {"id": "o2"}]}]
+    # Jump 20 min ago: outside the 10-min default window, inside the 30-min one.
+    history = [{"option_id": "o1", "market_id": "m1", "price": 0.50, "created_at": _at(20)},
+               {"option_id": "o1", "market_id": "m1", "price": 0.62, "created_at": _at(2)}]
+    monkeypatch.setattr(app, "markets", lambda *a, **k: (markets, ""))
+    monkeypatch.setattr(app, "price_history", lambda *a, **k: (history, ""))
+    monkeypatch.setattr(app, "recent_trades", lambda *a, **k: (
+        [{"market_id": "m1", "user_id": u, "created_at": _at(3)} for u in "abc"], ""))
+    monkeypatch.setattr(config, "ARBUS_WRITE_KEY", "service-role")
+
+    # No proposal → default profile → the 20-min-old jump is outside the window.
+    monkeypatch.setattr(app, "resolution_proposals", lambda *a, **k: ([], ""))
+    rows, _ = app.breaker_candidates(window_minutes=10, now=NOW)
+    assert rows == [] or rows[0]["tripped"] is False
+
+    # A proposal on m1 → strict profile → the jump is in the 30-min window and
+    # 12% ≥ 10% with 3 users trips it.
+    monkeypatch.setattr(app, "resolution_proposals",
+                        lambda *a, **k: ([{"market_id": "m1"}], ""))
+    rows, _ = app.breaker_candidates(window_minutes=10, now=NOW)
+    assert rows[0]["proposed"] is True
+    assert rows[0]["window"] == config.CB_PROPOSED_WINDOW_MINUTES
+    assert rows[0]["users"] == 3 and rows[0]["tripped"] is True
+
+
 def test_resolved_market_settlement_jump_is_not_a_candidate(monkeypatch):
     """When a market resolves the price snaps to 100/0 — a 100pp 'move'. That is
     the settlement, not suspicious flow, so a resolved market never appears."""

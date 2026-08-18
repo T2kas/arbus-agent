@@ -242,8 +242,11 @@ def cmd_watch(args: argparse.Namespace) -> int:
     print(f"⚙️  Circuit breaker: ≥{config.CB_PRICE_MOVE:.0%} kainos judesys IR "
           f"≥{config.CB_MIN_DISTINCT_USERS} vartotojai per {args.window} min. "
           f"| Auto-stabdymas: {freeze_state}")
-    print("   (keisk .env: CB_PRICE_MOVE / CB_MIN_DISTINCT_USERS / "
-          "CB_WINDOW_MINUTES; stabdymui reikia --freeze + ARBUS_WRITE_KEY)\n")
+    print(f"   📌 Pasiūlytoms rinkoms griežčiau: ≥{config.CB_PROPOSED_PRICE_MOVE:.0%} "
+          f"IR ≥{config.CB_PROPOSED_MIN_DISTINCT_USERS} vartotojai per "
+          f"{config.CB_PROPOSED_WINDOW_MINUTES} min.")
+    print("   (keisk .env: CB_PRICE_MOVE / CB_MIN_DISTINCT_USERS / CB_WINDOW_MINUTES "
+          "+ CB_PROPOSED_*; stabdymui reikia --freeze + ARBUS_WRITE_KEY)\n")
 
     if args.interval:
         import time
@@ -278,13 +281,17 @@ def _watch_once(args: argparse.Namespace) -> int:
     tripped = [r for r in rows if r["tripped"]]
     for item in rows[:15]:
         flag = "🚨" if item["tripped"] else "·"
+        tag = " 📌" if item.get("proposed") else ""
         question = app_api.question_of(item["market"]) or app_api.market_id_of(item["market"])
         moves = app_api.format_option_moves(item.get("options")) or f"{item['move']:+.0%}"
-        print(f"{flag} {moves} | {item['users']} user(s) — {question}")
+        win = item.get("window", args.window)
+        print(f"{flag}{tag} {moves} | {item['users']} user(s) / {win}min — {question}")
 
-    print(f"\n{len(tripped)} market(s) trip the breaker "
-          f"(≥{config.CB_PRICE_MOVE:.0%} move AND ≥{config.CB_MIN_DISTINCT_USERS} users "
-          f"in {args.window} min).")
+    print(f"\n{len(tripped)} market(s) trip the breaker. Default: "
+          f"≥{config.CB_PRICE_MOVE:.0%} move AND ≥{config.CB_MIN_DISTINCT_USERS} users "
+          f"in {args.window} min; 📌 proposed: ≥{config.CB_PROPOSED_PRICE_MOVE:.0%} AND "
+          f"≥{config.CB_PROPOSED_MIN_DISTINCT_USERS} users in "
+          f"{config.CB_PROPOSED_WINDOW_MINUTES} min.")
 
     frozen_now: list[str] = []
     freeze_errors: list[str] = []

@@ -111,16 +111,22 @@ def _set(conn: sqlite3.Connection, market_id: int, **fields) -> None:
 
 # ── Entry path 1: the circuit breaker ───────────────────────────────────────
 
-def circuit_breaker_tripped(price_move: float, distinct_users: int) -> bool:
+def circuit_breaker_tripped(price_move: float, distinct_users: int,
+                            price_threshold: float | None = None,
+                            min_users: int | None = None) -> bool:
     """Whether a price move looks like leaked information rather than a punt.
 
     A big move from ONE account is just someone predicting confidently — a
     whale, not a leak — so the move only counts when several distinct users
     push the same way inside the window. Requiring both is what stops the
     breaker firing on every large bet.
+
+    The thresholds default to the global config, but a caller can pass stricter
+    ones (a market a user has proposed a result for is watched harder).
     """
-    return (abs(price_move) >= config.CB_PRICE_MOVE
-            and distinct_users >= config.CB_MIN_DISTINCT_USERS)
+    threshold = config.CB_PRICE_MOVE if price_threshold is None else price_threshold
+    users = config.CB_MIN_DISTINCT_USERS if min_users is None else min_users
+    return abs(price_move) >= threshold and distinct_users >= users
 
 
 def trip_circuit_breaker(conn: sqlite3.Connection, market_id: int,

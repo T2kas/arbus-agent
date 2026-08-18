@@ -626,33 +626,78 @@ def breaker_candidates(window_minutes: int = config.CB_WINDOW_MINUTES,
         trades = []
 
     option_map = option_to_market(market_rows)
+    by_id = {market_id_of(m): m for m in market_rows}
+
+    # A market a user has PROPOSED a result for is watched harder: a longer
+    # window for a smaller move (config.CB_PROPOSED_*). Compute both profiles
+    # from the one fetch and pick per market. Proposed set is empty without the
+    # service_role key, so the default profile is the only one that runs then.
+    proposed = _proposed_market_ids()
+    strict_window = config.CB_PROPOSED_WINDOW_MINUTES
+
     moves = price_moves(history, option_map, window_minutes, now, since)
     windows = option_windows(history, window_minutes, now, option_map, since)
     traders = traders_per_market(trades, window_minutes, now)
-    by_id = {market_id_of(m): m for m in market_rows}
 
-    def users_for(market: dict, mid: str) -> int:
+    s_moves = price_moves(history, option_map, strict_window, now, since) if proposed else {}
+    s_windows = option_windows(history, strict_window, now, option_map, since) if proposed else {}
+    s_traders = traders_per_market(trades, strict_window, now) if proposed else {}
+
+    def users_for(market: dict, mid: str, tr: dict) -> int:
         # Price history keys by market id; the trade feed keys by title. Try
         # both so the two halves of the breaker actually meet.
-        by_market_id = traders.get(mid, set())
-        by_title = traders.get(question_of(market).strip().lower(), set())
+        by_market_id = tr.get(mid, set())
+        by_title = tr.get(question_of(market).strip().lower(), set())
         return len(by_market_id | by_title)
 
     out = []
-    for mid, move in moves.items():
+    # A proposed market's jump may sit in the wider strict window only, so union
+    # the ids seen under either profile.
+    for mid in set(moves) | set(s_moves):
         market = by_id.get(mid, {"id": mid})
         # Only live markets can trip. A resolved market's price snaps to 100/0 —
         # that is the settlement, not suspicious flow — and an already
         # closed/frozen one is out of the breaker's hands. Skip both.
         if not is_open(market):
             continue
-        users = users_for(market, mid)
+        if mid in proposed:
+            move = s_moves.get(mid, 0.0)
+            users = users_for(market, mid, s_traders)
+            options = option_move_lines(market, s_windows)
+            tripped = resolution.circuit_breaker_tripped(
+                move, users,
+                price_threshold=config.CB_PROPOSED_PRICE_MOVE,
+                min_users=config.CB_PROPOSED_MIN_DISTINCT_USERS)
+            window = strict_window
+        else:
+            move = moves.get(mid, 0.0)
+            users = users_for(market, mid, traders)
+            options = option_move_lines(market, windows)
+            tripped = resolution.circuit_breaker_tripped(move, users)
+            window = window_minutes
         out.append({
             "market": market,
             "move": move,
             "users": users,
-            "options": option_move_lines(market, windows),
-            "tripped": resolution.circuit_breaker_tripped(move, users),
+            "options": options,
+            "tripped": tripped,
+            "proposed": mid in proposed,
+            "window": window,
         })
     out.sort(key=lambda item: item["move"], reverse=True)
     return out, ""
+
+
+def _proposed_market_ids() -> set[str]:
+    """Market ids with a live resolution proposal — the breaker watches these
+    harder. Proposals sit behind RLS, so without ARBUS_WRITE_KEY (service_role)
+    we read nothing and every market falls back to the default thresholds."""
+    if not config.ARBUS_WRITE_KEY:
+        return set()
+    proposals, err = resolution_proposals()
+    if err:
+        log.warning("strict breaker: could not read proposals (%s) — using "
+                    "default thresholds for every market", err)
+        return set()
+    return {str(p.get("market_id")) for p in proposals
+            if p.get("market_id") is not None}
