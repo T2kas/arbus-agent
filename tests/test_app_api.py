@@ -300,9 +300,12 @@ def test_only_a_proposal_triggers_the_check_not_a_bare_freeze():
     """The AI check runs only on user proposals. A market that is merely frozen
     or closed, with no proposal, is not turned into a check item."""
     from arbus import main
-    # The proposals path keys items by proposal id + created_at; there is no
-    # frozen-market fallback, so a freeze without a proposal never enters it.
-    assert main._proposal_key({"id": 7, "created_at": "t1"}) == "7:t1"
+    # The proposals path keys items by proposal id alone, so unclosing a market
+    # without a new proposal keeps the same key (no re-check) while a fresh
+    # proposal is a new row with a new id (re-checked). There is no frozen-market
+    # fallback, so a freeze without a proposal never enters the path at all.
+    assert main._proposal_key({"id": 7, "created_at": "t1"}) == "7"
+    assert main._proposal_key({"id": 7, "created_at": "t2"}) == "7"  # reopen ≠ re-check
     assert not hasattr(__import__("arbus.aicheck", fromlist=["x"]),
                        "pending_frozen_proposals")
 

@@ -563,9 +563,18 @@ def _save_breaker_watermarks(marks: dict) -> None:
 
 
 def _proposal_key(proposal: dict) -> str:
-    """Identity of a proposal for the ledger: id + created_at, so a re-proposal
-    (same market, after a reopen) is a distinct key and gets checked again."""
-    return f"{proposal.get('id')}:{proposal.get('created_at', '')}"
+    """Identity of a proposal for the ledger: its id.
+
+    Each proposal is its own row with its own id, so:
+      • unclosing a market WITHOUT a new proposal keeps the same id → the check
+        does not run again;
+      • proposing a result AGAIN (after a reopen) is a new row with a new id →
+        it gets checked again.
+
+    We deliberately do NOT fold created_at into the key: touching the proposal
+    row on a reopen must not look like a fresh proposal, and it would also strand
+    every id already recorded under the old format."""
+    return str(proposal.get("id"))
 
 
 def cmd_check(args: argparse.Namespace) -> int:
@@ -590,9 +599,9 @@ def cmd_check(args: argparse.Namespace) -> int:
 
     # --proposals: check ONLY markets a user proposed a resolution for (the cheap,
     # targeted trigger), letting the AI see the claimed outcome + cited source.
-    # Each proposal is checked once — keyed by id AND created_at, so a FRESH
-    # proposal for the same market (after the admin reopened it) is a new key and
-    # gets re-checked, whether the app writes a new row or updates the old one.
+    # Each proposal is checked once — keyed by its id. Reopening a market without
+    # a new proposal keeps the same id (no re-check); proposing again is a new row
+    # with a new id, so THAT gets re-checked.
     if args.proposals:
         # Only a user's resolution proposal triggers the AI check. A market that
         # is merely closed or frozen without a proposal is NOT checked — the check
