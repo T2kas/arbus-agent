@@ -167,6 +167,22 @@ def market_id_of(row: dict) -> str:
     return str(_pick(row, "market_id", "id", default=""))
 
 
+def category_of(row: dict) -> str:
+    value = _pick(row, "category", "topic", "tag", default="")
+    return str(value).strip().lower()
+
+
+def winning_option_of(row: dict):
+    """The already-decided winner, if any — so the bot never resolves twice.
+    The app stores a single winner in `winning_option_id` and (for multi-winner
+    markets) an array in `winning_option_ids`; either being set means decided."""
+    single = _pick(row, "winning_option_id", default=None)
+    if single:
+        return single
+    many = row.get("winning_option_ids")
+    return many if many else None
+
+
 def _timestamp_of(row: dict) -> datetime | None:
     raw = _pick(row, "created_at", "timestamp", "inserted_at", "time", default="")
     if not isinstance(raw, str) or not raw:
@@ -301,6 +317,44 @@ def unfreeze_market(market_id: str) -> tuple[bool, str]:
     if config.ARBUS_WRITE_KEY and _is_auth_error(detail):
         return _set_status(market_id, config.APP_UNFREEZE_STATUS)
     return ok, detail
+
+
+_RESOLVE_MARKET_PARAM_FALLBACKS = (
+    "p_market_id", "market_id", "_market_id", "market_uuid", "id", "mid")
+_RESOLVE_OPTION_PARAM_FALLBACKS = (
+    "p_winning_option_id", "winning_option_id", "p_option_id", "option_id",
+    "_winning_option_id", "p_winner", "winner_option_id")
+
+
+def resolve_market(market_id: str, winning_option_id: str) -> tuple[bool, str]:
+    """Declare a market's winning outcome via the app's own resolution RPC
+    (admin_resolve_market), which then runs the app's payout. Needs the
+    service_role key (ARBUS_WRITE_KEY) — resolving pays real balances.
+
+    Like the freeze RPC, only a parameter-name mismatch (PGRST202/404) is retried
+    with the next naming convention; a real error (auth, network) stops at once.
+    """
+    if not config.ARBUS_WRITE_KEY:
+        return False, ("reikia service_role rakto: nustatyk ARBUS_WRITE_KEY "
+                       "secret'ą (rezultato nustatymas keičia balansus).")
+    market_names = [config.APP_RESOLVE_RPC_MARKET_PARAM] + [
+        p for p in _RESOLVE_MARKET_PARAM_FALLBACKS
+        if p != config.APP_RESOLVE_RPC_MARKET_PARAM]
+    option_names = [config.APP_RESOLVE_RPC_OPTION_PARAM] + [
+        p for p in _RESOLVE_OPTION_PARAM_FALLBACKS
+        if p != config.APP_RESOLVE_RPC_OPTION_PARAM]
+    last = ""
+    for mname in market_names:
+        for oname in option_names:
+            rows, error = _rpc(config.APP_RESOLVE_RPC,
+                               {mname: market_id, oname: winning_option_id},
+                               key=config.ARBUS_WRITE_KEY)
+            if not error:
+                return True, f"ok (params '{mname}', '{oname}')"
+            last = error
+            if "PGRST202" not in error and "404" not in error:
+                return False, _with_auth_hint(last)  # real failure — stop
+    return False, _with_auth_hint(last)
 
 
 def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:

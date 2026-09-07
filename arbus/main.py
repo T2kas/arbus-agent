@@ -340,6 +340,68 @@ def _watch_once(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_weather(args: argparse.Namespace) -> int:
+    """Resolve daily-max-temperature (orai) markets from the official Meteo LT API.
+
+    Runs one pass (or loops with --interval): reads the running day's max per
+    market, resolves the top bucket early once it is mathematically locked, and
+    resolves the rest once the last hourly measurement of the LT day arrives.
+    Resolving pays balances, so it needs the service_role key and is opt-in:
+    without it (or with --no-resolve) the bot only monitors and alerts.
+    """
+    from . import weather
+
+    if not config.ARBUS_API_URL:
+        print("ARBUS_API_URL is not set in .env — no app markets to read.")
+        return 1
+
+    do_resolve = not args.no_resolve
+    alert = not args.no_telegram
+    resolve_state = "ĮJUNGTAS" if do_resolve else "IŠJUNGTAS (tik stebi + įspėja)"
+    rpc_sig = (f"{config.APP_RESOLVE_RPC}({config.APP_RESOLVE_RPC_MARKET_PARAM}, "
+               f"{config.APP_RESOLVE_RPC_OPTION_PARAM})")
+    print(f"🌡️  Weather bot: kategorija='{config.WEATHER_CATEGORY}', "
+          f"tz={config.WEATHER_TZ}, šaltinis=api.meteo.lt")
+    print(f"   Rezultato nustatymas: {resolve_state} | RPC={rpc_sig}")
+    if do_resolve and not config.ARBUS_WRITE_KEY:
+        print("   ⚠️  Nėra ARBUS_WRITE_KEY (service_role) — resolve neveiks, "
+              "tik stebėjimas.")
+    print()
+
+    def once() -> int:
+        reports, error = weather.run(alert=alert, do_resolve=do_resolve)
+        if error:
+            print(f"❌ {error}")
+            return 1
+        if not reports:
+            print("Nėra aktyvių orų rinkų.")
+            return 0
+        for r in reports:
+            icon = {"resolved": "✅", "would-resolve": "📝", "watch": "·",
+                    "wait": "⏳", "done": "🔒", "skip": "⤼", "error": "❌"
+                    }.get(r.get("status"), "·")
+            mx = r.get("max")
+            mxs = f" | max {mx:.1f}°C" if isinstance(mx, (int, float)) else ""
+            extra = r.get("option") or r.get("note") or r.get("reason") or ""
+            print(f"{icon} {r.get('status')}{mxs} "
+                  f"{('— ' + str(extra)) if extra else ''} [{r.get('market_id')}]")
+        print(f"\n{sum(1 for r in reports if r.get('status') == 'resolved')} "
+              f"rinka(-os) išspręsta šį kartą.")
+        return 0
+
+    if args.interval:
+        import time
+        from datetime import datetime, timezone
+        print(f"Stebiu kas {args.interval}s — Ctrl+C sustabdyti.", flush=True)
+        while True:
+            stamp = datetime.now(timezone.utc).strftime("%H:%M:%S")
+            print(f"\n⏱️  {stamp} UTC — tikrinu…", flush=True)
+            once()
+            sys.stdout.flush()
+            time.sleep(args.interval)
+    return once()
+
+
 def cmd_stats(args: argparse.Namespace) -> int:
     """Market health from the app's own trades. No LLM, no cost.
 
@@ -890,6 +952,16 @@ def main() -> int:
     wt.add_argument("--interval", type=int, default=0,
                     help="keep running, scanning every N seconds (0 = once)")
     wt.set_defaults(func=cmd_watch)
+
+    wx = sub.add_parser("weather",
+                        help="resolve daily-max-temperature (orai) markets from Meteo LT")
+    wx.add_argument("--no-telegram", action="store_true")
+    wx.add_argument("--no-resolve", action="store_true",
+                    help="monitor + alert only; do not call the resolve RPC "
+                         "(same as leaving WEATHER_RESOLVE unset)")
+    wx.add_argument("--interval", type=int, default=0,
+                    help="keep running, checking every N seconds (0 = once)")
+    wx.set_defaults(func=cmd_weather)
 
     stt = sub.add_parser("stats", help="market health: dead, important, overdue")
     stt.add_argument("--days", type=int, default=config.DEAD_MARKET_DAYS)

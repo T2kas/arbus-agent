@@ -1,0 +1,77 @@
+name: weather-bot
+
+# Resolves daily-max-temperature ("orai") markets from the official Meteo LT API
+# (api.meteo.lt / LHMT). Every ~5 min it reads the running day's max per market:
+#   • the TOP bucket ("21,0 °C arba aukštesnė") is locked and resolved EARLY the
+#     moment any valid reading reaches its lower bound (temperature can only rise);
+#   • every other bucket resolves once the LAST hourly measurement of the
+#     Lithuanian calendar day has arrived.
+# Resolving pays balances, so it is OPT-IN: set Variables WEATHER_ENABLED=true to
+# run the schedule and WEATHER_RESOLVE=true to actually call admin_resolve_market
+# (otherwise the bot only monitors and alerts). GitHub's cron is often delayed;
+# for tighter timing, trigger workflow_dispatch from cron-job.org (like watch).
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      resolve:
+        description: "Actually resolve (call admin_resolve_market) this run"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write                    # to commit the weather state ledger
+
+concurrency:
+  group: weather
+  cancel-in-progress: false
+
+jobs:
+  weather:
+    if: github.event_name == 'workflow_dispatch' || vars.WEATHER_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Check and resolve weather markets
+        env:
+          PYTHONUNBUFFERED: "1"
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          # Resolving (and the early freeze) needs the service_role key.
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # Override RPC/category/tz only if the app ever changes them.
+          APP_RESOLVE_RPC: ${{ vars.APP_RESOLVE_RPC }}
+          APP_RESOLVE_RPC_MARKET_PARAM: ${{ vars.APP_RESOLVE_RPC_MARKET_PARAM }}
+          APP_RESOLVE_RPC_OPTION_PARAM: ${{ vars.APP_RESOLVE_RPC_OPTION_PARAM }}
+          APP_FREEZE_RPC: ${{ vars.APP_FREEZE_RPC }}
+          APP_FREEZE_RPC_PARAM: ${{ vars.APP_FREEZE_RPC_PARAM }}
+          WEATHER_CATEGORY: ${{ vars.WEATHER_CATEGORY }}
+          WEATHER_TZ: ${{ vars.WEATHER_TZ }}
+        run: |
+          # Resolve only when opted in: WEATHER_RESOLVE=true (schedule) or the
+          # dispatch input. Otherwise monitor + alert without touching balances.
+          RESOLVE_FLAG="--no-resolve"
+          if [ "${{ vars.WEATHER_RESOLVE }}" = "true" ] || [ "${{ github.event.inputs.resolve }}" = "true" ]; then
+            RESOLVE_FLAG=""
+          fi
+          python -m arbus weather $RESOLVE_FLAG
+
+      - name: Commit the weather state if it changed
+        run: |
+          git config user.name "arbus-bot"
+          git config user.email "arbus-bot@users.noreply.github.com"
+          git add state/weather_state.json
+          git diff --cached --quiet || git commit -m "weather state $(date -u +%FT%TZ) [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push || true

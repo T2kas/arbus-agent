@@ -798,6 +798,29 @@ APP_FREEZE_RPC = os.environ.get("APP_FREEZE_RPC", "").strip() or "admin_freeze_m
 APP_UNFREEZE_RPC = os.environ.get("APP_UNFREEZE_RPC", "").strip() or "admin_unfreeze_market"
 APP_FREEZE_RPC_PARAM = os.environ.get("APP_FREEZE_RPC_PARAM", "").strip() or "p_market_id"
 
+# How the app declares a winner: rpc/admin_resolve_market(p_market_id uuid,
+# p_winning_option_id uuid) for a single winning outcome (confirmed live). The
+# weather bot uses this to hand the decided bucket to the app's own resolution +
+# payout. Overridable via GitHub Variables; needs the service_role key.
+APP_RESOLVE_RPC = os.environ.get("APP_RESOLVE_RPC", "").strip() or "admin_resolve_market"
+APP_RESOLVE_RPC_MARKET_PARAM = (
+    os.environ.get("APP_RESOLVE_RPC_MARKET_PARAM", "").strip() or "p_market_id")
+APP_RESOLVE_RPC_OPTION_PARAM = (
+    os.environ.get("APP_RESOLVE_RPC_OPTION_PARAM", "").strip() or "p_winning_option_id")
+
+# ── Weather bot (arbus weather) ─────────────────────────────────────────────
+# Markets in this app category are daily-max-temperature markets resolved from
+# the official LHMT "Meteo LT" API (api.meteo.lt). The bot polls every ~5 min,
+# tracks the running daily max, resolves the top (unbounded) bucket early the
+# moment it is mathematically locked, and resolves the rest once the last hourly
+# measurement of the Lithuanian calendar day has arrived.
+WEATHER_CATEGORY = os.environ.get("WEATHER_CATEGORY", "").strip() or "orai"
+WEATHER_TZ = os.environ.get("WEATHER_TZ", "").strip() or "Europe/Vilnius"
+# Committed JSON so a stateless CI run remembers each market's running max, the
+# measurements already seen (dedup), the last response checksum, and whether it
+# has already been resolved (never resolve twice).
+WEATHER_STATE_PATH = os.environ.get("WEATHER_STATE_PATH", "state/weather_state.json")
+
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about
 # what NOT to generate. A market everybody trades deserves promotion. Both are

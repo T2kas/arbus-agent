@@ -3,3 +3,4 @@ feedparser>=6.0.11
 pydantic>=2.7
 rapidfuzz>=3.9
 requests>=2.32
+tzdata>=2024.1            # IANA zones for zoneinfo (Windows has no system db)
