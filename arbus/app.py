@@ -353,8 +353,21 @@ def resolve_market(market_id: str, winning_option_id: str) -> tuple[bool, str]:
                 return True, f"ok (params '{mname}', '{oname}')"
             last = error
             if "PGRST202" not in error and "404" not in error:
-                return False, _with_auth_hint(last)  # real failure — stop
-    return False, _with_auth_hint(last)
+                return False, _resolve_error_hint(last)  # real failure — stop
+    return False, _resolve_error_hint(last)
+
+
+def _resolve_error_hint(error: str) -> str:
+    """The resolve RPC often gates on admin INSIDE the function (raises
+    'admin_only' / SQLSTATE 42501), which the service_role key cannot bypass —
+    that is a DB-side check, not RLS. Point at the real fix instead of a raw 403."""
+    if "admin_only" in error or "42501" in error:
+        return (f"{error} — RPC '{config.APP_RESOLVE_RPC}' viduje tikrina, ar "
+                "kviečiantysis yra adminas, ir atmeta service_role backend'ą. "
+                "Reikia DB pakeitimo: leisk service_role kviesti šią funkciją "
+                "(pvz. jos admin patikroje pridėk `auth.role() = 'service_role'`), "
+                "arba sukurk atskirą backend RPC botui.")
+    return _with_auth_hint(error)
 
 
 def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:
