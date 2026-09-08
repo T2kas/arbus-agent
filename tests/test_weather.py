@@ -141,7 +141,10 @@ def test_early_max_locks_top_bucket_and_freezes_first(wired, monkeypatch):
 
 
 def test_end_of_day_resolves_the_matching_bucket_without_freezing(wired, monkeypatch):
-    monkeypatch.setattr(weather.app_api, "markets", lambda *a, **k: ([_market(_OPTS)], ""))
+    # By end of day the app has already closed trading (status 'closed'), so the
+    # bot neither re-closes nor freezes during resolve.
+    monkeypatch.setattr(weather.app_api, "markets",
+                        lambda *a, **k: ([_market(_OPTS, status="closed")], ""))
     monkeypatch.setattr(weather, "fetch",
                         lambda url, timeout=20: (_obs(("2026-09-10 12:00:00", 18.9)), "{raw}"))
     # Full day incl. the 23:00 LT (=20:00 UTC) reading; max 18.9 → bucket b2.
@@ -184,6 +187,40 @@ def test_no_double_resolve_across_runs(wired, monkeypatch):
     weather.run(now=now)
     weather.run(now=now)                                 # second pass sees state.resolved
     assert wired["resolve"] == [("m1", "b4")]            # resolved exactly once
+
+
+def test_closes_todays_market_at_14_but_does_not_resolve(wired, monkeypatch):
+    monkeypatch.setattr(weather.app_api, "markets", lambda *a, **k: ([_market(_OPTS)], ""))
+    monkeypatch.setattr(weather, "fetch",
+                        lambda url, timeout=20: (_obs(("2026-09-10 12:00:00", 18.9)), "{raw}"))
+    monkeypatch.setattr(weather, "fetch_lt_day", lambda s, iso: ([], [], "x"))
+    now = datetime(2026, 9, 10, 12, 0, tzinfo=timezone.utc)   # 15:00 Vilnius (>14)
+    reports, _ = weather.run(now=now)
+    assert wired["freeze"] == ["m1"]           # trading closed
+    assert wired["resolve"] == []              # but NOT resolved (max<21, day not over)
+    assert reports[0]["status"] == "watch" and reports[0]["closed"] is True
+
+
+def test_does_not_close_a_future_day_market(wired, monkeypatch):
+    fut = _market(_OPTS, title="Aukščiausia temperatūra Kaune rugsėjo 11 d.?",
+                  subtitle="2026 m. rugsėjo 11 d.")
+    monkeypatch.setattr(weather.app_api, "markets", lambda *a, **k: ([fut], ""))
+    monkeypatch.setattr(weather, "fetch",
+                        lambda url, timeout=20: (_obs(("2026-09-10 12:00:00", 18.9)), "{raw}"))
+    monkeypatch.setattr(weather, "fetch_lt_day", lambda s, iso: ([], [], "x"))
+    now = datetime(2026, 9, 10, 12, 0, tzinfo=timezone.utc)   # 15:00 Vilnius, but market is 09-11
+    reports, _ = weather.run(now=now)
+    assert wired["freeze"] == [] and wired["resolve"] == []   # left in peace
+
+
+def test_does_not_close_before_14(wired, monkeypatch):
+    monkeypatch.setattr(weather.app_api, "markets", lambda *a, **k: ([_market(_OPTS)], ""))
+    monkeypatch.setattr(weather, "fetch",
+                        lambda url, timeout=20: (_obs(("2026-09-10 08:00:00", 15.0)), "{raw}"))
+    monkeypatch.setattr(weather, "fetch_lt_day", lambda s, iso: ([], [], "x"))
+    now = datetime(2026, 9, 10, 9, 0, tzinfo=timezone.utc)    # 12:00 Vilnius (<14)
+    reports, _ = weather.run(now=now)
+    assert wired["freeze"] == []
 
 
 def test_no_resolve_flag_only_monitors(wired, monkeypatch):

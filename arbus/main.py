@@ -362,6 +362,7 @@ def cmd_weather(args: argparse.Namespace) -> int:
                f"{config.APP_RESOLVE_RPC_OPTION_PARAM})")
     print(f"🌡️  Weather bot: kategorija='{config.WEATHER_CATEGORY}', "
           f"tz={config.WEATHER_TZ}, šaltinis=api.meteo.lt")
+    print(f"   Prekyba uždaroma {config.WEATHER_CLOSE_HOUR}:00 (tik tos dienos rinkų)")
     print(f"   Rezultato nustatymas: {resolve_state} | RPC={rpc_sig}")
     if do_resolve and not config.ARBUS_WRITE_KEY:
         print("   ⚠️  Nėra ARBUS_WRITE_KEY (service_role) — resolve neveiks, "

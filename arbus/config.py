@@ -816,6 +816,12 @@ APP_RESOLVE_RPC_OPTION_PARAM = (
 # measurement of the Lithuanian calendar day has arrived.
 WEATHER_CATEGORY = os.environ.get("WEATHER_CATEGORY", "").strip() or "orai"
 WEATHER_TZ = os.environ.get("WEATHER_TZ", "").strip() or "Europe/Vilnius"
+# Trading closes at this Europe/Vilnius hour ON the market's OWN target day — the
+# daily max typically lands ~15:00 and is within ~1 °C by ~14:00, so 14:00 stops
+# trading while the winning bucket is usually still genuinely uncertain. Only
+# today's market is closed; a future-day market's 14:00 has not arrived yet, so
+# it is left untouched. The bot still resolves later from the full day's max.
+WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 14)
 # Committed JSON so a stateless CI run remembers each market's running max, the
 # measurements already seen (dedup), the last response checksum, and whether it
 # has already been resolved (never resolve twice).

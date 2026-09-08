@@ -28,7 +28,7 @@ import json
 import logging
 import math
 import re
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, time as dtime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -388,6 +388,26 @@ def _process_market(market: dict, mid: str, state: dict, now: datetime,
     vil_now = now.astimezone(tz)
     tgt = date.fromisoformat(iso)
 
+    # ── close trading at 14:00 Vilnius ON the market's own day ──
+    # Only this day's market: a future-day market's close moment is still ahead,
+    # so it is left open. Past-or-today still-open markets get closed. This is a
+    # trading stop (freeze), not a resolution — the winner is decided later.
+    close_at = datetime.combine(tgt, dtime(hour=config.WEATHER_CLOSE_HOUR), tzinfo=tz)
+    closed_now = False
+    if do_resolve and vil_now >= close_at and app_api.is_open(market):
+        ok, detail = app_api.freeze_market(mid)
+        closed_now = ok
+        if ok:
+            market["status"] = config.APP_FREEZE_STATUS   # is_open→False for the rest of this run
+            st["trading_closed_at"] = now.isoformat()
+            changed = True
+            if alert:
+                notify.send(f"🔒 ORŲ RINKA: prekyba uždaryta {config.WEATHER_CLOSE_HOUR}:00 "
+                            f"(Vilnius) — {app_api.question_of(market)}")
+        elif alert:
+            notify.send(f"⚠️ ORŲ RINKA: nepavyko uždaryti prekybos "
+                        f"({detail[:160]}) — {app_api.question_of(market)}")
+
     # ── monitor the running day via /observations/latest ──
     try:
         data, raw = fetch(latest_url(station))
@@ -443,7 +463,8 @@ def _process_market(market: dict, mid: str, state: dict, now: datetime,
         return {"market_id": mid, "status": "wait", "max": cur_max,
                 "note": "diena dar nepilna — laukiam paskutinio valandinio matavimo"}, changed
 
-    return {"market_id": mid, "status": "watch", "max": cur_max}, changed
+    return {"market_id": mid, "status": "watch", "max": cur_max,
+            "closed": closed_now}, changed
 
 
 def run(now: datetime | None = None, *, alert: bool = True,
