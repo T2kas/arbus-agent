@@ -17,10 +17,115 @@
  },
  "bd973152-b2c3-48e5-b25f-3da2f5435e85": {
   "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
-  "current_maximum": null,
-  "date": "2026-09-10",
-  "measurements": {},
+  "current_maximum": 22.2,
+  "date": "2026-09-08",
+  "max_received_at": "2026-09-08T14:05:42.002782+00:00",
+  "measurements": {
+   "2026-09-07 21:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.8
+   },
+   "2026-09-07 22:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.7
+   },
+   "2026-09-07 23:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.8
+   },
+   "2026-09-08 00:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.7
+   },
+   "2026-09-08 01:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.9
+   },
+   "2026-09-08 02:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.9
+   },
+   "2026-09-08 03:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 13.2
+   },
+   "2026-09-08 04:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.3
+   },
+   "2026-09-08 05:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 13.0
+   },
+   "2026-09-08 06:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 14.3
+   },
+   "2026-09-08 07:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 16.3
+   },
+   "2026-09-08 08:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 18.1
+   },
+   "2026-09-08 09:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 19.6
+   },
+   "2026-09-08 10:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 20.5
+   },
+   "2026-09-08 11:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 21.5
+   },
+   "2026-09-08 12:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 22.1
+   },
+   "2026-09-08 13:00:00": {
+    "checksum": "72a71153e5ac9fa446b9a3cfc19b7ffc7bf5f6dee9ee281b7a8f468809212781",
+    "received_at": "2026-09-08T14:05:42.002782+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 22.2
+   }
+  },
   "resolved": false,
+  "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  }
 }
