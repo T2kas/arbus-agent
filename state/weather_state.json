@@ -160,7 +160,16 @@
     "temp": 15.8
    }
   },
-  "resolved": false,
+  "resolved": true,
+  "resolved_at": "2026-09-08T19:40:41.379109+00:00",
+  "resolved_label": "21,0 °C arba aukštesnė",
+  "resolved_option_id": "5d76ab6c-133e-46d1-944e-6ca885ab7f74",
+  "resolved_sources": [
+   "https://api.meteo.lt/v1/stations/kauno-ams/observations/2026-09-07",
+   "https://api.meteo.lt/v1/stations/kauno-ams/observations/2026-09-08"
+  ],
+  "resolved_temp": 22.3,
+  "resolved_via": "early_max",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  }
