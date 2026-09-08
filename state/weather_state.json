@@ -1,6 +1,6 @@
 {
  "0e3772f1-72a5-478d-8e22-78e7059f2078": {
-  "checksum": "1b9a3b37acbaa5ec357abf9d638119a86eac3a14857052d55fc51436aa481327",
+  "checksum": "c2e5ff74296b4aa09cdbc808ba97f0d99c747576542715ec93a8957ef5f32cf3",
   "current_maximum": null,
   "date": "2026-09-10",
   "measurements": {},
@@ -8,7 +8,7 @@
   "station": "kauno-ams"
  },
  "bad5bcac-8d3f-4c12-84d6-656d5a9f2f89": {
-  "checksum": "d1fb179daf0ff2ac8c65ae34612917e0648511d837619e8509762c04beae8e39",
+  "checksum": "3394c2434e6e30dd8059719023dc39144dd6b587512b97f3581a75dbea069235",
   "current_maximum": null,
   "date": "2026-09-10",
   "measurements": {},
@@ -16,7 +16,7 @@
   "station": "vilniaus-ams"
  },
  "bd973152-b2c3-48e5-b25f-3da2f5435e85": {
-  "checksum": "1b9a3b37acbaa5ec357abf9d638119a86eac3a14857052d55fc51436aa481327",
+  "checksum": "c2e5ff74296b4aa09cdbc808ba97f0d99c747576542715ec93a8957ef5f32cf3",
   "current_maximum": null,
   "date": "2026-09-10",
   "measurements": {},
