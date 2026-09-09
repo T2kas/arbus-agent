@@ -1,6 +1,6 @@
 {
  "0e3772f1-72a5-478d-8e22-78e7059f2078": {
-  "checksum": "d04a0c0a34f227f48fb6fba3159f3eca2a1a818f71009ef174c4fd6d5ede152a",
+  "checksum": "3d68acda5b059953878c9d750a7247ec1d409cbe27dc00d9183dc266e6eb552f",
   "current_maximum": null,
   "date": "2026-09-10",
   "measurements": {},
@@ -8,7 +8,7 @@
   "station": "kauno-ams"
  },
  "bad5bcac-8d3f-4c12-84d6-656d5a9f2f89": {
-  "checksum": "b2ebb03b4032508d8a356306f078d07c471bc38caacd328a0078ee1394b0210b",
+  "checksum": "fddf95b4f95c0692a6715180acfde4a871b1038bdbbff3b0e2da66567445a1e8",
   "current_maximum": null,
   "date": "2026-09-10",
   "measurements": {},
