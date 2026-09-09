@@ -294,7 +294,16 @@
     "temp": 25.9
    }
   },
-  "resolved": false,
+  "resolved": true,
+  "resolved_at": "2026-09-09T15:31:01.679809+00:00",
+  "resolved_label": "28 iki 29,9 °C",
+  "resolved_option_id": "1fe4a436-da31-46a1-a512-748cb9a6b627",
+  "resolved_sources": [
+   "https://api.meteo.lt/v1/stations/kauno-ams/observations/2026-09-08",
+   "https://api.meteo.lt/v1/stations/kauno-ams/observations/2026-09-09"
+  ],
+  "resolved_temp": 28.1,
+  "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams",
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
