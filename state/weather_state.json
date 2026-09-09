@@ -172,5 +172,13 @@
   "resolved_via": "early_max",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
+ },
+ "ed030fc2-02fd-4ff0-865d-58c9d90dda27": {
+  "checksum": "5ace7ecb15d20302bc21a4cff18e5f9cdf99ea89343ccee7986ef08b14fc83d5",
+  "current_maximum": null,
+  "date": "2026-09-10",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
  }
 }
