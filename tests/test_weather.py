@@ -111,6 +111,9 @@ def wired(monkeypatch, tmp_path):
     calls = {"resolve": [], "freeze": [], "telegram": []}
     monkeypatch.setattr(config, "WEATHER_STATE_PATH", str(tmp_path / "w.json"))
     monkeypatch.setattr(config, "ARBUS_WRITE_KEY", "service-role")
+    # Pin the resolution timing so tests are independent of the shipped defaults.
+    monkeypatch.setattr(config, "WEATHER_RESOLVE_MIN_HOUR", 17)
+    monkeypatch.setattr(config, "WEATHER_DECLINE_HOURS", 2)
     monkeypatch.setattr(weather.app_api, "resolve_market",
                         lambda mid, oid: (calls["resolve"].append((mid, oid)), (True, "ok"))[1])
     monkeypatch.setattr(weather.app_api, "freeze_market",

@@ -827,7 +827,7 @@ WEATHER_TZ = os.environ.get("WEATHER_TZ", "").strip() or "Europe/Vilnius"
 # Meteo LT publishes readings ~real-time (measured ~0.3 h lag), so the downturn
 # is visible almost immediately; the bot only ever acts on data it can see, so a
 # lag can delay a resolution but never make it wrong.
-WEATHER_RESOLVE_MIN_HOUR = _env_int("WEATHER_RESOLVE_MIN_HOUR", 17)
+WEATHER_RESOLVE_MIN_HOUR = _env_int("WEATHER_RESOLVE_MIN_HOUR", 19)
 WEATHER_DECLINE_HOURS = _env_int("WEATHER_DECLINE_HOURS", 2)
 # Committed JSON so a stateless CI run remembers each market's running max, the
 # measurements already seen (dedup), the last response checksum, and whether it
