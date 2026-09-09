@@ -829,6 +829,19 @@ WEATHER_TZ = os.environ.get("WEATHER_TZ", "").strip() or "Europe/Vilnius"
 # lag can delay a resolution but never make it wrong.
 WEATHER_RESOLVE_MIN_HOUR = _env_int("WEATHER_RESOLVE_MIN_HOUR", 19)
 WEATHER_DECLINE_HOURS = _env_int("WEATHER_DECLINE_HOURS", 2)
+
+# ── Weather market creation (arbus weather also CREATES the markets) ─────────
+# The bot keeps a rolling horizon of daily-max markets: today it makes sure
+# tomorrow and the day after exist for each city, filling title/subtitle/rules/
+# context, 4 temperature buckets + probabilities (from the free Meteo LT
+# forecast), a 14:00 Vilnius auto-close, and the city's own image. Creation runs
+# in the evening (fresh forecast) and needs the service_role key.
+APP_CREATE_RPC = os.environ.get("APP_CREATE_RPC", "").strip() or "admin_create_market"
+WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 50000)
+WEATHER_HORIZON_DAYS = _env_int("WEATHER_HORIZON_DAYS", 2)      # tomorrow + day after
+WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 20)       # create from this Vilnius hour
+WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 2.0)  # daily-max forecast spread °C
+WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 14)         # auto-close (closes_at) hour
 # Committed JSON so a stateless CI run remembers each market's running max, the
 # measurements already seen (dedup), the last response checksum, and whether it
 # has already been resolved (never resolve twice).

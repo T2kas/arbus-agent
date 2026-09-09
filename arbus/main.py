@@ -355,7 +355,28 @@ def cmd_weather(args: argparse.Namespace) -> int:
         print("ARBUS_API_URL is not set in .env — no app markets to read.")
         return 1
 
+    # --preview: just print the markets the bot would create (uses the free
+    # forecast; no key, no writes). Shows every horizon day/city for judging.
+    if getattr(args, "preview", False):
+        from datetime import datetime, timezone
+        rows, err = weather.app_api.markets(200)
+        if err:
+            print(f"❌ {err}")
+            return 1
+        tz = weather._tz()
+        specs = weather.plan_new_markets(rows, datetime.now(timezone.utc), tz,
+                                         skip_existing=False)
+        print(f"🔮 Peržiūra — {len(specs)} rinka(-os) (σ={config.WEATHER_FORECAST_SIGMA}):\n")
+        for s in specs:
+            print(f"· {s['title']}  (prognozė ~{s['forecast_max']:.1f}°C, "
+                  f"uždaroma {s['closes_at']})")
+            for o in s["options"]:
+                print(f"    {o['probability']:>3}%  {o['label']}")
+            print()
+        return 0
+
     do_resolve = not args.no_resolve
+    do_create = not args.no_create
     alert = not args.no_telegram
     resolve_state = "ĮJUNGTAS" if do_resolve else "IŠJUNGTAS (tik stebi + įspėja)"
     rpc_sig = (f"{config.APP_RESOLVE_RPC}({config.APP_RESOLVE_RPC_MARKET_PARAM}, "
@@ -372,7 +393,9 @@ def cmd_weather(args: argparse.Namespace) -> int:
     print()
 
     def once() -> int:
-        reports, error = weather.run(alert=alert, do_resolve=do_resolve)
+        reports, error = weather.run(alert=alert, do_resolve=do_resolve,
+                                     do_create=do_create,
+                                     force_create=getattr(args, "create_now", False))
         if error:
             print(f"❌ {error}")
             return 1
@@ -381,15 +404,22 @@ def cmd_weather(args: argparse.Namespace) -> int:
             return 0
         for r in reports:
             icon = {"resolved": "✅", "would-resolve": "📝", "watch": "·",
-                    "wait": "⏳", "done": "🔒", "skip": "⤼", "error": "❌"
+                    "wait": "⏳", "done": "🔒", "skip": "⤼", "error": "❌",
+                    "created": "🆕", "would-create": "🆕"
                     }.get(r.get("status"), "·")
+            if r.get("status") in ("created", "would-create", "error") and r.get("city"):
+                opts = " · ".join(f"{o['probability']}% {o['label']}" for o in r.get("options", []))
+                print(f"{icon} {r['status']} {r['city']} {r['date']} "
+                      f"(~{r.get('forecast_max', 0):.1f}°C) — {opts} "
+                      f"{r.get('detail', '')}")
+                continue
             mx = r.get("max")
             mxs = f" | max {mx:.1f}°C" if isinstance(mx, (int, float)) else ""
             extra = r.get("option") or r.get("note") or r.get("reason") or ""
             print(f"{icon} {r.get('status')}{mxs} "
                   f"{('— ' + str(extra)) if extra else ''} [{r.get('market_id')}]")
-        print(f"\n{sum(1 for r in reports if r.get('status') == 'resolved')} "
-              f"rinka(-os) išspręsta šį kartą.")
+        print(f"\n{sum(1 for r in reports if r.get('status') == 'resolved')} išspręsta, "
+              f"{sum(1 for r in reports if r.get('status') == 'created')} sukurta.")
         return 0
 
     if args.interval:
@@ -957,11 +987,18 @@ def main() -> int:
     wt.set_defaults(func=cmd_watch)
 
     wx = sub.add_parser("weather",
-                        help="resolve daily-max-temperature (orai) markets from Meteo LT")
+                        help="create + resolve daily-max-temperature (orai) markets from Meteo LT")
     wx.add_argument("--no-telegram", action="store_true")
     wx.add_argument("--no-resolve", action="store_true",
                     help="monitor + alert only; do not call the resolve RPC "
                          "(same as leaving WEATHER_RESOLVE unset)")
+    wx.add_argument("--no-create", action="store_true",
+                    help="do not create the tomorrow/day-after markets")
+    wx.add_argument("--create-now", action="store_true",
+                    help="create missing horizon markets regardless of the hour gate")
+    wx.add_argument("--preview", action="store_true",
+                    help="print the markets that would be created (forecast-based, "
+                         "no key, no writes) and exit")
     wx.add_argument("--interval", type=int, default=0,
                     help="keep running, checking every N seconds (0 = once)")
     wx.set_defaults(func=cmd_weather)

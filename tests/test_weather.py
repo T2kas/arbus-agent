@@ -119,6 +119,8 @@ def wired(monkeypatch, tmp_path):
     monkeypatch.setattr(weather.app_api, "freeze_market",
                         lambda mid: (calls["freeze"].append(mid), (True, "ok"))[1])
     monkeypatch.setattr(weather.notify, "send", lambda msg: calls["telegram"].append(msg))
+    # Resolution tests should not touch the creation path.
+    monkeypatch.setattr(weather, "plan_new_markets", lambda *a, **k: [])
     return calls
 
 
@@ -251,3 +253,52 @@ def test_no_resolve_flag_only_monitors(wired, monkeypatch):
     reports, _ = weather.run(now=now, do_resolve=False)
     assert wired["resolve"] == [] and wired["freeze"] == []
     assert reports[0]["status"] == "would-resolve"
+
+
+# ── market creation ──────────────────────────────────────────────────────────
+
+def test_build_buckets_centres_on_forecast():
+    b = weather.build_buckets(18.7)                 # round→19, B=17
+    assert [x["label"] for x in b] == [
+        "16,9 °C arba žemesnė", "17,0 iki 18,9 °C",
+        "19,0 iki 20,9 °C", "21,0 °C arba aukštesnė"]
+
+
+def test_bucket_probabilities_sum_100_and_positive():
+    b = weather.build_buckets(18.7)
+    p = weather.bucket_probabilities(18.7, b, 2.0)
+    assert sum(p) == 100
+    assert all(1 <= x < 100 for x in p)             # app requires 0 < prob < 100
+    assert p[1] + p[2] > p[0] + p[3]                # mass sits in the middle
+
+
+def test_plan_skips_existing_and_reuses_city_image(monkeypatch):
+    from datetime import timezone as _tz2
+    monkeypatch.setattr(weather, "forecast_daily_max", lambda place, iso, tz=None: 18.0)
+    tz = weather._tz()
+    now = datetime(2026, 9, 9, 20, 0, tzinfo=_tz2.utc)
+    existing = [{"id": "v10", "category": "orai", "image_url": "vilnius.png",
+                 "title": "Aukščiausia temperatūra Vilniuje rugsėjo 10 d.?",
+                 "subtitle": "2026 m. rugsėjo 10 d."}]      # Vilnius 09-10 already exists
+    specs = weather.plan_new_markets(existing, now, tz)     # horizon 2 → 09-10, 09-11
+    made = {(s["city"], s["date"]) for s in specs}
+    assert ("vilnius", "2026-09-10") not in made           # skipped (exists)
+    assert ("kaunas", "2026-09-10") in made
+    assert made >= {("vilnius", "2026-09-11"), ("kaunas", "2026-09-11")}
+    vil = next(s for s in specs if s["city"] == "vilnius")
+    assert vil["image_url"] == "vilnius.png"                # reused the city's image
+
+
+def test_create_markets_calls_rpc_per_spec(monkeypatch):
+    calls = []
+    monkeypatch.setattr(weather.app_api, "create_market",
+                        lambda spec: (calls.append(spec["title"]), (True, "new-id"))[1])
+    monkeypatch.setattr(weather.notify, "send", lambda m: None)
+    specs = [{"city": "kaunas", "date": "2026-09-11", "title": "T", "forecast_max": 18.0,
+              "options": [{"label": "a", "probability": 50}, {"label": "b", "probability": 50}]}]
+    reports = weather.create_markets(specs, alert=True, do_create=True)
+    assert calls == ["T"] and reports[0]["status"] == "created"
+    # dry run makes no RPC call
+    calls.clear()
+    reports = weather.create_markets(specs, alert=False, do_create=False)
+    assert calls == [] and reports[0]["status"] == "would-create"

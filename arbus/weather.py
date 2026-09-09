@@ -28,7 +28,7 @@ import json
 import logging
 import math
 import re
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, time as dtime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -362,6 +362,212 @@ def _no_data_message(market: dict, station: str, iso: str) -> str:
     ])
 
 
+# ── market creation: forecast → buckets → probabilities ──────────────────────
+
+# Genitive Lithuanian month names (index 1..12) for titles/dates.
+_LT_MONTH_GEN = ["", "sausio", "vasario", "kovo", "balandžio", "gegužės",
+                 "birželio", "liepos", "rugpjūčio", "rugsėjo", "spalio",
+                 "lapkričio", "gruodžio"]
+
+# The cities the bot manages: measurement station (observations), forecast place
+# code, and Lithuanian name forms (locative for titles, genitive for the rules).
+CITIES = {
+    "vilnius": {"station": "vilniaus-ams", "place": "vilnius",
+                "loc": "Vilniuje", "gen": "Vilniaus"},
+    "kaunas": {"station": "kauno-ams", "place": "kaunas",
+               "loc": "Kaune", "gen": "Kauno"},
+}
+
+
+def forecast_url(place: str) -> str:
+    return f"https://api.meteo.lt/v1/places/{place}/forecasts/long-term"
+
+
+def forecast_daily_max(place: str, target_iso: str,
+                       tz: ZoneInfo | None = None) -> float | None:
+    """Forecast daily max for a Vilnius calendar day, from the free Meteo LT
+    long-term forecast (keyless). None if unavailable."""
+    tz = tz or _tz()
+    try:
+        data, _ = fetch(forecast_url(place))
+    except Exception as exc:                           # noqa: BLE001
+        log.warning("weather: forecast %s failed: %s", place, exc)
+        return None
+    temps = []
+    for t in data.get("forecastTimestamps") or []:
+        v = t.get("airTemperature")
+        dt = parse_obs_time_utc(t.get("forecastTimeUtc"))
+        if valid_temp(v) and dt is not None and dt.astimezone(tz).date().isoformat() == target_iso:
+            temps.append(float(v))
+    return max(temps) if temps else None
+
+
+def build_buckets(forecast_max: float) -> list[dict]:
+    """Four contiguous outcomes centred on the forecast: the two 2 °C middle
+    buckets straddle it, with an open bucket below and above. Labels match the
+    app's existing style (comma decimals)."""
+    b = round(forecast_max) - 2
+    return [
+        {"label": f"{_fmt(b - 0.1)} °C arba žemesnė", "lo": None, "hi": b - 0.05},
+        {"label": f"{_fmt(b)} iki {_fmt(b + 1.9)} °C", "lo": b - 0.05, "hi": b + 1.95},
+        {"label": f"{_fmt(b + 2)} iki {_fmt(b + 3.9)} °C", "lo": b + 1.95, "hi": b + 3.95},
+        {"label": f"{_fmt(b + 4)} °C arba aukštesnė", "lo": b + 3.95, "hi": None},
+    ]
+
+
+def _phi(z: float) -> float:
+    return 0.5 * (1.0 + math.erf(z / math.sqrt(2.0)))
+
+
+def bucket_probabilities(forecast_max: float, buckets: list[dict],
+                         sigma: float) -> list[int]:
+    """Integer percentages (each ≥1, summing to 100) from a normal distribution
+    N(forecast_max, sigma) integrated over each bucket — the app requires every
+    option in a 3+ way market to be strictly between 0 and 100."""
+    weights = []
+    for b in buckets:
+        lo = _phi((b["lo"] - forecast_max) / sigma) if b["lo"] is not None else 0.0
+        hi = _phi((b["hi"] - forecast_max) / sigma) if b["hi"] is not None else 1.0
+        weights.append(max(hi - lo, 0.0))
+    total = sum(weights) or 1.0
+    exact = [w / total * 100 for w in weights]
+    pct = [max(int(math.floor(x)), 1) for x in exact]           # floor, min 1
+    order = sorted(range(len(exact)), key=lambda i: exact[i] - math.floor(exact[i]),
+                   reverse=True)
+    i = 0
+    while sum(pct) < 100:                                        # hand out the remainder
+        pct[order[i % len(order)]] += 1
+        i += 1
+    while sum(pct) > 100:                                        # trim from the largest
+        big = max(range(len(pct)), key=lambda k: pct[k])
+        if pct[big] <= 1:
+            break
+        pct[big] -= 1
+    return pct
+
+
+def _lt_date_text(d: date) -> str:
+    return f"{d.year} m. {_LT_MONTH_GEN[d.month]} {d.day} d."
+
+
+def _rules_text(gen: str, date_text: str) -> str:
+    return (
+        f"Rinka bus išspręsta pagal aukščiausią oro temperatūrą, kurią {gen} "
+        f"automatinė meteorologijos stotis užfiksuos {date_text} nuo 00:00 iki "
+        "23:59 Lietuvos laiku.\n\n"
+        f"Naudojama didžiausia Lietuvos hidrometeorologijos tarnybos „Meteo LT“ "
+        f"API laukelyje airTemperature paskelbta {gen} AMS reikšmė. Temperatūra "
+        "papildomai neapvalinama.\n\n"
+        f"Jeigu {gen} AMS nepateiks dalies matavimų, naudojama aukščiausia iš tą "
+        f"dieną paskelbtų galiojančių reikšmių. Jeigu {gen} AMS nepateiks nė "
+        "vieno galiojančio matavimo, naudojama artimiausios veikiančios LHMT "
+        "automatinės meteorologijos stoties aukščiausia tos dienos temperatūra.\n\n"
+        "Rezultato šaltinis yra Lietuvos hidrometeorologijos tarnybos „Meteo LT“ API."
+    )
+
+
+def _context_text(loc: str, month_name: str, forecast_max: float) -> str:
+    return (
+        f"{month_name.capitalize()} orai {loc} gali pasikeisti vos per kelias "
+        f"valandas. Šiuo metu prognozės aukščiausią temperatūrą laiko apie "
+        f"{_fmt(round(forecast_max))} °C, bet modeliai dėl tikslios reikšmės dar "
+        "nesutaria, todėl net kelių laipsnių skirtumas gali pakeisti galutinę baigtį."
+    )
+
+
+def market_spec(city_key: str, target_iso: str, image_url: str = "",
+                sigma: float | None = None, tz: ZoneInfo | None = None) -> dict | None:
+    """The full admin_create_market payload for one city+day, or None if there is
+    no forecast for that day."""
+    tz = tz or _tz()
+    sigma = config.WEATHER_FORECAST_SIGMA if sigma is None else sigma
+    c = CITIES[city_key]
+    tf = forecast_daily_max(c["place"], target_iso, tz)
+    if tf is None:
+        return None
+    d = date.fromisoformat(target_iso)
+    buckets = build_buckets(tf)
+    pcts = bucket_probabilities(tf, buckets, sigma)
+    closes_at = datetime.combine(d, dtime(hour=config.WEATHER_CLOSE_HOUR), tzinfo=tz)
+    return {
+        "city": city_key,
+        "date": target_iso,
+        "station": c["station"],
+        "title": f"Aukščiausia temperatūra {c['loc']} {_LT_MONTH_GEN[d.month]} {d.day} d.?",
+        "subtitle": _lt_date_text(d),
+        "category": config.WEATHER_CATEGORY,
+        "image_url": image_url or "",
+        "liquidity": config.WEATHER_LIQUIDITY,
+        "rules": _rules_text(c["gen"], _lt_date_text(d)),
+        "context": _context_text(c["loc"], _LT_MONTH_GEN[d.month], tf),
+        "options": [{"label": b["label"], "probability": p}
+                    for b, p in zip(buckets, pcts)],
+        "closes_at": closes_at.isoformat(),
+        "forecast_max": tf,
+    }
+
+
+def plan_new_markets(existing_rows: list[dict], now: datetime, tz: ZoneInfo,
+                     *, skip_existing: bool = True,
+                     horizon: int | None = None) -> list[dict]:
+    """Specs for the markets that should exist over the next `horizon` days for
+    each city. With skip_existing, ones already in the app are left out."""
+    horizon = config.WEATHER_HORIZON_DAYS if horizon is None else horizon
+    today = now.astimezone(tz).date()
+    have: set[tuple[str, str]] = set()
+    images: dict[str, str] = {}
+    for m in existing_rows:                             # markets() returns newest-first
+        if app_api.category_of(m) != config.WEATHER_CATEGORY:
+            continue
+        wt = weather_target(m)
+        if not wt:
+            continue
+        station, iso = wt
+        have.add((station, iso))
+        img = str(m.get("image_url") or "")
+        if img and station not in images:               # newest image per station
+            images[station] = img
+    specs = []
+    for n in range(1, horizon + 1):
+        iso = (today + timedelta(days=n)).isoformat()
+        for city_key, c in CITIES.items():
+            if skip_existing and (c["station"], iso) in have:
+                continue
+            spec = market_spec(city_key, iso, images.get(c["station"], ""), tz=tz)
+            if spec:
+                specs.append(spec)
+    return specs
+
+
+def create_markets(specs: list[dict], *, alert: bool, do_create: bool) -> list[dict]:
+    reports = []
+    for s in specs:
+        if not do_create:
+            reports.append({"status": "would-create", "city": s["city"],
+                            "date": s["date"], "forecast_max": s["forecast_max"],
+                            "options": s["options"]})
+            continue
+        ok, detail = app_api.create_market(s)
+        if ok and alert:
+            notify.send(_created_message(s, detail))
+        reports.append({"status": "created" if ok else "error", "city": s["city"],
+                        "date": s["date"], "detail": detail,
+                        "options": s["options"], "forecast_max": s["forecast_max"]})
+    return reports
+
+
+def _created_message(spec: dict, market_id: str) -> str:
+    opts = " · ".join(f"{o['label']} {o['probability']}%" for o in spec["options"])
+    return "\n".join([
+        "🆕 SUKURTA ORŲ RINKA",
+        "",
+        f"· {spec['title']}",
+        f"  Prognozė ~{_fmt(round(spec['forecast_max']))} °C | uždaroma "
+        f"{config.WEATHER_CLOSE_HOUR}:00",
+        f"  {opts}",
+    ])
+
+
 # ── orchestration ────────────────────────────────────────────────────────────
 
 def _resolve(market: dict, mid: str, bucket: dict | None, temp: float,
@@ -487,9 +693,11 @@ def _process_market(market: dict, mid: str, state: dict, now: datetime,
     return {"market_id": mid, "status": "watch", "max": cur_max}, changed
 
 
-def run(now: datetime | None = None, *, alert: bool = True,
-        do_resolve: bool = True, limit: int = 200) -> tuple[list[dict], str]:
-    """Check every open orai market once. Returns (per-market reports, error)."""
+def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = True,
+        do_create: bool = True, force_create: bool = False,
+        limit: int = 200) -> tuple[list[dict], str]:
+    """One pass: resolve open orai markets, then keep the creation horizon full.
+    Returns (per-market reports, error)."""
     now = now or datetime.now(timezone.utc)
     try:
         tz = _tz()
@@ -515,4 +723,10 @@ def run(now: datetime | None = None, *, alert: bool = True,
         changed = changed or mchanged
     if changed:
         save_state(state)
+
+    # Keep the rolling horizon full — create tomorrow/day-after where missing.
+    # Gated to the evening (fresh forecast) unless forced.
+    if do_create and (force_create or now.astimezone(tz).hour >= config.WEATHER_CREATE_HOUR):
+        specs = plan_new_markets(rows, now, tz)
+        reports += create_markets(specs, alert=alert, do_create=True)
     return reports, ""

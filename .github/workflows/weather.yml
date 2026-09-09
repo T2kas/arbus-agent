@@ -20,6 +20,10 @@ on:
         description: "Actually resolve (call admin_resolve_market) this run"
         type: boolean
         default: true
+      create_now:
+        description: "Create missing tomorrow/day-after markets now (ignore the hour gate)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write                    # to commit the weather state ledger
@@ -56,16 +60,26 @@ jobs:
           APP_RESOLVE_RPC_OPTION_PARAM: ${{ vars.APP_RESOLVE_RPC_OPTION_PARAM }}
           APP_FREEZE_RPC: ${{ vars.APP_FREEZE_RPC }}
           APP_FREEZE_RPC_PARAM: ${{ vars.APP_FREEZE_RPC_PARAM }}
+          APP_CREATE_RPC: ${{ vars.APP_CREATE_RPC }}
           WEATHER_CATEGORY: ${{ vars.WEATHER_CATEGORY }}
           WEATHER_TZ: ${{ vars.WEATHER_TZ }}
+          # Timing / creation knobs (unset → code defaults 19 / 2 / 20 / 2.0 / 50000 / 14).
+          WEATHER_RESOLVE_MIN_HOUR: ${{ vars.WEATHER_RESOLVE_MIN_HOUR }}
+          WEATHER_DECLINE_HOURS: ${{ vars.WEATHER_DECLINE_HOURS }}
+          WEATHER_CREATE_HOUR: ${{ vars.WEATHER_CREATE_HOUR }}
+          WEATHER_FORECAST_SIGMA: ${{ vars.WEATHER_FORECAST_SIGMA }}
+          WEATHER_LIQUIDITY: ${{ vars.WEATHER_LIQUIDITY }}
+          WEATHER_CLOSE_HOUR: ${{ vars.WEATHER_CLOSE_HOUR }}
+          WEATHER_HORIZON_DAYS: ${{ vars.WEATHER_HORIZON_DAYS }}
         run: |
-          # Resolve only when opted in: WEATHER_RESOLVE=true (schedule) or the
-          # dispatch input. Otherwise monitor + alert without touching balances.
-          RESOLVE_FLAG="--no-resolve"
+          # Resolve + create only when opted in: WEATHER_RESOLVE=true (schedule)
+          # or the dispatch input. Otherwise monitor + alert without any writes.
+          FLAGS="--no-resolve --no-create"
           if [ "${{ vars.WEATHER_RESOLVE }}" = "true" ] || [ "${{ github.event.inputs.resolve }}" = "true" ]; then
-            RESOLVE_FLAG=""
+            FLAGS=""
           fi
-          python -m arbus weather $RESOLVE_FLAG
+          if [ "${{ github.event.inputs.create_now }}" = "true" ]; then FLAGS="$FLAGS --create-now"; fi
+          python -m arbus weather $FLAGS
 
       - name: Commit the weather state if it changed
         run: |

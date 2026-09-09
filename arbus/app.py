@@ -370,6 +370,34 @@ def _resolve_error_hint(error: str) -> str:
     return _with_auth_hint(error)
 
 
+def create_market(spec: dict) -> tuple[bool, str]:
+    """Create a market via the app's admin_create_market RPC. Returns (ok, id or
+    error). Needs the service_role key. `spec` carries the ready fields."""
+    if not config.ARBUS_WRITE_KEY:
+        return False, ("reikia service_role rakto: nustatyk ARBUS_WRITE_KEY "
+                       "secret'ą (rinkų kūrimas rašo į DB).")
+    payload = {
+        "p_title": spec["title"],
+        "p_subtitle": spec.get("subtitle") or None,
+        "p_category": spec.get("category") or None,
+        "p_image_url": spec.get("image_url") or None,
+        "p_liquidity": spec["liquidity"],
+        "p_rules": spec.get("rules") or None,
+        "p_context": spec.get("context") or None,
+        "p_options": spec["options"],
+        "p_dual_line_chart": False,
+        "p_closes_at": spec.get("closes_at"),
+    }
+    rows, error = _rpc(config.APP_CREATE_RPC, payload, key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, _resolve_error_hint(error)   # same admin_only / not-authenticated hint
+    market_id = ""
+    if rows:
+        first = rows[0]
+        market_id = first if isinstance(first, str) else str(_pick(first, "id", default=""))
+    return True, market_id or "ok"
+
+
 def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:
     """Resolution proposals users submitted (market_resolution_proposals): which
     market, the option they claim won (`proposed_option_id`), their cited
