@@ -266,6 +266,7 @@
   },
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
-  "station": "kauno-ams"
+  "station": "kauno-ams",
+  "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  }
 }
