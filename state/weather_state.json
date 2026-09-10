@@ -1,6 +1,6 @@
 {
  "0e3772f1-72a5-478d-8e22-78e7059f2078": {
-  "checksum": "1c397a684e568dfbc1b2a6137dbeeb6056a2d42ca17df45cb61619216eb03034",
+  "checksum": "bb0166fde8921dcff8734b23de3de0ecfd5ef08d01ee91f90adf5ffe7612a25c",
   "current_maximum": 17.7,
   "date": "2026-09-10",
   "max_received_at": "2026-09-09T21:10:44.208910+00:00",
@@ -97,7 +97,7 @@
   "station": "vilniaus-ams"
  },
  "71f4e677-8471-48e3-982c-80a892c62d69": {
-  "checksum": "1c397a684e568dfbc1b2a6137dbeeb6056a2d42ca17df45cb61619216eb03034",
+  "checksum": "bb0166fde8921dcff8734b23de3de0ecfd5ef08d01ee91f90adf5ffe7612a25c",
   "current_maximum": null,
   "date": "2026-09-11",
   "measurements": {},
