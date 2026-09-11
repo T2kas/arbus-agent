@@ -140,7 +140,7 @@
   "station": "kauno-ams"
  },
  "1df4b6e6-7033-4549-acdb-f584b938baca": {
-  "checksum": "f54716abf81595e72853922d8101f403a5eed95ff8a56838b315d7e5ee7116b3",
+  "checksum": "54d77836f00bf2e5739169d315a148dbdc80f9d3bd1f7da2ea6a1cd6a3a69a12",
   "current_maximum": null,
   "date": "2026-09-12",
   "measurements": {},
@@ -148,7 +148,7 @@
   "station": "kauno-ams"
  },
  "63354551-a59b-4b37-beb8-1eb116336122": {
-  "checksum": "9ec8a7608d32924eaf909d51430bbdf4e03dc1cad39895113442ed9a84f5acd4",
+  "checksum": "00fe5580de9770865a48a37a0a4b5769e37d751a2454cb5e8a3bb6358d4b7e0e",
   "current_maximum": 18.1,
   "date": "2026-09-11",
   "max_received_at": "2026-09-11T13:10:45.610947+00:00",
@@ -254,6 +254,12 @@
     "received_at": "2026-09-11T13:10:45.610947+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 18.1
+   },
+   "2026-09-11 14:00:00": {
+    "checksum": "00fe5580de9770865a48a37a0a4b5769e37d751a2454cb5e8a3bb6358d4b7e0e",
+    "received_at": "2026-09-11T14:10:39.141550+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 17.2
    }
   },
   "resolved": false,
@@ -261,7 +267,7 @@
   "station": "vilniaus-ams"
  },
  "71f4e677-8471-48e3-982c-80a892c62d69": {
-  "checksum": "f54716abf81595e72853922d8101f403a5eed95ff8a56838b315d7e5ee7116b3",
+  "checksum": "54d77836f00bf2e5739169d315a148dbdc80f9d3bd1f7da2ea6a1cd6a3a69a12",
   "current_maximum": 18.6,
   "date": "2026-09-11",
   "max_received_at": "2026-09-11T13:10:45.610947+00:00",
@@ -367,6 +373,12 @@
     "received_at": "2026-09-11T13:10:45.610947+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 18.6
+   },
+   "2026-09-11 14:00:00": {
+    "checksum": "54d77836f00bf2e5739169d315a148dbdc80f9d3bd1f7da2ea6a1cd6a3a69a12",
+    "received_at": "2026-09-11T14:10:39.141550+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 18.2
    }
   },
   "resolved": false,
@@ -672,7 +684,7 @@
   "station": "kauno-ams"
  },
  "e0e7f93d-d80d-4e44-8af3-d2ea3c9a3748": {
-  "checksum": "9ec8a7608d32924eaf909d51430bbdf4e03dc1cad39895113442ed9a84f5acd4",
+  "checksum": "00fe5580de9770865a48a37a0a4b5769e37d751a2454cb5e8a3bb6358d4b7e0e",
   "current_maximum": null,
   "date": "2026-09-12",
   "measurements": {},
