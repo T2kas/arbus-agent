@@ -427,6 +427,22 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "8481df81-f915-45c3-bf7c-a1a04766085e": {
+  "checksum": "4c26c89dee9169740b4663571d0bf982e4ede8e5224bb80d641fbfb5e11bc6a6",
+  "current_maximum": null,
+  "date": "2026-09-13",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
+ "8921eb20-c4c4-471f-b1a2-a17ae9461778": {
+  "checksum": "4a2c434a68e54d8fe071272faa68eec899cfa977cd30562c2a9732c31cae9b28",
+  "current_maximum": null,
+  "date": "2026-09-13",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "bad5bcac-8d3f-4c12-84d6-656d5a9f2f89": {
   "checksum": "eab7b56668601331d7ca86f1df7396b768e2afef747e203dde7c48faeec7d6f2",
   "current_maximum": 18.8,
