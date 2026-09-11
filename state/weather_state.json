@@ -140,7 +140,7 @@
   "station": "kauno-ams"
  },
  "1df4b6e6-7033-4549-acdb-f584b938baca": {
-  "checksum": "99e4007cc7d73a0fc19d66d80308c3db69304d874d7c9e0dd634833f882ca35d",
+  "checksum": "981f5c96437b438b8cd9176b25646d2266e07b02b75f5549d622f71e16b0eb4b",
   "current_maximum": null,
   "date": "2026-09-12",
   "measurements": {},
@@ -148,7 +148,7 @@
   "station": "kauno-ams"
  },
  "63354551-a59b-4b37-beb8-1eb116336122": {
-  "checksum": "e71b3b965ec102289126faf1ccd745b157203d192b7d834c732bd780f4b67e51",
+  "checksum": "6524ab7600d5fd3124b47e7b33e7b43ca303e25683f1a8c1f14a7a0c5fbf5803",
   "current_maximum": 17.5,
   "date": "2026-09-11",
   "max_received_at": "2026-09-11T10:10:38.787928+00:00",
@@ -236,6 +236,12 @@
     "received_at": "2026-09-11T10:10:38.787928+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 17.5
+   },
+   "2026-09-11 11:00:00": {
+    "checksum": "6524ab7600d5fd3124b47e7b33e7b43ca303e25683f1a8c1f14a7a0c5fbf5803",
+    "received_at": "2026-09-11T11:10:40.885342+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 17.2
    }
   },
   "resolved": false,
@@ -243,7 +249,7 @@
   "station": "vilniaus-ams"
  },
  "71f4e677-8471-48e3-982c-80a892c62d69": {
-  "checksum": "99e4007cc7d73a0fc19d66d80308c3db69304d874d7c9e0dd634833f882ca35d",
+  "checksum": "981f5c96437b438b8cd9176b25646d2266e07b02b75f5549d622f71e16b0eb4b",
   "current_maximum": 17.9,
   "date": "2026-09-11",
   "max_received_at": "2026-09-11T10:10:38.787928+00:00",
@@ -329,6 +335,12 @@
    "2026-09-11 10:00:00": {
     "checksum": "99e4007cc7d73a0fc19d66d80308c3db69304d874d7c9e0dd634833f882ca35d",
     "received_at": "2026-09-11T10:10:38.787928+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 17.9
+   },
+   "2026-09-11 11:00:00": {
+    "checksum": "981f5c96437b438b8cd9176b25646d2266e07b02b75f5549d622f71e16b0eb4b",
+    "received_at": "2026-09-11T11:10:40.885342+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 17.9
    }
@@ -636,7 +648,7 @@
   "station": "kauno-ams"
  },
  "e0e7f93d-d80d-4e44-8af3-d2ea3c9a3748": {
-  "checksum": "e71b3b965ec102289126faf1ccd745b157203d192b7d834c732bd780f4b67e51",
+  "checksum": "6524ab7600d5fd3124b47e7b33e7b43ca303e25683f1a8c1f14a7a0c5fbf5803",
   "current_maximum": null,
   "date": "2026-09-12",
   "measurements": {},
