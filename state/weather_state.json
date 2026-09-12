@@ -140,7 +140,7 @@
   "station": "kauno-ams"
  },
  "14f47f7a-b53d-41ea-b0f7-b557d4da2abf": {
-  "checksum": "2a38f9e7d8ba7323d5bdcb7cefc5d1397b04cb22581bd4f6af90cfa2acc2d062",
+  "checksum": "d2d4447c0d518358c3d880f9652e0c64a8839be5e32af218484f5015ce776a04",
   "current_maximum": null,
   "date": "2026-09-14",
   "measurements": {},
@@ -294,7 +294,7 @@
   "station": "kauno-ams"
  },
  "365bba16-e62b-47e4-914b-6d56cafdfb93": {
-  "checksum": "6d2579c0fea00e2d404a2b347822b885b53e7df9031b82904a052b2c8ced06d8",
+  "checksum": "abfc64db3610072657eea1a6688df30ac86f7ccd07bf03a333d730506c87df12",
   "current_maximum": null,
   "date": "2026-09-14",
   "measurements": {},
@@ -582,7 +582,7 @@
   "station": "kauno-ams"
  },
  "8481df81-f915-45c3-bf7c-a1a04766085e": {
-  "checksum": "2a38f9e7d8ba7323d5bdcb7cefc5d1397b04cb22581bd4f6af90cfa2acc2d062",
+  "checksum": "d2d4447c0d518358c3d880f9652e0c64a8839be5e32af218484f5015ce776a04",
   "current_maximum": null,
   "date": "2026-09-13",
   "measurements": {},
@@ -590,7 +590,7 @@
   "station": "vilniaus-ams"
  },
  "8921eb20-c4c4-471f-b1a2-a17ae9461778": {
-  "checksum": "6d2579c0fea00e2d404a2b347822b885b53e7df9031b82904a052b2c8ced06d8",
+  "checksum": "abfc64db3610072657eea1a6688df30ac86f7ccd07bf03a333d730506c87df12",
   "current_maximum": null,
   "date": "2026-09-13",
   "measurements": {},
