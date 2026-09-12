@@ -139,6 +139,12 @@ def test_decline_locked_pure():
     assert weather.decline_locked([(_u(12), 20.9), (_u(13), 20.0)], 2) is False                  # only 1 drop
     assert weather.decline_locked([(_u(12), 20.9), (_u(14), 19.5), (_u(15), 19.0)], 2) is False  # gap after peak
     assert weather.decline_locked([], 2) is False
+    # Oscillation below the peak must NOT lock (17→18h goes 16.7→17.0, i.e. back up):
+    # the real Vilnius 09-12 curve that resolved too early under the old rule.
+    osc = [(_u(11), 17.6), (_u(12), 16.9), (_u(13), 17.6), (_u(14), 16.7), (_u(15), 17.0)]
+    assert weather.decline_locked(osc, 2) is False
+    # Genuinely falling for 2h → locks.
+    assert weather.decline_locked([(_u(13), 17.6), (_u(14), 16.7), (_u(15), 16.2)], 2) is True
 
 
 # The bot NEVER freezes/closes now — a separate system owns that. Every resolving

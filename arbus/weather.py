@@ -181,24 +181,26 @@ def day_complete(observations, target_iso: str, tz: ZoneInfo | None = None) -> b
 
 def decline_locked(seq: list[tuple[datetime, float]], need: int = 2) -> bool:
     """True when the day's max is followed by `need` CONSECUTIVE hourly readings
-    each strictly below it — the temperature has turned down for `need` straight
-    hours, so (barring a rare late re-peak) the daily max is settled.
+    that are strictly FALLING — each hour lower than the one before, starting from
+    the peak. Merely being below the max is not enough: a day that dips then rises
+    back toward the peak (oscillating) must NOT lock, because it could still climb
+    to a new high. A genuine `need`-hour downtrend means the peak is settled.
 
-    `seq` is the day's (local datetime, temp) readings. Consecutive hours are
-    required: a gap right after the peak could hide a higher reading, so we wait.
+    Consecutive hours are required: a gap right after the peak could hide a higher
+    reading, so we wait for end-of-day instead.
     """
     if not seq:
         return False
     seq = sorted(seq)
     m = max(t for _, t in seq)
     last_peak = max(i for i, (_, t) in enumerate(seq) if t == m)   # end of any plateau
-    prev_dt = seq[last_peak][0]
+    prev_dt, prev_t = seq[last_peak]
     drops = 0
     for dt, t in seq[last_peak + 1:]:
-        if dt - prev_dt != timedelta(hours=1) or t >= m:
-            break                                    # gap, or not below the max
+        if dt - prev_dt != timedelta(hours=1) or t >= prev_t:
+            break                                    # gap, or not strictly falling
         drops += 1
-        prev_dt = dt
+        prev_dt, prev_t = dt, t
         if drops >= need:
             return True
     return False
@@ -322,18 +324,25 @@ def _fmt(temp: float) -> str:
 
 
 def resolved_message(market: dict, bucket: dict, temp: float, via: str,
-                     sources: list[str]) -> str:
+                     sources: list[str], peak_dt: datetime | None = None) -> str:
     why = {
-        "top_locked": "🔒 TOP baigtis užrakinta (temperatūra gali tik kilti)",
-        "decline": "📉 Maksimumas krenta jau kelias valandas — piko nebebus",
-        "end_of_day": "✅ Diena baigėsi — galutinis maksimumas",
-    }.get(via, "✅ Galutinis maksimumas")
+        "top_locked": "🔒 TOP baigtis užrakinta (temperatūra gali tik kilti).",
+        "decline": ("📉 Aukščiausia užfiksuota, po jos temperatūra krito "
+                    f"{config.WEATHER_DECLINE_HOURS} val. iš eilės — piko nebebus."),
+        "end_of_day": "✅ Diena baigėsi — tai galutinis dienos maksimumas.",
+    }.get(via, "✅ Galutinis dienos maksimumas.")
+    peak_line = (f"  🕒 Aukščiausia pasiekta {peak_dt.strftime('%H:%M')} "
+                 "(Lietuvos laiku)" if peak_dt else "")
     lines = [
         "🌡️ ORŲ RINKA IŠSPRĘSTA",
         "",
         f"· {app_api.question_of(market)}",
-        f"  Aukščiausia temp: {_fmt(temp)} °C",
-        f"  Laimi: {bucket.get('label')}",
+        f"  🌡️ Aukščiausia temperatūra: {_fmt(temp)} °C",
+    ]
+    if peak_line:
+        lines.append(peak_line)
+    lines += [
+        f"  🏆 Laimi: {bucket.get('label')}",
         f"  {why}",
     ]
     if sources:
@@ -488,7 +497,9 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
     d = date.fromisoformat(target_iso)
     buckets = build_buckets(tf)
     pcts = bucket_probabilities(tf, buckets, sigma)
-    closes_at = datetime.combine(d, dtime(hour=config.WEATHER_CLOSE_HOUR), tzinfo=tz)
+    closes_at = datetime.combine(
+        d, dtime(hour=config.WEATHER_CLOSE_HOUR, minute=config.WEATHER_CLOSE_MINUTE),
+        tzinfo=tz)
     return {
         "city": city_key,
         "date": target_iso,
@@ -563,16 +574,26 @@ def _created_message(spec: dict, market_id: str) -> str:
         "",
         f"· {spec['title']}",
         f"  Prognozė ~{_fmt(round(spec['forecast_max']))} °C | uždaroma "
-        f"{config.WEATHER_CLOSE_HOUR}:00",
+        f"{config.WEATHER_CLOSE_HOUR:02d}:{config.WEATHER_CLOSE_MINUTE:02d}",
         f"  {opts}",
     ])
 
 
 # ── orchestration ────────────────────────────────────────────────────────────
 
+def day_peak_time(observations, target_iso: str,
+                  tz: ZoneInfo | None = None) -> datetime | None:
+    """Local (Vilnius) time at which the day's max was reached (last occurrence)."""
+    ms = lt_day_measurements(observations, target_iso, tz)
+    if not ms:
+        return None
+    m = max(t for _, t in ms)
+    return max(v for v, t in ms if t == m)
+
+
 def _resolve(market: dict, mid: str, bucket: dict | None, temp: float,
              sources: list[str], st: dict, via: str, now: datetime,
-             alert: bool, do_resolve: bool) -> dict:
+             alert: bool, do_resolve: bool, peak_dt: datetime | None = None) -> dict:
     """Hand the decided bucket to the app's resolution RPC. The bot ONLY resolves
     — it never closes/freezes trading (a separate system owns that)."""
     if not bucket or not bucket.get("option_id"):
@@ -591,9 +612,10 @@ def _resolve(market: dict, mid: str, bucket: dict | None, temp: float,
         st.update({"resolved": True, "resolved_option_id": bucket["option_id"],
                    "resolved_label": bucket.get("label"), "resolved_via": via,
                    "resolved_temp": temp, "resolved_at": now.isoformat(),
+                   "resolved_peak_lt": peak_dt.isoformat() if peak_dt else None,
                    "resolved_sources": sources})
         if alert:
-            notify.send(resolved_message(market, bucket, temp, via, sources))
+            notify.send(resolved_message(market, bucket, temp, via, sources, peak_dt))
         return {"market_id": mid, "status": "resolved", "via": via,
                 "option": bucket.get("label"), "temp": temp, "detail": detail}
     # Failure: do NOT mark resolved — retry next run (and the app-side
@@ -667,7 +689,8 @@ def _process_market(market: dict, mid: str, state: dict, now: datetime,
                         "note": "nėra galiojančių matavimų — laukiam/adminas"}, changed
             return _resolve(market, mid, bucket_for_temp(buckets, final_max),
                             final_max, sources, st, "end_of_day",
-                            now, alert, do_resolve), True
+                            now, alert, do_resolve,
+                            peak_dt=day_peak_time(day_obs, iso, tz)), True
         return {"market_id": mid, "status": "wait", "max": cur_max,
                 "note": "diena dar nepilna — laukiam paskutinio valandinio matavimo"}, changed
 
@@ -688,7 +711,8 @@ def _process_market(market: dict, mid: str, state: dict, now: datetime,
                 bucket = top if top_locked else bucket_for_temp(buckets, confirm_max)
                 via = "top_locked" if top_locked else "decline"
                 return _resolve(market, mid, bucket, confirm_max, sources, st,
-                                via, now, alert, do_resolve), True
+                                via, now, alert, do_resolve,
+                                peak_dt=day_peak_time(day_obs, iso, tz)), True
 
     return {"market_id": mid, "status": "watch", "max": cur_max}, changed
 

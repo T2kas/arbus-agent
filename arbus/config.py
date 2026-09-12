@@ -827,7 +827,7 @@ WEATHER_TZ = os.environ.get("WEATHER_TZ", "").strip() or "Europe/Vilnius"
 # Meteo LT publishes readings ~real-time (measured ~0.3 h lag), so the downturn
 # is visible almost immediately; the bot only ever acts on data it can see, so a
 # lag can delay a resolution but never make it wrong.
-WEATHER_RESOLVE_MIN_HOUR = _env_int("WEATHER_RESOLVE_MIN_HOUR", 19)
+WEATHER_RESOLVE_MIN_HOUR = _env_int("WEATHER_RESOLVE_MIN_HOUR", 18)
 WEATHER_DECLINE_HOURS = _env_int("WEATHER_DECLINE_HOURS", 2)
 
 # ── Weather market creation (arbus weather also CREATES the markets) ─────────
@@ -841,7 +841,11 @@ WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 50000)
 WEATHER_HORIZON_DAYS = _env_int("WEATHER_HORIZON_DAYS", 2)      # tomorrow + day after
 WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 20)       # create from this Vilnius hour
 WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 2.0)  # daily-max forecast spread °C
-WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 14)         # auto-close (closes_at) hour
+# Auto-close (closes_at) time of day, Vilnius. 15:30 stops trading just before the
+# afternoon peak (peak is ~13–14 UTC ≈ 16:00+ Vilnius), so the winning bucket is
+# still uncertain at close.
+WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 15)
+WEATHER_CLOSE_MINUTE = _env_int("WEATHER_CLOSE_MINUTE", 30)
 # Committed JSON so a stateless CI run remembers each market's running max, the
 # measurements already seen (dedup), the last response checksum, and whether it
 # has already been resolved (never resolve twice).
