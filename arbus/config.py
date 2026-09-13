@@ -660,6 +660,9 @@ AICHECK_EUR_PER_USD = float(os.environ.get("AICHECK_EUR_PER_USD", "0.92"))
 # real source in hand the model needs at most a confirming search, not a hunt.
 AICHECK_SOURCE_FETCH = os.environ.get("AICHECK_SOURCE_FETCH", "on").strip().lower() != "off"
 AICHECK_SOURCE_MAX_CHARS = int(os.environ.get("AICHECK_SOURCE_MAX_CHARS", "6000"))
+# Data-file sources (a box-office CSV/XLSX, a stats table) carry the answer in
+# rows, so they get a larger budget than a prose page.
+AICHECK_DATA_MAX_CHARS = int(os.environ.get("AICHECK_DATA_MAX_CHARS", "12000"))
 AICHECK_MAX_SEARCHES_WITH_SOURCE = int(os.environ.get("AICHECK_MAX_SEARCHES_WITH_SOURCE", "1"))
 # When the failure is the model hitting its per-turn search cap (it wanted MORE
 # searches, not a rate limit), a backoff buys nothing — retry immediately with

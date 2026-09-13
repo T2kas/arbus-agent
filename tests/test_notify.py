@@ -236,9 +236,12 @@ def test_aicheck_reports_a_401_as_a_key_problem(monkeypatch):
 # ── source fetch: read the cited page instead of paying to search for it ────
 
 class _FakeGet:
-    def __init__(self, status, text):
+    def __init__(self, status, text, ctype="text/html", url="https://example.lt/x"):
         self.status_code = status
         self.text = text
+        self.content = text.encode("utf-8")
+        self.headers = {"content-type": ctype}
+        self.url = url
 
 
 def test_source_text_strips_html_to_readable_text(monkeypatch):

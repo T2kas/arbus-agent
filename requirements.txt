@@ -4,3 +4,4 @@ pydantic>=2.7
 rapidfuzz>=3.9
 requests>=2.32
 tzdata>=2024.1            # IANA zones for zoneinfo (Windows has no system db)
+openpyxl>=3.1             # read .xlsx data-file sources in the resolution check

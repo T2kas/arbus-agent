@@ -21,6 +21,8 @@ than any of these and cannot be undone.
 
 from __future__ import annotations
 
+import csv
+import io
 import json
 import logging
 import re
@@ -29,6 +31,7 @@ import threading
 import time
 from datetime import date, datetime, timezone
 from html import unescape as _html_unescape
+from urllib.parse import urljoin
 
 import requests
 
@@ -93,16 +96,92 @@ def verify_url(url: str, timeout: int = 12) -> str:
 _SCRIPT_RE = re.compile(r"<(script|style|noscript)\b[^>]*>.*?</\1>", re.I | re.S)
 _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
+# A landing page often only LINKS to the data file (a weekly CSV/XLSX report);
+# follow the first such link so the table itself is read, not just the nav text.
+_DATA_LINK_RE = re.compile(r'href=["\']([^"\']+\.(?:csv|xlsx|xls))(?:\?[^"\']*)?["\']', re.I)
 
 
-def fetch_source_text(url: str, max_chars: int | None = None, timeout: int = 12) -> str:
-    """Fetch a cited URL and return its readable text (''on any failure).
+def _looks_like_csv(text: str) -> bool:
+    lines = [l for l in text[:2000].splitlines() if l.strip()][:6]
+    if len(lines) < 2:
+        return False
+    for sep in (";", ",", "\t"):                     # one delimiter, ≥1 per line, consistent
+        counts = [l.count(sep) for l in lines]
+        if min(counts) >= 1 and len(set(counts)) <= 2:
+            return True
+    return False
+
+
+def _csv_text(raw: str, max_chars: int) -> str:
+    """Readable rows from CSV, delimiter sniffed (LT files often use ';'). Rows
+    are kept as separate lines — a table collapsed onto one line is unreadable."""
+    sample = raw[:4000]
+    try:
+        delim = csv.Sniffer().sniff(sample, delimiters=",;\t").delimiter
+    except Exception:
+        delim = ";" if sample.count(";") >= sample.count(",") else ","
+    out, size = [], 0
+    for row in csv.reader(io.StringIO(raw), delimiter=delim):
+        cells = [c.strip() for c in row]
+        if any(cells):
+            line = " | ".join(cells)
+            out.append(line)
+            size += len(line)
+            if size > max_chars:
+                break
+    return "\n".join(out)[:max_chars]
+
+
+def _xlsx_text(content: bytes, max_chars: int) -> str:
+    """Readable rows from an .xlsx workbook, or '' if openpyxl is unavailable."""
+    try:
+        import openpyxl
+    except ImportError:
+        log.warning("aicheck: .xlsx source needs openpyxl (add to requirements)")
+        return ""
+    try:
+        wb = openpyxl.load_workbook(io.BytesIO(content), read_only=True, data_only=True)
+    except Exception:
+        return ""
+    out, size = [], 0
+    for ws in wb.worksheets:
+        for row in ws.iter_rows(values_only=True):
+            cells = [("" if v is None else str(v)).strip() for v in row]
+            if any(cells):
+                line = " | ".join(cells)
+                out.append(line)
+                size += len(line)
+                if size > max_chars:
+                    return "\n".join(out)[:max_chars]
+    return "\n".join(out)[:max_chars]
+
+
+def _render_source(resp, url: str, data_cap: int) -> str:
+    """Turn a fetched response into readable text: a CSV/XLSX table becomes rows,
+    everything else has its HTML stripped."""
+    ctype = resp.headers.get("content-type", "").lower()
+    path = url.lower().split("?")[0]
+    if "sheet" in ctype or "excel" in ctype or path.endswith((".xlsx", ".xls")):
+        return _xlsx_text(resp.content, data_cap)
+    if "csv" in ctype or path.endswith(".csv") or (
+            ("text/plain" in ctype or not ctype) and _looks_like_csv(resp.text)):
+        return _csv_text(resp.text, data_cap)
+    stripped = _TAG_RE.sub(" ", _SCRIPT_RE.sub(" ", resp.text))
+    return _WS_RE.sub(" ", _html_unescape(stripped)).strip()
+
+
+def fetch_source_text(url: str, max_chars: int | None = None, timeout: int = 12,
+                      follow_links: bool = True) -> str:
+    """Fetch a cited URL and return its readable text ('' on any failure).
 
     A market's own source is the cheapest possible evidence: one free GET versus
-    several billed web searches. Failure is never fatal — we just fall back to
-    letting the model search."""
+    several billed web searches. Data-file sources (a weekly box-office CSV/XLSX,
+    say) are parsed into rows, and an HTML landing page that only links to such a
+    file is followed one level so the table is actually read. Failure is never
+    fatal — we just fall back to letting the model search."""
     if max_chars is None:
         max_chars = config.AICHECK_SOURCE_MAX_CHARS
+    data_cap = max(max_chars, config.AICHECK_DATA_MAX_CHARS)
     try:
         resp = requests.get(url, headers={"User-Agent": UA},
                             timeout=timeout, allow_redirects=True)
@@ -110,9 +189,21 @@ def fetch_source_text(url: str, max_chars: int | None = None, timeout: int = 12)
         return ""
     if resp.status_code >= 400:
         return ""
-    stripped = _TAG_RE.sub(" ", _SCRIPT_RE.sub(" ", resp.text))
-    text = _WS_RE.sub(" ", _html_unescape(stripped)).strip()
-    return text[:max_chars]
+    text = _render_source(resp, url, data_cap)
+    is_html = "html" in resp.headers.get("content-type", "").lower()
+    if follow_links and is_html:
+        m = _DATA_LINK_RE.search(resp.text)
+        if m:
+            data_url = urljoin(resp.url, m.group(1))
+            data_text = fetch_source_text(data_url, max_chars=data_cap,
+                                          timeout=timeout, follow_links=False)
+            if len(data_text) >= 20:
+                return (text[:max_chars]
+                        + f"\n\n[Atsisiųstas duomenų failas {data_url}]\n"
+                        + data_text)[:data_cap]
+    # A parsed table can be long and useful; plain page text keeps the tighter cap.
+    cap = data_cap if "\n" in text and " | " in text else max_chars
+    return text[:cap]
 
 
 def source_facts(*fields: str) -> str:
