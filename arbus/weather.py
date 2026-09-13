@@ -624,14 +624,14 @@ def _cinema_resolved_message(market: dict, res: dict, opt: dict, kind: str) -> s
                         for i, (n, a) in enumerate(res["top"][:5]))
     note = ("" if kind == "named"
             else " (nė vienas įvardintas filmas nelaimėjo → „Kitas filmas“)")
+    scope = "lietuviškų filmų " if res.get("lt_only") else ""
     return "\n".join([
         "🎬 KINO RINKA IŠSPRĘSTA",
         "",
         f"· {app_api.question_of(market)}",
-        f"  🏆 Daugiausiai žiūrovų (ADM) {res['start']}–{res['end']}: "
-        f"{w[0]} ({int(w[1])})",
+        f"  🏆 Daugiausiai žiūrovų ({scope}{res['desc']}): {w[0]} ({int(w[1])})",
         f"  ✅ Laimi: {label}{note}",
-        "  TOP pagal ADM:",
+        "  TOP pagal žiūrovus:",
         listing,
         f"  🔗 {res['url']}",
     ])
@@ -661,7 +661,7 @@ def _resolve_cinema(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
         if app_api.status_of(m) in config.APP_SETTLED_STATUSES:
             continue
         question, rules = app_api.question_of(m), str(m.get("rules") or "")
-        if resolvers._cinema_target(question, rules) is None:     # not a weekly cinema market
+        if resolvers._cinema_period(question, rules) is None:     # not a cinema market
             continue
         mid = app_api.market_id_of(m)
         st = state.setdefault(mid, {})

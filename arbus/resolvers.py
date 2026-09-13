@@ -20,6 +20,7 @@ from __future__ import annotations
 import io
 import logging
 import re
+import unicodedata
 from datetime import date, datetime, timedelta, timezone
 from urllib.parse import quote, urljoin
 
@@ -377,22 +378,38 @@ def parse_fuel_html(html: str) -> str:
             "Šaltinis: Lietuvos energetikos agentūra (ena.lt).")
 
 
-# ── Cinema: Lietuvos kino centras weekly TOP (.xlsx) ─────────────────────────
-# A "most-watched film this week" market resolves on the LKC weekly report. The
-# reports page links a Weekly AND a Weekend .xlsx per week — we must pick the
-# Weekly one matching the market's date range, then read the "Žiūrovų sk. (ADM)"
-# column (weekly admissions) and take the MAX — not rank #1, which is by revenue.
-_LKC_REPORTS_URL = ("https://www.lkc.lt/registras-ir-statistika/"
-                    "faktai-ir-statistika/naujausios-ataskaitos")
+# ── Cinema: Lietuvos kino centras TOP reports (.xlsx) ────────────────────────
+# "Most-watched film" markets resolve on the LKC reports (all on the same site):
+#   • WEEKLY  — "Savaitės (Weekly) TOP YYYY.MM.DD-YYYY.MM.DD.xlsx" (column ADM),
+#   • MONTHLY — "YYYY <Mėnuo>.xlsx" with a per-month sheet ("Žiūrovų skaičius"),
+#   • YEARLY  — "YYYY TOP …_lkc_suvestine.xlsx", sheet "YYYY".
+# We take the MAX viewers (not revenue rank #1), optionally only Lithuanian films
+# ("Kilmės šalis" = LT), skipping the totals row.
 _LKC_BASE = "https://www.lkc.lt"
+_LKC_REPORTS_URL = _LKC_BASE + "/registras-ir-statistika/faktai-ir-statistika/naujausios-ataskaitos"
+_LKC_YEARLY_URL = _LKC_BASE + "/registras-ir-statistika/faktai-ir-statistika/metines-ataskaitos"
+_LKC_ARCHIVE_URL = _LKC_BASE + "/registras-ir-statistika/faktai-ir-statistika/archyvas"
 _IKI_DAY_RE = re.compile(r"iki\s+(?:\w+\s+)?(\d{1,2})\s*d", re.I)
-# The workbook ends with a totals row ("Total (35)", "Iš viso", …) whose ADM is
-# the sum of all films — it must never be read as a film.
 _CINEMA_TOTAL_RE = re.compile(r"(?i)^\s*(total\b|iš\s*viso|is\s*viso|viso\b|bendra|suma|grand)")
+# Diacritic-insensitive month stems → number (matches genitive/accusative/nominative
+# in rules AND file/sheet names): "rugsėjo"/"rugsėjį"/"Rugsėjis" all hold "rugsej".
+_MONTH_STEMS = {"sausi": 1, "vasari": 2, "kov": 3, "baland": 4, "geguz": 5,
+                "birzel": 6, "liep": 7, "rugpjut": 8, "rugpjuc": 8, "rugsej": 9,
+                "spal": 10, "lapkrit": 11, "gruod": 12}
+_MONTH_STEM_BY_NUM = {1: "sausi", 2: "vasari", 3: "kov", 4: "baland", 5: "geguz",
+                      6: "birzel", 7: "liep", 8: "rugpjut", 9: "rugsej", 10: "spal",
+                      11: "lapkrit", 12: "gruod"}
+_MONTH_NAME_LT = ["", "sausis", "vasaris", "kovas", "balandis", "gegužė", "birželis",
+                  "liepa", "rugpjūtis", "rugsėjis", "spalis", "lapkritis", "gruodis"]
+
+
+def _cnorm(s: str) -> str:
+    s = "".join(c for c in unicodedata.normalize("NFKD", s or "") if not unicodedata.combining(c))
+    return s.lower()
 
 
 def _cinema_target(question: str, rules: str) -> tuple[str, str] | None:
-    """(start_iso, end_iso) if this is an LKC weekly most-watched-film market."""
+    """(start_iso, end_iso) if this is an LKC WEEKLY most-watched-film market."""
     text = f"{question}\n{rules}"
     low = text.lower()
     if "kino" not in low or not any(k in low for k in ("žiūrov", "ziurov", "adm", "film")):
@@ -415,13 +432,33 @@ def _cinema_target(question: str, rules: str) -> tuple[str, str] | None:
                 span = tuple(sorted([date(year, mo, d1), date(year, mo, int(m2.group(1)))]))
     except ValueError:
         return None
-    if not span:
-        return None
-    # Weekly report only: a monthly ("rugsėjį") or yearly ("2026 metais") market
-    # spans far more than a week and has no matching weekly file — never touch it.
-    if (span[1] - span[0]).days > 8:
+    if not span or (span[1] - span[0]).days > 8:     # >8 days = not a week
         return None
     return span[0].isoformat(), span[1].isoformat()
+
+
+def _cinema_period(question: str, rules: str):
+    """('weekly', start, end) | ('monthly', year, month) | ('yearly', year) | None."""
+    low = _cnorm(f"{question}\n{rules}")
+    if "film" not in low and "kino" not in low:
+        return None
+    weekly = _cinema_target(question, rules)
+    if weekly:
+        return ("weekly", weekly[0], weekly[1])
+    ym = re.search(r"20\d{2}", low)
+    if not ym:
+        return None
+    year = int(ym.group())
+    for stem, num in _MONTH_STEMS.items():
+        if stem in low:
+            return ("monthly", year, num)
+    if re.search(r"\bmet(ais|us|u)\b", low):
+        return ("yearly", year)
+    return None
+
+
+def _is_lt_film_market(text: str) -> bool:
+    return "lietuvisk" in _cnorm(text)
 
 
 def _lkc_weekly_url(start_iso: str, end_iso: str, page_html: str) -> str:
@@ -435,67 +472,164 @@ def _lkc_weekly_url(start_iso: str, end_iso: str, page_html: str) -> str:
     return ""
 
 
-def parse_cinema_xlsx(content: bytes, top: int = 6) -> list[tuple[str, float]]:
-    """(film, weekly ADM) sorted by ADM desc, from the LKC weekly workbook."""
+def _lkc_monthly_url(year: int, month: int, *page_htmls: str) -> str:
+    stem, y = _MONTH_STEM_BY_NUM[month], str(year)
+    for html in page_htmls:
+        for h in re.findall(r'href="([^"]+\.xlsx)"', html, re.I):
+            hn = _cnorm(h)
+            if (y in hn and stem in hn and "weekl" not in hn and "weekend" not in hn
+                    and "savait" not in hn and " top" not in hn):
+                return urljoin(_LKC_BASE, quote(h))
+    return ""
+
+
+def _lkc_yearly_url(year: int, page_html: str) -> str:
+    y = str(year)
+    for h in re.findall(r'href="([^"]+\.xlsx)"', page_html, re.I):
+        hn = _cnorm(h)
+        if y in hn and "top" in hn:
+            return urljoin(_LKC_BASE, quote(h))
+    return ""
+
+
+def _read_film_rows(ws) -> list[tuple[str, float, str]]:
+    """(film, viewers, country) from a TOP sheet — weekly (ADM) or monthly/yearly
+    ('Žiūrovų skaičius'), skipping the totals row. Picks the period-viewers column,
+    never the 'Bendras/Total' cumulative one."""
+    rows = [list(r) for r in ws.iter_rows(values_only=True)]
+    header_i = header = None
+    for i, r in enumerate(rows[:15]):
+        jn = _cnorm(" ".join(str(c or "") for c in r))
+        if ("filmas" in jn or "movie" in jn or "pavadinim" in jn) and ("adm" in jn or "ziurov" in jn):
+            header_i = i
+            header = [_cnorm(str(c or "")) for c in r]
+            break
+    if header_i is None:
+        return []
+    film_col = next((k for k, c in enumerate(header) if "pavadinim" in c and "orgin" not in c), None)
+    if film_col is None:
+        film_col = next((k for k, c in enumerate(header)
+                         if "pavadinim" in c or "filmas" in c or "movie" in c), None)
+    view_cands = [k for k, c in enumerate(header)
+                  if ("adm" in c or "ziurov" in c) and "bendr" not in c and "total" not in c]
+    view_col = view_cands[0] if view_cands else None
+    country_col = next((k for k, c in enumerate(header) if "kilm" in c or "salis" in c), None)
+    if film_col is None or view_col is None:
+        return []
+    out = []
+    for r in rows[header_i + 1:]:
+        if film_col >= len(r) or view_col >= len(r) or not r[film_col]:
+            continue
+        name = str(r[film_col]).strip()
+        if _CINEMA_TOTAL_RE.match(name):
+            continue
+        try:
+            viewers = float(str(r[view_col]).replace("\xa0", "").replace(" ", "").replace(",", "."))
+        except (TypeError, ValueError):
+            continue
+        country = ""
+        if country_col is not None and country_col < len(r) and r[country_col] is not None:
+            country = str(r[country_col]).strip()
+        out.append((name, viewers, country))
+    return out
+
+
+def _load_wb(content: bytes):
     try:
         import openpyxl
     except ImportError:
         log.warning("cinema resolver needs openpyxl (in requirements.txt)")
+        return None
+    return openpyxl.load_workbook(io.BytesIO(content), read_only=True, data_only=True)
+
+
+def parse_cinema_xlsx(content: bytes, top: int = 6) -> list[tuple[str, float]]:
+    """(film, viewers) sorted desc from a workbook's first sheet — weekly usage."""
+    wb = _load_wb(content)
+    if wb is None:
         return []
-    wb = openpyxl.load_workbook(io.BytesIO(content), read_only=True, data_only=True)
-    rows = [list(r) for r in wb.worksheets[0].iter_rows(values_only=True)]
-    header_i = adm_col = film_col = None
-    for i, r in enumerate(rows[:12]):
-        cells = [str(c or "") for c in r]
-        joined = " ".join(cells).lower()
-        if "adm" in joined and ("filmas" in joined or "movie" in joined):
-            header_i = i
-            adm_col = next((j for j, c in enumerate(cells) if "adm" in c.lower()), None)
-            film_col = next((j for j, c in enumerate(cells)
-                             if "filmas" in c.lower() or "movie" in c.lower()), None)
-            break
-    if header_i is None or adm_col is None or film_col is None:
-        return []
-    out = []
-    for r in rows[header_i + 1:]:
-        if film_col >= len(r) or adm_col >= len(r) or not r[film_col]:
-            continue
-        name = str(r[film_col]).strip()
-        if _CINEMA_TOTAL_RE.match(name):             # skip the totals row
-            continue
-        try:
-            adm = float(str(r[adm_col]).replace(" ", "").replace(",", "."))
-        except (TypeError, ValueError):
-            continue
-        out.append((name, adm))
-    out.sort(key=lambda x: x[1], reverse=True)
-    return out[:top]
+    rows = sorted(_read_film_rows(wb.worksheets[0]), key=lambda x: x[1], reverse=True)
+    return [(n, v) for n, v, _c in rows[:top]]
+
+
+def _select_sheet(wb, period):
+    kind = period[0]
+    if kind == "weekly":
+        return wb.worksheets[0]
+    if kind == "monthly":
+        stem = _MONTH_STEM_BY_NUM[period[2]]
+        for name in wb.sheetnames:
+            if stem in _cnorm(name):
+                return wb[name]
+        return None
+    for name in wb.sheetnames:                        # yearly: the "YYYY" sheet
+        if _cnorm(name).strip() == str(period[1]):
+            return wb[name]
+    for name in wb.sheetnames:                        # fallback: first film table
+        if _read_film_rows(wb[name]):
+            return wb[name]
+    return None
+
+
+def _month_last_day(year: int, month: int) -> date:
+    return (date(year, 12, 31) if month == 12
+            else date(year, month + 1, 1) - timedelta(days=1))
+
+
+def _get_text(url: str) -> str:
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=25)
+    r.encoding = "utf-8"
+    return r.text
 
 
 def cinema_top(question: str, rules: str = "") -> dict | None:
-    """Structured LKC weekly result for a most-watched-film market, or None if
-    it does not apply / the week is not over / the report is not published yet.
-    Returns {start, end, url, top: [(film, adm), …] sorted by ADM desc}."""
-    target = _cinema_target(question, rules)
-    if not target:
+    """Structured LKC result for a most-watched-film market (weekly/monthly/
+    yearly), or None if it does not apply / the period is not over / the report
+    is not published. Returns {desc, url, top:[(film,viewers)], lt_only, kind}."""
+    period = _cinema_period(question, rules)
+    if not period:
         return None
-    start_iso, end_iso = target
-    if end_iso > date.today().isoformat():           # the week is not over yet
-        return None
+    lt_only = _is_lt_film_market(f"{question}\n{rules}")
+    today = date.today().isoformat()
+    kind = period[0]
     try:
-        page = requests.get(_LKC_REPORTS_URL, headers={"User-Agent": UA}, timeout=25)
-        page.encoding = "utf-8"
-        url = _lkc_weekly_url(start_iso, end_iso, page.text)
-        if not url:                                  # report not published yet
+        if kind == "weekly":
+            start, end = period[1], period[2]
+            if end > today:
+                return None
+            url = _lkc_weekly_url(start, end, _get_text(_LKC_REPORTS_URL))
+            desc = f"{start}–{end}"
+        elif kind == "monthly":
+            year, month = period[1], period[2]
+            if _month_last_day(year, month).isoformat() > today:
+                return None
+            url = _lkc_monthly_url(year, month, _get_text(_LKC_REPORTS_URL),
+                                   _get_text(_LKC_ARCHIVE_URL))
+            desc = f"{year} m. {_MONTH_NAME_LT[month]}"
+        else:  # yearly
+            year = period[1]
+            if date(year, 12, 31).isoformat() > today:
+                return None
+            url = _lkc_yearly_url(year, _get_text(_LKC_YEARLY_URL))
+            desc = f"{year} m."
+        if not url:
             return None
-        content = requests.get(url, headers={"User-Agent": UA}, timeout=40).content
-        top = parse_cinema_xlsx(content)
+        wb = _load_wb(requests.get(url, headers={"User-Agent": UA}, timeout=60).content)
+        if wb is None:
+            return None
+        ws = _select_sheet(wb, period)
+        if ws is None:
+            return None
+        rows = _read_film_rows(ws)
     except Exception as exc:
-        log.debug("cinema %s–%s failed: %s", start_iso, end_iso, exc)
+        log.debug("cinema %s failed: %s", period, exc)
         return None
+    if lt_only:
+        rows = [r for r in rows if r[2].strip().upper() == "LT" or "LIETUV" in r[2].upper()]
+    top = sorted(((n, v) for n, v, _c in rows), key=lambda x: x[1], reverse=True)[:8]
     if not top:
         return None
-    return {"start": start_iso, "end": end_iso, "url": url, "top": top}
+    return {"desc": desc, "url": url, "top": top, "lt_only": lt_only, "kind": kind}
 
 
 def cinema_fact(question: str, rules: str = "", closes_at: str = "") -> str:
@@ -503,11 +637,11 @@ def cinema_fact(question: str, rules: str = "", closes_at: str = "") -> str:
     if not res:
         return ""
     winner = res["top"][0]
-    listing = ", ".join(f"„{name}“ {int(adm)}" for name, adm in res["top"])
-    return (f"Lietuvos kino centro savaitės TOP {res['start']}–{res['end']}, pagal "
-            f"„Žiūrovų sk. (ADM)“ (savaitės žiūrovai): daugiausiai surinko "
-            f"„{winner[0]}“ ({int(winner[1])} žiūr.). TOP pagal ADM: {listing}. "
-            f"Šaltinis: Lietuvos kino centras ({res['url']}).")
+    scope = "lietuviškų filmų " if res["lt_only"] else ""
+    listing = ", ".join(f"„{name}“ {int(v)}" for name, v in res["top"])
+    return (f"Lietuvos kino centro {scope}TOP {res['desc']} pagal žiūrovų skaičių: "
+            f"daugiausiai surinko „{winner[0]}“ ({int(winner[1])} žiūr.). "
+            f"TOP: {listing}. Šaltinis: Lietuvos kino centras ({res['url']}).")
 
 
 # ── Public API ───────────────────────────────────────────────────────────────

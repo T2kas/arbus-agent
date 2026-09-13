@@ -68,6 +68,48 @@ def test_monthly_and_yearly_markets_are_not_weekly():
                                     "kino teatruose per 2026 metus, ADM") is None
 
 
+def test_period_detection_weekly_monthly_yearly():
+    assert resolvers._cinema_period("Kuris filmas žiūrimiausias?", RULES)[0] == "weekly"
+    assert resolvers._cinema_period(
+        "Kuris filmas žiūrimiausias rugsėjį?",
+        "kino teatruose 2026 m. rugsėjo mėnesį pagal žiūrovus") == ("monthly", 2026, 9)
+    assert resolvers._cinema_period(
+        "Kuris lietuviškas filmas žiūrimiausias 2026 metais?",
+        "kino teatruose per 2026 metus pagal žiūrovus") == ("yearly", 2026)
+    assert resolvers._cinema_period("Kas laimės rinkimus?", "politika 2026 m.") is None
+
+
+def test_lt_film_market_flag():
+    assert resolvers._is_lt_film_market("Kuris lietuviškas filmas...")
+    assert not resolvers._is_lt_film_market("Kuris filmas...")
+
+
+def test_monthly_and_yearly_url_selection():
+    html = ('<a href="/docs/x/2026 Liepa.xlsx">m</a>'
+            '<a href="/docs/x/Savaitės (Weekly) TOP 2026.07.01-2026.07.07.xlsx">w</a>')
+    assert "2026%20Liepa" in resolvers._lkc_monthly_url(2026, 7, html)
+    assert resolvers._lkc_monthly_url(2026, 9, html) == ""      # September file not present
+    yhtml = '<a href="/docs/x/2025 TOP su menesiais_lkc_suvestine.xlsx">y</a>'
+    assert "2025%20TOP" in resolvers._lkc_yearly_url(2025, yhtml)
+
+
+def test_read_film_rows_monthly_country_and_viewers():
+    data = _xlsx([
+        ["Lietuvos kino teatruose TOP (2026)", None, None, None, None, None],
+        ["Eil. Nr.", "Filmo pavadinimas", "Filmo pavadinimas orginalo kalba",
+         "Kilmės šalis", "Pajamos", "Žiūrovų skaičius"],
+        [1, "Šeima į gamtą", "Family", "LT", 973310, 121497],
+        [2, "Avataras", "Avatar", "US", 999999, 102187],       # more revenue, fewer viewers
+        ["", "Iš viso", "", "", None, 223684],                 # totals row
+    ])
+    import openpyxl
+    wb = openpyxl.load_workbook(io.BytesIO(data))
+    rows = resolvers._read_film_rows(wb.worksheets[0])
+    assert [r[0] for r in rows] == ["Šeima į gamtą", "Avataras"]        # total skipped
+    assert dict((n, v) for n, v, c in rows)["Šeima į gamtą"] == 121497  # viewers, not revenue
+    assert dict((n, c) for n, v, c in rows)["Šeima į gamtą"] == "LT"    # country captured
+
+
 # ── film → option matching and proactive resolve ─────────────────────────────
 
 from datetime import datetime, timezone                              # noqa: E402
@@ -105,7 +147,7 @@ def test_resolve_cinema_resolves_the_named_winner(monkeypatch):
               "market_options": _opts("Odisėja", "Žmogus-voras", "Kitas filmas")}
     monkeypatch.setattr(weather.config, "ARBUS_WRITE_KEY", "svc")
     monkeypatch.setattr(weather.resolvers, "cinema_top", lambda q, r: {
-        "start": "2026-09-04", "end": "2026-09-10", "url": "http://x.xlsx",
+        "desc": "2026-09-04–10", "url": "http://x.xlsx", "lt_only": False,
         "top": [("Odisėja (Odyssey, The)", 8971.0), ("Žmogus-voras", 6015.0)]})
     calls = []
     monkeypatch.setattr(weather.app_api, "resolve_market",
@@ -122,7 +164,7 @@ def test_resolve_cinema_alerts_on_a_tie(monkeypatch):
               "market_options": _opts("Odisėja", "Žmogus-voras", "Kitas filmas")}
     monkeypatch.setattr(weather.config, "ARBUS_WRITE_KEY", "svc")
     monkeypatch.setattr(weather.resolvers, "cinema_top", lambda q, r: {
-        "start": "2026-09-04", "end": "2026-09-10", "url": "u",
+        "desc": "2026-09-04–10", "url": "u", "lt_only": False,
         "top": [("Odisėja", 5000.0), ("Žmogus-voras", 5000.0)]})
     calls, sent = [], []
     monkeypatch.setattr(weather.app_api, "resolve_market",
