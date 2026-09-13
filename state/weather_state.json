@@ -795,6 +795,15 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "91eeaae3-9119-4458-a3de-cec8f4e79e58": {
+  "resolved": true,
+  "resolved_adm": 8971.0,
+  "resolved_at": "2026-09-13T12:30:53.241253+00:00",
+  "resolved_label": "„Odisėja“",
+  "resolved_option_id": "f13823a5-9b3b-497c-99cc-c32f3886af7d",
+  "resolved_via": "cinema",
+  "resolved_winner": "Odisėja (Odyssey, The)"
+ },
  "bad5bcac-8d3f-4c12-84d6-656d5a9f2f89": {
   "checksum": "eab7b56668601331d7ca86f1df7396b768e2afef747e203dde7c48faeec7d6f2",
   "current_maximum": 18.8,
@@ -1093,6 +1102,7 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "c36d241f-670e-4e86-bc91-8b46405922ef": {},
  "e0e7f93d-d80d-4e44-8af3-d2ea3c9a3748": {
   "checksum": "99b1c281fdfbd1433f1263239fd6dd85e130d6dc6300e24e91c2fb1b75d1b114",
   "current_maximum": 17.6,
