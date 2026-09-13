@@ -383,9 +383,12 @@ _LT_MONTH_GEN = ["", "sausio", "vasario", "kovo", "balandžio", "gegužės",
 # code, and Lithuanian name forms (locative for titles, genitive for the rules).
 CITIES = {
     "vilnius": {"station": "vilniaus-ams", "place": "vilnius",
-                "loc": "Vilniuje", "gen": "Vilniaus"},
+                "loc": "Vilniuje", "gen": "Vilniaus", "image": ""},
     "kaunas": {"station": "kauno-ams", "place": "kaunas",
-               "loc": "Kaune", "gen": "Kauno"},
+               "loc": "Kaune", "gen": "Kauno", "image": ""},
+    "klaipeda": {"station": "klaipedos-ams", "place": "klaipeda",
+                 "loc": "Klaipėdoje", "gen": "Klaipėdos",
+                 "image": "https://orai.kasvyksta.lt/wp-content/uploads/2023/09/Klaipeda_rez.jpg"},
 }
 
 
@@ -508,7 +511,7 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
         "title": f"Aukščiausia temperatūra {c['loc']} {_LT_MONTH_GEN[d.month]} {d.day} d.?",
         "subtitle": _lt_date_text(d),
         "category": config.WEATHER_CATEGORY,
-        "image_url": image_url or "",
+        "image_url": image_url or c.get("image", ""),
         "liquidity": config.WEATHER_LIQUIDITY,
         "rules": _rules_text(c["gen"], _lt_date_text(d)),
         "context": _context_text(c["loc"], _LT_MONTH_GEN[d.month], tf),
@@ -545,7 +548,8 @@ def plan_new_markets(existing_rows: list[dict], now: datetime, tz: ZoneInfo,
         for city_key, c in CITIES.items():
             if skip_existing and (c["station"], iso) in have:
                 continue
-            spec = market_spec(city_key, iso, images.get(c["station"], ""), tz=tz)
+            image = images.get(c["station"]) or c.get("image", "")   # reuse latest, else city default
+            spec = market_spec(city_key, iso, image, tz=tz)
             if spec:
                 specs.append(spec)
     return specs

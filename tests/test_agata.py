@@ -31,6 +31,20 @@ def test_parse_agata_uses_only_the_chart_table():
     assert len(rows) == 2 and rows[1][0] == 2
 
 
+def test_parse_agata_picks_singles_not_albums():
+    # The page has BOTH charts with identical headers — must select by caption.
+    html = """
+    <p>2026 37-os savaitės ALBUMŲ TOP100</p>
+    <table><tr><th>Vieta</th><th>Atlikėjas/grupė</th><th>Pavadinimas</th></tr>
+    <tr><td>1</td><td>Jessica Shy</td><td>Liepa</td></tr></table>
+    <p>2026 37-os savaitės SINGLŲ TOP100</p>
+    <table><tr><th>Vieta</th><th>Atlikėjas/grupė</th><th>Pavadinimas</th></tr>
+    <tr><td>1</td><td>Jessica Shy</td><td>Kas Kaltas</td></tr></table>
+    """
+    assert resolvers.parse_agata(html, "singles")[0] == (1, "Jessica Shy", "Kas Kaltas")
+    assert resolvers.parse_agata(html, "albums")[0] == (1, "Jessica Shy", "Liepa")
+
+
 def _opts(*labels):
     return [{"id": f"o{i}", "label": l} for i, l in enumerate(labels)]
 

@@ -700,39 +700,59 @@ def _cells(row: str) -> list[str]:
             for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.I | re.S)]
 
 
-def parse_agata(html: str) -> list[tuple[int, str, str]]:
-    """(rank, artist, title) rows from the AGATA chart. The page holds several
-    tables — parse ONLY the first one whose header is the chart (Vieta / Atlikėjas
-    / Pavadinimas), never merging rows across tables."""
-    for table in re.findall(r"<table[^>]*>(.*?)</table>", html, re.I | re.S):
-        rows = re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.I | re.S)
-        ci = None
-        out = []
-        for row in rows:
-            cells = _cells(row)
-            if ci is None:
-                j = _cnorm(" ".join(cells))
-                if "vieta" in j and "pavadinim" in j and ("atlik" in j or "grup" in j):
-                    header = [_cnorm(c) for c in cells]
-                    ci = {
-                        "rank": next((k for k, c in enumerate(header) if "vieta" in c), 0),
-                        "artist": next((k for k, c in enumerate(header) if "atlik" in c or "grup" in c), None),
-                        "title": next((k for k, c in enumerate(header) if "pavadinim" in c), None),
-                    }
-                continue
-            if ci["artist"] is None or ci["title"] is None:
-                break
-            if max(ci["rank"], ci["artist"], ci["title"]) >= len(cells):
-                continue
-            digits = re.sub(r"\D", "", cells[ci["rank"]])
-            if not digits:
-                continue
-            if cells[ci["artist"]] or cells[ci["title"]]:
-                out.append((int(digits), cells[ci["artist"]], cells[ci["title"]]))
-        if out:
-            out.sort(key=lambda x: x[0])
-            return out
-    return []
+def _parse_agata_table(table_html: str) -> list[tuple[int, str, str]]:
+    """(rank, artist, title) from one chart <table>, rank-sorted."""
+    ci = None
+    out = []
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", table_html, re.I | re.S):
+        cells = _cells(row)
+        if ci is None:
+            j = _cnorm(" ".join(cells))
+            if "vieta" in j and "pavadinim" in j and ("atlik" in j or "grup" in j):
+                header = [_cnorm(c) for c in cells]
+                ci = {
+                    "rank": next((k for k, c in enumerate(header) if "vieta" in c), 0),
+                    "artist": next((k for k, c in enumerate(header) if "atlik" in c or "grup" in c), None),
+                    "title": next((k for k, c in enumerate(header) if "pavadinim" in c), None),
+                }
+            continue
+        if ci["artist"] is None or ci["title"] is None:
+            break
+        if max(ci["rank"], ci["artist"], ci["title"]) >= len(cells):
+            continue
+        digits = re.sub(r"\D", "", cells[ci["rank"]])
+        if not digits:
+            continue
+        if cells[ci["artist"]] or cells[ci["title"]]:
+            out.append((int(digits), cells[ci["artist"]], cells[ci["title"]]))
+    out.sort(key=lambda x: x[0])
+    return out
+
+
+def _agata_label_before(html: str, table_start: int) -> str:
+    """'singles' or 'albums' from the caption just before a table ("… SINGLŲ
+    TOP100" / "… ALBUMŲ TOP100"), or '' if unlabelled."""
+    seg = _cnorm(re.sub(r"<[^>]+>", " ", html[max(0, table_start - 700):table_start]))
+    si, ai = seg.rfind("singl"), seg.rfind("album")
+    if si == -1 and ai == -1:
+        return ""
+    return "singles" if si > ai else "albums"
+
+
+def parse_agata(html: str, want: str = "singles") -> list[tuple[int, str, str]]:
+    """(rank, artist, title) from the AGATA chart. The page holds BOTH a singlų
+    and an albumų TOP100 with identical headers — pick the one whose caption
+    matches `want` ('singles'/'albums'); fall back to the first chart table."""
+    fallback = None
+    for mt in re.finditer(r"<table[^>]*>(.*?)</table>", html, re.I | re.S):
+        rows = _parse_agata_table(mt.group(1))
+        if not rows:
+            continue
+        if fallback is None:
+            fallback = rows
+        if _agata_label_before(html, mt.start()) == want:
+            return rows
+    return fallback or []
 
 
 def agata_top(question: str, rules: str = "") -> dict | None:
@@ -742,12 +762,14 @@ def agata_top(question: str, rules: str = "") -> dict | None:
     if not tgt:
         return None
     year, week = tgt
+    low = _cnorm(f"{question}\n{rules}")
+    want = "albums" if ("album" in low and "singl" not in low) else "singles"
     try:
         found = _agata_url(year, week)
         if not found:
             return None
         url, html = found
-        chart = parse_agata(html)
+        chart = parse_agata(html, want)
     except Exception as exc:
         log.debug("agata %s w%s failed: %s", year, week, exc)
         return None
