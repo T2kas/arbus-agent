@@ -17,9 +17,11 @@ offline, the same discipline as pulse.py and harvest.py.
 
 from __future__ import annotations
 
+import io
 import logging
 import re
 from datetime import date, datetime, timedelta, timezone
+from urllib.parse import quote, urljoin
 
 import requests
 
@@ -375,6 +377,123 @@ def parse_fuel_html(html: str) -> str:
             "Šaltinis: Lietuvos energetikos agentūra (ena.lt).")
 
 
+# ── Cinema: Lietuvos kino centras weekly TOP (.xlsx) ─────────────────────────
+# A "most-watched film this week" market resolves on the LKC weekly report. The
+# reports page links a Weekly AND a Weekend .xlsx per week — we must pick the
+# Weekly one matching the market's date range, then read the "Žiūrovų sk. (ADM)"
+# column (weekly admissions) and take the MAX — not rank #1, which is by revenue.
+_LKC_REPORTS_URL = ("https://www.lkc.lt/registras-ir-statistika/"
+                    "faktai-ir-statistika/naujausios-ataskaitos")
+_LKC_BASE = "https://www.lkc.lt"
+_IKI_DAY_RE = re.compile(r"iki\s+(?:\w+\s+)?(\d{1,2})\s*d", re.I)
+# The workbook ends with a totals row ("Total (35)", "Iš viso", …) whose ADM is
+# the sum of all films — it must never be read as a film.
+_CINEMA_TOTAL_RE = re.compile(r"(?i)^\s*(total\b|iš\s*viso|is\s*viso|viso\b|bendra|suma|grand)")
+
+
+def _cinema_target(question: str, rules: str) -> tuple[str, str] | None:
+    """(start_iso, end_iso) if this is an LKC weekly most-watched-film market."""
+    text = f"{question}\n{rules}"
+    low = text.lower()
+    if "kino" not in low or not any(k in low for k in ("žiūrov", "ziurov", "adm", "film")):
+        return None
+    year_m = re.search(r"20\d{2}", low)
+    if not year_m:
+        return None
+    year = int(year_m.group())
+    pairs = [(_LT_MONTHS[mo], int(d)) for mo, d in
+             re.findall(r"(" + "|".join(_LT_MONTHS) + r")\s+(\d{1,2})", low)]
+    try:
+        if len(pairs) >= 2:
+            ds = sorted(date(year, mo, d) for mo, d in pairs)
+            return ds[0].isoformat(), ds[-1].isoformat()
+        if len(pairs) == 1:
+            mo, d1 = pairs[0]
+            m2 = _IKI_DAY_RE.search(low)
+            if m2:
+                ds = sorted([date(year, mo, d1), date(year, mo, int(m2.group(1)))])
+                return ds[0].isoformat(), ds[-1].isoformat()
+    except ValueError:
+        return None
+    return None
+
+
+def _lkc_weekly_url(start_iso: str, end_iso: str, page_html: str) -> str:
+    """The Weekly (not Weekend) .xlsx whose name carries this date range."""
+    hrefs = re.findall(r'href="([^"]+\.xlsx)"', page_html, re.I)
+    s, e = start_iso.replace("-", "."), end_iso.replace("-", ".")
+    for want_both in (True, False):                  # prefer both dates, else end date
+        for h in hrefs:
+            if "weekly" in h.lower() and e in h and (s in h or not want_both):
+                return urljoin(_LKC_BASE, quote(h))
+    return ""
+
+
+def parse_cinema_xlsx(content: bytes, top: int = 6) -> list[tuple[str, float]]:
+    """(film, weekly ADM) sorted by ADM desc, from the LKC weekly workbook."""
+    try:
+        import openpyxl
+    except ImportError:
+        log.warning("cinema resolver needs openpyxl (in requirements.txt)")
+        return []
+    wb = openpyxl.load_workbook(io.BytesIO(content), read_only=True, data_only=True)
+    rows = [list(r) for r in wb.worksheets[0].iter_rows(values_only=True)]
+    header_i = adm_col = film_col = None
+    for i, r in enumerate(rows[:12]):
+        cells = [str(c or "") for c in r]
+        joined = " ".join(cells).lower()
+        if "adm" in joined and ("filmas" in joined or "movie" in joined):
+            header_i = i
+            adm_col = next((j for j, c in enumerate(cells) if "adm" in c.lower()), None)
+            film_col = next((j for j, c in enumerate(cells)
+                             if "filmas" in c.lower() or "movie" in c.lower()), None)
+            break
+    if header_i is None or adm_col is None or film_col is None:
+        return []
+    out = []
+    for r in rows[header_i + 1:]:
+        if film_col >= len(r) or adm_col >= len(r) or not r[film_col]:
+            continue
+        name = str(r[film_col]).strip()
+        if _CINEMA_TOTAL_RE.match(name):             # skip the totals row
+            continue
+        try:
+            adm = float(str(r[adm_col]).replace(" ", "").replace(",", "."))
+        except (TypeError, ValueError):
+            continue
+        out.append((name, adm))
+    out.sort(key=lambda x: x[1], reverse=True)
+    return out[:top]
+
+
+def cinema_fact(question: str, rules: str = "", closes_at: str = "") -> str:
+    target = _cinema_target(question, rules)
+    if not target:
+        return ""
+    start_iso, end_iso = target
+    if end_iso > date.today().isoformat():           # the week is not over yet
+        return ""
+    try:
+        page = requests.get(_LKC_REPORTS_URL, headers={"User-Agent": UA}, timeout=25)
+        page.encoding = "utf-8"
+        url = _lkc_weekly_url(start_iso, end_iso, page.text)
+        if not url:                                  # report not published yet
+            return ""
+        content = requests.get(url, headers={"User-Agent": UA}, timeout=40).content
+        top = parse_cinema_xlsx(content)
+    except Exception as exc:
+        log.debug("cinema fact %s–%s failed: %s", start_iso, end_iso, exc)
+        return ""
+    if not top:
+        return ""
+    winner = top[0]
+    listing = ", ".join(f"„{name}“ {int(adm)}" for name, adm in top)
+    return (f"Lietuvos kino centro savaitės TOP {start_iso}–{end_iso}, pagal "
+            f"„Žiūrovų sk. (ADM)“ (savaitės žiūrovai): daugiausiai surinko "
+            f"„{winner[0]}“ ({int(winner[1])} žiūr.). TOP pagal ADM: {listing}. "
+            f"Šaltinis: Lietuvos kino centras ({url}).")
+
+
 # ── Public API ───────────────────────────────────────────────────────────────
 
 def diagnose(question: str, closes_at: str = "") -> list[tuple[str, str, str]]:
@@ -427,17 +546,19 @@ def diagnose(question: str, closes_at: str = "") -> list[tuple[str, str, str]]:
     return out
 
 
-def facts_for(question: str, closes_at: str = "") -> str:
+def facts_for(question: str, closes_at: str = "", rules: str = "") -> str:
     """Authoritative facts relevant to this market, newline-joined ('' if none).
 
     Never raises: a data feed being down must not stop a resolution check.
     `closes_at` (the market's deadline) helps date-based feeds when the question
-    itself is vague.
+    itself is vague; `rules` carries details some feeds need (the cinema week,
+    the exact metric).
     """
     resolvers = (
         lambda q: stock_fact(q),
         lambda q: weather_fact(q, closes_at),
         lambda q: fuel_fact(q),
+        lambda q: cinema_fact(q, rules, closes_at),
     )
     facts = []
     for resolver in resolvers:

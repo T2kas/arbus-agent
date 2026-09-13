@@ -336,7 +336,7 @@ def _run(question: str, options: str, criteria: str, proposed: str,
     the difference between profitable and not. A no-data market is skipped with a
     manual-check note unless it is flagged important (`--deep`).
     """
-    resolver_facts = resolvers.facts_for(question, closes_at)
+    resolver_facts = resolvers.facts_for(question, closes_at, criteria)
     # A cited source is the cheapest evidence there is: fetch it ourselves (free
     # GET) and hand the model the text, so it does not pay to web-search for a
     # page we already have. This is the biggest cost lever when markets carry a
