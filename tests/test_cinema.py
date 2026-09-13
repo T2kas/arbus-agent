@@ -59,3 +59,75 @@ def test_cinema_fact_empty_before_week_ends(monkeypatch):
     fact = resolvers.cinema_fact("Kuris filmas žiūrimiausias?",
                                  RULES.replace("2026 m. rugsėjo", "2099 m. rugsėjo"))
     assert fact == ""
+
+
+def test_monthly_and_yearly_markets_are_not_weekly():
+    assert resolvers._cinema_target("Kuris filmas žiūrimiausias rugsėjį?",
+                                    "kino teatruose 2026 m. rugsėjo 1 d. iki rugsėjo 30 d. ADM") is None
+    assert resolvers._cinema_target("Kuris filmas žiūrimiausias 2026 metais?",
+                                    "kino teatruose per 2026 metus, ADM") is None
+
+
+# ── film → option matching and proactive resolve ─────────────────────────────
+
+from datetime import datetime, timezone                              # noqa: E402
+
+from arbus import weather                                            # noqa: E402
+
+
+def _opts(*labels):
+    return [{"id": f"o{i}", "label": l} for i, l in enumerate(labels)]
+
+
+def test_match_named_option():
+    o, kind = weather.match_cinema_option(
+        "Odisėja (Odyssey, The)", _opts("Odisėja", "Žmogus-voras", "Kitas filmas"))
+    assert kind == "named" and o["label"] == "Odisėja"
+
+
+def test_match_falls_back_to_other():
+    o, kind = weather.match_cinema_option(
+        "Visai naujas (Whatever)", _opts("Odisėja", "Žmogus-voras", "Kitas filmas"))
+    assert kind == "other" and o["label"] == "Kitas filmas"
+
+
+def test_match_no_match_without_other():
+    o, kind = weather.match_cinema_option("Nežinomas", _opts("Odisėja", "Žmogus-voras"))
+    assert o is None and kind == "no_match"
+
+
+_CINEMA_RULES = "kino teatruose nuo 2026 m. rugsėjo 4 d. iki rugsėjo 10 d. ADM"
+
+
+def test_resolve_cinema_resolves_the_named_winner(monkeypatch):
+    market = {"id": "m1", "status": "closed", "winning_option_id": None,
+              "title": "Kuris filmas bus žiūrimiausias Lietuvoje?", "rules": _CINEMA_RULES,
+              "market_options": _opts("Odisėja", "Žmogus-voras", "Kitas filmas")}
+    monkeypatch.setattr(weather.config, "ARBUS_WRITE_KEY", "svc")
+    monkeypatch.setattr(weather.resolvers, "cinema_top", lambda q, r: {
+        "start": "2026-09-04", "end": "2026-09-10", "url": "http://x.xlsx",
+        "top": [("Odisėja (Odyssey, The)", 8971.0), ("Žmogus-voras", 6015.0)]})
+    calls = []
+    monkeypatch.setattr(weather.app_api, "resolve_market",
+                        lambda mid, oid: (calls.append((mid, oid)), (True, "ok"))[1])
+    monkeypatch.setattr(weather.notify, "send", lambda m: None)
+    reports, changed = weather._resolve_cinema(
+        [market], datetime.now(timezone.utc), weather._tz(), {}, alert=True, do_resolve=True)
+    assert calls == [("m1", "o0")] and reports[0]["status"] == "resolved" and changed
+
+
+def test_resolve_cinema_alerts_on_a_tie(monkeypatch):
+    market = {"id": "m1", "status": "closed", "winning_option_id": None,
+              "title": "Kuris filmas žiūrimiausias?", "rules": _CINEMA_RULES,
+              "market_options": _opts("Odisėja", "Žmogus-voras", "Kitas filmas")}
+    monkeypatch.setattr(weather.config, "ARBUS_WRITE_KEY", "svc")
+    monkeypatch.setattr(weather.resolvers, "cinema_top", lambda q, r: {
+        "start": "2026-09-04", "end": "2026-09-10", "url": "u",
+        "top": [("Odisėja", 5000.0), ("Žmogus-voras", 5000.0)]})
+    calls, sent = [], []
+    monkeypatch.setattr(weather.app_api, "resolve_market",
+                        lambda mid, oid: (calls.append(1), (True, "ok"))[1])
+    monkeypatch.setattr(weather.notify, "send", lambda m: sent.append(m))
+    reports, _ = weather._resolve_cinema(
+        [market], datetime.now(timezone.utc), weather._tz(), {}, alert=True, do_resolve=True)
+    assert calls == [] and reports[0]["reason"] == "cinema tie" and sent

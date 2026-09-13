@@ -404,18 +404,24 @@ def _cinema_target(question: str, rules: str) -> tuple[str, str] | None:
     pairs = [(_LT_MONTHS[mo], int(d)) for mo, d in
              re.findall(r"(" + "|".join(_LT_MONTHS) + r")\s+(\d{1,2})", low)]
     try:
+        span = None
         if len(pairs) >= 2:
             ds = sorted(date(year, mo, d) for mo, d in pairs)
-            return ds[0].isoformat(), ds[-1].isoformat()
-        if len(pairs) == 1:
+            span = (ds[0], ds[-1])
+        elif len(pairs) == 1:
             mo, d1 = pairs[0]
             m2 = _IKI_DAY_RE.search(low)
             if m2:
-                ds = sorted([date(year, mo, d1), date(year, mo, int(m2.group(1)))])
-                return ds[0].isoformat(), ds[-1].isoformat()
+                span = tuple(sorted([date(year, mo, d1), date(year, mo, int(m2.group(1)))]))
     except ValueError:
         return None
-    return None
+    if not span:
+        return None
+    # Weekly report only: a monthly ("rugsėjį") or yearly ("2026 metais") market
+    # spans far more than a week and has no matching weekly file — never touch it.
+    if (span[1] - span[0]).days > 8:
+        return None
+    return span[0].isoformat(), span[1].isoformat()
 
 
 def _lkc_weekly_url(start_iso: str, end_iso: str, page_html: str) -> str:
@@ -466,32 +472,42 @@ def parse_cinema_xlsx(content: bytes, top: int = 6) -> list[tuple[str, float]]:
     return out[:top]
 
 
-def cinema_fact(question: str, rules: str = "", closes_at: str = "") -> str:
+def cinema_top(question: str, rules: str = "") -> dict | None:
+    """Structured LKC weekly result for a most-watched-film market, or None if
+    it does not apply / the week is not over / the report is not published yet.
+    Returns {start, end, url, top: [(film, adm), …] sorted by ADM desc}."""
     target = _cinema_target(question, rules)
     if not target:
-        return ""
+        return None
     start_iso, end_iso = target
     if end_iso > date.today().isoformat():           # the week is not over yet
-        return ""
+        return None
     try:
         page = requests.get(_LKC_REPORTS_URL, headers={"User-Agent": UA}, timeout=25)
         page.encoding = "utf-8"
         url = _lkc_weekly_url(start_iso, end_iso, page.text)
         if not url:                                  # report not published yet
-            return ""
+            return None
         content = requests.get(url, headers={"User-Agent": UA}, timeout=40).content
         top = parse_cinema_xlsx(content)
     except Exception as exc:
-        log.debug("cinema fact %s–%s failed: %s", start_iso, end_iso, exc)
-        return ""
+        log.debug("cinema %s–%s failed: %s", start_iso, end_iso, exc)
+        return None
     if not top:
+        return None
+    return {"start": start_iso, "end": end_iso, "url": url, "top": top}
+
+
+def cinema_fact(question: str, rules: str = "", closes_at: str = "") -> str:
+    res = cinema_top(question, rules)
+    if not res:
         return ""
-    winner = top[0]
-    listing = ", ".join(f"„{name}“ {int(adm)}" for name, adm in top)
-    return (f"Lietuvos kino centro savaitės TOP {start_iso}–{end_iso}, pagal "
+    winner = res["top"][0]
+    listing = ", ".join(f"„{name}“ {int(adm)}" for name, adm in res["top"])
+    return (f"Lietuvos kino centro savaitės TOP {res['start']}–{res['end']}, pagal "
             f"„Žiūrovų sk. (ADM)“ (savaitės žiūrovai): daugiausiai surinko "
             f"„{winner[0]}“ ({int(winner[1])} žiūr.). TOP pagal ADM: {listing}. "
-            f"Šaltinis: Lietuvos kino centras ({url}).")
+            f"Šaltinis: Lietuvos kino centras ({res['url']}).")
 
 
 # ── Public API ───────────────────────────────────────────────────────────────

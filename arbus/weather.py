@@ -28,13 +28,14 @@ import json
 import logging
 import math
 import re
+import unicodedata
 from datetime import date, datetime, time as dtime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import requests
 
-from . import app as app_api, config, notify
+from . import app as app_api, config, notify, resolvers
 from .resolvers import _LT_MONTHS, _STATION_BY_CITY, UA
 
 log = logging.getLogger(__name__)
@@ -579,6 +580,136 @@ def _created_message(spec: dict, market_id: str) -> str:
     ])
 
 
+# ── cinema markets: LKC weekly most-watched film (proactive resolve) ─────────
+
+def _strip_diacritics(s: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
+
+
+def _norm_title(s: str) -> str:
+    """Film title reduced for matching: drop the parenthetical English title,
+    strip diacritics, lowercase, keep alnum words."""
+    s = re.sub(r"\(.*?\)", " ", s or "")
+    s = _strip_diacritics(s).lower()
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", s)).strip()
+
+
+def match_cinema_option(winner_film: str, options: list[dict]) -> tuple[dict | None, str]:
+    """Map the LKC winning film to a market option. Returns (option, kind) where
+    kind is 'named' or 'other'; (None, reason) when it is not safe to resolve
+    (ambiguous match, or no match and no 'Kitas filmas' option)."""
+    wn = _norm_title(winner_film)
+    named, other = [], None
+    for o in options:
+        ln = _norm_title(str(app_api._pick(o, "label", "name", "title", default="")))
+        if not ln:
+            continue
+        if ln.startswith("kitas") or ln.startswith("kita "):     # „Kitas filmas“ / „Kitas lietuviškas…“
+            other = o
+        elif ln in wn or wn in ln:
+            named.append(o)
+    if len(named) == 1:
+        return named[0], "named"
+    if len(named) > 1:
+        return None, "ambiguous"
+    if other is not None:
+        return other, "other"
+    return None, "no_match"
+
+
+def _cinema_resolved_message(market: dict, res: dict, opt: dict, kind: str) -> str:
+    w = res["top"][0]
+    label = str(app_api._pick(opt, "label", "name", "title", default=""))
+    listing = "\n".join(f"   {i + 1}. {n} — {int(a)}"
+                        for i, (n, a) in enumerate(res["top"][:5]))
+    note = ("" if kind == "named"
+            else " (nė vienas įvardintas filmas nelaimėjo → „Kitas filmas“)")
+    return "\n".join([
+        "🎬 KINO RINKA IŠSPRĘSTA",
+        "",
+        f"· {app_api.question_of(market)}",
+        f"  🏆 Daugiausiai žiūrovų (ADM) {res['start']}–{res['end']}: "
+        f"{w[0]} ({int(w[1])})",
+        f"  ✅ Laimi: {label}{note}",
+        "  TOP pagal ADM:",
+        listing,
+        f"  🔗 {res['url']}",
+    ])
+
+
+def _cinema_alert_message(market: dict, res: dict, why: str) -> str:
+    w = res["top"][0]
+    return "\n".join([
+        "🎬 KINO RINKA — REIKIA ADMINO",
+        "",
+        f"· {app_api.question_of(market)}",
+        f"  Daugiausiai žiūrovų (ADM): {w[0]} ({int(w[1])})",
+        f"  ⚠️ {why} — nustatyk rankiniu būdu.",
+        f"  🔗 {res['url']}",
+    ])
+
+
+def _resolve_cinema(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
+                    *, alert: bool, do_resolve: bool) -> tuple[list[dict], bool]:
+    """Proactively resolve LKC weekly most-watched-film markets the moment the
+    report is published — no human proposal needed. Only resolves on a clean,
+    unambiguous match; otherwise it alerts an admin and leaves the market."""
+    reports, changed = [], False
+    for m in rows:
+        if app_api.winning_option_of(m):
+            continue
+        if app_api.status_of(m) in config.APP_SETTLED_STATUSES:
+            continue
+        question, rules = app_api.question_of(m), str(m.get("rules") or "")
+        if resolvers._cinema_target(question, rules) is None:     # not a weekly cinema market
+            continue
+        mid = app_api.market_id_of(m)
+        st = state.setdefault(mid, {})
+        if st.get("resolved") or st.get("cinema_alerted"):
+            continue
+        res = resolvers.cinema_top(question, rules)
+        if not res:                                   # week not over / report not out yet
+            continue
+        top = res["top"]
+        if len(top) >= 2 and top[0][1] == top[1][1]:  # tie for #1 → rules split → admin
+            if alert:
+                notify.send(_cinema_alert_message(m, res, "lygus rezultatas (keli filmai vienodai)"))
+            st["cinema_alerted"] = True
+            reports.append({"status": "error", "market_id": mid, "reason": "cinema tie"})
+            changed = True
+            continue
+        opt, kind = match_cinema_option(top[0][0], m.get("market_options")
+                                        or m.get("options") or [])
+        if opt is None:
+            if alert:
+                notify.send(_cinema_alert_message(m, res, f"nepavyko priskirti baigties ({kind})"))
+            st["cinema_alerted"] = True
+            reports.append({"status": "error", "market_id": mid, "reason": f"cinema {kind}"})
+            changed = True
+            continue
+        oid = str(app_api._pick(opt, "id", "option_id", default=""))
+        label = str(app_api._pick(opt, "label", "name", "title", default=""))
+        if not do_resolve:
+            reports.append({"status": "would-resolve", "market_id": mid, "option": label,
+                            "note": f"{top[0][0]} {int(top[0][1])} ADM ({kind})"})
+            continue
+        ok, detail = app_api.resolve_market(mid, oid)
+        if ok:
+            st.update({"resolved": True, "resolved_option_id": oid, "resolved_label": label,
+                       "resolved_via": "cinema", "resolved_at": now.isoformat(),
+                       "resolved_winner": top[0][0], "resolved_adm": top[0][1]})
+            changed = True
+            if alert:
+                notify.send(_cinema_resolved_message(m, res, opt, kind))
+            reports.append({"status": "resolved", "market_id": mid, "option": label,
+                            "via": "cinema"})
+        else:
+            if alert:
+                notify.send(f"⚠️ KINO RINKA: nepavyko resolvinti ({detail[:150]}) — {question}")
+            reports.append({"status": "error", "market_id": mid, "reason": f"resolve: {detail}"})
+    return reports, changed
+
+
 # ── orchestration ────────────────────────────────────────────────────────────
 
 def day_peak_time(observations, target_iso: str,
@@ -745,6 +876,13 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
         report, mchanged = _process_market(m, mid, state, now, tz, alert, do_resolve)
         reports.append(report)
         changed = changed or mchanged
+
+    # Cinema markets (LKC weekly most-watched film) — resolved proactively the
+    # moment the report is out, from the same fetch/state/cron as the weather.
+    c_reports, c_changed = _resolve_cinema(rows, now, tz, state,
+                                           alert=alert, do_resolve=do_resolve)
+    reports += c_reports
+    changed = changed or c_changed
     if changed:
         save_state(state)
 
