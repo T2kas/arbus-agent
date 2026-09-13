@@ -710,6 +710,112 @@ def _resolve_cinema(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
     return reports, changed
 
 
+# ── music markets: AGATA weekly #1 single (proactive resolve) ────────────────
+
+def match_song_option(artist: str, title: str,
+                      options: list[dict]) -> tuple[dict | None, str]:
+    """Map the AGATA #1 (artist, title) to a market option: a named song (its
+    title present and an artist token shared) or „Kita daina". (None, reason)
+    when it is not safe to resolve."""
+    tn = _norm_title(title)
+    artist_tokens = [t for t in _norm_title(artist).split() if len(t) > 2]
+    named, other = [], None
+    for o in options:
+        ln = _norm_title(str(app_api._pick(o, "label", "name", "title", default="")))
+        if not ln:
+            continue
+        if ln.startswith("kita ") or ln.startswith("kitas") or ln.startswith("kito"):
+            other = o
+        elif tn and tn in ln and (not artist_tokens or any(t in ln for t in artist_tokens)):
+            named.append(o)
+    if len(named) == 1:
+        return named[0], "named"
+    if len(named) > 1:
+        return None, "ambiguous"
+    if other is not None:
+        return other, "other"
+    return None, "no_match"
+
+
+def _music_resolved_message(market: dict, res: dict, opt: dict, kind: str) -> str:
+    label = str(app_api._pick(opt, "label", "name", "title", default=""))
+    listing = "\n".join(f"   {i + 1}. {a} „{t}“"
+                        for i, (a, t) in enumerate(res["top"][:5]))
+    note = "" if kind == "named" else " (Nr.1 nėra tarp pasirinkimų → „Kita daina“)"
+    return "\n".join([
+        "🎵 MUZIKOS RINKA IŠSPRĘSTA",
+        "",
+        f"· {app_api.question_of(market)}",
+        f"  🏆 AGATA {res['desc']} Nr.1: {res['artist']} „{res['title']}“",
+        f"  ✅ Laimi: {label}{note}",
+        "  TOP:",
+        listing,
+        f"  🔗 {res['url']}",
+    ])
+
+
+def _music_alert_message(market: dict, res: dict, why: str) -> str:
+    return "\n".join([
+        "🎵 MUZIKOS RINKA — REIKIA ADMINO",
+        "",
+        f"· {app_api.question_of(market)}",
+        f"  AGATA Nr.1: {res['artist']} „{res['title']}“",
+        f"  ⚠️ {why} — nustatyk rankiniu būdu.",
+        f"  🔗 {res['url']}",
+    ])
+
+
+def _resolve_music(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
+                   *, alert: bool, do_resolve: bool) -> tuple[list[dict], bool]:
+    """Proactively resolve AGATA weekly #1-song markets once the chart is out."""
+    reports, changed = [], False
+    for m in rows:
+        if app_api.winning_option_of(m):
+            continue
+        if app_api.status_of(m) in config.APP_SETTLED_STATUSES:
+            continue
+        question, rules = app_api.question_of(m), str(m.get("rules") or "")
+        if resolvers._agata_target(question, rules) is None:
+            continue
+        mid = app_api.market_id_of(m)
+        st = state.setdefault(mid, {})
+        if st.get("resolved") or st.get("music_alerted"):
+            continue
+        res = resolvers.agata_top(question, rules)
+        if not res:                                   # chart not published yet
+            continue
+        opt, kind = match_song_option(res["artist"], res["title"],
+                                      m.get("market_options") or m.get("options") or [])
+        if opt is None:
+            if alert:
+                notify.send(_music_alert_message(m, res, f"nepavyko priskirti baigties ({kind})"))
+            st["music_alerted"] = True
+            reports.append({"status": "error", "market_id": mid, "reason": f"music {kind}"})
+            changed = True
+            continue
+        oid = str(app_api._pick(opt, "id", "option_id", default=""))
+        label = str(app_api._pick(opt, "label", "name", "title", default=""))
+        if not do_resolve:
+            reports.append({"status": "would-resolve", "market_id": mid, "option": label,
+                            "note": f"{res['artist']} – {res['title']} ({kind})"})
+            continue
+        ok, detail = app_api.resolve_market(mid, oid)
+        if ok:
+            st.update({"resolved": True, "resolved_option_id": oid, "resolved_label": label,
+                       "resolved_via": "music", "resolved_at": now.isoformat(),
+                       "resolved_winner": f"{res['artist']} – {res['title']}"})
+            changed = True
+            if alert:
+                notify.send(_music_resolved_message(m, res, opt, kind))
+            reports.append({"status": "resolved", "market_id": mid, "option": label,
+                            "via": "music"})
+        else:
+            if alert:
+                notify.send(f"⚠️ MUZIKOS RINKA: nepavyko resolvinti ({detail[:150]}) — {question}")
+            reports.append({"status": "error", "market_id": mid, "reason": f"resolve: {detail}"})
+    return reports, changed
+
+
 # ── orchestration ────────────────────────────────────────────────────────────
 
 def day_peak_time(observations, target_iso: str,
@@ -883,6 +989,11 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
                                            alert=alert, do_resolve=do_resolve)
     reports += c_reports
     changed = changed or c_changed
+    # Music markets (AGATA weekly #1 single) — same proactive pattern.
+    mus_reports, mus_changed = _resolve_music(rows, now, tz, state,
+                                              alert=alert, do_resolve=do_resolve)
+    reports += mus_reports
+    changed = changed or mus_changed
     if changed:
         save_state(state)
 

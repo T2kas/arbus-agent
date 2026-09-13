@@ -17,6 +17,7 @@ offline, the same discipline as pulse.py and harvest.py.
 
 from __future__ import annotations
 
+import html as _html
 import io
 import logging
 import re
@@ -644,6 +645,128 @@ def cinema_fact(question: str, rules: str = "", closes_at: str = "") -> str:
             f"TOP: {listing}. Šaltinis: Lietuvos kino centras ({res['url']}).")
 
 
+# ── Music: AGATA weekly singles TOP 100 (HTML table) ─────────────────────────
+# "Which song is #1 this week" resolves on the official AGATA chart. The weekly
+# article lives at /lt/naujienos/s<week>-5/ and its title carries the week
+# ("2026 37-os savaitės klausomiausi (TOP 100)"); the table columns are
+# Vieta | Praeitą savaitę | Savaičių tope | Atlikėjas/grupė | Pavadinimas.
+_AGATA_BASE = "https://www.agata.lt"
+_AGATA_LIST_URL = _AGATA_BASE + "/lt/naujienos/?cat=top-100"
+_AGATA_WEEK_RE = re.compile(r"(\d{1,2})\s*-?\s*os(?:ios)?\s+savait")
+
+
+def _agata_target(question: str, rules: str) -> tuple[int, int] | None:
+    """(year, week) if this is an AGATA weekly #1-song market."""
+    low = _cnorm(f"{question}\n{rules}")
+    if "agata" not in low:                            # authoritative signal
+        return None
+    ym = re.search(r"20\d{2}", low)
+    wm = _AGATA_WEEK_RE.search(low)
+    if not ym or not wm:
+        return None
+    week = int(wm.group(1))
+    if not 1 <= week <= 53:
+        return None
+    return int(ym.group()), week
+
+
+def _agata_page_week(html: str) -> tuple[int, int] | None:
+    m = re.search(r"<title>(.*?)</title>", html, re.I | re.S)
+    title = _cnorm(_html.unescape(m.group(1))) if m else ""
+    ym = re.search(r"20\d{2}", title)
+    wm = _AGATA_WEEK_RE.search(title)
+    if ym and wm:
+        return int(ym.group()), int(wm.group(1))
+    return None
+
+
+def _agata_url(year: int, week: int) -> tuple[str, str] | None:
+    """(url, html) of the chart for (year, week), verified by its title."""
+    cand = f"{_AGATA_BASE}/lt/naujienos/s{week}-5/"
+    html = _get_text(cand)
+    if _agata_page_week(html) == (year, week):
+        return cand, html
+    listing = _get_text(_AGATA_LIST_URL)                # fall back to the listing
+    for href in re.findall(rf'href="([^"]*naujienos/s{week}-[^"]*)"', listing, re.I):
+        url = urljoin(_AGATA_BASE, href)
+        h = _get_text(url)
+        if _agata_page_week(h) == (year, week):
+            return url, h
+    return None
+
+
+def _cells(row: str) -> list[str]:
+    return [re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", c))).strip()
+            for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.I | re.S)]
+
+
+def parse_agata(html: str) -> list[tuple[int, str, str]]:
+    """(rank, artist, title) rows from the AGATA chart. The page holds several
+    tables — parse ONLY the first one whose header is the chart (Vieta / Atlikėjas
+    / Pavadinimas), never merging rows across tables."""
+    for table in re.findall(r"<table[^>]*>(.*?)</table>", html, re.I | re.S):
+        rows = re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.I | re.S)
+        ci = None
+        out = []
+        for row in rows:
+            cells = _cells(row)
+            if ci is None:
+                j = _cnorm(" ".join(cells))
+                if "vieta" in j and "pavadinim" in j and ("atlik" in j or "grup" in j):
+                    header = [_cnorm(c) for c in cells]
+                    ci = {
+                        "rank": next((k for k, c in enumerate(header) if "vieta" in c), 0),
+                        "artist": next((k for k, c in enumerate(header) if "atlik" in c or "grup" in c), None),
+                        "title": next((k for k, c in enumerate(header) if "pavadinim" in c), None),
+                    }
+                continue
+            if ci["artist"] is None or ci["title"] is None:
+                break
+            if max(ci["rank"], ci["artist"], ci["title"]) >= len(cells):
+                continue
+            digits = re.sub(r"\D", "", cells[ci["rank"]])
+            if not digits:
+                continue
+            if cells[ci["artist"]] or cells[ci["title"]]:
+                out.append((int(digits), cells[ci["artist"]], cells[ci["title"]]))
+        if out:
+            out.sort(key=lambda x: x[0])
+            return out
+    return []
+
+
+def agata_top(question: str, rules: str = "") -> dict | None:
+    """Structured AGATA weekly result, or None if it does not apply / the chart
+    is not published. Returns {desc, url, artist, title, top:[(artist,title),…]}."""
+    tgt = _agata_target(question, rules)
+    if not tgt:
+        return None
+    year, week = tgt
+    try:
+        found = _agata_url(year, week)
+        if not found:
+            return None
+        url, html = found
+        chart = parse_agata(html)
+    except Exception as exc:
+        log.debug("agata %s w%s failed: %s", year, week, exc)
+        return None
+    if not chart:
+        return None
+    return {"desc": f"{year} m. {week} sav.", "url": url,
+            "artist": chart[0][1], "title": chart[0][2],
+            "top": [(a, t) for _r, a, t in chart[:10]]}
+
+
+def agata_fact(question: str, rules: str = "", closes_at: str = "") -> str:
+    res = agata_top(question, rules)
+    if not res:
+        return ""
+    listing = ", ".join(f"{a} „{t}“" for a, t in res["top"][:5])
+    return (f"AGATA singlų TOP 100, {res['desc']}: pirma vieta — {res['artist']} "
+            f"„{res['title']}“. TOP: {listing}. Šaltinis: AGATA ({res['url']}).")
+
+
 # ── Public API ───────────────────────────────────────────────────────────────
 
 def diagnose(question: str, closes_at: str = "") -> list[tuple[str, str, str]]:
@@ -709,6 +832,7 @@ def facts_for(question: str, closes_at: str = "", rules: str = "") -> str:
         lambda q: weather_fact(q, closes_at),
         lambda q: fuel_fact(q),
         lambda q: cinema_fact(q, rules, closes_at),
+        lambda q: agata_fact(q, rules, closes_at),
     )
     facts = []
     for resolver in resolvers:
