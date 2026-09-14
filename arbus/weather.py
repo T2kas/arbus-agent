@@ -932,7 +932,10 @@ def _resolve_sports(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
             continue
         mid = app_api.market_id_of(m)
         st = state.setdefault(mid, {})
-        if st.get("resolved") or st.get("sports_alerted"):
+        # No permanent "resolved" block: the app's winning_option (checked above) is
+        # the real double-resolve guard, so an admin who RESETS a mis-resolved market
+        # lets the bot fix it. Only the ambiguity alert persists (avoids re-alerting).
+        if st.get("sports_alerted"):
             continue
 
         game = None

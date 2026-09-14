@@ -102,9 +102,13 @@ _TOPLYGA_HOME = "https://www.toplyga.lt/"
 _TOPLYGA_MATCH_RE = re.compile(r'/?rungtynes/(\d{4}-\d{2}-\d{2}-[a-z0-9\-]+/\d+)', re.I)
 
 
-def _toplyga_score(match_html: str) -> tuple[int, int] | None:
-    """Final 'X : Y' on a match page, taken from the scoreboard near the top."""
-    for m in re.finditer(r">\s*(\d{1,2})\s*[:\-]\s*(\d{1,2})\s*<", match_html):
+def _toplyga_score(match_html: str, path: str) -> tuple[int, int] | None:
+    """Final 'X : Y' for THIS match. The page lists other fixtures too, each score
+    linking to its own match page — so read only the score in the anchor whose
+    href is this match's own path (never the first score on the page)."""
+    m = re.search(r'href="[^"]*' + re.escape(path) + r'/?"[^>]*>\s*(\d{1,2})\s*[:\-]\s*(\d{1,2})',
+                  match_html)
+    if m:
         return int(m.group(1)), int(m.group(2))
     return None
 
@@ -149,7 +153,7 @@ def toplyga_result(target_iso: str, tokens_a: set, tokens_b: set) -> dict | None
             return None
         url = _TOPLYGA_HOME + path
         html = _get(url)
-        score = _toplyga_score(html)
+        score = _toplyga_score(html, path)
     except Exception as exc:                           # noqa: BLE001
         log.debug("toplyga %s failed: %s", target_iso, exc)
         return None

@@ -20,9 +20,18 @@ def test_toplyga_find_and_parse():
                '<a href="/rungtynes/2020-09-16-suduva-siauliai/2201">y</a>')
     path = sports.toplyga_find_match("2020-09-16", {"zalgiris"}, {"kauno", "zalgiris"}, listing)
     assert path == "rungtynes/2020-09-16-zalgiris-k-zalgiris/2200"
-    html = "<title>Žalgiris - K. Žalgiris | TOPLYGA</title> ...<strong>2 : 1</strong>..."
-    assert sports._toplyga_score(html) == (2, 1)
-    assert sports._toplyga_teams(html) == ("Žalgiris", "K. Žalgiris")
+    assert sports._toplyga_teams(
+        "<title>Žalgiris - K. Žalgiris | TOPLYGA</title>") == ("Žalgiris", "K. Žalgiris")
+
+
+def test_toplyga_score_reads_own_match_not_a_sidebar():
+    # Regression: the page lists OTHER fixtures' scores first; the real score is the
+    # one whose link points to THIS match. (Bug: Sūduva–Žalgiris read 1:0 vs real 0:0.)
+    path = "rungtynes/2026-09-13-suduva-zalgiris/2193"
+    html = ('<a href="https://toplyga.lt/rungtynes/2026-09-06-zalgiris-siauliai/2189">1 : 0</a>'
+            '<a href="https://toplyga.lt/rungtynes/2026-09-13-suduva-zalgiris/2193">0 : 0</a>')
+    assert sports._toplyga_score(html, path) == (0, 0)
+    assert sports._toplyga_score("<a href='/other/9'>3 : 2</a>", path) is None  # no self-link → None
 
 
 def test_euroleague_games_parse(monkeypatch):
