@@ -35,7 +35,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
-from . import app as app_api, config, notify, resolvers
+from . import app as app_api, config, notify, resolvers, sports
 from .resolvers import _LT_MONTHS, _STATION_BY_CITY, UA
 
 log = logging.getLogger(__name__)
@@ -820,6 +820,196 @@ def _resolve_music(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
     return reports, changed
 
 
+# ── sports markets: single-match result (Euroleague / TOPLYGA) ───────────────
+
+_TEAM_FILLERS = {"fk", "bc", "kk", "fc", "sc", "bkk", "the", "komanda", "klubas"}
+
+
+def _team_tokens(label: str) -> set:
+    toks = set()
+    for t in _norm_title(label).split():
+        if t == "k":
+            toks.add("kauno")                         # "K. Žalgiris" → Kauno
+        elif len(t) > 2 and t not in _TEAM_FILLERS:
+            toks.add(t)
+    return toks
+
+
+def _is_draw_option(label: str) -> bool:
+    return "lygios" in _norm_title(label)
+
+
+def assign_two_teams(home_name: str, away_name: str,
+                     team_opts: list[dict]) -> dict | None:
+    """Assign the game's (home, away) to the two team options by token overlap.
+    None if it is ambiguous (equal either way) or matches nothing — so the two
+    same-named Žalgiris teams only resolve when the roles are clearly disjoint."""
+    if len(team_opts) != 2:
+        return None
+    hn, an = _team_tokens(home_name), _team_tokens(away_name)
+    o = [_team_tokens(str(app_api._pick(t, "label", "name", "title", default="")))
+         for t in team_opts]
+
+    def ov(a, b):
+        return len(a & b)
+    a_score = ov(hn, o[0]) + ov(an, o[1])
+    b_score = ov(hn, o[1]) + ov(an, o[0])
+    if a_score == b_score:
+        return None
+    if a_score > b_score:
+        return {"home": team_opts[0], "away": team_opts[1]}
+    return {"home": team_opts[1], "away": team_opts[0]}
+
+
+def _sports_league(rules: str) -> str | None:
+    low = _strip_diacritics(rules).lower()
+    if "eurolyg" in low:
+        return "euroleague"
+    if "toplyg" in low or "a lyga" in low or "a lygos" in low:
+        return "toplyga"
+    return None
+
+
+def _find_el_game(games: list[dict], team_opts: list[dict]):
+    """The finished Euroleague game between the two option teams. Prefers the leg
+    whose HOME is the market's first team; 'ambiguous' if both legs are played
+    and it cannot tell which the market means."""
+    o0 = _team_tokens(str(app_api._pick(team_opts[0], "label", "name", "title", default="")))
+    o1 = _team_tokens(str(app_api._pick(team_opts[1], "label", "name", "title", default="")))
+    cands = []
+    for g in games:
+        hn, an = _team_tokens(g["home"]), _team_tokens(g["away"])
+        if (hn & o0 and an & o1) or (hn & o1 and an & o0):
+            cands.append(g)
+    if not cands:
+        return None
+    if len(cands) == 1:
+        return cands[0]
+    home_first = [g for g in cands if _team_tokens(g["home"]) & o0]
+    return home_first[0] if len(home_first) == 1 else "ambiguous"
+
+
+def _sports_resolved_message(market: dict, game: dict, opt: dict, winner_txt: str) -> str:
+    label = str(app_api._pick(opt, "label", "name", "title", default=""))
+    return "\n".join([
+        "🏟️ SPORTO RINKA IŠSPRĘSTA",
+        "",
+        f"· {app_api.question_of(market)}",
+        f"  📊 {game['home']} {game['home_score']} : {game['away_score']} {game['away']}",
+        f"  ✅ Laimi: {label}" + ("" if winner_txt == label else f" ({winner_txt})"),
+        f"  🔗 {game['url']}",
+    ])
+
+
+def _sports_alert_message(market: dict, why: str, detail: str = "") -> str:
+    return "\n".join([
+        "🏟️ SPORTO RINKA — REIKIA ADMINO",
+        "",
+        f"· {app_api.question_of(market)}",
+        f"  ⚠️ {why}{(' — ' + detail) if detail else ''}. Nustatyk rankiniu būdu.",
+    ])
+
+
+def _resolve_sports(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
+                    *, alert: bool, do_resolve: bool) -> tuple[list[dict], bool]:
+    """Resolve single-match markets (Euroleague / TOPLYGA) once the game is final.
+    Resolves only on a clean, unambiguous result; alerts an admin otherwise."""
+    reports, changed = [], False
+    today = now.astimezone(tz).date().isoformat()
+    for m in rows:
+        if app_api.winning_option_of(m) or app_api.status_of(m) in config.APP_SETTLED_STATUSES:
+            continue
+        rules = str(m.get("rules") or "")
+        league = _sports_league(rules)
+        if not league:
+            continue
+        options = m.get("market_options") or m.get("options") or []
+        team_opts = [o for o in options
+                     if not _is_draw_option(str(app_api._pick(o, "label", "name", "title", default="")))]
+        draw_opt = next((o for o in options
+                         if _is_draw_option(str(app_api._pick(o, "label", "name", "title", default="")))), None)
+        if len(team_opts) != 2:
+            continue
+        mid = app_api.market_id_of(m)
+        st = state.setdefault(mid, {})
+        if st.get("resolved") or st.get("sports_alerted"):
+            continue
+
+        game = None
+        try:
+            if league == "euroleague":
+                year = sports.euroleague_season_year(rules)
+                if not year:
+                    continue
+                game = _find_el_game(sports.euroleague_games(year), team_opts)
+            else:  # toplyga football
+                iso = sports._rules_date(rules)
+                if not iso or iso >= today:            # not played yet
+                    continue
+                ta = _team_tokens(str(app_api._pick(team_opts[0], "label", "name", "title", default="")))
+                tb = _team_tokens(str(app_api._pick(team_opts[1], "label", "name", "title", default="")))
+                game = sports.toplyga_result(iso, ta, tb)
+        except Exception as exc:                       # noqa: BLE001
+            log.warning("sports %s failed: %s", mid, exc)
+            continue
+
+        if game == "ambiguous":
+            if alert:
+                notify.send(_sports_alert_message(m, "sužaistos abi rungtynės — neaišku kuri"))
+            st["sports_alerted"] = True
+            reports.append({"status": "error", "market_id": mid, "reason": "sports ambiguous"})
+            changed = True
+            continue
+        if not game:                                   # not found / not final yet
+            continue
+
+        hs, as_ = game["home_score"], game["away_score"]
+        if hs == as_:
+            win_opt, winner_txt = draw_opt, "Lygiosios"
+            if win_opt is None:                        # a no-draw sport ended level → check
+                if alert:
+                    notify.send(_sports_alert_message(m, "lygus rezultatas, o „Lygiosios“ baigties nėra",
+                                                      f"{game['home']} {hs}:{as_} {game['away']}"))
+                st["sports_alerted"] = True
+                reports.append({"status": "error", "market_id": mid, "reason": "sports draw no option"})
+                changed = True
+                continue
+        else:
+            assign = assign_two_teams(game["home"], game["away"], team_opts)
+            if assign is None:
+                if alert:
+                    notify.send(_sports_alert_message(m, "nepavyko priskirti komandų",
+                                                      f"{game['home']} {hs}:{as_} {game['away']}"))
+                st["sports_alerted"] = True
+                reports.append({"status": "error", "market_id": mid, "reason": "sports assign"})
+                changed = True
+                continue
+            win_opt = assign["home"] if hs > as_ else assign["away"]
+            winner_txt = game["home"] if hs > as_ else game["away"]
+
+        oid = str(app_api._pick(win_opt, "id", "option_id", default=""))
+        label = str(app_api._pick(win_opt, "label", "name", "title", default=""))
+        if not do_resolve:
+            reports.append({"status": "would-resolve", "market_id": mid, "option": label,
+                            "note": f"{game['home']} {hs}:{as_} {game['away']}"})
+            continue
+        ok, detail = app_api.resolve_market(mid, oid)
+        if ok:
+            st.update({"resolved": True, "resolved_option_id": oid, "resolved_label": label,
+                       "resolved_via": "sports", "resolved_at": now.isoformat(),
+                       "resolved_score": f"{game['home']} {hs}:{as_} {game['away']}"})
+            changed = True
+            if alert:
+                notify.send(_sports_resolved_message(m, game, win_opt, winner_txt))
+            reports.append({"status": "resolved", "market_id": mid, "option": label, "via": "sports"})
+        else:
+            if alert:
+                notify.send(f"⚠️ SPORTO RINKA: nepavyko resolvinti ({detail[:150]}) — "
+                            f"{app_api.question_of(m)}")
+            reports.append({"status": "error", "market_id": mid, "reason": f"resolve: {detail}"})
+    return reports, changed
+
+
 # ── orchestration ────────────────────────────────────────────────────────────
 
 def day_peak_time(observations, target_iso: str,
@@ -998,6 +1188,11 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
                                               alert=alert, do_resolve=do_resolve)
     reports += mus_reports
     changed = changed or mus_changed
+    # Sports markets (single match: Euroleague / TOPLYGA).
+    sp_reports, sp_changed = _resolve_sports(rows, now, tz, state,
+                                             alert=alert, do_resolve=do_resolve)
+    reports += sp_reports
+    changed = changed or sp_changed
     if changed:
         save_state(state)
 

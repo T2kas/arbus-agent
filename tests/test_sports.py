@@ -1,0 +1,109 @@
+"""Sports match resolvers: Euroleague feed, TOPLYGA scrape, and safe mapping."""
+
+from datetime import datetime, timezone
+
+from arbus import sports, weather
+
+_FOOTBALL_RULES = ("Rinka pagal FK „Žalgirio“ ir „Kauno Žalgirio“ TOPLYGOS rungtynių, "
+                   "numatytų 2020 m. rugsėjo 16 d., rezultatą. Lygiosios – baigtis.")
+_BASKET_RULES = ("Kauno „Žalgirio“ ir Pirėjo „Olympiacos“ 2026–2027 m. Eurolygos "
+                 "reguliariojo sezono rungtynių rezultatą. Lygiosios negalima.")
+
+
+def test_season_year_and_rules_date():
+    assert sports.euroleague_season_year(_BASKET_RULES) == 2026
+    assert sports._rules_date(_FOOTBALL_RULES) == "2020-09-16"
+
+
+def test_toplyga_find_and_parse():
+    listing = ('<a href="/rungtynes/2020-09-16-zalgiris-k-zalgiris/2200">x</a>'
+               '<a href="/rungtynes/2020-09-16-suduva-siauliai/2201">y</a>')
+    path = sports.toplyga_find_match("2020-09-16", {"zalgiris"}, {"kauno", "zalgiris"}, listing)
+    assert path == "rungtynes/2020-09-16-zalgiris-k-zalgiris/2200"
+    html = "<title>Žalgiris - K. Žalgiris | TOPLYGA</title> ...<strong>2 : 1</strong>..."
+    assert sports._toplyga_score(html) == (2, 1)
+    assert sports._toplyga_teams(html) == ("Žalgiris", "K. Žalgiris")
+
+
+def test_euroleague_games_parse(monkeypatch):
+    monkeypatch.setattr(sports, "_el_fetch", lambda year: [
+        {"status": "result", "home": {"name": "Zalgiris Kaunas", "score": 90},
+         "away": {"name": "Olympiacos Piraeus", "score": 88}, "date": "2026-10-05T18:00:00Z"},
+        {"status": "scheduled", "home": {"name": "A", "score": None},
+         "away": {"name": "B", "score": None}, "date": "2026-10-12T18:00:00Z"},
+    ])
+    games = sports.euroleague_games(2026)
+    assert len(games) == 1 and games[0]["home_score"] == 90 and games[0]["away"] == "Olympiacos Piraeus"
+
+
+def test_assign_two_teams_derby_and_ambiguous():
+    opts = [{"id": "o0", "label": "FK Žalgiris"}, {"id": "o1", "label": "Kauno Žalgiris"}]
+    a = weather.assign_two_teams("Žalgiris", "K. Žalgiris", opts)
+    assert a["home"]["label"] == "FK Žalgiris" and a["away"]["label"] == "Kauno Žalgiris"
+    # identical names on both sides → cannot tell → None
+    assert weather.assign_two_teams("Žalgiris", "Žalgiris", opts) is None
+
+
+def _football_market(date="2020-09-16"):
+    return {"id": "m1", "status": "closed", "winning_option_id": None,
+            "title": "Žalgiris vs Kauno Žalgiris?",
+            "rules": _FOOTBALL_RULES.replace("2020-09-16", date),
+            "market_options": [{"id": "o0", "label": "FK Žalgiris"},
+                               {"id": "o1", "label": "Kauno Žalgiris"},
+                               {"id": "o2", "label": "Lygiosios"}]}
+
+
+def _wire(monkeypatch):
+    calls = {"resolve": [], "telegram": []}
+    monkeypatch.setattr(weather.config, "ARBUS_WRITE_KEY", "svc")
+    monkeypatch.setattr(weather.app_api, "resolve_market",
+                        lambda mid, oid: (calls["resolve"].append((mid, oid)), (True, "ok"))[1])
+    monkeypatch.setattr(weather.notify, "send", lambda m: calls["telegram"].append(m))
+    return calls
+
+
+def test_resolve_football_home_win(monkeypatch):
+    calls = _wire(monkeypatch)
+    monkeypatch.setattr(weather.sports, "toplyga_result", lambda iso, a, b: {
+        "home": "Žalgiris", "away": "K. Žalgiris", "home_score": 2, "away_score": 1,
+        "url": "u", "date": iso})
+    now = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+    reports, changed = weather._resolve_sports([_football_market()], now, weather._tz(), {},
+                                               alert=True, do_resolve=True)
+    assert calls["resolve"] == [("m1", "o0")] and reports[0]["status"] == "resolved"
+
+
+def test_resolve_football_draw(monkeypatch):
+    calls = _wire(monkeypatch)
+    monkeypatch.setattr(weather.sports, "toplyga_result", lambda iso, a, b: {
+        "home": "Žalgiris", "away": "K. Žalgiris", "home_score": 1, "away_score": 1,
+        "url": "u", "date": iso})
+    now = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+    reports, _ = weather._resolve_sports([_football_market()], now, weather._tz(), {},
+                                         alert=True, do_resolve=True)
+    assert calls["resolve"] == [("m1", "o2")]                # Lygiosios
+
+
+def test_football_not_resolved_before_match_day(monkeypatch):
+    calls = _wire(monkeypatch)
+    monkeypatch.setattr(weather.sports, "toplyga_result",
+                        lambda *a, **k: (_ for _ in ()).throw(AssertionError("should not fetch")))
+    now = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)   # before the 2026-09-16 match
+    reports, _ = weather._resolve_sports([_football_market("2026-09-16")], now, weather._tz(), {},
+                                         alert=True, do_resolve=True)
+    assert calls["resolve"] == []
+
+
+def test_resolve_basketball(monkeypatch):
+    calls = _wire(monkeypatch)
+    market = {"id": "m2", "status": "closed", "winning_option_id": None,
+              "title": "Žalgiris vs Olympiacos?", "rules": _BASKET_RULES,
+              "market_options": [{"id": "z", "label": "Kauno „Žalgiris“"},
+                                 {"id": "o", "label": "Pirėjo „Olympiacos“"}]}
+    monkeypatch.setattr(weather.sports, "euroleague_games", lambda year: [
+        {"home": "Zalgiris Kaunas", "away": "Olympiacos Piraeus",
+         "home_score": 95, "away_score": 80, "url": "u", "date": "2026-10-05"}])
+    now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
+    reports, _ = weather._resolve_sports([market], now, weather._tz(), {},
+                                         alert=True, do_resolve=True)
+    assert calls["resolve"] == [("m2", "z")] and reports[0]["status"] == "resolved"
