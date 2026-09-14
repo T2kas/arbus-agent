@@ -422,7 +422,7 @@
   "station": "kauno-ams"
  },
  "2262c4a2-324e-4994-84ee-9ea299fccf79": {
-  "checksum": "481ec1f3440f182c6ec7dff0c4f26f32146cecde2a5ed4baeb4bf63d5f65ad33",
+  "checksum": "535eb03a8087db286752bc1a699e16352f2c8034d58c51fa3f360e6ef8173f84",
   "current_maximum": null,
   "date": "2026-09-15",
   "measurements": {},
@@ -438,7 +438,7 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "2724af90-778d-4595-ba66-8602575c585e": {
-  "checksum": "6effc339c179aaaadafa4aa3cc83b4c3f0cb6576dbf7edd6c9ae6a40e6a6ecba",
+  "checksum": "d4a8113e1c0b9a423e03c53c445e7b9d58999bf79610165f46977d49e877e03f",
   "current_maximum": null,
   "date": "2026-09-15",
   "measurements": {},
@@ -577,7 +577,7 @@
  },
  "377d62c0-fbd8-4f87-972e-615586d034f0": {},
  "3938528f-7613-44b3-93e6-4ceecfd3282f": {
-  "checksum": "2a03331a4cdb414919943151a3f6c4b49c07f754662393eef1077d2e604bd88e",
+  "checksum": "640eb84d2a4bec16d9a9cec2fdde6d9a85b5e0a437b18bc6f4b091c744fff93e",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -585,7 +585,7 @@
   "station": "klaipedos-ams"
  },
  "536e58af-ae24-4f98-b812-84af16b7a13f": {
-  "checksum": "2a03331a4cdb414919943151a3f6c4b49c07f754662393eef1077d2e604bd88e",
+  "checksum": "640eb84d2a4bec16d9a9cec2fdde6d9a85b5e0a437b18bc6f4b091c744fff93e",
   "current_maximum": null,
   "date": "2026-09-15",
   "measurements": {},
@@ -1185,7 +1185,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "ab8d9e9c-9817-4008-a0fe-df07c1421d64": {
-  "checksum": "481ec1f3440f182c6ec7dff0c4f26f32146cecde2a5ed4baeb4bf63d5f65ad33",
+  "checksum": "535eb03a8087db286752bc1a699e16352f2c8034d58c51fa3f360e6ef8173f84",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -1628,7 +1628,7 @@
   "station": "klaipedos-ams"
  },
  "cdcae7cf-3416-4949-aca4-31709c2a7a45": {
-  "checksum": "6effc339c179aaaadafa4aa3cc83b4c3f0cb6576dbf7edd6c9ae6a40e6a6ecba",
+  "checksum": "d4a8113e1c0b9a423e03c53c445e7b9d58999bf79610165f46977d49e877e03f",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
