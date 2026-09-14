@@ -422,11 +422,20 @@
   "station": "kauno-ams"
  },
  "2262c4a2-324e-4994-84ee-9ea299fccf79": {
-  "checksum": "9837993b45d6cd6e33833bbd5280803850a65bf21bf2a103366b6a649775cf80",
-  "current_maximum": null,
+  "checksum": "2ef21e2300a79a29160d063b400a2cee51a0d5526b4a0eeb40b4126453131acd",
+  "current_maximum": 14.1,
   "date": "2026-09-15",
-  "measurements": {},
+  "max_received_at": "2026-09-14T21:10:41.657129+00:00",
+  "measurements": {
+   "2026-09-14 21:00:00": {
+    "checksum": "2ef21e2300a79a29160d063b400a2cee51a0d5526b4a0eeb40b4126453131acd",
+    "received_at": "2026-09-14T21:10:41.657129+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 14.1
+   }
+  },
   "resolved": false,
+  "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
  "227e8f3c-6fde-4b0b-b34d-0da499d5fbdf": {
@@ -438,11 +447,20 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "2724af90-778d-4595-ba66-8602575c585e": {
-  "checksum": "0529935cfff1305ea5c9cc90d741421b252b2474c8c4a2887f6598b20b310e1f",
-  "current_maximum": null,
+  "checksum": "aa40a50a8c43c9cacacf73edafa4cbf01f77668114cb1ac909cb198948ce79f5",
+  "current_maximum": 15.3,
   "date": "2026-09-15",
-  "measurements": {},
+  "max_received_at": "2026-09-14T21:10:41.657129+00:00",
+  "measurements": {
+   "2026-09-14 21:00:00": {
+    "checksum": "aa40a50a8c43c9cacacf73edafa4cbf01f77668114cb1ac909cb198948ce79f5",
+    "received_at": "2026-09-14T21:10:41.657129+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 15.3
+   }
+  },
   "resolved": false,
+  "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
  "35673c42-e212-489d-9b0a-256985f46083": {},
@@ -577,7 +595,7 @@
  },
  "377d62c0-fbd8-4f87-972e-615586d034f0": {},
  "3938528f-7613-44b3-93e6-4ceecfd3282f": {
-  "checksum": "0f5996627b01b4699c1ac91ce41b053335049dcef3a75d382e617b9520ff6b31",
+  "checksum": "9fb76110c7a39997064261fa0360ecb4165f41d2b3332209d39b6853866fcfdc",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -585,11 +603,20 @@
   "station": "klaipedos-ams"
  },
  "536e58af-ae24-4f98-b812-84af16b7a13f": {
-  "checksum": "0f5996627b01b4699c1ac91ce41b053335049dcef3a75d382e617b9520ff6b31",
-  "current_maximum": null,
+  "checksum": "9fb76110c7a39997064261fa0360ecb4165f41d2b3332209d39b6853866fcfdc",
+  "current_maximum": 13.5,
   "date": "2026-09-15",
-  "measurements": {},
+  "max_received_at": "2026-09-14T21:10:41.657129+00:00",
+  "measurements": {
+   "2026-09-14 21:00:00": {
+    "checksum": "9fb76110c7a39997064261fa0360ecb4165f41d2b3332209d39b6853866fcfdc",
+    "received_at": "2026-09-14T21:10:41.657129+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 13.5
+   }
+  },
   "resolved": false,
+  "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
  "5f5d958c-1c10-4939-9558-f4e6e4b81001": {},
@@ -1185,7 +1212,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "ab8d9e9c-9817-4008-a0fe-df07c1421d64": {
-  "checksum": "9837993b45d6cd6e33833bbd5280803850a65bf21bf2a103366b6a649775cf80",
+  "checksum": "2ef21e2300a79a29160d063b400a2cee51a0d5526b4a0eeb40b4126453131acd",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -1628,7 +1655,7 @@
   "station": "klaipedos-ams"
  },
  "cdcae7cf-3416-4949-aca4-31709c2a7a45": {
-  "checksum": "0529935cfff1305ea5c9cc90d741421b252b2474c8c4a2887f6598b20b310e1f",
+  "checksum": "aa40a50a8c43c9cacacf73edafa4cbf01f77668114cb1ac909cb198948ce79f5",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
