@@ -422,10 +422,10 @@
   "station": "kauno-ams"
  },
  "2262c4a2-324e-4994-84ee-9ea299fccf79": {
-  "checksum": "5ecff9f63a84813ee64378de2b1948c23779cef7e3e31553936b88301b40c481",
-  "current_maximum": 14.3,
+  "checksum": "12c84b618c14aa2995b097e198e84bf6369d0c68276619e885c8a6805f79fda6",
+  "current_maximum": 14.8,
   "date": "2026-09-15",
-  "max_received_at": "2026-09-15T08:10:42.467225+00:00",
+  "max_received_at": "2026-09-15T09:10:41.120054+00:00",
   "measurements": {
    "2026-09-14 21:00:00": {
     "checksum": "2ef21e2300a79a29160d063b400a2cee51a0d5526b4a0eeb40b4126453131acd",
@@ -498,6 +498,12 @@
     "received_at": "2026-09-15T08:10:42.467225+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 14.3
+   },
+   "2026-09-15 09:00:00": {
+    "checksum": "12c84b618c14aa2995b097e198e84bf6369d0c68276619e885c8a6805f79fda6",
+    "received_at": "2026-09-15T09:10:41.120054+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 14.8
    }
   },
   "resolved": false,
@@ -513,10 +519,10 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "2724af90-778d-4595-ba66-8602575c585e": {
-  "checksum": "2395a2c797088cff427406beceef484213c1f5ef761b644a6107945105b6e0aa",
-  "current_maximum": 15.4,
+  "checksum": "912f1d9a585f38ac350e10460defbf19a0b662de1c2f6c91789f23a39f06287b",
+  "current_maximum": 16.1,
   "date": "2026-09-15",
-  "max_received_at": "2026-09-15T08:10:42.467225+00:00",
+  "max_received_at": "2026-09-15T09:10:41.120054+00:00",
   "measurements": {
    "2026-09-14 21:00:00": {
     "checksum": "aa40a50a8c43c9cacacf73edafa4cbf01f77668114cb1ac909cb198948ce79f5",
@@ -589,6 +595,12 @@
     "received_at": "2026-09-15T08:10:42.467225+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 15.4
+   },
+   "2026-09-15 09:00:00": {
+    "checksum": "912f1d9a585f38ac350e10460defbf19a0b662de1c2f6c91789f23a39f06287b",
+    "received_at": "2026-09-15T09:10:41.120054+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 16.1
    }
   },
   "resolved": false,
@@ -727,7 +739,7 @@
  },
  "377d62c0-fbd8-4f87-972e-615586d034f0": {},
  "3938528f-7613-44b3-93e6-4ceecfd3282f": {
-  "checksum": "22fd2d35ba0fd946dcc23289c2b41dfa41e8eec1195d5722a7fe4e4f3e11e7f9",
+  "checksum": "1d72989b13639404b919d4a8e1fdd4d257eff2e4cca2b52d5c7b6368ee472780",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -735,10 +747,10 @@
   "station": "klaipedos-ams"
  },
  "536e58af-ae24-4f98-b812-84af16b7a13f": {
-  "checksum": "22fd2d35ba0fd946dcc23289c2b41dfa41e8eec1195d5722a7fe4e4f3e11e7f9",
-  "current_maximum": 16.2,
+  "checksum": "1d72989b13639404b919d4a8e1fdd4d257eff2e4cca2b52d5c7b6368ee472780",
+  "current_maximum": 18.3,
   "date": "2026-09-15",
-  "max_received_at": "2026-09-15T07:10:39.977709+00:00",
+  "max_received_at": "2026-09-15T09:10:41.120054+00:00",
   "measurements": {
    "2026-09-14 21:00:00": {
     "checksum": "9fb76110c7a39997064261fa0360ecb4165f41d2b3332209d39b6853866fcfdc",
@@ -811,6 +823,12 @@
     "received_at": "2026-09-15T08:10:42.467225+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 16.2
+   },
+   "2026-09-15 09:00:00": {
+    "checksum": "1d72989b13639404b919d4a8e1fdd4d257eff2e4cca2b52d5c7b6368ee472780",
+    "received_at": "2026-09-15T09:10:41.120054+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 18.3
    }
   },
   "resolved": false,
@@ -1410,7 +1428,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "ab8d9e9c-9817-4008-a0fe-df07c1421d64": {
-  "checksum": "5ecff9f63a84813ee64378de2b1948c23779cef7e3e31553936b88301b40c481",
+  "checksum": "12c84b618c14aa2995b097e198e84bf6369d0c68276619e885c8a6805f79fda6",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -1853,7 +1871,7 @@
   "station": "klaipedos-ams"
  },
  "cdcae7cf-3416-4949-aca4-31709c2a7a45": {
-  "checksum": "2395a2c797088cff427406beceef484213c1f5ef761b644a6107945105b6e0aa",
+  "checksum": "912f1d9a585f38ac350e10460defbf19a0b662de1c2f6c91789f23a39f06287b",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
