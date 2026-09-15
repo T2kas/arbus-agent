@@ -1,0 +1,121 @@
+[
+  {
+    "id": 192,
+    "verify_verdict": "OPEN",
+    "verify_note": "Maxima's price policy is an ongoing/future commitment; the cited source only describes a past pricing-error apology incident, not a network-wide price-cut announcement, and nothing indicates this has already been decided by 2026-07-25.",
+    "question_lt": "Ar „Maxima“ iki 2026 m. pabaigos paskelbs apie plačią kainų mažinimo akciją?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "economics",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Vertinama, ar „Maxima“ viešai paskelbs apie viso tinklo ar daugumos prekių krepšelio kainų mažinimą (ne pavienes nuolaidas) per oficialią komunikaciją ar žiniasklaidą.",
+    "sources": [
+      "https://www.tv3.lt/naujiena/verslas/maxima-atsipraso-pirkeju-uz-kai-kurias-prekes-sestadieni-permokejote-n1538883"
+    ],
+    "rationale_en": "TV3 reported a Maxima pricing mistake and apologies, and everyday prices and promotions are one of the hottest issues for young people’s budgets."
+  },
+  {
+    "id": 193,
+    "verify_verdict": "OPEN",
+    "verify_note": "Compares Lithuanian fuel prices for July vs. October 2026; October data does not exist yet as of 2026-07-25, so the outcome is genuinely undecided and the market setup (Lithuanian fuel prices, official stat sources) is valid.",
+    "question_lt": "Ar vidutinė degalų kaina Lietuvoje 2026 m. spalį bus didesnė nei 2026 m. liepą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "economics",
+    "resolve_by": "2026-11-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Lyginamos vidutinės mėnesio benzino A95 arba dyzelino kainos Lietuvoje pagal oficialią Statistikos departamento ar Lietuvos banko statistiką už 2026 m. liepos ir spalio mėnesius.",
+    "sources": [
+      "https://osp.stat.gov.lt/",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2999132/degalu-krizei-apemus-rusijos-regionus-kyla-nerimas-del-traktoriu-sieno-ir-karviu"
+    ],
+    "rationale_en": "Fuel crises in Russian regions and oil price swings continuously affect fuel prices, which are directly relevant for Lithuanian drivers."
+  },
+  {
+    "id": 194,
+    "verify_verdict": "OPEN",
+    "verify_note": "Compares \"Ignitis grupė\" full-year 2026 net profit to 2025; FY2026 results won't be finalized until 2027, so this remains a valid, undecided future comparison for a clearly Lithuanian company.",
+    "question_lt": "Ar „Ignitis grupė“ pelnas 2026 m. viršys 2025 m. lygį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "economics",
+    "resolve_by": "2027-04-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Lyginamas „Ignitis grupės“ konsoliduotas grynasis pelnas už 2026 ir 2025 metus pagal oficialias metines ataskaitas.",
+    "sources": [
+      "https://ignitisgrupe.lt/",
+      "https://www.lrt.lt/naujienos/verslas/4/2997337/ignitis-renewables-latvijoje-investuos-35-mln-euru-i-107-mw-galios-elektros-kaupiklius"
+    ],
+    "rationale_en": "Energy-sector profits fluctuate sharply, and Ignitis is one of Lithuania’s most closely watched companies, so young investors want to know whether profitability will keep growing."
+  },
+  {
+    "id": 195,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "Whether IGN1L will close at/above €24 by 2026-09-15 depends on the current live share price, which could not be verified this session; cannot confirm current facts needed to judge plausibility.",
+    "question_lt": "Ar „Ignitis grupė“ akcijos pasieks 24 €?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "economics",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Galutinė dienos kaina tikrinama pagal „Ignitis grupė“ („IGN1L“) uždarymo kainą „Nasdaq Vilnius“ biržoje iki 2026-09-15 imtinai.",
+    "sources": [
+      "https://nasdaqbaltic.com/statistics/en/instrument/LV0000101805",
+      "https://finance.yahoo.com/quote/IGN1L.VS"
+    ],
+    "rationale_en": "Ignitis trades around €22.45 this week, so a move to €24 by September is plausible but not guaranteed, and it is a salient topic for Lithuanian retail investors watching energy and blue-chip stocks."
+  },
+  {
+    "id": 196,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "Whether TEL1L will close above €2.40 by 2026-09-20 depends on the current live share price, which could not be verified this session; cannot confirm current facts needed to judge plausibility.",
+    "question_lt": "Ar „Telia Lietuva“ akcijos pakils virš 2,40 €?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "economics",
+    "resolve_by": "2026-09-20",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinama „Telia Lietuva“ („TEL1L“) uždarymo kaina „Nasdaq Vilnius“ biržoje iki 2026-09-20 imtinai.",
+    "sources": [
+      "https://nasdaqbaltic.com/statistics/en/instrument/LT0000123911",
+      "https://finance.yahoo.com/quote/TEL1L.VS"
+    ],
+    "rationale_en": "Telia Lietuva is around €2.26 per share and has been almost flat this week, so €2.40 by autumn is a borderline but possible scenario that matters to Lithuanian investors."
+  }
+]

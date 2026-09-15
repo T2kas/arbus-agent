@@ -1,0 +1,132 @@
+[
+  {
+    "id": 237,
+    "verify_verdict": "OPEN",
+    "verify_note": "Q3 2026 wage data doesn't exist yet (published only after quarter ends, well before Dec 20 deadline); a genuine forward-looking economic market with valid, exhaustive ranges.",
+    "question_lt": "Koks bus vidutinio bruto darbo užmokesčio pokytis Lietuvoje 2026 m. III ketvirtį, palyginti su tuo pačiu 2025 m. ketvirčiu?",
+    "market_type": "multi",
+    "options_lt": [
+      "< +5 %",
+      "+5 % – +7,9 %",
+      "+8 % – +9,9 %",
+      "≥ +10 %"
+    ],
+    "probabilities": [
+      0.25,
+      0.4,
+      0.25,
+      0.1
+    ],
+    "category": "Ekonomika & finansai (atlyginimai, valstybės statistika)",
+    "resolve_by": "2026-12-20",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus sprendžiama pagal oficialius Statistikos departamento skelbiamus vidutinio mėnesinio bruto darbo užmokesčio duomenis Lietuvoje – bus lyginamas 2026 m. III ketvirčio rodiklis su 2025 m. III ketvirčio rodikliu ir skaičiuojamas procentinis pokytis, kuriam artimiausia ir atitinkanti intervalą parinktis bus laikoma teisinga.",
+    "sources": [
+      "https://osp.stat.gov.lt/statistiniu-rodikliu-analize",
+      "https://osp.stat.gov.lt/darbo-rinka"
+    ],
+    "rationale_en": "Average wages in Lithuania have been growing at mid‑single to high‑single digit rates YoY in recent quarters, so a 5–10 % range is realistic and widely discussed given inflation and living‑cost pressure.[Eurostat/government debt & wages context; Eurostat skola straipsnis]"
+  },
+  {
+    "id": 238,
+    "verify_verdict": "OPEN",
+    "verify_note": "End-2026 government debt/GDP figure isn't known yet; Eurostat's own Q1 2026 reading (42.3% of GDP) shows the market's bands are realistic, but the year-end figure is still undetermined.",
+    "question_lt": "Kokią Lietuvos BVP dalį sudarys valdžios sektoriaus skola 2026 m. pabaigoje?",
+    "market_type": "multi",
+    "options_lt": [
+      "< 42 %",
+      "42 % – 44,9 %",
+      "45 % – 47,9 %",
+      "≥ 48 %"
+    ],
+    "probabilities": [
+      0.2,
+      0.45,
+      0.25,
+      0.1
+    ],
+    "category": "Ekonomika & finansai (valstybės skola, makro statistika)",
+    "resolve_by": "2027-04-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus sprendžiama pagal Eurostato/Lietuvos statistikos departamento skelbiamą valdžios sektoriaus skolos rodiklį procentais nuo BVP 2026 m. pabaigoje – kai bus paskelbtas galutinis 2026 m. ketvirčio / metų skolos rodiklis, jam atitinkantis intervalas bus laikomas laimėjęs.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/2997238/eurostatas-lietuvos-valdzios-sektoriaus-skola-pirma-metu-ketvirti-sudare-42-3-proc-bvp",
+      "https://ec.europa.eu/eurostat"
+    ],
+    "rationale_en": "Eurostat reports Lithuania’s government debt at 42.3 % of GDP in Q1 2026, and with ongoing budget debates and EU fiscal rules this trajectory is a live topic for economically aware Lithuanians.[Eurostat debt article]"
+  },
+  {
+    "id": 242,
+    "verify_verdict": "OPEN",
+    "verify_note": "No ceasefire has been announced; reporting shows continued skepticism and internal Ukrainian military leadership turmoil rather than any peace deal, so this remains a genuinely undecided market ahead of the Aug 31 deadline.",
+    "question_lt": "Ar Rusija ir Ukraina iki rugpjūčio susitars dėl paliaubų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "politics",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal viešą Ukrainos, Rusijos arba tarptautinių derybų pareiškimą, kuriame aiškiai patvirtinamas paliaubų susitarimas; susitarimas turi būti paskelbtas iki 2026-08-31 imtinai.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2998392/ukrainos-kariai-ir-civiliai-palankiai-vertina-sprendima-pakeisti-kariuomenes-vada",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2998349/nereikejo-viesumo-reikejo-kompromiso-zukas-skeptiskas-del-pokyciu-ukrainos-kariuomeneje",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2998364/naujasis-hamas-vadovas-pareiske-kad-tes-ligsiolini-kursa"
+    ],
+    "rationale_en": "Ukraine–Russia war outcomes, including potential ceasefires, are a constant argument topic among 16–35yo Lithuanians who closely follow LRT and other regional coverage of the front, leadership changes, and negotiation prospects."
+  },
+  {
+    "id": 243,
+    "verify_verdict": "OPEN",
+    "verify_note": "Current confirmed drone shoot-downs are in Romania, not Lithuania; no Lithuania-specific \"unknown drone\" incursion has been reported yet, so this remains a legitimate, unresolved forward market for Lithuanian airspace.",
+    "question_lt": "Ar iki rugsėjo į Lietuvos teritoriją įskris nežinomas dronas?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "other",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Lietuvos kariuomenės, Krašto apsaugos ministerijos arba patikimų žiniasklaidos pranešimų patvirtinimą apie neidentifikuotą bepiločio orlaivio įskridimą į Lietuvos teritoriją; įvykis turi būti užfiksuotas iki 2026-09-15 imtinai.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3001030/rumunija-per-dvi-dienas-numuse-jau-antra-oro-erdve-pazeidusi-drona",
+      "https://www.vz.lt/verslo-aplinka/2026/07/25/rumunija-numuse-antra-drona-587921",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3000152/rumunijoje-pirma-karta-numuštas-salies-oro-erdve-pazeides-dronas"
+    ],
+    "rationale_en": "Drone incursions near NATO borders, like recent Romanian airspace violations, spark security anxiety and speculation in Lithuania, making a concrete \"unknown drone in Lithuania\" question very debate-worthy."
+  },
+  {
+    "id": 244,
+    "verify_verdict": "OPEN",
+    "verify_note": "The president is only urging a \"transition period\" for the 10th-grade threshold; no Seimas vote/amendment has passed yet, so this is still an open legislative question ahead of the Sep 10 deadline.",
+    "question_lt": "Ar Seimas iki rugsėjo pakeis dešimtokų kartelę?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "politics",
+    "resolve_by": "2026-09-10",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal priimtą Seimo įstatymo pataisą arba oficialų balsavimą dėl dešimtokų kartelės keitimo; sprendimas turi būti priimtas iki 2026-09-10 imtinai.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/svietimas/45/3001070/prezidentas-kartele-desimtokams-turi-buti",
+      "https://www.15min.lt/naujiena/aktualu/lietuva/prezidentas-kartele-desimtokams-turi-buti-pereinamasis-laikotarpis-nenorint-sistemos-griuties-56-2730886?utm_source=rssfeed_default&utm_medium=rss&utm_campaign=rssfeed"
+    ],
+    "rationale_en": "The debate over the 10th graders' exam threshold is a hot education-policy issue in Lithuania, with strong opinions among students, parents, and teachers about whether Seimas will adjust the bar."
+  }
+]

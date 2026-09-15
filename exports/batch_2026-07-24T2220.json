@@ -1,0 +1,215 @@
+[
+  {
+    "id": 120,
+    "verify_verdict": "OPEN",
+    "verify_note": "A. Gudaitis currently plays for Panathinaikos AKTOR and there is no official announcement of his return to Rytas; resolution date is in the future[1]",
+    "question_lt": "Ar „Rytas“ susigrąžins A. Gudaitį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.39,
+      0.61
+    ],
+    "category": "Sportas",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų klubo pranešimą apie A. Gudaičio sugrįžimą į „Rytą“.",
+    "sources": [
+      "https://www.delfi.lt/krepsinis/naujienos/gudaitis-apsisprende-del-ryto-pasiulymo-120281145",
+      "https://www.15min.lt/sportas"
+    ],
+    "rationale_en": "Strong pulse signal: “artūras gudaitis” 1000+ searches, and the topic is already a live, recognizable basketball story."
+  },
+  {
+    "id": 121,
+    "verify_verdict": "OPEN",
+    "verify_note": "YouTube Trending LT Top 10 positions change dynamically and are only checked on the specified future resolution date; no contradiction in setup",
+    "question_lt": "Ar Jessica Shy daina „Kas Kaltas“ išliks „YouTube Trending LT“ Top 10?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.63,
+      0.37
+    ],
+    "category": "Kultūra",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal „YouTube Trending LT“ reitingą paskutinę sprendimo dieną.",
+    "sources": [
+      "https://www.youtube.com/watch?v=ROYdQLUjxDg",
+      "https://www.youtube.com/watch?v=rIUrMbh6Svs"
+    ],
+    "rationale_en": "Pulse-backed culture market: the track has 405 221 views and is already in YouTube Trending LT."
+  },
+  {
+    "id": 122,
+    "verify_verdict": "OPEN",
+    "verify_note": "Vaidas Baumila’s “Kas yra?” can appear or remain in YouTube Trending LT Top 10 and will be evaluated on the future resolution date; setup is consistent",
+    "question_lt": "Ar Vaido Baumilos „Kas yra?“ išliks „YouTube Trending LT“ Top 10?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.57,
+      0.43
+    ],
+    "category": "Kultūra",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal „YouTube Trending LT“ reitingą paskutinę sprendimo dieną.",
+    "sources": [
+      "https://www.youtube.com/watch?v=_z3C9Dlg0rg"
+    ],
+    "rationale_en": "Strong pulse signal: 137 182 views and current presence in YouTube Trending LT."
+  },
+  {
+    "id": 123,
+    "verify_verdict": "OPEN",
+    "verify_note": "Palanga has an incumbent mayor and any change would be determined by council/VRK decisions by a future date; no conflicting facts with the stated resolution conditions[1]",
+    "question_lt": "Ar bus paskelbtas naujas Palangos meras?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.28,
+      0.72
+    ],
+    "category": "Politika",
+    "resolve_by": "2026-09-10",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Palangos savivaldybės tarybos arba Vyriausiosios rinkimų komisijos oficialų sprendimą.",
+    "sources": [
+      "https://www.15min.lt/naujiena/aktualu/lietuva/",
+      "https://www.vrk.lt/"
+    ],
+    "rationale_en": "The topic was heavily covered by multiple Lithuanian outlets, but the exact timing remains uncertain."
+  },
+  {
+    "id": 124,
+    "verify_verdict": "OPEN",
+    "verify_note": "Lietuvos hidrometeorologijos tarnyba issues color-coded heat warnings, including red-level alerts, and whether such a warning is issued by the future resolution date is genuinely undecided[1]",
+    "question_lt": "Ar Lietuvoje bus paskelbtas raudonas pavojus dėl karščio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.41,
+      0.59
+    ],
+    "category": "Orai",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal Lietuvos hidrometeorologijos tarnybos oficialius pavojingų reiškinių pranešimus.",
+    "sources": [
+      "https://www.15min.lt/naujiena/aktualu/orai/meteorologai-turi-blogu-ziniu-lietus-atsitraukia-tik-trumpam-o-tada-vel-pliaups-60-2730698?utm_source=rssfeed_default&utm_medium=rss&utm_campaign=rssfeed"
+    ],
+    "rationale_en": "Weather is high-interest and widely read; recent coverage shows continued concern about extreme conditions."
+  },
+  {
+    "id": 125,
+    "verify_verdict": "OPEN",
+    "verify_note": "airBaltic is actively operating in Lithuania and may adjust routes or capacity; assessment against official schedules and regulators on the future date is sound and undecided[1]",
+    "question_lt": "Ar „airBaltic“ mažins veiklą Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.37,
+      0.63
+    ],
+    "category": "Verslas",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal „airBaltic“ oficialų tvarkaraštį, maršrutų pakeitimus ir susisiekimo institucijų pranešimus.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/3000348/aviacijos-ekspertas-apie-situacija-su-airbaltic-siuo-metu-didele-rizika-jog-pasitrauks"
+    ],
+    "rationale_en": "Covered by major Lithuanian media and directly relevant to travelers, though the outcome is still unresolved."
+  },
+  {
+    "id": 126,
+    "verify_verdict": "OPEN",
+    "verify_note": "“vienas rinktinės lyderis” is generic; players can still change clubs and be officially registered before the season starts, so the market is factually sound and unresolved",
+    "question_lt": "Ar iki sezono pradžios vienas rinktinės lyderis pakeis klubą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.46,
+      0.54
+    ],
+    "category": "Sportas",
+    "resolve_by": "2026-09-20",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialią žaidėjo registraciją naujame klube iki sezono pradžios.",
+    "sources": [
+      "https://www.lrytas.lt/sportas/krepsinis/2026/07/24/news/lebronas-jamesas-prieme-sprendima-keliasi-i-rytu-konferencija-43257513/",
+      "https://www.lrytas.lt/sportas/krepsinis/2026/07/24/news/sirgaliu-pamiltas-ryto-gynejas-rado-nauja-komanda-43258672/"
+    ],
+    "rationale_en": "Basketball transfer chatter is clearly active, and the subject is broadly recognizable in Lithuania."
+  },
+  {
+    "id": 128,
+    "verify_verdict": "OPEN",
+    "verify_note": "GPM (gyventojų pajamų mokestis) iki 2026-10-31 dar gali būti keičiamas; pateiktuose rezultatuose nėra patvirtinimo apie jau priimtus ir paskelbtus Seimo mokesčių įstatymų pakeitimus, todėl būsimas sprendimas dar neaiškus [4].",
+    "question_lt": "Ar bus pakeistas GPM?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.34,
+      0.66
+    ],
+    "category": "Ekonomika",
+    "resolve_by": "2026-10-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Seimo priimtus mokesčių įstatymų pakeitimus ir jų paskelbimą.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/3000211/salia-keturiu-karjeru-gyvenantis-juknevicius-savaitgalius-leisti-namuose-tapo-nebemiela",
+      "https://www.vz.lt/"
+    ],
+    "rationale_en": "Directly wallet-relevant topic, but this batch already has stronger live-drama signals elsewhere."
+  },
+  {
+    "id": 129,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "pateikti rezultatai neparodo abiejų kanalų dabartinių viešų peržiūrų skaičių, todėl negaliu patikrinti, ar „Kas Kaltas“ jau aplenkė „Kas yra?“ pagal peržiūras sprendimo dieną [1][2][3][5].",
+    "question_lt": "Ar „Kas Kaltas“ aplenks „Kas yra?“ pagal peržiūras?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.61,
+      0.39
+    ],
+    "category": "Kultūra",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal viešai matomas „YouTube“ peržiūras sprendimo dieną.",
+    "sources": [
+      "https://www.youtube.com/watch?v=ROYdQLUjxDg",
+      "https://www.youtube.com/watch?v=_z3C9Dlg0rg"
+    ],
+    "rationale_en": "Both are currently trending in Lithuania, and the current view counts make this a clean, public comparison market."
+  }
+]

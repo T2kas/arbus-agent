@@ -1,0 +1,162 @@
+[
+  {
+    "id": 253,
+    "verify_verdict": "OPEN",
+    "verify_note": "Current price is 22,45 € (LIVE DATA, -0,2% week); reaching >24€ by Oct 15 is a ~7% move, plausible but genuinely undecided.",
+    "question_lt": "Ar „Ignitis grupė“ akcijų kaina viršys 24 € iki spalio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "verslas",
+    "resolve_by": "2026-10-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendimas pagal oficialią „Ignitis grupė“ (IGN1L) uždarymo kainą Nasdaq Vilnius biržoje 2026-10-15.",
+    "sources": [
+      "https://finance.yahoo.com/quote/IGN1L.VS",
+      "https://www.nasdaqbaltic.com/statistics/lt/shares/ign1l",
+      "https://www.lrt.lt/naujienos/verslas/4/2997337/ignitis-renewables-latvijoje-investuos-35-mln-euru-i-107-mw-galios-elektros-kaupiklius"
+    ],
+    "rationale_en": "Ignitis is a major Lithuanian energy group whose stock is actively traded on Nasdaq Vilnius; with the price around 22.45 € and recent expansion news, a 24 € level by October is plausible but uncertain, inviting investor debate about valuation and growth prospects.",
+    "image_url": "https://pinhole.finance.yahoo.com/chart/IGN1L.VS/__screenshot",
+    "image_source": "https://finance.yahoo.com/quote/IGN1L.VS"
+  },
+  {
+    "id": 254,
+    "verify_verdict": "OPEN",
+    "verify_note": "Finance official M. Sinkevičius stated the priority is heating compensations rather than restoring the VAT relief, meaning no decision has been finalized yet; matter remains open through year-end.",
+    "question_lt": "Ar iki 2026 m. pabaigos bus priimtas sprendimas grąžinti šildymo PVM lengvatą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendimas pagal tai, ar iki 2026-12-31 įsigalios teisės aktų pakeitimai, numatantys sumažintą PVM tarifą centralizuotam šildymui, kaip skelbiama Teisės aktų registre ir pagrindiniuose naujienų portaluose.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/2999310/m-sinkevicius-prioritetas-sildymo-kompensacijos-o-ne-pvm-lengvatos-sugrazinimas",
+      "https://e-seimas.lrs.lt/portal/legalActSearch"
+    ],
+    "rationale_en": "Debate over heating support measures versus restoring a reduced VAT (PVM) rate, with the new prime minister prioritising compensation over tax relief, is widely reported and directly impacts household budgets, making the policy outcome a contentious topic among citizens.",
+    "image_url": "https://www.lrt.lt/img/2020/04/14/635912-223117-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/verslas/4/2999310/m-sinkevicius-prioritetas-sildymo-kompensacijos-o-ne-pvm-lengvatos-sugrazinimas"
+  },
+  {
+    "id": 257,
+    "verify_verdict": "OPEN",
+    "verify_note": "This is a full-season outcome (resolves Nov 30, 2026); current news is only about transfers/draw results, not a final table, so it's genuinely undecided.",
+    "question_lt": "Kauno „Žalgirio“ futbolo klubo sezonas A lygoje: galutinė vieta 2026 m. čempionate",
+    "market_type": "multi",
+    "options_lt": [
+      "1–2 vieta",
+      "3–4 vieta",
+      "5 vieta ar žemiau"
+    ],
+    "probabilities": [
+      0.3,
+      0.4,
+      0.3
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-11-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialią 2026 m. A lygos galutinę turnyrinę lentelę, skelbiamą Lietuvos futbolo federacijos ir A lygos svetainėse po sezono pabaigos.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2997388/kauno-zalgiris-is-cempionu-lygos-atrankos-rungtyniu-fareru-salose-parsiveza-lygiasias",
+      "https://www.lrt.lt/naujienos/sportas/10/2999303/kauno-zalgirio-futbolo-kluba-papilde-kosovo-rinktines-gynejas",
+      "https://alyga.lt"
+    ],
+    "rationale_en": "Kauno „Žalgiris“ dalyvavimas Čempionų lygos atrankoje, nauji legionieriai ir A lygos kovos nušviečiami keliais straipsniais, o klubo sezonas yra aiškus diskusijų objektas tarp futbolo gerbėjų.",
+    "image_url": "https://www.lrt.lt/img/2026/07/21/2445109-391436-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/sportas/10/2997388/kauno-zalgiris-is-cempionu-lygos-atrankos-rungtyniu-fareru-salose-parsiveza-lygiasias"
+  },
+  {
+    "id": 258,
+    "verify_verdict": "OPEN",
+    "verify_note": "Per LIVE DATA, \"Kas Kaltas\" is currently #2 in Lithuania (behind Dai Dai at #1); reaching #1 sometime in August is plausible but not yet decided.",
+    "question_lt": "Ar Jessica Shy daina „Kas Kaltas“ rugpjūtį pasieks 1 vietą Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų Apple Music Lietuva singlų topą: jei bent vieną dieną 2026 m. rugpjūtį „Kas Kaltas (feat. Igoris Kofas)“ bus #1 daina Lietuvoje, rinka laikoma išspręsta kaip „Taip“.",
+    "sources": [
+      "https://music.apple.com/lt/album/kas-kaltas-feat-igoris-kofas/6784728491?i=6784728497",
+      "https://music.apple.com/lt/playlist/top-100-lithuania/pl.3c9ad7d9f9f54b0c9d3e0a4d9e0d1b34"
+    ],
+    "rationale_en": "Apple Music LT shows „Kas Kaltas“ currently at #2 with multiple Jessica Shy tracks in the top 5, so the race for #1 in August is a live, high‑attention topic for young listeners.",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d7/bb/ca/d7bbca19-0e17-d119-34b9-9c0aaa9a755e/cover.jpg/1200x630wp-60.jpg",
+    "image_source": "https://music.apple.com/lt/album/kas-kaltas-feat-igoris-kofas/6784728491?i=6784728497"
+  },
+  {
+    "id": 259,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "Cannot verify the current YouTube view count for \"šalis nepaliesta\" (not among the top-5 chart entries in LIVE DATA), so plausibility of hitting 150k by Aug 31 cannot be assessed with available data.",
+    "question_lt": "„šalis nepaliesta“: ar vaizdo klipas pasieks 150 tūkst. peržiūrų iki rugpjūčio pabaigos?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų „YouTube“ peržiūrų skaičių klipui „kamanių šilelis, Jessica Shy - šalis nepaliesta“; jei 2026-08-31 23:59 Lietuvos laiku skaičius yra ≥150 000, rezultatas „Taip“, priešingu atveju „Ne“.",
+    "sources": [
+      "https://www.youtube.com/watch?v=rIUrMbh6Svs",
+      "https://www.youtube.com/feed/trending"
+    ],
+    "rationale_en": "The song is on YouTube Trending LT with ~66k views already and features two widely known artists, making a near‑term milestone at ~2× current views an uncertain but realistic target for a mass audience.",
+    "image_url": "",
+    "image_source": ""
+  },
+  {
+    "id": 262,
+    "verify_verdict": "OPEN",
+    "verify_note": "Cited sources concern Romania shooting down drones, not Lithuania; no new Lithuanian airspace violation has been reported yet for the Aug 10–25 window, so this remains a genuinely open future event.",
+    "question_lt": "Ar Lietuvoje rugpjūčio mėnesį bus užfiksuota nauja oro erdvės pažaida?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.58,
+      0.42
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-08-25",
+    "duration_class": "long",
+    "resolution_hint_lt": "Taip, jei po 2026-08-10 iki 2026-08-25 Lietuvos ar kaimyninės šalies vieši institucijų pranešimai patvirtins bent vieną naują bepilotį orlaivį ar kitą objektą, pažeidusį Lietuvos oro erdvę arba dėl kurio paskelbtas oficialus pavojus; ne, jei tokių naujų atvejų per šį laikotarpį neužfiksuojama.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3001030/rumunija-per-dvi-dienas-numuse-jau-antra-oro-erdve-pazeidusi-drona",
+      "https://www.vz.lt/verslo-aplinka/2026/07/25/rumunija-numuse-antra-drona-587921"
+    ],
+    "rationale_en": "Recent widely covered drone incidents in Romania highlight regional airspace violations and security concerns; similar events are often quickly picked up in Baltic security discourse, making a potential new Lithuanian airspace breach a plausible and debated near-term risk.",
+    "image_url": "https://www.lrt.lt/img/2026/07/24/2447117-485447-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/3001030/rumunija-per-dvi-dienas-numuse-jau-antra-oro-erdve-pazeidusi-drona"
+  }
+]

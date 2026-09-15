@@ -1,0 +1,716 @@
+[
+  {
+    "id": 73,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nepateikta naujausių oficialių „Ryto“/LKL/FIBA registracijos ar sutarties duomenų apie A. Gudaitį; be gyvo web patikrinimo šio statuso patvirtinti negaliu.",
+    "question_lt": "Ar Artūras Gudaitis liks „Ryte“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.8,
+      0.2
+    ],
+    "category": "sports",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų Vilniaus „Ryto“ arba LKL/FIBA pranešimą apie A. Gudaičio sutartį ar registraciją 2026–2027 m. sezonui.",
+    "sources": [
+      "https://www.delfi.lt/krepsinis/naujienos/gudaitis-apsisprende-del-ryto-pasiulymo-120281145",
+      "https://www.basketnews.lt/news-227886-arturas-gudaitis-prieme-sprendima-del-ateities-ryte.html",
+      "https://www.lrytas.lt/sportas/krepsinis/2026/07/24/news/a-gudaitis-apsisprende-aisku-kur-kita-sezona-rungtyniaus-aukstaugis-43247442"
+    ],
+    "rationale_en": "Strong pulse signal around Artūras Gudaitis and his contract decision with Rytas; multiple Lithuanian outlets report he has chosen to stay, but official registration for 2026–2027 is still a checkable future event."
+  },
+  {
+    "id": 74,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nepakanka patikimų viešų duomenų apie artimiausius „Ryto“ atsisveikinimus ar sudėties pokyčius, todėl dabartinės sudėties faktų patikrinti negaliu.",
+    "question_lt": "Ar „Rytas“ praras dar vieną svarbų žaidėją?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "sports",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal oficialius „Ryto“ atsisveikinimo ar registracijos pranešimus prieš sezono startą; remiamasi tik viešai patvirtintais transferais.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/3000375/ryta-palikes-smithas-rungtyniaus-kitoje-cempionu-lygos-komandoje",
+      "https://www.lrytas.lt/sportas/krepsinis/2026/07/24/news/sirgaliu-pamiltas-ryto-gynejas-rado-nauja-komanda-43258672/"
+    ],
+    "rationale_en": "Rytas is already losing key players like Smith; ongoing roster changes before the season start create real uncertainty and fan discussion."
+  },
+  {
+    "id": 75,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "trūksta oficialios NBA registracijos / sutarties būklės informacijos apie LeBrono Jameso komandą, kad būtų galima patvirtinti ar paneigti „76ers“ variantą.",
+    "question_lt": "Ar LeBronas Jamesas žais „76ers“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.85,
+      0.15
+    ],
+    "category": "sports",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal NBA oficialų kontraktų/komandos sudėties statusą arba patikimą lygos registraciją.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/3000337/nba-legenda-lebronas-jamesas-karjera-tes-filadelfijos-76ers-klube",
+      "https://www.bbc.com/sport/articles/cx27r0me3zno"
+    ],
+    "rationale_en": "Major NBA move widely covered: reports say LeBron James will continue his career with the Philadelphia 76ers, but official roster/contract status by a given date is a clear resolution point."
+  },
+  {
+    "id": 76,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "neturiu oficialių 2026 m. Lietuvos lengvosios atletikos čempionato starto ir rezultatų duomenų, todėl negaliu patikrinti, ar A. Palšytė gins titulą.",
+    "question_lt": "Ar Airinė Palšytė apgins Lietuvos čempionės titulą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.7,
+      0.3
+    ],
+    "category": "sports",
+    "resolve_by": "2026-08-24",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal Lietuvos lengvosios atletikos čempionato oficialius rezultatus.",
+    "sources": [
+      "https://www.lrytas.lt/sportas/startai/2026/07/24/news/ispudinga-po-siaubingos-traumos-grizusi-a-palsyte-tapo-lietuvos-cempione-43257113",
+      "https://www.15min.lt/sportas/naujiena/lengvoji-atletika/dvejus-metus-lauktas-sugrizimas-ivyko-airine-palsyte-ir-vel-cempione-133-2730604"
+    ],
+    "rationale_en": "Airinė Palšytė has just returned from injury and become Lithuanian champion again; whether she defends the title at the next championship is both uncertain and publicly trackable."
+  },
+  {
+    "id": 77,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "nėra pateikta oficiali 2026 m. Europos paplūdimio tinklinio čempionato lentelė ar Lietuvos poros statusas, todėl ketvirtfinalio klausimo patikrinti negaliu.",
+    "question_lt": "Ar Lietuvos moterų paplūdimio tinklinio pora pateks į ketvirtfinalį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "sports",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal Europos paplūdimio tinklinio čempionato oficialią turnyro lentelę ir rungtynių rezultatus.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/3000383/europos-papludimio-tinklinio-cempionate-lietuvai-atstovaus-trys-moteru-komandos"
+    ],
+    "rationale_en": "Three Lithuanian women’s teams will represent the country at the European beach volleyball championship; reaching the quarterfinals is a meaningful but uncertain performance target with clear bracket results."
+  },
+  {
+    "id": 78,
+    "verify_verdict": "OPEN",
+    "verify_note": "klausimas susijęs su būsimais LHMT perspėjimais iki 2026-09-15; dabartinėje informacijoje nėra duomenų, kad raudonas oro pavojus jau įvyko ar kad formuluotė būtų neteisinga.",
+    "question_lt": "Ar Lietuva sulauks raudono oro pavojaus?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "weather",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal LHMT oficialius pavojaus lygio įspėjimus.",
+    "sources": [
+      "https://www.15min.lt/naujiena/aktualu/orai/meteorologai-turi-blogu-ziniu-lietus-atsitraukia-tik-trumpam-o-tada-vel-pliaups-60-2730698",
+      "https://www.15min.lt/naujiena/aktualu/orai/po-lietingu-dienu-geresnes-zinios-savaitgali-lepins-siluma-60-2730734"
+    ],
+    "rationale_en": "Lithuanian media are discussing unstable weather with heavy rain and heat; a red-level meteorological warning from LHMT is significant, uncertain, and easy to verify."
+  },
+  {
+    "id": 79,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "neturiu pakankamai patikimų viešų šaltinių apie „Mere“ parduotuvių dabartinį veiklos statusą Lietuvoje, todėl negaliu patvirtinti, ar tinklas dar veiks.",
+    "question_lt": "Ar „Mere“ dar veiks Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.3,
+      0.7
+    ],
+    "category": "economics",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal viešą parduotuvių darbo statusą ir oficialius tinklo pranešimus.",
+    "sources": [
+      "https://www.15min.lt/verslas/naujiena/bendroves/lietuvoje-uzdarinejamos-mere-parduotuves-663-2730570",
+      "https://www.delfi.lt/ru/news/economy/set-mere-zakryla-svoi-magaziny-v-litve-120281273",
+      "https://www.vz.lt/verslo-aplinka/2026/07/24/dienos-akcentai-del-europiniu-sankciju-uzdaromos-mere-parduotuves-ir-nauji-jav-muitu-tarifai-587866"
+    ],
+    "rationale_en": "Lithuanian business media report that Mere stores are being closed due to European sanctions; whether any of the chain still operates in Lithuania by the resolution date is uncertain but publicly observable."
+  },
+  {
+    "id": 81,
+    "verify_verdict": "OPEN",
+    "verify_note": "Gitanas Nausėda is the incumbent Lithuanian president and continues to exercise veto powers; no specific future veto is predetermined, and the resolution deadline is in the future[UNCLEAR VIA PRESIDENTŪRA/SEIMAS SITES]",
+    "question_lt": "Ar G. Nausėda dar vetuos įstatymą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "politics",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Prezidentūros viešą veto pranešimą ir Seimo dokumentus.",
+    "sources": [
+      "https://www.lrytas.lt/lietuvosdiena/aktualijos/2026/07/24/news/karstasis-penktadienis-nuo-g-nausedos-veto-iki-staigiu-judesiu-mere-parduotuvese-43257946"
+    ],
+    "rationale_en": "Media cover President Gitanas Nausėda’s recent veto and ongoing legislative tensions; another veto before the specified date is plausible and clearly recorded in public documents."
+  },
+  {
+    "id": 82,
+    "verify_verdict": "OPEN",
+    "verify_note": "Current 10th‑grade/PUPP assessment rules are set by ŠMSM and can still be changed before the 2026‑08‑31 resolution date; no conflicting factual premise about existing rules was found[UNCLEAR VIA ŠMSM/NŠA SITES]",
+    "question_lt": "Ar išliks dabartinė dešimtokų kartelė?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "other",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal ŠMSM ir Seimo patvirtintas PUPP / dešimtokų vertinimo taisykles.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/svietimas/45/3000354/bus-silpnesni-darbo-rinkoje-ekspertai-mato-riziku-zeminant-desimtoku-kartele",
+      "https://www.lrt.lt/naujienos/svietimas/45/3000309/paskelbti-pakartotines-sesijos-rezultatai-matematikos-egzamino-neislaike-beveik-puse"
+    ],
+    "rationale_en": "Discussions about lowering the achievement bar for tenth graders and PUPP rules are active; whether current standards remain in force is contested but decisively set by official ministry and Seimas rules."
+  },
+  {
+    "id": 83,
+    "verify_verdict": "OPEN",
+    "verify_note": "The 2026 pakartotinė sesija mathematics results have not yet been published for the 2026-08-10 resolution date; the outcome (whether more than half fail) is genuinely undecided but the setup matches official result publication practice[8]",
+    "question_lt": "Ar daugiau nei pusė pakartotinės sesijos matematikos neišlaikys?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "other",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal oficialiai paskelbtus pakartotinės sesijos rezultatus.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/svietimas/45/3000309/paskelbti-pakartotines-sesijos-rezultatai-matematikos-egzamino-neislaike-beveik-puse"
+    ],
+    "rationale_en": "Recent results show almost half of repeat-session students failed the mathematics exam; whether the failure rate exceeds 50% in the next published dataset is a narrow but publicly measurable outcome."
+  },
+  {
+    "id": 84,
+    "verify_verdict": "OPEN",
+    "verify_note": "Eurovision 2027 has not yet taken place and no winner is known; listed options (Lithuania / Sweden / Italy / Other) are factually valid and exhaustive with respect to possible winning country, and the final occurs after the resolution date[5]",
+    "question_lt": "Kas laimės „Euroviziją 2027“?",
+    "market_type": "multi",
+    "options_lt": [
+      "Lietuva",
+      "Švedija",
+      "Italija",
+      "Kita"
+    ],
+    "probabilities": [
+      0.15,
+      0.25,
+      0.2,
+      0.4
+    ],
+    "category": "culture",
+    "resolve_by": "2027-05-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų „Eurovision“ finalo rezultatą.",
+    "sources": [
+      "https://www.lrytas.lt/zmones/muzika/2026/07/24/news/suzadetuves-santorinio-saloje-virto-sensacija-internautai-negalejo-patiketi-ka-uzfiksavo-kamera-43247643"
+    ],
+    "rationale_en": "Eurovision is a mass-followed cultural event among young audiences; speculating on whether Lithuania, Sweden, Italy or another country wins 2027 invites ongoing debate until the official final."
+  },
+  {
+    "id": 85,
+    "verify_verdict": "OPEN",
+    "verify_note": "Gabrielė Vilkickytė is an active Lithuanian artist on Spotify, but no specific future track’s performance in “Spotify Top 10 Lietuva” by 2026‑08‑24 is yet known; the chart and resolution source are valid and currently used in Lithuania[UNCLEAR VIA SPOTIFY LT CHART SEARCH]",
+    "question_lt": "Ar Gabrielės Vilkickytės daina pateks į „Spotify Top 10 Lietuva“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "culture",
+    "resolve_by": "2026-08-24",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal „Spotify Top 50 Lietuva“/Top 10 reitingą.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/laisvalaikis/13/2948127/gabrieles-vilkickytes-salotos-kvepiancios-juodkrante-puikiai-tinka-improvizacijoms"
+    ],
+    "rationale_en": "Gabrielė Vilkickytė is being highlighted by Lithuanian media; whether a song of hers reaches the Spotify Top 10 Lithuania is a relevant, chart-based outcome for music-engaged youth."
+  },
+  {
+    "id": 86,
+    "verify_verdict": "OPEN",
+    "verify_note": "Arūnas Valinskas remains a publicly known Lithuanian media figure; whether he will again generate notable “vestuvių triukšmas” via media coverage or appearances by 2026‑08‑31 is not yet decided, and the resolution criteria (media/public appearances) are factually sound[UNCLEAR VIA LITHUANIAN MEDIA SEARCH]",
+    "question_lt": "Ar Arūnas Valinskas dar sukels vestuvių triukšmą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "culture",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal viešą A. Valinsko šeimos žiniasklaidos sklaidą ir patvirtintus pasirodymus/interviu.",
+    "sources": [
+      "https://www.15min.lt/zmones/naujiena/lietuva/valinsku-seimoje-slaptos-vestuves-su-mylimaja-susituoke-jaunelis-sunus-sarunas-1050-2730648"
+    ],
+    "rationale_en": "Media cover secret weddings in the Valinskas family; further public fuss related to Arūnas Valinskas and weddings via media coverage or appearances is a celebrity-topic market with notable search interest."
+  },
+  {
+    "id": 87,
+    "verify_verdict": "OPEN",
+    "verify_note": "airBaltic currently operates regular flights from Vilnius Airport and publishes schedules into 2026; whether regular Vilnius flights will still appear in the 2027‑01‑15 timetable is not yet known, and the premise that airBaltic flies from Vilnius is presently correct[UNCLEAR VIA AIRBALTIC/VILNIUS AIRPORT SITES]",
+    "question_lt": "Ar „airBaltic“ tęsis skrydžius iš Vilniaus po 2026 m.?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "ekonomika_keliavimas",
+    "resolve_by": "2027-01-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal tai, ar 2027 m. sausio 15 d. „airBaltic“ tvarkaraštyje vis dar yra reguliarūs skrydžiai iš Vilniaus oro uosto.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/3000348/aviacijos-ekspertas-apie-situacija-su-airbaltic-siuo-metu-didele-rizika-jog-pasitrauks"
+    ],
+    "rationale_en": "High-profile LRT piece cites experts warning about a “big risk” that airBaltic may withdraw from Lithuania, touching a huge audience of travelers."
+  },
+  {
+    "id": 88,
+    "verify_verdict": "OPEN",
+    "verify_note": "Mere discount stores exited Lithuania earlier, leaving former store premises to be reused; by the 2026‑12‑31 resolution date it is still uncertain which usage (other retailers / empty or warehouses / repurposed for other functions / other) will dominate, and all listed options are factually coherent with the current state of these locations[UNCLEAR VIA NEWS ON MERE CLOSURE IN LT]",
+    "question_lt": "„Mere“ parduotuvių patalpų likimas Lietuvoje",
+    "market_type": "multi",
+    "options_lt": [
+      "Dauguma patalpų užims kiti mažmenininkai",
+      "Dauguma patalpų liks tuščios ar sandėliai",
+      "Dauguma patalpų bus perplanuotos kitai paskirčiai (biurai, paslaugos)",
+      "Kita"
+    ],
+    "probabilities": [
+      0.45,
+      0.25,
+      0.2,
+      0.1
+    ],
+    "category": "ekonomika_prekyba",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Skaičiuojamos buvusios „Mere“ vietos Lietuvoje ir viešai prieinamos nuotraukos, naujienos bei registrai nustatys, koks naudojimas vyrauja metų pabaigoje.",
+    "sources": [
+      "https://www.15min.lt/verslas/naujiena/bendroves/lietuvoje-uzdarinejamos-mere-parduotuves-663-2730570"
+    ],
+    "rationale_en": "Mere store closures are a major business and everyday-life story with thousands of searches for “parduotuvė” and Russian-language coverage on Delfi/15min."
+  },
+  {
+    "id": 89,
+    "verify_verdict": "OPEN",
+    "verify_note": "Jūros šventė 2026 vyksta liepos 24–26 d., oficialių lankytojų skaičių dar nėra, renginys nepasibaigęs, premisa ir rezoliucijos data suderintos su įprasta praktika skelbti statistiką vėliau[UNCLEAR SOURCE NEEDED].",
+    "question_lt": "Ar Jūros šventė šiemet sulauks bent 0,5 mln. lankytojų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "renginiai_kultura",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Remiamasi oficialiais Jūros šventės organizatorių ar Klaipėdos savivaldybės skelbiamais lankytojų skaičiais.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/laisvalaikis/13/2999301/juros-svente-atejo-i-miesta-piratai-robotai-ir-gitanas-nauseda"
+    ],
+    "rationale_en": "Jūros šventė is one of Lithuania’s biggest summer events with heavy national media coverage and recurring debate on visitor numbers."
+  },
+  {
+    "id": 90,
+    "verify_verdict": "OPEN",
+    "verify_note": "nėra viešai skelbto ŠMSM ar Seimo sprendimo, kuriuo būtų pakeista PUPP / dešimtokų kartelė ir jis jau įsigaliojęs; pokyčiai dėl pasiekimų patvirtinimo diskutuojami, bet galutinio sprendimo dar nėra[UNCLEAR SOURCE NEEDED].",
+    "question_lt": "Ar iki 2026 m. pabaigos bus pakeista PUPP / dešimtokų kartelė?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "svietimas_politika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialius ŠMSM ar Seimo priimtus ir įsigaliojusius pakeitimus dėl dešimtokų pasiekimų vertinimo kartelės.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/svietimas/45/3000354/bus-silpnesni-darbo-rinkoje-ekspertai-mato-riziku-zeminant-desimtoku-kartele"
+    ],
+    "rationale_en": "The tenth-grade threshold debate is prominent on LRT and affects a whole student cohort, making it very discussable among teens."
+  },
+  {
+    "id": 91,
+    "verify_verdict": "OPEN",
+    "verify_note": "iki šiol Lietuvoje privaloma pradinė karo tarnyba taikoma vyrams, o moterims ji neprivaloma ir savanoriška; nėra priimto ir įsigaliojusio įstatymo, įvedančio privalomą pradinę karo tarnybą moterims, bet sprendimo galutinė data dar nepasiekta[UNCLEAR SOURCE NEEDED].",
+    "question_lt": "Ar iki 2026 m. pabaigos Lietuvoje bus įvesta privaloma pradinė karo tarnyba moterims?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.08,
+      0.92
+    ],
+    "category": "politika_saugumas",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinama pagal priimtus ir įsigaliojusius įstatymus dėl karo prievolės registro ir šaukimo tvarkos.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2997349/apklausa-dauguma-lenku-yra-pries-privalomosios-karo-tarnybos-sugrazinima"
+    ],
+    "rationale_en": "Compulsory service is hotly debated in the region (e.g., Poland poll on conscription) and closely watched in Lithuania due to security concerns."
+  },
+  {
+    "id": 92,
+    "verify_verdict": "OPEN",
+    "verify_note": "po Astravo AE paleidimo Lietuva jau turi kelis branduolinio ir radiacinio saugumo priemonių paketus, tačiau naujas, aiškiai atskirai paskelbtas „paketas“ iki šiol nebuvo viešai pristatytas kaip nauja programa; rezoliucijos sąlygos ir data logiškos, įvykis dar gali įvykti[UNCLEAR SOURCE NEEDED].",
+    "question_lt": "Ar iki 2026 m. pabaigos bus paskelbta apie naują branduolinių saugumo priemonių paketą Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "saugumas_politika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Vyriausybės ar atsakingų institucijų viešai pristatytą naują priemonių paketą, tiesiogiai susijusį su radiacine / civiline sauga.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/lietuvoje/2/3000146/priedangu-situacija-kaimuose-islieka-sudetinga-zmones-sleptusi-rusiuose-baznyciose"
+    ],
+    "rationale_en": "LRT reporting on shelters and civil defense shows rising concern about preparedness, especially with the war in Ukraine ongoing."
+  },
+  {
+    "id": 93,
+    "verify_verdict": "OPEN",
+    "verify_note": "viešoje erdvėje nėra užfiksuoto galutinio Lietuvos banko, Vyriausybės ar ES priežiūros institucijų sprendimo, kuriuo „OTP Bank“ būtų galutinai patvirtinta teisė įsigyti „Luminor“ arba sandoris būtų oficialiai atmestas; sprendimo galutinė data dar nepasiekta[UNCLEAR SOURCE NEEDED].",
+    "question_lt": "Ar iki 2026 m. pabaigos bus paskelbtas oficialus sprendimas dėl „Luminor“ ir „OTP Bank“ sandorio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.7,
+      0.3
+    ],
+    "category": "ekonomika_finansai",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remiamasi oficialiais LB, Vyriausybės ar ES priežiūros institucijų sprendimais dėl „OTP Bank“ teisės įsigyti „Luminor“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/3000315/prasoma-ivertinti-luminor-isigyti-norincio-otp-bank-atitikti-salies-saugumo-interesams"
+    ],
+    "rationale_en": "The potential OTP–Luminor deal is widely covered and ties into bank concentration and security-interest debates in Lithuania."
+  },
+  {
+    "id": 94,
+    "verify_verdict": "OPEN",
+    "verify_note": "2026 m. A lygos sezonas dar vyksta, galutinė turnyrinė lentelė nepatvirtinta, „Hegelmann“ ir „Žalgiris“ abu žaidžia A lygoje, pasirinkimų sąrašas išsamus ir teisingas, o rezoliucijos data atitinka sezono pabaigą[UNCLEAR SOURCE NEEDED].",
+    "question_lt": "Kuris Lietuvos A lygos klubas sezoną baigs aukščiau: „Hegelmann“ ar „Žalgiris“?",
+    "market_type": "multi",
+    "options_lt": [
+      "„Hegelmann“ aukščiau",
+      "„Žalgiris“ aukščiau",
+      "Vienodas galutinis taškų skaičius"
+    ],
+    "probabilities": [
+      0.25,
+      0.7,
+      0.05
+    ],
+    "category": "sportas_futbolas",
+    "resolve_by": "2026-11-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remiamasi oficialia A lygos galutine turnyrine lentele pasibaigus 2026 m. sezonui.",
+    "sources": [
+      "https://www.15min.lt/sportas/naujiena/futbolas/dvieju-duobeje-esanciu-komandu-akistatoje-aukstyn-stryktelejo-hegelmann-24-2730718"
+    ],
+    "rationale_en": "A lyga and especially Žalgiris are well-known; the Hegelmann story about “jumping up” from the bottom provides a narrative rivalry."
+  },
+  {
+    "id": 95,
+    "verify_verdict": "OPEN",
+    "verify_note": "Klaipėdos zoologijos sodas šiuo metu vis dar veikia ir turi galiojantį leidimą, nėra AAD ar kitų institucijų sprendimų, kuriais leidimas būtų jau atimtas; rezoliucijos sąlygos ir data faktams neprieštarauja[UNCLEAR SOURCE NEEDED].",
+    "question_lt": "Ar iki 2026 m. pabaigos Klaipėdos zoologijos sodas praras veiklos leidimą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "visuomene_aplinka",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinama AAD ir kitų atsakingų institucijų sprendimų bei registrų duomenimis dėl veiklos leidimo statuso.",
+    "sources": [
+      "http://www.lrytas.lt/gamta/fauna/2026/07/24/news/po-vizito-dar-vienas-aad-kirtis-klaipedos-zoologijos-sodui-43257070/"
+    ],
+    "rationale_en": "AAD “hit” on Klaipėda zoo is covered nationally and sparks emotional debates about animal welfare and closures."
+  },
+  {
+    "id": 96,
+    "verify_verdict": "OPEN",
+    "verify_note": "tragiška avarija Vilniuje, kur žuvo abiturientė, įvyko konkrečioje sankryžoje/atkarpoje, sukėlė viešą diskusiją apie saugumo priemones, tačiau Vilniaus savivaldybė ar LAKD dar nėra paskelbę oficialaus sprendimo dėl konkretaus sankryžos atnaujinimo; rezoliucijos sąlygos suformuluotos korektiškai, įvykis dar gali įvykti[1][3].",
+    "question_lt": "Ar iki 2026 m. pabaigos bus paskelbtas sprendimas atnaujinti pavojingą sankryžą Vilniuje, kur žuvo abiturientė?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "miestai_saugumas",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remiamasi Vilniaus savivaldybės ar LAKD sprendimais ir projektiniais dokumentais dėl konkrečios vietos sutvarkymo.",
+    "sources": [
+      "https://www.15min.lt/naujiena/aktualu/lietuva/dviem-mirtimis-pazenklinta-vilniaus-vieta-sukele-aistru-kodel-per-tris-savaites-ji-nesutvarkyta-56-2730546"
+    ],
+    "rationale_en": "The “two deaths in three weeks” spot has triggered strong public outrage and media scrutiny, making future fixes a hot topic."
+  },
+  {
+    "id": 97,
+    "verify_verdict": "OPEN",
+    "verify_note": "iki dabar nėra viešai patvirtinto oficialaus mirčių nuo naujo Europoje plintančio viruso atvejo Lietuvoje; tokio fakto iki 2026-07-24 nepateikė NVSC/SAM šaltiniai iš pateiktų rezultatų, bet galutinis 2026 m. rezultatas dar nežinomas.",
+    "question_lt": "Ar Lietuvoje iki 2026 m. pabaigos bus paskelbtas pirmas oficialus mirčių nuo naujo Europoje plintančio viruso atvejis?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.15,
+      0.85
+    ],
+    "category": "sveikata_visuomene",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remiamasi NVSC / SAM skelbiamais duomenimis, aiškiai įvardijančiais šio viruso sukeltas mirtis.",
+    "sources": [
+      "http://www.lrytas.lt/sveikata/ligos-ir-gydymas/2026/07/24/news/turistu-pamegtoje-europos-salyje-spartus-pavojingo-viruso-plitimas-43256707/"
+    ],
+    "rationale_en": "Reports of a “dangerous virus” rapidly spreading in a popular tourist country instantly raise concern for returning Lithuanian travelers."
+  },
+  {
+    "id": 98,
+    "verify_verdict": "OPEN",
+    "verify_note": "nepavyko rasti viešai patvirtinto oficialaus žmogaus užsikrėtimo Lietuvoje nuo miško grybuose aptikto naujo toksino ar patogeno; pagal pateiktus šaltinius tai dar nepatvirtinta, bet 2026 m. pabaigos baigtis nežinoma.",
+    "question_lt": "Ar iki 2026 m. pabaigos Lietuvoje bus paskelbta apie pirmą oficialų žmogaus užsikrėtimą nuo miško grybuose aptikto toksino / naujo patogeno?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.1,
+      0.9
+    ],
+    "category": "sveikata_aplinka",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinama pagal NVSC, SAM ar VMVT pranešimus apie naują identifikuotą toksiną/patogeną ir patvirtintą infekcijos atvejį žmonėms.",
+    "sources": [
+      "http://www.lrytas.lt/sveikata/gyvenu-sveikai/2026/07/24/news/misko-lobis-grybai-vaistininke-ivardijo-nepatyrusiu-grybautoju-klaidas-43256969/"
+    ],
+    "rationale_en": "Mushroom picking is a national pastime; safety pieces about poisonous mushrooms and mistakes are popular and ripe for a “what if” style prediction."
+  },
+  {
+    "id": 99,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "pateikti rezultatai neapima „airBaltic“ ir Vilniaus oro uosto dabartinio statuso ar skrydžių tvarkaraščio, todėl iš viešų duomenų šio momento negaliu patikrinti, ar pasitraukimas jau įvyko ar yra suplanuotas.",
+    "question_lt": "Ar „airBaltic“ pasitrauks iš Vilniaus oro uosto?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "economics",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rėmimasis oficialiais „airBaltic“ pranešimais ir Vilniaus oro uosto skelbiama skrydžių tvarkaraščio informacija.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/3000348/aviacijos-ekspertas-apie-situacija-su-airbaltic-siuo-metu-didele-rizika-jog-pasitrauks[1]",
+      "https://www.vz.lt/verslo-aplinka/2026/07/24/dienos-akcentai-del-europiniu-sankciju-uzdaromos-mere-parduotuves-ir-nauji-jav-muitu-tarifai-587866[2]"
+    ],
+    "rationale_en": "High-attention story in major outlets about „airBaltic“ possibly leaving Lithuania, with aviation expert warning of a “big risk” it withdraws from Vilnius airport[1]."
+  },
+  {
+    "id": 100,
+    "verify_verdict": "OPEN",
+    "verify_note": "iki šiol pateiktuose šaltiniuose nėra patvirtinimo apie naujo žemo kainų prekybos tinklo startą Lietuvoje po „Mere“ uždarymo, bet metų pabaigos rezultatas dar atviras.",
+    "question_lt": "Ar po „Mere“ uždarymo Lietuvoje bus paskelbta apie naują žemo kainų prekybos tinklą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "economics",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinama, ar iki šios datos didieji portalai (Delfi, LRT, 15min, Lrytas) paskelbė apie naujo žemo kainų prekybos tinklo (diskontinio formato) startą Lietuvoje.",
+    "sources": [
+      "https://www.15min.lt/verslas/naujiena/bendroves/lietuvoje-uzdarinejamos-mere-parduotuves-663-2730570[3]",
+      "https://www.delfi.lt/ru/news/economy/set-mere-zakryla-svoi-magaziny-v-litve-120281273[4]",
+      "https://www.lrytas.lt/verslas/rinkos-pulsas/2026/07/24/news/po-zinios-apie-mere-parduotuviu-uzdaryma-naujos-detales-kas-laukia-prekybos-tinklo-valdytojo-43256460/[5]"
+    ],
+    "rationale_en": "„Mere“ closures and discount-store topic are trending (Google Trends LT: „parduotuvė“ 5000+ searches, „магазин“ 500+ searches) with extensive coverage in multiple outlets[3][4][5]."
+  },
+  {
+    "id": 101,
+    "verify_verdict": "OPEN",
+    "verify_note": "nėra pateikta 2026 m. A lygos galutinė lentelė, todėl negalima nustatyti, ar „Hegelmann“ sezoną baigs aukščiau nei „Panevėžys“; tai dar neišspręsta.",
+    "question_lt": "Ar „Hegelmann“ A lygoje sezoną baigs aukščiau nei „Panevėžys“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "sports",
+    "resolve_by": "2026-11-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rėmimasis oficialia A lygos 2026 m. sezono galutine turnyro lentele, skelbiama A lygos ir Lietuvos futbolo federacijos svetainėse.",
+    "sources": [
+      "https://www.15min.lt/sportas/naujiena/futbolas/dvieju-duobeje-esanciu-komandu-akistatoje-aukstyn-stryktelejo-hegelmann-24-2730718[8]",
+      "https://www.lrt.lt/naujienos/sportas/10/3000361/atidetas-lietuvos-futbolo-cempionato-rungtynes-laimejo-hegelmann[9]"
+    ],
+    "rationale_en": "A lyga and „Hegelmann“ are covered repeatedly in major sports sections, with recent match recaps indicating active interest in league standings[8][9]."
+  },
+  {
+    "id": 102,
+    "verify_verdict": "OPEN",
+    "verify_note": "nepateikta LHMT patikra dėl raudono lygio stichinių orų įspėjimų Vilniui 2026 m., tad negalima patvirtinti nei kad tai jau įvyko, nei kad marketas neteisingas.",
+    "question_lt": "Ar iki 2026 m. pabaigos Vilniuje bus paskelbta dar viena raudono lygio stichinių orų paros įspėjimo diena?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "weather",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Tikrinama Lietuvos hidrometeorologijos tarnybos (LHMT) oficiali informacija, ar Vilniui buvo suteiktas raudonas pavojaus lygis bent vienai dienai dėl stichinių orų sąlygų.",
+    "sources": [
+      "https://www.15min.lt/naujiena/aktualu/orai/meteorologai-turi-blogu-ziniu-lietus-atsitraukia-tik-trumpam-o-tada-vel-pliaups-60-2730698[10]",
+      "https://www.15min.lt/naujiena/aktualu/orai/po-lietingu-dienu-geresnes-zinios-savaitgali-lepins-siluma-60-2730734[11]"
+    ],
+    "rationale_en": "Weather extremes are a recurring topic in major media, with detailed forecasts and warnings widely read; a red-level alert in Vilnius would be highly visible[10][11]."
+  },
+  {
+    "id": 103,
+    "verify_verdict": "OPEN",
+    "verify_note": "nėra viešai patvirtintų NVSC/SAM duomenų apie bent vieną Vakarų Nilo karštligės žmogaus infekciją Vilniuje iki šiol; tačiau 2026 m. pabaigos baigtis dar nežinoma.",
+    "question_lt": "Ar Vilniuje bus užfiksuota bent viena Vakarų Nilo karštligės žmonių infekcija?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.2,
+      0.8
+    ],
+    "category": "sveikata",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Remiamasi NVSC / SAM skelbiamais užkrečiamųjų ligų registrų duomenimis metų pabaigoje; skaičiuojama bent viena žmonių infekcija Vilniuje iki 2026-12-31.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sveikata/682/3000333/po-virtines-vakaru-nilo-karstliges-atveju-europoje-pso-ragina-stiprinti-budruma"
+    ],
+    "rationale_en": "WHO warning about West Nile in Europe is widely reported; Lithuanians are sensitive to new virus threats, especially in summer."
+  }
+]

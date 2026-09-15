@@ -1,0 +1,146 @@
+[
+  {
+    "id": 155,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Kiek taškų pelnys Lebronas Jamesas pirmosėse 2026-2027 m. NBA sezono rungtynėse?",
+    "market_type": "multi",
+    "options_lt": [
+      "Mažiau nei 20",
+      "20–29",
+      "30 ir daugiau"
+    ],
+    "probabilities": [
+      0.35,
+      0.5,
+      0.15
+    ],
+    "category": "sports",
+    "resolve_by": "2026-10-28",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų NBA statistikos lapą (box score) pirmosėse „Philadelphia 76ers“ komandos sezono rungtynėse.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/3000337/nba-legenda-lebronas-jamesas-karjera-tes-filadelfijos-76ers-klube",
+      "https://www.eurohoops.net/en/nba-news/1993920/lebron-james-day-philadelphia-76ers-nba/"
+    ],
+    "rationale_en": "LeBron James is a global sports icon; rumors of his move to a new team and his physical performance in his later career years are highly debated topics among basketball fans."
+  },
+  {
+    "id": 156,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar „Mere“ atidarys parduotuvę Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.2,
+      0.8
+    ],
+    "category": "economics",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Laikotarpis: iki 2026 m. gruodžio 31 d. Sprendžiama teigiama, jei atidaryta bent viena parduotuvė. Šaltinis: oficialūs „Mere“ arba Lietuvos Respublikos vyriausybės/susijusių institucijų pranešimai spaudai.",
+    "sources": [
+      "https://www.15min.lt/verslas/naujiena/finansai/merei-uzdarius-parduotuves-lietuvoje-zinia-is-ministerijos-662-2730660",
+      "https://www.delfi.lt/verslas/naujienos/mere-uzdare-parduotuves-lietuvoje-120281251"
+    ],
+    "rationale_en": "The departure of Mere stores was a major recent economic event in Lithuania; young consumers frequently debate the return of low-price retail options amidst high inflation."
+  },
+  {
+    "id": 157,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar Artūras Gudaitis pelnys daugiau nei 12 taškų pirmose 2026-2027 m. „Rytas“ rungtynėse?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "sports",
+    "resolve_by": "2026-10-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Apibrėžtis: pirmosios 2026-2027 m. sezono „Rytas“ oficialios rungtynės (LKL, „EuroCup“ ar BBL). Sprendžiama pagal oficialų rungtynių protokolą.",
+    "sources": [
+      "https://www.delfi.lt/krepsinis/naujienos/gudaitis-apsisprende-del-ryto-pasiulymo-120281145",
+      "https://www.lrytas.lt/sportas/krepsinis/2026/07/24/news/sirgaliu-pamiltas-ryto-gynejas-rado-nauja-komanda-43258672/"
+    ],
+    "rationale_en": "High public interest in the star center's move to Rytas; Google Trends LT shows 1000+ searches for \"artūras gudaitis\" immediately following the decision news."
+  },
+  {
+    "id": 158,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar buvusi „Mere“ parduotuvė atsivers kito prekybos tinklo pavadinimu?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "economics",
+    "resolve_by": "2027-01-05",
+    "duration_class": "long",
+    "resolution_hint_lt": "Laikotarpis: iki 2026 m. gruodžio 31 d. Sprendžiama teigiama, jei bent vienoje buvusios „Mere“ vietoje atsivers kita prekybos vieta. Šaltinis: oficialus naujojo tinklo pranešimas ar patvirtinta informacija verslo portaluose (Delfi Verslas, VZ).",
+    "sources": [
+      "https://www.15min.lt/verslas/naujiena/finansai/merei-uzdarius-parduotuves-lietuvoje-zinia-is-ministerijos-662-2730660",
+      "https://www.delfi.lt/verslas/naujienos/mere-uzdare-parduotuves-lietuvoje-120281251"
+    ],
+    "rationale_en": "Massive consumer impact event; Google Trends LT records 5000+ searches for \"parduotuvė\" and Russian \"magazin\" linked to the closing news, indicating high public anxiety and interest in the aftermath."
+  },
+  {
+    "id": 159,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar Vaidos Baumilos daina „Kas yra?“ pasieks 200 tūkst. peržiūrų „YouTube“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "culture",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal viešai prieinamą peržiūrų skaičių „YouTube“ vaizdo įraše (https://www.youtube.com/watch?v=_z3C9Dlg0rg) 2026 m. rugpjūčio 10 d. 23:59:59 val.",
+    "sources": [
+      "https://www.youtube.com/watch?v=_z3C9Dlg0rg"
+    ],
+    "rationale_en": "Strong viral signal; the video is currently #2 on YouTube Trending LT with 137k views, showing active engagement from the target demographic within the last 24 hours."
+  },
+  {
+    "id": 160,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar Jessica Shy daina „Šalis nepaliesta“ išliks „Spotify Top 50 Lietuva“ reitinge?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "culture",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal „Spotify Top 50 Lietuva“ lentelės (https://charts.spotify.com/home/region/LT/playlist/top50) būklę 2026 m. rugsėjo 1 d.; dainai turi būti nurodytas konkretus pavadinimas „Šalis nepaliesta“.",
+    "sources": [
+      "https://www.youtube.com/watch?v=rIUrMbh6Svs"
+    ],
+    "rationale_en": "High visibility on YouTube Trending LT (64k views for the new track), confirming the artist's relevance and the song's current popularity with young Lithuanians."
+  }
+]

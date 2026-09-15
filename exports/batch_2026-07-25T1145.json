@@ -1,0 +1,197 @@
+[
+  {
+    "id": 177,
+    "verify_verdict": "OPEN",
+    "verify_note": "Sources only confirm a past Maxima pricing glitch already occurred (15min/LRT reports on refunds for wrong prices); nothing shows a second/new disruption has been reported yet, so recurrence by year-end is still genuinely open. Valid LT entity (Maxima).",
+    "question_lt": "Ar „Maxima“ dar kartą paskelbs apie kainų sutrikimus šiemet?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "economics",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinkoje sprendžiama Taip, jei iki metų pabaigos viešai pasirodo naujas pranešimas apie kainų ar atsiskaitymo sutrikimus „Maxima“ tinkle, fiksuotas didžiuosiuose naujienų portaluose.",
+    "sources": [
+      "https://www.15min.lt/verslas/naujiena/bendroves/uz-kai-kurias-prekes-galejote-sumoketi-daugiau-nei-reikejo-parduotuviu-tinklas-maxima-pranesa-apie-sutrikimus-663-2730810",
+      "https://www.lrt.lt/naujienos/verslas/4/3001031/sestadieni-dalyje-maxima-parduotuviu-taikyta-ne-akcijine-kaina-pinigai-bus-grazinami"
+    ],
+    "rationale_en": "Maxima pricing glitches and compensation drew broad media attention and Google Trends LT interest around price/payment issues, which directly affects many young Lithuanians' money."
+  },
+  {
+    "id": 179,
+    "verify_verdict": "OPEN",
+    "verify_note": "No confirmed report that a \"raudonasis pavojus\" (red heat alert) has already been issued for Vilnius; LHMT is the correct real authority and the window (through Sept 1) hasn't closed, so this remains a live/undecided weather question.",
+    "question_lt": "Ar Vilniuje šią vasarą bus paskelbtas raudonasis pavojus dėl karščio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.3,
+      0.7
+    ],
+    "category": "weather",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal LHMT oficialius perspėjimus; Taip, jei 2026 m. vasarą Vilniui paskelbtas raudonasis pavojus dėl karščio.",
+    "sources": [
+      "https://news.google.com/rss/articles/CBMiywFBVV95cUxNWDI2ZWRWVEZsZnk2VGtkNV9PUDFvQmhLSk9pOS1WQ2lPcXQza2dtV0dCTVlhQTJkVFhlSExEajdNZkdUVzRGWVhfQXIta2c4bjJ3cGRiVWlGWWdUeVM4akR1Wmk5S3JFZVkzbnBOVV9ab3FSN25NN2JXLTR6UHJUQ243QjVTWHRSa2k5eXQ4Ti0yVVdtM1V2Z0NKZkNId21RWUpidWZZSC1TVkhVVTJQM2FBWXBJTl9wWXNOTlllTW9hMjY2ZHNNUlBGOA?oc=5"
+    ],
+    "rationale_en": "News about 28°C heat and weather changes, combined with constant climate and heat discussion, make this an informative and emotional question."
+  },
+  {
+    "id": 180,
+    "verify_verdict": "OPEN",
+    "verify_note": "\"Kas Kaltas\" (feat. Igoris Kofas) is a real, current Apple Music LT track; the three chart-tier options (Top3 / 4-10 / out of Top10) are mutually exclusive and exhaustive, so the market structure is valid and the outcome by Oct 1 is still undetermined.",
+    "question_lt": "Jessica Shy „Kas Kaltas“ vieta Top 10 Lietuvoje iki rudens",
+    "market_type": "multi",
+    "options_lt": [
+      "Išliks Top 3",
+      "Nukris į 4–10 vietą",
+      "Iškris iš Top 10"
+    ],
+    "probabilities": [
+      0.45,
+      0.4,
+      0.15
+    ],
+    "category": "culture",
+    "resolve_by": "2026-10-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Apple Music Lietuva Top 100 sąrašą; fiksuojama dainos „Kas Kaltas (feat. Igoris Kofas)“ pozicija 2026-10-01.",
+    "sources": [
+      "https://music.apple.com/lt/album/kas-kaltas-feat-igoris-kofas/6784728491?i=6784728497"
+    ],
+    "rationale_en": "Jessica Shy occupies multiple top Apple Music LT chart positions, making this a mainstream pop phenomenon for young Lithuanians."
+  },
+  {
+    "id": 181,
+    "verify_verdict": "OPEN",
+    "verify_note": "Vaidas Baumila is an established Lithuanian artist and \"Kas yra?\" is a real released video; the three view-count tiers are exhaustive, and the Sept 10 measurement hasn't occurred yet.",
+    "question_lt": "Vaidas Baumila „Kas yra?“ srautas YouTube iki rugsėjo",
+    "market_type": "multi",
+    "options_lt": [
+      "Pasieks ≥250 tūkst. peržiūrų",
+      "180–249 tūkst. peržiūrų",
+      "<180 tūkst. peržiūrų"
+    ],
+    "probabilities": [
+      0.35,
+      0.45,
+      0.2
+    ],
+    "category": "culture",
+    "resolve_by": "2026-09-10",
+    "duration_class": "long",
+    "resolution_hint_lt": "Fiksuojamas oficialaus vaizdo klipo „Vaidas Baumila - Kas yra?“ peržiūrų skaičius YouTube kanale 2026-09-10.",
+    "sources": [
+      "https://www.youtube.com/watch?v=_z3C9Dlg0rg"
+    ],
+    "rationale_en": "The song already has about 140k views and is in YouTube Trending LT, and Baumila is a well-known performer."
+  },
+  {
+    "id": 182,
+    "verify_verdict": "OPEN",
+    "verify_note": "\"Šventę Švęst\" (OG Version & Furytto) is a real released track; whether it reaches Spotify LT Top 50 by Sept 1 is a genuine, undecided future event.",
+    "question_lt": "Ar „Šventę Švęst“ ar pateks į Spotify Top 50 Lietuva?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "culture",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Taip, jei iki šios datos OG Version ir Furytto daina „Šventę Švęst“ bent vieną dieną bus Spotify Top 50 Lietuva sąraše.",
+    "sources": [
+      "https://www.youtube.com/watch?v=vYh4AAyZkVU"
+    ],
+    "rationale_en": "The song is already in YouTube Trending LT and fits party/celebration vibes widely discussed in youth groups."
+  },
+  {
+    "id": 183,
+    "verify_verdict": "OPEN",
+    "verify_note": "JUDU is a real Lithuanian mobility/ticketing app on the App Store LT; the three ranking-tier options are exhaustive, and the Oct 15 snapshot date hasn't occurred.",
+    "question_lt": "„JUDU“ programėlės vieta App Store Lietuva rudenį",
+    "market_type": "multi",
+    "options_lt": [
+      "Išliks Top 3",
+      "Nukris į 4–10 vietą",
+      "Nukris žemiau Top 10"
+    ],
+    "probabilities": [
+      0.5,
+      0.35,
+      0.15
+    ],
+    "category": "technology",
+    "resolve_by": "2026-10-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal App Store Lietuva reitingus, fiksuojant „JUDU — SUSISIEKIMO PASLAUGOS SI“ vietą 2026-10-15.",
+    "sources": [
+      "https://apps.apple.com/lt/app/judu/id6477285112"
+    ],
+    "rationale_en": "JUDU is the #1 app in Lithuania, and young people actively use public transport and micromobility solutions."
+  },
+  {
+    "id": 184,
+    "verify_verdict": "OPEN",
+    "verify_note": "The cited lrytas source is about A. Veryga experiencing a personal bereavement (\"išgyvena skaudžią netektį\"), not a political-retirement announcement, so nothing currently confirms or rules out a future withdrawal from politics — he remains an active, real Lithuanian politician, so the market stands as open.",
+    "question_lt": "Ar Aurelijus Veryga paskelbs apie pasitraukimą iš politikos?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.25,
+      0.75
+    ],
+    "category": "politics",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Taip, jei iki metų pabaigos patikimuose naujienų portaluose pasirodo aiški žinia, kad A. Veryga skelbia pasitraukimą iš aktyvios politikos ar nebekandidatuos; kitaip Ne.",
+    "sources": [
+      "https://www.lrytas.lt/zmones/veidai-ir-vardai/2026/07/25/news/aurelijus-veryga-isgyvena-skaudzia-netekti-43261431",
+      "https://trends.google.lt/trends"
+    ],
+    "rationale_en": "Veryga is a well-known politician and doctor, and a personal news cycle around him generated strong interest."
+  },
+  {
+    "id": 185,
+    "verify_verdict": "OPEN",
+    "verify_note": "The linked pages (kasvyksta.lt, mzirafos.lt, aerokaunas.lt) are event-info/program pages for the 2026 Kaunas air show, not ticket-sales reports; no evidence tickets are already sold out, and the event/resolution date (Sept 15) hasn't passed.",
+    "question_lt": "Ar aviacijos šventė Kaune bus išparduota?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "culture",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Taip, jei organizatoriai ar bilietų platinimo platformos viešai paskelbia, kad visi bilietai į 2026 m. aviacijos šventę Kaune yra parduoti; kitaip Ne.",
+    "sources": [
+      "https://kaunas.kasvyksta.lt/renginiai/aviacijos-svente-kaune-renginio-programa-ka-reikia-zinoti",
+      "https://www.mzirafos.lt/renginiai/kaune/kauno-aviacijos-svente-2026/",
+      "https://aerokaunas.lt/2026/07/21/kauno-aviacijos-svente-2026/",
+      "https://www.facebook.com/events/s-dariaus-ir-s-gir%C4%97no-aerodromas/kauno-aviacijos-%C5%A1vent%C4%97-2026/2564029500725364/"
+    ],
+    "rationale_en": "Kaunas Aviation Festival has 500+ Google Trends LT searches and broad regional interest, making it a popular weekend event for young people."
+  }
+]

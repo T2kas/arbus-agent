@@ -1,0 +1,369 @@
+[
+  {
+    "id": 185,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar JAV ir Iranas iki rugsėjo pabaigos susitars dėl paliaubų Artimuosiuose Rytuose?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "„Taip“ bus fiksuojama, jei iki 2026-09-30 JAV ir Irano pareigūnai viešai paskelbs apie susitarimą dėl paliaubų ar ugnies nutraukimo Artimuosiuose Rytuose, patvirtintą bent vienoje patikimoje naujienų agentūroje (pvz., LRT, Reuters, AP); jei tokio susitarimo nebus – rinka baigsis „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3002061/jav-nutraukus-smugius-iranas-skelbia-stabdantis-atakas-artimuosiuose-rytuose",
+      "https://www.15min.lt/naujiena/aktualu/pasaulis/jav-pasiuntinys-jt-donaldas-trumpas-suteikia-erdves-deryboms-su-iranu-jav-amunicijos-stygiaus-nera-57-2731278",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2999109/kodel-jav-ir-irano-konfliktas-nuolat-svyruoja-tarp-karo-veiksmu-ir-diplomatijos"
+    ],
+    "rationale_en": "US halted strikes while Iran announced stopping attacks and US diplomats speak about space for talks, creating real but uncertain ceasefire prospects that directly affect NATO and Baltic security debates.",
+    "image_url": "https://www.lrt.lt/img/2025/04/18/2049346-612228-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/3002061/jav-nutraukus-smugius-iranas-skelbia-stabdantis-atakas-artimuosiuose-rytuose",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 186,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar ES iki metų pabaigos priims naują plataus masto Rusijos ir Baltarusijos sankcijų paketą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "„Taip“ bus fiksuojama, jei iki 2026-12-31 ES oficialiai patvirtins naują sankcijų paketą Rusijai ir (ar) Baltarusijai, apimantį papildomus subjektus ar sektorius, o apie tai praneš LRT ar kiti patikimi šaltiniai; jei naujų sankcijų paketo nebus – rinka baigsis „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/3000265/naujame-es-sankciju-pakete-ir-lietuvoje-veikiancio-tinklo-mere-savininkas",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2999387/budrys-es-sankciju-politikos-sprendimus-vis-labiau-lemia-saliu-ekonominiai-interesai",
+      "https://www.vz.lt/verslo-aplinka/2026/07/24/dienos-akcentai-del-europiniu-sankciju-uzdaromos-mere-parduotuves-ir-nauji-jav-muitu-tarifai-587866"
+    ],
+    "rationale_en": "EU just expanded sanctions including Mere’s owner and Lithuanian presidential adviser Budrys comments on evolving sanctions logic, making another package in 2026 a live geopolitical question.",
+    "image_url": "https://www.lrt.lt/img/2022/12/07/1402398-245191-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/verslas/4/3000265/naujame-es-sankciju-pakete-ir-lietuvoje-veikiancio-tinklo-mere-savininkas",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 187,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar iki metų pabaigos NATO paskelbs apie naują nuolatinį karinių pajėgų dislokavimą Baltijos šalyse?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "„Taip“ bus fiksuojama, jei iki 2026-12-31 NATO ar kuri nors NATO valstybė oficialiai paskelbs apie naują nuolatinį sausumos, oro ar jūrų pajėgų dislokavimą bent vienoje Baltijos šalyje, apie kurį praneš LRT ar kiti patikimi šaltiniai; jei tokio sprendimo nebus – rinka baigsis „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2999358/nato-ketina-modernizuoti-savo-degalu-tiekimo-tinkla-europoje",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3000327/europoje-nesuvaldomi-gaisrai-evakuota-tukstanciai-zmoniu-pagalbos-prasoma-es-saliu"
+    ],
+    "rationale_en": "NATO is publicly planning to modernise its fuel network in Europe and the regional security environment around Ukraine and Russia keeps Baltic force posture a hot topic in Lithuanian media.",
+    "image_url": "https://www.lrt.lt/img/2026/03/17/2346618-672130-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/2999358/nato-ketina-modernizuoti-savo-degalu-tiekimo-tinkla-europoje",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 188,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ukrainos karo eiga: kokį reikšmingą teritorinį pokytį matysime iki 2026 m. pabaigos?",
+    "market_type": "multi",
+    "options_lt": [
+      "Daugiau kaip 5 % Ukrainos teritorijos atkovota nuo 2026-07-01 lygio",
+      "Pokytis iki ±5 % (status quo su nedideliais svyravimais)",
+      "Daugiau kaip 5 % papildomos teritorijos užimta Rusijos pajėgų"
+    ],
+    "probabilities": [
+      0.25,
+      0.5,
+      0.25
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Vertinant bus lyginamos nepriklausomų šaltinių (pvz., ISW, „DeepStateMap“ ir pagrindinės žiniasklaidos, tokios kaip LRT) skelbiamos kontrolės linijos – bus skaičiuojama apytikslė Ukrainos kontroliuojamos teritorijos dalis 2026-07-01 ir 2026-12-31, pagal kurią nustatoma, kurių opcijų slenkstį (±5 proc. punktų) rezultatas atitinka. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3000125/drasko-kunus-i-gabalus-pervarge-ukrainos-medikai-pasakoja-pasikeite-kariu-suzalojimai",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3000099/europa-alina-sausra-galvos-skausmas-del-derliaus-upiu-lygis-kelia-laivybos-problemu",
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2998392/ukrainos-kariai-ir-civiliai-palankiai-vertina-sprendima-pakeisti-kariuomenes-vada"
+    ],
+    "rationale_en": "The war in Ukraine remains central in Lithuanian coverage, with focus on front-line changes and leadership shifts, making territorial gains vs losses a key, measurable geopolitical metric.",
+    "image_url": "https://www.lrt.lt/img/2026/07/24/2447090-448997-1287x836.png",
+    "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/3000125/drasko-kunus-i-gabalus-pervarge-ukrainos-medikai-pasakoja-pasikeite-kariu-suzalojimai",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 189,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar „Ignitis grupė“ akcijos pasieks 24 € iki spalio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "verslas",
+    "resolve_by": "2026-10-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka sprendžiama pagal oficialią „Ignitis grupė“ (IGN1L) uždarymo kainą Nasdaq Vilnius biržoje paskutinę prekybos dieną iki 2026-10-15 imtinai; jei kaina bent kartą iki šios datos užsidarys ≥24,00 €, sprendžiama „Taip“, kitu atveju „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.nasdaqbaltic.com/statistics/lt/instrument/LT0000128696",
+      "https://finance.yahoo.com/quote/IGN1L.VS"
+    ],
+    "rationale_en": "Ignitis grupė is a widely followed Lithuanian energy stock, and a move from around 22.45 EUR to 24 EUR is a small but uncertain upside that many retail investors in Lithuania would debate.",
+    "image_url": "https://pinhole.finance.yahoo.com/chart/IGN1L.VS/__screenshot",
+    "image_source": "https://finance.yahoo.com/quote/IGN1L.VS",
+    "theme": "ekonomika ir finansai"
+  },
+  {
+    "id": 190,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar „Telia Lietuva“ akcijos pakils virš 2,40 € iki rugsėjo?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "verslas",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal „Telia Lietuva“ (TEL1L) uždarymo kainą Nasdaq Vilnius biržoje: jei bent vieną prekybos dieną iki 2026-09-30 imtinai oficiali uždarymo kaina bus >2,40 €, rinka baigiasi „Taip“, jei neperžengs 2,40 € ribos – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.nasdaqbaltic.com/statistics/lt/instrument/LT0000123916",
+      "https://finance.yahoo.com/quote/TEL1L.VS"
+    ],
+    "rationale_en": "Telia Lietuva trades around 2.26 EUR, its results and dividends are closely watched by small investors, and a modest move above 2.40 EUR is a simple, relevant question.",
+    "image_url": "https://pinhole.finance.yahoo.com/chart/TEL1L.VS/__screenshot",
+    "image_source": "https://finance.yahoo.com/quote/TEL1L.VS",
+    "theme": "ekonomika ir finansai"
+  },
+  {
+    "id": 191,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Koks bus minimalaus atlyginimo dydis 2027 m. pradžioje?",
+    "market_type": "multi",
+    "options_lt": [
+      "1050–1099 €",
+      "1100–1149 €",
+      "1150 € ir daugiau",
+      "Iki 1049 €"
+    ],
+    "probabilities": [
+      0.25,
+      0.4,
+      0.2,
+      0.15
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2027-01-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka sprendžiama pagal oficialiai patvirtintą mėnesio minimalųjį atlyginimą (MMA, prieš mokesčius, pilnai darbo laikui) Lietuvoje, galiojantį 2027 m. sausio 1 d., kaip skelbia Lietuvos Respublikos Vyriausybės nutarimas ir Socialinės apsaugos ir darbo ministerijos / „Sodra“ informacija; pasirenkamas intervalas, į kurį patenka paskelbta suma. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://www.sodra.lt/lt/situacijos/informacija-apie-minimalu-menesi-atlyginima",
+      "https://www.lrt.lt/naujienos/verslas/4/2998189/vyriausybe-skyre-dar-10-mln-euru-pagalbai-zmonems-turintiems-negalia"
+    ],
+    "rationale_en": "The minimum wage is one of the most discussed topics among workers and employers, and each increase is widely covered in the media while directly affecting young people's income.",
+    "image_url": "https://www.lrt.lt/img/2026/05/21/2395906-771821-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/verslas/4/2998189/vyriausybe-skyre-dar-10-mln-euru-pagalbai-zmonems-turintiems-negalia",
+    "theme": "ekonomika ir finansai"
+  },
+  {
+    "id": 192,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar nuo rugpjūčio taikomas 10 % pradinis įnašas pirmajam būstui bus peržiūrėtas iki metų pabaigos?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.3,
+      0.7
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka sprendžiama „Taip“, jei iki 2026-12-31 imtinai Lietuvos bankas ar Vyriausybė oficialiai pakeis taisykles dėl 10 % pradinio įnašo pirmajam būstui (pvz., pakeis procentą ar panaikins lengvatą) ir nauja tvarka įsigalios; jei tokie sprendimai nebus priimti ir įsigalioję – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/verslas/4/2999135/lrt-trumpai-laukti-pokyciai-nuo-rugpjucio-perkantiems-pirma-busta-mazeja-pradinis-inasas",
+      "https://www.lrt.lt/naujienos/verslas/4/3000248/naujove-del-10-proc-pradinio-inaso-kliutimi-gali-tapti-turimas-sandeliukas-ar-garazas"
+    ],
+    "rationale_en": "The 10% down payment relief for first-home buyers is widely discussed in Lithuanian media and directly matters to young people with mortgages, so it is salient whether the rules will be revised further by year-end.",
+    "image_url": "https://www.lrt.lt/img/2023/09/05/1582110-979435-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/verslas/4/2999135/lrt-trumpai-laukti-pokyciai-nuo-rugpjucio-perkantiems-pirma-busta-mazeja-pradinis-inasas",
+    "theme": "ekonomika ir finansai"
+  },
+  {
+    "id": 193,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar Vilniaus „Žalgiris“ pateks į kitą Konferencijų lygos atrankos etapą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-08-22",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal oficialius UEFA Konferencijų lygos atrankos rungtynių tarp Vilniaus „Žalgirio“ ir Tbilisio „Dinamo“ rezultatus UEFA svetainėje; jei po atsakomojo mačo „Žalgiris“ žengs į kitą etapą, sprendžiama „Taip“, kitu atveju – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2999348/zalgiris-is-konferenciju-lygos-rungtyniu-tbilisyje-parsiveza-triju-ivarciu-deficita",
+      "https://www.lrt.lt/naujienos/sportas/10/2998389/skerla-pries-rungtynes-su-dinamo-50-pries-50-o-raktas-i-sekme-kontratakos",
+      "https://www.uefa.com/uefaeuropaconferenceleague/"
+    ],
+    "rationale_en": "\"Žalgiris\" in the Conference League suffered a painful 0:3 defeat in Tbilisi, widely discussed on LRT and elsewhere, so the second match and the question \"is a miracle still possible?\" is a natural topic of debate.[1][2]",
+    "image_url": "https://www.lrt.lt/img/2026/07/23/2446847-662438-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/sportas/10/2999348/zalgiris-is-konferenciju-lygos-rungtyniu-tbilisyje-parsiveza-triju-ivarciu-deficita",
+    "theme": "sportas"
+  },
+  {
+    "id": 194,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "„Panevėžys“ Konferencijų lygoje: ar praeis į kitą etapą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-08-22",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka bus išspręsta pagal oficialius UEFA Konferencijų lygos atrankos rungtynių, kuriose žaidžia FK „Panevėžys“, rezultatus UEFA svetainėje; jei „Panevėžys“ po atsakomojo mačo pateks į kitą atrankos etapą, sprendžiama „Taip“, jei iškris – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2999314/cerniauskas-atreme-baudini-taciau-panevezys-konferenciju-lygoje-pergales-neissaugojo",
+      "https://www.lrt.lt/naujienos/sportas/10/2999400/panevezio-treneris-apie-kostanaju-turistauti-ten-nesirinkciau-vykstame-pergales",
+      "https://www.uefa.com/uefaeuropaconferenceleague/"
+    ],
+    "rationale_en": "FK \"Panevėžys\" played dramatic Conference League qualifying matches (fragile lead, saved penalty), covered in detail by LRT, so the battle to reach the next round is current and still undecided.[3][4]",
+    "image_url": "https://www.lrt.lt/img/2026/03/15/2344925-846806-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/sportas/10/2999314/cerniauskas-atreme-baudini-taciau-panevezys-konferenciju-lygoje-pergales-neissaugojo",
+    "theme": "sportas"
+  },
+  {
+    "id": 195,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar Lietuvos vyrų futbolo rinktinė šį rudenį laimės kontrolines rungtynes prieš Andorą Kaune?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus išspręsta remiantis oficialiu Lietuvos futbolo federacijos ir rungtynių protokolo rezultatu; jei kontrolinėse rungtynėse Kaune prieš Andoros rinktinę Lietuva iškovos pergalę (po pagrindo ir, jei bus, pratęsimo, neįskaitant vien baudinių serijos), sprendžiama „Taip“, jei sužais lygiosiomis ar pralaimės – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2998356/lietuvos-rinktine-kontrolinese-rungtynese-kaune-priims-andoros-futbolininkus",
+      "https://lff.lt/rinktines/vyru-rinktine/",
+      "https://www.lrt.lt/naujienos/sportas/10/2998336/lietuvos-futbolo-cempionato-savaites-rungtyniu-apzvalga-seimininkai-irode-pranasuma"
+    ],
+    "rationale_en": "LRT is already announcing Lithuania's autumn friendly against Andorra in Kaunas, and national team results are always debated among fans, so the question of victory is widely discussed and still undecided.[5]",
+    "image_url": "https://www.lrt.lt/img/2026/06/06/2409522-26628-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/sportas/10/2998356/lietuvos-rinktine-kontrolinese-rungtynese-kaune-priims-andoros-futbolininkus",
+    "theme": "sportas"
+  },
+  {
+    "id": 196,
+    "verify_verdict": "NOT_VERIFIED",
+    "verify_note": "verification stage failed (technical, not an editorial verdict)",
+    "question_lt": "Ar „Odisėja“ taps žiūrimiausiu filmu Lietuvoje per premjeros savaitgalį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-12-22",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka bus sprendžiama pagal oficialią „Forum Cinemas“ ir „Multikino“ Lietuva savaitgalio lankomumo statistiką (žiūrovų skaičių), lyginant „Odisėją“ su kitais tuo metu rodomais filmais. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://lt.wikipedia.org/wiki/Odisėja_(2026_filmas)",
+      "https://www.forumcinemas.lt",
+      "https://multikino.lt"
+    ],
+    "rationale_en": "The upcoming Lithuanian-linked film \"Odisėja (2026)\" has a dedicated LT Wikipedia page with 287 views in one day and is widely discussed as a major theatrical release, making its box-office performance over premiere weekend a high-attention topic.",
+    "image_url": "",
+    "image_source": "",
+    "theme": "kultūra ir visuomenė"
+  },
+  {
+    "id": 197,
+    "verify_verdict": "OPEN",
+    "verify_note": "Currently Jessica Shy already holds 3 of Lithuania's Top 5 Apple Music slots (\"Kas Kaltas\" #1, \"Saulė Nesileis\" #2, \"Jeigu Būčiau\" #5), but the resolution date (2026‑09‑15) is nearly 7 weeks away, giving real room for chart movement — a genuinely open market.",
+    "question_lt": "Jessica Shy dainos Apple Music Lietuva Top 5 rugsėjį",
+    "market_type": "multi",
+    "options_lt": [
+      "3 ar daugiau Jessica Shy dainų Top 5",
+      "1–2 Jessica Shy dainos Top 5",
+      "0 Jessica Shy dainų Top 5"
+    ],
+    "probabilities": [
+      0.5,
+      0.35,
+      0.15
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "2026-09-15 dieną bus patikrintas Apple Music Lietuva „Top Songs“ sąrašas; rinka sprendžiama pagal tai, kiek Jessica Shy kūrinių („Kas Kaltas“, „Saulė Nesileis“, „Jeigu Būčiau“ ir kt.) tuo metu bus Top 5 pozicijose. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://music.apple.com/lt/album/kas-kaltas-feat-igoris-kofas/6784728491?i=6784728497",
+      "https://music.apple.com/lt/album/saul%C4%97-nesileis/6776362511?i=6776362513",
+      "https://music.apple.com/lt/album/jeigu-b%C5%AB%C4%8Diau/6784728491?i=6784728494"
+    ],
+    "rationale_en": "Jessica Shy currently occupies 3 of the Top 5 songs on Apple Music Lietuva, showing massive mainstream reach, so predicting how many of her tracks will still be in the Top 5 in mid-September is a clear metric market on a widely recognized artist (and uses our single allowed streams chart metric in this chunk).",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d7/bb/ca/d7bbca19-0e17-d119-34b9-9c0aaa9a755e/cover.jpg/1200x630wp-60.jpg",
+    "image_source": "https://music.apple.com/lt/album/kas-kaltas-feat-igoris-kofas/6784728491?i=6784728497",
+    "theme": "kultūra ir visuomenė"
+  }
+]

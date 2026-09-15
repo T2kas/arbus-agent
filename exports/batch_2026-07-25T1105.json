@@ -1,0 +1,209 @@
+[
+  {
+    "id": 162,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "no search results found for a festival named \"Žaliųjų peizažų festivalis\"; cannot confirm it exists or its ticket status.",
+    "question_lt": "Ar Žaliųjų peizažų festivalis bus išparduotas?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.42,
+      0.58
+    ],
+    "category": "culture",
+    "resolve_by": "2026-08-15",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų festivalio organizatorių pranešimą apie pilną bilietų išpardavimą arba bilietų prekybos puslapio būseną.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/laisvalaikis/13/3000139/neries-pakrantese-nematytas-sujudimas-pirmakart-surengtas-upes-festivalis"
+    ],
+    "rationale_en": "A local festival-sale market is easy for Lithuanian young adults to follow because it combines a recognizable summer event with a simple sell-out outcome."
+  },
+  {
+    "id": 163,
+    "verify_verdict": "OPEN",
+    "verify_note": "Sinkevičius is only interim leader; official leadership election was scheduled for this coming weekend among three candidates, outcome not yet confirmed as of today.",
+    "question_lt": "Ar Virginijus Sinkevičius liks Demokratų lyderiu?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.81,
+      0.19
+    ],
+    "category": "politics",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal Demokratų sąjungos „Vardan Lietuvos“ oficialų pranešimą ir patvirtintą vadovybės sudėtį.",
+    "sources": [
+      "https://www.15min.lt/naujiena/aktualu/lietuva/valdanciuju-demokratu-nuolatiniu-lyderiu-isrinktas-virginijus-sinkevicius-56-2730874?utm_source=rssfeed_default&utm_medium=rss&utm_campaign=rssfeed"
+    ],
+    "rationale_en": "This is a concrete leadership question about a nationally known politician, which tends to draw attention from politically engaged Lithuanians."
+  },
+  {
+    "id": 164,
+    "verify_verdict": "OPEN",
+    "verify_note": "Trade rumors (Kings–Hornets) persist but no confirmed trade has been reported as of the latest available news; Sabonis's status is genuinely undecided.",
+    "question_lt": "Ar Domantas Sabonis liks „Kings“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "sports",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų NBA sandorį, komandos sudėtį arba lygos registraciją.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/3001056/ziniasklaida-pistons-atmete-kings-pasiulyma-del-sabonio-mainu"
+    ],
+    "rationale_en": "Sabonis is one of Lithuania’s most visible sports figures, and any trade/roster uncertainty involving him is highly discussable among young fans."
+  },
+  {
+    "id": 166,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "could not verify current operational status of the Klaipėda \"Naujoji perkėla\" ferry due to search limitations.",
+    "question_lt": "Ar Klaipėdos Naujoji perkėla veiks be sutrikimų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.64,
+      0.36
+    ],
+    "category": "other",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal operatoriaus pranešimus ir viešą keltų tvarkaraštį / sustabdymo įrašus.",
+    "sources": [
+      "https://www.lrytas.lt/verslas/rinkos-pulsas/2026/07/25/news/po-rekonstrukcijos-atveriama-naujoji-perkela-dideli-pokyciai-uostamiestyje-43246812/"
+    ],
+    "rationale_en": "A ferry-service reliability market is easy to understand and locally relevant, especially for people following summer travel and city logistics."
+  },
+  {
+    "id": 167,
+    "verify_verdict": "OPEN",
+    "verify_note": "ChatGPT outages are a recurring, genuinely unpredictable event; plausible either way by Aug 20 2026, and it has direct relevance to LT users of the service.",
+    "question_lt": "Ar „ChatGPT“ vėl sutriks?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.46,
+      0.54
+    ],
+    "category": "other",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal viešai patvirtintą „ChatGPT“ paslaugos sutrikimą arba oficialų statuso puslapį.",
+    "sources": [
+      "https://www.vz.lt/technologijos/2026/07/25/sutriko-chatgpt-veikla-587923"
+    ],
+    "rationale_en": "ChatGPT outages are widely discussed among young Lithuanian users because they directly affect studying, work, and daily online habits."
+  },
+  {
+    "id": 168,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "could not verify current YouTube Trending LT chart status for \"kamanių šilelis\" / Jessica Shy due to search limitations.",
+    "question_lt": "Ar „kamanių šilelis“ ir Jessica Shy pateks į „YouTube Trending LT“ top 3?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.31,
+      0.69
+    ],
+    "category": "culture",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal „YouTube Trending LT“ reitingą Lietuvoje.",
+    "sources": [
+      "https://www.youtube.com/watch?v=rIUrMbh6Svs"
+    ],
+    "rationale_en": "This combines two recognizable Lithuanian music names with a visible chart outcome, making it easy for young users to follow and debate."
+  },
+  {
+    "id": 169,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "could not verify current view count of the Vaidas Baumila video due to search limitations, so cannot judge plausibility of reaching 200k.",
+    "question_lt": "Ar „Vaidas Baumila – Kas yra?“ pasieks 200 tūkst. peržiūrų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.44,
+      0.56
+    ],
+    "category": "culture",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų „YouTube“ peržiūrų skaitiklį nurodytam vaizdo įrašui.",
+    "sources": [
+      "https://www.youtube.com/watch?v=_z3C9Dlg0rg"
+    ],
+    "rationale_en": "A near-term YouTube view milestone for a known Lithuanian performer is a clear, trackable pop-culture bet."
+  },
+  {
+    "id": 170,
+    "verify_verdict": "OPEN",
+    "verify_note": "DramaBox is a globally massive short-drama app (50M+ downloads); no evidence confirming or ruling out a #10 LT App Store position, genuinely open/fluctuating metric.",
+    "question_lt": "Ar „DramaBox“ bus #10 Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "other",
+    "resolve_by": "2026-08-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal „App Store LT“ programėlių reitingą.",
+    "sources": [
+      "https://apps.apple.com/lt/app/dramabox-stream-drama-shorts/id6445905219"
+    ],
+    "rationale_en": "App-chart races are highly legible for younger users, and ranking changes are concrete enough to spark debate."
+  },
+  {
+    "id": 171,
+    "verify_verdict": "OPEN",
+    "verify_note": "LHMT issued high-heat warnings in June 2026, but no confirmed official \"red\" tier alert has been reported yet; summer still ongoing through Aug 31, genuinely undecided.",
+    "question_lt": "Ar LHMT paskelbs raudoną pavojų dėl karščio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.22,
+      0.78
+    ],
+    "category": "weather",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Lietuvos hidrometeorologijos tarnybos oficialius įspėjimus.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3000384/jungtines-karalystes-pramoniniame-objekte-didelis-gaisras-pasitelkta-per-100-ugniagesiu"
+    ],
+    "rationale_en": "Extreme-heat alerts are public-interest weather events that many Lithuanian adults monitor during summer."
+  }
+]

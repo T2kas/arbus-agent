@@ -1,0 +1,214 @@
+[
+  {
+    "id": 223,
+    "verify_verdict": "OPEN",
+    "verify_note": "LIVE DATA shows „Ignitis grupė\" trading at 22.45 € (week -0.2%), a plausible but genuinely undetermined future move to breach 23 € by year-end.",
+    "question_lt": "Ar „Ignitis grupė“ akcija pakils virš 23 €?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.34,
+      0.66
+    ],
+    "category": "Rinkos / akcijos",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialią Nasdaq Baltic uždarymo kainą nurodytą dieną.",
+    "sources": [
+      "https://finance.yahoo.com/quote/IGN1L.VS",
+      "https://www.lrt.lt/naujienos/verslas/4/2997337/ignitis-renewables-latvijoje-investuos-35-mln-euru-i-107-mw-galios-elektros-kaupiklius"
+    ],
+    "rationale_en": "This is a clean Lithuania-listed stock market and the current level is about €22.45, so a €23 threshold is close enough to be plausible and interesting."
+  },
+  {
+    "id": 225,
+    "verify_verdict": "OPEN",
+    "verify_note": "\"Avengers: Doomsday\" has not yet had its theatrical release (scheduled for later in 2026); whether it stays on YouTube Trending LT through the resolve date is a genuinely open future question.",
+    "question_lt": "Ar „Avengers: Doomsday“ liks „YouTube Trending LT“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.61,
+      0.39
+    ],
+    "category": "Kultūra / interneto dėmesys",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal „YouTube Trending LT“ sąrašą nurodytą dieną.",
+    "sources": [
+      "https://www.youtube.com/watch?v=irVNGjRFZGk"
+    ],
+    "rationale_en": "This is a globally familiar trailer with huge current view count, and Lithuanians clearly engage with it even though the subject is international."
+  },
+  {
+    "id": 226,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "Could not verify the actual 2026 date of the „Upės festivalis\" in Vilnius or any post-event attendance figures; without confirming whether it falls before the Aug 10 launch or its real turnout, this cannot be judged.",
+    "question_lt": "Ar „Upės festivalis“ Vilniuje sulauks bent 10 tūkst. lankytojų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.39,
+      0.61
+    ],
+    "category": "Kultūra / renginiai",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal organizatorių arba patikimos žiniasklaidos paskelbtą lankytojų skaičių po renginio.",
+    "sources": [
+      "https://news.google.com/rss/articles/CBMixgFBVV95cUxNTXUxcXl5ejRJbDB3dUN2Z3FmeHZraWdoeWdNWkxhU0k4LXNudkR5aFZsa1czQXMzNEFJc2xsUkhXSVZ0SUlRUEFiLTVIWDQzdGx2dmRLa2pTT2hQYlZscUFkN1EzVWdXelpuVWlpYUdtZjFPUW1kSmRicnFKYWFWaU5naE5HanRySE5NVGRaZUVqZk5ydHpHcEtqYzNhdVMyMnYxRHVGREh1aGpKY01BNVA2X2N0SHNiRG5rWXd4U2pOci1OVFE?oc=5"
+    ],
+    "rationale_en": "The event is brand-new and clearly current, and the question is publicly checkable through post-event attendance reporting."
+  },
+  {
+    "id": 227,
+    "verify_verdict": "OPEN",
+    "verify_note": "Per LRT, Žalgiris only lost the away first leg in Tbilisi (3-goal deficit); the return/home leg outcome determining advancement had not yet been decided.",
+    "question_lt": "Ar „Žalgiris“ atsities Konferencijų lygoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.29,
+      0.71
+    ],
+    "category": "Sportas",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal dviejų rungtynių serijos rezultatą ir ar „Žalgiris“ pateks į kitą etapą.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/2999348/zalgiris-is-konferenciju-lygos-rungtyniu-tbilisyje-parsiveza-triju-ivarciu-deficita",
+      "https://www.lrt.lt/naujienos/sportas/10/2998370/po-keliu-desimtmeciu-vilniaus-zalgirio-akistata-su-istoriniu-sakartvelo-grandu"
+    ],
+    "rationale_en": "This has a clear public sporting resolution and real tension after the three-goal deficit story, so it is meaningful for Lithuanian fans."
+  },
+  {
+    "id": 228,
+    "verify_verdict": "OPEN",
+    "verify_note": "Sources concern a drone shot down in Romanian airspace; no report yet of an unknown drone entering Lithuanian territory specifically, so the Lithuania-specific event remains a genuine future uncertainty.",
+    "question_lt": "Ar į Lietuvos teritoriją pateks nežinomas bepiločis orlaivis?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.42,
+      0.58
+    ],
+    "category": "Saugumas / geopolitika",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal viešai patvirtintus Lietuvos institucijų, NATO ar patikimų žiniasklaidos šaltinių pranešimus apie įskridimą į Lietuvos teritoriją; laikotarpis iki 2026-09-01.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3001030/rumunijoje-pirma-karta-numustas-salies-oro-erdve-pazeides-dronas",
+      "https://www.vz.lt/verslo-aplinka/2026/07/25/rumunija-numuse-antra-drona-587921"
+    ],
+    "rationale_en": "The drone-incursion theme has hard attention across multiple outlets this week, and security stories are exactly the kind of mass-recognized Lithuania-relevant issue the pulse gate is looking for."
+  },
+  {
+    "id": 229,
+    "verify_verdict": "OPEN",
+    "verify_note": "The cited Maxima disruption already happened (pricing glitch); whether a NEW disruption occurs before 2026-08-10 is a separate, still-undetermined future event.",
+    "question_lt": "Ar „Maxima“ praneš apie naują sutrikimą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.41,
+      0.59
+    ],
+    "category": "Verslas / prekyba",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų „Maxima“ pranešimą arba patikimos žiniasklaidos citatą apie naują sutrikimą po šio marketo sukūrimo; iki 2026-08-10.",
+    "sources": [
+      "https://www.15min.lt/verslas/naujiena/bendroves/uz-kai-kurias-prekes-galejote-sumoketi-daugiau-nei-reikejo-parduotuviu-tinklas-maxima-pranesa-apie-sutrikimus-663-2730810?utm_source=rssfeed_verslas&utm_medium=rss&utm_campaign=rssfeed"
+    ],
+    "rationale_en": "The pulse showed 1000+ searches for “kaina” and this retail glitch is exactly the kind of everyday issue people check and discuss immediately."
+  },
+  {
+    "id": 231,
+    "verify_verdict": "OPEN",
+    "verify_note": "Sources reference Romania's drone shoot-downs as regional context; whether Lithuanian authorities will comment on a drone airspace violation from a neighboring state by Sept 1 remains an open, plausible future scenario given recurring Baltic drone-incursion issues.",
+    "question_lt": "Ar Lietuva pakomentuos oro erdvės pažeidimą dronu iš kaimyninės valstybės?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.37,
+      0.63
+    ],
+    "category": "Saugumas / geopolitika",
+    "resolve_by": "2026-09-01",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Krašto apsaugos ministerijos, Vyriausybės arba kariuomenės viešą patvirtinimą apie tokį incidentą; iki 2026-09-01.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3001030/rumunijoje-pirma-karta-numustas-salies-oro-erdve-pazeides-dronas",
+      "https://www.vz.lt/verslo-aplinka/2026/07/25/rumunija-numuse-antra-drona-587921"
+    ],
+    "rationale_en": "It uses the same high-attention security frame as the headline cluster, but keeps the resolution tied to a concrete Lithuanian public statement."
+  },
+  {
+    "id": 232,
+    "verify_verdict": "OPEN",
+    "verify_note": "Sources show coaching continuity (Kurtinaitis staying) amid national-team preparation, but the final roster announcement by Aug 10 is a specific future event not yet confirmed.",
+    "question_lt": "Ar Lietuvos vyrų krepšinio rinktinė paskelbs galutinį kandidatų sąrašą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.83,
+      0.17
+    ],
+    "category": "Sportas",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų rinktinės arba LKF viešą kandidatų sąrašo paskelbimą; iki 2026-08-10.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/sportas/10/3001014/kurtinaitis-prieme-sprendima-tes-darbus-lietuvos-rinktineje",
+      "https://www.lrt.lt/naujienos/sportas/10/2998152/sargiunas-apie-eurolyga-pas-sara-ir-kurtinaicio-procesa-susikomplikavome-labai-gaila"
+    ],
+    "rationale_en": "National-team basketball is a guaranteed mass-audience topic in Lithuania, and the Kurtinaitis-related coverage shows the roster process is actively live."
+  },
+  {
+    "id": 233,
+    "verify_verdict": "OPEN",
+    "verify_note": "ChatGPT outages recur periodically per reporting; whether another outage is reported by Aug 10, 2026 remains a genuinely open future question.",
+    "question_lt": "Ar „ChatGPT“ vėl patirs sutrikimų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.48,
+      0.52
+    ],
+    "category": "Technologijos / platformos",
+    "resolve_by": "2026-08-10",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal viešus „OpenAI“ pranešimus arba plačiai cituotą platformos sutrikimo ataskaitą; iki 2026-08-10.",
+    "sources": [
+      "https://uk.finance.yahoo.com/news/chatgpt-down-openai-experiencing-issues-104222176.html"
+    ],
+    "rationale_en": "The pulse shows strong current Lithuanian search interest in ChatGPT, and platform outage questions are broadly understandable to the young audience."
+  }
+]

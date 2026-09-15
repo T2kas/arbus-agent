@@ -1,0 +1,120 @@
+[
+  {
+    "id": 207,
+    "verify_verdict": "OPEN",
+    "verify_note": "Ukraine-France Rafale deal is a real, ongoing negotiation but jets have not yet been delivered as of today (July 25, 2026); production/delivery timelines typically span years, so this remains an open, unresolved question through 2026-12-31.",
+    "question_lt": "Ar Ukraina iki metų pabaigos gaus „Rafale“ naikintuvus?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.3,
+      0.7
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialius Prancūzijos ir Ukrainos vyriausybių, gynybos ministerijų bei patikimų žiniasklaidos šaltinių pranešimus apie lėktuvų perdavimą.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2999150/gavusi-prancuzisku-rafale-ukraina-galetu-atsisakyti-sovietiniu-naikintuvu"
+    ],
+    "rationale_en": "LRT analizuoja „Rafale“ perdavimo Ukrainai galimybę ir jos poveikį oro gynybai, tai nuolat aptariama karo Ukrainoje kontekste, ypač Baltijos šalyse."
+  },
+  {
+    "id": 208,
+    "verify_verdict": "OPEN",
+    "verify_note": "The Kaunas Aviation Festival 2026 is a planned event with \"oro banditai\" performance previewed in official coverage (kauno.diena.lt), but the show itself has not yet taken place as of 2026-07-25 (resolves by 2026-08-31), so the outcome isn't yet decided.",
+    "question_lt": "Aviacijos šventė Kaune 2026: ar pasirodys „oro banditai“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.7,
+      0.3
+    ],
+    "category": "saugumas",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal oficialią Kauno savivaldybės ir renginio programą bei žiniasklaidos reportažus apie „oro banditų“ pasirodymą.",
+    "sources": [
+      "https://kauno.diena.lt/naujienos/kaunas/miesto-pulsas/kaune-vyks-aviacijos-svente-numatomas-oro-banditu-pasirodymas-1767283",
+      "https://www.lrt.lt/naujienos/lietuvoje/2/3000146/priedangu-situacija-kaimuose-islieka-sudetinga-zmones-sleptusi-rusiuose-baznyciose"
+    ],
+    "rationale_en": "Aviacijos šventė su „oro banditų“ pasirodymu yra Google Trends LT pulse („aviacijos svente 2026“ – 1000+ paieškų), o kartu daug diskutuojama apie priedangas ir saugumą, todėl absurdiškas, bet aktualus kampas."
+  },
+  {
+    "id": 209,
+    "verify_verdict": "OPEN",
+    "verify_note": "Live LT chart data confirms Jessica Shy currently holds 3 of the top-5 spots (incl. \"Kas Kaltas\" at #2), making continued Top-5 presence through 2026-09-15 plausible but not yet certain.",
+    "question_lt": "Jessica Shy „Kas Kaltas“: ar daina išliks Apple Music LT Top 5 iki rugsėjo?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "muzika",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Apple Music Lietuva top dainų sąrašą nurodytą dieną.",
+    "sources": [
+      "https://music.apple.com/lt/album/kas-kaltas-feat-igoris-kofas/6784728491?i=6784728497",
+      "https://music.apple.com/lt/album/saul%C4%97-nesileis/6776362511?i=6776362513"
+    ],
+    "rationale_en": "Apple Music LT rodo Jessica Shy su keliomis dainomis Top 5, ji yra viena populiariausių jaunimo atlikėjų, o tokie topai nuolat aptariami socialiniuose tinkluose."
+  },
+  {
+    "id": 210,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "Current YouTube view count for \"šalis nepaliesta\" by kamanių šilelis & Jessica Shy could not be established this session, so plausibility against the 500k target by 2026-10-15 cannot be confirmed.",
+    "question_lt": "Ar kamanių šilelio ir Jessica Shy daina „šalis nepaliesta“ peržengs 500 tūkst. peržiūrų iki spalio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "muzika",
+    "resolve_by": "2026-10-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal viešai matomą vaizdo įrašo peržiūrų skaičių YouTube platformoje pasirinktą dieną.",
+    "sources": [
+      "https://www.youtube.com/watch?v=rIUrMbh6Svs"
+    ],
+    "rationale_en": "Daina „šalis nepaliesta“ yra YouTube Trending LT su 66 460 peržiūrų, ją atlieka dvi labai žinomos atlikėjos, todėl peržiūrų augimą seka plati auditorija."
+  },
+  {
+    "id": 211,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "Current YouTube LT Trending position/view trajectory for Jovani's \"Vakaras Ilgas\" could not be established this session, so its chance of reaching Trending Top 3 by 2026-09-15 cannot be confirmed.",
+    "question_lt": "Ar Jovani „Vakaras Ilgas“ pakils į YouTube LT Trending Top 3 iki rugsėjo?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "category": "muzika",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal YouTube Lietuva „Trending“ sąrašą ir dainos poziciją nurodytą dieną.",
+    "sources": [
+      "https://www.youtube.com/watch?v=tPxhpwdcFJE",
+      "https://www.delfi.lt/veidai/muzika/dj-jovani-ir-atlikeja-nora-blu-pristato-vasariska-kurini-120281359"
+    ],
+    "rationale_en": "Jovani „Vakaras Ilgas“ yra YouTube Trending LT su 28 151 peržiūra, Jovani yra gerai žinomas DJ Lietuvoje, todėl vieta topuose yra aktuali jauniems klausytojams."
+  }
+]

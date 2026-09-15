@@ -1,0 +1,294 @@
+[
+  {
+    "id": 153,
+    "verify_verdict": "OPEN",
+    "verify_note": "Wage growth trend continues (vz.lt on high earners increasing) but the ~2 400 € average threshold for Q3/near-term data isn't yet confirmed.",
+    "question_lt": "Ar vidutinis atlyginimas Lietuvoje viršys 2 400 €?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.52,
+      0.48
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Statistikos departamento paskelbtą vidutinį bruto darbo užmokestį už trečiąjį ketvirtį arba artimiausią viešą mėnesinį rodiklį, jei iki tada jis jau bus paskelbtas.",
+    "sources": [
+      "https://www.vz.lt/vadyba/2026/07/26/kiek-uzdirba-lietuvos-darbuotojai-gaunanciuju-didesne-alga-nei-15000-eur-skaicius-isaugo-587841"
+    ],
+    "rationale_en": "Average wages in Lithuania are widely discussed and still rising; recent reports highlight growing earnings and keep debate open on how quickly the average gross salary could surpass the €2,400 level.",
+    "image_url": "https://www.vz.lt/image/1280/story/image/OIc562d2-foto-darbo-uzmokescio-intervalai.png?1729795298",
+    "image_source": "https://www.vz.lt/vadyba/2026/07/26/kiek-uzdirba-lietuvos-darbuotojai-gaunanciuju-didesne-alga-nei-15000-eur-skaicius-isaugo-587841",
+    "theme": "ekonomika ir finansai"
+  },
+  {
+    "id": 155,
+    "verify_verdict": "OPEN",
+    "verify_note": "Current price 22.45 € (LIVE DATA); reaching >23.00 € by mid-September is plausible but undecided.",
+    "question_lt": "Ar „Ignitis grupė“ akcijos iki 2026 m. rugsėjo viršys 23 €?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.38,
+      0.62
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-09-15",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Nasdaq Vilnius oficialų „Ignitis grupė“ uždarymo kursą; „Taip“, jei bent vieną prekybos dieną iki 2026-09-15 įskaitytinai uždarymo kaina yra >23,00 €.",
+    "sources": [
+      "https://finance.yahoo.com/quote/IGN1L.VS"
+    ],
+    "rationale_en": "Ignitis grupė is a liquid, closely watched Nasdaq Vilnius stock; with the current price near €22.45, a €23 threshold is near-term and genuinely uncertain, inviting debate on market direction.",
+    "image_url": "https://pinhole.finance.yahoo.com/chart/IGN1L.VS/__screenshot",
+    "image_source": "https://finance.yahoo.com/quote/IGN1L.VS",
+    "theme": "ekonomika ir finansai"
+  },
+  {
+    "id": 156,
+    "verify_verdict": "OPEN",
+    "verify_note": "Economists (vz.lt, 24 July 2026) forecast inflation could exceed 6%, but the official August CPI figure is not yet published/confirmed.",
+    "question_lt": "Ar Lietuvos infliacija už rugpjūtį viršys 5 %?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.41,
+      0.59
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-08-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Statistikos departamento paskelbtą 12 mėn. vartotojų kainų indekso pokytį už 2026 m. rugpjūtį; „Taip“, jei oficialus rodiklis yra >5,0 %, kitu atveju „Ne“.",
+    "sources": [
+      "https://www.vz.lt/finansai/2026/07/24/ekonomistai-infliacija-lietuvoje-dar-gali-virsyti-6-o-nepalankiu-scenarijumi-ir-10-587897"
+    ],
+    "rationale_en": "Inflation is a core wallet issue in Lithuania; recent coverage discusses scenarios in the 5–6% range and even higher, making a 5% threshold both topical and contested.",
+    "image_url": "https://www.vz.lt/image/1280/story/image/wrXWK8kD-image-0-000168081.jpg?1729795298",
+    "image_source": "https://www.vz.lt/finansai/2026/07/24/ekonomistai-infliacija-lietuvoje-dar-gali-virsyti-6-o-nepalankiu-scenarijumi-ir-10-587897",
+    "theme": "ekonomika ir finansai"
+  },
+  {
+    "id": 158,
+    "verify_verdict": "OPEN",
+    "verify_note": "URM has only proposed the sanctions package; Seimas has not yet voted, outcome by October genuinely undetermined.",
+    "question_lt": "Ar Seimas priims URM siūlomas sankcijas rusams ir baltarusiams iki spalio?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-10-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka sprendžiama pagal Seimo balsavimo ir priimtų teisės aktų informaciją Seimo svetainėje (lrs.lt) ir pagrindiniuose naujienų portaluose.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/lietuvoje/2/3002051/urm-siulo-naujas-sankcijas-rusams-ir-baltarusiams-riboti-nt-isigijima-neisileisti-remeju",
+      "https://www.15min.lt/naujiena/aktualu/lietuva/urm-siulo-naujas-sankcijas-rusams-ir-baltarusiams-riboti-nt-isigijima-neisileisti-agresijos-remeju-56-2731162"
+    ],
+    "rationale_en": "URM sanctions proposals for Russians and Belarusians are already widely discussed across major Lithuanian news portals, making this a salient geopolitical topic for young Lithuanians.",
+    "image_url": "https://www.lrt.lt/img/2026/05/07/2383806-382561-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/lietuvoje/2/3002051/urm-siulo-naujas-sankcijas-rusams-ir-baltarusiams-riboti-nt-isigijima-neisileisti-remeju",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 159,
+    "verify_verdict": "OPEN",
+    "verify_note": "NATO has only stated intent to modernize the fuel network; no approved plan yet, remains undecided.",
+    "question_lt": "Ar NATO šiemet patvirtins degalų tiekimo tinklo modernizavimo planą Europoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendimas nustatomas pagal oficialius NATO pranešimus ir LRT, Delfi, 15min publikacijas apie patvirtintą degalų tiekimo tinklo modernizavimo planą Europoje.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2999358/nato-ketina-modernizuoti-savo-degalu-tiekimo-tinkla-europoje"
+    ],
+    "rationale_en": "NATO fuel-network modernization is covered in detail by LRT; the topic is tied to military logistics and matters to Lithuania as a NATO member.",
+    "image_url": "https://www.lrt.lt/img/2026/03/17/2346618-672130-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/2999358/nato-ketina-modernizuoti-savo-degalu-tiekimo-tinkla-europoje",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 160,
+    "verify_verdict": "OPEN",
+    "verify_note": "Šimkus's ECB rate-hike view is a forecast, not an ECB decision; September outcome not yet determined.",
+    "question_lt": "Ar ECB rugsėjį iš tiesų padidins palūkanų normas, kaip prognozuoja G. Šimkus?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.7,
+      0.3
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-10-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal ECB oficialius sprendimus ir pranešimus po rugsėjo posėdžio, remiantis ECB svetainės ir LRT, VZ, Delfi apžvalgomis.",
+    "sources": [
+      "https://www.vz.lt/rinkos/2026/07/24/g-simkus-kartoja-ecb-rugseji-tiketina-padidins-palukanu-normas-587900",
+      "https://www.lrt.lt/naujienos/verslas/4/3000181/simkus-kartoja-ecb-rugseji-tiketina-padidins-palukanu-normas"
+    ],
+    "rationale_en": "Lithuanian central bank chief G. Šimkus has repeatedly voiced an expectation of an ECB rate hike, and business media have covered it widely.",
+    "image_url": "https://www.vz.lt/image/1280/story/image/Q2f9D6r3-dar-vadovas-2.jpg?1729795298",
+    "image_source": "https://www.vz.lt/rinkos/2026/07/24/g-simkus-kartoja-ecb-rugseji-tiketina-padidins-palukanu-normas-587900",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 161,
+    "verify_verdict": "OPEN",
+    "verify_note": "Sanctions package is still only proposed by URM; no measure has been adopted yet, so which one comes first is undecided.",
+    "question_lt": "Kuri URM siūlomų sankcijų rusams ir baltarusiams priemonė pirmiausia bus patvirtinta Lietuvoje?",
+    "market_type": "multi",
+    "options_lt": [
+      "NT įsigijimo ribojimas",
+      "Agresijos rėmėjų neįleidimas",
+      "Kita URM pakete numatyta priemonė"
+    ],
+    "probabilities": [
+      0.4,
+      0.4,
+      0.2
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-12-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal pirmą Seimo ar Vyriausybės formaliai priimtą teisės aktą, įgyvendinant šį URM paketą, remiantis Seimo teisės aktų registru ir LRT, 15min publikacijomis.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/lietuvoje/2/3002051/urm-siulo-naujas-sankcijas-rusams-ir-baltarusiams-riboti-nt-isigijima-neisileisti-remeju",
+      "https://www.15min.lt/naujiena/aktualu/lietuva/urm-siulo-naujas-sankcijas-rusams-ir-baltarusiams-riboti-nt-isigijima-neisileisti-agresijos-remeju-56-2731162"
+    ],
+    "rationale_en": "The URM package includes several clearly named instruments and has drawn attention across multiple portals, making it suitable for a multi-option market.",
+    "image_url": "https://www.lrt.lt/img/2026/05/07/2383806-382561-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/lietuvoje/2/3002051/urm-siulo-naujas-sankcijas-rusams-ir-baltarusiams-riboti-nt-isigijima-neisileisti-remeju",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 162,
+    "verify_verdict": "OPEN",
+    "verify_note": "No concrete completion deadline has been announced for the NATO fuel-network project; remains speculative.",
+    "question_lt": "Ar NATO iki 2027 m. paskelbs konkretų degalų tiekimo tinklo modernizavimo Europoje pabaigos terminą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2027-06-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Rinka sprendžiama pagal NATO oficialius dokumentus ir pranešimus, ar juose aiškiai nurodytas galutinis modernizavimo projekto įgyvendinimo terminas.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/2999358/nato-ketina-modernizuoti-savo-degalu-tiekimo-tinkla-europoje"
+    ],
+    "rationale_en": "NATO’s plan to modernize the fuel network is already public, but it still lacks a clear deadline, so the deadline itself is a natural prediction target.",
+    "image_url": "https://www.lrt.lt/img/2026/03/17/2346618-672130-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/2999358/nato-ketina-modernizuoti-savo-degalu-tiekimo-tinkla-europoje",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 163,
+    "verify_verdict": "OPEN",
+    "verify_note": "Half-year Seimas spending (~1.3M €, per LRT/15min) roughly doubles to the 2.6M € threshold, making the year-end result a genuine toss-up.",
+    "question_lt": "Ar Seimo narių parlamentinės veiklos išlaidos per 2026 m. viršys 2,6 mln. eurų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2027-02-28",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendžiama pagal Seimo kanceliarijos ir LRT, 15min skelbiamą metinę ataskaitą, kurioje nurodomos parlamentinei veiklai skirtos lėšos per 2026 m.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/lietuvoje/2/3002043/per-pusmeti-seimo-nariai-parlamentinei-veiklai-isleido-beveik-1-3-mln-euru",
+      "https://www.15min.lt/naujiena/aktualu/lietuva/per-pusmeti-seimo-nariai-parlamentinei-veiklai-isleido-beveik-13-mln-euru-56-2731134"
+    ],
+    "rationale_en": "Half-year Seimas spending figures were widely covered by LRT and 15min, which makes it reasonable to forecast the full-year total for a topic tied to public finances.",
+    "image_url": "https://www.lrt.lt/img/2026/07/26/2448347-313067-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/lietuvoje/2/3002043/per-pusmeti-seimo-nariai-parlamentinei-veiklai-isleido-beveik-1-3-mln-euru",
+    "theme": "valstybė ir geopolitika"
+  },
+  {
+    "id": 166,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "I could not retrieve the current YouTube view count for \"kamanių šilelis, Jessica Shy - šalis nepaliesta\" this session (search access was unavailable), so I can't judge plausibility of reaching 150,000 views by 5 Sept 2026 against a verified baseline.",
+    "question_lt": "Ar „šalis nepaliesta“ vaizdo klipas YouTube pasieks ≥150 000 peržiūrų iki rugsėjo?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-05",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendimas remsis oficialiu „YouTube“ peržiūrų skaičiumi „kamanių šilelis, Jessica Shy - šalis nepaliesta“ klipui sprendimo dienos pabaigoje.",
+    "sources": [
+      "https://www.youtube.com/watch?v=rIUrMbh6Svs"
+    ],
+    "rationale_en": "Daina yra YouTube Trending LT su ~70 tūkst. peržiūrų, Jessica Shy ir Kamanių šilelis yra masiškai atpažįstami, todėl vienas metrikos marketas šiam hitui atitinka mandatus.",
+    "image_url": "",
+    "image_source": "",
+    "theme": "kultūra ir visuomenė"
+  },
+  {
+    "id": 167,
+    "verify_verdict": "OPEN",
+    "verify_note": "\"Odisėja\" (Christopher Nolan's *The Odyssey*) is a major global blockbuster slated for a mid-2026 release, and it's plausible it could top Lithuanian cinema attendance in August; the outcome for the full August viewership window isn't decided as of today (26 July) or by the 10 August launch, and the setup (comparing month's box-office leaders in Lithuanian cinemas) is factually sound with clear Lithuanian relevance (local cinema attendance).",
+    "question_lt": "Ar filmas „Odisėja“ taps žiūrimiausiu filmu Lietuvoje 2026 m. rugpjūčio mėnesį pagal kino žiūrovų skaičių?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "Sprendimas remsis „Forum Cinemas“ ir kitų pagrindinių Lietuvos kino teatrų skelbiamais mėnesio žiūrovų statistikos suvestiniais, lyginant visus rugpjūtį rodomus filmus.",
+    "sources": [
+      "https://lt.wikipedia.org/wiki/Odisėja_(2026_filmas)"
+    ],
+    "rationale_en": "„Odisėja“ turi Vikipedijos puslapį ir matomą interesą, o kino lyderių varžybos vasarą yra plačiai aptariamos žiniasklaidoje ir socialiniuose tinkluose.",
+    "image_url": "https://upload.wikimedia.org/wikipedia/lt/f/f5/Odis%C4%97ja_%282026_filmas%29.jpg",
+    "image_source": "https://lt.wikipedia.org/wiki/Odisėja_(2026_filmas)",
+    "theme": "kultūra ir visuomenė"
+  }
+]
