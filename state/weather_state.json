@@ -422,10 +422,10 @@
   "station": "kauno-ams"
  },
  "2262c4a2-324e-4994-84ee-9ea299fccf79": {
-  "checksum": "2a0f79d7ddd3255d2bb3e6b205bbd34e8e2ea47a7fc4f19fdc09c1ebfd448038",
-  "current_maximum": 16.4,
+  "checksum": "a969c6bdc1f4721594b378e123b0fb78e36f483b2f3093f86f437d6e66d429ed",
+  "current_maximum": 16.7,
   "date": "2026-09-15",
-  "max_received_at": "2026-09-15T10:10:43.947694+00:00",
+  "max_received_at": "2026-09-15T11:10:43.573229+00:00",
   "measurements": {
    "2026-09-14 21:00:00": {
     "checksum": "2ef21e2300a79a29160d063b400a2cee51a0d5526b4a0eeb40b4126453131acd",
@@ -510,6 +510,12 @@
     "received_at": "2026-09-15T10:10:43.947694+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 16.4
+   },
+   "2026-09-15 11:00:00": {
+    "checksum": "a969c6bdc1f4721594b378e123b0fb78e36f483b2f3093f86f437d6e66d429ed",
+    "received_at": "2026-09-15T11:10:43.573229+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 16.7
    }
   },
   "resolved": false,
@@ -525,10 +531,10 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "2724af90-778d-4595-ba66-8602575c585e": {
-  "checksum": "839023db094f304111e7869b8e56a765097062fc60cdcea9c81d3b269f1c446e",
-  "current_maximum": 16.4,
+  "checksum": "af3f39515e64bc9a6f39894c322550fa3751341cf8320bbe0561b78bc2ef8f28",
+  "current_maximum": 17.3,
   "date": "2026-09-15",
-  "max_received_at": "2026-09-15T10:10:43.947694+00:00",
+  "max_received_at": "2026-09-15T11:10:43.573229+00:00",
   "measurements": {
    "2026-09-14 21:00:00": {
     "checksum": "aa40a50a8c43c9cacacf73edafa4cbf01f77668114cb1ac909cb198948ce79f5",
@@ -613,6 +619,12 @@
     "received_at": "2026-09-15T10:10:43.947694+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 16.4
+   },
+   "2026-09-15 11:00:00": {
+    "checksum": "af3f39515e64bc9a6f39894c322550fa3751341cf8320bbe0561b78bc2ef8f28",
+    "received_at": "2026-09-15T11:10:43.573229+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 17.3
    }
   },
   "resolved": false,
@@ -751,7 +763,7 @@
  },
  "377d62c0-fbd8-4f87-972e-615586d034f0": {},
  "3938528f-7613-44b3-93e6-4ceecfd3282f": {
-  "checksum": "ed87bb832c5fea29eb1355087203b5bd2a3c681a5b1e5574ac011b76fc86084a",
+  "checksum": "e6c4dc3db078fc177cc2f1cc6dfff538601997353456ab920942ade3b9982c51",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -759,7 +771,7 @@
   "station": "klaipedos-ams"
  },
  "536e58af-ae24-4f98-b812-84af16b7a13f": {
-  "checksum": "ed87bb832c5fea29eb1355087203b5bd2a3c681a5b1e5574ac011b76fc86084a",
+  "checksum": "e6c4dc3db078fc177cc2f1cc6dfff538601997353456ab920942ade3b9982c51",
   "current_maximum": 18.9,
   "date": "2026-09-15",
   "max_received_at": "2026-09-15T10:10:43.947694+00:00",
@@ -847,6 +859,12 @@
     "received_at": "2026-09-15T10:10:43.947694+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 18.9
+   },
+   "2026-09-15 11:00:00": {
+    "checksum": "e6c4dc3db078fc177cc2f1cc6dfff538601997353456ab920942ade3b9982c51",
+    "received_at": "2026-09-15T11:10:43.573229+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 17.7
    }
   },
   "resolved": false,
@@ -1446,7 +1464,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "ab8d9e9c-9817-4008-a0fe-df07c1421d64": {
-  "checksum": "2a0f79d7ddd3255d2bb3e6b205bbd34e8e2ea47a7fc4f19fdc09c1ebfd448038",
+  "checksum": "a969c6bdc1f4721594b378e123b0fb78e36f483b2f3093f86f437d6e66d429ed",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
@@ -1889,7 +1907,7 @@
   "station": "klaipedos-ams"
  },
  "cdcae7cf-3416-4949-aca4-31709c2a7a45": {
-  "checksum": "839023db094f304111e7869b8e56a765097062fc60cdcea9c81d3b269f1c446e",
+  "checksum": "af3f39515e64bc9a6f39894c322550fa3751341cf8320bbe0561b78bc2ef8f28",
   "current_maximum": null,
   "date": "2026-09-16",
   "measurements": {},
