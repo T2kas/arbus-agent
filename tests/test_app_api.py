@@ -322,20 +322,30 @@ def test_proposals_on_resolved_markets_are_dropped(monkeypatch):
     monkeypatch.setattr(app, "resolution_proposals", lambda *a, **k: (proposals, ""))
     monkeypatch.setattr(app, "markets", lambda *a, **k: (markets, ""))
     items, err = aicheck.pending_app_proposals(50)
-    ids = {it["proposal"]["id"] for it in items}
-    assert err == "" and ids == {"p1", "p3"}     # p2 (resolved) dropped
+    ids = {p["id"] for it in items for p in it["proposals"]}
+    assert err == "" and ids == {"p1", "p3"}     # p2 (resolved) dropped, grouped by market
+
+
+def test_proposals_grouped_by_market():
+    """A proposal and its dispute (two rows, same market) become ONE check item."""
+    from arbus import aicheck, main
+    import arbus.app as app_mod
+    ps = [{"id": "p1", "market_id": "m1", "proposed_option_id": "yes", "source": "a"},
+          {"id": "p2", "market_id": "m1", "proposed_option_id": "no", "source": "b"}]
+    import pytest
+    mp = pytest.MonkeyPatch()
+    mp.setattr(app_mod, "resolution_proposals", lambda *a, **k: (ps, ""))
+    mp.setattr(app_mod, "markets", lambda *a, **k: ([{"id": "m1", "status": "closed"}], ""))
+    items, _ = aicheck.pending_app_proposals(50)
+    mp.undo()
+    assert len(items) == 1 and len(items[0]["proposals"]) == 2
+    # dispute changes the group key → re-checked
+    assert main._proposal_group_key(items[0]) == "p1|p2"
+    assert main._proposal_group_key({"proposals": [{"id": "p1"}]}) == "p1"
 
 
 def test_only_a_proposal_triggers_the_check_not_a_bare_freeze():
-    """The AI check runs only on user proposals. A market that is merely frozen
-    or closed, with no proposal, is not turned into a check item."""
-    from arbus import main
-    # The proposals path keys items by proposal id alone, so unclosing a market
-    # without a new proposal keeps the same key (no re-check) while a fresh
-    # proposal is a new row with a new id (re-checked). There is no frozen-market
-    # fallback, so a freeze without a proposal never enters the path at all.
-    assert main._proposal_key({"id": 7, "created_at": "t1"}) == "7"
-    assert main._proposal_key({"id": 7, "created_at": "t2"}) == "7"  # reopen ≠ re-check
+    """The AI check runs only on user proposals; there is no frozen-market fallback."""
     assert not hasattr(__import__("arbus.aicheck", fromlist=["x"]),
                        "pending_frozen_proposals")
 

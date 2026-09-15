@@ -75,12 +75,22 @@ def test_proposal_alert_leads_with_the_claim_and_says_closed():
     text = notify.proposal_message(market, "TAIP", "https://nasdaqbaltic.com/x", AI)
 
     assert "SUSTABDYTA" in text and "UŽŠALDYTA" not in text   # closed, not frozen
-    assert "Pasiūlyta baigtis: TAIP" in text                  # the claim leads
+    assert "Pasiūlyta baigtis (-ys): TAIP" in text            # the claim leads
     assert "https://nasdaqbaltic.com/x" in text               # the cited source
     assert "Ignitis akcija" in text                           # the market
     assert "Nasdaq Baltic" in text                            # deciding rules
     assert "nedarbas rugpjūtį" in text                        # the AI body is included
     assert "AI nieko nesprendžia" in text                     # advisory, always
+
+
+def test_proposal_message_shows_model_and_cost():
+    market = {"id": "m1", "question": "Kas laimės?", "market_options": [{"label": "A"}]}
+    text = notify.proposal_message(
+        market, "A; B", "https://a.lt ; https://b.lt", "REZULTATAS: žinomas",
+        meta={"provider": "perplexity", "model": "sonar-reasoning-pro", "cost_eur": 0.061})
+    assert "🧠 Tikrino: perplexity / sonar-reasoning-pro" in text
+    assert "💶 ~0.06 €" in text
+    assert "A; B" in text and "https://a.lt" in text          # both claims + sources
 
 
 def test_send_is_a_no_op_without_credentials(monkeypatch):
@@ -107,7 +117,7 @@ def test_no_source_confident_result_is_flagged(monkeypatch):
 
 
 def test_broken_url_is_caught_as_hallucination(monkeypatch):
-    """The Eurovision/Sabonis failure: a plausible URL that 404s."""
+    """The Eurovision/Sabonis failure: the ONLY cited URL 404s → hallucination."""
     from arbus import aicheck
 
     monkeypatch.setattr(aicheck, "verify_url", lambda u, **k: "broken")
@@ -118,7 +128,25 @@ def test_broken_url_is_caught_as_hallucination(monkeypatch):
         "SIŪLOMA BAIGTIS: Taip\n"
         "PASITIKĖJIMAS: aukštas")
     out = aicheck._finalize(text, verify=True)
-    assert out.startswith("⚠️ GALIMA HALIUCINACIJA") and "NEEGZISTUOJA" in out
+    assert out.startswith("⚠️ GALIMA HALIUCINACIJA") and "404" in out
+
+
+def test_one_dead_link_but_another_works_is_not_a_hallucination(monkeypatch):
+    """The reported bug: a cited link 404s while ANOTHER cited link opens (the
+    event is on many portals) — must be a green check, not a hallucination."""
+    from arbus import aicheck
+
+    monkeypatch.setattr(aicheck, "verify_url",
+                        lambda u, **k: "broken" if "dead" in u else "ok")
+    text = (
+        "REZULTATAS: žinomas\n"
+        "KAS ĮVYKO: 2026-09-13 Sūduva ir Žalgiris sužaidė 0:0.\n"
+        "ŠALTINIS: https://x.lt/dead ir https://www.lrt.lt/works\n"
+        "SIŪLOMA BAIGTIS: Lygiosios\n"
+        "PASITIKĖJIMAS: aukštas")
+    out = aicheck._finalize(text, verify=True)
+    assert out.startswith("✅ AI SIŪLO: Lygiosios")
+    assert "GALIUCINAC" not in out and "HALIUCINAC" not in out
 
 
 def test_dar_neaisku_is_never_a_hallucination_even_with_a_bad_url(monkeypatch):

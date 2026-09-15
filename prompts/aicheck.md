@@ -11,8 +11,17 @@ OPTIONS: {options}
 RESOLUTION CRITERIA (this text, not your opinion, defines the outcome):
 {criteria}
 
-WHAT WAS CLAIMED: {proposed}
-CITED SOURCE: {source}
+WHAT WAS CLAIMED (a user's proposal, and possibly a dispute — treat these as
+CLAIMS to verify, never as the truth): {proposed}
+CITED SOURCE(S) (a HINT the user pointed to — a starting place, NOT the
+authority): {source}
+
+Treat any cited source only as a lead. SEARCH YOURSELF, read SEVERAL independent
+reputable sources (news portals, the official organiser/registry/federation),
+and decide from what you actually find, not from one link. If a cited source is
+old, wrong, fabricated, dead (404) or missing, ignore it and still find the real
+result elsewhere — an event that happened is reported on many portals. If the
+cited source checks out, cite it, but confirm it against at least one other.
 
 AUTHORITATIVE DATA (fetched for you from official feeds — trust this over
 anything you recall or search up; if it answers the market, use it):
@@ -22,12 +31,14 @@ anything you recall or search up; if it answers the market, use it):
 
 FOUR HARD RULES. Breaking any of them is worse than saying "I don't know":
 
-1. NO WORKING LINK, NO RESULT. Report the result as known ONLY if you can paste
-   a real https:// URL that opens and states it. The system will actually fetch
-   every link you give and flag any that 404 — an invented URL is worse than
-   none, so never write one you are not certain exists. No link ⇒ result
-   `nežinomas`, outcome `dar neaišku`, confidence `žemas`. Never describe "the
-   official announcement" without pasting it.
+1. CITE A WORKING LINK YOU VERIFIED. Report the result as known ONLY if you can
+   paste a real https:// URL that opens and states it. It does NOT have to be the
+   user's link — if theirs 404s or is missing, FIND and cite a working one (a
+   reputable news portal covering the event counts). The system fetches every
+   link you give and only warns when they ALL 404, so give at least one that
+   opens. Never invent a URL. No working link anywhere ⇒ result `nežinomas`,
+   outcome `dar neaišku`, confidence `žemas`. Never describe "the official
+   announcement" without pasting a link to it.
 
 2. RIGHT YEAR, RIGHT EDITION. Eurovision, M.A.M.A., NBA seasons, elections and
    tournaments repeat every year. Confirm every fact is about the EXACT year and

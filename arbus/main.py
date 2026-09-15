@@ -664,19 +664,12 @@ def _save_breaker_watermarks(marks: dict) -> None:
     path.write_text(json.dumps(serialisable, indent=0, sort_keys=True), encoding="utf-8")
 
 
-def _proposal_key(proposal: dict) -> str:
-    """Identity of a proposal for the ledger: its id.
-
-    Each proposal is its own row with its own id, so:
-      • unclosing a market WITHOUT a new proposal keeps the same id → the check
-        does not run again;
-      • proposing a result AGAIN (after a reopen) is a new row with a new id →
-        it gets checked again.
-
-    We deliberately do NOT fold created_at into the key: touching the proposal
-    row on a reopen must not look like a fresh proposal, and it would also strand
-    every id already recorded under the old format."""
-    return str(proposal.get("id"))
+def _proposal_group_key(item: dict) -> str:
+    """Ledger identity of a market's proposal GROUP: the sorted set of its
+    proposal ids. One proposal → one key; a dispute (a new proposal on the same
+    market) changes the set → a fresh key → the market is re-checked with both."""
+    ids = sorted(str(p.get("id")) for p in item.get("proposals", []))
+    return "|".join(ids)
 
 
 def cmd_check(args: argparse.Namespace) -> int:
@@ -719,18 +712,19 @@ def cmd_check(args: argparse.Namespace) -> int:
                   "ARBUS_WRITE_KEY (service_role) yra secrets'uose, arba kad "
                   "lentelė ir stulpeliai vadinasi būtent taip.")
         ledger = _load_ledger()
-        new = [it for it in items if _proposal_key(it["proposal"]) not in ledger]
-        print(f"{len(new)} naujas pasiūlymas iš {len(items)} "
-              "(kiti jau tikrinti).")
+        new = [it for it in items if _proposal_group_key(it) not in ledger]
+        print(f"{len(new)} nauja(-os) rinka(-os) su pasiūlymais iš {len(items)} "
+              "(kitos jau tikrintos).")
         import time
         for idx, it in enumerate(new):
             if idx and config.APP_CHECK_DELAY_SECONDS:
                 time.sleep(config.APP_CHECK_DELAY_SECONDS)
             from . import app as app_api
-            print(f"\n— proposal {it['proposal'].get('id')} on "
-                  f"{app_api.question_of(it['market']) if it['market'] else it['proposal'].get('market_id')}")
+            mkt = it["market"]
+            print(f"\n— {len(it['proposals'])} pasiūlymas(-ai) rinkai "
+                  f"{app_api.question_of(mkt) if mkt else it['proposals'][0].get('market_id')}")
             print(aicheck.review_app_proposal(it, alert=alert, deep=args.deep))
-            ledger.add(_proposal_key(it["proposal"]))
+            ledger.add(_proposal_group_key(it))
         if new:
             _save_ledger(ledger)
         conn.close()

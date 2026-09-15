@@ -140,13 +140,27 @@ def notify_resolution(market: sqlite3.Row, request: sqlite3.Row | None,
     return send(resolution_message(market, request, ai_summary))
 
 
-def proposal_message(market, proposed: str, source: str, ai_summary: str) -> str:
+def _checker_line(meta: dict | None) -> str:
+    """'🧠 Tikrino: <provider>/<model> · 💶 ~X.XX €' from the check metadata."""
+    if not meta:
+        return ""
+    prov = meta.get("provider") or "?"
+    model = meta.get("model") or "?"
+    cost = meta.get("cost_eur")
+    cost_txt = f" · 💶 ~{cost:.2f} €" if isinstance(cost, (int, float)) and cost else ""
+    return f"🧠 Tikrino: {prov} / {model}{cost_txt}"
+
+
+def proposal_message(market, proposed: str, source: str, ai_summary: str,
+                     meta: dict | None = None) -> str:
     """Alert for a user-submitted resolution proposal.
 
     A proposal closes the market in the app, so the wording is SUSTABDYTA
-    (closed), and the claimed outcome + source lead — that is what the admin is
-    being asked to confirm — with the advisory AI check underneath."""
+    (closed), and the claimed outcome(s) + source(s) lead — that is what the admin
+    is being asked to confirm — with the advisory AI check underneath. `meta`
+    names the model that checked and its EUR cost."""
     view = market_view(market) if market else {}
+    checker = _checker_line(meta)
     lines = [
         "🛑 RINKA SUSTABDYTA — kažkas pasiūlė rezultatą",
         "",
@@ -154,13 +168,17 @@ def proposal_message(market, proposed: str, source: str, ai_summary: str) -> str
         f"Variantai: {' / '.join(view.get('options') or []) or '?'}",
         f"Terminas: {view.get('resolve_by', '?')}",
         "",
-        f"👤 Pasiūlyta baigtis: {proposed}",
-        f"🔗 Šaltinis: {source}",
+        f"👤 Pasiūlyta baigtis (-ys): {proposed}",
+        f"🔗 Šaltinis (-iai): {source}",
         "",
         "Taisyklės (pagal jas sprendžiama):",
         view.get("rules") or "(nėra)",
         "",
         "🤖 AI PATIKRA (patariamoji — AI nieko nesprendžia):",
+    ]
+    if checker:
+        lines.append(checker)
+    lines += [
         ai_summary or "(nepavyko)",
         "",
         "Sprendimą priima adminas dashboarde. Po paspaudimo išmokėjimas "
@@ -169,5 +187,6 @@ def proposal_message(market, proposed: str, source: str, ai_summary: str) -> str
     return "\n".join(lines)
 
 
-def notify_proposal(market, proposed: str, source: str, ai_summary: str) -> bool:
-    return send(proposal_message(market, proposed, source, ai_summary))
+def notify_proposal(market, proposed: str, source: str, ai_summary: str,
+                    meta: dict | None = None) -> bool:
+    return send(proposal_message(market, proposed, source, ai_summary, meta))

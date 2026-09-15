@@ -581,18 +581,22 @@ def _structure_anthropic(text: str, output_model: Type[T], max_tokens: int) -> T
 
 # ── Public API ──────────────────────────────────────────────────────────────
 
-def aicheck_target() -> tuple[str, str]:
-    """(provider, model) the resolution check will actually use — for display,
-    so a provider/model mismatch in .env is visible before the run."""
-    prov = provider("aicheck")
-    model = {
+def model_for(prov: str) -> str:
+    """The model id a given provider runs the resolution check with."""
+    return {
         "anthropic": config.AICHECK_MODEL or config.MODEL,
         "openai": config.OPENAI_AICHECK_MODEL,
         "openrouter": config.OPENROUTER_AICHECK_MODEL,
         "perplexity": config.PERPLEXITY_AICHECK_MODEL,
         "zai": config.ZAI_MODEL,
     }.get(prov, "?")
-    return prov, model
+
+
+def aicheck_target() -> tuple[str, str]:
+    """(provider, model) the resolution check will actually use — for display,
+    so a provider/model mismatch in .env is visible before the run."""
+    prov = provider("aicheck")
+    return prov, model_for(prov)
 
 
 def available_providers() -> list[str]:

@@ -611,6 +611,10 @@ DEADLINE_SWEEP_GRACE_DAYS = 1
 # cheaper, and the cap-hit retry below bumps the budget instead of wasting a turn.
 AICHECK_MAX_SEARCHES = int(os.environ.get("AICHECK_MAX_SEARCHES", "0"))
 AICHECK_MAX_SEARCHES_OPEN = int(os.environ.get("AICHECK_MAX_SEARCHES_OPEN", "4"))
+# A user PROPOSAL (and its dispute) decides a real payout, so the check must not
+# just read the cited link — it searches independently and cross-checks several
+# sources, treating any cited source as a hint. Worth the extra searches.
+AICHECK_PROPOSAL_SEARCHES = int(os.environ.get("AICHECK_PROPOSAL_SEARCHES", "5"))
 # Output budget for the aicheck call. Anthropic silently returns whatever it
 # generated when this is hit mid-answer (only a log warning, no error), so a too-
 # tight cap truncates the response before its SIŪLOMA BAIGTIS line — which then

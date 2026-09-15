@@ -63,6 +63,10 @@ _OUTCOME_RE = re.compile(r"SIŪLOMA\s+BAIGTIS:\s*(.+)", re.I)
 
 _BAR = "─" * 22
 
+# The last check's actual provider/model + EUR cost, so the Telegram alert can
+# say WHO checked and WHAT it cost. Set by `_run` on a successful call.
+_LAST_META: dict = {}
+
 
 # Only "page does not exist" reliably means a fabricated link. Real sources
 # routinely answer 403/401/429/503 to a bot (nasdaqbaltic.com does — it blocked
@@ -266,16 +270,21 @@ def _finalize(text: str, verify: bool = None) -> str:
     if not has_outcome:
         header = ("❌ AI NEŽINO / DAR NEAIŠKU — NESPRĘSK automatiškai. "
                   "Palauk įvykio arba oficialaus šaltinio.")
+    elif has_working:
+        # At least one cited link OPENS — a green check even if another 404s
+        # (news lives on many portals; one dead link is not a hallucination).
+        note = (" (viena iš nuorodų neatsidaro, bet kita veikia)"
+                if has_broken else "")
+        header = (f"✅ AI SIŪLO: {outcome} — ir nuoroda veikia{note}. Vis tiek "
+                  "įsitikink, kad metai ir įvykis sutampa.")
     elif has_broken:
-        header = ("⚠️ GALIMA HALIUCINACIJA — AI siūlo baigtį, bet jo nurodyta "
-                  "nuoroda NEEGZISTUOJA (404). Nepasitikėk — patikrink pats, ar "
-                  "tai teisingi metai ir tas pats įvykis/asmuo.")
+        # Every cited link 404s AND none opened — only then flag it.
+        header = ("⚠️ GALIMA HALIUCINACIJA — AI siūlo baigtį, bet VISOS jo "
+                  "nurodytos nuorodos neatsidaro (404). Patikrink pats — ar tai "
+                  "teisingi metai ir tas pats įvykis/asmuo.")
     elif not urls:
         header = (f"⚠️ AI siūlo: {outcome} — BET be jokios nuorodos. Be šaltinio "
                   "tai NĖRA patvirtinta, patikrink rankiniu būdu.")
-    elif has_working:
-        header = (f"✅ AI SIŪLO: {outcome} — ir nuoroda veikia. Vis tiek "
-                  "įsitikink, kad metai ir įvykis sutampa.")
     else:  # links present but unverified (verify off) or site refused us
         header = (f"ℹ️ AI siūlo: {outcome}. Nuoroda pateikta, bet nepatvirtinta "
                   "— atidaryk ją pats ir patikrink metus.")
@@ -284,12 +293,15 @@ def _finalize(text: str, verify: bool = None) -> str:
 
 
 _SEARCH_ON = (
-    "SEARCH THE WEB. Always — including when a source is cited, and especially "
-    "when none is. An admin freezing a market cannot attach a source, and a user "
-    "may cite a weak or wrong link, so judge the FACT, not the URL. Search in "
+    "SEARCH THE WEB independently — always, even when a source is cited. The "
+    "cited source is only a HINT; a user may cite a weak, old, wrong or dead "
+    "link, so judge the FACT, not the URL, and CROSS-CHECK at least two "
+    "independent reputable sources before you claim a result. Search in "
     "Lithuanian using the market's own words and find the official confirmation "
     "(LKL/UEFA/organiser, eurovision.tv, nba.com, lrs.lt, VRK, Nasdaq Baltic, "
-    "Statistikos departamentas, LHMT)."
+    "Statistikos departamentas, LHMT, LKC, AGATA) plus a news portal (LRT, "
+    "Delfi, 15min, BNS). If the cited link 404s but the event is real, find and "
+    "cite a working source instead."
 )
 _SEARCH_OFF = (
     "YOU HAVE NO SEARCH TOOL THIS RUN — an authoritative feed already gave you "
@@ -382,6 +394,10 @@ def _run(question: str, options: str, criteria: str, proposed: str,
             if i:                                    # a fallback was used
                 text += (f"\n(pastaba: {primary} nepavyko, "
                          f"patikra atlikta su {prov})")
+            _LAST_META.clear()
+            _LAST_META.update({"provider": prov, "model": llm.model_for(prov),
+                               "cost_eur": llm.usage_cost_eur(),
+                               "cost_line": llm.usage_line()})
             return _append_cost(_finalize(text))
         except Exception as exc:
             last_exc = exc
@@ -712,46 +728,63 @@ def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
         return [], error
     markets, m_err = app_api.markets(200)
     by_id = {} if m_err else {app_api.market_id_of(m): m for m in markets}
-    out = []
+    # Group by market: a proposal AND its dispute (a second proposal on the same
+    # market, claiming the other outcome, with its own source) must be ONE check
+    # that weighs the market against BOTH sources — not two separate checks.
+    groups: dict[str, dict] = {}
     for p in proposals:
-        market = by_id.get(str(p.get("market_id")), {})
+        mid = str(p.get("market_id"))
+        market = by_id.get(mid, {})
         if market and app_api.status_of(market) in config.APP_SETTLED_STATUSES:
             continue                       # already decided — no check needed
-        out.append({"proposal": p, "market": market})
-    return out, ""
+        groups.setdefault(mid, {"market": market, "proposals": []})["proposals"].append(p)
+    return list(groups.values()), ""
 
 
-def check_app_proposal(proposal: dict, market: dict, today: date | None = None,
+def check_app_proposal(market: dict, proposals: list[dict], today: date | None = None,
                        deep: bool = True) -> dict:
-    """Verify one user's proposed resolution: does the cited source (and a search)
-    support the outcome they claim? The claim and source are handed to the model,
-    and a cited URL is fetched for free, so this is both targeted and cheap.
-
-    Returns {proposed, source, summary}: the claimed outcome, the cited source,
-    and the advisory AI body — kept apart so the alert can lead with the claim."""
+    """Verify a market's proposed resolution(s) in ONE check. All claimed outcomes
+    (proposal + dispute) and all cited sources are handed to the model together;
+    the sources are HINTS — the model searches independently and cross-checks
+    several sources, so it lands the truth even if a source is old, fake, dead or
+    missing. Returns {proposed, source, summary, meta}."""
     from . import app as app_api, notify
 
     view = notify.market_view(market) if market else {}
-    proposed = app_api.option_label(market, proposal.get("proposed_option_id"))
-    source = proposal.get("source") or "(vartotojas nenurodė šaltinio)"
+    claims, sources = [], []
+    for p in proposals:
+        label = app_api.option_label(market, p.get("proposed_option_id"))
+        if label and label not in claims:
+            claims.append(label)
+        src = (p.get("source") or "").strip()
+        if src and src not in sources:
+            sources.append(src)
+    proposed = ("vartotojai siūlo baigtį (-is): " + "; ".join(claims)
+                if claims else "vartotojas pasiūlė rezultatą")
+    source = "\n".join(sources) if sources else "(vartotojas nenurodė šaltinio)"
+
+    _LAST_META.clear()
     summary = _run(
         question=view.get("question") or "(rinka nerasta app'e)",
         options=" / ".join(view.get("options") or []),
         criteria=view.get("rules") or "",
-        proposed=f"vartotojas siūlo baigtį: {proposed}",
-        source=source, today=today,
+        proposed=proposed, source=source, today=today,
+        # A payout is at stake: search independently, don't just read the link.
+        searches=config.AICHECK_PROPOSAL_SEARCHES,
         closes_at=view.get("resolve_by", ""), deep=deep)
-    return {"proposed": proposed, "source": source, "summary": summary}
+    return {"proposed": "; ".join(claims) or "(nenurodyta)",
+            "source": " ; ".join(sources) or "(nenurodyta)",
+            "summary": summary, "meta": dict(_LAST_META)}
 
 
 def review_app_proposal(item: dict, today: date | None = None,
                         alert: bool = True, deep: bool = True) -> str:
-    """Check one proposal and post a SUSTABDYTA alert (claimed outcome + source +
-    AI check) to Telegram. Returns the console-friendly text."""
-    res = check_app_proposal(item["proposal"], item["market"], today, deep)
+    """Check a market's proposals (one AI check for all of them) and post a
+    SUSTABDYTA alert to Telegram. Returns the console-friendly text."""
+    res = check_app_proposal(item["market"], item["proposals"], today, deep)
     if alert:
         notify.notify_proposal(item["market"] or {}, res["proposed"],
-                               res["source"], res["summary"])
-    header = (f"👤 Vartotojo pasiūlyta baigtis: {res['proposed']}\n"
-              f"🔗 Pateiktas šaltinis: {res['source']}\n{_BAR}\n")
+                               res["source"], res["summary"], res["meta"])
+    header = (f"👤 Vartotojų pasiūlyta baigtis (-is): {res['proposed']}\n"
+              f"🔗 Pateikti šaltiniai: {res['source']}\n{_BAR}\n")
     return header + res["summary"]
