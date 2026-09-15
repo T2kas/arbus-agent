@@ -72,10 +72,12 @@ def test_proposal_alert_leads_with_the_claim_and_says_closed():
         "resolve_by": "2026-09-01",
         "resolution_criteria": "Pagal Nasdaq Baltic uždarymo kainą.",
     }
-    text = notify.proposal_message(market, "TAIP", "https://nasdaqbaltic.com/x", AI)
+    text = notify.proposal_message(
+        market, {"outcome": "TAIP", "source": "https://nasdaqbaltic.com/x"}, [], AI)
 
     assert "SUSTABDYTA" in text and "UŽŠALDYTA" not in text   # closed, not frozen
-    assert "Pasiūlyta baigtis (-ys): TAIP" in text            # the claim leads
+    assert " ir kitas užginčijo" not in text                 # no dispute → plain header
+    assert "Pasiūlyta baigtis: TAIP" in text                 # the claim leads
     assert "https://nasdaqbaltic.com/x" in text               # the cited source
     assert "Ignitis akcija" in text                           # the market
     assert "Nasdaq Baltic" in text                            # deciding rules
@@ -83,14 +85,26 @@ def test_proposal_alert_leads_with_the_claim_and_says_closed():
     assert "AI nieko nesprendžia" in text                     # advisory, always
 
 
+def test_proposal_alert_separates_proposal_from_dispute():
+    market = {"id": "m1", "question": "Kas laimės?",
+              "market_options": [{"label": "Sūduva"}, {"label": "Lygiosios"}]}
+    text = notify.proposal_message(
+        market,
+        {"outcome": "Sūduva", "source": "https://a.lt"},
+        [{"outcome": "Lygiosios", "source": "https://b.lt"}],
+        "AI body", meta=None)
+    assert "kažkas pasiūlė rezultatą ir kitas užginčijo" in text
+    assert "👤 Pasiūlyta baigtis: Sūduva" in text and "https://a.lt" in text
+    assert "⚔️ Ginčijimas: Lygiosios" in text and "https://b.lt" in text
+
+
 def test_proposal_message_shows_model_and_cost():
     market = {"id": "m1", "question": "Kas laimės?", "market_options": [{"label": "A"}]}
     text = notify.proposal_message(
-        market, "A; B", "https://a.lt ; https://b.lt", "REZULTATAS: žinomas",
+        market, {"outcome": "A", "source": "https://a.lt"}, [], "REZULTATAS: žinomas",
         meta={"provider": "perplexity", "model": "sonar-reasoning-pro", "cost_eur": 0.061})
     assert "🧠 Tikrino: perplexity / sonar-reasoning-pro" in text
     assert "💶 ~0.06 €" in text
-    assert "A; B" in text and "https://a.lt" in text          # both claims + sources
 
 
 def test_send_is_a_no_op_without_credentials(monkeypatch):

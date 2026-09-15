@@ -29,7 +29,7 @@ import re
 import sqlite3
 import threading
 import time
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from html import unescape as _html_unescape
 from urllib.parse import urljoin
 
@@ -738,7 +738,37 @@ def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
         if market and app_api.status_of(market) in config.APP_SETTLED_STATUSES:
             continue                       # already decided — no check needed
         groups.setdefault(mid, {"market": market, "proposals": []})["proposals"].append(p)
+    # Keep only the CURRENT round per market — the newest proposal and any dispute
+    # within the challenge window — so stale proposals/disputes from an earlier
+    # resolution round of the same market are not shown or re-checked.
+    for g in groups.values():
+        g["proposals"] = _current_round(g["proposals"])
     return list(groups.values()), ""
+
+
+def _proposal_dt(p: dict) -> datetime | None:
+    raw = p.get("created_at") or p.get("inserted_at") or ""
+    if not isinstance(raw, str) or not raw:
+        return None
+    try:
+        return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def _current_round(proposals: list[dict]) -> list[dict]:
+    """The current proposal + its dispute(s): the newest proposal and anything
+    within the challenge window of it, sorted oldest→newest (so the original
+    proposal comes first and disputes follow). Older rounds are dropped."""
+    dated = [(p, _proposal_dt(p)) for p in proposals]
+    times = [t for _, t in dated if t]
+    if not times:
+        return list(proposals)             # no timestamps — best effort, keep all
+    newest = max(times)
+    window = timedelta(hours=config.CHALLENGE_WINDOW_HOURS + 1)
+    keep = [p for p, t in dated if t is None or (newest - t) <= window]
+    keep.sort(key=lambda p: _proposal_dt(p) or newest)
+    return keep
 
 
 def check_app_proposal(market: dict, proposals: list[dict], today: date | None = None,
@@ -747,33 +777,39 @@ def check_app_proposal(market: dict, proposals: list[dict], today: date | None =
     (proposal + dispute) and all cited sources are handed to the model together;
     the sources are HINTS — the model searches independently and cross-checks
     several sources, so it lands the truth even if a source is old, fake, dead or
-    missing. Returns {proposed, source, summary, meta}."""
+    missing. Returns {proposal, disputes, summary, meta}."""
     from . import app as app_api, notify
 
     view = notify.market_view(market) if market else {}
-    claims, sources = [], []
-    for p in proposals:
-        label = app_api.option_label(market, p.get("proposed_option_id"))
-        if label and label not in claims:
-            claims.append(label)
-        src = (p.get("source") or "").strip()
-        if src and src not in sources:
-            sources.append(src)
-    proposed = ("vartotojai siūlo baigtį (-is): " + "; ".join(claims)
-                if claims else "vartotojas pasiūlė rezultatą")
-    source = "\n".join(sources) if sources else "(vartotojas nenurodė šaltinio)"
+
+    def entry(p: dict) -> dict:
+        return {"outcome": app_api.option_label(market, p.get("proposed_option_id")) or "(nenurodyta)",
+                "source": (p.get("source") or "").strip() or "(nenurodyta)"}
+
+    # First = the original proposal; the rest = disputes (sorted oldest→newest).
+    proposal = entry(proposals[0]) if proposals else {"outcome": "(nenurodyta)",
+                                                       "source": "(nenurodyta)"}
+    disputes = [entry(p) for p in proposals[1:]]
+
+    # The AI check weighs the market against BOTH at once (claims + all sources).
+    claims = [proposal["outcome"]] + [d["outcome"] for d in disputes]
+    sources = [s for s in ([proposal["source"]] + [d["source"] for d in disputes])
+               if s and s != "(nenurodyta)"]
+    proposed = "vartotojas siūlo: " + proposal["outcome"] + (
+        "; ginčija (kitas siūlo): " + "; ".join(d["outcome"] for d in disputes)
+        if disputes else "")
 
     _LAST_META.clear()
     summary = _run(
         question=view.get("question") or "(rinka nerasta app'e)",
         options=" / ".join(view.get("options") or []),
         criteria=view.get("rules") or "",
-        proposed=proposed, source=source, today=today,
+        proposed=proposed, source="\n".join(sources) or "(vartotojas nenurodė šaltinio)",
+        today=today,
         # A payout is at stake: search independently, don't just read the link.
         searches=config.AICHECK_PROPOSAL_SEARCHES,
         closes_at=view.get("resolve_by", ""), deep=deep)
-    return {"proposed": "; ".join(claims) or "(nenurodyta)",
-            "source": " ; ".join(sources) or "(nenurodyta)",
+    return {"proposal": proposal, "disputes": disputes,
             "summary": summary, "meta": dict(_LAST_META)}
 
 
@@ -783,8 +819,10 @@ def review_app_proposal(item: dict, today: date | None = None,
     SUSTABDYTA alert to Telegram. Returns the console-friendly text."""
     res = check_app_proposal(item["market"], item["proposals"], today, deep)
     if alert:
-        notify.notify_proposal(item["market"] or {}, res["proposed"],
-                               res["source"], res["summary"], res["meta"])
-    header = (f"👤 Vartotojų pasiūlyta baigtis (-is): {res['proposed']}\n"
-              f"🔗 Pateikti šaltiniai: {res['source']}\n{_BAR}\n")
-    return header + res["summary"]
+        notify.notify_proposal(item["market"] or {}, res["proposal"],
+                               res["disputes"], res["summary"], res["meta"])
+    header = (f"👤 Pasiūlyta baigtis: {res['proposal']['outcome']}\n"
+              f"🔗 Šaltinis: {res['proposal']['source']}\n")
+    for d in res["disputes"]:
+        header += f"⚔️ Ginčijimas: {d['outcome']}\n🔗 Ginčo šaltinis: {d['source']}\n"
+    return header + _BAR + "\n" + res["summary"]

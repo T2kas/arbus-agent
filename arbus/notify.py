@@ -151,31 +151,41 @@ def _checker_line(meta: dict | None) -> str:
     return f"🧠 Tikrino: {prov} / {model}{cost_txt}"
 
 
-def proposal_message(market, proposed: str, source: str, ai_summary: str,
+def proposal_message(market, proposal: dict, disputes: list[dict], ai_summary: str,
                      meta: dict | None = None) -> str:
-    """Alert for a user-submitted resolution proposal.
+    """Alert for a user-submitted resolution proposal (and its dispute, if any).
 
-    A proposal closes the market in the app, so the wording is SUSTABDYTA
-    (closed), and the claimed outcome(s) + source(s) lead — that is what the admin
-    is being asked to confirm — with the advisory AI check underneath. `meta`
-    names the model that checked and its EUR cost."""
+    A proposal closes the market in the app, so the wording is SUSTABDYTA. The
+    header says whether it was ALSO disputed. The original proposal and each
+    dispute are shown SEPARATELY (each with its own cited source), then the
+    advisory AI check. `meta` names the model that checked and its EUR cost."""
     view = market_view(market) if market else {}
-    checker = _checker_line(meta)
+    disputed = bool(disputes)
+    title = ("🛑 RINKA SUSTABDYTA — kažkas pasiūlė rezultatą"
+             + (" ir kitas užginčijo" if disputed else ""))
     lines = [
-        "🛑 RINKA SUSTABDYTA — kažkas pasiūlė rezultatą",
+        title,
         "",
         f"#{view.get('id', '?')} {view.get('question', '(rinka nerasta app’e)')}",
         f"Variantai: {' / '.join(view.get('options') or []) or '?'}",
         f"Terminas: {view.get('resolve_by', '?')}",
         "",
-        f"👤 Pasiūlyta baigtis (-ys): {proposed}",
-        f"🔗 Šaltinis (-iai): {source}",
+        f"👤 Pasiūlyta baigtis: {proposal.get('outcome', '(nenurodyta)')}",
+        f"🔗 Šaltinis: {proposal.get('source', '(nenurodyta)')}",
+    ]
+    for d in disputes:
+        lines += [
+            f"⚔️ Ginčijimas: {d.get('outcome', '(nenurodyta)')}",
+            f"🔗 Ginčo šaltinis: {d.get('source', '(nenurodyta)')}",
+        ]
+    lines += [
         "",
         "Taisyklės (pagal jas sprendžiama):",
         view.get("rules") or "(nėra)",
         "",
         "🤖 AI PATIKRA (patariamoji — AI nieko nesprendžia):",
     ]
+    checker = _checker_line(meta)
     if checker:
         lines.append(checker)
     lines += [
@@ -187,6 +197,6 @@ def proposal_message(market, proposed: str, source: str, ai_summary: str,
     return "\n".join(lines)
 
 
-def notify_proposal(market, proposed: str, source: str, ai_summary: str,
+def notify_proposal(market, proposal: dict, disputes: list[dict], ai_summary: str,
                     meta: dict | None = None) -> bool:
-    return send(proposal_message(market, proposed, source, ai_summary, meta))
+    return send(proposal_message(market, proposal, disputes, ai_summary, meta))

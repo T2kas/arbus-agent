@@ -656,6 +656,11 @@ AICHECK_PRICE_CACHE_READ_PER_M = float(os.environ.get("AICHECK_PRICE_CACHE_READ_
 AICHECK_PRICE_CACHE_WRITE_PER_M = float(os.environ.get("AICHECK_PRICE_CACHE_WRITE_PER_M", "3.75"))
 AICHECK_PRICE_SEARCH = float(os.environ.get("AICHECK_PRICE_SEARCH", "0.01"))
 AICHECK_EUR_PER_USD = float(os.environ.get("AICHECK_EUR_PER_USD", "0.92"))
+# Perplexity (sonar-reasoning-pro) list prices, USD, so the check cost shows for
+# the perplexity provider too (it reports prompt/completion tokens + searches).
+PERPLEXITY_PRICE_INPUT_PER_M = float(os.environ.get("PERPLEXITY_PRICE_INPUT_PER_M", "2.0"))
+PERPLEXITY_PRICE_OUTPUT_PER_M = float(os.environ.get("PERPLEXITY_PRICE_OUTPUT_PER_M", "8.0"))
+PERPLEXITY_PRICE_SEARCH = float(os.environ.get("PERPLEXITY_PRICE_SEARCH", "0.005"))
 
 # When a market cites a source, fetching that page ourselves (a free HTTP GET)
 # and injecting its text lets the model READ the source instead of paying to

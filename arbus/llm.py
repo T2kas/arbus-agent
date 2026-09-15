@@ -42,11 +42,14 @@ _USAGE = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "searches"
 # call (a market cut off by the wall-clock timeout) cannot land its cost on the
 # NEXT market's tab when it finally returns on its daemon thread.
 _USAGE_GEN = 0
+# Which provider produced the accumulated usage, so cost uses the right prices.
+_USAGE_PROVIDER = ""
 
 
 def reset_usage() -> int:
-    global _USAGE_GEN
+    global _USAGE_GEN, _USAGE_PROVIDER
     _USAGE_GEN += 1
+    _USAGE_PROVIDER = ""
     for k in _USAGE:
         _USAGE[k] = 0
     return _USAGE_GEN
@@ -75,16 +78,22 @@ def _accumulate_usage(resp, gen: int | None = None) -> None:
         _USAGE["searches"] += getattr(stu, "web_search_requests", 0) or 0
 
 
-def usage_cost_eur(snap: dict | None = None) -> float:
+def usage_cost_eur(snap: dict | None = None, provider: str | None = None) -> float:
     """Rough EUR cost of the accumulated usage. Order-of-magnitude by design —
-    a "3 vs 15 cents" signal, not a billing figure. Prices are Anthropic list
-    prices (config), converted to EUR."""
+    a "3 vs 15 cents" signal, not a billing figure. Uses the price list of the
+    provider that actually ran (Anthropic by default, Perplexity when it did)."""
     s = snap if snap is not None else _USAGE
-    usd = (s["input"] / 1e6 * config.AICHECK_PRICE_INPUT_PER_M
-           + s["output"] / 1e6 * config.AICHECK_PRICE_OUTPUT_PER_M
-           + s["cache_read"] / 1e6 * config.AICHECK_PRICE_CACHE_READ_PER_M
-           + s["cache_write"] / 1e6 * config.AICHECK_PRICE_CACHE_WRITE_PER_M
-           + s["searches"] * config.AICHECK_PRICE_SEARCH)
+    prov = provider or _USAGE_PROVIDER
+    if prov == "perplexity":
+        usd = (s["input"] / 1e6 * config.PERPLEXITY_PRICE_INPUT_PER_M
+               + s["output"] / 1e6 * config.PERPLEXITY_PRICE_OUTPUT_PER_M
+               + s["searches"] * config.PERPLEXITY_PRICE_SEARCH)
+    else:
+        usd = (s["input"] / 1e6 * config.AICHECK_PRICE_INPUT_PER_M
+               + s["output"] / 1e6 * config.AICHECK_PRICE_OUTPUT_PER_M
+               + s["cache_read"] / 1e6 * config.AICHECK_PRICE_CACHE_READ_PER_M
+               + s["cache_write"] / 1e6 * config.AICHECK_PRICE_CACHE_WRITE_PER_M
+               + s["searches"] * config.AICHECK_PRICE_SEARCH)
     return usd * config.AICHECK_EUR_PER_USD
 
 
@@ -159,7 +168,12 @@ def perplexity_chat(
         timeout=600,
     )
     resp.raise_for_status()
-    return _strip_reasoning(resp.json()["choices"][0]["message"]["content"])
+    j = resp.json()
+    u = j.get("usage") or {}                          # so the check's EUR cost is not zero
+    _USAGE["input"] += u.get("prompt_tokens", 0) or 0
+    _USAGE["output"] += u.get("completion_tokens", 0) or 0
+    _USAGE["searches"] += (u.get("num_search_queries") or u.get("search_queries") or 0)
+    return _strip_reasoning(j["choices"][0]["message"]["content"])
 
 
 def _strip_reasoning(content: str) -> str:
@@ -623,7 +637,9 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
              stage: str | None = None, force_provider: str | None = None) -> str:
     """Web-grounded free-text generation. `force_provider` overrides the stage's
     configured provider (used by aicheck to fall back when the primary fails)."""
+    global _USAGE_PROVIDER
     prov = force_provider or provider(stage)
+    _USAGE_PROVIDER = prov                            # price the usage with prov's list
     if prov == "perplexity":
         # The resolution check gets a reasoning model; drafting/verify stay on
         # the cheaper search model.
