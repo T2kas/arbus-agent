@@ -181,14 +181,24 @@ def day_complete(observations, target_iso: str, tz: ZoneInfo | None = None) -> b
 
 
 def decline_locked(seq: list[tuple[datetime, float]], need: int = 2) -> bool:
-    """True when the day's max is followed by `need` CONSECUTIVE hourly readings
-    that are strictly FALLING — each hour lower than the one before, starting from
-    the peak. Merely being below the max is not enough: a day that dips then rises
-    back toward the peak (oscillating) must NOT lock, because it could still climb
-    to a new high. A genuine `need`-hour downtrend means the peak is settled.
+    """True once the day's peak is followed — anywhere after it — by `need`
+    CONSECUTIVE hourly readings that each fall below the one before.
 
-    Consecutive hours are required: a gap right after the peak could hide a higher
-    reading, so we wait for end-of-day instead.
+    The peak can only be beaten upward (a new daily high), so we anchor at the
+    LAST time the running max was seen and then watch the hourly steps after it.
+    A run of `need` straight hour-over-hour drops means the peak is settled.
+
+    The run does NOT have to begin at the peak. A day may fall, bob back up a
+    little (still below the max), and only THEN fall for `need` straight hours —
+    that later downtrend locks just the same. Earlier code required the streak to
+    start at the peak, so a single bounce right after the high killed early
+    resolution for the whole day even when the temperature later fell for hours;
+    that is the bug this fixes. Only a genuinely oscillating day — one that never
+    strings `need` drops together — keeps waiting for end of day.
+
+    A non-drop (flat or a rise) or an hour-sized GAP resets the running count,
+    because either could hide a higher reading; the `need` drops that trip the
+    lock must be strictly consecutive clock hours.
     """
     if not seq:
         return False
@@ -198,12 +208,13 @@ def decline_locked(seq: list[tuple[datetime, float]], need: int = 2) -> bool:
     prev_dt, prev_t = seq[last_peak]
     drops = 0
     for dt, t in seq[last_peak + 1:]:
-        if dt - prev_dt != timedelta(hours=1) or t >= prev_t:
-            break                                    # gap, or not strictly falling
-        drops += 1
+        if dt - prev_dt == timedelta(hours=1) and t < prev_t:
+            drops += 1                               # strictly falling, no gap
+            if drops >= need:
+                return True
+        else:
+            drops = 0                                # gap or bounce — start over
         prev_dt, prev_t = dt, t
-        if drops >= need:
-            return True
     return False
 
 

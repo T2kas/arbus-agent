@@ -145,6 +145,15 @@ def test_decline_locked_pure():
     assert weather.decline_locked(osc, 2) is False
     # Genuinely falling for 2h → locks.
     assert weather.decline_locked([(_u(13), 17.6), (_u(14), 16.7), (_u(15), 16.2)], 2) is True
+    # Bounce AFTER the peak, then a fresh 2h downtrend → must still lock. The old
+    # rule anchored the streak at the peak, so this single bounce killed early
+    # resolution for the whole day; now the later downtrend is what matters.
+    # 18.3 peak → 17.6 (drop) → 17.8 (bounce) → 17.4 (drop) → 17.0 (drop) = 2 in a row.
+    bounce = [(_u(11), 18.3), (_u(12), 17.6), (_u(13), 17.8),
+              (_u(14), 17.4), (_u(15), 17.0)]
+    assert weather.decline_locked(bounce, 2) is True
+    # But a lone drop-then-bounce with no later 2-in-a-row still waits.
+    assert weather.decline_locked([(_u(12), 18.3), (_u(13), 17.2), (_u(14), 17.6)], 2) is False
 
 
 # The bot NEVER freezes/closes now — a separate system owns that. Every resolving
