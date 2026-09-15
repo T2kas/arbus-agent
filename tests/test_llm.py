@@ -473,3 +473,43 @@ def test_current_generation_usage_is_still_counted():
     gen = llm.reset_usage()
     llm._accumulate_usage(_FakeResp(_FakeUsage(inp=1000, out=100, searches=1)), gen)
     assert llm.usage_snapshot()["input"] == 1000
+
+
+def test_perplexity_appends_citations_and_counts_usage(monkeypatch):
+    """A search-confirmed event with no user source still gets real source URLs:
+    perplexity's citation list is appended to the answer, and its tokens/searches
+    are counted so the check shows a non-zero EUR cost."""
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "k")
+
+    class _Resp:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self):
+            return {"choices": [{"message": {"content": "REZULTATAS: žinomas"}}],
+                    "citations": ["https://www.lrt.lt/a", "https://www.delfi.lt/b"],
+                    "usage": {"prompt_tokens": 1200, "completion_tokens": 300,
+                              "num_search_queries": 3}}
+
+    monkeypatch.setattr(llm.requests, "post", lambda *a, **k: _Resp())
+    llm.reset_usage()
+    llm._USAGE_PROVIDER = "perplexity"
+    out = llm.perplexity_chat("q", system="s")
+    assert "https://www.lrt.lt/a" in out and "https://www.delfi.lt/b" in out
+    snap = llm.usage_snapshot()
+    assert snap["input"] == 1200 and snap["searches"] == 3
+    assert llm.usage_cost_eur(snap, provider="perplexity") > 0
+
+
+def test_perplexity_structured_call_does_not_append_citations(monkeypatch):
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "k")
+
+    class _Resp:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self):
+            return {"choices": [{"message": {"content": '{"ok": true}'}}],
+                    "citations": ["https://x.lt/a"], "usage": {}}
+
+    monkeypatch.setattr(llm.requests, "post", lambda *a, **k: _Resp())
+    out = llm.perplexity_chat("q", response_format={"type": "json_schema"})
+    assert out == '{"ok": true}'                     # no citations appended → valid JSON

@@ -173,7 +173,18 @@ def perplexity_chat(
     _USAGE["input"] += u.get("prompt_tokens", 0) or 0
     _USAGE["output"] += u.get("completion_tokens", 0) or 0
     _USAGE["searches"] += (u.get("num_search_queries") or u.get("search_queries") or 0)
-    return _strip_reasoning(j["choices"][0]["message"]["content"])
+    content = _strip_reasoning(j["choices"][0]["message"]["content"])
+    # Perplexity returns its search sources as [N] markers with the real URLs in a
+    # separate list. Append them (free text only, never structured JSON) so the
+    # answer actually carries working https:// links the check can verify — that
+    # is how a search-confirmed event with no user source still gets a source.
+    if not response_format:
+        cites = j.get("citations") or [s.get("url") for s in (j.get("search_results") or [])
+                                       if isinstance(s, dict) and s.get("url")]
+        cites = [c for c in dict.fromkeys(cites) if isinstance(c, str) and c.startswith("http")]
+        if cites:
+            content += "\n\nŠALTINIAI (rasta per paiešką): " + " ".join(cites[:6])
+    return content
 
 
 def _strip_reasoning(content: str) -> str:

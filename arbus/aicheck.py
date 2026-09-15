@@ -731,19 +731,34 @@ def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
     # Group by market: a proposal AND its dispute (a second proposal on the same
     # market, claiming the other outcome, with its own source) must be ONE check
     # that weighs the market against BOTH sources — not two separate checks.
+    # Only status='open' proposals are the CURRENT round; 'rejected'/'accepted'
+    # rows are earlier rounds and must never be read again. Each market's round is
+    # exactly one proposal + at most one dispute.
+    now = datetime.now(timezone.utc)
+    wait = timedelta(hours=config.CHALLENGE_WINDOW_HOURS)
     groups: dict[str, dict] = {}
     for p in proposals:
+        if str(p.get("status", "")).strip().lower() != "open":
+            continue
         mid = str(p.get("market_id"))
         market = by_id.get(mid, {})
         if market and app_api.status_of(market) in config.APP_SETTLED_STATUSES:
             continue                       # already decided — no check needed
         groups.setdefault(mid, {"market": market, "proposals": []})["proposals"].append(p)
-    # Keep only the CURRENT round per market — the newest proposal and any dispute
-    # within the challenge window — so stale proposals/disputes from an earlier
-    # resolution round of the same market are not shown or re-checked.
+
+    out = []
     for g in groups.values():
-        g["proposals"] = _current_round(g["proposals"])
-    return list(groups.values()), ""
+        ps = sorted(g["proposals"], key=lambda p: _proposal_dt(p) or now)  # proposal first
+        disputed = len(ps) >= 2
+        if not disputed:
+            # A fresh, undisputed proposal is NOT checked until the challenge
+            # window (2 h) has passed — only then, or once someone disputes.
+            dt0 = _proposal_dt(ps[0])
+            if dt0 is not None and (now - dt0) < wait:
+                continue
+        g["proposals"] = ps[:2]            # proposal + at most ONE dispute
+        out.append(g)
+    return out, ""
 
 
 def _proposal_dt(p: dict) -> datetime | None:
@@ -754,21 +769,6 @@ def _proposal_dt(p: dict) -> datetime | None:
         return datetime.fromisoformat(raw.replace("Z", "+00:00"))
     except ValueError:
         return None
-
-
-def _current_round(proposals: list[dict]) -> list[dict]:
-    """The current proposal + its dispute(s): the newest proposal and anything
-    within the challenge window of it, sorted oldest→newest (so the original
-    proposal comes first and disputes follow). Older rounds are dropped."""
-    dated = [(p, _proposal_dt(p)) for p in proposals]
-    times = [t for _, t in dated if t]
-    if not times:
-        return list(proposals)             # no timestamps — best effort, keep all
-    newest = max(times)
-    window = timedelta(hours=config.CHALLENGE_WINDOW_HOURS + 1)
-    keep = [p for p, t in dated if t is None or (newest - t) <= window]
-    keep.sort(key=lambda p: _proposal_dt(p) or newest)
-    return keep
 
 
 def check_app_proposal(market: dict, proposals: list[dict], today: date | None = None,
@@ -782,21 +782,23 @@ def check_app_proposal(market: dict, proposals: list[dict], today: date | None =
 
     view = notify.market_view(market) if market else {}
 
-    def entry(p: dict) -> dict:
-        return {"outcome": app_api.option_label(market, p.get("proposed_option_id")) or "(nenurodyta)",
+    def entry(p: dict, dispute: bool = False) -> dict:
+        label = app_api.option_label(market, p.get("proposed_option_id"))
+        if not label:                       # a dispute often names no alternative
+            label = "nesutinka su pasiūlymu" if dispute else "(nenurodyta)"
+        return {"outcome": label,
                 "source": (p.get("source") or "").strip() or "(nenurodyta)"}
 
     # First = the original proposal; the rest = disputes (sorted oldest→newest).
     proposal = entry(proposals[0]) if proposals else {"outcome": "(nenurodyta)",
                                                        "source": "(nenurodyta)"}
-    disputes = [entry(p) for p in proposals[1:]]
+    disputes = [entry(p, dispute=True) for p in proposals[1:]]
 
     # The AI check weighs the market against BOTH at once (claims + all sources).
-    claims = [proposal["outcome"]] + [d["outcome"] for d in disputes]
     sources = [s for s in ([proposal["source"]] + [d["source"] for d in disputes])
                if s and s != "(nenurodyta)"]
     proposed = "vartotojas siūlo: " + proposal["outcome"] + (
-        "; ginčija (kitas siūlo): " + "; ".join(d["outcome"] for d in disputes)
+        "; kitas ginčija: " + "; ".join(d["outcome"] for d in disputes)
         if disputes else "")
 
     _LAST_META.clear()

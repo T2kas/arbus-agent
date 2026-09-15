@@ -309,39 +309,69 @@ def test_resolved_market_settlement_jump_is_not_a_candidate(monkeypatch):
     assert error == "" and rows == []          # resolved market filtered out entirely
 
 
-def test_proposals_on_resolved_markets_are_dropped(monkeypatch):
-    """A proposal whose market is already resolved is not returned — the admin
-    decided it, so re-checking would just cost money."""
+def _iso_ago(hours):
+    from datetime import datetime, timezone, timedelta
+    return (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+
+
+def test_only_open_proposals_of_the_current_round(monkeypatch):
+    """Only status='open' rows are the current round; 'rejected'/'accepted' rows
+    from earlier rounds are never read, and a resolved market is dropped."""
     from arbus import aicheck
     proposals = [
-        {"id": "p1", "market_id": "m1", "proposed_option_id": "yes"},   # still open
-        {"id": "p2", "market_id": "m2", "proposed_option_id": "yes"},   # resolved
-        {"id": "p3", "market_id": "gone", "proposed_option_id": "yes"},  # unknown → kept
+        {"id": "p1", "market_id": "m1", "proposed_option_id": "yes", "status": "open",
+         "created_at": _iso_ago(3)},                       # current, disputed below
+        {"id": "d1", "market_id": "m1", "proposed_option_id": None, "status": "open",
+         "created_at": _iso_ago(2.9)},                     # the dispute
+        {"id": "old", "market_id": "m1", "proposed_option_id": "no", "status": "rejected",
+         "created_at": _iso_ago(30)},                      # earlier round → ignored
+        {"id": "p2", "market_id": "m2", "proposed_option_id": "yes", "status": "open",
+         "created_at": _iso_ago(3)},                       # market resolved → dropped
+        {"id": "p3", "market_id": "gone", "proposed_option_id": "yes", "status": "open",
+         "created_at": _iso_ago(3)},                       # unknown market → kept
     ]
     markets = [{"id": "m1", "status": "closed"}, {"id": "m2", "status": "resolved"}]
     monkeypatch.setattr(app, "resolution_proposals", lambda *a, **k: (proposals, ""))
     monkeypatch.setattr(app, "markets", lambda *a, **k: (markets, ""))
     items, err = aicheck.pending_app_proposals(50)
     ids = {p["id"] for it in items for p in it["proposals"]}
-    assert err == "" and ids == {"p1", "p3"}     # p2 (resolved) dropped, grouped by market
+    assert err == "" and ids == {"p1", "d1", "p3"}         # 'old' rejected + p2 resolved gone
 
 
-def test_proposals_grouped_by_market():
-    """A proposal and its dispute (two rows, same market) become ONE check item."""
+def test_proposal_and_one_dispute_grouped():
+    """A proposal + its dispute (both open) become ONE item, capped to 2 rows."""
     from arbus import aicheck, main
-    import arbus.app as app_mod
-    ps = [{"id": "p1", "market_id": "m1", "proposed_option_id": "yes", "source": "a"},
-          {"id": "p2", "market_id": "m1", "proposed_option_id": "no", "source": "b"}]
-    import pytest
+    import arbus.app as app_mod, pytest
+    ps = [{"id": "p1", "market_id": "m1", "proposed_option_id": "yes", "status": "open",
+           "source": "a", "created_at": _iso_ago(1)},
+          {"id": "p2", "market_id": "m1", "proposed_option_id": "no", "status": "open",
+           "source": "b", "created_at": _iso_ago(0.5)}]   # dispute after proposal
     mp = pytest.MonkeyPatch()
     mp.setattr(app_mod, "resolution_proposals", lambda *a, **k: (ps, ""))
     mp.setattr(app_mod, "markets", lambda *a, **k: ([{"id": "m1", "status": "closed"}], ""))
     items, _ = aicheck.pending_app_proposals(50)
     mp.undo()
     assert len(items) == 1 and len(items[0]["proposals"]) == 2
-    # dispute changes the group key → re-checked
+    assert items[0]["proposals"][0]["id"] == "p1"          # proposal first, dispute second
     assert main._proposal_group_key(items[0]) == "p1|p2"
-    assert main._proposal_group_key({"proposals": [{"id": "p1"}]}) == "p1"
+
+
+def test_fresh_undisputed_proposal_waits_two_hours(monkeypatch):
+    """A lone, undisputed proposal younger than the challenge window is NOT
+    checked yet; once it is old enough (or disputed) it is."""
+    from arbus import aicheck
+    market = [{"id": "m1", "status": "open"}]
+    monkeypatch.setattr(app, "markets", lambda *a, **k: (market, ""))
+
+    fresh = [{"id": "p1", "market_id": "m1", "proposed_option_id": "yes",
+              "status": "open", "created_at": _iso_ago(0.5)}]
+    monkeypatch.setattr(app, "resolution_proposals", lambda *a, **k: (fresh, ""))
+    assert aicheck.pending_app_proposals(50)[0] == []       # waits
+
+    old = [{"id": "p1", "market_id": "m1", "proposed_option_id": "yes",
+            "status": "open", "created_at": _iso_ago(3)}]
+    monkeypatch.setattr(app, "resolution_proposals", lambda *a, **k: (old, ""))
+    assert len(aicheck.pending_app_proposals(50)[0]) == 1   # 2h passed → checked
 
 
 def test_only_a_proposal_triggers_the_check_not_a_bare_freeze():
