@@ -317,3 +317,24 @@ def test_create_markets_calls_rpc_per_spec(monkeypatch):
     calls.clear()
     reports = weather.create_markets(specs, alert=False, do_create=False)
     assert calls == [] and reports[0]["status"] == "would-create"
+
+
+def test_eliminate_impossible_buckets(monkeypatch):
+    market = {"id": "m1", "market_options": [], "title": "oras?"}
+    buckets = [{"option_id": "b1", "label": "16,3 žemiau", "low": None, "high": 16.3},
+               {"option_id": "b2", "label": "16,4-18", "low": 16.4, "high": 18.0},
+               {"option_id": "b3", "label": "18,1-19", "low": 18.1, "high": 19.0},
+               {"option_id": "b4", "label": "19,1+", "low": 19.1, "high": None}]
+    calls = []
+    monkeypatch.setattr(weather.app_api, "eliminate_options",
+                        lambda mid, ids: (calls.append((mid, tuple(ids))), (True, "ok"))[1])
+    monkeypatch.setattr(weather.notify, "send", lambda m: None)
+    monkeypatch.setattr(weather.config, "WEATHER_ELIMINATE", True)
+    st = {}
+    assert weather._eliminate_impossible(market, "m1", buckets, 16.7, st, True, True)
+    assert calls[-1] == ("m1", ("b1",)) and st["eliminated"] == ["b1"]
+    assert weather._eliminate_impossible(market, "m1", buckets, 18.5, st, True, True)
+    assert calls[-1] == ("m1", ("b2",)) and set(st["eliminated"]) == {"b1", "b2"}
+    weather._eliminate_impossible(market, "m1", buckets, 25.0, st, True, True)
+    assert "b4" not in st["eliminated"]                # top (unbounded) never eliminated
+    assert not weather._eliminate_impossible(market, "m1", buckets, 25.0, st, True, True)  # idempotent

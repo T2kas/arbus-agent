@@ -398,6 +398,22 @@ def create_market(spec: dict) -> tuple[bool, str]:
     return True, market_id or "ok"
 
 
+def eliminate_options(market_id: str, option_ids: list[str]) -> tuple[bool, str]:
+    """Resolve the given options to "Ne" (losers) while the market stays open on
+    the rest — for killing impossible temperature buckets early. Needs the
+    service_role key and the admin_eliminate_options RPC."""
+    if not config.ARBUS_WRITE_KEY:
+        return False, "reikia ARBUS_WRITE_KEY (service_role)"
+    if not option_ids:
+        return False, "nėra opcijų"
+    rows, error = _rpc(config.APP_ELIMINATE_RPC,
+                       {"p_market_id": market_id, "p_option_ids": option_ids},
+                       key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, _resolve_error_hint(error)
+    return True, "ok"
+
+
 def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:
     """Resolution proposals users submitted (market_resolution_proposals): which
     market, the option they claim won (`proposed_option_id`), their cited

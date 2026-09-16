@@ -116,3 +116,47 @@ def test_resolve_basketball(monkeypatch):
     reports, _ = weather._resolve_sports([market], now, weather._tz(), {},
                                          alert=True, do_resolve=True)
     assert calls["resolve"] == [("m2", "z")] and reports[0]["status"] == "resolved"
+
+
+def test_toplyga_finished_marker():
+    assert sports._toplyga_finished("blah Rungtynių pabaiga blah") is True
+    assert sports._toplyga_finished("Antrojo kėlinio pabaiga") is True
+    assert sports._toplyga_finished("Pirmojo kėlinio pabaiga") is False   # half-time only
+    assert sports._toplyga_finished("rungtynės vyksta") is False
+
+
+def _today_football_rules():
+    from datetime import date
+    mo = ["", "sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio",
+          "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"]
+    d = date.today()
+    return (f"FK „Žalgirio“ ir „Kauno Žalgirio“ TOPLYGOS rungtynių, {d.year} m. "
+            f"{mo[d.month]} {d.day} d. rezultatą. Lygiosios – baigtis.")
+
+
+def _today_market():
+    return {"id": "m9", "status": "closed", "winning_option_id": None,
+            "title": "derby", "rules": _today_football_rules(),
+            "market_options": [{"id": "o0", "label": "FK Žalgiris"},
+                               {"id": "o1", "label": "Kauno Žalgiris"},
+                               {"id": "o2", "label": "Lygiosios"}]}
+
+
+def test_football_match_day_waits_for_full_time(monkeypatch):
+    calls = _wire(monkeypatch)
+    monkeypatch.setattr(weather.sports, "toplyga_result", lambda iso, a, b: {
+        "home": "Žalgiris", "away": "K. Žalgiris", "home_score": 1, "away_score": 0,
+        "url": "u", "date": iso, "finished": False})               # live/half-time
+    reports, _ = weather._resolve_sports([_today_market()], datetime.now(timezone.utc),
+                                         weather._tz(), {}, alert=True, do_resolve=True)
+    assert calls["resolve"] == []                                  # not full-time → wait
+
+
+def test_football_match_day_resolves_once_full_time(monkeypatch):
+    calls = _wire(monkeypatch)
+    monkeypatch.setattr(weather.sports, "toplyga_result", lambda iso, a, b: {
+        "home": "Žalgiris", "away": "K. Žalgiris", "home_score": 3, "away_score": 2,
+        "url": "u", "date": iso, "finished": True})
+    reports, _ = weather._resolve_sports([_today_market()], datetime.now(timezone.utc),
+                                         weather._tz(), {}, alert=True, do_resolve=True)
+    assert calls["resolve"] == [("m9", "o0")]                      # FK Žalgiris (home) won

@@ -815,6 +815,11 @@ APP_FREEZE_RPC_PARAM = os.environ.get("APP_FREEZE_RPC_PARAM", "").strip() or "p_
 # weather bot uses this to hand the decided bucket to the app's own resolution +
 # payout. Overridable via GitHub Variables; needs the service_role key.
 APP_RESOLVE_RPC = os.environ.get("APP_RESOLVE_RPC", "").strip() or "admin_resolve_market"
+# Eliminate (resolve to "Ne") individual options early while the market stays
+# open on the rest — used to kill impossible temperature buckets as the day's max
+# climbs. Needs the app RPC below (SQL provided). Off if the RPC is absent.
+APP_ELIMINATE_RPC = os.environ.get("APP_ELIMINATE_RPC", "").strip() or "admin_eliminate_options"
+WEATHER_ELIMINATE = os.environ.get("WEATHER_ELIMINATE", "on").strip().lower() != "off"
 APP_RESOLVE_RPC_MARKET_PARAM = (
     os.environ.get("APP_RESOLVE_RPC_MARKET_PARAM", "").strip() or "p_market_id")
 APP_RESOLVE_RPC_OPTION_PARAM = (
@@ -851,13 +856,13 @@ WEATHER_DECLINE_HOURS = _env_int("WEATHER_DECLINE_HOURS", 2)
 APP_CREATE_RPC = os.environ.get("APP_CREATE_RPC", "").strip() or "admin_create_market"
 WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 50000)
 WEATHER_HORIZON_DAYS = _env_int("WEATHER_HORIZON_DAYS", 2)      # tomorrow + day after
-WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 20)       # create from this Vilnius hour
+WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 18)       # create from this Vilnius hour
 WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 2.0)  # daily-max forecast spread °C
 # Auto-close (closes_at) time of day, Vilnius. 15:30 stops trading just before the
 # afternoon peak (peak is ~13–14 UTC ≈ 16:00+ Vilnius), so the winning bucket is
 # still uncertain at close.
-WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 15)
-WEATHER_CLOSE_MINUTE = _env_int("WEATHER_CLOSE_MINUTE", 30)
+WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 14)
+WEATHER_CLOSE_MINUTE = _env_int("WEATHER_CLOSE_MINUTE", 20)
 # Committed JSON so a stateless CI run remembers each market's running max, the
 # measurements already seen (dedup), the last response checksum, and whether it
 # has already been resolved (never resolve twice).

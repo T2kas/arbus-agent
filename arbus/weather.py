@@ -958,11 +958,15 @@ def _resolve_sports(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
                 game = _find_el_game(sports.euroleague_games(year), team_opts)
             else:  # toplyga football
                 iso = sports._rules_date(rules)
-                if not iso or iso >= today:            # not played yet
+                if not iso or iso > today:             # not played yet
                     continue
                 ta = _team_tokens(str(app_api._pick(team_opts[0], "label", "name", "title", default="")))
                 tb = _team_tokens(str(app_api._pick(team_opts[1], "label", "name", "title", default="")))
                 game = sports.toplyga_result(iso, ta, tb)
+                # On the match day itself, resolve only once it is full-time —
+                # never on a live/half-time score. Past days are already final.
+                if game and iso == today and not game.get("finished"):
+                    game = None
         except Exception as exc:                       # noqa: BLE001
             log.warning("sports %s failed: %s", mid, exc)
             continue
@@ -1070,6 +1074,32 @@ def _resolve(market: dict, mid: str, bucket: dict | None, temp: float,
     return {"market_id": mid, "status": "error", "reason": f"resolve: {detail}"}
 
 
+def _eliminate_impossible(market: dict, mid: str, buckets: list[dict],
+                         cur_max: float | None, st: dict, alert: bool,
+                         do_resolve: bool) -> bool:
+    """Resolve to "Ne" every bucket the running max has already climbed past
+    (high < cur_max) — they can no longer contain the day's max. The top
+    (unbounded) bucket is never eliminated. Returns True if state changed."""
+    if not (do_resolve and config.WEATHER_ELIMINATE) or cur_max is None:
+        return False
+    done = set(st.get("eliminated") or [])
+    todo = [b for b in buckets
+            if b.get("high") is not None and cur_max > b["high"]
+            and b.get("option_id") and b["option_id"] not in done]
+    if not todo:
+        return False
+    ok, detail = app_api.eliminate_options(mid, [b["option_id"] for b in todo])
+    if not ok:
+        log.warning("weather eliminate %s failed: %s", mid, detail)
+        return False
+    st["eliminated"] = sorted(done | {b["option_id"] for b in todo})
+    if alert:
+        labels = ", ".join(b["label"] for b in todo)
+        notify.send(f"❌ ORŲ RINKA: baigtys nebeįmanomos → Ne ({labels}); jau "
+                    f"pasiekta ≥{_fmt(cur_max)} °C — {app_api.question_of(market)}")
+    return True
+
+
 def _process_market(market: dict, mid: str, state: dict, now: datetime,
                     tz: ZoneInfo, alert: bool, do_resolve: bool) -> tuple[dict, bool]:
     target = weather_target(market)
@@ -1118,6 +1148,13 @@ def _process_market(market: dict, mid: str, state: dict, now: datetime,
         st["source"] = latest_url(station)
         changed = True
     latest_hour = seq[-1][0].hour if seq else None
+
+    # ── from the start of the day: kill impossible buckets early ──
+    # Once the running max passes a bucket's upper bound the day can no longer end
+    # in it (temperature only rises), so resolve that bucket to "Ne" now. The
+    # WINNER is still decided after WEATHER_RESOLVE_MIN_HOUR (below).
+    if _eliminate_impossible(market, mid, buckets, cur_max, st, alert, do_resolve):
+        changed = True
 
     # ── end-of-day: authoritative, always correct (guaranteed fallback) ──
     end_of_day = vil_now.date() > tgt or (vil_now.date() == tgt and vil_now.hour >= 23)

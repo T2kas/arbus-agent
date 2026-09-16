@@ -113,6 +113,14 @@ def _toplyga_score(match_html: str, path: str) -> tuple[int, int] | None:
     return None
 
 
+def _toplyga_finished(match_html: str) -> bool:
+    """True when the match page shows full time — the timeline event 'rungtynių
+    pabaiga' / 'antrojo kėlinio pabaiga'. NOT 'pabaiga' alone (that also marks
+    half-time), so a live/half-time match is never read as final."""
+    low = _cnorm(match_html)
+    return ("rungtyniu pabaiga" in low) or ("antrojo kelinio pabaiga" in low)
+
+
 def _toplyga_teams(match_html: str) -> tuple[str, str] | None:
     """(home, away) from the match page title 'Home - Away | TOPLYGA …'."""
     m = re.search(r"<title>(.*?)</title>", match_html, re.I | re.S)
@@ -162,4 +170,4 @@ def toplyga_result(target_iso: str, tokens_a: set, tokens_b: set) -> dict | None
         return None
     return {"home": teams[0], "away": teams[1],
             "home_score": score[0], "away_score": score[1],
-            "url": url, "date": target_iso}
+            "url": url, "date": target_iso, "finished": _toplyga_finished(html)}
