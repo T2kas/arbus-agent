@@ -1168,7 +1168,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "5f5d958c-1c10-4939-9558-f4e6e4b81001": {},
+ "5f5d958c-1c10-4939-9558-f4e6e4b81001": {
+  "resolved": true,
+  "resolved_at": "2026-09-16T18:35:29.775242+00:00",
+  "resolved_label": "FK „Žalgiris\"",
+  "resolved_option_id": "65f5c530-063e-48bd-903f-ad44aa65be95",
+  "resolved_score": "Žalgiris 3:2 K. Žalgiris",
+  "resolved_via": "sports"
+ },
  "63354551-a59b-4b37-beb8-1eb116336122": {
   "checksum": "4c26c89dee9169740b4663571d0bf982e4ede8e5224bb80d641fbfb5e11bc6a6",
   "current_maximum": 18.1,
