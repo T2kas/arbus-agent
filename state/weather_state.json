@@ -1118,6 +1118,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "3d9865b6-0d3a-4769-af36-c87b205a6af3": {
+  "checksum": "97973f8f45394c44c491bea9494af4e8490b2afe4048597a508de7148baa5886",
+  "current_maximum": null,
+  "date": "2026-09-19",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "536e58af-ae24-4f98-b812-84af16b7a13f": {
   "checksum": "50a09d82b9540cf5f18b30df98c441ca49cef7f33d20c1848a6a9e9461b1922b",
   "current_maximum": 18.9,
@@ -2133,6 +2141,14 @@
   "resolved_option_id": "f13823a5-9b3b-497c-99cc-c32f3886af7d",
   "resolved_via": "cinema",
   "resolved_winner": "Odisėja (Odyssey, The)"
+ },
+ "a5c63419-560f-4535-a06a-f3d03e7e8121": {
+  "checksum": "33d1b157e03e760c4a02406336ad6f297d8edd3bc60365b86807a9a0936d23a1",
+  "current_maximum": null,
+  "date": "2026-09-19",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
  },
  "ab8d9e9c-9817-4008-a0fe-df07c1421d64": {
   "checksum": "6d52ad76f41112af0f203025273517673330a4ae2ac129e66da40bd1ccf3d006",
@@ -3156,5 +3172,13 @@
   "station": "kauno-ams",
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
- "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {}
+ "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
+ "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
+  "checksum": "9d6fcfc2903934d889d9e4033a6b16967583741de7a30145004273f36235e4f4",
+  "current_maximum": null,
+  "date": "2026-09-19",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
+ }
 }
