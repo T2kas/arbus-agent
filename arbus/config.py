@@ -819,7 +819,9 @@ APP_RESOLVE_RPC = os.environ.get("APP_RESOLVE_RPC", "").strip() or "admin_resolv
 # open on the rest — used to kill impossible temperature buckets as the day's max
 # climbs. Needs the app RPC below (SQL provided). Off if the RPC is absent.
 APP_ELIMINATE_RPC = os.environ.get("APP_ELIMINATE_RPC", "").strip() or "admin_eliminate_options"
-WEATHER_ELIMINATE = os.environ.get("WEATHER_ELIMINATE", "on").strip().lower() != "off"
+# Early per-bucket "Ne" elimination — DISABLED by default (caused issues in the
+# app). Turn back on with WEATHER_ELIMINATE=on once the app side is sorted.
+WEATHER_ELIMINATE = os.environ.get("WEATHER_ELIMINATE", "off").strip().lower() == "on"
 APP_RESOLVE_RPC_MARKET_PARAM = (
     os.environ.get("APP_RESOLVE_RPC_MARKET_PARAM", "").strip() or "p_market_id")
 APP_RESOLVE_RPC_OPTION_PARAM = (
