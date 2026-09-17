@@ -1135,7 +1135,7 @@
   "station": "klaipedos-ams"
  },
  "3d9865b6-0d3a-4769-af36-c87b205a6af3": {
-  "checksum": "f1ea711d7c54883f5d651cb015ccf176c00551bad2939a7ce42f8aa27e23218f",
+  "checksum": "d29562b5dabc441e913183d0ae871f45f790b1a292518748a384232e38db2830",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -1753,7 +1753,7 @@
   "station": "kauno-ams"
  },
  "81dbe47c-618a-4d8d-adee-0ee658c15578": {
-  "checksum": "46f3d3edc66c851f3c50ac01cc8f3a7444f767ee89bed9e58ed146467367ad90",
+  "checksum": "4ea1eef8b8b5605b2e59424faae0d07a573389d801ca3e029248f32e8b3a7f2e",
   "current_maximum": null,
   "date": "2026-09-18",
   "measurements": {},
@@ -2221,7 +2221,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "a5c63419-560f-4535-a06a-f3d03e7e8121": {
-  "checksum": "46f3d3edc66c851f3c50ac01cc8f3a7444f767ee89bed9e58ed146467367ad90",
+  "checksum": "4ea1eef8b8b5605b2e59424faae0d07a573389d801ca3e029248f32e8b3a7f2e",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -2675,7 +2675,7 @@
   "station": "kauno-ams"
  },
  "c0fb773f-654e-4804-95ed-a9a41b19f850": {
-  "checksum": "7a07390ca8a13dc2336613a8c1cf06feb096881654db5b2a70b3ca4a14246932",
+  "checksum": "7ae4d191b8aa225d7020a1fef70d2c62f2ed5afde4bcf7422d2bdbe55993bc66",
   "current_maximum": null,
   "date": "2026-09-18",
   "measurements": {},
@@ -3108,7 +3108,7 @@
   "resolved_via": "sports"
  },
  "eafb4e8e-6252-4882-8f2a-74218eca1b62": {
-  "checksum": "f1ea711d7c54883f5d651cb015ccf176c00551bad2939a7ce42f8aa27e23218f",
+  "checksum": "d29562b5dabc441e913183d0ae871f45f790b1a292518748a384232e38db2830",
   "current_maximum": null,
   "date": "2026-09-18",
   "measurements": {},
@@ -3252,7 +3252,7 @@
  },
  "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
  "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
-  "checksum": "7a07390ca8a13dc2336613a8c1cf06feb096881654db5b2a70b3ca4a14246932",
+  "checksum": "7ae4d191b8aa225d7020a1fef70d2c62f2ed5afde4bcf7422d2bdbe55993bc66",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
