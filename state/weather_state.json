@@ -730,7 +730,7 @@
   "station": "kauno-ams"
  },
  "2c2d3f23-7b77-412f-a587-ce3c6f0069fa": {
-  "checksum": "abc949cad592677f3116c97c193d27ffb17c5e0b8f62024f5d710c1bfd55b96a",
+  "checksum": "90146c484a3126447a828c9896322ee9b18a1be59ade6451a6f3a89aa821afda",
   "current_maximum": 17.5,
   "date": "2026-09-17",
   "eliminated": [
@@ -834,6 +834,12 @@
     "received_at": "2026-09-17T12:10:46.888278+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 17.5
+   },
+   "2026-09-17 13:00:00": {
+    "checksum": "90146c484a3126447a828c9896322ee9b18a1be59ade6451a6f3a89aa821afda",
+    "received_at": "2026-09-17T13:10:47.371263+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 17.0
    }
   },
   "resolved": false,
@@ -1420,13 +1426,13 @@
   "station": "vilniaus-ams"
  },
  "6b96c073-3c0f-474e-9444-288220e0a358": {
-  "checksum": "af96726ac3a395dc6c835b8e1c489851023ff1efa819a6e5ffeef7e576f30115",
-  "current_maximum": 17.0,
+  "checksum": "182f340d6d07284cbaecc595758a51fb99060a70563f6d96a042efd6aef9b4f0",
+  "current_maximum": 17.2,
   "date": "2026-09-17",
   "eliminated": [
    "ecdfa2e0-c346-4fb7-b735-4d4b0b4d0220"
   ],
-  "max_received_at": "2026-09-16T21:10:46.682738+00:00",
+  "max_received_at": "2026-09-17T13:10:47.371263+00:00",
   "measurements": {
    "2026-09-16 21:00:00": {
     "checksum": "48c2ca14002df78fde9cd8214d357d25c8becf172344d34a9965e882875f34e4",
@@ -1523,6 +1529,12 @@
     "received_at": "2026-09-17T12:10:46.888278+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 16.5
+   },
+   "2026-09-17 13:00:00": {
+    "checksum": "182f340d6d07284cbaecc595758a51fb99060a70563f6d96a042efd6aef9b4f0",
+    "received_at": "2026-09-17T13:10:47.371263+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 17.2
    }
   },
   "resolved": false,
@@ -1671,7 +1683,7 @@
   "station": "kauno-ams"
  },
  "81dbe47c-618a-4d8d-adee-0ee658c15578": {
-  "checksum": "af96726ac3a395dc6c835b8e1c489851023ff1efa819a6e5ffeef7e576f30115",
+  "checksum": "182f340d6d07284cbaecc595758a51fb99060a70563f6d96a042efd6aef9b4f0",
   "current_maximum": null,
   "date": "2026-09-18",
   "measurements": {},
@@ -1979,13 +1991,13 @@
   "station": "kauno-ams"
  },
  "8b0b9384-1207-4e67-828e-b1c51405a92f": {
-  "checksum": "3841eb899b23710d2e0c243752fdc6bd643497030b50766cf2468f519c460609",
-  "current_maximum": 15.0,
+  "checksum": "9f2efcc63c3e4b678314481992984001425ba5b024f9dbc0bd1316cf47d929f6",
+  "current_maximum": 15.1,
   "date": "2026-09-17",
   "eliminated": [
    "4b671141-3474-4dd1-b821-3bd4dadaaca7"
   ],
-  "max_received_at": "2026-09-17T12:10:46.888278+00:00",
+  "max_received_at": "2026-09-17T13:10:47.371263+00:00",
   "measurements": {
    "2026-09-16 21:00:00": {
     "checksum": "09bebe5b1be060e5c715e97c5225b20bba9be8c772ae52161a32595e1ddeb5d2",
@@ -2082,6 +2094,12 @@
     "received_at": "2026-09-17T12:10:46.888278+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 15.0
+   },
+   "2026-09-17 13:00:00": {
+    "checksum": "9f2efcc63c3e4b678314481992984001425ba5b024f9dbc0bd1316cf47d929f6",
+    "received_at": "2026-09-17T13:10:47.371263+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 15.1
    }
   },
   "resolved": false,
@@ -2545,7 +2563,7 @@
   "station": "kauno-ams"
  },
  "c0fb773f-654e-4804-95ed-a9a41b19f850": {
-  "checksum": "3841eb899b23710d2e0c243752fdc6bd643497030b50766cf2468f519c460609",
+  "checksum": "9f2efcc63c3e4b678314481992984001425ba5b024f9dbc0bd1316cf47d929f6",
   "current_maximum": null,
   "date": "2026-09-18",
   "measurements": {},
@@ -2978,7 +2996,7 @@
   "resolved_via": "sports"
  },
  "eafb4e8e-6252-4882-8f2a-74218eca1b62": {
-  "checksum": "abc949cad592677f3116c97c193d27ffb17c5e0b8f62024f5d710c1bfd55b96a",
+  "checksum": "90146c484a3126447a828c9896322ee9b18a1be59ade6451a6f3a89aa821afda",
   "current_maximum": null,
   "date": "2026-09-18",
   "measurements": {},
