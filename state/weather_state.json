@@ -1135,7 +1135,7 @@
   "station": "klaipedos-ams"
  },
  "3d9865b6-0d3a-4769-af36-c87b205a6af3": {
-  "checksum": "f2daf02191cb34688ea39cc8bc8af160b77fde2abce40ba4f2a6f4dc37632147",
+  "checksum": "1206b99dcc61cf277aba5d11403398d586e0f231d3407924cd251a5bedf3089d",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -1753,10 +1753,10 @@
   "station": "kauno-ams"
  },
  "81dbe47c-618a-4d8d-adee-0ee658c15578": {
-  "checksum": "491ebe9258b6a74845af95a728f141d3d0aa5b7ac9e9e878a73a74a42bcd3633",
-  "current_maximum": 14.5,
+  "checksum": "f1834a08f06cf48330e16d982bbaec25eb300dce1ec5982043e6b296b60938f6",
+  "current_maximum": 16.4,
   "date": "2026-09-18",
-  "max_received_at": "2026-09-18T08:10:45.909458+00:00",
+  "max_received_at": "2026-09-18T09:10:36.632074+00:00",
   "measurements": {
    "2026-09-17 21:00:00": {
     "checksum": "0911f483763650fe2cf1472e58e21088184e7a17e1bb934fcbf99f570cc4fa39",
@@ -1829,6 +1829,12 @@
     "received_at": "2026-09-18T08:10:45.909458+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 14.5
+   },
+   "2026-09-18 09:00:00": {
+    "checksum": "f1834a08f06cf48330e16d982bbaec25eb300dce1ec5982043e6b296b60938f6",
+    "received_at": "2026-09-18T09:10:36.632074+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 16.4
    }
   },
   "resolved": false,
@@ -2296,7 +2302,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "a5c63419-560f-4535-a06a-f3d03e7e8121": {
-  "checksum": "491ebe9258b6a74845af95a728f141d3d0aa5b7ac9e9e878a73a74a42bcd3633",
+  "checksum": "f1834a08f06cf48330e16d982bbaec25eb300dce1ec5982043e6b296b60938f6",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -2750,10 +2756,10 @@
   "station": "kauno-ams"
  },
  "c0fb773f-654e-4804-95ed-a9a41b19f850": {
-  "checksum": "a85409d796470456f3964e8113367c77c4190931023b9c795b4978364388d5e4",
-  "current_maximum": 13.8,
+  "checksum": "be8a93d4c4c78b0ab44b89e4dc926b1ae7fb388f5a2391dfa92e0de7b4b41c8a",
+  "current_maximum": 15.4,
   "date": "2026-09-18",
-  "max_received_at": "2026-09-18T08:10:45.909458+00:00",
+  "max_received_at": "2026-09-18T09:10:36.632074+00:00",
   "measurements": {
    "2026-09-17 21:00:00": {
     "checksum": "8a02a9d664454deb00b4350738ab11c249c6db368de977df8c025a5c6ad963b1",
@@ -2826,6 +2832,12 @@
     "received_at": "2026-09-18T08:10:45.909458+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 13.8
+   },
+   "2026-09-18 09:00:00": {
+    "checksum": "be8a93d4c4c78b0ab44b89e4dc926b1ae7fb388f5a2391dfa92e0de7b4b41c8a",
+    "received_at": "2026-09-18T09:10:36.632074+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 15.4
    }
   },
   "resolved": false,
@@ -3258,10 +3270,10 @@
   "resolved_via": "sports"
  },
  "eafb4e8e-6252-4882-8f2a-74218eca1b62": {
-  "checksum": "f2daf02191cb34688ea39cc8bc8af160b77fde2abce40ba4f2a6f4dc37632147",
-  "current_maximum": 16.9,
+  "checksum": "1206b99dcc61cf277aba5d11403398d586e0f231d3407924cd251a5bedf3089d",
+  "current_maximum": 17.2,
   "date": "2026-09-18",
-  "max_received_at": "2026-09-18T08:10:45.909458+00:00",
+  "max_received_at": "2026-09-18T09:10:36.632074+00:00",
   "measurements": {
    "2026-09-17 21:00:00": {
     "checksum": "a6b3ceb8741dcccff69103dd65d4e0ea984e23d254cc8ca9256cd720b18d20cc",
@@ -3334,6 +3346,12 @@
     "received_at": "2026-09-18T08:10:45.909458+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 16.9
+   },
+   "2026-09-18 09:00:00": {
+    "checksum": "1206b99dcc61cf277aba5d11403398d586e0f231d3407924cd251a5bedf3089d",
+    "received_at": "2026-09-18T09:10:36.632074+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 17.2
    }
   },
   "resolved": false,
@@ -3477,7 +3495,7 @@
  },
  "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
  "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
-  "checksum": "a85409d796470456f3964e8113367c77c4190931023b9c795b4978364388d5e4",
+  "checksum": "be8a93d4c4c78b0ab44b89e4dc926b1ae7fb388f5a2391dfa92e0de7b4b41c8a",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
