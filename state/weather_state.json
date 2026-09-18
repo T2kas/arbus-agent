@@ -1135,7 +1135,7 @@
   "station": "klaipedos-ams"
  },
  "3d9865b6-0d3a-4769-af36-c87b205a6af3": {
-  "checksum": "1206b99dcc61cf277aba5d11403398d586e0f231d3407924cd251a5bedf3089d",
+  "checksum": "ba2ee6bf7f98b0a3dba96be020f8665f4f522f78a7b2cb96dea567e8fa95a423",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -1753,10 +1753,10 @@
   "station": "kauno-ams"
  },
  "81dbe47c-618a-4d8d-adee-0ee658c15578": {
-  "checksum": "f1834a08f06cf48330e16d982bbaec25eb300dce1ec5982043e6b296b60938f6",
-  "current_maximum": 16.4,
+  "checksum": "efa0a9f6dc3e96963bf83f3612bf90be96440a9bc27a31865fa10550d0e1df35",
+  "current_maximum": 17.9,
   "date": "2026-09-18",
-  "max_received_at": "2026-09-18T09:10:36.632074+00:00",
+  "max_received_at": "2026-09-18T10:10:38.598808+00:00",
   "measurements": {
    "2026-09-17 21:00:00": {
     "checksum": "0911f483763650fe2cf1472e58e21088184e7a17e1bb934fcbf99f570cc4fa39",
@@ -1835,6 +1835,12 @@
     "received_at": "2026-09-18T09:10:36.632074+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 16.4
+   },
+   "2026-09-18 10:00:00": {
+    "checksum": "efa0a9f6dc3e96963bf83f3612bf90be96440a9bc27a31865fa10550d0e1df35",
+    "received_at": "2026-09-18T10:10:38.598808+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 17.9
    }
   },
   "resolved": false,
@@ -2302,7 +2308,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "a5c63419-560f-4535-a06a-f3d03e7e8121": {
-  "checksum": "f1834a08f06cf48330e16d982bbaec25eb300dce1ec5982043e6b296b60938f6",
+  "checksum": "efa0a9f6dc3e96963bf83f3612bf90be96440a9bc27a31865fa10550d0e1df35",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -2756,10 +2762,10 @@
   "station": "kauno-ams"
  },
  "c0fb773f-654e-4804-95ed-a9a41b19f850": {
-  "checksum": "be8a93d4c4c78b0ab44b89e4dc926b1ae7fb388f5a2391dfa92e0de7b4b41c8a",
-  "current_maximum": 15.4,
+  "checksum": "bac24d9f42e422963fdf880aaaca4fc30d74f6a45fd3c5077653d1f2cc43e252",
+  "current_maximum": 17.1,
   "date": "2026-09-18",
-  "max_received_at": "2026-09-18T09:10:36.632074+00:00",
+  "max_received_at": "2026-09-18T10:10:38.598808+00:00",
   "measurements": {
    "2026-09-17 21:00:00": {
     "checksum": "8a02a9d664454deb00b4350738ab11c249c6db368de977df8c025a5c6ad963b1",
@@ -2838,6 +2844,12 @@
     "received_at": "2026-09-18T09:10:36.632074+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 15.4
+   },
+   "2026-09-18 10:00:00": {
+    "checksum": "bac24d9f42e422963fdf880aaaca4fc30d74f6a45fd3c5077653d1f2cc43e252",
+    "received_at": "2026-09-18T10:10:38.598808+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 17.1
    }
   },
   "resolved": false,
@@ -3270,7 +3282,7 @@
   "resolved_via": "sports"
  },
  "eafb4e8e-6252-4882-8f2a-74218eca1b62": {
-  "checksum": "1206b99dcc61cf277aba5d11403398d586e0f231d3407924cd251a5bedf3089d",
+  "checksum": "ba2ee6bf7f98b0a3dba96be020f8665f4f522f78a7b2cb96dea567e8fa95a423",
   "current_maximum": 17.2,
   "date": "2026-09-18",
   "max_received_at": "2026-09-18T09:10:36.632074+00:00",
@@ -3352,6 +3364,12 @@
     "received_at": "2026-09-18T09:10:36.632074+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 17.2
+   },
+   "2026-09-18 10:00:00": {
+    "checksum": "ba2ee6bf7f98b0a3dba96be020f8665f4f522f78a7b2cb96dea567e8fa95a423",
+    "received_at": "2026-09-18T10:10:38.598808+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 17.1
    }
   },
   "resolved": false,
@@ -3495,7 +3513,7 @@
  },
  "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
  "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
-  "checksum": "be8a93d4c4c78b0ab44b89e4dc926b1ae7fb388f5a2391dfa92e0de7b4b41c8a",
+  "checksum": "bac24d9f42e422963fdf880aaaca4fc30d74f6a45fd3c5077653d1f2cc43e252",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
