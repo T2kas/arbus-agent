@@ -1135,7 +1135,7 @@
   "station": "klaipedos-ams"
  },
  "3d9865b6-0d3a-4769-af36-c87b205a6af3": {
-  "checksum": "7af5e7735210d1a298a64cc89c8e070a65bfc7bc06d9459016ef9288c186cc28",
+  "checksum": "11578ba0fa79b688261691b53c11ce50cd83ba1e51027430497b90557f71109c",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -1308,7 +1308,7 @@
   "station": "klaipedos-ams"
  },
  "5ede0c49-6a11-4471-ace1-48543975e05c": {
-  "checksum": "8624ad7942ae227b5f2ff3c5922fda4a4bbc1febe6569cacd36b2573a1a727cf",
+  "checksum": "2d7f6977a28551ffb2c799794382e3718d91da364fff22e607ab3c0461d4436e",
   "current_maximum": null,
   "date": "2026-09-20",
   "measurements": {},
@@ -2356,7 +2356,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "a5c63419-560f-4535-a06a-f3d03e7e8121": {
-  "checksum": "8624ad7942ae227b5f2ff3c5922fda4a4bbc1febe6569cacd36b2573a1a727cf",
+  "checksum": "2d7f6977a28551ffb2c799794382e3718d91da364fff22e607ab3c0461d4436e",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
@@ -2945,7 +2945,7 @@
   "station": "vilniaus-ams"
  },
  "c19a3b41-8b70-4640-9200-9723924e42e5": {
-  "checksum": "ddff8c55fe7f0d9f88f3034c15bc31258189f985d9ce06506a8278822a21edb6",
+  "checksum": "7dc9230738c5576cc88a2945260eefab7b6830cc3000834a97df73c0a0c4ca56",
   "current_maximum": null,
   "date": "2026-09-20",
   "measurements": {},
@@ -3238,7 +3238,7 @@
   "station": "kauno-ams"
  },
  "dc1597c6-fb47-431e-9d4a-dfbe3e7b5ee2": {
-  "checksum": "7af5e7735210d1a298a64cc89c8e070a65bfc7bc06d9459016ef9288c186cc28",
+  "checksum": "11578ba0fa79b688261691b53c11ce50cd83ba1e51027430497b90557f71109c",
   "current_maximum": null,
   "date": "2026-09-20",
   "measurements": {},
@@ -3665,7 +3665,7 @@
  },
  "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
  "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
-  "checksum": "ddff8c55fe7f0d9f88f3034c15bc31258189f985d9ce06506a8278822a21edb6",
+  "checksum": "7dc9230738c5576cc88a2945260eefab7b6830cc3000834a97df73c0a0c4ca56",
   "current_maximum": null,
   "date": "2026-09-19",
   "measurements": {},
