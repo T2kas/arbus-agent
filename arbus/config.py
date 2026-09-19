@@ -859,7 +859,12 @@ APP_CREATE_RPC = os.environ.get("APP_CREATE_RPC", "").strip() or "admin_create_m
 WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 50000)
 WEATHER_HORIZON_DAYS = _env_int("WEATHER_HORIZON_DAYS", 2)      # tomorrow + day after
 WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 18)       # create from this Vilnius hour
-WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 2.0)  # daily-max forecast spread °C
+# Daily-max forecast spread °C — the std of the actual forecast error. Calibrated
+# 2026-09-19 against 21 resolved weather markets (forecast in each market's
+# context vs the real Meteo max): mean error ≈0, std 1.39, MAE 0.90, 81% within
+# 1 °C; Brier/log-loss minimised near 1.3–1.4. At 2.0 the tail buckets were
+# overpriced (~15% assigned, 0–10% actual), giving bettors an edge on the middle.
+WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 1.4)
 # Auto-close (closes_at) time of day, Vilnius. 15:30 stops trading just before the
 # afternoon peak (peak is ~13–14 UTC ≈ 16:00+ Vilnius), so the winning bucket is
 # still uncertain at close.
