@@ -1,5 +1,153 @@
 {
- "offset": null,
+ "offset": 63525491,
  "sessions": {},
- "ideas": {}
+ "ideas": {
+  "1": {
+   "question": "Ar Seimas iki metų pabaigos priims vienkartinių elektroninių cigarečių draudimą?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.35,
+    0.65
+   ],
+   "category": "politika",
+   "resolve_by": "2026-12-31",
+   "resolution_hint": "Sprendžiama pagal Seimo balsavimo rezultatą dėl draudimo priėmimo; jei įstatymas nepriimtas arba svarstymas nukeltas į kitus metus, rinka baigiasi „Ne“.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/verslas/4/3055339/vienkartiniu-elektroniniu-cigareciu-draudimas-seime-vel-istrigo"
+   ],
+   "image_url": "https://www.lrt.lt/img/2025/06/02/2088676-359778-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3055339/vienkartiniu-elektroniniu-cigareciu-draudimas-seime-vel-istrigo"
+  },
+  "2": {
+   "question": "Ar Seimas iki gruodžio patvirtins visą 0,5 mlrd. eurų Audrų paketą?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.55,
+    0.45
+   ],
+   "category": "politika",
+   "resolve_by": "2026-12-15",
+   "resolution_hint": "Sprendžiama pagal Seimo ar Vyriausybės oficialų patvirtinimą, kad visas 0,5 mlrd. eurų paketas (kabeliavimas, generatorių rezervas) yra priimtas; dalinis patvirtinimas neskaitomas, rinka baigiasi „Taip“ tik jei paketas patvirtintas pilnai. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/verslas/4/3054412/vyriausybes-0-5-mlrd-euru-audru-paketas-kabeliavimas-didesnis-generatoriu-rezervas"
+   ],
+   "image_url": "https://www.lrt.lt/img/2024/11/02/1905575-852088-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3054412/vyriausybes-0-5-mlrd-euru-audru-paketas-kabeliavimas-didesnis-generatoriu-rezervas"
+  },
+  "3": {
+   "question": "Kuri šalis kitą praneš apie didelį nežinomo drono incidentą Baltijos regione?",
+   "options": [
+    "Lietuva",
+    "Lenkija",
+    "Latvija",
+    "Estija",
+    "Kita šalis",
+    "Incidentų per laikotarpį nebus"
+   ],
+   "probabilities": [
+    0.25,
+    0.3,
+    0.15,
+    0.1,
+    0.1,
+    0.1
+   ],
+   "category": "geopolitika",
+   "resolve_by": "2026-10-20",
+   "resolution_hint": "Skaičiuojamas pirmas oficialiai patvirtintas didelis (pvz., oro uosto veiklos sutrikdymas ar karinis reagavimas) nežinomo drono incidentas regiono šalyje pagal tos šalies gynybos ministerijos pranešimą; jei incidentų nebus per laikotarpį, laimi „Incidentų nebus“. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/pasaulyje/6/3056405/netoli-moldovos-sostines-rastos-drono-nuolauzos",
+    "https://www.lrt.lt/naujienos/lietuvoje/2/3058126/ar-lietuva-skiria-pakankamai-demesio-kubilius-ragina-ruostis-ne-tik-pavieniams-dronams"
+   ],
+   "image_url": "https://www.lrt.lt/img/2026/09/18/2492963-70555-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/3056405/netoli-moldovos-sostines-rastos-drono-nuolauzos"
+  },
+  "4": {
+   "question": "Kas nutiks su Hormuzo sąsiauriu iki spalio pabaigos?",
+   "options": [
+    "Liks visiškai atviras laivybai",
+    "Bus dalinai apribota laivyba",
+    "Bus visiškai uždarytas",
+    "Kita"
+   ],
+   "probabilities": [
+    0.6,
+    0.25,
+    0.1,
+    0.05
+   ],
+   "category": "ekonomika",
+   "resolve_by": "2026-10-31",
+   "resolution_hint": "Sprendžiama pagal tarptautinių žiniasklaidos šaltinių (Reuters, AFP) ir Irano/JAV oficialius pareiškimus apie Hormuzo sąsiaurio laivybos statusą; jei padėtis nepasikeis nuo dabartinės, laimi „Liks visiškai atviras“. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/pasaulyje/6/3058093/iranas-sako-perdaves-jav-savo-salygas-del-hormuzo-sasiaurio-atidarymo",
+    "https://www.vz.lt/verslo-aplinka/2026/09/20/jav-ispeja-del-galimos-karo-viduriniuose-rytuose-eskalacijos-590291"
+   ],
+   "image_url": "https://www.lrt.lt/img/2026/09/13/2487495-711962-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/3058093/iranas-sako-perdaves-jav-savo-salygas-del-hormuzo-sasiaurio-atidarymo"
+  },
+  "5": {
+   "question": "Ar Lietuvos metinė infliacija rugsėjį liks tarp trijų didžiausių euro zonoje?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.65,
+    0.35
+   ],
+   "category": "ekonomika",
+   "resolve_by": "2026-10-17",
+   "resolution_hint": "Sprendžiama pagal Eurostato skelbiamą suderintą vartotojų kainų indeksą (SVKI) už rugsėjo mėn., lyginant Lietuvos rodiklį su kitomis ES šalimis. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/verslas/4/3055224/eurostatas-metine-infliacija-lietuvoje-rugpjuti-antra-didziausia-es"
+   ],
+   "image_url": "https://www.lrt.lt/img/2025/10/09/2207767-854990-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3055224/eurostatas-metine-infliacija-lietuvoje-rugpjuti-antra-didziausia-es"
+  },
+  "6": {
+   "question": "Ar šį šildymo sezoną šilumos kaina Lietuvoje pakils daugiau nei 20 proc.?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.7,
+    0.3
+   ],
+   "category": "ekonomika",
+   "resolve_by": "2026-11-15",
+   "resolution_hint": "Sprendžiama pagal VERT (Valstybinė energetikos reguliavimo taryba) skelbiamus vidutinius šilumos kainų duomenis, lyginant su 2025 m. lapkričio mėn. rodikliais. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/verslas/4/3054347/sildymas-siemet-brangs-bent-penktadaliu-gyventojai-jau-kreipiasi-del-kompensaciju"
+   ],
+   "image_url": "https://www.lrt.lt/img/2020/04/08/633016-630351-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3054347/sildymas-siemet-brangs-bent-penktadaliu-gyventojai-jau-kreipiasi-del-kompensaciju"
+  },
+  "7": {
+   "question": "Ar EIB iki 2026 m. pabaigos pasieks 2 mlrd. eurų finansavimo Lietuvai tikslą?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.55,
+    0.45
+   ],
+   "category": "ekonomika",
+   "resolve_by": "2026-12-31",
+   "resolution_hint": "Sprendžiama pagal EIB (Europos investicijų banko) oficialią metinę ataskaitą ar pranešimą apie 2026 m. finansavimo Lietuvai apimtį. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/verslas/4/3054364/eib-prezidente-finansavimo-lietuvoje-lygi-siemet-ketiname-padidinti-iki-2-mlrd-euru"
+   ],
+   "image_url": "https://www.lrt.lt/img/2026/03/05/2336795-899530-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3054364/eib-prezidente-finansavimo-lietuvoje-lygi-siemet-ketiname-padidinti-iki-2-mlrd-euru"
+  }
+ }
 }
