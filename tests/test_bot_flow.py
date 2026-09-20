@@ -98,6 +98,48 @@ def test_photo_at_image_step_is_rejected_with_hint(wired):
     assert any("URL" in m for m in sent)
 
 
+def test_state_round_trip_persists_session_and_ideas(wired, monkeypatch, tmp_path):
+    sent, created = wired
+    state_file = tmp_path / "bot_state.json"
+    monkeypatch.setattr(bot.config, "BOT_STATE_PATH", str(state_file))
+    tok, chat = "t", "42"
+
+    # get to a mid-flow state, then persist and wipe memory (a "cron restart")
+    bot._handle(tok, chat, {"text": "/pridėti 7"})
+    bot._handle(tok, chat, {"text": "50000"})
+    assert bot.SESSIONS[chat]["step"] == "image"
+    bot.IDEAS["9"] = {"question": "Ar Y?", "options": ["Taip", "Ne"],
+                      "probabilities": [0.5, 0.5], "category": "sportas",
+                      "resolve_by": "2026-10-05", "sources": []}
+    bot._save_state(123)
+    bot.SESSIONS.clear()
+    bot.IDEAS.clear()
+
+    bot._restore_globals(bot._load_state())
+    assert isinstance(bot.SESSIONS[chat]["composed"], compose.ComposedMarket)
+    assert bot.SESSIONS[chat]["liquidity"] == 50000
+    assert bot.IDEAS["9"]["question"] == "Ar Y?"
+
+    # the flow continues seamlessly after the restart
+    bot._handle(tok, chat, {"text": "be"})
+    bot._handle(tok, chat, {"text": "taip"})
+    assert len(created) == 1
+
+
+def test_add_uses_persisted_ideas_without_sqlite(wired, monkeypatch):
+    sent, created = wired
+
+    def _boom(*a, **k):
+        raise AssertionError("SQLite must not be touched when the idea is cached")
+    monkeypatch.setattr(bot.store, "get_market", _boom)
+    bot.IDEAS["7"] = {"question": "Ar Z?", "options": ["Taip", "Ne"],
+                      "probabilities": [0.6, 0.4], "category": "sportas",
+                      "resolve_by": "2026-10-05", "sources": []}
+    bot._handle("t", "42", {"text": "/pridėti 7"})
+    assert bot.SESSIONS["42"]["step"] == "liquidity"
+    bot.IDEAS.clear()
+
+
 def test_rejected_candidate_is_not_launched(wired, monkeypatch):
     sent, created = wired
     monkeypatch.setattr(bot.store, "get_market", lambda conn, mid: {

@@ -911,6 +911,10 @@ SERIES_RESEARCH_MAX_TOKENS = _env_int("SERIES_RESEARCH_MAX_TOKENS", 8000)
 # one-off per market you actually launch, and getting the rules right matters.
 COMPOSE_SEARCHES = _env_int("COMPOSE_SEARCHES", 6)
 COMPOSE_MAX_TOKENS = _env_int("COMPOSE_MAX_TOKENS", 12000)
+# Committed state for the cron-drain bot (`arbus bot --once`): the getUpdates
+# offset, in-flight /pridėti uploads, and the last batch's ideas — so the
+# interactive flow works from the Telegram chat with no always-on process.
+BOT_STATE_PATH = os.environ.get("BOT_STATE_PATH", "state/bot_state.json")
 
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about

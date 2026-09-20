@@ -949,10 +949,10 @@ def cmd_feedback(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_bot(_args: argparse.Namespace) -> int:
+def cmd_bot(args: argparse.Namespace) -> int:
     from . import bot
 
-    return bot.run()
+    return bot.poll_once() if args.once else bot.run()
 
 
 def main() -> int:
@@ -1103,7 +1103,11 @@ def main() -> int:
     fb.add_argument("text", nargs="+", help='e.g. arbus feedback "mažiau ekonomikos rinkų"')
     fb.set_defaults(func=cmd_feedback)
 
-    b = sub.add_parser("bot", help="run the Telegram bot (long polling)")
+    b = sub.add_parser("bot", help="run the Telegram bot (long polling, or --once for cron)")
+    b.add_argument("--once", action="store_true",
+                   help="drain pending Telegram messages once and exit (for a "
+                        "scheduled run with no always-on process); state is kept "
+                        "in a committed file")
     b.set_defaults(func=cmd_bot)
 
     args = parser.parse_args()

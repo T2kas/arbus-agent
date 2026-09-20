@@ -1,0 +1,62 @@
+name: telegram-bot
+
+# Answers your Telegram commands in the SAME chat, with no always-on machine:
+# every few minutes it drains pending messages once and handles them —
+#   /markets [n] [fast]  → generate ideas (with EUR cost)
+#   /pridėti <id>        → research + draft one idea, ask liquidity + image,
+#                          then create it in Arbus after you reply "taip"
+# The getUpdates offset, any in-flight /pridėti upload and the idea list are
+# kept in a committed state file (state/bot_state.json), so the multi-step flow
+# survives between runs and each message is handled exactly once.
+#
+# Opt-in: set Variable TELEGRAM_BOT_ENABLED=true. Needs an LLM key (generation +
+# compose) and, for the actual upload, the service_role key.
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write                    # to commit the bot state
+
+concurrency:
+  group: telegram-bot                # never two drains at once (double-handling)
+  cancel-in-progress: false
+
+jobs:
+  telegram:
+    if: github.event_name == 'workflow_dispatch' || vars.TELEGRAM_BOT_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30              # generation can take a few minutes
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Drain and handle Telegram commands
+        env:
+          PYTHONUNBUFFERED: "1"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}   # only needed to upload
+          APP_CREATE_RPC: ${{ vars.APP_CREATE_RPC }}
+          WEATHER_TZ: ${{ vars.WEATHER_TZ }}
+        run: python -m arbus bot --once
+
+      - name: Commit the bot state if it changed
+        run: |
+          git config user.name "arbus-bot"
+          git config user.email "arbus-bot@users.noreply.github.com"
+          git add state/bot_state.json
+          git diff --cached --quiet || git commit -m "bot state $(date -u +%FT%TZ) [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push || true

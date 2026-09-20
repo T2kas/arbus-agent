@@ -24,9 +24,11 @@ empty the bot answers only /id (so you can discover your chat id).
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import traceback
+from pathlib import Path
 
 import requests
 
@@ -51,8 +53,57 @@ HELP = (
 TG_LIMIT = 3800  # keep under Telegram's 4096-char message cap
 
 # Per-chat in-flight upload. {chat_id: {"step", "cand", "composed", "meta",
-# "liquidity", "image_url", "spec"}}. Lives only while the process runs.
+# "liquidity", "image_url", "spec"}}. Held in memory during a long-poll session;
+# for the cron drain it is persisted to the committed bot state so a multi-step
+# upload survives between runs.
 SESSIONS: dict[str, dict] = {}
+# The ideas from the most recent /markets, keyed by their #id, so /pridėti works
+# even when the SQLite candidate DB is gone (CI does not keep it between runs).
+IDEAS: dict[str, dict] = {}
+_MAX_IDEAS = 400
+
+
+# ── committed state (so the cron drain remembers across runs) ────────────────
+
+def _load_state() -> dict:
+    try:
+        return json.loads(Path(config.BOT_STATE_PATH).read_text("utf-8"))
+    except (FileNotFoundError, ValueError):
+        return {}
+
+
+def _save_state(offset: int | None) -> None:
+    """Persist the getUpdates offset, the pending sessions and the idea list.
+    ComposedMarket is stored as a plain dict so the file is JSON."""
+    sessions = {}
+    for chat, s in SESSIONS.items():
+        out = dict(s)
+        comp = out.get("composed")
+        if hasattr(comp, "model_dump"):
+            out["composed"] = comp.model_dump()
+        sessions[chat] = out
+    path = Path(config.BOT_STATE_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {"offset": offset, "sessions": sessions,
+               "ideas": dict(list(IDEAS.items())[-_MAX_IDEAS:])}
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def _restore_globals(state: dict) -> None:
+    """Load the persisted sessions/ideas into the module globals, rebuilding the
+    ComposedMarket objects the flow works with."""
+    SESSIONS.clear()
+    IDEAS.clear()
+    IDEAS.update(state.get("ideas") or {})
+    for chat, s in (state.get("sessions") or {}).items():
+        s = dict(s)
+        comp = s.get("composed")
+        if isinstance(comp, dict):
+            try:
+                s["composed"] = compose.ComposedMarket(**comp)
+            except Exception:                            # noqa: BLE001 — drop a bad session
+                continue
+        SESSIONS[chat] = s
 
 
 def _api(token: str, method: str, **params) -> dict:
@@ -108,6 +159,8 @@ def _cmd_markets(token: str, chat_id: str, parts: list[str]) -> None:
     llm.reset_usage()
     result = pipeline.run_batch(count=count, skip_verify=skip_verify,
                                 progress=lambda msg: log.info("%s", msg))
+    for db_id, cand, _v, _n in result.accepted:         # remember ideas for /pridėti
+        IDEAS[str(db_id)] = compose.summary_from_candidate(cand)
     cost = llm.usage_line()                              # "💶 kaina ~0.30 € (...)"
     cost_line = f"💶 idėjų rinkimas: {cost.replace('💶 kaina ', '')}" if cost else ""
     _send(token, chat_id, _format_batch(result, cost_line))
@@ -138,19 +191,24 @@ def _cmd_add(token: str, chat_id: str, parts: list[str]) -> None:
     if len(parts) < 2 or not parts[1].lstrip("#").isdigit():
         _send(token, chat_id, "Nurodyk idėjos id, pvz.: /pridėti 12")
         return
-    db_id = int(parts[1].lstrip("#"))
-    conn = store.connect()
-    row = store.get_market(conn, db_id)
-    if conn is not None:
-        conn.close()
-    if row is None:
-        _send(token, chat_id, f"Idėjos #{db_id} neradau. Sugeneruok partiją su /markets.")
-        return
-    if str(row["status"]) == "rejected":
-        _send(token, chat_id, f"#{db_id} buvo atmesta — jos nekelsiu.")
-        return
-
-    cand = compose.candidate_summary(row)
+    key = parts[1].lstrip("#")
+    db_id = int(key)
+    # Prefer the persisted idea list (works on stateless CI); fall back to the
+    # local SQLite candidate DB for a developer running the long-poll bot.
+    cand = IDEAS.get(key)
+    if cand is None:
+        conn = store.connect()
+        row = store.get_market(conn, db_id)
+        if conn is not None:
+            conn.close()
+        if row is None:
+            _send(token, chat_id,
+                  f"Idėjos #{db_id} neradau. Sugeneruok partiją su /markets.")
+            return
+        if str(row["status"]) == "rejected":
+            _send(token, chat_id, f"#{db_id} buvo atmesta — jos nekelsiu.")
+            return
+        cand = compose.candidate_summary(row)
     _send(token, chat_id, f"Ruošiu #{db_id}: „{cand['question']}“ … ⏳ (tikrinu internete)")
     try:
         composed, meta = compose.compose(cand)
@@ -310,7 +368,32 @@ def _handle(token: str, chat_id: str, msg: dict) -> None:
         _flow_reply(token, chat_id, text, has_photo)
 
 
+def _process_update(token: str, allowed: str, upd: dict) -> None:
+    msg = upd.get("message") or upd.get("channel_post") or {}
+    text = (msg.get("text") or msg.get("caption") or "").strip()
+    chat_id = str(msg.get("chat", {}).get("id", ""))
+    if not chat_id or (not text and not msg.get("photo")):
+        return
+    if text.split()[:1] and text.split()[0].lower().startswith("/id"):
+        _send(token, chat_id, f"Chat id: {chat_id}")
+        return
+    if not allowed:
+        _send(token, chat_id,
+              "TELEGRAM_CHAT_ID nesukonfigūruotas. Įrašyk šio pokalbio id "
+              f"({chat_id}) į .env ir perkrauk botą.")
+        return
+    if chat_id != allowed:
+        log.warning("ignoring message from unauthorized chat %s", chat_id)
+        return
+    try:
+        _handle(token, chat_id, msg)
+    except Exception:
+        log.error("handler failed:\n%s", traceback.format_exc())
+        _send(token, chat_id, "❌ Klaida. Žiūrėk boto logą.")
+
+
 def run() -> int:
+    """Long-poll forever (interactive dev/local use)."""
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     if not token:
         log.error("TELEGRAM_BOT_TOKEN is not set (see .env)")
@@ -327,29 +410,43 @@ def run() -> int:
         except requests.RequestException as exc:
             log.warning("getUpdates failed: %s — retrying", exc)
             continue
-
         for upd in updates.get("result", []):
             offset = upd["update_id"] + 1
-            msg = upd.get("message") or upd.get("channel_post") or {}
-            text = (msg.get("text") or msg.get("caption") or "").strip()
-            chat_id = str(msg.get("chat", {}).get("id", ""))
-            if not chat_id or (not text and not msg.get("photo")):
-                continue
+            _process_update(token, allowed, upd)
 
-            if text.split()[:1] and text.split()[0].lower().startswith("/id"):
-                _send(token, chat_id, f"Chat id: {chat_id}")
-                continue
-            if not allowed:
-                _send(token, chat_id,
-                      "TELEGRAM_CHAT_ID nesukonfigūruotas. Įrašyk šio pokalbio id "
-                      f"({chat_id}) į .env ir perkrauk botą.")
-                continue
-            if chat_id != allowed:
-                log.warning("ignoring message from unauthorized chat %s", chat_id)
-                continue
 
-            try:
-                _handle(token, chat_id, msg)
-            except Exception:
-                log.error("handler failed:\n%s", traceback.format_exc())
-                _send(token, chat_id, "❌ Klaida. Žiūrėk boto logą.")
+def poll_once() -> int:
+    """Drain pending Telegram updates once and exit — for a scheduled (cron) run
+    with no always-on process. Offset, in-flight uploads and the idea list are
+    kept in a committed state file so the multi-step /pridėti flow survives
+    between runs and each message is handled exactly once."""
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    if not token:
+        log.error("TELEGRAM_BOT_TOKEN is not set (see .env)")
+        return 1
+    allowed = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+    state = _load_state()
+    _restore_globals(state)
+    offset = state.get("offset")
+
+    try:
+        updates = _api(token, "getUpdates", timeout=0,
+                       **({"offset": offset} if offset else {})).get("result", [])
+    except requests.RequestException as exc:
+        log.warning("getUpdates failed: %s", exc)
+        return 1
+
+    if not updates:
+        _save_state(offset)                              # keep sessions/ideas warm
+        print("Nėra naujų žinučių.")
+        return 0
+
+    # Consume the offset FIRST so an expensive command (generation) is never
+    # re-run if this job is killed mid-handling.
+    new_offset = updates[-1]["update_id"] + 1
+    _save_state(new_offset)
+    print(f"Apdoroju {len(updates)} žinutę(-es)…")
+    for upd in updates:
+        _process_update(token, allowed, upd)
+    _save_state(new_offset)                              # persist sessions/ideas changes
+    return 0

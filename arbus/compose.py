@@ -96,6 +96,23 @@ def candidate_summary(row) -> dict:
     }
 
 
+def summary_from_candidate(cand) -> dict:
+    """The same summary dict as `candidate_summary`, but from an in-memory
+    Candidate object — so a batch can persist its ideas without the SQLite DB
+    (which CI does not keep between runs)."""
+    return {
+        "question": getattr(cand, "question_lt", ""),
+        "options": list(getattr(cand, "options_lt", []) or []),
+        "probabilities": list(getattr(cand, "probabilities", []) or []),
+        "category": getattr(cand, "category", ""),
+        "resolve_by": str(getattr(cand, "resolve_by", ""))[:10],
+        "resolution_hint": getattr(cand, "resolution_hint_lt", ""),
+        "sources": [s for s in (getattr(cand, "sources", []) or []) if isinstance(s, str)],
+        "image_url": getattr(cand, "image_url", ""),
+        "image_source": getattr(cand, "image_source", ""),
+    }
+
+
 def _normalise_category(value: str, candidate_category: str) -> str:
     v = (value or "").strip().lower()
     if v in APP_CATEGORIES:
