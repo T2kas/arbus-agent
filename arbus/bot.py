@@ -1,12 +1,25 @@
-"""Telegram bot — type /markets in your chat, get a fresh batch back.
+"""Telegram bot — generate ideas, then approve one straight into the app.
 
 Long-polling, single-process, no webhook/server needed:
 
     python -m arbus bot
 
-Security: the bot only obeys the chat configured in TELEGRAM_CHAT_ID.
-If TELEGRAM_CHAT_ID is empty it answers only /id (so you can discover your
-chat id) and ignores everything else.
+Two things it does:
+
+  1. /markets — generate a batch of candidate ideas (each shown with a #id and
+     the EUR cost of gathering them).
+  2. /pridėti <id> — take one idea all the way into Arbus: the bot researches
+     and writes the full rules, asks you for the liquidity and an image, shows
+     the final draft, and only creates the market after you confirm. The EUR
+     cost of drafting is reported too.
+
+The approval flow is a tiny per-chat state machine held in memory for the life
+of the process — you reply to the bot's questions (a number, an image URL or
+"auto", then "taip"/"ne"), so no plain message is acted on unless the bot just
+asked for it.
+
+Security: the bot only obeys the chat configured in TELEGRAM_CHAT_ID. If it is
+empty the bot answers only /id (so you can discover your chat id).
 """
 
 from __future__ import annotations
@@ -17,22 +30,29 @@ import traceback
 
 import requests
 
-from . import config, feedback, pipeline
+from . import app as app_api, compose, config, feedback, images, llm, pipeline, store
 
 log = logging.getLogger(__name__)
 
 HELP = (
     "🍉 Arbus market agent\n\n"
-    "/markets — generate a batch (default "
+    "/markets — generuoti idėjų partiją (numatyta "
     f"{config.DEFAULT_BATCH_SIZE})\n"
-    "/markets 15 — generate 15 candidates\n"
-    "/markets 15 fast — skip web verification (cheaper, riskier)\n"
-    "/feedback <pastaba> — teach the bot (e.g. /feedback mažiau ekonomikos)\n"
-    "/id — show this chat's id\n"
-    "/help — this message"
+    "/markets 15 — generuoti 15 kandidatų\n"
+    "/markets 15 fast — be interneto patikros (pigiau, rizikingiau)\n"
+    "/pridėti <id> — paruošti idėją ir įkelti į Arbus (klaus likvidumo, "
+    "nuotraukos, patvirtinimo)\n"
+    "/atšaukti — nutraukti dabartinį įkėlimą\n"
+    "/feedback <pastaba> — pamokyti botą (pvz. /feedback mažiau ekonomikos)\n"
+    "/id — parodyti šio pokalbio id\n"
+    "/help — ši žinutė"
 )
 
 TG_LIMIT = 3800  # keep under Telegram's 4096-char message cap
+
+# Per-chat in-flight upload. {chat_id: {"step", "cand", "composed", "meta",
+# "liquidity", "image_url", "spec"}}. Lives only while the process runs.
+SESSIONS: dict[str, dict] = {}
 
 
 def _api(token: str, method: str, **params) -> dict:
@@ -55,13 +75,17 @@ def _send(token: str, chat_id: str, text: str) -> None:
         _api(token, "sendMessage", chat_id=chat_id, text=chunk, disable_web_page_preview=True)
 
 
-def _format_batch(result: pipeline.BatchResult) -> str:
+# ── batch generation ─────────────────────────────────────────────────────────
+
+def _format_batch(result: pipeline.BatchResult, cost_line: str) -> str:
     lines = [
         f"🍉 Batch {result.batch_id}",
         f"✅ {len(result.accepted)} accepted | ⚠️ {result.needs_review} need review | "
         f"✗ {len(result.rejected)} rejected",
-        "",
     ]
+    if cost_line:
+        lines.append(cost_line)
+    lines.append("")
     for db_id, c, verdict, _note in result.accepted:
         flag = " ⚠️" if verdict == "UNCLEAR" else ""
         probs = " / ".join(f"{o} {p:.0%}" for o, p in zip(c.options_lt, c.probabilities))
@@ -71,38 +95,219 @@ def _format_batch(result: pipeline.BatchResult) -> str:
             f"   📅 iki {c.resolve_by} · {c.category} · {c.duration_class}",
             "",
         ]
-    lines.append(f"Report: {result.report_path}")
+    lines.append("Patinka viena? Rašyk /pridėti <id> ir įkelsiu ją į Arbus.")
     return "\n".join(lines)
 
 
-def _handle(token: str, chat_id: str, text: str) -> None:
-    parts = text.split()
-    cmd = parts[0].lower().split("@")[0]  # tolerate /markets@BotName
+def _cmd_markets(token: str, chat_id: str, parts: list[str]) -> None:
+    count = config.DEFAULT_BATCH_SIZE
+    if len(parts) > 1 and parts[1].isdigit():
+        count = max(3, min(60, int(parts[1])))
+    skip_verify = "fast" in [p.lower() for p in parts[1:]]
+    _send(token, chat_id, f"Generuoju {count} rinkų kandidatų... ⏳ (kelios minutės)")
+    llm.reset_usage()
+    result = pipeline.run_batch(count=count, skip_verify=skip_verify,
+                                progress=lambda msg: log.info("%s", msg))
+    cost = llm.usage_line()                              # "💶 kaina ~0.30 € (...)"
+    cost_line = f"💶 idėjų rinkimas: {cost.replace('💶 kaina ', '')}" if cost else ""
+    _send(token, chat_id, _format_batch(result, cost_line))
 
-    if cmd == "/markets":
-        count = config.DEFAULT_BATCH_SIZE
-        if len(parts) > 1 and parts[1].isdigit():
-            count = max(3, min(60, int(parts[1])))
-        skip_verify = "fast" in [p.lower() for p in parts[1:]]
+
+# ── the approve-one-idea → upload flow ───────────────────────────────────────
+
+def _draft_preview(spec_like: dict, extra: str = "") -> str:
+    opts = "\n".join(f"   {o['probability']:>3}%  {o['label']}" for o in spec_like["options"])
+    lines = [
+        f"· {spec_like['title']}",
+        (f"  {spec_like.get('subtitle')}" if spec_like.get("subtitle") else ""),
+        f"  📂 {spec_like.get('category', '?')} · uždaroma "
+        f"{str(spec_like.get('closes_at', ''))[:16].replace('T', ' ')}",
+        opts,
+        "",
+        "📜 Taisyklės:",
+        (spec_like.get("rules") or "(nėra)")[:1400],
+    ]
+    if spec_like.get("context"):
+        lines += ["", "ℹ️ Kontekstas:", spec_like["context"][:600]]
+    if extra:
+        lines += ["", extra]
+    return "\n".join(l for l in lines if l != "")
+
+
+def _cmd_add(token: str, chat_id: str, parts: list[str]) -> None:
+    if len(parts) < 2 or not parts[1].lstrip("#").isdigit():
+        _send(token, chat_id, "Nurodyk idėjos id, pvz.: /pridėti 12")
+        return
+    db_id = int(parts[1].lstrip("#"))
+    conn = store.connect()
+    row = store.get_market(conn, db_id)
+    if conn is not None:
+        conn.close()
+    if row is None:
+        _send(token, chat_id, f"Idėjos #{db_id} neradau. Sugeneruok partiją su /markets.")
+        return
+    if str(row["status"]) == "rejected":
+        _send(token, chat_id, f"#{db_id} buvo atmesta — jos nekelsiu.")
+        return
+
+    cand = compose.candidate_summary(row)
+    _send(token, chat_id, f"Ruošiu #{db_id}: „{cand['question']}“ … ⏳ (tikrinu internete)")
+    try:
+        composed, meta = compose.compose(cand)
+    except Exception:
+        log.error("compose failed:\n%s", traceback.format_exc())
+        _send(token, chat_id, "❌ Nepavyko paruošti idėjos. Žiūrėk boto logą.")
+        return
+
+    cost = meta.get("cost_eur") or 0.0
+    if not composed.still_open:
         _send(token, chat_id,
-              f"Generuoju {count} rinkų kandidatų... ⏳ (kelios minutės)")
-        result = pipeline.run_batch(
-            count=count,
-            skip_verify=skip_verify,
-            progress=lambda msg: log.info("%s", msg),
-        )
-        _send(token, chat_id, _format_batch(result))
-    elif cmd == "/feedback":
-        note = text[len("/feedback"):].strip()
-        if not note:
+              f"⚠️ Atrodo, šis įvykis jau įvyko arba nebeaktualus — nekelčiau.\n"
+              f"💶 juodraščio kaina ~{cost:.2f} €\n\n"
+              + _draft_preview({
+                  "title": composed.title, "subtitle": composed.subtitle,
+                  "category": composed.category, "closes_at": composed.closes_at,
+                  "rules": composed.rules, "context": composed.context,
+                  "options": [{"label": o.label, "probability": round(o.probability)}
+                              for o in composed.options]}))
+        return
+
+    SESSIONS[chat_id] = {"step": "liquidity", "cand": cand, "composed": composed,
+                         "meta": meta, "db_id": db_id}
+    preview = _draft_preview({
+        "title": composed.title, "subtitle": composed.subtitle,
+        "category": composed.category, "closes_at": composed.closes_at,
+        "rules": composed.rules, "context": composed.context,
+        "options": [{"label": o.label, "probability": round(o.probability)}
+                    for o in composed.options]})
+    _send(token, chat_id,
+          f"📝 Juodraštis paruoštas (💶 ~{cost:.2f} €):\n\n{preview}\n\n"
+          "1/3 — koks LIKVIDUMAS? Parašyk skaičių (pvz. 50000).")
+
+
+def _flow_reply(token: str, chat_id: str, text: str, has_photo: bool) -> None:
+    """Handle a plain reply while an upload is in progress for this chat."""
+    sess = SESSIONS.get(chat_id)
+    if not sess:
+        return
+    step = sess["step"]
+
+    if step == "liquidity":
+        digits = "".join(ch for ch in text if ch.isdigit())
+        if not digits:
+            _send(token, chat_id, "Parašyk likvidumą skaičiumi, pvz. 50000.")
+            return
+        sess["liquidity"] = max(1000, int(digits))
+        sess["step"] = "image"
+        srcs = sess["cand"].get("sources") or []
+        hint = " (turiu šaltinių — galiu parinkti pats)" if srcs else ""
+        _send(token, chat_id,
+              f"2/3 — NUOTRAUKA? Atsiųsk paveikslėlio URL, arba parašyk „auto“{hint}, "
+              "arba „be“ (be nuotraukos).")
+        return
+
+    if step == "image":
+        low = text.strip().lower()
+        if has_photo:
             _send(token, chat_id,
-                  "Parašyk pastabą po komandos, pvz.:\n/feedback mažiau ekonomikos rinkų")
+                  "Programėlei reikia viešo paveikslėlio URL — atsiųsto failo "
+                  "panaudoti negaliu. Parašyk URL arba „auto“ (parinksiu pats).")
+            return
+        if low in ("auto", "automatiškai", "pats"):
+            url, _src = images.image_for_sources(sess["cand"].get("sources") or [])
+            sess["image_url"] = url or ""
+            note = f"parinkau: {url}" if url else "neradau tinkamos — kelsiu be nuotraukos"
+            _send(token, chat_id, f"🖼️ {note}")
+        elif low in ("be", "nera", "nėra", "skip", "praleisti"):
+            sess["image_url"] = ""
+        elif text.strip().startswith("http"):
+            sess["image_url"] = text.strip()
         else:
-            line = feedback.append_feedback(note)
-            _send(token, chat_id, f"✍️ Įrašyta, į tai atsižvelgsiu kitose partijose:\n{line}")
-    elif cmd in ("/help", "/start"):
-        _send(token, chat_id, HELP)
-    # unknown commands are ignored silently
+            _send(token, chat_id, "Nesupratau. Atsiųsk URL, „auto“ arba „be“.")
+            return
+        spec = compose.build_spec(sess["composed"], sess["cand"],
+                                  liquidity=sess["liquidity"],
+                                  image_url=sess.get("image_url", ""))
+        sess["spec"] = spec
+        sess["step"] = "confirm"
+        cost = sess["meta"].get("cost_eur") or 0.0
+        img_line = f"🖼️ {spec['image_url']}" if spec["image_url"] else "🖼️ (be nuotraukos)"
+        _send(token, chat_id,
+              "3/3 — GALUTINIS JUODRAŠTIS:\n\n"
+              + _draft_preview(spec, f"💧 likvidumas: {spec['liquidity']}\n{img_line}\n"
+                                     f"💶 juodraščio kaina ~{cost:.2f} €")
+              + "\n\nĮkelti į Arbus? Rašyk „taip“ (arba /patvirtinti). „ne“ atšauks.")
+        return
+
+    if step == "confirm":
+        low = text.strip().lower().lstrip("/")
+        if low in ("taip", "patvirtinti", "ikelti", "įkelti", "yes", "ok"):
+            _upload(token, chat_id, sess)
+        elif low in ("ne", "atšaukti", "atsaukti", "cancel", "no"):
+            SESSIONS.pop(chat_id, None)
+            _send(token, chat_id, "Atšaukta — nieko neįkėliau.")
+        else:
+            _send(token, chat_id, "Parašyk „taip“ (įkelti) arba „ne“ (atšaukti).")
+        return
+
+
+def _upload(token: str, chat_id: str, sess: dict) -> None:
+    if not config.ARBUS_WRITE_KEY:
+        _send(token, chat_id,
+              "❌ Nėra ARBUS_WRITE_KEY (service_role) — įkelti negaliu. "
+              "Nustatyk raktą ir bandyk vėl.")
+        SESSIONS.pop(chat_id, None)
+        return
+    spec = sess["spec"]
+    ok, detail = app_api.create_market(spec)
+    cost = sess["meta"].get("cost_eur") or 0.0
+    SESSIONS.pop(chat_id, None)
+    if ok:
+        _send(token, chat_id,
+              f"✅ Įkelta į Arbus!\n· {spec['title']}\n  id: {detail}\n"
+              f"  💧 likvidumas {spec['liquidity']} · uždaroma "
+              f"{str(spec['closes_at'])[:16].replace('T', ' ')}\n"
+              f"  💶 kaina (paruošimas + įkėlimas) ~{cost:.2f} €")
+    else:
+        _send(token, chat_id, f"❌ Nepavyko įkelti: {detail[:300]}")
+
+
+# ── command routing ──────────────────────────────────────────────────────────
+
+def _handle(token: str, chat_id: str, msg: dict) -> None:
+    text = (msg.get("text") or msg.get("caption") or "").strip()
+    has_photo = bool(msg.get("photo"))
+
+    if text.startswith("/"):
+        parts = text.split()
+        cmd = parts[0].lower().split("@")[0]
+        if cmd == "/markets":
+            _cmd_markets(token, chat_id, parts)
+        elif cmd in ("/pridėti", "/prideti", "/add", "/ikelti", "/įkelti"):
+            _cmd_add(token, chat_id, parts)
+        elif cmd in ("/atšaukti", "/atsaukti", "/cancel"):
+            if SESSIONS.pop(chat_id, None):
+                _send(token, chat_id, "Atšaukta.")
+            else:
+                _send(token, chat_id, "Nieko nevyksta.")
+        elif cmd in ("/patvirtinti", "/taip") and chat_id in SESSIONS:
+            _flow_reply(token, chat_id, "taip", has_photo)
+        elif cmd == "/feedback":
+            note = text[len("/feedback"):].strip()
+            if not note:
+                _send(token, chat_id,
+                      "Parašyk pastabą po komandos, pvz.:\n/feedback mažiau ekonomikos rinkų")
+            else:
+                line = feedback.append_feedback(note)
+                _send(token, chat_id, f"✍️ Įrašyta, į tai atsižvelgsiu:\n{line}")
+        elif cmd in ("/help", "/start"):
+            _send(token, chat_id, HELP)
+        # unknown commands ignored
+        return
+
+    # Not a command: only meaningful mid-flow (a reply to the bot's question).
+    if chat_id in SESSIONS:
+        _flow_reply(token, chat_id, text, has_photo)
 
 
 def run() -> int:
@@ -126,12 +331,12 @@ def run() -> int:
         for upd in updates.get("result", []):
             offset = upd["update_id"] + 1
             msg = upd.get("message") or upd.get("channel_post") or {}
-            text = (msg.get("text") or "").strip()
+            text = (msg.get("text") or msg.get("caption") or "").strip()
             chat_id = str(msg.get("chat", {}).get("id", ""))
-            if not text.startswith("/") or not chat_id:
+            if not chat_id or (not text and not msg.get("photo")):
                 continue
 
-            if text.split()[0].lower().startswith("/id"):
+            if text.split()[:1] and text.split()[0].lower().startswith("/id"):
                 _send(token, chat_id, f"Chat id: {chat_id}")
                 continue
             if not allowed:
@@ -140,11 +345,11 @@ def run() -> int:
                       f"({chat_id}) į .env ir perkrauk botą.")
                 continue
             if chat_id != allowed:
-                log.warning("ignoring command from unauthorized chat %s", chat_id)
+                log.warning("ignoring message from unauthorized chat %s", chat_id)
                 continue
 
             try:
-                _handle(token, chat_id, text)
+                _handle(token, chat_id, msg)
             except Exception:
-                log.error("command failed:\n%s", traceback.format_exc())
-                _send(token, chat_id, "❌ Klaida generuojant. Žiūrėk boto logą.")
+                log.error("handler failed:\n%s", traceback.format_exc())
+                _send(token, chat_id, "❌ Klaida. Žiūrėk boto logą.")

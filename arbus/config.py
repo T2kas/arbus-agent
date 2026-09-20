@@ -904,6 +904,14 @@ SERIES_CLOSE_MINUTE = _env_int("SERIES_CLOSE_MINUTE", 0)
 SERIES_RESEARCH_SEARCHES = _env_int("SERIES_RESEARCH_SEARCHES", 6)
 SERIES_RESEARCH_MAX_TOKENS = _env_int("SERIES_RESEARCH_MAX_TOKENS", 8000)
 
+# ── Interactive "compose one idea → app-ready market" (Telegram /pridėti) ────
+# When you pick a generated idea to launch, one web-grounded LLM call re-checks
+# it and writes the full rules/context/options/close-time. Metered so the bot
+# reports its EUR cost. A bit more search budget than a series market: this is a
+# one-off per market you actually launch, and getting the rules right matters.
+COMPOSE_SEARCHES = _env_int("COMPOSE_SEARCHES", 6)
+COMPOSE_MAX_TOKENS = _env_int("COMPOSE_MAX_TOKENS", 12000)
+
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about
 # what NOT to generate. A market everybody trades deserves promotion. Both are
