@@ -194,10 +194,10 @@ def run_batch(
         try:
             draft_text = llm.research(draft_prompt, system=system,
                                       max_uses=config.SEARCH_MAX_USES_DRAFT,
-                                      max_tokens=8000, stage="draft")
+                                      max_tokens=config.DRAFT_MAX_TOKENS, stage="draft")
             structure_prompt = llm.load_prompt("structure", draft=draft_text)
             batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch,
-                                                  max_tokens=8000)
+                                                  max_tokens=config.STRUCTURE_MAX_TOKENS)
         except Exception as exc:
             log.warning("chunk (%s) failed (%s); skipping it and continuing", label, exc)
             return []
@@ -232,7 +232,7 @@ def run_batch(
                 )
                 repaired = llm.structure(
                     llm.load_prompt("repair", items=items), CandidateBatch,
-                    max_tokens=8000,
+                    max_tokens=config.STRUCTURE_MAX_TOKENS,
                 )
                 themes = [c.theme for c, _ in fixables]
                 for i, cand in enumerate(repaired.candidates):

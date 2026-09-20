@@ -97,6 +97,21 @@ AICHECK_THINKING = os.environ.get("ANTHROPIC_AICHECK_THINKING", "off")
 SEARCH_MAX_USES_DRAFT = 6
 SEARCH_MAX_USES_VERIFY = 4
 
+# Drafting must NOT use extended thinking. With thinking on (ANTHROPIC_THINKING=
+# adaptive), the model spent the whole output budget "thinking" before emitting
+# a single candidate, hit max_tokens, and returned truncated/empty JSON — so a
+# chunk drafted 0 candidates, the batch accepted nothing, and the top-up rounds
+# re-drafted everything: 20 min and a pile of burned tokens for an empty batch
+# (live-measured 2026-09-20). Off, the draft emits candidates straight away.
+# Set ANTHROPIC_DRAFT_THINKING=adaptive to turn it back on.
+DRAFT_THINKING = os.environ.get("ANTHROPIC_DRAFT_THINKING", "off")
+# Output budgets. 8K truncated an 11–15-candidate chunk (each candidate carries
+# question + options + probs + rules hint + sources), so give real headroom;
+# you are billed for tokens generated, not for the ceiling. Anthropic honours
+# these; Perplexity caps output near 8K regardless.
+DRAFT_MAX_TOKENS = _env_int("DRAFT_MAX_TOKENS", 16000)
+STRUCTURE_MAX_TOKENS = _env_int("STRUCTURE_MAX_TOKENS", 12000)
+
 # Localize Anthropic web search to Lithuania. The `country` field rejects "LT"
 # with a 400 that aborts the call, but `city`/`region`/`timezone` are free-form
 # and Lithuania can use them — and localizing is what makes the tool return

@@ -674,7 +674,11 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
                         max_tokens=max_tokens, web_search=True)
     model = None
     thinking = None
-    if stage == "verify" and config.VERIFY_MODEL:
+    if stage == "draft":
+        # Drafting with extended thinking truncated every chunk (the model spent
+        # the output budget thinking, hit max_tokens, emitted no candidates). Off.
+        thinking = config.DRAFT_THINKING
+    elif stage == "verify" and config.VERIFY_MODEL:
         model = config.VERIFY_MODEL
     elif stage == "aicheck":
         if config.AICHECK_MODEL:

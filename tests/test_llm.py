@@ -192,10 +192,13 @@ def test_aicheck_uses_the_stronger_model_by_default(monkeypatch):
     assert seen["model"] is None          # drafting stays on the cheap default
 
 
-def test_aicheck_disables_extended_thinking_but_generation_keeps_it(monkeypatch):
+def test_aicheck_and_draft_disable_extended_thinking(monkeypatch):
     """Thinking-on made the check ~6 min/market (a reasoning trace before each
-    search round-trip). aicheck turns it off; drafting/verify keep the default."""
+    search round-trip); aicheck turns it off. Drafting ALSO turns it off: with it
+    on the model spent the whole output budget thinking, hit max_tokens and
+    emitted zero candidates. Only verify keeps the default."""
     monkeypatch.setattr(config, "AICHECK_THINKING", "off")
+    monkeypatch.setattr(config, "DRAFT_THINKING", "off")
     monkeypatch.setattr(config, "ANTHROPIC_THINKING", "adaptive")
     seen = {}
 
@@ -210,7 +213,10 @@ def test_aicheck_disables_extended_thinking_but_generation_keeps_it(monkeypatch)
     assert seen["thinking"] == "off"
 
     llm.research("p", system="s", stage="draft")
-    assert seen["thinking"] is None          # None -> _research_anthropic uses the default
+    assert seen["thinking"] == "off"          # drafting no longer burns the budget thinking
+
+    llm.research("p", system="s", stage="verify")
+    assert seen["thinking"] is None           # verify keeps the config default
 
 
 def test_research_anthropic_thinking_override(monkeypatch):

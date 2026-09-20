@@ -444,9 +444,20 @@ def poll_once() -> int:
         return 0
 
     # Consume the offset FIRST so an expensive command (generation) is never
-    # re-run if this job is killed mid-handling.
+    # re-run. We do this two ways, because on CI the committed state file is only
+    # written by a later git step that a cancelled/killed job never reaches:
+    #   1) persist the offset locally, and
+    #   2) ACK it to Telegram now — calling getUpdates with the new offset drops
+    #      these updates server-side, so they are never redelivered even if this
+    #      job dies mid-generation or its state is never committed.
+    # The trade-off is deliberate: a command interrupted mid-run is dropped
+    # rather than re-generated, which is the right call for an expensive batch.
     new_offset = updates[-1]["update_id"] + 1
     _save_state(new_offset)
+    try:
+        _api(token, "getUpdates", offset=new_offset, timeout=0)
+    except requests.RequestException as exc:
+        log.warning("could not ack updates to Telegram: %s", exc)
     print(f"Apdoroju {len(updates)} žinutę(-es)…")
     for upd in updates:
         _process_update(token, allowed, upd)
