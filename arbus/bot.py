@@ -383,7 +383,9 @@ def _process_update(token: str, allowed: str, upd: dict) -> None:
               f"({chat_id}) į .env ir perkrauk botą.")
         return
     if chat_id != allowed:
-        log.warning("ignoring message from unauthorized chat %s", chat_id)
+        log.warning("ignoring message from chat %s — bot only obeys TELEGRAM_CHAT_ID "
+                    "%s (send the command THERE). Text was: %r",
+                    chat_id, allowed, text[:40])
         return
     try:
         _handle(token, chat_id, msg)
