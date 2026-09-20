@@ -2450,7 +2450,7 @@
   "station": "kauno-ams"
  },
  "896399cc-f32a-4e5c-bf96-b0d08ea2f930": {
-  "checksum": "e29e0d4341b3935e157b6d5939e8660c9899a53c96d7c880e195950ae82dfa8f",
+  "checksum": "79c2c8b6abf18224a41e5f867b8e9124c061720936ac01b5232cbf584551c0f2",
   "current_maximum": null,
   "date": "2026-09-22",
   "measurements": {},
@@ -2901,7 +2901,7 @@
  },
  "b18421a6-e897-463f-a8ce-9ef0a6c5f0cd": {},
  "b4465e96-fd52-4e5e-b9ca-c38056ea9674": {
-  "checksum": "277f2789a26ef0a0de49ba189733be1e88f977410de04f4f3c1485c567155239",
+  "checksum": "41b37f615fda0ea763fca268e779c6d39ad27e6a8746d5f29fa95fae55305679",
   "current_maximum": null,
   "date": "2026-09-22",
   "measurements": {},
@@ -2909,7 +2909,7 @@
   "station": "kauno-ams"
  },
  "ba7da1c4-990d-4bc2-84a7-7b25007867f2": {
-  "checksum": "4e05b39635093df2370c4a24d3dbc5a3b36d4519714b3bee3e30a43b6c69aef6",
+  "checksum": "5b45db98f611db89030c802fd7dfe2f77e3a4c958dec2f3f3ab78cf32c9ada3c",
   "current_maximum": null,
   "date": "2026-09-21",
   "measurements": {},
@@ -3770,7 +3770,7 @@
   "station": "kauno-ams"
  },
  "d5030210-e981-4c18-8cb7-253a220053f6": {
-  "checksum": "4e05b39635093df2370c4a24d3dbc5a3b36d4519714b3bee3e30a43b6c69aef6",
+  "checksum": "5b45db98f611db89030c802fd7dfe2f77e3a4c958dec2f3f3ab78cf32c9ada3c",
   "current_maximum": null,
   "date": "2026-09-22",
   "measurements": {},
@@ -4053,7 +4053,7 @@
   "station": "vilniaus-ams"
  },
  "e4bf75f6-d425-4077-bea4-839283ac9e6b": {
-  "checksum": "e29e0d4341b3935e157b6d5939e8660c9899a53c96d7c880e195950ae82dfa8f",
+  "checksum": "79c2c8b6abf18224a41e5f867b8e9124c061720936ac01b5232cbf584551c0f2",
   "current_maximum": null,
   "date": "2026-09-21",
   "measurements": {},
@@ -4487,7 +4487,7 @@
   "station": "vilniaus-ams"
  },
  "feff12e7-acac-430c-9652-f2ffb073fb40": {
-  "checksum": "277f2789a26ef0a0de49ba189733be1e88f977410de04f4f3c1485c567155239",
+  "checksum": "41b37f615fda0ea763fca268e779c6d39ad27e6a8746d5f29fa95fae55305679",
   "current_maximum": null,
   "date": "2026-09-21",
   "measurements": {},
