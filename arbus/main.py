@@ -435,6 +435,74 @@ def cmd_weather(args: argparse.Namespace) -> int:
     return once()
 
 
+def cmd_series(args: argparse.Namespace) -> int:
+    """Create the self-running weekly cinema/music markets, one after another.
+
+    Each series keeps exactly one live market: the next week's is created only
+    once the current one has resolved. Options + starting probabilities come
+    from a metered LLM research call whose EUR cost is reported. Resolution is
+    handled by `arbus weather` (the LKC/AGATA resolvers run there).
+    """
+    from datetime import datetime, timezone
+    from . import series
+
+    if not config.ARBUS_API_URL:
+        print("ARBUS_API_URL is not set in .env — no app markets to read.")
+        return 1
+
+    enabled = [s["key"] for s in series.series_registry() if s["enabled"]]
+    print(f"🎬🎵 Series bot: {', '.join(enabled) or '(nė vieno įjungto)'} | "
+          f"likvidumas {config.SERIES_CINEMA_LIQUIDITY}/{config.SERIES_MUSIC_LIQUIDITY} | "
+          f"uždaroma {config.SERIES_CLOSE_HOUR:02d}:{config.SERIES_CLOSE_MINUTE:02d}")
+
+    # --preview: run the research and print what WOULD be created (still spends
+    # the research call, so the real options/probabilities are shown), no writes.
+    if args.preview:
+        from . import series as series_mod
+        rows, err = series_mod.app_api.markets(200)
+        if err:
+            print(f"❌ {err}")
+            return 1
+        tz = series_mod._tz()
+        todo = series_mod.plan(rows, datetime.now(timezone.utc).astimezone(tz).date())
+        if not todo:
+            print("Nėra ką kurti — kiekviena serija jau turi aktyvią rinką "
+                  "(arba laukia rezultato).")
+            return 0
+        reports = series_mod.create(todo, tz, alert=False, do_create=False)
+        for r in reports:
+            if r["status"] == "would-create":
+                print(f"\n· [{r['series']}] {r['title']}  "
+                      f"(💶 ~{r.get('cost_eur', 0):.2f} €)")
+                for o in r["options"]:
+                    print(f"    {o['probability']:>3}%  {o['label']}")
+                if r.get("context"):
+                    print(f"    ℹ️  {r['context']}")
+            else:
+                print(f"\n· [{r['series']}] ⚠️ {r.get('reason')}")
+        return 0
+
+    if not config.ARBUS_WRITE_KEY:
+        print("   ⚠️  Nėra ARBUS_WRITE_KEY (service_role) — kūrimas neveiks.")
+
+    reports, error = series.run(alert=not args.no_telegram,
+                                do_create=not args.no_create)
+    if error:
+        print(f"❌ {error}")
+        return 1
+    if not reports:
+        print("Nėra ką kurti — kiekviena serija jau turi aktyvią rinką.")
+        return 0
+    for r in reports:
+        icon = {"created": "🆕", "would-create": "📝", "error": "❌"}.get(r["status"], "·")
+        cost = r.get("cost_eur", 0.0)
+        print(f"{icon} {r['status']} [{r['series']}] {r.get('title', '')} "
+              f"💶 ~{cost:.2f} € {r.get('detail', '') or r.get('reason', '')}")
+    print(f"\n{sum(1 for r in reports if r['status'] == 'created')} sukurta, "
+          f"bendra kaina ~{sum(r.get('cost_eur', 0.0) for r in reports):.2f} €.")
+    return 0
+
+
 def cmd_stats(args: argparse.Namespace) -> int:
     """Market health from the app's own trades. No LLM, no cost.
 
@@ -996,6 +1064,16 @@ def main() -> int:
     wx.add_argument("--interval", type=int, default=0,
                     help="keep running, checking every N seconds (0 = once)")
     wx.set_defaults(func=cmd_weather)
+
+    se = sub.add_parser("series",
+                        help="create self-running weekly cinema/music markets (one after another)")
+    se.add_argument("--no-telegram", action="store_true")
+    se.add_argument("--no-create", action="store_true",
+                    help="research + report what would be created, but do not write")
+    se.add_argument("--preview", action="store_true",
+                    help="research and print the draft market(s) without creating them "
+                         "(still spends the research call)")
+    se.set_defaults(func=cmd_series)
 
     stt = sub.add_parser("stats", help="market health: dead, important, overdue")
     stt.add_argument("--days", type=int, default=config.DEAD_MARKET_DAYS)

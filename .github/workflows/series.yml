@@ -1,0 +1,69 @@
+name: series-bot
+
+# Creates the self-running weekly "series" markets, one after another:
+#   • "Kuris filmas bus žiūrimiausias Lietuvoje?" (LKC weekly ADM)
+#   • "Kuri daina bus klausomiausia Lietuvoje?"   (AGATA weekly singles #1)
+# Each series keeps at most one live market: the next week's is created only
+# once the current one has resolved (which the weather-bot's LKC/AGATA resolvers
+# do). Options + starting probabilities come from a metered LLM research call,
+# and its EUR cost is reported to Telegram — so the schedule can be frequent
+# because a run with a live market spends nothing.
+#
+# Opt-in: set Variable SERIES_ENABLED=true. Needs the service_role key (creation
+# writes to the DB) and an LLM key (ANTHROPIC_API_KEY / PERPLEXITY_API_KEY).
+# Hourly is plenty; a new market only appears at the start of each week.
+
+on:
+  schedule:
+    - cron: "20 * * * *"        # hourly, offset from the weather bot's */5
+  workflow_dispatch:
+    inputs:
+      no_create:
+        description: "Research + report what would be created, but do not write"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: series
+  cancel-in-progress: false
+
+jobs:
+  series:
+    if: github.event_name == 'workflow_dispatch' || vars.SERIES_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Create due weekly series markets
+        env:
+          PYTHONUNBUFFERED: "1"
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          APP_CREATE_RPC: ${{ vars.APP_CREATE_RPC }}
+          # Per-series knobs (unset → code defaults: on / 50000 / kultura / 23:00).
+          SERIES_CINEMA_ENABLED: ${{ vars.SERIES_CINEMA_ENABLED }}
+          SERIES_MUSIC_ENABLED: ${{ vars.SERIES_MUSIC_ENABLED }}
+          SERIES_CINEMA_LIQUIDITY: ${{ vars.SERIES_CINEMA_LIQUIDITY }}
+          SERIES_MUSIC_LIQUIDITY: ${{ vars.SERIES_MUSIC_LIQUIDITY }}
+          SERIES_CINEMA_IMAGE: ${{ vars.SERIES_CINEMA_IMAGE }}
+          SERIES_MUSIC_IMAGE: ${{ vars.SERIES_MUSIC_IMAGE }}
+          SERIES_CLOSE_HOUR: ${{ vars.SERIES_CLOSE_HOUR }}
+          WEATHER_TZ: ${{ vars.WEATHER_TZ }}
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.inputs.no_create }}" = "true" ]; then FLAGS="--no-create"; fi
+          python -m arbus series $FLAGS

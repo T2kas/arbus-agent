@@ -875,6 +875,35 @@ WEATHER_CLOSE_MINUTE = _env_int("WEATHER_CLOSE_MINUTE", 20)
 # has already been resolved (never resolve twice).
 WEATHER_STATE_PATH = os.environ.get("WEATHER_STATE_PATH", "state/weather_state.json")
 
+# ── Recurring weekly "series" markets (arbus series) ────────────────────────
+# Self-creating weekly markets that run one after another: a new week's market
+# is created only once the current one has resolved (so at most one is ever
+# live). The options (specific films/songs) and their starting probabilities
+# come from a small web-grounded LLM research call, metered so its EUR cost is
+# reported to Telegram. Resolution reuses the existing LKC/AGATA resolvers that
+# already run in `weather.run`. Needs the service_role key (creation writes DB)
+# and an LLM key (ANTHROPIC/PERPLEXITY/…). Gate the schedule with SERIES_ENABLED.
+SERIES_CINEMA_ENABLED = os.environ.get("SERIES_CINEMA_ENABLED", "on").strip().lower() != "off"
+SERIES_MUSIC_ENABLED = os.environ.get("SERIES_MUSIC_ENABLED", "on").strip().lower() != "off"
+# Weekly liquidity (team direction: 50k for these).
+SERIES_CINEMA_LIQUIDITY = _env_int("SERIES_CINEMA_LIQUIDITY", 50000)
+SERIES_MUSIC_LIQUIDITY = _env_int("SERIES_MUSIC_LIQUIDITY", 50000)
+# App category for the created markets (resolution does not depend on it).
+SERIES_CINEMA_CATEGORY = os.environ.get("SERIES_CINEMA_CATEGORY", "").strip() or "kultura"
+SERIES_MUSIC_CATEGORY = os.environ.get("SERIES_MUSIC_CATEGORY", "").strip() or "kultura"
+# Reused images: the bot copies the newest image from an existing market of the
+# same series; these are only the fallback when none exists yet.
+SERIES_CINEMA_IMAGE = os.environ.get("SERIES_CINEMA_IMAGE", "").strip()
+SERIES_MUSIC_IMAGE = os.environ.get("SERIES_MUSIC_IMAGE", "").strip()
+# Trading closes at the end of the evaluation week (Vilnius); the winner is
+# published a few days later, and the resolver settles then.
+SERIES_CLOSE_HOUR = _env_int("SERIES_CLOSE_HOUR", 23)
+SERIES_CLOSE_MINUTE = _env_int("SERIES_CLOSE_MINUTE", 0)
+# Research budget for one weekly market (searches + output tokens). One call per
+# market per week, so this is a small recurring spend, reported each time.
+SERIES_RESEARCH_SEARCHES = _env_int("SERIES_RESEARCH_SEARCHES", 6)
+SERIES_RESEARCH_MAX_TOKENS = _env_int("SERIES_RESEARCH_MAX_TOKENS", 8000)
+
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about
 # what NOT to generate. A market everybody trades deserves promotion. Both are

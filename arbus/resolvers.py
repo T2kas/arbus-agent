@@ -583,6 +583,42 @@ def _get_text(url: str) -> str:
     return r.text
 
 
+_LKC_WEEK_SPAN_RE = re.compile(r"(\d{4})\.(\d{2})\.(\d{2})\s*-\s*(\d{4})\.(\d{2})\.(\d{2})")
+
+
+def latest_lkc_week(page_html: str = "") -> tuple[str, str] | None:
+    """(start_iso, end_iso) of the most recently PUBLISHED LKC weekly report,
+    read from the weekly .xlsx filenames on the reports page. The series creator
+    uses this to line a new weekly market's date span up with a real report file
+    (so the resolver's filename match will find it), then rolls it forward a week.
+
+    Best-effort: returns None if the page is unreachable or has no weekly file.
+    """
+    try:
+        html = page_html or _get_text(_LKC_REPORTS_URL)
+    except Exception as exc:                              # noqa: BLE001
+        log.debug("latest_lkc_week fetch failed: %s", exc)
+        return None
+    spans = []
+    for h in re.findall(r'href="([^"]+\.xlsx)"', html, re.I):
+        if "weekly" not in h.lower():
+            continue
+        m = _LKC_WEEK_SPAN_RE.search(_html.unescape(h))
+        if not m:
+            continue
+        try:
+            s = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            e = date(int(m.group(4)), int(m.group(5)), int(m.group(6)))
+        except ValueError:
+            continue
+        if e >= s and (e - s).days <= 8:
+            spans.append((s, e))
+    if not spans:
+        return None
+    s, e = max(spans, key=lambda se: se[1])              # newest by end date
+    return s.isoformat(), e.isoformat()
+
+
 def cinema_top(question: str, rules: str = "") -> dict | None:
     """Structured LKC result for a most-watched-film market (weekly/monthly/
     yearly), or None if it does not apply / the period is not over / the report
