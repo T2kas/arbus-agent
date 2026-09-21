@@ -675,6 +675,11 @@ AICHECK_EUR_PER_USD = float(os.environ.get("AICHECK_EUR_PER_USD", "0.92"))
 PERPLEXITY_PRICE_INPUT_PER_M = float(os.environ.get("PERPLEXITY_PRICE_INPUT_PER_M", "2.0"))
 PERPLEXITY_PRICE_OUTPUT_PER_M = float(os.environ.get("PERPLEXITY_PRICE_OUTPUT_PER_M", "8.0"))
 PERPLEXITY_PRICE_SEARCH = float(os.environ.get("PERPLEXITY_PRICE_SEARCH", "0.005"))
+# OpenAI (GPT-5) list prices, USD per 1M tokens — approximate, for the cost line
+# only. Reasoning tokens are billed as output and are already counted in
+# output_tokens. Override if you switch model or prices change.
+OPENAI_PRICE_INPUT_PER_M = float(os.environ.get("OPENAI_PRICE_INPUT_PER_M", "1.25"))
+OPENAI_PRICE_OUTPUT_PER_M = float(os.environ.get("OPENAI_PRICE_OUTPUT_PER_M", "10.0"))
 
 # When a market cites a source, fetching that page ourselves (a free HTTP GET)
 # and injecting its text lets the model READ the source instead of paying to

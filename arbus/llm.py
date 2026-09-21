@@ -88,6 +88,9 @@ def usage_cost_eur(snap: dict | None = None, provider: str | None = None) -> flo
         usd = (s["input"] / 1e6 * config.PERPLEXITY_PRICE_INPUT_PER_M
                + s["output"] / 1e6 * config.PERPLEXITY_PRICE_OUTPUT_PER_M
                + s["searches"] * config.PERPLEXITY_PRICE_SEARCH)
+    elif prov == "openai":
+        usd = (s["input"] / 1e6 * config.OPENAI_PRICE_INPUT_PER_M
+               + s["output"] / 1e6 * config.OPENAI_PRICE_OUTPUT_PER_M)
     else:
         usd = (s["input"] / 1e6 * config.AICHECK_PRICE_INPUT_PER_M
                + s["output"] / 1e6 * config.AICHECK_PRICE_OUTPUT_PER_M
@@ -309,7 +312,11 @@ def openai_chat(
         timeout=600,
     )
     resp.raise_for_status()
-    return _strip_reasoning(_openai_output_text(resp.json()))
+    data = resp.json()
+    u = data.get("usage") or {}                         # so the EUR cost line is not blank
+    _USAGE["input"] += u.get("input_tokens", 0) or 0
+    _USAGE["output"] += u.get("output_tokens", 0) or 0
+    return _strip_reasoning(_openai_output_text(data))
 
 
 def _extract_json(text: str) -> str:
