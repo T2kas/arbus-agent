@@ -79,6 +79,40 @@ def test_period_detection_weekly_monthly_yearly():
     assert resolvers._cinema_period("Kas laimės rinkimus?", "politika 2026 m.") is None
 
 
+def test_september_market_not_read_as_august_from_a_caveat():
+    """Regression: a September market whose rules mention 'rugpjūčio arba spalio
+    dienas' as a caveat was parsed as monthly AUGUST (first month by dict order),
+    so the bot grabbed the already-published August report and resolved early.
+    The month must come from the dated evaluation range, not an incidental word."""
+    rules = ("Rinka bus išspręsta pagal filmą, kurį Lietuvos kino teatruose nuo "
+             "2026 m. rugsėjo 1 d. iki rugsėjo 30 d. imtinai pamatys daugiausia "
+             "žiūrovų. Naudojamas Lietuvos kino centro mėnesio TOP. Lietuvos kino "
+             "centro savaitės ataskaitų skaičiai nesudedami, nes atskiros savaitės "
+             "gali apimti rugpjūčio arba spalio dienas. Laukiama rugsėjo ataskaitos.")
+    assert resolvers._cinema_period("Kuris filmas bus žiūrimiausias Lietuvoje rugsėjį?",
+                                    rules) == ("monthly", 2026, 9)
+
+
+def test_yearly_market_not_read_as_monthly_from_a_deadline_date():
+    """Regression: a whole-year market whose rules set a report deadline
+    ('vasario 28 d.') was parsed as monthly February. The whole-year signal wins."""
+    rules = ("Rinka bus išspręsta pagal lietuvišką filmą, surinkusį daugiausia "
+             "žiūrovų Lietuvos kino teatruose per visus 2026 metus. Naudojama "
+             "metinėje 2026 m. TOP lentelėje paskelbta reikšmė. Galutinės ataskaitos "
+             "laukiama iki 2027 m. vasario 28 d. imtinai.")
+    assert resolvers._cinema_period("Kuris lietuviškas filmas bus žiūrimiausias 2026 metais?",
+                                    rules) == ("yearly", 2026)
+
+
+def test_non_cinema_market_with_stray_kino_is_not_cinema():
+    """A border-control market that merely contains 'kino' somewhere must not be
+    treated as a most-watched-film market (no viewers signal)."""
+    assert resolvers._cinema_period(
+        "Ar Lietuva atnaujins sienos kontrolę su Latvija iki spalio 31 d.?",
+        "Rinka išspręsta TAIP, jei nuo 2026 m. rugsėjo 6 d. įsigalios kontrolė. "
+        "kino") is None
+
+
 def test_lt_film_market_flag():
     assert resolvers._is_lt_film_market("Kuris lietuviškas filmas...")
     assert not resolvers._is_lt_film_market("Kuris filmas...")

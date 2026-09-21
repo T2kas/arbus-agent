@@ -438,10 +438,47 @@ def _cinema_target(question: str, rules: str) -> tuple[str, str] | None:
     return span[0].isoformat(), span[1].isoformat()
 
 
+def _dated_month(question: str, rules: str) -> int | None:
+    """The month tied to a specific DATE ('rugsėjo 1 d.') — a monthly market's
+    evaluation period. This is what makes month detection safe: a September
+    market's rules also mention 'rugpjūčio arba spalio dienas' as a caveat, and
+    picking the first month by dict order chose AUGUST, so the bot grabbed the
+    already-published August report and resolved a September market on it. Only a
+    month next to a day-of-month is the real period; incidental mentions are
+    ignored. Title first, then rules; earliest such month wins."""
+    for text in (question, rules):
+        low = _cnorm(text)
+        hits = []
+        for stem, num in _MONTH_STEMS.items():
+            m = re.search(re.escape(stem) + r"\w*\s+\d{1,2}\s*d", low)
+            if m:
+                hits.append((m.start(), num))
+        if hits:
+            return min(hits)[1]
+    return None
+
+
+def _any_month(question: str, rules: str) -> int | None:
+    """Fallback: the earliest month mentioned at all (title before rules), for a
+    monthly market that names its month without a '1 d.' date range."""
+    for text in (question, rules):
+        low = _cnorm(text)
+        hits = sorted((low.find(stem), num)
+                      for stem, num in _MONTH_STEMS.items() if stem in low)
+        if hits:
+            return hits[0][1]
+    return None
+
+
 def _cinema_period(question: str, rules: str):
     """('weekly', start, end) | ('monthly', year, month) | ('yearly', year) | None."""
     low = _cnorm(f"{question}\n{rules}")
+    # Must be a most-watched-FILM market: a film/cinema word AND a viewers signal.
+    # Requiring the viewers signal stops unrelated markets that merely contain
+    # "kino"/"film" (e.g. a border-control market) being treated as cinema.
     if "film" not in low and "kino" not in low:
+        return None
+    if not any(k in low for k in ("ziurov", "ziurim", "adm", "kino centr")):
         return None
     weekly = _cinema_target(question, rules)
     if weekly:
@@ -450,11 +487,20 @@ def _cinema_period(question: str, rules: str):
     if not ym:
         return None
     year = int(ym.group())
-    for stem, num in _MONTH_STEMS.items():
-        if stem in low:
-            return ("monthly", year, num)
+    # Whole-year evaluation FIRST, before any month date: a yearly market's rules
+    # carry a report deadline ('vasario 28 d.') that would otherwise be read as
+    # the evaluation month and settle the year market on February data.
+    if re.search(r"per\s+vis|vis\w*\s+20\d{2}\s*m|metin", low):
+        return ("yearly", year)
+    # A month tied to a real date is the monthly evaluation period.
+    dated = _dated_month(question, rules)
+    if dated:
+        return ("monthly", year, dated)
     if re.search(r"\bmet(ais|us|u)\b", low):
         return ("yearly", year)
+    month = _any_month(question, rules)
+    if month:
+        return ("monthly", year, month)
     return None
 
 
