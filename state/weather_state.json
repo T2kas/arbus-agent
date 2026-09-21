@@ -1278,7 +1278,7 @@
   "station": "klaipedos-ams"
  },
  "4385ede3-2a70-424b-a84f-d41f5f4ec6cd": {
-  "checksum": "b74b0cb9d7dd74e55e685b14b33a6f83dcda5746226de15685f5984310cdbef2",
+  "checksum": "3a02f5323d78f98af1bcdbd61bfb921cbdbaaab1a3a323477392d61e10454dea",
   "current_maximum": null,
   "date": "2026-09-23",
   "measurements": {},
@@ -1450,6 +1450,7 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "566b1822-3bdb-4b9d-937c-0de6df8b904f": {},
  "5ede0c49-6a11-4471-ace1-48543975e05c": {
   "checksum": "4ab01e6d61ae56678be83712be88d5be56dda194fdf06388d462752d2be32cb3",
   "current_maximum": 17.3,
@@ -2466,7 +2467,7 @@
   "station": "kauno-ams"
  },
  "896399cc-f32a-4e5c-bf96-b0d08ea2f930": {
-  "checksum": "b74b0cb9d7dd74e55e685b14b33a6f83dcda5746226de15685f5984310cdbef2",
+  "checksum": "3a02f5323d78f98af1bcdbd61bfb921cbdbaaab1a3a323477392d61e10454dea",
   "current_maximum": null,
   "date": "2026-09-22",
   "measurements": {},
@@ -2917,7 +2918,7 @@
  },
  "b18421a6-e897-463f-a8ce-9ef0a6c5f0cd": {},
  "b4465e96-fd52-4e5e-b9ca-c38056ea9674": {
-  "checksum": "a254d39e7aacbcf77be31c8942251f828e3d34205084f4324392166dacf5863c",
+  "checksum": "b64bcc6ef9adde4a060f1067fda3a7088af21869d49a21e385fc6fdd5cb33a99",
   "current_maximum": null,
   "date": "2026-09-22",
   "measurements": {},
@@ -3913,7 +3914,7 @@
   "station": "kauno-ams"
  },
  "d5030210-e981-4c18-8cb7-253a220053f6": {
-  "checksum": "c2092e65df93405562e50817052035d98c46a74bd1caa4cb95e28f0739148eea",
+  "checksum": "098aa1ec425b8673d3886df7dacb0507f3540b846d97b4fa35fd6870596acd3b",
   "current_maximum": null,
   "date": "2026-09-22",
   "measurements": {},
@@ -4345,7 +4346,7 @@
   "resolved_via": "sports"
  },
  "e666398e-6e42-4b6b-8dac-9b93cddbfd9c": {
-  "checksum": "c2092e65df93405562e50817052035d98c46a74bd1caa4cb95e28f0739148eea",
+  "checksum": "098aa1ec425b8673d3886df7dacb0507f3540b846d97b4fa35fd6870596acd3b",
   "current_maximum": null,
   "date": "2026-09-23",
   "measurements": {},
@@ -4623,7 +4624,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "fab32d0a-52c8-4a1c-8db4-2745745300d5": {
-  "checksum": "a254d39e7aacbcf77be31c8942251f828e3d34205084f4324392166dacf5863c",
+  "checksum": "b64bcc6ef9adde4a060f1067fda3a7088af21869d49a21e385fc6fdd5cb33a99",
   "current_maximum": null,
   "date": "2026-09-23",
   "measurements": {},
