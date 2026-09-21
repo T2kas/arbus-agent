@@ -2450,7 +2450,7 @@
   "station": "kauno-ams"
  },
  "896399cc-f32a-4e5c-bf96-b0d08ea2f930": {
-  "checksum": "dfd5a776644a556788746b1c85909312b332b99f59d70d37856590020a45c726",
+  "checksum": "bc95e1475352cca500d56b7507e9a48850f9c9d742f2d832e28cd7042bd46a4a",
   "current_maximum": null,
   "date": "2026-09-22",
   "measurements": {},
@@ -4104,7 +4104,7 @@
   "station": "vilniaus-ams"
  },
  "e4bf75f6-d425-4077-bea4-839283ac9e6b": {
-  "checksum": "dfd5a776644a556788746b1c85909312b332b99f59d70d37856590020a45c726",
+  "checksum": "bc95e1475352cca500d56b7507e9a48850f9c9d742f2d832e28cd7042bd46a4a",
   "current_maximum": 14.9,
   "date": "2026-09-21",
   "max_received_at": "2026-09-20T21:10:40.526581+00:00",
