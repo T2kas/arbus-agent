@@ -44,7 +44,15 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          # Pick the generation backend by Variable (no code change). Leave unset
+          # for Anthropic; set LLM_PROVIDER=openai to run the whole batch on GPT-5,
+          # or LLM_PROVIDER_DRAFT=openai for just the drafting stage.
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}
+          LLM_PROVIDER_DRAFT: ${{ vars.LLM_PROVIDER_DRAFT }}
+          LLM_PROVIDER_VERIFY: ${{ vars.LLM_PROVIDER_VERIFY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
           ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
           ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
           ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}   # only needed to upload

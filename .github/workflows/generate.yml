@@ -34,6 +34,12 @@ jobs:
         env:
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Set Variable LLM_PROVIDER=openai (or LLM_PROVIDER_DRAFT=openai) to use GPT-5.
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}
+          LLM_PROVIDER_DRAFT: ${{ vars.LLM_PROVIDER_DRAFT }}
+          LLM_PROVIDER_VERIFY: ${{ vars.LLM_PROVIDER_VERIFY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           # Optional: enriches the PULSE stage (YouTube Trending LT). Inert if unset.
