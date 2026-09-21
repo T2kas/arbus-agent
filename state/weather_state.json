@@ -1269,6 +1269,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "4385ede3-2a70-424b-a84f-d41f5f4ec6cd": {
+  "checksum": "278ec49fae005ae2ca6185a7ed98c0a08a9cb498569b773be785e8cd3a8aef94",
+  "current_maximum": null,
+  "date": "2026-09-23",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "536e58af-ae24-4f98-b812-84af16b7a13f": {
   "checksum": "50a09d82b9540cf5f18b30df98c441ca49cef7f33d20c1848a6a9e9461b1922b",
   "current_maximum": 18.9,
@@ -4290,6 +4298,14 @@
   "resolved_score": "Sūduva 1:0 Žalgiris",
   "resolved_via": "sports"
  },
+ "e666398e-6e42-4b6b-8dac-9b93cddbfd9c": {
+  "checksum": "3de6190101c67b1c31c594e9fb4d03d24ea088cdef42db99735616c57cad1735",
+  "current_maximum": null,
+  "date": "2026-09-23",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "eafb4e8e-6252-4882-8f2a-74218eca1b62": {
   "checksum": "95632211591f61b4a8f31433ae750415e9b361e14686b7a3791f4ceb69147f84",
   "current_maximum": 17.9,
@@ -4559,6 +4575,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams",
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
+ },
+ "fab32d0a-52c8-4a1c-8db4-2745745300d5": {
+  "checksum": "ea2177f3dd40352d8ae1196f2c4900ff622f68cd8919ac9fda76019fa29950f7",
+  "current_maximum": null,
+  "date": "2026-09-23",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
  },
  "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
  "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
