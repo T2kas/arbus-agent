@@ -86,9 +86,18 @@ STEP 2 — DRAFT exactly {count} quick-mode market candidates:
   when the seed came from the pulse (e.g. "Google Trends LT: 20 000+ searches",
   "312 upvotes / 87 comments on r/lietuva"), otherwise a checked figure ("300+
   comments on Delfi", "every outlet covered it").
-- Roughly 70% binary (Taip/Ne — a short "Ar ...?" or a clear yes/no statement),
-  30% multi-outcome (2-6 options). Headlines may be clean titles, not only
-  questions.
+- HEADLINE STYLE — vary it, and PREFER a concise STATEMENT over a stiff "Ar ...?"
+  question when it reads better. E.g. instead of "Ar Seimas iki metų pabaigos
+  priims vienkartinių el. cigarečių draudimą?" write "Priimtas vienkartinių el.
+  cigarečių draudimas?". Both forms are allowed — just do NOT make every headline
+  an "Ar ...?".
+- MIX OF FORMATS — do not make everything one shape, and do not make everything
+  politics: ~45% binary (Taip/Ne), ~30% multi-outcome (2-6 options, a "kas
+  laimės" style), ~25% DATE LADDER for "by when" questions. A date ladder asks
+  "…iki kada?" with several DATES as separate cumulative Taip/Ne outcomes: if it
+  happens by an earlier date it also counts for every later date, so a later
+  date's Taip probability is never lower than an earlier one. Use concrete dates,
+  never open intervals ("artimiausiu metu").
 - Multi-outcome options must be factually valid and exhaustive AS OF TODAY —
   check the current state (who is still in the competition, who is actually
   participating) before writing options.

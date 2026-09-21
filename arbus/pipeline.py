@@ -47,7 +47,13 @@ def _theme_chunks(count: int, chunk_size: int) -> list[tuple[int, str, str]]:
     """
     themes = config.DRAFT_THEMES
     counts = [min(int(count * share), count) for _, share, _ in themes]
-    counts[0] += count - sum(counts)          # remainder to the top priority
+    # Spread the rounding remainder round-robin across themes, NOT all onto the
+    # first one — otherwise a small batch (count < number of themes) went 100% to
+    # the top theme (all politics), which is exactly the imbalance to avoid.
+    i = 0
+    while sum(counts) < count:
+        counts[i % len(counts)] += 1
+        i += 1
 
     chunks: list[tuple[int, str, str]] = []
     for (label, _, focus), n in zip(themes, counts):

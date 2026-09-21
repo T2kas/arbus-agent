@@ -106,11 +106,11 @@ def _install_fake_llm(monkeypatch, quality):
 
 
 def test_topup_recovers_a_failing_theme(harness):
-    """Geopolitics fails at first, then recovers — quota must still be met."""
+    """The state theme fails at first, then recovers — quota must still be met."""
     seen = {"geo_calls": 0}
 
     def quality(theme):
-        if theme == "valstybė ir geopolitika":
+        if theme == "valstybė ir aktualijos":
             seen["geo_calls"] += 1
             return seen["geo_calls"] > 1   # first chunk fails, top-ups succeed
         return True
@@ -119,16 +119,16 @@ def test_topup_recovers_a_failing_theme(harness):
     result = pipeline.run_batch(count=15)
     accepted = result.accepted_by_theme
     target = result.target_by_theme
-    assert accepted["valstybė ir geopolitika"] >= target["valstybė ir geopolitika"], \
+    assert accepted["valstybė ir aktualijos"] >= target["valstybė ir aktualijos"], \
         f"top-up failed to recover: {dict(accepted)}"
 
 
 def test_culture_cannot_take_over_the_batch(harness):
     """The real failure mode: only culture survives. It must not inherit the batch."""
-    _install_fake_llm(harness, lambda theme: theme == "kultūra ir visuomenė")
+    _install_fake_llm(harness, lambda theme: theme == "kultūra ir pramogos")
     result = pipeline.run_batch(count=15)
-    culture = result.accepted_by_theme["kultūra ir visuomenė"]
-    assert culture <= result.target_by_theme["kultūra ir visuomenė"], \
+    culture = result.accepted_by_theme["kultūra ir pramogos"]
+    assert culture <= result.target_by_theme["kultūra ir pramogos"], \
         "culture exceeded its quota by absorbing other themes' share"
     assert len(result.accepted) == culture, "only culture should have survived"
 
@@ -144,7 +144,7 @@ def test_no_topup_when_every_theme_delivers(harness):
 def test_draft_call_ceiling_stops_runaway_cost(harness, monkeypatch):
     """Every theme failing must not spiral into unbounded paid drafting calls."""
     monkeypatch.setattr(config, "MAX_DRAFT_CALLS", 5)
-    state = _install_fake_llm(harness, lambda theme: theme == "kultūra ir visuomenė")
+    state = _install_fake_llm(harness, lambda theme: theme == "kultūra ir pramogos")
     pipeline.run_batch(count=15)
     assert state["calls"] <= 5
 
@@ -154,4 +154,4 @@ def test_report_records_theme_yield(harness):
     result = pipeline.run_batch(count=15)
     text = open(result.report_path, encoding="utf-8").read()
     assert "Yield per theme" in text
-    assert "valstybė ir geopolitika" in text
+    assert "valstybė ir aktualijos" in text

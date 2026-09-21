@@ -19,14 +19,24 @@ def test_every_theme_represented_in_a_full_batch():
     assert labels == {label for label, _, _ in config.DRAFT_THEMES}
 
 
-def test_state_and_economy_dominate():
-    chunks = _theme_chunks(20, 15)
+def test_culture_and_sport_dominate_over_politics():
+    """Team direction 2026-09-21: the batch should lead with fun culture/sport/
+    internet markets, not politics/economics."""
+    chunks = _theme_chunks(35, 15)
     per_theme = {}
     for n, label, _ in chunks:
         per_theme[label] = per_theme.get(label, 0) + n
-    informative = (per_theme["valstybė ir geopolitika"]
-                   + per_theme["ekonomika ir finansai"])
-    assert informative >= per_theme["sportas"] + per_theme["kultūra ir visuomenė"]
+    fun = (per_theme["kultūra ir pramogos"] + per_theme["sportas"]
+           + per_theme["influenceriai ir internetas"])
+    informative = (per_theme["valstybė ir aktualijos"]
+                   + per_theme["kasdienybė ir ekonomika"])
+    assert fun > informative
+
+
+def test_small_batch_is_not_all_one_theme():
+    """A tiny batch used to dump every slot on the first theme (all politics)."""
+    labels = {label for _, label, _ in _theme_chunks(3, 15)}
+    assert len(labels) == 3
 
 
 def test_chunks_never_exceed_chunk_size():
@@ -35,5 +45,5 @@ def test_chunks_never_exceed_chunk_size():
 
 def test_mandate_text_travels_with_each_chunk():
     for _, label, focus in _theme_chunks(35, 15):
-        assert focus.startswith("ONLY draft markets")
+        assert focus.startswith("ONLY")
         assert len(focus) > 50, label

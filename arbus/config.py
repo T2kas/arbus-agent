@@ -215,45 +215,44 @@ MAX_DRAFT_CALLS = 12
 # so the model stops repeating a mistake while the batch is still being drafted.
 REJECT_FEEDBACK_LIMIT = 8
 
+# Rebalanced 2026-09-21 per team direction: the batch was almost all politics
+# and economics (informative/niche), with little culture/sport. Shares now favour
+# fun, mass-recognition culture/sport/internet markets and keep the informative
+# themes small and mass-only. (label, share, mandate-for-prompt). Shares sum ~1.
 DRAFT_THEMES: list[tuple[str, float, str]] = [
-    ("valstybė ir geopolitika", 0.30,
-     "ONLY draft markets about state affairs and geopolitics: the war in "
-     "Ukraine and its milestones (ceasefire, negotiations, sanctions), security "
-     "and airspace incidents (drones, balloons, GPS jamming, red alerts), "
-     "NATO/EU decisions affecting Lithuania, Belarus/Kaliningrad tensions, "
-     "Lithuanian foreign-policy milestones (e.g. China relations measured by "
-     "concrete events like ambassadors returning), Seimas and presidential "
-     "decisions, elections, party ratings."),
-    ("ekonomika ir finansai", 0.30,
-     "ONLY draft markets about the economy, finance and state statistics. "
-     "PREFER THE SIMPLE, WIDELY UNDERSTOOD INDICATORS most of the batch: "
-     "nedarbo lygis, infliacija, degalų ir elektros kaina, minimali alga ir "
-     "vidutinis atlyginimas, mokesčių pakeitimai (GPM, PVM, „Sodra“), Euribor "
-     "ir būsto paskolų palūkanos, būsto kainos. EVERYDAY-MONEY DECISIONS "
-     "belong here and are currently under-represented: pensijos ir jų "
-     "indeksavimas, pensijų kaupimo pakopos ir jų reforma, „Sodra“, "
-     "kompensacijos, šildymo sezono kaina, ES/ECB sprendimai, kurie pasiekia "
-     "kiekvieno kišenę (palūkanų sprendimai, naujų eurų banknotų dizainas). "
-     "A market a normal person understands in one reading beats a technically "
-     "impressive one. "
-     "Secondary: demographics (gyventojų skaičius, emigracija — Statistikos "
-     "departamentas), BVP, valstybės skola, Nasdaq Vilnius stocks from the "
-     "pulse (threshold + coarse deadline, current price in the rationale), "
-     "Lithuanian companies (Vinted, Ignitis, Telia, bankai)."),
+    ("kultūra ir pramogos", 0.28,
+     "ONLY culture & entertainment a mass 16-35 Lithuanian audience knows and "
+     "argues about: music (new releases, AGATA / Spotify LT #1, concerts, "
+     "festivals), TV shows and their winners/eliminations, cinema and box office "
+     "('kuris filmas bus žiūrimiausias Lietuvoje?'), well-known celebrities and "
+     "their public milestones (relationships, projects, records), awards (MAMA, "
+     "Eurovision LT), viral cultural moments. FUN and emotional over informative. "
+     "Prefer QUICK markets resolving within days to a few weeks."),
     ("sportas", 0.20,
-     "ONLY draft markets about Lithuanian sport: national teams, "
-     "Žalgiris/Rytas in European competitions, LT athletes and their clubs, "
-     "transfers. Outcomes must be concrete and checkable — 'ar pateks į kitą "
-     "etapą?', 'ar laimės rungtynes?' — NEVER metaphors like 'atsities' or "
-     "'sužibės'."),
-    ("kultūra ir visuomenė", 0.20,
-     "ONLY draft markets about culture and society with MASS recognition: big "
-     "festivals and events (sold-out only if the event is 2+ weeks away), "
-     "kino box-office ('ar taps žiūrimiausiu filmu Lietuvoje pagal savaitgalio "
-     "žiūrovus?' — better than any view-count), TV shows and music releases, "
-     "top-tier influencers everyone knows (the Dirkstys tier). AT MOST ONE "
-     "views/followers/streams metric market in this chunk, only for something "
-     "the whole country knows."),
+     "ONLY Lithuanian sport with mass appeal: Žalgiris / Rytas in the Euroleague "
+     "and LKL, the national teams, LT athletes in the NBA and abroad, single "
+     "matches ('ar laimės?', 'kas laimės rungtynes?', 'ar pateks į kitą etapą?'). "
+     "Concrete, checkable outcomes — NEVER metaphors like 'atsities' or 'sužibės'."),
+    ("influenceriai ir internetas", 0.18,
+     "ONLY the biggest Lithuanian creators and internet moments a mass young "
+     "audience recognizes: top TikTok / YouTube / Instagram creators, their new "
+     "projects, feuds, collaborations and milestones (look up and state the "
+     "CURRENT follower/view number first), viral videos, memes, popular games. "
+     "No niche accounts. Include 1-2 playful, absurd-angle markets on FAMILIAR "
+     "subjects — the kind Polymarket runs, but clearly Lithuanian."),
+    ("kasdienybė ir ekonomika", 0.17,
+     "ONLY simple everyday-life and everyday-money topics a normal person "
+     "understands in ONE reading: fuel / electricity / food prices, minimum wage, "
+     "mortgage rates / Euribor, weather extremes and seasons, holidays and events, "
+     "public transport, city life, prices of familiar things. AVOID niche macro "
+     "indicators and technical finance (no BVP, no bond yields, no obscure "
+     "statistics)."),
+    ("valstybė ir aktualijos", 0.17,
+     "ONLY the BIG, widely-followed state / geopolitics stories the whole country "
+     "is talking about: elections and party ratings, a major Seimas or "
+     "presidential decision in the news, Ukraine-war and airspace-security "
+     "milestones that affect Lithuania. Keep it to a FEW; skip niche legislative "
+     "detail. Prefer concise statement-style headlines."),
 ]
 
 # App goes live ~mid-September 2026. Per team direction, generate markets that
