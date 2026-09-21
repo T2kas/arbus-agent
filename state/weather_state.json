@@ -998,7 +998,15 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "377d62c0-fbd8-4f87-972e-615586d034f0": {},
+ "377d62c0-fbd8-4f87-972e-615586d034f0": {
+  "resolved": true,
+  "resolved_adm": 118652.0,
+  "resolved_at": "2026-09-21T15:30:58.859646+00:00",
+  "resolved_label": "„Žmogus-voras: Nauja diena“",
+  "resolved_option_id": "4b7df9b4-8801-4628-b7e1-dcf8316fa12e",
+  "resolved_via": "cinema",
+  "resolved_winner": "Žmogus-voras: nauja diena"
+ },
  "3938528f-7613-44b3-93e6-4ceecfd3282f": {
   "checksum": "55c3a6ab735ae4d2ced7f87a66f8f24a6baff0fe8718bf816f965485b817b479",
   "current_maximum": 19.7,
