@@ -37,6 +37,26 @@ class BatchResult:
         return sum(1 for _, _, v, _ in self.accepted if v in ("UNCLEAR", "NOT_VERIFIED"))
 
 
+def _is_fatal_provider_error(exc: Exception) -> bool:
+    """A provider rejection that will recur on every call — a bad key, no
+    credits, an unknown/blank model, a 404 endpoint — as opposed to a transient
+    per-chunk hiccup (rate limit, a single malformed response) worth skipping.
+    Detected from the message and any HTTP status; 429 (rate limit) is NOT fatal."""
+    import re as _re
+    import requests as _rq
+    s = str(exc).lower()
+    if any(k in s for k in ("credit balance", "insufficient", "quota",
+                            "authentication", "invalid api key", "invalid_api_key",
+                            "unauthorized", "permission", "not found", "no such model",
+                            "does not exist", "model_not_found")):
+        return True
+    if isinstance(exc, _rq.HTTPError):
+        code = getattr(getattr(exc, "response", None), "status_code", 0)
+        return code in (400, 401, 403, 404)
+    m = _re.search(r"error code:\s*(\d{3})", s)      # OpenAI/Anthropic SDK style
+    return bool(m) and m.group(1) in ("400", "401", "403", "404")
+
+
 def _theme_chunks(count: int, chunk_size: int) -> list[tuple[int, str, str]]:
     """Allocate the batch across DRAFT_THEMES by share, split to chunk_size.
 
@@ -205,6 +225,16 @@ def run_batch(
             batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch,
                                                   max_tokens=config.STRUCTURE_MAX_TOKENS)
         except Exception as exc:
+            # A hard provider error (bad API key, no credits, unknown model, 404)
+            # will fail EVERY chunk the same way, so grinding through all the
+            # top-up calls only to raise a misleading "no candidates survived
+            # (ignores JSON schema)" wastes time and hides the cause. Abort now
+            # with the real reason, which the bot shows the user.
+            if _is_fatal_provider_error(exc):
+                raise RuntimeError(
+                    f"Generavimo tiekėjas „{llm.provider('draft')}“ atmetė užklausą "
+                    "— patikrink API raktą, modelį ir kreditus. Klaida: "
+                    f"{str(exc)[:200]}") from exc
             log.warning("chunk (%s) failed (%s); skipping it and continuing", label, exc)
             return []
         for cand in batch.candidates:

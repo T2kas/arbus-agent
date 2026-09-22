@@ -47,3 +47,20 @@ def test_mandate_text_travels_with_each_chunk():
     for _, label, focus in _theme_chunks(35, 15):
         assert focus.startswith("ONLY")
         assert len(focus) > 50, label
+
+
+def test_fatal_provider_errors_detected_but_transient_ones_not():
+    import requests
+    from arbus import pipeline
+
+    class _404(requests.HTTPError):
+        def __init__(self):
+            self.response = type("r", (), {"status_code": 404})()
+
+    assert pipeline._is_fatal_provider_error(_404())
+    assert pipeline._is_fatal_provider_error(
+        Exception("Error code: 400 - credit balance is too low"))
+    assert pipeline._is_fatal_provider_error(Exception("model_not_found"))
+    # transient / non-provider errors must NOT abort the whole batch
+    assert not pipeline._is_fatal_provider_error(Exception("Error code: 429 rate limit"))
+    assert not pipeline._is_fatal_provider_error(ValueError("no json object found"))

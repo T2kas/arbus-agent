@@ -270,6 +270,7 @@ def openai_chat(
     web_search: bool = False,
     response_format: dict | None = None,
 ) -> str:
+    model = (model or "").strip() or "gpt-5"          # blank model → 404; never send it
     input_items = ([{"role": "system", "content": system}] if system else []) + [
         {"role": "user", "content": user}
     ]

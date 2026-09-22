@@ -65,6 +65,16 @@ def _env_float(name: str, default: float) -> float:
         return default
 
 
+def _env_str(name: str, default: str) -> str:
+    """A string env var, but an unset OR EMPTY value → default.
+
+    GitHub Actions passes an undefined `${{ vars.X }}` as an EMPTY string, so a
+    bare os.environ.get(name, default) returns "" instead of the default and a
+    model id ends up blank — which made OpenAI's /v1/responses answer 404 for
+    every call. This keeps a missing repo Variable harmless."""
+    return os.environ.get(name, "").strip() or default
+
+
 # Generation model. Sonnet by default: a full Opus batch with adaptive thinking
 # and many searches per chunk burned ~$5, and with the same web search and
 # deterministic gates around it Sonnet loses very little. Easy toggle to compare:
@@ -496,7 +506,7 @@ ZAI_STRUCTURE_MIN_TOKENS = 20000
 # chunks than the search-native providers.
 ZAI_DRAFT_CHUNK_SIZE = 8
 
-PERPLEXITY_MODEL = os.environ.get("PERPLEXITY_MODEL", "sonar-pro")  # draft + verify
+PERPLEXITY_MODEL = _env_str("PERPLEXITY_MODEL", "sonar-pro")  # draft + verify
 # sonar-pro for structuring too: the small "sonar" model corrupts Lithuanian
 # diacritics when copying text (tested 2026-07-13).
 PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
@@ -510,7 +520,7 @@ PERPLEXITY_STRUCTURE_MODEL = "sonar-pro"
 # uses the SAME Anthropic search as Opus at about half the cost; Opus only for
 # maximum reasoning on ambiguous cases. This Perplexity model applies only if
 # you still route the check through Perplexity.
-PERPLEXITY_AICHECK_MODEL = os.environ.get(
+PERPLEXITY_AICHECK_MODEL = _env_str(
     "PERPLEXITY_AICHECK_MODEL", "sonar-reasoning-pro")
 
 # ── OpenRouter: one key → OpenAI / DeepSeek / Gemini / … + web search ────────
@@ -520,9 +530,9 @@ PERPLEXITY_AICHECK_MODEL = os.environ.get(
 #   Resolution (reasoning matters): openai/gpt-5 (default), openai/o4-mini,
 #     deepseek/deepseek-r1 (cheapest reasoning), google/gemini-2.5-pro.
 #   Search engine: "exa" ($0.005/search) or "parallel" ($0.001, cheapest).
-OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "openai/gpt-5")
-OPENROUTER_AICHECK_MODEL = os.environ.get("OPENROUTER_AICHECK_MODEL", "openai/gpt-5")
-OPENROUTER_STRUCTURE_MODEL = os.environ.get(
+OPENROUTER_MODEL = _env_str("OPENROUTER_MODEL", "openai/gpt-5")
+OPENROUTER_AICHECK_MODEL = _env_str("OPENROUTER_AICHECK_MODEL", "openai/gpt-5")
+OPENROUTER_STRUCTURE_MODEL = _env_str(
     "OPENROUTER_STRUCTURE_MODEL", "openai/gpt-5")
 OPENROUTER_SEARCH_ENGINE = os.environ.get("OPENROUTER_SEARCH_ENGINE", "exa")
 OPENROUTER_SEARCH_RESULTS = int(os.environ.get("OPENROUTER_SEARCH_RESULTS", "5"))
@@ -531,10 +541,10 @@ OPENROUTER_SEARCH_RESULTS = int(os.environ.get("OPENROUTER_SEARCH_RESULTS", "5")
 # Direct OpenAI, for testing GPT-5 / o-series on their own credits. Swap the
 # model to compare: gpt-5 (default), gpt-5-mini (cheaper), o4-mini (reasoning).
 # OpenAI's web search accepts a Lithuania country code, so it is localized here.
-OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-5")
-OPENAI_AICHECK_MODEL = os.environ.get("OPENAI_AICHECK_MODEL", "gpt-5")
-OPENAI_STRUCTURE_MODEL = os.environ.get("OPENAI_STRUCTURE_MODEL", "gpt-5")
-OPENAI_SEARCH_COUNTRY = os.environ.get("OPENAI_SEARCH_COUNTRY", "LT")
+OPENAI_MODEL = _env_str("OPENAI_MODEL", "gpt-5")
+OPENAI_AICHECK_MODEL = _env_str("OPENAI_AICHECK_MODEL", "gpt-5")
+OPENAI_STRUCTURE_MODEL = _env_str("OPENAI_STRUCTURE_MODEL", "gpt-5")
+OPENAI_SEARCH_COUNTRY = _env_str("OPENAI_SEARCH_COUNTRY", "LT")
 # Reasoning models spend output budget thinking; floor the visible-answer room
 # generously, or GPT-5 can burn the whole budget reasoning and return an empty
 # message (the weather market came back <no output>). Unused tokens are not

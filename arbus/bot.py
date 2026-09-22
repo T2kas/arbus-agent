@@ -157,8 +157,14 @@ def _cmd_markets(token: str, chat_id: str, parts: list[str]) -> None:
     skip_verify = "fast" in [p.lower() for p in parts[1:]]
     _send(token, chat_id, f"Generuoju {count} rinkų kandidatų... ⏳ (kelios minutės)")
     llm.reset_usage()
-    result = pipeline.run_batch(count=count, skip_verify=skip_verify,
-                                progress=lambda msg: log.info("%s", msg))
+    try:
+        result = pipeline.run_batch(count=count, skip_verify=skip_verify,
+                                    progress=lambda msg: log.info("%s", msg))
+    except RuntimeError as exc:
+        # A clear, actionable failure (bad provider key/model/credits, or nothing
+        # survived) — show it instead of a generic "žiūrėk logą".
+        _send(token, chat_id, f"❌ Nepavyko sugeneruoti: {str(exc)[:350]}")
+        return
     for db_id, cand, _v, _n in result.accepted:         # remember ideas for /pridėti
         IDEAS[str(db_id)] = compose.summary_from_candidate(cand)
     cost = llm.usage_line()                              # "💶 kaina ~0.30 € (...)"

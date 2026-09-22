@@ -519,3 +519,33 @@ def test_perplexity_structured_call_does_not_append_citations(monkeypatch):
     monkeypatch.setattr(llm.requests, "post", lambda *a, **k: _Resp())
     out = llm.perplexity_chat("q", response_format={"type": "json_schema"})
     assert out == '{"ok": true}'                     # no citations appended → valid JSON
+
+
+def test_empty_env_var_falls_back_to_default(monkeypatch):
+    """GitHub passes an unset Variable as '' — a blank model id 404'd OpenAI.
+    _env_str must treat empty as unset so the default applies."""
+    monkeypatch.setenv("OPENAI_MODEL", "")          # as CI passes ${{ vars.OPENAI_MODEL }}
+    assert config._env_str("OPENAI_MODEL", "gpt-5") == "gpt-5"
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-5-mini")
+    assert config._env_str("OPENAI_MODEL", "gpt-5") == "gpt-5-mini"
+    monkeypatch.delenv("OPENAI_MODEL", raising=False)
+    assert config._env_str("OPENAI_MODEL", "gpt-5") == "gpt-5"
+
+
+def test_openai_chat_never_sends_a_blank_model(monkeypatch):
+    """Even if a blank model reaches the client, it must not hit the API blank."""
+    captured = {}
+
+    class _Resp:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self): return {"output_text": "ok", "usage": {}}
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        captured["model"] = json.get("model")
+        return _Resp()
+
+    monkeypatch.setattr(llm.requests, "post", fake_post)
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    llm.openai_chat("hi", model="")
+    assert captured["model"] == "gpt-5"
