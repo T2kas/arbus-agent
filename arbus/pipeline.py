@@ -39,8 +39,16 @@ class BatchResult:
 
 
 def _is_rate_limited(exc: Exception) -> bool:
-    """A transient rate limit (HTTP 429) — worth a backoff+retry, not a skip."""
+    """A TRANSIENT rate limit (HTTP 429) — worth a backoff+retry.
+
+    Not every 429 is transient: OpenAI returns 429 for "no credits remaining"
+    (insufficient_quota) too, which a backoff can never clear. Those are billing
+    errors and are handled by _is_fatal_provider_error instead, so exclude them
+    here — otherwise the bot wastes its backoff on a dead account."""
     s = str(exc).lower()
+    if any(k in s for k in ("insufficient_quota", "no credits", "credit_balance",
+                            "credit balance", "billing", "exceeded your current quota")):
+        return False                                     # a quota/billing 429 is fatal, not transient
     if "429" in s or "too many requests" in s or "rate limit" in s or "rate_limit" in s:
         return True
     import requests as _rq

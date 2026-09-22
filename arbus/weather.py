@@ -1244,6 +1244,13 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
                                              alert=alert, do_resolve=do_resolve)
     reports += sp_reports
     changed = changed or sp_changed
+    # Daily fuel-price markets (LEA national average) — resolved the same way.
+    if config.FUEL_ENABLED:
+        from . import fuel                                # lazy: fuel imports weather
+        f_reports, f_changed = fuel.resolve_markets(rows, now, tz, state,
+                                                     alert=alert, do_resolve=do_resolve)
+        reports += f_reports
+        changed = changed or f_changed
     if changed:
         save_state(state)
 
@@ -1252,4 +1259,9 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
     if do_create and (force_create or now.astimezone(tz).hour >= config.WEATHER_CREATE_HOUR):
         specs = plan_new_markets(rows, now, tz)
         reports += create_markets(specs, alert=alert, do_create=True)
+        # Daily fuel markets: create tomorrow's the same way, one after another.
+        if config.FUEL_ENABLED:
+            from . import fuel                            # lazy: fuel imports weather
+            f_specs = fuel.plan_new_markets(rows, now, tz)
+            reports += fuel.create_markets(f_specs, alert=alert, do_create=True)
     return reports, ""

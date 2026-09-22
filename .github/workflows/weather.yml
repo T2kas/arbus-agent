@@ -71,6 +71,13 @@ jobs:
           WEATHER_LIQUIDITY: ${{ vars.WEATHER_LIQUIDITY }}
           WEATHER_CLOSE_HOUR: ${{ vars.WEATHER_CLOSE_HOUR }}
           WEATHER_HORIZON_DAYS: ${{ vars.WEATHER_HORIZON_DAYS }}
+          # Daily fuel-price markets are created + resolved inside the same run
+          # (LEA national average). Defaults on; set FUEL_ENABLED=false to skip.
+          FUEL_ENABLED: ${{ vars.FUEL_ENABLED }}
+          FUEL_IMAGE: ${{ vars.FUEL_IMAGE }}
+          FUEL_LIQUIDITY: ${{ vars.FUEL_LIQUIDITY }}
+          FUEL_CATEGORY: ${{ vars.FUEL_CATEGORY }}
+          FUEL_CLOSE_HOUR: ${{ vars.FUEL_CLOSE_HOUR }}
         run: |
           # Resolve + create only when opted in: WEATHER_RESOLVE=true (schedule)
           # or the dispatch input. Otherwise monitor + alert without any writes.

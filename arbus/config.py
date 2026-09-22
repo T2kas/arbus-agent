@@ -588,6 +588,11 @@ OPENAI_MIN_OUTPUT_TOKENS = int(os.environ.get("OPENAI_MIN_OUTPUT_TOKENS", "8000"
 # Default "low" — GPT-5's default effort billed ~1 EUR for one check; low keeps
 # the wrong-year/namesake reasoning at a fraction of the cost. "" omits it.
 OPENAI_REASONING_EFFORT = os.environ.get("OPENAI_REASONING_EFFORT", "low")
+# Force GPT-5 to actually USE web search. With "auto" (the API default) GPT-5,
+# given a large headlines/pulse context, often answered without searching, so
+# the batch was grounded only on what we fed it and searches read 0. "required"
+# makes it call the web_search tool. Set OPENAI_TOOL_CHOICE=auto to relax it.
+OPENAI_TOOL_CHOICE = _env_str("OPENAI_TOOL_CHOICE", "required")
 
 # Draft in chunks: Perplexity output caps around 8K tokens, so one call can't
 # reliably carry 35 candidates through draft + structure.
@@ -978,6 +983,26 @@ COMPOSE_MAX_TOKENS = _env_int("COMPOSE_MAX_TOKENS", 12000)
 # offset, in-flight /pridėti uploads, and the last batch's ideas — so the
 # interactive flow works from the Telegram chat with no always-on process.
 BOT_STATE_PATH = os.environ.get("BOT_STATE_PATH", "state/bot_state.json")
+
+# ── Daily fuel-price markets (created + resolved in weather.run) ─────────────
+# Like the weather markets but for the LEA national daily average: one bucketed
+# market per fuel per day ("Vidutinė benzino A95 / dyzelino kaina … rugsėjo 23
+# d.?"), resolved from the ena.lt bulletin for that EXACT date, and the next
+# day's market created the same way (same image/rules, buckets from the latest
+# price). Only these recurring daily markets are auto-managed — not the ladders
+# or highest-price markets. Needs the service_role key. Opt-in via FUEL_ENABLED.
+FUEL_ENABLED = os.environ.get("FUEL_ENABLED", "on").strip().lower() not in ("off", "false", "0", "no")
+FUEL_CATEGORY = _env_str("FUEL_CATEGORY", "ekonomika")
+FUEL_LIQUIDITY = _env_int("FUEL_LIQUIDITY", 50000)
+FUEL_IMAGE = _env_str("FUEL_IMAGE", "")           # reused from an existing fuel market if empty
+# Daily change std €/l — how far tomorrow's average lands from today's. Fuel
+# moves ~1–2 cents/day, so the buckets are ~1 cent wide.
+FUEL_FORECAST_SIGMA = _env_float("FUEL_FORECAST_SIGMA", 0.012)
+FUEL_HORIZON_DAYS = _env_int("FUEL_HORIZON_DAYS", 1)     # create tomorrow's
+FUEL_CREATE_HOUR = _env_int("FUEL_CREATE_HOUR", 18)     # create from this Vilnius hour
+# Close before the ~10:00 measurement so nobody trades on the day's known price.
+FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 9)
+FUEL_CLOSE_MINUTE = _env_int("FUEL_CLOSE_MINUTE", 0)
 
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about

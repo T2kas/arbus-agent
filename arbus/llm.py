@@ -298,6 +298,9 @@ def openai_chat(
         if len(loc) > 1:
             tool["user_location"] = loc
         payload["tools"] = [tool]
+        # Force the model to actually search instead of answering from context.
+        if config.OPENAI_TOOL_CHOICE and config.OPENAI_TOOL_CHOICE.lower() != "auto":
+            payload["tool_choice"] = config.OPENAI_TOOL_CHOICE
     if response_format:
         # Translate a Chat-Completions-style response_format into the Responses
         # API's text.format shape, so structuring can reuse the shared helper.

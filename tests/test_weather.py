@@ -121,6 +121,8 @@ def wired(monkeypatch, tmp_path):
     monkeypatch.setattr(weather.notify, "send", lambda msg: calls["telegram"].append(msg))
     # Resolution tests should not touch the creation path.
     monkeypatch.setattr(weather, "plan_new_markets", lambda *a, **k: [])
+    # Daily fuel markets are exercised by their own tests, not the weather ones.
+    monkeypatch.setattr(config, "FUEL_ENABLED", False)
     return calls
 
 
