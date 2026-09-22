@@ -1278,7 +1278,7 @@
   "station": "klaipedos-ams"
  },
  "4385ede3-2a70-424b-a84f-d41f5f4ec6cd": {
-  "checksum": "cafb3968c89a48681c3f24540fd1bb9071db654d24d35eb94f6570c71ffc0ded",
+  "checksum": "87365eb995022964bf17241ebf69f0c41b0410a6ce2a5e3062c89eb6ca9ce23a",
   "current_maximum": null,
   "date": "2026-09-23",
   "measurements": {},
@@ -2467,10 +2467,10 @@
   "station": "kauno-ams"
  },
  "896399cc-f32a-4e5c-bf96-b0d08ea2f930": {
-  "checksum": "cafb3968c89a48681c3f24540fd1bb9071db654d24d35eb94f6570c71ffc0ded",
-  "current_maximum": 17.5,
+  "checksum": "87365eb995022964bf17241ebf69f0c41b0410a6ce2a5e3062c89eb6ca9ce23a",
+  "current_maximum": 17.7,
   "date": "2026-09-22",
-  "max_received_at": "2026-09-22T12:10:51.014101+00:00",
+  "max_received_at": "2026-09-22T14:10:46.591582+00:00",
   "measurements": {
    "2026-09-21 21:00:00": {
     "checksum": "04311cade39f74aa4a096d70611d28aa76b2a87b79004d31b512c037f35be328",
@@ -2573,6 +2573,12 @@
     "received_at": "2026-09-22T13:10:57.135901+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 17.5
+   },
+   "2026-09-22 14:00:00": {
+    "checksum": "87365eb995022964bf17241ebf69f0c41b0410a6ce2a5e3062c89eb6ca9ce23a",
+    "received_at": "2026-09-22T14:10:46.591582+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 17.7
    }
   },
   "resolved": false,
@@ -3023,10 +3029,10 @@
  },
  "b18421a6-e897-463f-a8ce-9ef0a6c5f0cd": {},
  "b4465e96-fd52-4e5e-b9ca-c38056ea9674": {
-  "checksum": "2b14d44593800200cad60abdbe907dbcc7e4d2ae2d4ef311195880b2c8efc85d",
-  "current_maximum": 14.4,
+  "checksum": "18dfd874c222c2604752ff993c575db951535b803e6b29b751a28cbb54f6e776",
+  "current_maximum": 14.5,
   "date": "2026-09-22",
-  "max_received_at": "2026-09-22T12:10:51.014101+00:00",
+  "max_received_at": "2026-09-22T14:10:46.591582+00:00",
   "measurements": {
    "2026-09-21 21:00:00": {
     "checksum": "c89d4386b54f1b5a532c15096200db455530a9b8a77778a68ecc6d68b32c3565",
@@ -3129,6 +3135,12 @@
     "received_at": "2026-09-22T13:10:57.135901+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 14.4
+   },
+   "2026-09-22 14:00:00": {
+    "checksum": "18dfd874c222c2604752ff993c575db951535b803e6b29b751a28cbb54f6e776",
+    "received_at": "2026-09-22T14:10:46.591582+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 14.5
    }
   },
   "resolved": false,
@@ -4124,7 +4136,7 @@
   "station": "kauno-ams"
  },
  "d5030210-e981-4c18-8cb7-253a220053f6": {
-  "checksum": "12741da4d8b6bf0b2853195495b9cb5c62b1f45e003b7ceed015d491e9dd82b0",
+  "checksum": "b7cef145c50b111f3d8b76c71d1c7a9a7af447e163cbf87f99d77aa77bdd50e5",
   "current_maximum": 12.5,
   "date": "2026-09-22",
   "max_received_at": "2026-09-22T12:10:51.014101+00:00",
@@ -4230,6 +4242,12 @@
     "received_at": "2026-09-22T13:10:57.135901+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 12.1
+   },
+   "2026-09-22 14:00:00": {
+    "checksum": "b7cef145c50b111f3d8b76c71d1c7a9a7af447e163cbf87f99d77aa77bdd50e5",
+    "received_at": "2026-09-22T14:10:46.591582+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 10.9
    }
   },
   "resolved": false,
@@ -4661,7 +4679,7 @@
   "resolved_via": "sports"
  },
  "e666398e-6e42-4b6b-8dac-9b93cddbfd9c": {
-  "checksum": "12741da4d8b6bf0b2853195495b9cb5c62b1f45e003b7ceed015d491e9dd82b0",
+  "checksum": "b7cef145c50b111f3d8b76c71d1c7a9a7af447e163cbf87f99d77aa77bdd50e5",
   "current_maximum": null,
   "date": "2026-09-23",
   "measurements": {},
@@ -4939,7 +4957,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "fab32d0a-52c8-4a1c-8db4-2745745300d5": {
-  "checksum": "2b14d44593800200cad60abdbe907dbcc7e4d2ae2d4ef311195880b2c8efc85d",
+  "checksum": "18dfd874c222c2604752ff993c575db951535b803e6b29b751a28cbb54f6e776",
   "current_maximum": null,
   "date": "2026-09-23",
   "measurements": {},
