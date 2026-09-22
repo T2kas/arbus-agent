@@ -204,7 +204,9 @@ NASDAQ_VILNIUS_TICKERS: list[tuple[str, str]] = [
 # add a _spotify() fetcher to pulse.SOURCES when you wire a key.
 
 # ── Batch shape ─────────────────────────────────────────────────────────────
-DEFAULT_BATCH_SIZE = 35
+# 15 by default: the team wants a smaller, higher-signal batch — fewer, better
+# markets over a big pile that includes filler.
+DEFAULT_BATCH_SIZE = _env_int("DEFAULT_BATCH_SIZE", 15)
 
 # Drafting is THEMED: each chunk carries a mandatory theme, so the balance is
 # enforced structurally in code — the model cannot drift into view-count bait
@@ -336,6 +338,34 @@ VAGUE_STEMS = [
     "sužibės", "suzibes",
     "nustebins",
 ]
+
+# ── Low-value "market just to be a market" patterns ─────────────────────────
+# Team direction 2026-09-22: the batch had too many chart-tracking music markets
+# "about nothing" and too many niche single-athlete stat props. Reject both.
+#
+# 1) CHART-POSITION PERSISTENCE — asking whether the ALREADY-KNOWN leader stays
+#    on top ("ar „X" išliks #1 / top 10", "iki kada išsilaikys #1"). The winner
+#    is already known, so there is no real question. Matches a persistence verb
+#    (išlieka / išsilaiko / liks / išsilaikys) near a rank word (#1 / top / pirm
+#    / vieta). NOTE: "kas bus #1?" (who WILL be #1) has no persistence verb and
+#    stays legal — genuine uncertainty.
+# A persistence VERB (stays / holds on / doesn't drop) co-occurring with a RANK
+# token (#1 / top N / first place) means "will the current leader stay on top" —
+# the answer is already known. Checked as co-occurrence (both present), which is
+# robust to word order and Lithuanian inflection without a brittle gap regex.
+CHART_PERSIST_VERB_RE = re.compile(
+    r"išlie|islie|išlik|islik|išsilaik|issilaik|nenukris|nekris|"
+    r"\bliks\b|\blieka\b|\blaikysis\b|\bilaikys\b", re.IGNORECASE)
+CHART_RANK_RE = re.compile(
+    r"#\s*\d|\btop\s*\d|\bnr\.?\s*\d|pirmoj|pirmame|pirma\w*\s+viet|pirmoje\s+viet",
+    re.IGNORECASE)
+# 2) SINGLE-ATHLETE MICRO-STAT PROP — one player's box-score line ("ar X surinks
+#    dviženklį", "ar X padarys dublį dublį", double-double / triple-double). Too
+#    niche for a mass market.
+ATHLETE_STATLINE_RE = re.compile(
+    r"dviženkl|dvizenkl|dublis\s+dublis|dubl[įiı]\s+dubl|dvigub\w*\s+dubl|"
+    r"trigub\w*\s+dubl|double.?double|triple.?double",
+    re.IGNORECASE)
 
 # ── Open-ended binary questions need a time anchor ──────────────────────────
 # "Ar rinktinė paskelbs galutinį sąrašą?" WILL eventually happen — without a

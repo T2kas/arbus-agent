@@ -421,3 +421,28 @@ def test_multi_markets_get_the_later_official_result_rule_not_ne():
     fixed, _ = validate.validate_candidate(cand, TODAY)
     assert "pirmą oficialų rezultatą" in fixed.resolution_hint_lt
     assert "„Ne“" not in fixed.resolution_hint_lt
+
+
+def test_lint_low_value_rejects_chart_persistence():
+    from arbus import validate
+    assert validate.lint_low_value('„Kas Kaltas?“ išlieka #1 Apple Music LT iki rugsėjo 29?')
+    assert validate.lint_low_value('„Kas Kaltas?“ #1 Apple Music LT – iki kada išsilaikys?')
+    assert validate.lint_low_value('Ar daina išliks top 10 iki spalio?')
+    # who WILL be #1 is genuine uncertainty — keep it
+    assert not validate.lint_low_value('Kas #1 Spotify Lietuva penktadienį?')
+    # reaching a position (not staying) is allowed
+    assert not validate.lint_low_value('„Movin To The Sun“ Top 3 Apple Music iki rugsėjo 29?')
+
+
+def test_lint_low_value_rejects_single_athlete_statline():
+    from arbus import validate
+    assert validate.lint_low_value('R. Jokubaitis dviženklis pirmose Eurolygos rungtynėse?')
+    assert validate.lint_low_value('D. Sabonis – dublis dublis NBA sezono starte?')
+    # a team result is fine
+    assert not validate.lint_low_value('Rytas – Gargždai: kas laimės?')
+    assert not validate.lint_low_value('Kiek pergalių „Žalgiris“ turės po pirmų 5 rungtynių?')
+
+
+def test_default_batch_size_is_15():
+    from arbus import config
+    assert config.DEFAULT_BATCH_SIZE == 15

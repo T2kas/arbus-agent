@@ -317,6 +317,11 @@ def openai_chat(
     u = data.get("usage") or {}                         # so the EUR cost line is not blank
     _USAGE["input"] += u.get("input_tokens", 0) or 0
     _USAGE["output"] += u.get("output_tokens", 0) or 0
+    # Count the web searches the model actually ran (Responses API emits one
+    # web_search_call item per search) — otherwise the cost line reads "0 paieškos"
+    # even when it searched, and we cannot tell whether it searched at all.
+    _USAGE["searches"] += sum(1 for it in (data.get("output") or [])
+                              if isinstance(it, dict) and it.get("type") == "web_search_call")
     return _strip_reasoning(_openai_output_text(data))
 
 

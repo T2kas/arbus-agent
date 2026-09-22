@@ -27,12 +27,20 @@ so you do not have to invent popularity. When a pulse item is a person, show,
 song, meme, game, or drama that a mass 16-35 audience recognizes, it is a prime
 market seed.
 
-STEP 1 — SCOUT (use web search extensively, anchored to the two signals):
-- Start from the PULSE. For each strong pulse signal, ask: is this a real,
-  current, still-undecided thing a mass young audience recognizes? If yes,
-  search the live web to pin down the specifics — the actual people named, the
-  actual event/date, the current number — and build a market on it. Prefer
-  pulse-driven culture/hype markets over yet another news-desk story.
+STEP 1 — SCOUT (you MUST use web search — do not work from the signals alone):
+- The PULSE and HEADLINES are HINTS about what is hot, NOT a market factory. Do
+  NOT convert chart positions and follower counts into markets wholesale. Take a
+  hot signal as a starting point, then SEARCH the live web to FIND the genuinely
+  interesting, still-UNDECIDED, emotional angle a mass audience would argue about
+  — the drama, the rivalry, the upcoming decision or release, the "will they /
+  won't they". YOU find and describe the topic; you do not just transcribe
+  Spotify / YouTube / Apple charts.
+- THE TEST for every idea: would a normal 16-35 Lithuanian find this interesting
+  or feel something about it, AND genuinely NOT know the answer yet? If the
+  answer is already essentially known (the current #1 song, a near-certain
+  favourite), it is a market about nothing — skip it. Quality over quantity:
+  fewer, better markets. It is better to return fewer strong markets than to pad
+  the batch with filler.
 - Cross-reference the two signals: a topic in BOTH the headlines and the pulse
   is a strong, high-attention market. A topic hot in the pulse but absent from
   news is exactly the trendy/hype market this app needs.
@@ -54,12 +62,13 @@ STEP 1 — SCOUT (use web search extensively, anchored to the two signals):
 - GO DEEPER INTO SOCIAL MEDIA around the pulse seeds: what big Lithuanian
   TikTok/Instagram/YouTube creators are doing right now — the ACTUAL trending
   dramas with the actual people named (e.g. Viltė & Viktoras / viktorasbalykov
-  style stories), feuds, new projects, viral videos. Check Spotify Top 50
-  Lietuva and YouTube Trending LT. For any follower/metric market, look up the
-  current number FIRST and state it in the rationale — never guess milestones.
-  Only creators a mass audience recognizes; no niche accounts. At least a third
-  of the batch comes from this culture/influencer/hype territory, including 1-3
-  absurd-angle markets on FAMILIAR subjects.
+  style stories), feuds, new projects, viral videos, a big release everyone is
+  waiting for. Prefer the DRAMA and the EVENT over a raw number: a feud outcome,
+  a comeback, a collaboration, who wins a show — these beat "will X reach N
+  views". Cap the pure metric/chart markets: AT MOST ONE "reach N views /
+  streams / followers / chart position" market in this chunk, and only for
+  something the whole country knows; the rest must be events / decisions / drama.
+  Only creators a mass audience recognizes; no niche accounts.
 - APPLY THE ATTENTION GATE to every topic. The pulse already gives you hard
   numbers for the signals it surfaced; for anything else, search for engagement
   evidence (comment counts, multiple outlets covering it, social buzz). If
@@ -69,10 +78,21 @@ STEP 1 — SCOUT (use web search extensively, anchored to the two signals):
   the event is real, current, and NOT already decided. Note the exact article
   URL (full https://... link, not just the outlet name).
 
-STEP 2 — DRAFT exactly {count} quick-mode market candidates:
+STEP 2 — DRAFT up to {count} quick-mode market candidates (fewer is fine if the
+rest would be filler — never invent weak markets just to hit the number):
 - THIS CHUNK'S MANDATE — every candidate in this chunk must fit it, no
   exceptions and no drifting to other territory:
   {focus}
+- BANNED — never draft these (they are markets about nothing):
+  • Chart-position PERSISTENCE — "ar [jau #1 daina] išliks #1 / top N", "iki kada
+    išsilaikys #1 / top 10". The current leader is already known. (Asking who
+    WILL become #1 is fine — that is uncertain.)
+  • A single athlete's box-score line — "ar X surinks dviženklį", "ar X padarys
+    dublį dublį", one player's points/rebounds/assists prop. Too niche.
+  • Anything already decided or a near-certainty (a lopsided favourite,
+    yesterday's result). If there is no real doubt, it is not a market.
+  • Filler with no emotional or informative hook — a market that exists only to
+    be a market. Every candidate must be something people CARE about.
 - Wording follows HEADLINE & OPTION CLARITY strictly: as SHORT and simple as
   possible, instantly readable, exact entities and thresholds, but NO data-
   source attribution ("pagal X duomenis") and NO date in the headline unless

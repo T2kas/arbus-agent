@@ -60,7 +60,7 @@ def _install_fake_llm(monkeypatch, quality):
             if focus[:60] in prompt:
                 state["theme"] = label
                 break
-        marker = "DRAFT exactly "
+        marker = "DRAFT up to "
         state["n"] = int(prompt.split(marker)[1].split()[0])
         return "drafted"
 

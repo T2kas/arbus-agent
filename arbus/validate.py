@@ -86,6 +86,19 @@ def lint_headline_format(question: str) -> list[str]:
     return problems
 
 
+def lint_low_value(question: str) -> list[str]:
+    """Reject "market just to be a market" ideas the team flagged: chart-position
+    persistence (asking whether the already-known #1 stays #1 / top N) and
+    single-athlete micro-stat props (one player's double-digit / double-double).
+    Both are non-repairable — the IDEA is weak, not the wording."""
+    hits: list[str] = []
+    if config.CHART_PERSIST_VERB_RE.search(question) and config.CHART_RANK_RE.search(question):
+        hits.append("chart-position persistence (the leader is already known)")
+    if config.ATHLETE_STATLINE_RE.search(question):
+        hits.append("single-athlete micro-stat prop (too niche)")
+    return hits
+
+
 def lint_open_ended(question: str, market_type: str) -> str | None:
     """Reject binary questions with no time anchor at all.
 
@@ -235,6 +248,10 @@ def validate_candidate(
     fmt = lint_headline_format(cand.question_lt)
     if fmt:
         return None, f"headline format: {', '.join(fmt)}"
+
+    low_value = lint_low_value(cand.question_lt)
+    if low_value:
+        return None, f"low-value market: {', '.join(low_value)}"
 
     if not looks_lithuanian(cand.question_lt):
         return None, "question does not look Lithuanian"
