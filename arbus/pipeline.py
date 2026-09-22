@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
@@ -35,6 +36,16 @@ class BatchResult:
     @property
     def needs_review(self) -> int:
         return sum(1 for _, _, v, _ in self.accepted if v in ("UNCLEAR", "NOT_VERIFIED"))
+
+
+def _is_rate_limited(exc: Exception) -> bool:
+    """A transient rate limit (HTTP 429) — worth a backoff+retry, not a skip."""
+    s = str(exc).lower()
+    if "429" in s or "too many requests" in s or "rate limit" in s or "rate_limit" in s:
+        return True
+    import requests as _rq
+    return (isinstance(exc, _rq.HTTPError)
+            and getattr(getattr(exc, "response", None), "status_code", 0) == 429)
 
 
 def _is_fatal_provider_error(exc: Exception) -> bool:
@@ -217,25 +228,39 @@ def run_batch(
             headlines=headlines, pulse=pulse_text, feedback=feedback_text,
             avoid=avoid, timing=timing,
         )
-        try:
-            draft_text = llm.research(draft_prompt, system=system,
-                                      max_uses=config.SEARCH_MAX_USES_DRAFT,
-                                      max_tokens=config.DRAFT_MAX_TOKENS, stage="draft")
-            structure_prompt = llm.load_prompt("structure", draft=draft_text)
-            batch: CandidateBatch = llm.structure(structure_prompt, CandidateBatch,
-                                                  max_tokens=config.STRUCTURE_MAX_TOKENS)
-        except Exception as exc:
-            # A hard provider error (bad API key, no credits, unknown model, 404)
-            # will fail EVERY chunk the same way, so grinding through all the
-            # top-up calls only to raise a misleading "no candidates survived
-            # (ignores JSON schema)" wastes time and hides the cause. Abort now
-            # with the real reason, which the bot shows the user.
-            if _is_fatal_provider_error(exc):
-                raise RuntimeError(
-                    f"Generavimo tiekėjas „{llm.provider('draft')}“ atmetė užklausą "
-                    "— patikrink API raktą, modelį ir kreditus. Klaida: "
-                    f"{str(exc)[:200]}") from exc
-            log.warning("chunk (%s) failed (%s); skipping it and continuing", label, exc)
+        batch: CandidateBatch | None = None
+        for attempt in range(config.DRAFT_RATELIMIT_RETRIES + 1):
+            try:
+                draft_text = llm.research(draft_prompt, system=system,
+                                          max_uses=config.SEARCH_MAX_USES_DRAFT,
+                                          max_tokens=config.DRAFT_MAX_TOKENS, stage="draft")
+                structure_prompt = llm.load_prompt("structure", draft=draft_text)
+                batch = llm.structure(structure_prompt, CandidateBatch,
+                                      max_tokens=config.STRUCTURE_MAX_TOKENS)
+                break
+            except Exception as exc:
+                # A rate limit (429) is transient — back off and retry rather than
+                # losing the chunk (and, in a burst, the whole batch).
+                if _is_rate_limited(exc) and attempt < config.DRAFT_RATELIMIT_RETRIES:
+                    wait = config.DRAFT_RATELIMIT_BACKOFF * (attempt + 1)
+                    log.warning("chunk (%s) rate-limited; backing off %ds (retry %d)",
+                                label, wait, attempt + 1)
+                    time.sleep(wait)
+                    continue
+                # A hard provider error (bad key, no credits, unknown model, 404)
+                # fails EVERY chunk the same way, so grinding through all the top-up
+                # calls only to raise a misleading "no candidates survived (ignores
+                # JSON schema)" wastes time and hides the cause. Abort now with the
+                # real reason, which the bot shows the user.
+                if _is_fatal_provider_error(exc):
+                    raise RuntimeError(
+                        f"Generavimo tiekėjas „{llm.provider('draft')}“ atmetė "
+                        "užklausą — patikrink API raktą, modelį ir kreditus. Klaida: "
+                        f"{str(exc)[:200]}") from exc
+                log.warning("chunk (%s) failed (%s); skipping it and continuing", label, exc)
+                return []
+        if batch is None:                                # exhausted rate-limit retries
+            log.warning("chunk (%s) still rate-limited after retries; skipping", label)
             return []
         for cand in batch.candidates:
             cand.theme = label

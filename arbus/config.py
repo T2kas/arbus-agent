@@ -121,6 +121,10 @@ DRAFT_THINKING = os.environ.get("ANTHROPIC_DRAFT_THINKING", "off")
 # these; Perplexity caps output near 8K regardless.
 DRAFT_MAX_TOKENS = _env_int("DRAFT_MAX_TOKENS", 16000)
 STRUCTURE_MAX_TOKENS = _env_int("STRUCTURE_MAX_TOKENS", 12000)
+# A rate limit (429) is transient — back off and retry a drafting chunk instead
+# of losing it (and, in a burst, the whole batch). Two retries at 15s, 30s.
+DRAFT_RATELIMIT_RETRIES = _env_int("DRAFT_RATELIMIT_RETRIES", 2)
+DRAFT_RATELIMIT_BACKOFF = _env_int("DRAFT_RATELIMIT_BACKOFF", 15)
 
 # Localize Anthropic web search to Lithuania. The `country` field rejects "LT"
 # with a 400 that aborts the call, but `city`/`region`/`timezone` are free-form

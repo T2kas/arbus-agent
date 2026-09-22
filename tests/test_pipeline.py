@@ -64,3 +64,13 @@ def test_fatal_provider_errors_detected_but_transient_ones_not():
     # transient / non-provider errors must NOT abort the whole batch
     assert not pipeline._is_fatal_provider_error(Exception("Error code: 429 rate limit"))
     assert not pipeline._is_fatal_provider_error(ValueError("no json object found"))
+
+
+def test_rate_limit_detected_separately_from_fatal():
+    from arbus import pipeline
+    assert pipeline._is_rate_limited(Exception("429 Client Error: Too Many Requests"))
+    assert pipeline._is_rate_limited(Exception("Rate limit reached"))
+    assert not pipeline._is_rate_limited(Exception("404 Not Found"))
+    # a 429 must NOT be treated as fatal (it is retryable), a 404 must
+    assert not pipeline._is_fatal_provider_error(Exception("429 Too Many Requests"))
+    assert pipeline._is_fatal_provider_error(Exception("404 Not Found for url"))
