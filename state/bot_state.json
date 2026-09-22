@@ -1,47 +1,55 @@
 {
- "offset": 63525494,
+ "offset": 63525495,
  "sessions": {},
  "ideas": {
   "1": {
-   "question": "„Kas Kaltas?“ išlieka #1 Apple Music LT iki rugsėjo 29?",
+   "question": "Kas bus #1 Spotify Lietuvoje sekmadienį?",
    "options": [
-    "Taip",
-    "Ne"
+    "„Kas Kaltas?“ — Jessica Shy & Igoris Kofas",
+    "„Jeigu Būčiau“ — Jessica Shy",
+    "„Palangoj“ — Different Dimension & QV",
+    "Kita daina"
    ],
    "probabilities": [
-    0.62,
-    0.38
+    0.55,
+    0.18,
+    0.12,
+    0.15
    ],
    "category": "kultura",
-   "resolve_by": "2026-09-29",
-   "resolution_hint": "Vertinama 2026-09-29 23:59 LT Top 100: Lithuania grojaraštyje; jei „Kas Kaltas?“ (Jessica Shy & Igoris Kofas) yra #1 – „Taip“, kitu atveju – „Ne“. Šaltinis: Apple Music „Top 100: Lithuania“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "resolve_by": "2026-09-27",
+   "resolution_hint": "Tikrinama 2026-09-27 dienos Spotify Top 50 – Lithuania 1-a pozicija; jei oficialus sąrašas nepasiekiamas, remiamasi kasdieniu LT topų archyvu. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
    "sources": [
-    "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
-    "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea?utm_source=openai",
-    "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea?utm_source=openai"
+    "https://open.spotify.com/playlist/37i9dQZEVXbMx56Rdq5lwc",
+    "https://spotify-top.com/charts/lt/daily"
    ],
-   "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/33/1c/c6/331cc6aa-a909-cda0-c314-04000f295ac2/3dd1c3de-efc3-4119-8ee0-706598d5da0b.png/1200x630wp-60.jpg",
-   "image_source": "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea"
+   "image_url": "https://charts-images.scdn.co/assets/locale_en/regional/daily/region_lt_default.jpg",
+   "image_source": "https://open.spotify.com/playlist/37i9dQZEVXbMx56Rdq5lwc"
   },
   "2": {
-   "question": "„Saulė nesileis“ Top 3 Spotify Lietuva iki rugsėjo 30?",
+   "question": "„Lietuvos balsas“ 13 sezono nugalėtojo komanda",
    "options": [
-    "Taip",
-    "Ne"
+    "Monika Liu komanda",
+    "AISTÈ komanda",
+    "Manto Jankavičiaus komanda",
+    "„Žemaitukai“ komanda"
    ],
    "probabilities": [
-    0.48,
-    0.52
+    0.3,
+    0.25,
+    0.22,
+    0.23
    ],
    "category": "kultura",
-   "resolve_by": "2026-09-30",
-   "resolution_hint": "Tikrinamas 2026-09-30 dienos Spotify Top 200 Lietuva (daily) sąrašas; jei „Saulė nesileis“ (Jessica Shy) yra Top 3 – „Taip“. Šaltinis: Spotify LT Daily Top 200. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "resolve_by": "2026-12-20",
+   "resolution_hint": "Sprendžiama pagal finalo transliacijoje paskelbtą nugalėtoją ir jo mokytojų komandą; jei finalas nukeliamas, sprendžiama po pirmo įvykusio finalo po šios datos.",
    "sources": [
-    "https://spotify-top.com/charts/lt/daily",
-    "https://spotify-top.com/charts/lt/daily?utm_source=openai"
+    "https://www.lrytas.lt/zmones/tv-antena/2026/07/15/news/paaiskejo-visi-projekto-lietuvos-balsas-mokytojai-43146312/",
+    "https://www.svyturioarena.lt/events/lietuvos-balsas-didysis-13-ojo-sezono-finalas/",
+    "https://www.bilietai.lt/naujienos/23-63-775/paaiskejo-visi-lietuvos-balso-mokytojai-i-projekta-sugrizo-mylimas-atlikejas"
    ],
-   "image_url": "https://spotify-top.com/og.png",
-   "image_source": "https://spotify-top.com/charts/lt/daily"
+   "image_url": "https://www.svyturioarena.lt/wp-content/uploads/2026/09/Balsas420.jpg",
+   "image_source": "https://www.svyturioarena.lt/events/lietuvos-balsas-didysis-13-ojo-sezono-finalas/"
   },
   "3": {
    "question": "„Saulė nesileis“ YouTube peržiūros pasieks 1,5 mln. iki spalio 5?",
@@ -64,112 +72,28 @@
    "image_source": ""
   },
   "4": {
-   "question": "„Rytas“ pateks į pusfinalį?",
+   "question": "Ar „Rytas“ pateks į tarpkontinentinės taurės finalą?",
    "options": [
     "Taip",
     "Ne"
    ],
    "probabilities": [
-    0.62,
-    0.38
-   ],
-   "category": "sportas",
-   "resolve_by": "2026-09-24",
-   "resolution_hint": "„Taip“, jei Rytas po grupės etapų pateks tarp dviejų geriausių savo grupėje ir bus priskirtas prie „Semi-Finals“ dalyvių FIBA turnyro puslapyje; priešingu atveju „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
-   "sources": [
-    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026",
-    "https://www.championsleague.basketball/en/news/lineup-confirmed-for-fiba-intercontinental-cup-in-beijing"
-   ],
-   "image_url": "https://assets.fiba.basketball/image/upload/w_1230,h_630,c_fill/f_auto/q_auto/l_.asset_mainlogo--competition_209126/c_fit,w_598,h_504/fl_layer_apply/.asset_simplifiedbackground--competition_209126?buster=20718",
-   "image_source": "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026"
-  },
-  "5": {
-   "question": "„Rytas“ – vieta Pekine",
-   "options": [
-    "Čempionai",
-    "2 vieta",
-    "3–4 vieta",
-    "5–6 vieta"
-   ],
-   "probabilities": [
-    0.18,
-    0.22,
-    0.35,
-    0.25
+    0.6,
+    0.4
    ],
    "category": "sportas",
    "resolve_by": "2026-09-27",
-   "resolution_hint": "Sprendžiama pagal galutinę komandų rikiuotę („Final“, „3rd Place Game“, „Class. 5–6“) FIBA turnyro puslapyje pasibaigus turnyrui; jei turnyras nukeliamas po termino – „Nepasibaigus, laikoma, kad rinka baigiasi pagal paskutinę FIBA paskelbtą oficialią komandų vietų rikiuotę iki termino“.",
+   "resolution_hint": "„Taip“, jei Rytas Vilnius patenka į FIBA Intercontinental Cup 2026 finalą (skelbiama FIBA oficialiame tvarkaraštyje ir rungtynių puslapiuose); jei komanda neiškovos vietos finale arba finalas neįvyks iki 2026-09-27 – „Ne“.",
    "sources": [
-    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026"
+    "https://www.fiba.basketball/en/news/meet-the-team-rytas-vilnius-2026",
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/watch-it-live-day-1-of-fiba-intercontinental-cup-2026",
+    "https://www.fiba.basketball/en/news/meet-the-team-rytas-vilnius-2026?utm_source=openai"
    ],
-   "image_url": "https://assets.fiba.basketball/image/upload/w_1230,h_630,c_fill/f_auto/q_auto/l_.asset_mainlogo--competition_209126/c_fit,w_598,h_504/fl_layer_apply/.asset_simplifiedbackground--competition_209126?buster=20718",
-   "image_source": "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026"
+   "image_url": "http://assets.fiba.basketball/image/upload/w_2000/f_auto/q_auto/v1789470396/ekltw4geizhhovphy5ng.jpg",
+   "image_source": "https://www.fiba.basketball/en/news/meet-the-team-rytas-vilnius-2026"
   },
-  "6": {
-   "question": "Kauno „Žalgiris“ – Toplygos čempionas 2026?",
-   "options": [
-    "Taip",
-    "Ne"
-   ],
-   "probabilities": [
-    0.52,
-    0.48
-   ],
-   "category": "sportas",
-   "resolve_by": "2026-11-30",
-   "resolution_hint": "„Taip“, jei pasibaigus 2026 m. sezonui Kauno „Žalgiris“ užims 1-ą vietą oficialioje Toplyga.lt galutinėje turnyrinėje lentelėje; atidėjus sezono pabaigą – sprendžiama pagal pirmą oficialiai paskelbtą galutinę lentelę. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
-   "sources": [
-    "https://toplyga.lt/turnyrine-lentele/1",
-    "https://toplyga.lt/uploads/files/2026-sezono-TOPLYGA-cempionato-varzybu-nuostatai.pdf"
-   ],
-   "image_url": "",
-   "image_source": ""
-  },
-  "7": {
-   "question": "Dyzelino kaina ≥ 2,25 €/l iki rugsėjo 30?",
-   "options": [
-    "Taip",
-    "Ne"
-   ],
-   "probabilities": [
-    0.38,
-    0.62
-   ],
-   "category": "ekonomika",
-   "resolve_by": "2026-10-01",
-   "resolution_hint": "Sprendžiama pagal 2026-09-30 dienos vidutinę dyzelino kainą Lietuvoje; šaltinis — viešai skelbiama degalų vidurkių statistika (dienos vidurkis) degalu-kaina.lt ar degalaipigiau.lt. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
-   "sources": [
-    "https://www.vz.lt/rinkos/2026/09/21/dyzelino-kaina-po-95-suolio-atsidure-istorinese-aukstumose-590342",
-    "https://degalu-kaina.lt/degalu-kainu-istorija",
-    "https://degalaipigiau.lt/istorija"
-   ],
-   "image_url": "https://www.vz.lt/image/1280/story/image/Sjuw6sMF-degalai.jpg?1729795298&label=",
-   "image_source": "https://www.vz.lt/rinkos/2026/09/21/dyzelino-kaina-po-95-suolio-atsidure-istorinese-aukstumose-590342"
-  },
-  "8": {
-   "question": "Elektra: savaitės vidurkis ≤ 95 €/MWh?",
-   "options": [
-    "Taip",
-    "Ne"
-   ],
-   "probabilities": [
-    0.58,
-    0.42
-   ],
-   "category": "ekonomika",
-   "resolve_by": "2026-10-02",
-   "resolution_hint": "Sprendžiama pagal „Litgrid“/Lietuvos energetikos agentūros skelbiamą 2026-09-23–09-29 savaitės vidutinę didmeninę kainą (€/MWh) Nord Pool LT zonoje; jei oficialus savaitės apibendrinimas nepasirodo — skaičiuojamas Nord Pool LT vidurkis toms datoms. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
-   "sources": [
-    "https://archyvai.lrt.lt/naujienos/verslas/4/3059144/lietuvoje-elektros-kaina-per-savaite-sumazejo-16-proc",
-    "https://www.ena.lt/Naujiena/seda-20260921/",
-    "https://nordpool.lv/lithuania/?language=lt"
-   ],
-   "image_url": "https://www.lrt.lt/img/2021/07/08/1007181-12243-1287x836.jpg",
-   "image_source": "https://archyvai.lrt.lt/naujienos/verslas/4/3059144/lietuvoje-elektros-kaina-per-savaite-sumazejo-16-proc"
-  },
-  "9": {
-   "question": "Oranžinis/raudonas LHMT įspėjimas Vilniaus apskrityje iki rugsėjo 29?",
+  "5": {
+   "question": "„Žalgiris“ pirmas namų mačas Eurolygoje: ar įveiks „Olympiacos“?",
    "options": [
     "Taip",
     "Ne"
@@ -178,80 +102,182 @@
     0.4,
     0.6
    ],
-   "category": "orai",
-   "resolve_by": "2026-09-30",
-   "resolution_hint": "Sprendžiama, jei LHMT (Meteo.lt arba programėlė) ar LT72 archyvas nurodo bent vieną oranžinio ar raudono lygio įspėjimą Vilniaus apskrityje 2026-09-22–09-29; jei nebuvo — „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "category": "sportas",
+   "resolve_by": "2026-09-29",
+   "resolution_hint": "„Taip“, jei Kauno „Žalgiris“ laimi namų rungtynes prieš „Olympiacos“ (rezultatas pagal Eurolygos oficialų tvarkaraštį/mačo įrašą); jei rungtynės neįvyks iki 2026-09-29 arba bus nukeltos vėliau – „Ne“.",
    "sources": [
-    "https://www.meteo.lt/",
-    "https://lt72.lt/kategorija/pranesimai/",
-    "https://news.google.com/articles/CBMioAFBVV95cUxNOUpUbWdyb21FYTZVcVNmWHRiVGxPTDQ4SDZwYlhxMmJYdDYtaGJhOHl0MVVKczkwcXdZYmlpTXJsVkhtcXh4MXhaX291N2FwdFZDa1gwN25hb2cycWJWWEZLZk1XV0xnZGwwQXpIaGUxcGFNa250TjhqUFdUMmt5N2ZoS3h1eFd0Tll0NHEtenBsMXoybkZXcWpuQ0pUN3NS?oc=5"
+    "https://www.olympiacosbc.gr/en/games/euroleague/schedule/2026.html",
+    "https://www.lrt.lt/naujienos/sportas/10/3005106/paskelbtas-eurolygos-tvarkarastis-zalgirio-arenoje-pirmieji-apsilankys-cempionai",
+    "https://www.olympiacosbc.gr/en/games/euroleague/schedule/2026.html?utm_source=openai"
    ],
-   "image_url": "https://www.meteo.lt/app/themes/slyva/images/social-default.png",
-   "image_source": "https://www.meteo.lt/"
+   "image_url": "https://www.lrt.lt/img/2026/02/13/2315342-756766-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/sportas/10/3005106/paskelbtas-eurolygos-tvarkarastis-zalgirio-arenoje-pirmieji-apsilankys-cempionai"
   },
-  "10": {
-   "question": "6 mėn. Euribor < 2,80 % iki spalio 15?",
+  "6": {
+   "question": "„Kas Kaltas?“ „YouTube“ pasieks 1,8 mln. peržiūrų iki spalio?",
    "options": [
     "Taip",
     "Ne"
    ],
    "probabilities": [
-    0.52,
-    0.48
+    0.58,
+    0.42
+   ],
+   "category": "influenceriai",
+   "resolve_by": "2026-10-31",
+   "resolution_hint": "Skaičiuojamas šio konkretaus vaizdo įrašo peržiūrų skaičius 2026-10-31 23:59 EEST: „Kas Kaltas?“ (YouTube ID: ROYdQLUjxDg); jei įrašas iki termino bus pašalintas arba paslėptas, laikoma „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "sources": [
+    "https://www.youtube.com/watch?v=ROYdQLUjxDg",
+    "https://www.youtube.com/watch?v=ROYdQLUjxDg&utm_source=openai",
+    "https://kworb.net/youtube/insights/lt.html",
+    "https://kworb.net/youtube/insights/lt.html?utm_source=openai",
+    "https://music.apple.com/lt/album/kas-kaltas/6784728491?i=6784728497",
+    "https://music.apple.com/us/song/6784728497?utm_source=openai",
+    "https://relaxfm.lt/jessica-shy-igoris-kofas-kas-kaltas/",
+    "https://relaxfm.lt/jessica-shy-igoris-kofas-kas-kaltas/?utm_source=openai"
+   ],
+   "image_url": "",
+   "image_source": ""
+  },
+  "7": {
+   "question": "Kada Vilniuje bus pradėtas šildymo sezonas?",
+   "options": [
+    "Iki rugsėjo 30 d.",
+    "Iki spalio 7 d.",
+    "Iki spalio 14 d.",
+    "Iki spalio 21 d."
+   ],
+   "probabilities": [
+    0.125,
+    0.188,
+    0.375,
+    0.312
+   ],
+   "category": "orai",
+   "resolve_by": "2026-10-22",
+   "resolution_hint": "Rinka sprendžiama pagal Vilniaus miesto savivaldybės ar AB „Vilniaus šilumos tinklai“/„Miesto gijos“ oficialų pranešimą apie šildymo sezono pradžią; jei iki nurodytos datos ji nepaskelbta, ta parinktis laikoma „Ne“.",
+   "sources": [
+    "https://vilnius.lt/naujienos/ijungtas-sildymas-svietimo-ir-gydymo-istaigose-sildyma-pradeti-gali-ir-kiekvieno-daugiabucio-savininkai?utm_source=openai",
+    "https://vmb.lt/senoji/nuomojamo-busto-prieziura/sildymas/?utm_source=openai",
+    "https://vilnius.lt/naujienos/sildymo-kompensacija-2026-2027-m-ka-svarbu-zinoti-gyventojams-1?utm_source=openai"
+   ],
+   "image_url": "https://vmb.lt/senoji/wp-content/uploads/2023/06/fireplace-6092518_1920.jpg",
+   "image_source": "https://vmb.lt/senoji/nuomojamo-busto-prieziura/sildymas/?utm_source=openai"
+  },
+  "8": {
+   "question": "Ar spalį dyzelino vidutinė kaina Lietuvoje viršys 2,30 €/l?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.45,
+    0.55
    ],
    "category": "ekonomika",
-   "resolve_by": "2026-10-16",
-   "resolution_hint": "Sprendžiama pagal oficialų 6 mėn. Euribor fiksingą 2026-10-15; jei tą dieną nepublikuojama — imamas artimiausios TARGET2 darbo dienos fiksingas. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "resolve_by": "2026-11-05",
+   "resolution_hint": "Sprendžiama pagal 2026 m. spalio mėn. dyzelino mėnesinį vidurkį Lietuvoje; šaltinis – LEA (Lietuvos energetikos agentūra) konsoliduojami duomenys (pvz., „Degalų kainų istorija“ ar kiti LEA pagrįsti vieši suvestiniai); jei spalio vidurkis > 2,30 €/l – „Taip“, priešingu atveju – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
    "sources": [
-    "https://euribor-rates.info/en/euribor-rate/6-month-rate/2026/09/",
-    "https://www.suomenpankki.fi/en/statistics/interest-rates-and-exchange-rates/euribor-rates/",
-    "https://euribor-rate.eu/euribor-6-month"
+    "https://degalu-kaina.lt/degalu-kainu-istorija?utm_source=openai",
+    "https://megakalendorius.lt/kuras-lietuva?utm_source=openai",
+    "https://www.kurokainoszemelapis.lt/dyzelino-kaina"
    ],
-   "image_url": "https://www.suomenpankki.fi/globalassets/bof/kuvat/tilastot/euriborkorot-1920x1080.jpg",
-   "image_source": "https://www.suomenpankki.fi/en/statistics/interest-rates-and-exchange-rates/euribor-rates/"
+   "image_url": "https://degalu-kaina.lt/logo512.png",
+   "image_source": "https://degalu-kaina.lt/degalu-kainu-istorija?utm_source=openai"
+  },
+  "9": {
+   "question": "Ar spalį Lietuvoje bus paskelbtas oro pavojus?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.55,
+    0.45
+   ],
+   "category": "kita",
+   "resolve_by": "2026-10-31",
+   "resolution_hint": "„Taip“, jei 2026 m. spalio 1–31 d. bent kartą Lietuvoje bus oficialiai paskelbtas oro pavojaus signalas (geltonas/raudonas/baltas) — skelbia Civilinės saugos/EPP sistemos pranešimai ir/ar juos patvirtinantys KAM/VRM pranešimai; jei tokio signalo nebus — „Ne“. Sprendžiama pagal VRM/KAM pranešimus ir didžiųjų žiniasklaidos priemonių suvestines. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "sources": [
+    "https://archyvai.lrt.lt/naujienos/lietuvoje/2/2936222/lietuvoje-oro-pavojaus-nebera-radarai-fiksavo-pauksciu-buri",
+    "https://www.lrt.lt/naujienos/lietuvoje/2/2934348/geltonas-raudonas-baltas-ka-reiskia-sie-ispejimai-ir-ka-daryti-oro-pavojaus-metu"
+   ],
+   "image_url": "https://www.lrt.lt/img/2026/08/19/2467417-936895-1287x836.jpg",
+   "image_source": "https://archyvai.lrt.lt/naujienos/lietuvoje/2/2936222/lietuvoje-oro-pavojaus-nebera-radarai-fiksavo-pauksciu-buri"
+  },
+  "10": {
+   "question": "Ar Tapinas X parašys „gėda“ apie „Žalgirį“ rugsėjį?",
+   "options": [
+    "Taip",
+    "Ne"
+   ],
+   "probabilities": [
+    0.42,
+    0.58
+   ],
+   "category": "sportas",
+   "resolve_by": "2026-09-30",
+   "resolution_hint": "„Taip“, jei iki 2026-09-30 23:59 EEST Andriaus Tapino X (@AndriusTapinas) profilyje bus bent vienas naujas įrašas (postas, citata ar atsakymas), kuriame lietuviškai yra žodis „gėda“ ir minima „Žalgiris“ (bet kokia linksniuota forma). Tikrinama viešame @AndriusTapinas sraute; jei tokio įrašo nebus — „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "sources": [
+    "https://www.lrt.lt/naujienos/sportas/10/3057165/po-niukso-toplygoje-tapino-zinute-zalgirieciams-absoliuti-geda",
+    "https://www.lrt.lt/naujienos/sportas/10/3057165/po-niukso-toplygoje-tapino-zinute-zalgirieciams-absoliuti-geda?utm_source=openai",
+    "https://ve.lt/sportas/absoliuti-geda-andrius-tapinas-audringai-reagavo-i-skaudu-vilniaus-zalgirio-pralaimejima",
+    "https://ve.lt/sportas/absoliuti-geda-andrius-tapinas-audringai-reagavo-i-skaudu-vilniaus-zalgirio-pralaimejima?utm_source=openai",
+    "https://www.lrt.lt/naujienos/sportas/10/3058010/po-triuskinamos-zalgirio-nesekmes-skerla-jaute-apmauda-sunku-suvokti",
+    "https://www.lrt.lt/naujienos/sportas/10/3058010/po-triuskinamos-zalgirio-nesekmes-skerla-jaute-apmauda-sunku-suvokti?utm_source=openai",
+    "https://en.wikipedia.org/wiki/Andrius_Tapinas",
+    "https://en.wikipedia.org/wiki/Andrius_Tapinas?utm_source=openai"
+   ],
+   "image_url": "https://www.lrt.lt/img/2026/06/19/2420989-749107-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/sportas/10/3057165/po-niukso-toplygoje-tapino-zinute-zalgirieciams-absoliuti-geda"
   },
   "11": {
-   "question": "Baltarusiškų trąšų tranzitas per Lietuvą atnaujintas iki spalio 31?",
+   "question": "9 proc. PVM šildymui sugrąžintas šiemet?",
    "options": [
     "Taip",
     "Ne"
    ],
    "probabilities": [
-    0.2,
-    0.8
+    0.38,
+    0.62
    ],
-   "category": "geopolitika",
-   "resolve_by": "2026-10-31",
-   "resolution_hint": "„Taip“ tik jei iki 2026-10-31 oficialiai paskelbta ir faktiškai atnaujintas BY kalio trąšų tranzitas per Lietuvos infrastruktūrą (Klaipėdos uostą / LTG), patvirtina Vyriausybė, Susisiekimo ministerija, LTG arba Klaipėdos uostas; priešingu atveju — „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "category": "kita",
+   "resolve_by": "2026-12-31",
+   "resolution_hint": "„Taip“, jei iki 2026-12-31 Seimas priims ir Prezidentas pasirašys įstatymo pakeitimą, nustatantį 9 proc. PVM tarifą centralizuotam būsto šildymui; jei sprendimas nepriimtas ar nukeltas po šios datos — „Ne“. Patikra pagal Seimo teisės aktų registrą ir oficialų paskelbimą Teisės aktų registre.",
    "sources": [
-    "https://www.lrt.lt/naujienos/pasaulyje/6/3059407/donaldas-trumpas-skelbia-apie-brestanti-didziuli-susitarima-del-baltarusisku-trasu-pirkimo",
-    "https://www.15min.lt/verslas/naujiena/finansai/lietuva-negavo-jav-prasymo-leisti-baltarusisku-trasu-tranzita-sako-premjeras-662-2768938",
-    "https://www.lrt.lt/naujienos/verslas/4/3060140/simonyte-baltarusiskoms-trasoms-vezti-per-lietuva-yra-dvi-kliutys",
-    "https://www.washingtonpost.com/politics/2026/09/21/trump-seeks-fertilizer-deal-with-russia-ally-belarus-amid-canadian-tensions/"
+    "https://www.lrt.lt/naujienos/verslas/4/3055131/seime-siulymas-grazinti-9-proc-pvm-tarifa-sildymui",
+    "https://lsta.lt/wp-content/uploads/2026/03/260305_LSTA-info-suvestine-IS-873_1148-2026-03-05.pdf"
    ],
-   "image_url": "https://www.lrt.lt/img/2026/09/21/2494380-792577-1287x836.jpg",
-   "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/3059407/donaldas-trumpas-skelbia-apie-brestanti-didziuli-susitarima-del-baltarusisku-trasu-pirkimo"
+   "image_url": "https://www.lrt.lt/img/2020/04/08/633010-921425-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3055131/seime-siulymas-grazinti-9-proc-pvm-tarifa-sildymui"
   },
   "12": {
-   "question": "Vilniaus oro erdvės ribojimai – dar kartą iki rugsėjo 29?",
+   "question": "Kokia bus „Ryto“ galutinė vieta FIBA Intercontinental Cup 2026 Pekine?",
    "options": [
-    "Taip",
-    "Ne"
+    "Laimės taurę",
+    "2 vieta",
+    "3 vieta",
+    "4–6 vieta"
    ],
    "probabilities": [
-    0.35,
-    0.65
+    0.28,
+    0.23,
+    0.22,
+    0.27
    ],
-   "category": "geopolitika",
-   "resolve_by": "2026-09-29",
-   "resolution_hint": "„Taip“, jei iki 2026-09-29 bent kartą paskelbti nauji ribojimai virš/šalia Vilniaus oro uosto (EYVI) dėl hibridinių incidentų — patvirtina LTOU, LRT pranešimai ar NOTAM (AB „Oro navigacija“); jei ne — „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+   "category": "kultura",
+   "resolve_by": "2026-09-27",
+   "resolution_hint": "Rinka sprendžiama pagal oficialią FIBA Intercontinental Cup 2026 galutinę turnyro rikiuotę FIBA svetainėje; jei „Rytas“ užims konkrečią vietą, laimės atitinkama opcija. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
    "sources": [
-    "https://www.lrt.lt/naujienos/verslas/4/3059490/virs-vilniaus-oro-uosto-apribota-veikla",
-    "https://www.lrytas.lt/verslas/rinkos-pulsas/2026/09/21/news/vilniaus-oro-uoste-vel-neramu-44098923/",
-    "https://www.ans.lt/lt/informaciniai-leidiniai/notam"
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026",
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026?utm_source=openai",
+    "https://www.fiba.basketball/en/news/lineup-confirmed-for-fiba-intercontinental-cup-in-beijing",
+    "https://www.fiba.basketball/en/news/lineup-confirmed-for-fiba-intercontinental-cup-in-beijing?utm_source=openai",
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/games/136822-VILN-RSSB",
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/games/136822-VILN-RSSB?utm_source=openai"
    ],
-   "image_url": "https://www.lrt.lt/img/2026/02/12/2313664-939396-1287x836.jpg",
-   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3059490/virs-vilniaus-oro-uosto-apribota-veikla"
+   "image_url": "https://assets.fiba.basketball/image/upload/w_1230,h_630,c_fill/f_auto/q_auto/l_.asset_mainlogo--competition_209126/c_fit,w_598,h_504/fl_layer_apply/.asset_simplifiedbackground--competition_209126?buster=20719",
+   "image_source": "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026"
   },
   "13": {
    "question": "Papildoma 2026 m. užsieniečių įdarbinimo kvota – patvirtinta iki spalio 15?",
@@ -275,117 +301,127 @@
    "image_source": "https://www.15min.lt/verslas/naujiena/finansai/migracijos-departamento-vadove-nebepriimami-vidurines-azijos-gyventoju-prasymai-dirbti-lietuvoje-662-2768880"
   },
   "14": {
-   "question": "9% PVM šildymui – iki kada bus priimtas?",
+   "question": "„Rytas“ – pusfinalyje Pekine?",
    "options": [
-    "Taip iki 2026-09-30",
-    "Taip 2026-10-01–2026-10-15",
-    "Taip 2026-10-16–2026-10-31",
-    "Ne iki 2026-10-31"
+    "Taip",
+    "Ne"
    ],
    "probabilities": [
-    0.1,
-    0.15,
-    0.15,
-    0.6
+    0.72,
+    0.28
    ],
-   "category": "ekonomika",
-   "resolve_by": "2026-10-31",
-   "resolution_hint": "Kiekvienas laiptelio „Taip“ reiškia, kad iki nurodytos datos Seimas priima įstatymo pakeitimą dėl 9% PVM tarifo centralizuotam šildymui (priėmimo stadija Seimo balsavimų registre), o laimi ankstyviausias atitikęs terminas; jei iki 2026-10-31 nepriimta — „Ne iki 2026-10-31“. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+   "category": "sportas",
+   "resolve_by": "2026-09-26",
+   "resolution_hint": "„Taip“, jei „Rytas“ pateks į FIBA Intercontinental Cup 2026 pusfinalį pagal oficialų FIBA turnyro grafiką ir rezultatų puslapį; jei nepatenka arba turnyrą baigia grupėje, „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
    "sources": [
-    "https://www.lrt.lt/naujienos/verslas/4/3055131/seime-siulymas-grazinti-9-proc-pvm-tarifa-sildymui",
-    "https://www.lrt.lt/naujienos/verslas/4/3056419/ekspertai-prognozuoja-brangesni-sildyma-taciau-valdzia-neplanuoja-grazinti-pvm-lengvatos"
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/watch-it-live-day-1-of-fiba-intercontinental-cup-2026",
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/watch-it-live-day-1-of-fiba-intercontinental-cup-2026?utm_source=openai",
+    "https://www.lrytas.lt/sportas/krepsinis/2026/09/17/news/lrt-transliuos-vilniaus-ryto-fiba-tarpkontinentines-taures-kovas-44045656",
+    "https://www.lrytas.lt/sportas/krepsinis/2026/09/17/news/lrt-transliuos-vilniaus-ryto-fiba-tarpkontinentines-taures-kovas-44045656?utm_source=openai",
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026",
+    "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026?utm_source=openai"
    ],
-   "image_url": "https://www.lrt.lt/img/2020/04/08/633010-921425-1287x836.jpg",
-   "image_source": "https://www.lrt.lt/naujienos/verslas/4/3055131/seime-siulymas-grazinti-9-proc-pvm-tarifa-sildymui"
+   "image_url": "http://assets.fiba.basketball/image/upload/w_2000/f_auto/q_auto/v1790058849/lhieen4i2xfchdmodprt.jpg",
+   "image_source": "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/watch-it-live-day-1-of-fiba-intercontinental-cup-2026"
   },
   "15": {
-   "question": "Kiek Jessica Shy dainų bus Apple Music LT Top 5?",
+   "question": "Kas taps TOPLYGOS čempionu 2026?",
    "options": [
-    "3",
-    "4",
-    "5"
+    "Vilniaus „Žalgiris“",
+    "Kauno „Žalgiris“",
+    "„TransINVEST“",
+    "„Panevėžys“",
+    "Kita komanda"
    ],
    "probabilities": [
+    0.4,
+    0.25,
     0.2,
-    0.55,
-    0.25
+    0.1,
+    0.05
    ],
-   "category": "kultura",
-   "resolve_by": "2026-09-29",
-   "resolution_hint": "Skaičiuojamos Jessica Shy dainos Apple Music „Top 100: Lithuania“ penketuke 2026-09-29 23:59; rezultatas – atitinkama parinktis. Šaltinis: Apple Music „Top 100: Lithuania“. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+   "category": "sportas",
+   "resolve_by": "2026-10-31",
+   "resolution_hint": "Rinka sprendžiama pagal oficialią TOPLYGOS 2026 galutinę turnyrinę lentelę, paskelbtą toplyga.lt pasibaigus 34 turui; jei čempiono paskelbimas formaliai patvirtinamas po 2026-10-24, sprendžiama pagal pirmą oficialų TOPLYGA/LFF patvirtinimą iki 2026-10-31; jei sezonas nutraukiamas ar rezultatai anuliuojami, sprendžiama pagal LFF/TOPLYGA oficialų sprendimą. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
    "sources": [
-    "https://www.icharts.co.za/lt",
-    "https://www.icharts.co.za/lt?utm_source=openai"
+    "https://toplyga.lt/en/fixtures/1",
+    "https://toplyga.lt/en/fixtures/1?utm_source=openai",
+    "https://www.lrt.lt/naujienos/sportas/10/3057165/po-niukso-toplygoje-tapino-zinute-zalgirieciams-absoliuti-geda",
+    "https://en.wikipedia.org/wiki/2025%E2%80%9326_BC_Rytas_season?utm_source=openai"
    ],
-   "image_url": "",
-   "image_source": ""
+   "image_url": "https://www.lrt.lt/img/2026/06/19/2420989-749107-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/sportas/10/3057165/po-niukso-toplygoje-tapino-zinute-zalgirieciams-absoliuti-geda"
   },
   "16": {
-   "question": "Lietuvos savaitgalio #1 filmas",
+   "question": "Ar „Žalgiris“ pateks į Eurolygos ketvirtfinalį šį sezoną?",
    "options": [
-    "The Odyssey",
-    "Minions & Monsters",
-    "Kita"
+    "Taip",
+    "Ne"
    ],
    "probabilities": [
-    0.55,
-    0.15,
-    0.3
+    0.38,
+    0.62
    ],
-   "category": "kultura",
-   "resolve_by": "2026-09-29",
-   "resolution_hint": "Sprendžiama pagal Box Office Mojo „Lithuanian Weekend 39 (2026-09-25–27)“ lyderį; jei #1 titulas sutampa – atitinkama parinktis, kitu atveju – „Kita“. Šaltinis: Box Office Mojo (Lithuania). Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+   "category": "sportas",
+   "resolve_by": "2027-04-30",
+   "resolution_hint": "„Taip“, jei Kauno „Žalgiris“ taps vienu iš 8 ketvirtfinalio dalyvių (po reguliariojo sezono ir „Play-In“ etapo); sprendžiama pagal oficialius Eurolygos (euroleague.com) ketvirtfinalio dalyvių sąrašus; kitu atveju — „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
    "sources": [
-    "https://www.boxofficemojo.com/weekend/2026W38/?area=LT",
-    "https://www.boxofficemojo.com/weekend/2026W38/?area=LT"
+    "https://www.lrt.lt/naujienos/sportas/10/3060295/kojas-zalgiryje-apsiles-valanciunas-apie-eurolyga-sirgalius-lietuvoje-ir-rinktine",
+    "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
+    "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407?utm_source=openai",
+    "https://ftpserver.euroleague.net/general/2025_26_EuroLeague_Bylaws.pdf",
+    "https://ftpserver.euroleague.net/general/2025_26_EuroLeague_Bylaws.pdf?utm_source=openai"
    ],
-   "image_url": "https://m.media-amazon.com/images/G/01/boxofficemojo/logo/mojo-logo-bg.png",
-   "image_source": "https://www.boxofficemojo.com/weekend/2026W38/?area=LT"
+   "image_url": "https://www.lrt.lt/img/2026/09/22/2495098-875946-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/sportas/10/3060295/kojas-zalgiryje-apsiles-valanciunas-apie-eurolyga-sirgalius-lietuvoje-ir-rinktine"
   },
   "17": {
-   "question": "„Kas Kaltas?“ #1 Apple Music LT – iki kada išsilaikys?",
+   "question": "Ar J. Valančiūnas pradės prieš „Olympiacos“ pirmajame Eurolygos ture?",
    "options": [
-    "iki 09-25",
-    "iki 09-27",
-    "iki 09-30"
+    "Taip",
+    "Ne"
    ],
    "probabilities": [
-    0.411,
-    0.337,
-    0.253
+    0.58,
+    0.42
    ],
-   "category": "kultura",
-   "resolve_by": "2026-09-30",
-   "resolution_hint": "Kiekviena data vertinama 23:59 LT Apple Music „Top 100: Lithuania“ #1 pozicijai; jei „Kas Kaltas?“ tebėra #1 iki ankstesnės datos, ji skaičiuoja ir vėlesnėms (kaupiamoji logika). Šaltinis: Apple Music „Top 100: Lithuania“. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+   "category": "sportas",
+   "resolve_by": "2026-09-29",
+   "resolution_hint": "Vertinama pagal Eurolygos rungtynių Kauno „Žalgiris“ – Pirėjo „Olympiacos“ (2026-09-29) oficialų protokolą; „Taip“, jei Valančiūnas nurodytas starto penkete. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
    "sources": [
-    "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
-    "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea?utm_source=openai",
-    "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea?utm_source=openai"
+    "https://www.sportas.lt/m/tvarkarasciai/krepsinio-tvarkarasciai/eurolygos-tvarkarastis",
+    "https://www.sportas.lt/m/tvarkarasciai/krepsinio-tvarkarasciai/eurolygos-tvarkarastis?utm_source=openai",
+    "https://zalgiris.lt/rungtynes",
+    "https://zalgiris.lt/rungtynes?utm_source=openai",
+    "https://www.lrt.lt/naujienos/sportas/10/3044125/masiulis-apie-valanciuno-sumusima-galejo-zaisti-bet-nerizikavome",
+    "https://www.lrt.lt/naujienos/sportas/10/3044125/masiulis-apie-valanciuno-sumusima-galejo-zaisti-bet-nerizikavome?utm_source=openai"
    ],
-   "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/33/1c/c6/331cc6aa-a909-cda0-c314-04000f295ac2/3dd1c3de-efc3-4119-8ee0-706598d5da0b.png/1200x630wp-60.jpg",
-   "image_source": "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea"
+   "image_url": "https://www.sportas.lt/pimg/icons/icon-logo.png",
+   "image_source": "https://www.sportas.lt/m/tvarkarasciai/krepsinio-tvarkarasciai/eurolygos-tvarkarastis"
   },
   "18": {
-   "question": "„Saulė nesileis“ YouTube – iki kada pasieks 1,4M / 1,45M / 1,5M?",
+   "question": "Ar „Baby Lasagna“ koncerto „Loftas“ bilietai bus išparduoti iki spalio vidurio?",
    "options": [
-    "≥1,4M iki 09-27",
-    "≥1,45M iki 10-01",
-    "≥1,5M iki 10-08"
+    "Taip",
+    "Ne"
    ],
    "probabilities": [
-    0.376,
-    0.335,
-    0.288
+    0.46,
+    0.54
    ],
-   "category": "influenceriai",
-   "resolve_by": "2026-10-08",
-   "resolution_hint": "Tikrinamas oficialaus „Jessica Shy – Saulė nesileis“ vaizdo įrašo peržiūrų skaičius atitinkamą datą 23:59 LT; jei slenkstis pasiektas – „Taip“. Šaltinis: YouTube video. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+   "category": "kultura",
+   "resolve_by": "2026-10-15",
+   "resolution_hint": "„Taip“, jei iki 2026-10-15 23:59 oficialiame platintojo puslapyje (Bilietai.lt) šiam renginiui rodomas „Sold out“/„Išparduota“ statusas arba organizatoriai viešai paskelbia apie išpardavimą; kitu atveju „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
    "sources": [
-    "https://www.youtube.com/watch?v=xA-LEuwx3-4",
-    "https://www.youtube.com/watch?v=xA-LEuwx3-4&utm_source=openai"
+    "https://www.lrt.lt/naujienos/muzika/680/3044073/eurovizijos-zvaigzde-baby-lasagna-grizta-i-lietuva-surengs-koncerta-vilniuje",
+    "https://www.lrt.lt/naujienos/muzika/680/3044073/eurovizijos-zvaigzde-baby-lasagna-grizta-i-lietuva-surengs-koncerta-vilniuje?utm_source=openai",
+    "https://www.bilietai.lt/ru/tickets/J6O3GWXCFC/baby-lasagna",
+    "https://www.bilietai.lt/ru/tickets/J6O3GWXCFC/baby-lasagna?utm_source=openai",
+    "https://www.bilietai.lt/en/venues/21-61-2572//menu-fabrikas-loftas",
+    "https://www.bilietai.lt/en/venues/21-61-2572//menu-fabrikas-loftas?utm_source=openai"
    ],
-   "image_url": "",
-   "image_source": ""
+   "image_url": "https://www.lrt.lt/img/2025/03/02/2007486-200981-1287x836.jpg",
+   "image_source": "https://www.lrt.lt/naujienos/muzika/680/3044073/eurovizijos-zvaigzde-baby-lasagna-grizta-i-lietuva-surengs-koncerta-vilniuje"
   },
   "19": {
    "question": "Spotify LT #1 sekmadienį",
