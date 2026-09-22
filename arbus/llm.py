@@ -706,9 +706,12 @@ def research(user_prompt: str, system: str, max_uses: int = 12, max_tokens: int 
                                model=model, thinking=thinking)
 
 
-def structure(text: str, output_model: Type[T], max_tokens: int = 16000) -> T:
-    """Convert free text into a validated instance of `output_model`."""
-    prov = provider()
+def structure(text: str, output_model: Type[T], max_tokens: int = 16000,
+              force_provider: str | None = None) -> T:
+    """Convert free text into a validated instance of `output_model`.
+    `force_provider` overrides the configured provider (used when drafting falls
+    back to another backend after a rate limit)."""
+    prov = force_provider or provider()
     if prov == "perplexity":
         return _structure_openai_compatible(
             perplexity_chat, config.PERPLEXITY_STRUCTURE_MODEL, text, output_model, max_tokens

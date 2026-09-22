@@ -194,6 +194,11 @@ def run_batch(
         result.accepted_by_theme[cand.theme] += 1
 
     draft_calls = {"n": 0}
+    # The draft backend can switch mid-run: if the configured provider is
+    # rate-limited or down, drafting falls over to another CONFIGURED provider
+    # (e.g. OpenAI → Perplexity) and sticks with the one that works, so a
+    # throttled account never empties the whole batch.
+    draft_provider = {"cur": None}                       # None = configured default
 
     def draft_chunk(n: int, label: str, focus: str) -> list[Candidate]:
         """Draft + structure one themed chunk. Failures cost the chunk, not the batch."""
@@ -228,45 +233,70 @@ def run_batch(
             headlines=headlines, pulse=pulse_text, feedback=feedback_text,
             avoid=avoid, timing=timing,
         )
-        batch: CandidateBatch | None = None
+
+        def _draft_once(provider: str | None) -> CandidateBatch:
+            draft_text = llm.research(draft_prompt, system=system,
+                                      max_uses=config.SEARCH_MAX_USES_DRAFT,
+                                      max_tokens=config.DRAFT_MAX_TOKENS, stage="draft",
+                                      force_provider=provider)
+            structure_prompt = llm.load_prompt("structure", draft=draft_text)
+            return llm.structure(structure_prompt, CandidateBatch,
+                                 max_tokens=config.STRUCTURE_MAX_TOKENS,
+                                 force_provider=provider)
+
+        def _emit(batch: CandidateBatch) -> list[Candidate]:
+            for cand in batch.candidates:
+                cand.theme = label
+                drafted_questions.append(cand.question_lt)
+            result.drafted_by_theme[label] += len(batch.candidates)
+            return batch.candidates
+
+        cur = draft_provider["cur"]
+        active = cur or llm.provider("draft")
+        last_exc: Exception | None = None
+
+        # 1) the current provider, with a backoff for a transient rate limit.
         for attempt in range(config.DRAFT_RATELIMIT_RETRIES + 1):
             try:
-                draft_text = llm.research(draft_prompt, system=system,
-                                          max_uses=config.SEARCH_MAX_USES_DRAFT,
-                                          max_tokens=config.DRAFT_MAX_TOKENS, stage="draft")
-                structure_prompt = llm.load_prompt("structure", draft=draft_text)
-                batch = llm.structure(structure_prompt, CandidateBatch,
-                                      max_tokens=config.STRUCTURE_MAX_TOKENS)
-                break
-            except Exception as exc:
-                # A rate limit (429) is transient — back off and retry rather than
-                # losing the chunk (and, in a burst, the whole batch).
+                return _emit(_draft_once(cur))
+            except Exception as exc:                     # noqa: BLE001
+                last_exc = exc
                 if _is_rate_limited(exc) and attempt < config.DRAFT_RATELIMIT_RETRIES:
                     wait = config.DRAFT_RATELIMIT_BACKOFF * (attempt + 1)
-                    log.warning("chunk (%s) rate-limited; backing off %ds (retry %d)",
-                                label, wait, attempt + 1)
+                    log.warning("chunk (%s) rate-limited on %s; backing off %ds (retry %d)",
+                                label, active, wait, attempt + 1)
                     time.sleep(wait)
                     continue
-                # A hard provider error (bad key, no credits, unknown model, 404)
-                # fails EVERY chunk the same way, so grinding through all the top-up
-                # calls only to raise a misleading "no candidates survived (ignores
-                # JSON schema)" wastes time and hides the cause. Abort now with the
-                # real reason, which the bot shows the user.
-                if _is_fatal_provider_error(exc):
-                    raise RuntimeError(
-                        f"Generavimo tiekėjas „{llm.provider('draft')}“ atmetė "
-                        "užklausą — patikrink API raktą, modelį ir kreditus. Klaida: "
-                        f"{str(exc)[:200]}") from exc
-                log.warning("chunk (%s) failed (%s); skipping it and continuing", label, exc)
-                return []
-        if batch is None:                                # exhausted rate-limit retries
-            log.warning("chunk (%s) still rate-limited after retries; skipping", label)
-            return []
-        for cand in batch.candidates:
-            cand.theme = label
-            drafted_questions.append(cand.question_lt)
-        result.drafted_by_theme[label] += len(batch.candidates)
-        return batch.candidates
+                break                                    # stop retrying this provider
+
+        # 2) fall over to any OTHER configured provider and stick with what works.
+        for alt in llm.available_providers():
+            if alt == active:
+                continue
+            try:
+                log.warning("chunk (%s): %s failed (%s) — trying provider %s",
+                            label, active, str(last_exc)[:80], alt)
+                batch = _draft_once(alt)
+                draft_provider["cur"] = alt              # keep using the working one
+                log.warning("draft switched to fallback provider %s", alt)
+                return _emit(batch)
+            except Exception as exc:                     # noqa: BLE001
+                last_exc = exc
+                continue
+
+        # 3) nobody could draft this chunk. If the failure is SYSTEMIC (every
+        # provider rate-limited or down), the batch cannot proceed — surface a
+        # clear reason instead of the generic "no candidates survived". A one-off
+        # transient error just skips this chunk so the rest of the batch survives.
+        if last_exc is not None and (_is_rate_limited(last_exc)
+                                     or _is_fatal_provider_error(last_exc)):
+            raise RuntimeError(
+                "nepavyko sugeneruoti nė su vienu tiekėju (OpenAI / Perplexity / …). "
+                "Dažniausia priežastis — API limitas (429) arba kreditai/raktas. "
+                f"Paskutinė klaida: {str(last_exc)[:180]}")
+        log.warning("chunk (%s) failed on all providers (%s); skipping",
+                    label, str(last_exc)[:150])
+        return []
 
     def run_round(chunks: list[tuple[int, str, str]]) -> None:
         """Draft, validate and repair one round of themed chunks."""

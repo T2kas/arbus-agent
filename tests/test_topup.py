@@ -155,3 +155,35 @@ def test_report_records_theme_yield(harness):
     text = open(result.report_path, encoding="utf-8").read()
     assert "Yield per theme" in text
     assert "valstybė ir aktualijos" in text
+
+
+def test_draft_falls_over_to_another_provider_on_rate_limit(harness, monkeypatch):
+    """A rate-limited (429) provider must not empty the batch: drafting falls
+    over to another configured provider and keeps using it."""
+    import requests
+    monkeypatch.setattr(config, "DRAFT_RATELIMIT_RETRIES", 0)   # no sleeps
+    monkeypatch.setattr(pipeline.llm, "provider", lambda stage=None: "openai")
+    monkeypatch.setattr(pipeline.llm, "available_providers",
+                        lambda: ["openai", "perplexity"])
+    seen = {"providers": []}
+
+    def fake_research(prompt, system, **kw):
+        fp = kw.get("force_provider")
+        seen["providers"].append(fp)
+        if fp in (None, "openai"):
+            raise requests.HTTPError("429 Client Error: Too Many Requests")
+        return "drafted"                                   # perplexity works
+
+    counter = {"i": 0}
+
+    def fake_structure(text, model, **kw):
+        counter["i"] += 1
+        q = f"Ar komanda #{counter['i']} laimės rungtynes iki spalio?"
+        return CandidateBatch(candidates=[Candidate(question_lt=q, category="sportas", **GOOD)])
+
+    monkeypatch.setattr(pipeline.llm, "research", fake_research)
+    monkeypatch.setattr(pipeline.llm, "structure", fake_structure)
+
+    result = pipeline.run_batch(count=3)
+    assert len(result.accepted) >= 1
+    assert "perplexity" in seen["providers"]               # fell over to the working provider
