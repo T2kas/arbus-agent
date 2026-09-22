@@ -68,10 +68,13 @@ def test_build_buckets_center_holds_forecast_and_sums_100():
 
 # ── the exact-date LEA match (the money-safety) ──────────────────────────────
 
-def test_bulletin_iso_reads_the_bulletin_date():
-    assert fuel._bulletin_iso("… rugsėjo 23 d. …", 2026) == "2026-09-23"
-    assert fuel._bulletin_iso("… spalio 1 d. …", 2026) == "2026-10-01"
-    assert fuel._bulletin_iso("no date here", 2026) == ""
+def test_dated_bulletin_url_carries_the_date():
+    # the date is IN the URL, so a different day's price can never be returned
+    assert fuel._kdk_url("2026-09-23") == "https://www.ena.lt/Naujiena/kdk-20260923/"
+    assert fuel._kdk_url("2026-09-23", "ndk") == "https://www.ena.lt/Naujiena/ndk-20260923/"
+    hits = fuel._KDK_SLUG_RE.findall(
+        "<loc>https://www.ena.lt/Naujiena/kdk-20260922/</loc>")
+    assert hits and hits[0][1:] == ("2026", "09", "22")
 
 
 def test_single_date_from_title():

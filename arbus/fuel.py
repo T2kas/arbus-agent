@@ -154,23 +154,6 @@ def fuel_target(market: dict) -> tuple[str, str] | None:
 
 # ── network: the LEA price for an EXACT date ─────────────────────────────────
 
-def _bulletin_iso(html: str, year: int) -> str:
-    """ISO date the bulletin is about, from its LT date ('rugsėjo 23 d.')."""
-    m = resolvers._BULLETIN_DATE_RE.search(html)
-    if not m:
-        return ""
-    mm = re.match(r"(\w+)\s+(\d+)", m.group(0))
-    if not mm:
-        return ""
-    month = _LT_MONTHS.get(mm.group(1).lower())
-    if not month:
-        return ""
-    try:
-        return date(year, month, int(mm.group(2))).isoformat()
-    except ValueError:
-        return ""
-
-
 def _get(url: str, timeout: int = 20) -> str:
     r = requests.get(url, headers={"User-Agent": UA}, timeout=timeout)
     r.raise_for_status()
@@ -178,50 +161,66 @@ def _get(url: str, timeout: int = 20) -> str:
     return r.text
 
 
+# LEA's daily bulletin lives at a URL that CARRIES the date: today it is
+# /Naujiena/kdk-YYYYMMDD/ (earlier days used ndk-YYYYMMDD). The date in the URL
+# is the reliable signal — far safer than parsing "rugsėjo 23 d." out of prose,
+# which the bulletins often skip (they say "penktadienį"). So the resolver just
+# fetches the URL for the exact date it needs.
+_KDK_SLUG_RE = re.compile(r"/Naujiena/((?:kdk|ndk)-(20\d{2})(\d{2})(\d{2}))", re.I)
+
+
+def _kdk_url(iso: str, prefix: str = "kdk") -> str:
+    d = date.fromisoformat(iso)
+    return f"https://www.ena.lt/Naujiena/{prefix}-{d.strftime('%Y%m%d')}/"
+
+
+def _price(html: str, fuel: str) -> float | None:
+    val = resolvers._fuel_prices(html).get(fuel)
+    return float(val) if isinstance(val, (int, float)) and 0.3 < val < 5 else None
+
+
 def lea_price_for_date(target_iso: str, fuel: str,
                        lookback: int | None = None) -> tuple[float | None, str]:
-    """(price, source_url) for `fuel` on the EXACT `target_iso`, from the LEA
-    bulletin whose own stated date equals it, or (None, '') if not published yet.
-
-    Never returns a different day's price — that is the whole safety of this
-    resolver (mirrors the cinema-period fix)."""
-    lookback = lookback or config.FUEL_BULLETIN_LOOKBACK
-    year = date.fromisoformat(target_iso).year
+    """(price, source_url) for `fuel` on the EXACT `target_iso`, or (None, '') if
+    not published yet. The date is taken from the bulletin URL itself, so a
+    different day's price can never be returned — the safety this resolver needs.
+    """
+    # 1) the dated bulletin URL directly (the date is in the URL).
+    for prefix in ("kdk", "ndk"):
+        try:
+            price = _price(_get(_kdk_url(target_iso, prefix)), fuel)
+        except Exception:                                # noqa: BLE001 — 404 = not published
+            price = None
+        if price is not None:
+            return price, _kdk_url(target_iso, prefix)
+    # 2) fallback: a descriptive-slug bulletin, matched by its URL date via sitemap.
     try:
         sitemap = _get("https://www.ena.lt/sitemap.xml")
     except Exception as exc:                             # noqa: BLE001
         log.warning("fuel: sitemap fetch failed: %s", exc)
         return None, ""
-    for url in resolvers.recent_fuel_bulletin_urls(sitemap, lookback):
+    for slug, y, mo, d in _KDK_SLUG_RE.findall(sitemap):
+        if f"{y}-{mo}-{d}" != target_iso:
+            continue
+        url = f"https://www.ena.lt/Naujiena/{slug}/"
         try:
-            html = _get(url)
-        except Exception as exc:                         # noqa: BLE001
-            log.debug("fuel: bulletin %s failed: %s", url, exc)
+            price = _price(_get(url), fuel)
+        except Exception:                                # noqa: BLE001
             continue
-        if _bulletin_iso(html, year) != target_iso:      # only the exact date's bulletin
-            continue
-        prices = resolvers._fuel_prices(html)
-        val = prices.get(fuel)
-        if isinstance(val, (int, float)) and 0.3 < val < 5:
-            return float(val), url
+        if price is not None:
+            return price, url
     return None, ""
 
 
-def latest_lea_price(fuel: str) -> tuple[float | None, str]:
-    """The most recent published `fuel` average (for the creation forecast)."""
-    try:
-        sitemap = _get("https://www.ena.lt/sitemap.xml")
-    except Exception as exc:                             # noqa: BLE001
-        log.warning("fuel: sitemap fetch failed: %s", exc)
-        return None, ""
-    for url in resolvers.recent_fuel_bulletin_urls(sitemap, config.FUEL_BULLETIN_LOOKBACK):
-        try:
-            prices = resolvers._fuel_prices(_get(url))
-        except Exception:                                # noqa: BLE001
-            continue
-        val = prices.get(fuel)
-        if isinstance(val, (int, float)) and 0.3 < val < 5:
-            return float(val), url
+def latest_lea_price(fuel: str, now: datetime | None = None) -> tuple[float | None, str]:
+    """The most recent published `fuel` average (the creation forecast) — walk
+    back day by day from today over the dated bulletin URLs until one has data."""
+    today = (now or datetime.now(timezone.utc)).astimezone(_tz()).date()
+    for n in range(0, 8):
+        iso = (today - timedelta(days=n)).isoformat()
+        price, url = lea_price_for_date(iso, fuel)
+        if price is not None:
+            return price, url
     return None, ""
 
 
