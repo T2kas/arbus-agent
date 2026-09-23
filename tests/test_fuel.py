@@ -130,3 +130,17 @@ def test_already_resolved_market_is_skipped(monkeypatch):
     reports, _ = fuel.resolve_markets([_daily_market(resolved=True)], now, fuel._tz(), {},
                                       alert=True, do_resolve=True)
     assert calls["resolve"] == []
+
+
+def test_new_market_reuses_previous_days_image(monkeypatch):
+    """New daily markets take the image from the latest existing daily market of
+    that fuel, so changing yesterday's image propagates."""
+    from datetime import datetime, timezone
+    monkeypatch.setattr(fuel, "latest_lea_price", lambda f, **k: (2.0, "u"))
+    existing = _daily_market("benzino A95", "2026 m. rugsėjo 22 d.")
+    existing["image_url"] = "https://img/yesterday.jpg"
+    now = datetime(2026, 9, 22, 12, tzinfo=timezone.utc)
+    specs = fuel.plan_new_markets([existing], now, fuel._tz())
+    petrol = [s for s in specs if s["fuel"] == "benzinas"]
+    assert petrol and petrol[0]["image_url"] == "https://img/yesterday.jpg"
+    assert petrol[0]["closes_at"].endswith("10:00:00+03:00")

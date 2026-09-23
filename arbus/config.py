@@ -999,9 +999,12 @@ FUEL_IMAGE = _env_str("FUEL_IMAGE", "")           # reused from an existing fuel
 # moves ~1–2 cents/day, so the buckets are ~1 cent wide.
 FUEL_FORECAST_SIGMA = _env_float("FUEL_FORECAST_SIGMA", 0.012)
 FUEL_HORIZON_DAYS = _env_int("FUEL_HORIZON_DAYS", 1)     # create tomorrow's
-FUEL_CREATE_HOUR = _env_int("FUEL_CREATE_HOUR", 18)     # create from this Vilnius hour
-# Close before the ~10:00 measurement so nobody trades on the day's known price.
-FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 9)
+# LEA publishes each day's average mid-morning (~11:00 Vilnius), when the market
+# resolves. So close at 10:00 (before it is knowable) and create the next day's
+# market at 12:00 — right after the old one has resolved. Its own gate, separate
+# from the weather 18:00 creation.
+FUEL_CREATE_HOUR = _env_int("FUEL_CREATE_HOUR", 12)
+FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 10)
 FUEL_CLOSE_MINUTE = _env_int("FUEL_CLOSE_MINUTE", 0)
 
 # ── Market health (arbus stats) ─────────────────────────────────────────────

@@ -1256,11 +1256,14 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
 
     # Keep the rolling horizon full — create tomorrow/day-after where missing.
     # Gated to the evening (fresh forecast) unless forced.
-    if do_create and (force_create or now.astimezone(tz).hour >= config.WEATHER_CREATE_HOUR):
-        specs = plan_new_markets(rows, now, tz)
-        reports += create_markets(specs, alert=alert, do_create=True)
-        # Daily fuel markets: create tomorrow's the same way, one after another.
-        if config.FUEL_ENABLED:
+    if do_create:
+        vil_hour = now.astimezone(tz).hour
+        if force_create or vil_hour >= config.WEATHER_CREATE_HOUR:
+            specs = plan_new_markets(rows, now, tz)
+            reports += create_markets(specs, alert=alert, do_create=True)
+        # Daily fuel markets: their OWN, earlier gate — create the next day's just
+        # after the old one resolves (LEA publishes ~11:00), not at the weather hour.
+        if config.FUEL_ENABLED and (force_create or vil_hour >= config.FUEL_CREATE_HOUR):
             from . import fuel                            # lazy: fuel imports weather
             f_specs = fuel.plan_new_markets(rows, now, tz)
             reports += fuel.create_markets(f_specs, alert=alert, do_create=True)
