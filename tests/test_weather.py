@@ -123,6 +123,9 @@ def wired(monkeypatch, tmp_path):
     monkeypatch.setattr(weather, "plan_new_markets", lambda *a, **k: [])
     # Daily fuel markets are exercised by their own tests, not the weather ones.
     monkeypatch.setattr(config, "FUEL_ENABLED", False)
+    # Early per-bucket elimination has its own dedicated test; keep it out of the
+    # resolution-flow tests (their fixture does not mock eliminate_options).
+    monkeypatch.setattr(config, "WEATHER_ELIMINATE", False)
     return calls
 
 

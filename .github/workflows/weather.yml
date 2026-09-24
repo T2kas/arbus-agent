@@ -71,6 +71,10 @@ jobs:
           WEATHER_LIQUIDITY: ${{ vars.WEATHER_LIQUIDITY }}
           WEATHER_CLOSE_HOUR: ${{ vars.WEATHER_CLOSE_HOUR }}
           WEATHER_HORIZON_DAYS: ${{ vars.WEATHER_HORIZON_DAYS }}
+          # Early per-bucket "Ne" elimination (on by default); needs the
+          # admin_eliminate_options RPC. Set Variable WEATHER_ELIMINATE=off to stop.
+          WEATHER_ELIMINATE: ${{ vars.WEATHER_ELIMINATE }}
+          APP_ELIMINATE_RPC: ${{ vars.APP_ELIMINATE_RPC }}
           # Daily fuel-price markets are created + resolved inside the same run
           # (LEA national average). Defaults on; set FUEL_ENABLED=false to skip.
           FUEL_ENABLED: ${{ vars.FUEL_ENABLED }}
