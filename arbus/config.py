@@ -927,12 +927,17 @@ APP_CREATE_RPC = os.environ.get("APP_CREATE_RPC", "").strip() or "admin_create_m
 WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 50000)
 WEATHER_HORIZON_DAYS = _env_int("WEATHER_HORIZON_DAYS", 2)      # tomorrow + day after
 WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 18)       # create from this Vilnius hour
-# Daily-max forecast spread °C — the std of the actual forecast error. Calibrated
-# 2026-09-19 against 21 resolved weather markets (forecast in each market's
-# context vs the real Meteo max): mean error ≈0, std 1.39, MAE 0.90, 81% within
-# 1 °C; Brier/log-loss minimised near 1.3–1.4. At 2.0 the tail buckets were
-# overpriced (~15% assigned, 0–10% actual), giving bettors an edge on the middle.
-WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 1.4)
+# Daily-max forecast spread °C — the std of the actual forecast error, and the
+# lever that sets the two OPEN tail buckets' probability. Recalibrated 2026-09-24
+# against 36 resolved weather markets (forecast in each market's context vs the
+# real Meteo max + which bucket actually won): mean error ≈0, std 1.31, MAE 0.83.
+# The two tail buckets WON only 3/36 = 8% of the time (buckets 0 and 3), but
+# σ=1.4 priced them at ~15% combined — a ~2× overprice that fed a middle-bucket
+# edge. σ=1.2 puts the tails at ~9% (matching the 8% they actually win) and is
+# Brier-optimal (0.5792). Lower σ hits the 1% floor and over-shrinks the tails,
+# exposing the house on a genuine outlier day. History: 2.0 → 1.4 (2026-09-19,
+# 21 markets) → 1.2 (2026-09-24, 36 markets, tail-calibrated).
+WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 1.2)
 # Auto-close (closes_at) time of day, Vilnius. 15:30 stops trading just before the
 # afternoon peak (peak is ~13–14 UTC ≈ 16:00+ Vilnius), so the winning bucket is
 # still uncertain at close.
