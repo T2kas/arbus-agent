@@ -2690,6 +2690,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "86d88f58-b59e-4b60-91fc-79dcf10c79b3": {
+  "checksum": "f28a7468ed258091c0305c40679f9c8cea03f2793bed98f05e113b3571448d03",
+  "current_maximum": null,
+  "date": "2026-09-26",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "87b2fc1a-6398-44e7-a1d2-db005cb94bb9": {
   "resolved": true,
   "resolved_at": "2026-09-23T08:30:58.252280+00:00",
@@ -3164,6 +3172,14 @@
   "resolved_via": "cinema",
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
+ "956c8c08-465d-47b2-9447-b7eb2adfc48a": {
+  "checksum": "4127167e4138b3888458cb40f85fa45115d09100f36299f51b92910d0242761a",
+  "current_maximum": null,
+  "date": "2026-09-26",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "a5c63419-560f-4535-a06a-f3d03e7e8121": {
   "checksum": "5d18873846cfe687416c07e00aff4faab51af51075e9bdf9742ee8b24c1b5716",
   "current_maximum": 19.9,
@@ -3586,6 +3602,14 @@
   "resolved_temp": 14.5,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+  "station": "kauno-ams"
+ },
+ "b95e66f2-4538-48cc-b816-6bf99a9b9e1a": {
+  "checksum": "f4848c26c0f6a2122523421cfd5bd62a95dce4eefd358b7f69490d7022ca0de5",
+  "current_maximum": null,
+  "date": "2026-09-26",
+  "measurements": {},
+  "resolved": false,
   "station": "kauno-ams"
  },
  "ba7da1c4-990d-4bc2-84a7-7b25007867f2": {
