@@ -3128,7 +3128,7 @@
   "station": "vilniaus-ams"
  },
  "86d88f58-b59e-4b60-91fc-79dcf10c79b3": {
-  "checksum": "b596d018326b5ff088a807c90f061f9d564b6e445a94e261a59ae57966889ac6",
+  "checksum": "a42a229888df97ee7120f62267c663273ccc30b69c73fa0aaea022b4022607f2",
   "current_maximum": 15.0,
   "date": "2026-09-26",
   "max_received_at": "2026-09-25T23:10:42.542703+00:00",
@@ -3150,6 +3150,12 @@
     "received_at": "2026-09-25T23:10:42.542703+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 15.0
+   },
+   "2026-09-26 00:00:00": {
+    "checksum": "a42a229888df97ee7120f62267c663273ccc30b69c73fa0aaea022b4022607f2",
+    "received_at": "2026-09-26T00:10:37.378858+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 14.7
    }
   },
   "resolved": false,
@@ -3631,10 +3637,10 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "956c8c08-465d-47b2-9447-b7eb2adfc48a": {
-  "checksum": "2fb491932f50a5f853f3b9c921a74563ef3a78731c60ab4bb399d741b95c6ec1",
-  "current_maximum": 10.8,
+  "checksum": "00829cc12069812e3a7b6ae25f00933af6e385bb3df41e0500238e82c9073228",
+  "current_maximum": 10.9,
   "date": "2026-09-26",
-  "max_received_at": "2026-09-25T23:10:42.542703+00:00",
+  "max_received_at": "2026-09-26T00:10:37.378858+00:00",
   "measurements": {
    "2026-09-25 21:00:00": {
     "checksum": "3d4e7807f89b0e4a7c65846c3ac5a918cd2ba10ff54753c9ea687357feea2ef9",
@@ -3653,6 +3659,12 @@
     "received_at": "2026-09-25T23:10:42.542703+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 10.8
+   },
+   "2026-09-26 00:00:00": {
+    "checksum": "00829cc12069812e3a7b6ae25f00933af6e385bb3df41e0500238e82c9073228",
+    "received_at": "2026-09-26T00:10:37.378858+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 10.9
    }
   },
   "resolved": false,
@@ -3660,7 +3672,7 @@
   "station": "vilniaus-ams"
  },
  "95c18c49-bd45-4846-9756-d6e2b129c646": {
-  "checksum": "e8126263615aafd5082a3aa5c2d1e2831bbad43a85478da9250153bf281a9bd5",
+  "checksum": "a9a9a2f7fc29487b6118773201968fbf01f5b4c7ba496f1f44df44f3f499986b",
   "current_maximum": null,
   "date": "2026-09-27",
   "measurements": {},
@@ -3950,7 +3962,7 @@
   "station": "vilniaus-ams"
  },
  "ae7ca777-26d7-4ed0-bd4e-d7bf2f1157e4": {
-  "checksum": "2fb491932f50a5f853f3b9c921a74563ef3a78731c60ab4bb399d741b95c6ec1",
+  "checksum": "00829cc12069812e3a7b6ae25f00933af6e385bb3df41e0500238e82c9073228",
   "current_maximum": null,
   "date": "2026-09-27",
   "measurements": {},
@@ -4100,10 +4112,10 @@
   "station": "kauno-ams"
  },
  "b95e66f2-4538-48cc-b816-6bf99a9b9e1a": {
-  "checksum": "e8126263615aafd5082a3aa5c2d1e2831bbad43a85478da9250153bf281a9bd5",
-  "current_maximum": 12.3,
+  "checksum": "a9a9a2f7fc29487b6118773201968fbf01f5b4c7ba496f1f44df44f3f499986b",
+  "current_maximum": 12.5,
   "date": "2026-09-26",
-  "max_received_at": "2026-09-25T23:10:42.542703+00:00",
+  "max_received_at": "2026-09-26T00:10:37.378858+00:00",
   "measurements": {
    "2026-09-25 21:00:00": {
     "checksum": "366cd59b2ae4c4932d2b2c30f3f8f8220e2d8e268df2e501b46437f05473b681",
@@ -4122,6 +4134,12 @@
     "received_at": "2026-09-25T23:10:42.542703+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 12.3
+   },
+   "2026-09-26 00:00:00": {
+    "checksum": "a9a9a2f7fc29487b6118773201968fbf01f5b4c7ba496f1f44df44f3f499986b",
+    "received_at": "2026-09-26T00:10:37.378858+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.5
    }
   },
   "resolved": false,
@@ -6236,7 +6254,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "eeed615a-5119-4e05-bc3e-737b6ec9aff5": {
-  "checksum": "b596d018326b5ff088a807c90f061f9d564b6e445a94e261a59ae57966889ac6",
+  "checksum": "a42a229888df97ee7120f62267c663273ccc30b69c73fa0aaea022b4022607f2",
   "current_maximum": null,
   "date": "2026-09-27",
   "measurements": {},
