@@ -276,7 +276,7 @@
   "station": "kauno-ams"
  },
  "10fa58f6-fa6d-4714-aacd-9cf4d1738238": {
-  "checksum": "30d0a0e6fb8b23d127c8238826ed5a63ccd5c39fdac4bcf91224cb5ed2f37578",
+  "checksum": "f0e9dcc7a23c1b1ff5ee51aa715353b4510d9a82492447f865e993c2c3e24b9e",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -3880,7 +3880,7 @@
   "station": "vilniaus-ams"
  },
  "95c18c49-bd45-4846-9756-d6e2b129c646": {
-  "checksum": "06ff381f195dffa10622a539c45c53f85e280da9d59f167addf802982e267808",
+  "checksum": "6d7928b08c6cb6f586797abc2fe3e3f3fae42dcd9e17571e3dd499cfd651bfed",
   "current_maximum": null,
   "date": "2026-09-27",
   "measurements": {},
@@ -4170,7 +4170,7 @@
   "station": "vilniaus-ams"
  },
  "ae7ca777-26d7-4ed0-bd4e-d7bf2f1157e4": {
-  "checksum": "53435c41b30b7e22a48a78b69e535c835ff440a95d64358906dba729dab58c63",
+  "checksum": "e8179452d1e07180991050d7ab230fb4bdde80e5779d7186d46d8539d441a78d",
   "current_maximum": null,
   "date": "2026-09-27",
   "measurements": {},
@@ -5314,7 +5314,7 @@
   "station": "klaipedos-ams"
  },
  "c98ddf15-3ba1-4b14-bdde-a6762aa0a5fe": {
-  "checksum": "53435c41b30b7e22a48a78b69e535c835ff440a95d64358906dba729dab58c63",
+  "checksum": "e8179452d1e07180991050d7ab230fb4bdde80e5779d7186d46d8539d441a78d",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -6312,7 +6312,7 @@
   "station": "vilniaus-ams"
  },
  "e86d39c4-2217-40fc-bebf-036f408a2cc7": {
-  "checksum": "06ff381f195dffa10622a539c45c53f85e280da9d59f167addf802982e267808",
+  "checksum": "6d7928b08c6cb6f586797abc2fe3e3f3fae42dcd9e17571e3dd499cfd651bfed",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -6590,7 +6590,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "eeed615a-5119-4e05-bc3e-737b6ec9aff5": {
-  "checksum": "30d0a0e6fb8b23d127c8238826ed5a63ccd5c39fdac4bcf91224cb5ed2f37578",
+  "checksum": "f0e9dcc7a23c1b1ff5ee51aa715353b4510d9a82492447f865e993c2c3e24b9e",
   "current_maximum": null,
   "date": "2026-09-27",
   "measurements": {},
