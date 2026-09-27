@@ -224,6 +224,47 @@ def latest_lea_price(fuel: str, now: datetime | None = None) -> tuple[float | No
     return None, ""
 
 
+# ── publication days: LEA posts no bulletin on weekends / public holidays ─────
+
+def _easter(year: int) -> date:
+    """Western Easter Sunday (anonymous Gregorian algorithm)."""
+    a, b, c = year % 19, year // 100, year % 100
+    d, e = b // 4, b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i, k = c // 4, c % 4
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    month = (h + l - 7 * m + 114) // 31
+    day = ((h + l - 7 * m + 114) % 31) + 1
+    return date(year, month, day)
+
+
+def _lt_holidays(year: int) -> set[date]:
+    fixed = [(1, 1), (2, 16), (3, 11), (5, 1), (6, 24), (7, 6), (8, 15),
+             (11, 1), (11, 2), (12, 24), (12, 25), (12, 26)]
+    days = {date(year, m, d) for m, d in fixed}
+    days.add(_easter(year) + timedelta(days=1))          # Easter Monday
+    return days
+
+
+def is_publication_day(d: date) -> bool:
+    """LEA publishes the daily average only on working days — verified: Fri
+    2026-09-25 has a kdk- bulletin, Sat 26 / Sun 27 are 404 (and the archive
+    jumps Friday → Monday). A market for any other day can never resolve."""
+    return d.weekday() < 5 and d not in _lt_holidays(d.year)
+
+
+def next_publication_days(after: date, n: int) -> list[date]:
+    out, d = [], after
+    while len(out) < n:
+        d += timedelta(days=1)
+        if is_publication_day(d):
+            out.append(d)
+    return out
+
+
 # ── market creation: forecast → buckets → probabilities ──────────────────────
 
 FUELS = {
@@ -335,8 +376,9 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
             forecast, _ = latest_lea_price(fuel)
         if forecast is None:
             continue
-        for n in range(1, horizon + 1):
-            iso = (today + timedelta(days=n)).isoformat()
+        # Only days LEA actually publishes: Friday's run creates MONDAY's market.
+        for d in next_publication_days(today, horizon):
+            iso = d.isoformat()
             if skip_existing and (fuel, iso) in have:
                 continue
             specs.append(market_spec(fuel, iso, images.get(fuel, ""), forecast, tz))
@@ -405,6 +447,21 @@ def resolve_markets(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
         mid = app_api.market_id_of(m)
         st = state.setdefault(mid, {})
         if st.get("resolved") or st.get("fuel_alerted"):
+            continue
+        if not is_publication_day(date.fromisoformat(iso)):
+            # LEA publishes nothing for weekends/holidays, so the rules' source
+            # never appears. Do NOT guess with another day's price — flag once.
+            if alert:
+                notify.send(
+                    "⚠️ DEGALŲ RINKA — REIKIA ADMINO\n\n"
+                    f"· {app_api.question_of(m)}\n"
+                    f"  {iso} yra savaitgalis / šventė — LEA tą dieną vidurkio "
+                    "neskelbia, todėl pagal taisykles rinkos išspręsti negalima. "
+                    "Atšauk (grąžink statymus) arba išspręsk rankiniu būdu.")
+            st["fuel_alerted"] = True
+            reports.append({"status": "error", "market_id": mid,
+                            "reason": "no LEA bulletin on weekends/holidays"})
+            changed = True
             continue
         try:
             price, url = lea_price_for_date(iso, fuel)

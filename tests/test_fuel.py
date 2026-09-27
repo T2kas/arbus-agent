@@ -144,3 +144,38 @@ def test_new_market_reuses_previous_days_image(monkeypatch):
     petrol = [s for s in specs if s["fuel"] == "benzinas"]
     assert petrol and petrol[0]["image_url"] == "https://img/yesterday.jpg"
     assert petrol[0]["closes_at"].endswith("10:00:00+03:00")
+
+
+def test_publication_days_skip_weekends_and_holidays():
+    from datetime import date
+    assert fuel.is_publication_day(date(2026, 9, 25))        # Friday
+    assert not fuel.is_publication_day(date(2026, 9, 26))    # Saturday
+    assert not fuel.is_publication_day(date(2026, 9, 27))    # Sunday
+    assert not fuel.is_publication_day(date(2026, 12, 24))   # Christmas Eve (Thu)
+    assert fuel._easter(2026) == date(2026, 4, 5)
+    assert not fuel.is_publication_day(date(2026, 4, 6))     # Easter Monday
+    # Friday's run creates MONDAY's market, not Saturday's
+    assert fuel.next_publication_days(date(2026, 9, 25), 1) == [date(2026, 9, 28)]
+
+
+def test_friday_creation_targets_monday(monkeypatch):
+    monkeypatch.setattr(fuel, "latest_lea_price", lambda f, **k: (2.0, "u"))
+    now = datetime(2026, 9, 25, 10, tzinfo=timezone.utc)      # Fri 13:00 Vilnius
+    specs = fuel.plan_new_markets([], now, fuel._tz())
+    assert {s["date"] for s in specs} == {"2026-09-28"}
+
+
+def test_weekend_market_is_flagged_not_guessed(monkeypatch):
+    calls = _wire(monkeypatch)
+    monkeypatch.setattr(fuel, "lea_price_for_date",
+                        lambda *a, **k: (_ for _ in ()).throw(AssertionError("no fetch")))
+    now = datetime(2026, 9, 28, 12, tzinfo=timezone.utc)
+    m = _daily_market("dyzelino", "2026 m. rugsėjo 26 d.")   # Saturday
+    state = {}
+    reports, changed = fuel.resolve_markets([m], now, fuel._tz(), state,
+                                            alert=True, do_resolve=True)
+    assert calls["resolve"] == [] and changed
+    assert reports[0]["status"] == "error" and len(calls["tg"]) == 1
+    # alerted once only
+    fuel.resolve_markets([m], now, fuel._tz(), state, alert=True, do_resolve=True)
+    assert len(calls["tg"]) == 1
