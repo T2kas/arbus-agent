@@ -276,7 +276,7 @@
   "station": "kauno-ams"
  },
  "10fa58f6-fa6d-4714-aacd-9cf4d1738238": {
-  "checksum": "7fdd5a4ec8efd133fb0d8b5e224dd4523aa8d09de811c34aef4a019f164a2e50",
+  "checksum": "fb22aa636129b22597a5e7130b779279c605d14e3d990c4b8311beeb57334620",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -3880,10 +3880,10 @@
   "station": "vilniaus-ams"
  },
  "95c18c49-bd45-4846-9756-d6e2b129c646": {
-  "checksum": "93c55bae31d41803fdfe006f509d7f352628aeebecdacb798f1106ade75f5838",
-  "current_maximum": 17.0,
+  "checksum": "f20a1f749b252d0aebbdde41a07ed36c7895c05e53d7abd8675a75ae60536c6e",
+  "current_maximum": 17.3,
   "date": "2026-09-27",
-  "max_received_at": "2026-09-27T11:10:42.781825+00:00",
+  "max_received_at": "2026-09-27T12:10:42.610342+00:00",
   "measurements": {
    "2026-09-26 21:00:00": {
     "checksum": "9664ed4a7038efcbe0845c0d19f7751f5c82d08e384ad44a10f39def8a5745f0",
@@ -3974,6 +3974,12 @@
     "received_at": "2026-09-27T11:10:42.781825+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 17.0
+   },
+   "2026-09-27 12:00:00": {
+    "checksum": "f20a1f749b252d0aebbdde41a07ed36c7895c05e53d7abd8675a75ae60536c6e",
+    "received_at": "2026-09-27T12:10:42.610342+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 17.3
    }
   },
   "resolved": false,
@@ -4263,10 +4269,10 @@
   "station": "vilniaus-ams"
  },
  "ae7ca777-26d7-4ed0-bd4e-d7bf2f1157e4": {
-  "checksum": "4f1d7167cda0db9d1b2a5793783cce6b2bc97092839c153e3102669904ddbc45",
-  "current_maximum": 14.3,
+  "checksum": "3b49a18c991992d79e70da7f867a2dac64442caede82989fc3a90f320dad9d96",
+  "current_maximum": 14.7,
   "date": "2026-09-27",
-  "max_received_at": "2026-09-27T11:10:42.781825+00:00",
+  "max_received_at": "2026-09-27T12:10:42.610342+00:00",
   "measurements": {
    "2026-09-26 21:00:00": {
     "checksum": "a1e72422b2e23faecfff705408daf04b2972a1438dbcf49ee1ef3fe55a553ee0",
@@ -4357,6 +4363,12 @@
     "received_at": "2026-09-27T11:10:42.781825+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 14.3
+   },
+   "2026-09-27 12:00:00": {
+    "checksum": "3b49a18c991992d79e70da7f867a2dac64442caede82989fc3a90f320dad9d96",
+    "received_at": "2026-09-27T12:10:42.610342+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 14.7
    }
   },
   "resolved": false,
@@ -5500,7 +5512,7 @@
   "station": "klaipedos-ams"
  },
  "c98ddf15-3ba1-4b14-bdde-a6762aa0a5fe": {
-  "checksum": "4f1d7167cda0db9d1b2a5793783cce6b2bc97092839c153e3102669904ddbc45",
+  "checksum": "3b49a18c991992d79e70da7f867a2dac64442caede82989fc3a90f320dad9d96",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -6498,7 +6510,7 @@
   "station": "vilniaus-ams"
  },
  "e86d39c4-2217-40fc-bebf-036f408a2cc7": {
-  "checksum": "93c55bae31d41803fdfe006f509d7f352628aeebecdacb798f1106ade75f5838",
+  "checksum": "f20a1f749b252d0aebbdde41a07ed36c7895c05e53d7abd8675a75ae60536c6e",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -6777,7 +6789,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "eeed615a-5119-4e05-bc3e-737b6ec9aff5": {
-  "checksum": "7fdd5a4ec8efd133fb0d8b5e224dd4523aa8d09de811c34aef4a019f164a2e50",
+  "checksum": "fb22aa636129b22597a5e7130b779279c605d14e3d990c4b8311beeb57334620",
   "current_maximum": 17.2,
   "date": "2026-09-27",
   "max_received_at": "2026-09-27T09:10:42.786495+00:00",
@@ -6871,6 +6883,12 @@
     "received_at": "2026-09-27T11:10:42.781825+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 17.1
+   },
+   "2026-09-27 12:00:00": {
+    "checksum": "fb22aa636129b22597a5e7130b779279c605d14e3d990c4b8311beeb57334620",
+    "received_at": "2026-09-27T12:10:42.610342+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 17.2
    }
   },
   "resolved": false,
