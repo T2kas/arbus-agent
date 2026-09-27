@@ -276,7 +276,7 @@
   "station": "kauno-ams"
  },
  "10fa58f6-fa6d-4714-aacd-9cf4d1738238": {
-  "checksum": "129ce0d197578a322730f6fafea9c85b88e687cdee43e966b809611a3cabba20",
+  "checksum": "6270513e63c39dd31d68cfbb048401243ea5902a6fa0c7fbc589e360f921fee7",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -697,7 +697,7 @@
   "station": "kauno-ams"
  },
  "1993fdf4-9e01-41d1-b8e7-1e96025c89e1": {
-  "checksum": "7669a735ffeb5da6f4b4b9f4f2a6adea1af15602520d769e9de07186a6b532b1",
+  "checksum": "2fd703b9fc084e892b8984207a92970f985d62a4e25c71555fd47b63e9fe0328",
   "current_maximum": null,
   "date": "2026-09-29",
   "measurements": {},
@@ -1977,7 +1977,7 @@
   "station": "klaipedos-ams"
  },
  "40e331ab-25e0-4fdb-8f02-7170c6ab285a": {
-  "checksum": "74758330f2db3d1240e1add3889a3899a7ae79c7309c22428e665ec9ac6dc7c6",
+  "checksum": "23e85fdf5c9664ea2f5acfab028c7f86d02636256495f4add33171358acc6700",
   "current_maximum": null,
   "date": "2026-09-29",
   "measurements": {},
@@ -5596,7 +5596,7 @@
   "station": "klaipedos-ams"
  },
  "c98ddf15-3ba1-4b14-bdde-a6762aa0a5fe": {
-  "checksum": "74758330f2db3d1240e1add3889a3899a7ae79c7309c22428e665ec9ac6dc7c6",
+  "checksum": "23e85fdf5c9664ea2f5acfab028c7f86d02636256495f4add33171358acc6700",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -5745,7 +5745,7 @@
   "station": "kauno-ams"
  },
  "d494bd35-7148-4545-a2e8-32a290572e3a": {
-  "checksum": "129ce0d197578a322730f6fafea9c85b88e687cdee43e966b809611a3cabba20",
+  "checksum": "6270513e63c39dd31d68cfbb048401243ea5902a6fa0c7fbc589e360f921fee7",
   "current_maximum": null,
   "date": "2026-09-29",
   "measurements": {},
@@ -6602,7 +6602,7 @@
   "station": "vilniaus-ams"
  },
  "e86d39c4-2217-40fc-bebf-036f408a2cc7": {
-  "checksum": "7669a735ffeb5da6f4b4b9f4f2a6adea1af15602520d769e9de07186a6b532b1",
+  "checksum": "2fd703b9fc084e892b8984207a92970f985d62a4e25c71555fd47b63e9fe0328",
   "current_maximum": null,
   "date": "2026-09-28",
   "measurements": {},
@@ -6881,7 +6881,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "eeed615a-5119-4e05-bc3e-737b6ec9aff5": {
-  "checksum": "129ce0d197578a322730f6fafea9c85b88e687cdee43e966b809611a3cabba20",
+  "checksum": "6270513e63c39dd31d68cfbb048401243ea5902a6fa0c7fbc589e360f921fee7",
   "current_maximum": 17.4,
   "date": "2026-09-27",
   "max_received_at": "2026-09-27T13:10:39.456546+00:00",
@@ -7005,9 +7005,25 @@
     "received_at": "2026-09-27T16:10:41.476842+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 14.2
+   },
+   "2026-09-27 17:00:00": {
+    "checksum": "6270513e63c39dd31d68cfbb048401243ea5902a6fa0c7fbc589e360f921fee7",
+    "received_at": "2026-09-27T17:10:39.987502+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 11.5
    }
   },
-  "resolved": false,
+  "resolved": true,
+  "resolved_at": "2026-09-27T17:10:39.987502+00:00",
+  "resolved_label": "16,0 iki 17,9 °C",
+  "resolved_option_id": "0fe64f18-ed74-48a5-a447-b08d5de739fe",
+  "resolved_peak_lt": "2026-09-27T16:00:00+03:00",
+  "resolved_sources": [
+   "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/2026-09-26",
+   "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/2026-09-27"
+  ],
+  "resolved_temp": 17.4,
+  "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
