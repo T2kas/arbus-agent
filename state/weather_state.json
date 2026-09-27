@@ -1992,7 +1992,9 @@
   "resolved_price": 1.95,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260925/"
  },
- "436c2483-69aa-47d9-87c6-1eef9cf908d6": {},
+ "436c2483-69aa-47d9-87c6-1eef9cf908d6": {
+  "fuel_alerted": true
+ },
  "4385ede3-2a70-424b-a84f-d41f5f4ec6cd": {
   "checksum": "456ec680a7405adac0bab80d8784170662ae47d0b4fb632bc431caa93e55f1ff",
   "current_maximum": 16.4,
@@ -5887,7 +5889,9 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "dbaf9489-c5a2-4a7b-bfa8-031abc90a44c": {},
+ "dbaf9489-c5a2-4a7b-bfa8-031abc90a44c": {
+  "fuel_alerted": true
+ },
  "dbc0a5e4-d2ab-4a47-9a91-a1d51783cc2a": {
   "resolved": true,
   "resolved_at": "2026-09-23T08:30:58.252280+00:00",
@@ -6609,7 +6613,9 @@
   "resolved": false,
   "station": "kauno-ams"
  },
- "e96c0a4f-765c-457d-9768-92bf1c8e13ca": {},
+ "e96c0a4f-765c-457d-9768-92bf1c8e13ca": {
+  "fuel_alerted": true
+ },
  "eafb4e8e-6252-4882-8f2a-74218eca1b62": {
   "checksum": "95632211591f61b4a8f31433ae750415e9b361e14686b7a3791f4ceb69147f84",
   "current_maximum": 17.9,
@@ -7146,7 +7152,9 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "fb207a0a-d83d-4d02-8b5e-bc0d569fe64d": {},
+ "fb207a0a-d83d-4d02-8b5e-bc0d569fe64d": {
+  "fuel_alerted": true
+ },
  "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
  "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
   "checksum": "930f6a6d7a4e865be4c1ddea3aca76bbf62ac51db6b2796c1cb7ddc2aa6dd834",
