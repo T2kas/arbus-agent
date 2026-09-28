@@ -135,7 +135,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "0b79772f-8771-4346-9c8a-424f9ac3dcda": {},
+ "0b79772f-8771-4346-9c8a-424f9ac3dcda": {
+  "resolved": true,
+  "resolved_at": "2026-09-28T08:45:40.781542+00:00",
+  "resolved_label": "Nuo 2,244 iki 2,254 €/l",
+  "resolved_option_id": "c5c352b0-0d71-466d-a45c-fd3d7bce7c9f",
+  "resolved_price": 2.249,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260928/"
+ },
  "0e3772f1-72a5-478d-8e22-78e7059f2078": {
   "checksum": "3fb96f3f63d00af6737c69111545e789c1ed1f1f26d199ebd220168e610d72ff",
   "current_maximum": 17.7,
@@ -2507,7 +2514,14 @@
   "resolved_score": "Žalgiris 3:2 K. Žalgiris",
   "resolved_via": "sports"
  },
- "61d53af8-e978-419a-9cbb-e4071743b9ee": {},
+ "61d53af8-e978-419a-9cbb-e4071743b9ee": {
+  "resolved": true,
+  "resolved_at": "2026-09-28T08:45:40.781542+00:00",
+  "resolved_label": "Nuo 1,934 iki 1,944 €/l",
+  "resolved_option_id": "52c2bbc9-f12e-4ec5-a017-7ca2e3d33aff",
+  "resolved_price": 1.944,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260928/"
+ },
  "63354551-a59b-4b37-beb8-1eb116336122": {
   "checksum": "4c26c89dee9169740b4663571d0bf982e4ede8e5224bb80d641fbfb5e11bc6a6",
   "current_maximum": 18.1,
