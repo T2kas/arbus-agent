@@ -307,8 +307,11 @@ def openai_chat(
         schema = (response_format.get("json_schema", {}).get("schema")
                   or response_format.get("schema"))
         if schema:
-            payload["text"] = {"format": {"type": "json_schema",
-                                          "name": "result", "schema": schema}}
+            # strict=False: OpenAI's default strict mode rejects our Pydantic
+            # schemas with a 400 ("additionalProperties is required to be ... false"),
+            # which forced a wasted retry in plain-JSON mode on every call.
+            payload["text"] = {"format": {"type": "json_schema", "name": "result",
+                                          "schema": schema, "strict": False}}
     resp = requests.post(
         "https://api.openai.com/v1/responses",
         headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"},
