@@ -2060,7 +2060,7 @@
   "station": "klaipedos-ams"
  },
  "40e331ab-25e0-4fdb-8f02-7170c6ab285a": {
-  "checksum": "38dde9cadf71f0380c0930bfe73924ae88046523be89439ed0b968c8ac39fe2a",
+  "checksum": "f645a5bf21304f0d0af011ada2fce244cb894fc59d61b3608948683783e6e6c7",
   "current_maximum": null,
   "date": "2026-09-29",
   "measurements": {},
@@ -5689,7 +5689,7 @@
   "station": "klaipedos-ams"
  },
  "c98ddf15-3ba1-4b14-bdde-a6762aa0a5fe": {
-  "checksum": "38dde9cadf71f0380c0930bfe73924ae88046523be89439ed0b968c8ac39fe2a",
+  "checksum": "f645a5bf21304f0d0af011ada2fce244cb894fc59d61b3608948683783e6e6c7",
   "current_maximum": 13.2,
   "date": "2026-09-28",
   "max_received_at": "2026-09-28T08:10:41.203515+00:00",
