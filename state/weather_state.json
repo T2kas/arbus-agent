@@ -1,7 +1,7 @@
 {
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
  "08cdd6b7-cc77-401c-ac4b-b95662e867e5": {
-  "checksum": "9ef54cb5aa757ee3b164f6ed994ad81b649974de793c553546cedb29a3631087",
+  "checksum": "a0b4fd11d233c38f7a13f7335a6b538a97fb4d1d60878ae2e62790eb0d1572ae",
   "current_maximum": null,
   "date": "2026-09-30",
   "measurements": {},
@@ -844,7 +844,7 @@
   "station": "kauno-ams"
  },
  "1993fdf4-9e01-41d1-b8e7-1e96025c89e1": {
-  "checksum": "bb2679498efaa2140d792f60d820012d3e59ea9067841419b7ecd6aafc788a47",
+  "checksum": "a6c692007554f035b56fbcbad2755013a879a10eb717088b987a7150d55c1a17",
   "current_maximum": null,
   "date": "2026-09-29",
   "measurements": {},
@@ -2124,7 +2124,7 @@
   "station": "klaipedos-ams"
  },
  "40a604ff-5ce2-48ef-bf0b-e54666799d2a": {
-  "checksum": "acb4ac904cebc59ba01d4b376936bc5c85b2f6f9fc9c56eda7b27741150c14b0",
+  "checksum": "38fade78f4e90e3f3e37e7790bac839eea57e75ca8f887371fef7d66c2b8a86f",
   "current_maximum": null,
   "date": "2026-09-30",
   "measurements": {},
@@ -2132,7 +2132,7 @@
   "station": "vilniaus-ams"
  },
  "40e331ab-25e0-4fdb-8f02-7170c6ab285a": {
-  "checksum": "acb4ac904cebc59ba01d4b376936bc5c85b2f6f9fc9c56eda7b27741150c14b0",
+  "checksum": "38fade78f4e90e3f3e37e7790bac839eea57e75ca8f887371fef7d66c2b8a86f",
   "current_maximum": null,
   "date": "2026-09-29",
   "measurements": {},
@@ -5617,7 +5617,7 @@
   "station": "vilniaus-ams"
  },
  "c2213fbd-ae10-417c-a38c-f9c3a3992bac": {
-  "checksum": "bb2679498efaa2140d792f60d820012d3e59ea9067841419b7ecd6aafc788a47",
+  "checksum": "a6c692007554f035b56fbcbad2755013a879a10eb717088b987a7150d55c1a17",
   "current_maximum": null,
   "date": "2026-09-30",
   "measurements": {},
@@ -6054,7 +6054,7 @@
   "station": "kauno-ams"
  },
  "d494bd35-7148-4545-a2e8-32a290572e3a": {
-  "checksum": "9ef54cb5aa757ee3b164f6ed994ad81b649974de793c553546cedb29a3631087",
+  "checksum": "a0b4fd11d233c38f7a13f7335a6b538a97fb4d1d60878ae2e62790eb0d1572ae",
   "current_maximum": null,
   "date": "2026-09-29",
   "measurements": {},
