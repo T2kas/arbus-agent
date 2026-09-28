@@ -108,3 +108,28 @@ def test_newest_image_reused_from_existing_row():
              "image_url": "https://img/cinema.jpg", "rules": "", "status": "open"}]
     assert series._newest_image(rows, series._cinema_series()) == \
         "https://img/cinema.jpg"
+
+
+def test_series_research_uses_openai_when_configured(monkeypatch):
+    """Weekly cinema/music research must run on SERIES_LLM_PROVIDER (OpenAI)."""
+    from arbus import llm
+    seen = {}
+    monkeypatch.setattr(series.config, "SERIES_LLM_PROVIDER", "openai")
+    monkeypatch.setattr(llm, "available_providers", lambda: ["anthropic", "openai"])
+    monkeypatch.setattr(llm, "research",
+                        lambda *a, **k: (seen.__setitem__("research", k.get("force_provider")), "t")[1])
+    monkeypatch.setattr(llm, "structure", lambda *a, **k: (
+        seen.__setitem__("structure", k.get("force_provider")),
+        series.SeriesDraft(options=[series.SeriesOption(label="A", probability=50),
+                                    series.SeriesOption(label="B", probability=30)],
+                           context="c"))[1])
+    spec, meta = series.build_spec(series._music_series(), (2026, 40), "", series._tz())
+    assert spec is not None
+    assert seen == {"research": "openai", "structure": "openai"}
+
+
+def test_series_provider_falls_back_without_key(monkeypatch):
+    from arbus import llm
+    monkeypatch.setattr(series.config, "SERIES_LLM_PROVIDER", "openai")
+    monkeypatch.setattr(llm, "available_providers", lambda: ["anthropic"])
+    assert series.series_provider() is None      # → normal provider choice

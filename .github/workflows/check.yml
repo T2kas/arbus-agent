@@ -54,7 +54,12 @@ jobs:
           ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
           # Resolution check on Perplexity (search-native, cheap) with its
           # reasoning model. Switch back to Anthropic by setting these Variables.
-          LLM_PROVIDER_AICHECK: ${{ vars.LLM_PROVIDER_AICHECK || 'perplexity' }}
+          # AI resolution check runs on OpenAI by default (team direction
+          # 2026-09-28). Override with Variable LLM_PROVIDER_AICHECK.
+          LLM_PROVIDER_AICHECK: ${{ vars.LLM_PROVIDER_AICHECK || 'openai' }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_AICHECK_MODEL: ${{ vars.OPENAI_AICHECK_MODEL }}
+          OPENAI_TOOL_CHOICE: ${{ vars.OPENAI_TOOL_CHOICE }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
           PERPLEXITY_AICHECK_MODEL: ${{ vars.PERPLEXITY_AICHECK_MODEL || 'sonar-reasoning-pro' }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

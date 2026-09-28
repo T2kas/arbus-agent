@@ -981,6 +981,10 @@ SERIES_CLOSE_MINUTE = _env_int("SERIES_CLOSE_MINUTE", 0)
 # market per week, so this is a small recurring spend, reported each time.
 SERIES_RESEARCH_SEARCHES = _env_int("SERIES_RESEARCH_SEARCHES", 6)
 SERIES_RESEARCH_MAX_TOKENS = _env_int("SERIES_RESEARCH_MAX_TOKENS", 8000)
+# Which LLM researches the weekly cinema/music markets. OpenAI by default (team
+# direction 2026-09-28: better search). Used only if its API key is configured;
+# otherwise the normal provider choice applies (with a warning in the log).
+SERIES_LLM_PROVIDER = _env_str("SERIES_LLM_PROVIDER", "openai")
 
 # ── Interactive "compose one idea → app-ready market" (Telegram /pridėti) ────
 # When you pick a generated idea to launch, one web-grounded LLM call re-checks

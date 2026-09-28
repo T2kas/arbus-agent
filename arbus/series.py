@@ -337,11 +337,13 @@ def build_spec(series: dict, period: tuple, image: str,
     llm.reset_usage()
     system = ("Rašyk aiškia lietuvių kalba, naudok lietuviškas kabutes, remkis tik "
               "realiais, patikrinamais faktais ir nekurk neegzistuojančių pavadinimų.")
+    prov = series_provider()
     try:
         text = llm.research(prompt, system=system,
                             max_uses=config.SERIES_RESEARCH_SEARCHES,
-                            max_tokens=config.SERIES_RESEARCH_MAX_TOKENS, stage="draft")
-        draft = llm.structure(text, SeriesDraft)
+                            max_tokens=config.SERIES_RESEARCH_MAX_TOKENS, stage="draft",
+                            force_provider=prov)
+        draft = llm.structure(text, SeriesDraft, force_provider=prov)
     except Exception as exc:                            # noqa: BLE001 — never crash a run
         log.warning("series %s research failed: %s", series["key"], exc)
         return None, _meta(f"tyrimas nepavyko: {exc}")
@@ -369,6 +371,19 @@ def build_spec(series: dict, period: tuple, image: str,
         "closes_at": close_dt.isoformat(),
     }
     return spec, meta
+
+
+def series_provider() -> str | None:
+    """The LLM provider for series research: SERIES_LLM_PROVIDER (OpenAI by
+    default) when its key is configured, else None = the normal provider choice."""
+    want = (config.SERIES_LLM_PROVIDER or "").strip().lower()
+    if not want:
+        return None
+    if want in llm.available_providers():
+        return want
+    log.warning("series: SERIES_LLM_PROVIDER=%s but its API key is not set — "
+                "falling back to the default provider", want)
+    return None
 
 
 def _meta(reason: str) -> dict:

@@ -51,6 +51,11 @@ jobs:
           ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          # Series research runs on OpenAI (SERIES_LLM_PROVIDER, default openai).
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SERIES_LLM_PROVIDER: ${{ vars.SERIES_LLM_PROVIDER }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          OPENAI_TOOL_CHOICE: ${{ vars.OPENAI_TOOL_CHOICE }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           APP_CREATE_RPC: ${{ vars.APP_CREATE_RPC }}
