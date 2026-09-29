@@ -1,7 +1,7 @@
 {
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
  "08cdd6b7-cc77-401c-ac4b-b95662e867e5": {
-  "checksum": "6303d66c2fb2cc0df11b105a2abb7c1f4a9d1cb3914c40625a76b356c85862ad",
+  "checksum": "6578d2f5303bf009dcdb4607756b12c408b8eaf1ccab7a12979f04305196ea82",
   "current_maximum": null,
   "date": "2026-09-30",
   "measurements": {},
@@ -2261,7 +2261,7 @@
   "station": "klaipedos-ams"
  },
  "40a604ff-5ce2-48ef-bf0b-e54666799d2a": {
-  "checksum": "80cacf3dc384a9fc4f4336094af66bf839d1e6e33c226a9e70104f68d12c3fae",
+  "checksum": "37175fe212187b3affb7787a36fc73b64589d9f97a110db3b638ff0e0776b9be",
   "current_maximum": null,
   "date": "2026-09-30",
   "measurements": {},
@@ -2538,7 +2538,7 @@
   "station": "klaipedos-ams"
  },
  "4dc5de32-e283-4766-b7bb-a16dc9d9a185": {
-  "checksum": "80cacf3dc384a9fc4f4336094af66bf839d1e6e33c226a9e70104f68d12c3fae",
+  "checksum": "37175fe212187b3affb7787a36fc73b64589d9f97a110db3b638ff0e0776b9be",
   "current_maximum": null,
   "date": "2026-10-01",
   "measurements": {},
@@ -3744,7 +3744,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260923/"
  },
  "88606d38-3b8e-48e8-bfb1-6d769bc9ec23": {
-  "checksum": "d00cf6e0a12f62b9b7446ebbaca8d1799625dd2ab62fc377d435bbde08c235a4",
+  "checksum": "1d7fb4c9730081d42e85949528f9ad84ae8d9d2c4a97560d64857bc0447c3b72",
   "current_maximum": null,
   "date": "2026-10-01",
   "measurements": {},
@@ -4776,7 +4776,7 @@
   "station": "vilniaus-ams"
  },
  "acc6a4ab-7315-435f-afcc-94cc664e89af": {
-  "checksum": "6303d66c2fb2cc0df11b105a2abb7c1f4a9d1cb3914c40625a76b356c85862ad",
+  "checksum": "6578d2f5303bf009dcdb4607756b12c408b8eaf1ccab7a12979f04305196ea82",
   "current_maximum": null,
   "date": "2026-10-01",
   "measurements": {},
@@ -5917,7 +5917,7 @@
   "station": "vilniaus-ams"
  },
  "c2213fbd-ae10-417c-a38c-f9c3a3992bac": {
-  "checksum": "d00cf6e0a12f62b9b7446ebbaca8d1799625dd2ab62fc377d435bbde08c235a4",
+  "checksum": "1d7fb4c9730081d42e85949528f9ad84ae8d9d2c4a97560d64857bc0447c3b72",
   "current_maximum": null,
   "date": "2026-09-30",
   "measurements": {},
