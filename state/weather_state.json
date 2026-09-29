@@ -2736,7 +2736,14 @@
   "resolved_score": "Žalgiris 3:2 K. Žalgiris",
   "resolved_via": "sports"
  },
- "618e0021-3797-47f9-8cea-368a5fbf00b9": {},
+ "618e0021-3797-47f9-8cea-368a5fbf00b9": {
+  "resolved": true,
+  "resolved_at": "2026-09-29T08:35:37.607514+00:00",
+  "resolved_label": "1,955 €/l arba daugiau",
+  "resolved_option_id": "991ea973-4733-40f0-a482-1a317bdbdaeb",
+  "resolved_price": 1.996,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260929/"
+ },
  "61d53af8-e978-419a-9cbb-e4071743b9ee": {
   "resolved": true,
   "resolved_at": "2026-09-28T08:45:40.781542+00:00",
@@ -6871,7 +6878,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "e4223e01-2e91-4a80-8fdd-2c8d19fcd493": {},
+ "e4223e01-2e91-4a80-8fdd-2c8d19fcd493": {
+  "resolved": true,
+  "resolved_at": "2026-09-29T08:35:37.607514+00:00",
+  "resolved_label": "2,265 €/l arba daugiau",
+  "resolved_option_id": "d2cde78b-f979-40e5-9040-58606d5f8a0f",
+  "resolved_price": 2.295,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260929/"
+ },
  "e4bf75f6-d425-4077-bea4-839283ac9e6b": {
   "checksum": "69f547ed24f7fed94cbc411f38997054d4cecc2722426c8357608565b0e13fef",
   "current_maximum": 16.7,
