@@ -2817,7 +2817,7 @@
   "station": "klaipedos-ams"
  },
  "4dc5de32-e283-4766-b7bb-a16dc9d9a185": {
-  "checksum": "3d8518a0996a616c19d75dba58613290455873d7df759cd6cffd9a15937c123d",
+  "checksum": "c7628cd38d62f867b0d22980d68e603ee393c32d5f28c9ccc108162d764bad93",
   "current_maximum": null,
   "date": "2026-10-01",
   "measurements": {},
@@ -4023,7 +4023,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260923/"
  },
  "88606d38-3b8e-48e8-bfb1-6d769bc9ec23": {
-  "checksum": "ba3ffe53acc57cc3de216c8677063acb1df71dce82e4e1ec8181ddc1fd11f3c2",
+  "checksum": "86dd5240ee2207a2fdff20fcd7195b9538da7485cf1fa6e709cfb2f0ec9125d2",
   "current_maximum": null,
   "date": "2026-10-01",
   "measurements": {},
@@ -5055,7 +5055,7 @@
   "station": "vilniaus-ams"
  },
  "acc6a4ab-7315-435f-afcc-94cc664e89af": {
-  "checksum": "13dee8337cb5cb60f0a9ca86da3195442b9e56078a96e6e52776c4515b2c6796",
+  "checksum": "9596b6737787bbd8909719d3cd0db16f254b2f1a08f9e123b137443ae12c406c",
   "current_maximum": null,
   "date": "2026-10-01",
   "measurements": {},
@@ -7911,7 +7911,7 @@
   "fuel_alerted": true
  },
  "e9c63882-69e4-4a21-ac33-695e208b84c6": {
-  "checksum": "3d8518a0996a616c19d75dba58613290455873d7df759cd6cffd9a15937c123d",
+  "checksum": "c7628cd38d62f867b0d22980d68e603ee393c32d5f28c9ccc108162d764bad93",
   "current_maximum": null,
   "date": "2026-10-02",
   "measurements": {},
@@ -8336,7 +8336,7 @@
   "station": "klaipedos-ams"
  },
  "f2697a93-6337-4747-b9af-6e6612419dfc": {
-  "checksum": "ba3ffe53acc57cc3de216c8677063acb1df71dce82e4e1ec8181ddc1fd11f3c2",
+  "checksum": "86dd5240ee2207a2fdff20fcd7195b9538da7485cf1fa6e709cfb2f0ec9125d2",
   "current_maximum": null,
   "date": "2026-10-02",
   "measurements": {},
@@ -8749,7 +8749,7 @@
   "station": "kauno-ams"
  },
  "ff23f050-33a1-4d95-835d-2bd691f25a96": {
-  "checksum": "13dee8337cb5cb60f0a9ca86da3195442b9e56078a96e6e52776c4515b2c6796",
+  "checksum": "9596b6737787bbd8909719d3cd0db16f254b2f1a08f9e123b137443ae12c406c",
   "current_maximum": null,
   "date": "2026-10-02",
   "measurements": {},
