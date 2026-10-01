@@ -3216,7 +3216,14 @@
   "resolved_score": "Žalgiris 3:2 K. Žalgiris",
   "resolved_via": "sports"
  },
- "60d6e769-5bea-4236-be14-7ee79c5d0045": {},
+ "60d6e769-5bea-4236-be14-7ee79c5d0045": {
+  "resolved": true,
+  "resolved_at": "2026-10-01T08:31:02.936037+00:00",
+  "resolved_label": "Nuo 1,954 iki 1,964 €/l",
+  "resolved_option_id": "9cd17e9c-69c3-421b-a4a5-ff6c86264c3c",
+  "resolved_price": 1.964,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261001/"
+ },
  "618e0021-3797-47f9-8cea-368a5fbf00b9": {
   "resolved": true,
   "resolved_at": "2026-09-29T08:35:37.607514+00:00",
@@ -6991,7 +6998,14 @@
   "station": "kauno-ams"
  },
  "ce175b06-a6ca-4144-a86e-53faf0e7f556": {},
- "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {},
+ "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {
+  "resolved": true,
+  "resolved_at": "2026-10-01T08:31:02.936037+00:00",
+  "resolved_label": "Nuo 2,264 iki 2,274 €/l",
+  "resolved_option_id": "1dcdd016-8924-4a22-9559-3aeef4041c15",
+  "resolved_price": 2.268,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261001/"
+ },
  "d494bd35-7148-4545-a2e8-32a290572e3a": {
   "checksum": "edbaa9515788717e494f7a441e74302f05670899d33dbb8c0ab37bf004eefdde",
   "current_maximum": 19.1,
