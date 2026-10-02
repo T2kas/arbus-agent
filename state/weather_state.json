@@ -2817,7 +2817,7 @@
   "station": "klaipedos-ams"
  },
  "43fcab83-f0e1-4bac-8143-e9da11b7ec8a": {
-  "checksum": "5bddf883ab4e0ccb3c3b82ba43313f337114c32a05bfbbb7c955665d1723818e",
+  "checksum": "ff8c82fb1fc1bfbc4d1af3011750c7465b932d1ad3f0576ab5ecf82481c31f3e",
   "current_maximum": null,
   "date": "2026-10-03",
   "measurements": {},
@@ -6182,7 +6182,7 @@
   "station": "vilniaus-ams"
  },
  "bc08b81a-e579-4b55-ae22-02c061c0b89e": {
-  "checksum": "9f95f55e73ee1a793b625498014ef93d978242a14d606c04fc34c5f1ca231439",
+  "checksum": "c472664c95a3d92121b605917f0e7ad02a9826b183bf33dc1f7c4a6d02505a32",
   "current_maximum": null,
   "date": "2026-10-03",
   "measurements": {},
@@ -8356,10 +8356,13 @@
   "fuel_alerted": true
  },
  "e9c63882-69e4-4a21-ac33-695e208b84c6": {
-  "checksum": "9f95f55e73ee1a793b625498014ef93d978242a14d606c04fc34c5f1ca231439",
-  "current_maximum": 15.6,
+  "checksum": "c472664c95a3d92121b605917f0e7ad02a9826b183bf33dc1f7c4a6d02505a32",
+  "current_maximum": 17.6,
   "date": "2026-10-02",
-  "max_received_at": "2026-10-02T09:10:45.696087+00:00",
+  "eliminated": [
+   "7e3a5843-feba-4f5c-bae7-62aa15112f9f"
+  ],
+  "max_received_at": "2026-10-02T10:10:43.912774+00:00",
   "measurements": {
    "2026-10-01 21:00:00": {
     "checksum": "796720d989a1c61f55e0bdc370b60c7a5f2e3c8e6835a47de0f534acaab2b607",
@@ -8438,6 +8441,12 @@
     "received_at": "2026-10-02T09:10:45.696087+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 15.6
+   },
+   "2026-10-02 10:00:00": {
+    "checksum": "c472664c95a3d92121b605917f0e7ad02a9826b183bf33dc1f7c4a6d02505a32",
+    "received_at": "2026-10-02T10:10:43.912774+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 17.6
    }
   },
   "resolved": false,
@@ -8862,10 +8871,10 @@
   "station": "klaipedos-ams"
  },
  "f2697a93-6337-4747-b9af-6e6612419dfc": {
-  "checksum": "5bddf883ab4e0ccb3c3b82ba43313f337114c32a05bfbbb7c955665d1723818e",
-  "current_maximum": 16.1,
+  "checksum": "ff8c82fb1fc1bfbc4d1af3011750c7465b932d1ad3f0576ab5ecf82481c31f3e",
+  "current_maximum": 17.9,
   "date": "2026-10-02",
-  "max_received_at": "2026-10-02T09:10:45.696087+00:00",
+  "max_received_at": "2026-10-02T10:10:43.912774+00:00",
   "measurements": {
    "2026-10-01 21:00:00": {
     "checksum": "478a36a1160bcc69ed12f5827cfec019316f8fd1522f6165daa902402f85d208",
@@ -8944,6 +8953,12 @@
     "received_at": "2026-10-02T09:10:45.696087+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 16.1
+   },
+   "2026-10-02 10:00:00": {
+    "checksum": "ff8c82fb1fc1bfbc4d1af3011750c7465b932d1ad3f0576ab5ecf82481c31f3e",
+    "received_at": "2026-10-02T10:10:43.912774+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 17.9
    }
   },
   "resolved": false,
@@ -9364,10 +9379,13 @@
   "station": "kauno-ams"
  },
  "ff23f050-33a1-4d95-835d-2bd691f25a96": {
-  "checksum": "a7bfee98408c4bed374952d6d67684fe2ca385d2d28b448b46f13321579a0cba",
-  "current_maximum": 17.1,
+  "checksum": "a99edd8aafc2f5d1bdc5ce2db5dfeeb89daf590a4401f7ac607b20c1c0d1e6ab",
+  "current_maximum": 18.5,
   "date": "2026-10-02",
-  "max_received_at": "2026-10-02T09:10:45.696087+00:00",
+  "eliminated": [
+   "17fb392a-82cc-46ce-82da-78a6680aa9ec"
+  ],
+  "max_received_at": "2026-10-02T10:10:43.912774+00:00",
   "measurements": {
    "2026-10-01 21:00:00": {
     "checksum": "77a28d6dd9ff2105d36dc60fc57275929c777d6ceface4cf84c65582a870edc3",
@@ -9446,6 +9464,12 @@
     "received_at": "2026-10-02T09:10:45.696087+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 17.1
+   },
+   "2026-10-02 10:00:00": {
+    "checksum": "a99edd8aafc2f5d1bdc5ce2db5dfeeb89daf590a4401f7ac607b20c1c0d1e6ab",
+    "received_at": "2026-10-02T10:10:43.912774+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 18.5
    }
   },
   "resolved": false,
@@ -9453,7 +9477,7 @@
   "station": "klaipedos-ams"
  },
  "ffedb0db-1ed3-4a95-bcbe-4a6226398c03": {
-  "checksum": "a7bfee98408c4bed374952d6d67684fe2ca385d2d28b448b46f13321579a0cba",
+  "checksum": "a99edd8aafc2f5d1bdc5ce2db5dfeeb89daf590a4401f7ac607b20c1c0d1e6ab",
   "current_maximum": null,
   "date": "2026-10-03",
   "measurements": {},
