@@ -431,7 +431,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260930/"
  },
  "0fe27902-82c0-4dcc-a6d4-f303ad44ce62": {
-  "checksum": "f22648b9321a586297a9bd5fc737e98b2676d0e227a750016fe881b3717986dc",
+  "checksum": "03d24b04e86c58664717fcfada949ab94bfc389bd86d47355bc8f81adb16ea09",
   "current_maximum": null,
   "date": "2026-10-04",
   "measurements": {},
@@ -1136,7 +1136,7 @@
   "station": "kauno-ams"
  },
  "1b9e3d2e-b1c3-4712-af14-5df091ddefa0": {
-  "checksum": "5483cdf467e65f55d5b2717db45360f878d6324e6446c72a2ba253b702cc9fec",
+  "checksum": "17f9f9700103d83b8a22713c71a2bd42a0a133bdc42757d08d440b1bcab4ed3e",
   "current_maximum": null,
   "date": "2026-10-04",
   "measurements": {},
@@ -2833,7 +2833,7 @@
   "station": "klaipedos-ams"
  },
  "43fcab83-f0e1-4bac-8143-e9da11b7ec8a": {
-  "checksum": "f22648b9321a586297a9bd5fc737e98b2676d0e227a750016fe881b3717986dc",
+  "checksum": "03d24b04e86c58664717fcfada949ab94bfc389bd86d47355bc8f81adb16ea09",
   "current_maximum": null,
   "date": "2026-10-03",
   "measurements": {},
@@ -5072,7 +5072,7 @@
   "station": "kauno-ams"
  },
  "a0b2dd38-05be-44d8-b5d2-631098b85c18": {
-  "checksum": "63052ff70cdbdfa5b635e2666a1434946fe828479aa8e31cc8aea6593fa6787b",
+  "checksum": "60d4e5ac28b835793d86f49bf270ec02dfa86493bdabd09daa46ecccb4568d85",
   "current_maximum": null,
   "date": "2026-10-04",
   "measurements": {},
@@ -6206,7 +6206,7 @@
   "station": "vilniaus-ams"
  },
  "bc08b81a-e579-4b55-ae22-02c061c0b89e": {
-  "checksum": "5483cdf467e65f55d5b2717db45360f878d6324e6446c72a2ba253b702cc9fec",
+  "checksum": "17f9f9700103d83b8a22713c71a2bd42a0a133bdc42757d08d440b1bcab4ed3e",
   "current_maximum": null,
   "date": "2026-10-03",
   "measurements": {},
@@ -7218,6 +7218,7 @@
   "resolved_via": "music",
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
+ "cfee8c11-99c8-4cc6-858a-40cdf310db3c": {},
  "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {
   "resolved": true,
   "resolved_at": "2026-10-01T08:31:02.936037+00:00",
@@ -9625,7 +9626,7 @@
   "station": "klaipedos-ams"
  },
  "ffedb0db-1ed3-4a95-bcbe-4a6226398c03": {
-  "checksum": "63052ff70cdbdfa5b635e2666a1434946fe828479aa8e31cc8aea6593fa6787b",
+  "checksum": "60d4e5ac28b835793d86f49bf270ec02dfa86493bdabd09daa46ecccb4568d85",
   "current_maximum": null,
   "date": "2026-10-03",
   "measurements": {},
