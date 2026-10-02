@@ -1,0 +1,50 @@
+name: create-markets
+
+# Creates a reviewed batch of markets from a JSON file in the repo (e.g. the
+# monthly markets in markets/2026-10.json). Manual only: Actions -> create-markets
+# -> Run workflow. Every spec is validated first (nothing is created if any is
+# invalid) and titles that already exist in the app are skipped, so running it
+# twice cannot create duplicates. A Telegram message lists what was created.
+
+on:
+  workflow_dispatch:
+    inputs:
+      file:
+        description: "Batch file to create"
+        default: "markets/2026-10.json"
+      dry_run:
+        description: "Only validate and list, do not create"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: create-markets
+  cancel-in-progress: false
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Create markets
+        env:
+          PYTHONUNBUFFERED: "1"
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          APP_CREATE_RPC: ${{ vars.APP_CREATE_RPC }}
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then FLAGS="--dry-run"; fi
+          python -m arbus create-batch "${{ github.event.inputs.file }}" $FLAGS

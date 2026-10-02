@@ -503,6 +503,24 @@ def cmd_series(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_create_batch(args: argparse.Namespace) -> int:
+    """Create a reviewed batch of markets from a JSON file (needs the service_role
+    key). Validates every spec first; skips titles that already exist."""
+    from . import batch_create
+
+    reports, error = batch_create.run(args.file, dry_run=args.dry_run,
+                                      alert=not args.no_telegram)
+    if error:
+        print(f"❌ {error}")
+        return 1
+    for r in reports:
+        icon = {"created": "🆕", "would-create": "📝", "skipped": "⏭️",
+                "error": "❌"}.get(r["status"], "·")
+        print(f"{icon} {r['status']:12} {r['title']}  {r.get('detail', '')}")
+    errors = sum(1 for r in reports if r["status"] == "error")
+    return 1 if errors else 0
+
+
 def cmd_stats(args: argparse.Namespace) -> int:
     """Market health from the app's own trades. No LLM, no cost.
 
@@ -1074,6 +1092,14 @@ def main() -> int:
                     help="research and print the draft market(s) without creating them "
                          "(still spends the research call)")
     se.set_defaults(func=cmd_series)
+
+    cb = sub.add_parser("create-batch",
+                        help="create a reviewed batch of markets from a JSON file")
+    cb.add_argument("file", help="e.g. markets/2026-10.json")
+    cb.add_argument("--dry-run", action="store_true",
+                    help="validate + show what would be created, write nothing")
+    cb.add_argument("--no-telegram", action="store_true")
+    cb.set_defaults(func=cmd_create_batch)
 
     stt = sub.add_parser("stats", help="market health: dead, important, overdue")
     stt.add_argument("--days", type=int, default=config.DEAD_MARKET_DAYS)

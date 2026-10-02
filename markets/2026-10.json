@@ -1,0 +1,254 @@
+[
+  {
+    "title": "Kuris filmas bus žiūrimiausias Lietuvoje spalį?",
+    "subtitle": "2026 m. spalio 1–31 d.",
+    "category": "kultura",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/215e94e9-1219-44f4-94a8-8ec6b5139b80.jpg",
+    "liquidity": 150000,
+    "rules": "Rinka bus išspręsta pagal filmą, kuris oficialioje Lietuvos kino centro 2026 m. spalio mėnesio filmų TOP lentelėje turės didžiausią žiūrovų skaičių.\n\nVertinami visi nuo 2026 m. spalio 1 d. 00:00 iki spalio 31 d. 23:59 Lietuvos laiku Lietuvos kino teatruose užregistruoti žiūrovai, kuriuos Lietuvos kino centras įtrauks į spalio mėnesio ataskaitą.\n\nNaudojamas ataskaitoje nurodytas žiūrovų skaičius. Bilietų pajamos, seansų skaičius, užimtų ekranų skaičius, pasaulinės pajamos, transliacijų platformų peržiūros ir kitų valstybių rezultatai nenaudojami.\n\nĮ rinką įtraukiami visi Lietuvos kino teatruose rodyti filmai, nepriklausomai nuo jų gamybos šalies ar premjeros datos. Filmas neprivalo būti pasirodęs spalį – skaičiuojami tik jo spalio mėnesio žiūrovai.\n\nBaigtį lemia Lietuvos kino centro lentelėje vartojamas filmo pavadinimas:\n\ndubliuotos, subtitruotos, 2D, 3D, IMAX ir kitos to paties filmo versijos sumuojamos, jeigu Lietuvos kino centras jas pateiks vienoje eilutėje;\njeigu skirtingos versijos bus pateiktos atskiromis eilutėmis, jos laikomos atskirais rezultatais ir papildomai nesumuojamos;\npakartotinis rodymas ar restauruota versija laikoma atskiru filmu, jeigu taip ją išskirs Lietuvos kino centras;\nbaigtis „Kitas filmas“ reiškia vieną konkretų sąraše nepaminėtą filmą, o ne visų kitų filmų žiūrovų sumą.\n\nJeigu du ar daugiau filmų turės vienodą didžiausią žiūrovų skaičių, rezultatas bus paskirstytas po lygiai tarp jų baigčių. Jeigu Lietuvos kino centras filmus oficialiai išrikiuos nepaisydamas vienodo paskelbto skaičiaus, naudojama jo nustatyta pirmoji vieta.\n\nNaudojama naujausia oficiali spalio ataskaitos versija, paskelbta arba pataisyta iki 2027 m. sausio 31 d. 23:59 Lietuvos laiku. Vėlesni pataisymai rinkos rezultato nekeičia.\n\nJeigu iki 2027 m. vasario 28 d. Lietuvos kino centras nepaskelbs 2026 m. spalio mėnesio TOP lentelės, rinka atšaukiama ir visos pozicijos grąžinamos. Savaitinių rezultatų sumavimas kaip pakaitalas nenaudojamas, nes savaitės gali apimti rugsėjo arba lapkričio dienas.\n\nRezultato šaltinis – Lietuvos kino centro naujausios kino teatrų ataskaitos, skiltis „Mėnesio TOP“.",
+    "context": "Rugsėjo 25 d. pasirodžiusi lietuviška komedija „(Ne)tobuli melagiai“ per pirmąją savaitę (rugsėjo 25 – spalio 1 d.) surinko 12 058 žiūrovus ir pirmauja Lietuvos kino centro savaitės TOP. Toliau rikiuojasi „Absoliutus blogis“ (7 549) ir „Žvėries širdis“ (7 414).\n\nSpalio 2 d. kino teatruose pasirodo Tomo Cruise'o „Digeris“ ir lietuviška kriminalinė rekonstrukcija „Tulpiniai. Lemtinga klaida“, o spalio 16 d. – „Street Fighter“. Lietuviški filmai dažnai ilgai išlaiko lankomumą, todėl favoritu laikomi „(Ne)tobuli melagiai“, tačiau stipri naujų premjerų pradžia gali pakeisti mėnesio lyderį.",
+    "closes_at": "2026-10-31T23:59:00+02:00",
+    "options": [
+      {
+        "label": "„(Ne)tobuli melagiai“",
+        "probability": 50
+      },
+      {
+        "label": "„Digeris“",
+        "probability": 15
+      },
+      {
+        "label": "„Tulpiniai. Lemtinga klaida“",
+        "probability": 12
+      },
+      {
+        "label": "„Žvėries širdis“",
+        "probability": 5
+      },
+      {
+        "label": "„Aviukas Šonas ir baimės pilnos kelnės“",
+        "probability": 5
+      },
+      {
+        "label": "„Absoliutus blogis“",
+        "probability": 3
+      },
+      {
+        "label": "Kitas filmas",
+        "probability": 10
+      }
+    ]
+  },
+  {
+    "title": "Kokia bus metinė infliacija spalį?",
+    "subtitle": "2026 m. spalio mėn. duomenys",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/e5574320-31fe-4e7a-93f6-e23e51fd124f.jpg",
+    "liquidity": 150000,
+    "rules": "Rinka bus išspręsta pagal Valstybės duomenų agentūros paskelbtą 2026 m. spalio mėnesio metinį vartotojų kainų pokytį, apskaičiuotą pagal vartotojų kainų indeksą.\n\nVertinamas 2026 m. spalio kainų pokytis, palyginti su 2025 m. spaliu. Mėnesinė infliacija, vidutinė metinė infliacija ir pagal suderintą vartotojų kainų indeksą apskaičiuotas Europos Sąjungos rodiklis nenaudojami.\n\nNaudojama oficialiai paskelbta vieno skaičiaus po kablelio reikšmė, jos papildomai neperskaičiuojant. Jeigu Valstybės duomenų agentūra iki 2026 m. lapkričio 30 d. paskelbs aiškų pirminio rezultato pataisymą, naudojama pataisyta reikšmė.\n\nRezultato šaltiniai yra Valstybės duomenų agentūros Oficialiosios statistikos portalas ir jos oficialūs vartotojų kainų pranešimai.",
+    "context": "Išankstiniais Valstybės duomenų agentūros duomenimis, rugsėjį metinė infliacija Lietuvoje siekė 6,1 %, o per mėnesį kainos pakilo 0,9 %. Didžiausią spaudimą kainoms daro degalai ir energija.\n\nSpalio pradžioje degalai išlieka brangūs: spalio 1 d. vidutinė dyzelino kaina buvo 2,268 Eur/l, benzino A95 – 1,964 Eur/l. Spalio rezultatą lems, ar degalų kainos išliks aukštos ir kiek kainas paveiks šildymo sezono pradžia. Dabartinis rodiklis yra arti dviejų vidurinių baigčių ribos.",
+    "closes_at": "2026-10-26T23:59:00+02:00",
+    "options": [
+      {
+        "label": "5,4% arba mažesnė",
+        "probability": 10
+      },
+      {
+        "label": "Nuo 5,5% iki 5,9%",
+        "probability": 30
+      },
+      {
+        "label": "Nuo 6,0% iki 6,4%",
+        "probability": 42
+      },
+      {
+        "label": "6,5% arba didesnė",
+        "probability": 18
+      }
+    ]
+  },
+  {
+    "title": "Kuri elektromobilių markė bus populiariausia spalį?",
+    "subtitle": "Spalio 1–31 d. imtinai",
+    "category": "technologijos",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/10c87753-62f8-4ff6-93dc-229d51f64aca.jpg",
+    "liquidity": 150000,
+    "rules": "Rinka bus išspręsta pagal 2026 m. spalį pirmą kartą Lietuvoje įregistruotų M1 klasės tik elektra varomų automobilių skaičių.\n\nSkaičiuojami nuo 2026 m. spalio 1 d. iki spalio 31 d. imtinai pirmą kartą Lietuvoje įregistruoti nauji ir naudoti M1 klasės elektromobiliai. Iš išorės įkraunami hibridai, įprasti hibridai, N1 klasės transporto priemonės ir anksčiau Lietuvoje registruotų automobilių savininkų pasikeitimai neskaičiuojami.\n\nLaimės markė, kurios bendras naujų ir naudotų elektromobilių registracijų skaičius spalį bus didžiausias.\n\nBaigtis „Kita markė“ laimės, jeigu daugiausia elektromobilių bus įregistruota markės, kuri nėra atskirai išvardyta tarp pasirinkimų.\n\nJeigu didžiausią rezultatą pasieks dvi arba daugiau markių, galutinis rezultatas bus paskirstytas po lygiai tarp atitinkamų baigčių. Jeigu viena iš lyderiaujančių markių priklausys baigčiai „Kita markė“, ši baigtis laikoma viena lygiaverte baigtimi.\n\nRezultato šaltinis yra naujausia AB „Regitra“ paskelbta 2026 m. M1 klasės elektromobilių markių lentelė, kurioje registracijos pateikiamos pagal mėnesį. Papildomai gali būti naudojami „Regitros“ transporto priemonių statistikos puslapis ir Susisiekimo ministerijos elektromobilių statistika.",
+    "context": "„Tesla“ šiais metais išlieka populiariausia elektromobilių markė Lietuvoje – jai tenka maždaug kas penktas įregistruotas grynasis elektromobilis. Rugsėjo 1 d. šalyje buvo įregistruoti 31 074 grynieji elektromobiliai, o vien rugsėjį įregistruotas 581 naujas elektromobilis.\n\nĮ rinką skaičiuojami ir pirmą kartą Lietuvoje registruojami naudoti elektromobiliai, todėl didesnė naudotų „Tesla“ ar „Volkswagen“ automobilių partija gali nulemti mėnesio lyderį. Tradiciniai Europos gamintojai sparčiai didina registracijų skaičių.",
+    "closes_at": "2026-10-31T23:59:00+02:00",
+    "options": [
+      {
+        "label": "Tesla",
+        "probability": 55
+      },
+      {
+        "label": "Volkswagen",
+        "probability": 20
+      },
+      {
+        "label": "Škoda",
+        "probability": 7
+      },
+      {
+        "label": "BMW",
+        "probability": 4
+      },
+      {
+        "label": "Nissan",
+        "probability": 3
+      },
+      {
+        "label": "Audi",
+        "probability": 2
+      },
+      {
+        "label": "Hyundai",
+        "probability": 2
+      },
+      {
+        "label": "Kia",
+        "probability": 2
+      },
+      {
+        "label": "Kita markė",
+        "probability": 5
+      }
+    ]
+  },
+  {
+    "title": "Kuris naujas automobilio modelis bus populiariausias spalį?",
+    "subtitle": "2026 m. spalio 1–31 d.",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/06466127-1666-411f-adf7-f326708aedf9.jpg",
+    "liquidity": 150000,
+    "rules": "Rinka bus išspręsta pagal naują M1 kategorijos lengvojo automobilio modelį, kurio Lietuvoje per laikotarpį nuo 2026 m. spalio 1 d. iki spalio 31 d. imtinai bus įregistruota daugiausia.\n\nSkaičiuojamos tik:\n\nnaujos M1 kategorijos transporto priemonės;\n2026 m. spalį pirmą kartą Lietuvoje įregistruoti automobiliai;\nregistracijos, įtrauktos į galutinę „AutoTyrimų“ arba „Regitros“ spalio mėnesio statistiką.\n\nNeskaičiuojami:\n\nnaudoti ir iš užsienio įvežti automobiliai;\nLietuvoje jau registruotų automobilių savininkų pasikeitimai;\nN1 kategorijos komercinės transporto priemonės;\nmotociklai, autobusai ir sunkvežimiai;\nužsienio valstybių registracijos.\n\nSkirtingos to paties modelio variklio, pavaros, kėbulo ar komplektacijos versijos sumuojamos, jeigu galutinis šaltinis jas pateikia vienu modelio pavadinimu. Atskiri modeliai, pavyzdžiui, „Yaris“ ir „Yaris Cross“ arba „Corolla“ ir „Corolla Cross“, nesumuojami.\n\nAtnaujinta modelio versija arba „facelift“ priskiriama tam pačiam modeliui, jeigu šaltinyje išlaikomas tas pats modelio pavadinimas. Nauja karta taip pat sumuojama, jeigu statistikoje ji nėra išskirta atskirai.\n\nBaigtis „Kitas modelis“ reiškia vieną konkretų sąraše nepaminėtą modelį, o ne visų kitų modelių registracijų sumą.\n\nJeigu keli modeliai turės vienodą didžiausią registracijų skaičių, rezultatas bus paskirstytas po lygiai tarp juos atitinkančių baigčių.\n\nPirmenybė teikiama „AutoTyrimų“ 2026 m. spalio mėnesio naujų automobilių registracijų suvestinei. Jeigu joje nebus pateikti spalio rezultatai pagal modelius, naudojami oficialūs „Regitros“ duomenys. Jei reikšmės skirsis, naudojama „AutoTyrimų“ ES reglamentuota naujų automobilių registracijų metodika.\n\nNaudojama naujausia iki 2026 m. lapkričio 30 d. paskelbta arba pataisyta spalio reikšmė. Vėlesni pataisymai rezultato nekeičia.\n\nRezultato šaltiniai – „AutoTyrimai“ ir „Regitros“ atviri duomenys.",
+    "context": "Rugpjūtį daugiausia naujų automobilių Lietuvoje įregistruota „Volkswagen Tiguan“ (323), „Toyota RAV4“ (217) ir „Škoda Octavia“ (211). Pirmąjį 2026 m. ketvirtį pirmavo „Toyota Yaris Cross“, antrąjį – „Volkswagen T-Roc“, vos trimis automobiliais aplenkęs „Tiguan“.\n\nMėnesio lyderis keičiasi dažnai, todėl net vienas didesnis įmonių automobilių parko užsakymas gali nulemti rezultatą. „Tiguan“ šiuo metu laikomas nedideliu favoritu.",
+    "closes_at": "2026-10-31T23:59:00+02:00",
+    "options": [
+      {
+        "label": "„Volkswagen Tiguan“",
+        "probability": 25
+      },
+      {
+        "label": "„Toyota RAV4“",
+        "probability": 17
+      },
+      {
+        "label": "„Škoda Octavia“",
+        "probability": 15
+      },
+      {
+        "label": "„Volkswagen T-Roc“",
+        "probability": 12
+      },
+      {
+        "label": "„Toyota Yaris Cross“",
+        "probability": 11
+      },
+      {
+        "label": "„Toyota Corolla“",
+        "probability": 6
+      },
+      {
+        "label": "„Škoda Kodiaq“",
+        "probability": 5
+      },
+      {
+        "label": "Kitas modelis",
+        "probability": 9
+      }
+    ]
+  },
+  {
+    "title": "Kuri nauja automobilių markė bus populiariausia spalį?",
+    "subtitle": "2026 m. spalio 1–31 d.",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/06466127-1666-411f-adf7-f326708aedf9.jpg",
+    "liquidity": 150000,
+    "rules": "Rinka bus išspręsta pagal automobilių markę, kurios naujų M1 kategorijos lengvųjų automobilių Lietuvoje per laikotarpį nuo 2026 m. spalio 1 d. iki spalio 31 d. imtinai bus įregistruota daugiausia.\n\nSkaičiuojamos visos tos markės naujų M1 kategorijos automobilių registracijos, nepriklausomai nuo modelio. Naudoti ir iš užsienio įvežti automobiliai, Lietuvoje jau registruotų automobilių savininkų pasikeitimai, N1 kategorijos komercinės transporto priemonės, motociklai, autobusai ir sunkvežimiai neskaičiuojami.\n\nMarkė vertinama pagal šaltinyje nurodytą pavadinimą. Skirtingos tos pačios grupės markės, pavyzdžiui, „Volkswagen“, „Škoda“, „Audi“, „Cupra“ ir „Seat“, nesumuojamos.\n\nBaigtis „Kita markė“ reiškia vieną konkrečią sąraše nepaminėtą markę, o ne visų kitų markių registracijų sumą.\n\nJeigu kelios markės turės vienodą didžiausią registracijų skaičių, rezultatas bus paskirstytas po lygiai tarp jas atitinkančių baigčių.\n\nPirmenybė teikiama „AutoTyrimų“ 2026 m. spalio mėnesio naujų automobilių registracijų suvestinei. Jeigu joje nebus pateikti spalio rezultatai pagal markes, naudojami oficialūs „Regitros“ duomenys. Jei reikšmės skirsis, naudojama „AutoTyrimų“ ES reglamentuota naujų automobilių registracijų metodika.\n\nNaudojama naujausia iki 2026 m. lapkričio 30 d. paskelbta arba pataisyta spalio reikšmė. Vėlesni pataisymai rezultato nekeičia.\n\nRezultato šaltiniai – „AutoTyrimai“ ir „Regitros“ atviri duomenys.",
+    "context": "Rugsėjį daugiausia naujų automobilių Lietuvoje įregistravo „Škoda“ (678), „Toyota“ (674) ir „Volkswagen“ (621) – lyderius skyrė vos keli automobiliai. Rugpjūtį pirmavo „Toyota“ (795), antras buvo „Volkswagen“ (736), trečia – „Škoda“ (633).\n\nTrys markės kas mėnesį keičiasi vietomis, todėl spalio lyderį gali nulemti vienas didesnis pristatymas ar įmonių parko užsakymas.",
+    "closes_at": "2026-10-31T23:59:00+02:00",
+    "options": [
+      {
+        "label": "Toyota",
+        "probability": 37
+      },
+      {
+        "label": "Škoda",
+        "probability": 29
+      },
+      {
+        "label": "Volkswagen",
+        "probability": 28
+      },
+      {
+        "label": "Kita markė",
+        "probability": 6
+      }
+    ]
+  },
+  {
+    "title": "Aukščiausia vidutinė dyzelino kaina spalį?",
+    "subtitle": "2026 m. spalio 1–31 d. imtinai",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/7d9a91c6-899f-4ff1-bd5b-3143ae5ad681.jpg",
+    "liquidity": 150000,
+    "rules": "Rinka bus išspręsta pagal aukščiausią Lietuvos energetikos agentūros paskelbtą vienos dienos vidutinę dyzelino kainą nuo 2026 m. spalio 1 d. iki spalio 31 d. imtinai.\n\nSkaičiuojamas nacionalinis visų duomenis pateikusių Lietuvos degalinių dyzelino kainų vidurkis apie 10:00 val.\n\nAtskirų degalinių, tinklų, miestų ar savivaldybių kainos bei mažiausios, didžiausios ir didmeninės kainos nenaudojamos. Kaina papildomai neapvalinama – naudojama Lietuvos energetikos agentūros paskelbta trijų skaičių po kablelio reikšmė.\n\nIntervalų ribos įtraukiamos taip:\n\n2,299 €/l arba mažiau apima visas reikšmes iki šios ribos imtinai;\n2,300–2,349 €/l apima abi nurodytas ribas;\ntokia pati taisyklė taikoma kitiems intervalams;\ntiksliai 2,450 €/l priskiriama paskutinei baigčiai.\n\nJeigu tam tikrą dieną Lietuvos energetikos agentūra duomenų nepaskelbs (pavyzdžiui, savaitgaliais ar švenčių dienomis), ši diena praleidžiama. Naudojama naujausia konkrečios dienos reikšmė, paskelbta arba pataisyta iki kitos kalendorinės dienos 12:00 val.\n\nJeigu iki 2026 m. lapkričio 7 d. nebus paskelbta nė viena tinkama vertinamo laikotarpio reikšmė, rinka atšaukiama.\n\nRezultato šaltinis – Lietuvos energetikos agentūros kasdien skelbiamos degalų kainos.",
+    "context": "Rugsėjį vidutinė dyzelino kaina svyravo nuo 2,076 iki 2,324 Eur/l – aukščiausia buvo rugsėjo 22 d. Spalio 1 d. vidurkis siekė 2,268 Eur/l, spalio 2 d. – 2,255 Eur/l.\n\nLietuvos energetikos agentūros duomenys rodo savaitinį ciklą: antradieniais kaina dažniausiai šokteli 5–8 ct, o vėliau per savaitę pamažu mažėja. Todėl mėnesio maksimumą dažniausiai lemia didžiausias antradienio šuolis.",
+    "closes_at": "2026-10-30T10:00:00+02:00",
+    "options": [
+      {
+        "label": "2,299 €/l arba mažiau",
+        "probability": 40
+      },
+      {
+        "label": "Nuo 2,300 iki 2,349 €/l",
+        "probability": 30
+      },
+      {
+        "label": "Nuo 2,350 iki 2,399 €/l",
+        "probability": 16
+      },
+      {
+        "label": "Nuo 2,400 iki 2,449 €/l",
+        "probability": 8
+      },
+      {
+        "label": "2,450 €/l arba daugiau",
+        "probability": 6
+      }
+    ]
+  },
+  {
+    "title": "Aukščiausia vidutinė benzino A95 kaina spalį?",
+    "subtitle": "2026 m. spalio 1–31 d. imtinai",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/b172018e-2282-4d58-bd9c-47fdcb5e0a38.jpg",
+    "liquidity": 150000,
+    "rules": "Rinka bus išspręsta pagal aukščiausią Lietuvos energetikos agentūros paskelbtą vienos dienos vidutinę benzino A95 kainą nuo 2026 m. spalio 1 d. iki spalio 31 d. imtinai.\n\nSkaičiuojamas nacionalinis visų duomenis pateikusių Lietuvos degalinių benzino A95 kainų vidurkis apie 10:00 val. Kitų benzino rūšių kainos nenaudojamos.\n\nAtskirų degalinių, tinklų, miestų ar savivaldybių kainos bei mažiausios, didžiausios ir didmeninės kainos nenaudojamos. Kaina papildomai neapvalinama – naudojama Lietuvos energetikos agentūros paskelbta trijų skaičių po kablelio reikšmė.\n\nIntervalų ribos įtraukiamos taip:\n\n1,999 €/l arba mažiau apima visas reikšmes iki šios ribos imtinai;\n2,000–2,049 €/l apima abi nurodytas ribas;\ntokia pati taisyklė taikoma kitiems intervalams;\ntiksliai 2,150 €/l priskiriama paskutinei baigčiai.\n\nJeigu tam tikrą dieną Lietuvos energetikos agentūra duomenų nepaskelbs (pavyzdžiui, savaitgaliais ar švenčių dienomis), ši diena praleidžiama. Naudojama naujausia konkrečios dienos reikšmė, paskelbta arba pataisyta iki kitos kalendorinės dienos 12:00 val.\n\nJeigu iki 2026 m. lapkričio 7 d. nebus paskelbta nė viena tinkama vertinamo laikotarpio reikšmė, rinka atšaukiama.\n\nRezultato šaltinis – Lietuvos energetikos agentūros kasdien skelbiamos degalų kainos.",
+    "context": "Rugsėjį vidutinė benzino A95 kaina svyravo nuo 1,828 iki 2,021 Eur/l – 2 Eur/l riba buvo peržengta tik rugsėjo 22 d. Spalio 1 d. vidurkis siekė 1,964 Eur/l, spalio 2 d. – 1,947 Eur/l.\n\nKaip ir dyzelino, benzino kaina dažniausiai šokteli antradieniais ir vėliau per savaitę mažėja. Ar spalį vėl bus pasiekta 2 Eur/l riba, lems naftos ir didmeninių degalų kainos.",
+    "closes_at": "2026-10-30T10:00:00+02:00",
+    "options": [
+      {
+        "label": "1,999 €/l arba mažiau",
+        "probability": 45
+      },
+      {
+        "label": "Nuo 2,000 iki 2,049 €/l",
+        "probability": 33
+      },
+      {
+        "label": "Nuo 2,050 iki 2,099 €/l",
+        "probability": 14
+      },
+      {
+        "label": "Nuo 2,100 iki 2,149 €/l",
+        "probability": 5
+      },
+      {
+        "label": "2,150 €/l arba daugiau",
+        "probability": 3
+      }
+    ]
+  }
+]
