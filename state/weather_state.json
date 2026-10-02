@@ -7186,7 +7186,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "ce175b06-a6ca-4144-a86e-53faf0e7f556": {},
+ "ce175b06-a6ca-4144-a86e-53faf0e7f556": {
+  "resolved": true,
+  "resolved_at": "2026-10-02T07:05:35.256933+00:00",
+  "resolved_label": "Jessica Shy – „Kas Kaltas (feat. Igoris Kofas)“",
+  "resolved_option_id": "93baa1f5-d27c-4af2-917c-aceaa868a329",
+  "resolved_via": "music",
+  "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
+ },
  "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {
   "resolved": true,
   "resolved_at": "2026-10-01T08:31:02.936037+00:00",
