@@ -22,6 +22,14 @@ declare
   v_resid numeric;
   v_top   uuid;
 begin
+  -- Only exclusive (one-winner) markets must sum to 100. Cumulative-date,
+  -- survival and independent markets price each option on its own, so their
+  -- probabilities are never rescaled.
+  if (select outcome_structure from public.markets where id = p_market_id)
+       is distinct from 'single_outcome' then
+    return;
+  end if;
+
   select coalesce(sum(probability), 0), count(*) into v_sum, v_n
     from public.market_options
    where market_id = p_market_id and resolved_outcome is null;
