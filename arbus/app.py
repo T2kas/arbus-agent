@@ -398,6 +398,25 @@ def create_market(spec: dict) -> tuple[bool, str]:
     return True, market_id or "ok"
 
 
+OUTCOME_STRUCTURES = ("single_outcome", "cumulative_date", "survival", "multi_winner")
+
+
+def set_market_structure(market_id: str, structure: str) -> tuple[bool, str]:
+    """Set a market's outcome structure via admin_set_market_structure (3+
+    options only). multi_winner = every option its own Taip/Ne, any number can
+    win. Needs the service_role key."""
+    if not config.ARBUS_WRITE_KEY:
+        return False, "reikia ARBUS_WRITE_KEY (service_role)"
+    if structure not in OUTCOME_STRUCTURES:
+        return False, f"unknown structure {structure!r}"
+    rows, error = _rpc("admin_set_market_structure",
+                       {"p_market_id": market_id, "p_structure": structure},
+                       key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, _resolve_error_hint(error)
+    return True, structure
+
+
 def eliminate_options(market_id: str, option_ids: list[str]) -> tuple[bool, str]:
     """Resolve the given options to "Ne" (losers) while the market stays open on
     the rest — for killing impossible temperature buckets early. Needs the

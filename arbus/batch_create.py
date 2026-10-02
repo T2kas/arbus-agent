@@ -41,11 +41,22 @@ def validate(spec: dict, now: datetime | None = None) -> list[str]:
         errs.append("an option has no label")
     if len(set(labels)) != len(labels):
         errs.append("duplicate option labels")
+    structure = spec.get("outcome_structure") or "single_outcome"
+    if structure not in app_api.OUTCOME_STRUCTURES:
+        errs.append(f"outcome_structure must be one of {', '.join(app_api.OUTCOME_STRUCTURES)}")
+    elif structure != "single_outcome" and len(opts) < 3:
+        errs.append(f"{structure} needs at least 3 options")
     probs = [o.get("probability") for o in opts]
     if any(not isinstance(p, (int, float)) or not 0 < p < 100 for p in probs):
         errs.append("every probability must be strictly between 0 and 100")
-    elif abs(sum(probs) - 100) > 0.01:
+    elif structure == "single_outcome" and abs(sum(probs) - 100) > 0.01:
+        # Only one-winner markets must sum to 100; multi_winner / date ladders
+        # price each option on its own.
         errs.append(f"probabilities sum to {sum(probs)}, not 100")
+    elif structure == "cumulative_date" and probs != sorted(probs):
+        errs.append("cumulative_date probabilities must not decrease (later date >= earlier)")
+    elif structure == "survival" and probs != sorted(probs, reverse=True):
+        errs.append("survival probabilities must not increase (later date <= earlier)")
     try:
         closes = datetime.fromisoformat(str(spec["closes_at"]))
         if closes.tzinfo is None:
@@ -91,10 +102,20 @@ def run(path: str, *, dry_run: bool, alert: bool = True) -> tuple[list[dict], st
                                                  for o in s["options"])})
             continue
         ok, detail = app_api.create_market(s)
+        structure = s.get("outcome_structure") or "single_outcome"
+        if ok and structure != "single_outcome":
+            # The create RPC always makes a one-winner market; switch it now.
+            if detail in ("", "ok"):
+                ok, detail = False, (f"created, but no market id returned — set "
+                                     f"structure {structure} by hand")
+            else:
+                ok2, d2 = app_api.set_market_structure(detail, structure)
+                if not ok2:
+                    ok, detail = False, (f"created ({detail}) but setting structure "
+                                         f"{structure} FAILED: {d2} — fix by hand")
         reports.append({"status": "created" if ok else "error", "title": title,
                         "detail": detail})
-        if ok:
-            have.add(title)
+        have.add(title)
     if alert and not dry_run:
         created = [r for r in reports if r["status"] == "created"]
         errors = [r for r in reports if r["status"] == "error"]

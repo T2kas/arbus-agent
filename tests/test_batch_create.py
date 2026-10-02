@@ -102,3 +102,50 @@ def test_october_non_film_markets_are_not_touched_by_auto_resolvers():
         assert resolvers._agata_target(s["title"], s["rules"]) is None
         assert fuel.fuel_target(m) is None
         assert weather._sports_league(s["rules"]) is None
+
+
+def _multi(**kw):
+    return _spec(options=[{"label": "A", "probability": 70},
+                          {"label": "B", "probability": 55},
+                          {"label": "C", "probability": 20}],
+                 outcome_structure="multi_winner", **kw)
+
+
+def test_multi_winner_does_not_need_sum_100():
+    assert batch_create.validate(_multi(), NOW) == []          # 70+55+20 = 145, fine
+
+
+def test_structure_rules():
+    two = _spec(outcome_structure="multi_winner")              # only 2 options
+    assert any("at least 3" in e for e in batch_create.validate(two, NOW))
+    assert batch_create.validate(_spec(outcome_structure="bogus"), NOW)
+    bad_dates = dict(_multi(), outcome_structure="cumulative_date")    # 70, 55, 20 decreases
+    assert any("must not decrease" in e for e in batch_create.validate(bad_dates, NOW))
+    single_bad = dict(_multi(), outcome_structure="single_outcome")    # sums to 145
+    assert any("sum" in e for e in batch_create.validate(single_bad, NOW))
+
+
+def test_multi_winner_market_gets_its_structure_set(monkeypatch, tmp_path):
+    f = tmp_path / "b.json"
+    f.write_text(json.dumps([_multi(title="Ar Q?")]), "utf-8")
+    calls = []
+    monkeypatch.setattr(batch_create.app_api, "markets", lambda n: ([], ""))
+    monkeypatch.setattr(batch_create.app_api, "create_market", lambda s: (True, "mkt-1"))
+    monkeypatch.setattr(batch_create.app_api, "set_market_structure",
+                        lambda mid, st: (calls.append((mid, st)), (True, st))[1])
+    monkeypatch.setattr(batch_create, "validate", lambda s, now=None: [])
+    reports, err = batch_create.run(str(f), dry_run=False, alert=False)
+    assert err == "" and reports[0]["status"] == "created"
+    assert calls == [("mkt-1", "multi_winner")]
+
+
+def test_structure_failure_is_reported_not_hidden(monkeypatch, tmp_path):
+    f = tmp_path / "b.json"
+    f.write_text(json.dumps([_multi(title="Ar Q?")]), "utf-8")
+    monkeypatch.setattr(batch_create.app_api, "markets", lambda n: ([], ""))
+    monkeypatch.setattr(batch_create.app_api, "create_market", lambda s: (True, "mkt-1"))
+    monkeypatch.setattr(batch_create.app_api, "set_market_structure",
+                        lambda mid, st: (False, "PGRST202"))
+    monkeypatch.setattr(batch_create, "validate", lambda s, now=None: [])
+    reports, _ = batch_create.run(str(f), dry_run=False, alert=False)
+    assert reports[0]["status"] == "error" and "FAILED" in reports[0]["detail"]
