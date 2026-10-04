@@ -1,0 +1,10 @@
+# Traffic counting worker only — the arbus agent (requirements.txt) never needs these.
+numpy>=1.26,<3
+opencv-python>=4.9
+onnxruntime>=1.17          # YOLOX inference on CPU (Apache-2.0 model, no torch needed)
+supervision>=0.25,<0.31    # ByteTrack + PolygonZone; ByteTrack leaves supervision in 0.31
+imageio-ffmpeg>=0.5        # bundled ffmpeg: H.264 output + stream recording
+flask>=3.0                 # local admin tool
+pillow>=10.1
+requests>=2.32
+tzdata>=2024.1

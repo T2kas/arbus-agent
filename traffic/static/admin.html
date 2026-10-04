@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eismo kalibravimas</title>
+<style>
+:root{--bg:#0f1218;--panel:#171b23;--line:#2a303c;--text:#e6e9ef;--muted:#8b93a3;--blue:#3b8cff;--green:#3cc864;--red:#ff5b5b;--amber:#ffb84d}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+aside{width:250px;border-right:1px solid var(--line);padding:14px;overflow:auto;flex:none}
+main{flex:1;overflow:auto;padding:16px 20px}
+h1{font-size:16px;margin:0 0 12px}h2{font-size:15px;margin:18px 0 8px}
+button,select,input{font:inherit;color:var(--text);background:#222835;border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--blue)}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+button.good{background:#1f5a32;border-color:var(--green)}
+button:disabled{opacity:.45;cursor:default}
+input[type=number]{width:90px}
+.cam{padding:8px;border-radius:6px;cursor:pointer;margin-bottom:4px;border:1px solid transparent}
+.cam:hover{background:var(--panel)}.cam.sel{border-color:var(--blue);background:var(--panel)}
+.cam small{color:var(--muted);display:block}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tabs button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500}tr.click{cursor:pointer}tr.click:hover{background:var(--panel)}
+.muted{color:var(--muted)}.ok{color:var(--green)}.bad{color:var(--red)}.warn{color:var(--amber)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px}
+.card b{display:block;font-size:22px}
+.split{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+video{max-width:min(960px,100%);background:#000;border-radius:6px}
+canvas{background:#000;border-radius:6px;max-width:100%;cursor:crosshair}
+.big{font-size:42px;font-weight:700}
+.kbd{border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:12px;background:#222835}
+.taps{max-height:160px;overflow:auto;font-size:12px;color:var(--muted)}
+.strip{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+.strip span{padding:2px 6px;border:1px solid var(--line);border-radius:4px;cursor:pointer;font-size:12px}
+.strip span.done{border-color:var(--green);color:var(--green)}.strip span.cur{background:var(--blue);color:#fff}
+.form label{display:flex;justify-content:space-between;gap:10px;margin:5px 0;align-items:center}
+.form{max-width:360px}
+#toast{position:fixed;bottom:16px;right:16px;background:var(--panel);border:1px solid var(--line);padding:10px 14px;border-radius:8px;display:none;max-width:420px}
+.pbar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;width:240px}.pbar div{height:100%;background:var(--blue)}
+</style>
+</head>
+<body>
+<aside>
+  <h1>Eismo kalibravimas</h1>
+  <div id="cams"></div>
+  <h2>Nauja kamera</h2>
+  <div class="form">
+    <input id="nc-id" placeholder="id (pvz. vilnius-gedimino)" style="width:100%;margin-bottom:5px">
+    <input id="nc-name" placeholder="pavadinimas" style="width:100%;margin-bottom:5px">
+    <input id="nc-city" placeholder="miestas" style="width:100%;margin-bottom:5px">
+    <input id="nc-src" placeholder="srauto URL (HLS/RTSP)" style="width:100%;margin-bottom:5px">
+    <select id="nc-perm" style="width:100%;margin-bottom:5px">
+      <option value="pending">leidimas: laukiama</option><option value="granted">leidimas: suteiktas</option>
+    </select>
+    <button onclick="addCamera()">Pridėti</button>
+  </div>
+  <h2>Darbai</h2><div id="jobs" class="muted">—</div>
+</aside>
+<main>
+  <div id="empty" class="muted">Pasirink arba pridėk kamerą kairėje.</div>
+  <div id="view" style="display:none">
+    <div class="row"><h1 id="cam-title" style="margin:0"></h1><span id="cam-ready"></span></div>
+    <div class="tabs" id="tabs"></div>
+    <section data-tab="clips"></section>
+    <section data-tab="review"></section>
+    <section data-tab="zone"></section>
+    <section data-tab="label"></section>
+    <section data-tab="report"></section>
+    <section data-tab="search"></section>
+  </div>
+</main>
+<div id="toast"></div>
+<script>
+const TABS = [["clips","Klipai"],["review","Peržiūra"],["zone","Zona ir parametrai"],["label","Žymėjimas"],["report","Ataskaita"],["search","Parametrų paieška"]];
+const S = {cams:[], cam:null, tab:"clips", clips:[], clip:null};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function api(path, opts={}) {
+  if (opts.json !== undefined) { opts.body = JSON.stringify(opts.json); opts.headers = {"Content-Type":"application/json"}; delete opts.json; }
+  const r = await fetch(path, opts); const d = await r.json().catch(() => ({}));
+  if (!r.ok) { toast(d.error || r.statusText, true); throw new Error(d.error || r.statusText); }
+  return d;
+}
+function toast(msg, bad) { const t = $("#toast"); t.textContent = msg; t.style.borderColor = bad ? "var(--red)" : "var(--line)"; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 4000); }
+function sec(name) { return document.querySelector(`section[data-tab="${name}"]`); }
+const pct = x => x == null ? "—" : (x * 100).toFixed(1) + " %";
+
+// ── jobs ─────────────────────────────────────────────────────────────────
+const waiters = {};
+function watchJob(id, onDone) { if (id) waiters[id] = onDone; }
+setInterval(async () => {
+  const active = await fetch("/api/jobs").then(r => r.json()).catch(() => []);
+  $("#jobs").innerHTML = active.length ? active.map(j => `<div>${esc(j.kind)}: ${esc(j.status)} ${esc(j.progress || "")}</div>`).join("") : "—";
+  for (const id of Object.keys(waiters)) {
+    const j = await fetch("/api/jobs/" + id).then(r => r.json()).catch(() => null);
+    if (j && (j.status === "done" || j.status === "error")) { const cb = waiters[id]; delete waiters[id]; if (j.status === "error") toast("Klaida: " + j.error, true); cb && cb(j); }
+    else if (j && waiters[id] && waiters[id].progress) waiters[id].progress(j);
+  }
+}, 1200);
+
+// ── cameras ──────────────────────────────────────────────────────────────
+async function loadCams() {
+  S.cams = await api("/api/cameras");
+  $("#cams").innerHTML = S.cams.map(c => `<div class="cam ${S.cam && S.cam.id === c.id ? "sel" : ""}" onclick="selectCam('${esc(c.id)}')">
+    <div>${esc(c.name)}</div><small>${esc(c.city || "")} · ${c.reviewed} įvert. · ${c.enabled ? '<span class="ok">žaidime</span>' : "išjungta"}</small></div>`).join("") || '<div class="muted">Kamerų nėra.</div>';
+  if (S.cam) S.cam = S.cams.find(c => c.id === S.cam.id) || null;
+}
+async function addCamera() {
+  await api("/api/cameras", {method:"POST", json:{id:$("#nc-id").value.trim(), name:$("#nc-name").value.trim(), city:$("#nc-city").value.trim(), source_url:$("#nc-src").value.trim(), permission_status:$("#nc-perm").value}});
+  await loadCams(); selectCam($("#nc-id").value.trim());
+}
+async function selectCam(id) {
+  S.cam = S.cams.find(c => c.id === id); if (!S.cam) return;
+  $("#empty").style.display = "none"; $("#view").style.display = "";
+  $("#cam-title").textContent = `${S.cam.name} (${S.cam.city || "—"})`;
+  await loadCams(); showTab(S.tab === "review" || S.tab === "label" ? "clips" : S.tab);
+}
+function showTab(t) {
+  S.tab = t;
+  $("#tabs").innerHTML = TABS.map(([k, n]) => `<button class="${k === t ? "on" : ""}" onclick="showTab('${k}')">${n}</button>`).join("");
+  document.querySelectorAll("section").forEach(s => s.style.display = s.dataset.tab === t ? "" : "none");
+  ({clips:renderClips, review:renderReview, zone:renderZone, label:renderLabel, report:renderReport, search:renderSearch})[t]();
+}
+
+// ── clips ────────────────────────────────────────────────────────────────
+async function loadClips() { S.clips = await api(`/api/cameras/${S.cam.id}/clips`); return S.clips; }
+async function renderClips() {
+  const el = sec("clips");
+  el.innerHTML = `<div class="row">
+    <label class="primary" style="display:inline-block"><input type="file" id="up" accept="video/*" multiple style="display:none" onchange="upload(this.files)"><button class="primary" onclick="$('#up').click()">Įkelti klipus</button></label>
+    <button onclick="reprocessAll()">Perskaičiuoti visus</button>
+    <button onclick="nextUnreviewed()">Kitas neįvertintas →</button>
+    <span class="muted">Tarpas peržiūroje = viena mašina.</span></div><div id="cliptable" class="muted">Kraunama…</div>`;
+  const clips = await loadClips();
+  $("#cliptable").innerHTML = clips.length ? `<table><tr><th>Įrašyta</th><th>Būsena</th><th>CV</th><th>Tikras</th><th>Paklaida</th><th>Žymėta kadrų</th><th>Pastabos</th></tr>` +
+    clips.map(c => { const err = c.true_count == null ? null : c.reviewed_cv - c.true_count;
+      return `<tr class="click" onclick="openClip('${c.id}')"><td>${esc(c.recorded_at.replace("T", " ").slice(0, 19))}</td>
+      <td class="${c.status === "approved" ? "ok" : c.status === "rejected" || c.status === "error" ? "bad" : "warn"}">${esc(c.status)}</td>
+      <td>${c.cv_count ?? "…"}</td><td>${c.true_count ?? '<span class="muted">—</span>'}</td>
+      <td class="${err ? "bad" : err === 0 ? "ok" : ""}">${err == null ? "" : (err > 0 ? "+" : "") + err}</td>
+      <td>${c.labeled_frames || ""}</td><td class="muted">${esc((c.reasons || []).join("; ") || c.error || "")}</td></tr>`; }).join("") + "</table>"
+    : "Klipų dar nėra — įkelk vaizdo failus (mp4).";
+}
+async function upload(files) {
+  if (!files.length) return;
+  const fd = new FormData(); for (const f of files) fd.append("files", f);
+  toast(`Keliama ${files.length}…`);
+  const r = await api(`/api/cameras/${S.cam.id}/upload`, {method:"POST", body:fd});
+  toast(`Įkelta ${r.clip_ids.length}, skaičiuojama fone.`);
+  watchJob(r.job, () => { toast("Suskaičiuota."); if (S.tab === "clips") renderClips(); loadCams(); });
+  renderClips();
+}
+async function reprocessAll() {
+  const r = await api(`/api/cameras/${S.cam.id}/reprocess`, {method:"POST"});
+  toast("Perskaičiuojama fone (detekcijos iš talpyklos, jei modelis nepasikeitė).");
+  watchJob(r.job, () => { toast("Perskaičiuota."); if (S.tab === "clips") renderClips(); });
+}
+async function nextUnreviewed() {
+  const clips = await loadClips();
+  const c = clips.find(c => c.true_count == null && c.cv_count != null && c.status !== "error");
+  if (c) openClip(c.id); else toast("Visi suskaičiuoti klipai jau įvertinti.");
+}
+async function openClip(id) { S.clip = await api(`/api/clips/${id}`); showTab("review"); }
+
+// ── review ───────────────────────────────────────────────────────────────
+let taps = [];
+function renderReview() {
+  const el = sec("review"), c = S.clip;
+  if (!c) { el.innerHTML = '<div class="muted">Pasirink klipą skiltyje „Klipai“.</div>'; return; }
+  taps = [];
+  const rv = c.review;
+  el.innerHTML = `<div class="split"><div>
+      <video id="vid" controls preload="auto" src="/api/clips/${c.id}/video/${c.has_annotated ? "annotated" : "raw"}"></video>
+      <div class="row"><label><input type="checkbox" id="rawtoggle" ${c.has_annotated ? "" : "checked disabled"} onchange="toggleRaw()"> rodyti be perdangos (aklas skaičiavimas)</label>
+      <button onclick="vidRate(0.5)">0.5×</button><button onclick="vidRate(1)">1×</button><button onclick="restart()">Iš naujo</button></div>
+      <div class="muted">Leisk klipą ir spausk <span class="kbd">Tarpas</span> kiekvieną kartą, kai mašina <b>kerta mėlyną liniją</b> (arba įvažiuoja į mėlyną zoną) — skaičiuojamos kryptys kaip nustatyta.
+      <span class="kbd">Backspace</span> — atšaukti paskutinį. Mašinos, jau buvusios zonoje pirmame kadre, neskaičiuojamos.</div>
+    </div><div style="min-width:260px">
+      <div class="muted">Sistema suskaičiavo</div><div class="big">${c.cv_count ?? "…"}</div>
+      <div class="muted">Tavo paspaudimai</div><div class="big" id="tapn">0</div>
+      <div class="taps" id="taplist"></div>
+      <div class="row"><label>Tikras skaičius <input type="number" id="truec" min="0" value="${rv ? rv.true_count : ""}"></label></div>
+      <div class="row"><button class="good" onclick="saveReview(true)">Teisinga (= ${c.cv_count})</button><button class="primary" onclick="saveReview(false)">Išsaugoti</button></div>
+      <div id="revres"></div>
+      <div class="row"><button onclick="nextUnreviewed()">Kitas neįvertintas →</button><button onclick="labelClip()">Žymėti mašinas kadruose</button><button onclick="reprocessClip()">Perskaičiuoti</button></div>
+      <h2>Kokybė</h2><div class="muted" style="font-size:12px">${esc(Object.entries(c.quality || {}).filter(([k]) => k !== "reasons").map(([k, v]) => k + ": " + v).join(" · "))}</div>
+      ${(c.quality?.reasons || []).length ? `<div class="bad">${esc(c.quality.reasons.join("; "))}</div>` : ""}
+      ${rv ? `<div class="muted" style="margin-top:8px">Paskutinis įvertinimas: ${rv.true_count} (CV tada ${rv.cv_count})</div>` : ""}
+    </div></div>`;
+}
+function toggleRaw() { const v = $("#vid"); const t = v.currentTime; v.src = `/api/clips/${S.clip.id}/video/${$("#rawtoggle").checked ? "raw" : "annotated"}`; v.currentTime = t; }
+function vidRate(r) { $("#vid").playbackRate = r; }
+function restart() { const v = $("#vid"); v.currentTime = 0; taps = []; drawTaps(); v.play(); }
+function drawTaps() { $("#tapn").textContent = taps.length; $("#taplist").textContent = taps.map(t => t.toFixed(1) + " s").join(", "); $("#truec").value = taps.length; }
+document.addEventListener("keydown", e => {
+  if (S.tab === "review" && $("#vid") && !["INPUT", "SELECT"].includes(document.activeElement.tagName)) {
+    if (e.code === "Space") { e.preventDefault(); const v = $("#vid"); if (v.paused && !taps.length && v.currentTime === 0) v.play(); else taps.push(v.currentTime); drawTaps(); }
+    if (e.code === "Backspace") { e.preventDefault(); taps.pop(); drawTaps(); }
+  }
+  if (S.tab === "label") labelKey(e);
+});
+async function saveReview(correct) {
+  const c = S.clip; const val = correct ? c.cv_count : parseInt($("#truec").value, 10);
+  if (isNaN(val)) { toast("Įvesk tikrą skaičių", true); return; }
+  const r = await api(`/api/clips/${c.id}/review`, {method:"POST", json:{true_count:val, taps:taps.length ? taps : null}});
+  let msg = `Išsaugota: ${val}.`;
+  if (r.missed_at && (r.missed_at.length || r.extra_at.length))
+    msg += ` Praleista ties: ${r.missed_at.map(t => t.toFixed(1) + "s").join(", ") || "—"}; nereikalingai įskaityta ties: ${r.extra_at.map(t => t.toFixed(1) + "s").join(", ") || "—"}`;
+  $("#revres").innerHTML = `<div class="${val === c.cv_count ? "ok" : "warn"}">${esc(msg)}</div>`;
+  loadCams();
+}
+async function reprocessClip() { const r = await api(`/api/clips/${S.clip.id}/process`, {method:"POST"}); toast("Skaičiuojama…"); watchJob(r.job, () => openClip(S.clip.id)); }
+function labelClip() { S.labelClip = S.clip.id; showTab("label"); }
+
+// ── zone & params ────────────────────────────────────────────────────────
+let Z = null;
+async function renderZone() {
+  const el = sec("zone"); const p = S.cam.params;
+  const clips = await loadClips(); const ref = [...clips].reverse().find(c => c.cv_count != null);
+  el.innerHTML = `<div class="split"><div>
+    ${ref ? `<canvas id="zc"></canvas>` : '<div class="muted">Įkelk ir suskaičiuok bent vieną klipą — zona brėžiama ant jo kadro.</div>'}
+    <div class="row"><button class="primary" onclick="zoneMode('line')">Brėžti liniją</button><button onclick="zoneMode('poly')">Brėžti zoną</button><button onclick="zoneMode('dir')">Kryptis (nebūtina)</button>
+    <button onclick="extendLine()">Linija per visą kadrą</button><button onclick="Z.dir=null;drawZone()">Abi kryptys</button><button onclick="Z.poly=[];Z.line=null;Z.lineStart=null;drawZone()">Išvalyti</button></div>
+    <div class="muted" id="zhelp"></div>
+    <div class="muted" style="font-size:12px;max-width:760px">Linija: du paspaudimai per kelią — mašina įskaitoma ją kirtusi, iš bet kurios pusės. Zona: taškai aplink plotą (≥3).
+    Linijos ilgis neribojamas: galus gali tempti pele, paspaudimas prie krašto prilimpa prie kadro krašto, o „Linija per visą kadrą“ ištęsia ją nuo krašto iki krašto.
+    Kryptis nustatyk tik tada, jei nori skaičiuoti vieną eismo kryptį.</div>
+  </div><div class="form">
+    <h2 style="margin-top:0">Parametrai</h2>
+    <label>Pasitikėjimo slenkstis (conf) <input type="number" step="0.05" min="0.05" max="0.95" id="p-conf" value="${p.conf}"></label>
+    <label>Kadrų zonoje N (min_frames) <input type="number" min="1" id="p-min_frames" value="${p.min_frames}"></label>
+    <label>Min. poslinkis (dalis pločio) <input type="number" step="0.005" min="0" id="p-min_travel" value="${p.min_travel}"></label>
+    <label>Sekimo atmintis, kadrai (lost_buffer) <input type="number" min="1" id="p-lost_buffer" value="${p.lost_buffer}"></label>
+    <label>Sutapatinimo slenkstis (match) <input type="number" step="0.05" min="0.1" max="0.99" id="p-match_thresh" value="${p.match_thresh}"></label>
+    <label>Sujungimo tarpas, kadrai (merge_gap) <input type="number" min="0" id="p-merge_gap" value="${p.merge_gap}"></label>
+    <label>Sujungimo atstumas (merge_dist) <input type="number" step="0.01" min="0" id="p-merge_dist" value="${p.merge_dist}"></label>
+    <label>Taškas <select id="p-anchor"><option value="bottom_center" ${p.anchor === "bottom_center" ? "selected" : ""}>apačios centras</option><option value="center" ${p.anchor === "center" ? "selected" : ""}>centras</option></select></label>
+    <label>Modelis <select id="p-model">${["yolox_nano","yolox_tiny","yolox_s","yolox_m","yolox_l"].map(m => `<option ${p.model === m ? "selected" : ""}>${m}</option>`).join("")}${p.model.endsWith(".onnx") ? `<option selected>${esc(p.model)}</option>` : ""}</select></label>
+    <label>Kadrų/s apdorojimui <input type="number" min="5" max="25" id="p-fps" value="${p.fps}"></label>
+    <div>Klasės: ${["car","truck","bus","motorcycle","bicycle"].map(k => `<label style="display:inline-flex;gap:4px;margin-right:8px"><input type="checkbox" class="p-cls" value="${k}" ${p.classes.includes(k) ? "checked" : ""}>${k}</label>`).join("")}</div>
+    <label><span>Neskaičiuoti jau esančių zonoje pradžioje</span><input type="checkbox" id="p-skip_initial" ${p.skip_initial ? "checked" : ""}></label>
+    <label><span>Užlieti numerius (blur)</span><input type="checkbox" id="p-blur_plates" ${p.blur_plates ? "checked" : ""}></label>
+    <div class="row"><button class="primary" onclick="saveParams(true)">Išsaugoti ir perskaičiuoti</button><button onclick="saveParams(false)">Tik išsaugoti</button></div>
+    <div class="muted" style="font-size:12px">Modelio ar kadrų/s pakeitimas reikalauja detekcijų iš naujo (lėčiau). Kiti — tik perskaičiavimo iš talpyklos.</div>
+  </div></div>`;
+  if (!ref) return;
+  Z = {mode:p.zone.length ? "poly-done" : "line", poly:p.zone.map(q => [...q]), line:p.line ? p.line.map(q => [...q]) : null, lineStart:null,
+       dir:p.direction ? [...p.direction] : null, dirStart:null, img:new Image()};
+  Z.img.onload = () => { const cv = $("#zc"); cv.width = Z.img.naturalWidth; cv.height = Z.img.naturalHeight; drawZone(); };
+  Z.img.src = `/api/clips/${ref.id}/frame/0.jpg`;
+  const cv = $("#zc"); cv.onclick = zoneClick; cv.onmousedown = lineGrab; cv.onmousemove = lineDrag;
+  cv.onmouseup = cv.onmouseleave = () => { if (Z.dragEnd != null) { Z.dragEnd = null; Z.justDragged = true; } };
+}
+const snap = v => v < 0.03 ? 0 : v > 0.97 ? 1 : +v.toFixed(4);
+function canvasXY(e) { const r = $("#zc").getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; }
+function lineGrab(e) {
+  if (!Z.line) return; const [x, y] = canvasXY(e), cv = $("#zc"), ar = cv.height / cv.width;
+  const i = Z.line.findIndex(([px, py]) => Math.hypot(px - x, (py - y) * ar) < 0.03);
+  if (i >= 0) { Z.dragEnd = i; e.preventDefault(); }
+}
+function lineDrag(e) {
+  if (Z.dragEnd == null) return; const [x, y] = canvasXY(e);
+  Z.line[Z.dragEnd] = [snap(x), snap(y)]; drawZone();
+}
+function extendLine() {
+  if (!Z.line) { toast("Pirma nubrėžk liniją", true); return; }
+  // stretch the line through both ends until it meets the frame border
+  const [[ax, ay], [bx, by]] = Z.line, dx = bx - ax, dy = by - ay; let t0 = -1e9, t1 = 1e9;
+  for (const [p, q] of [[-dx, ax], [dx, 1 - ax], [-dy, ay], [dy, 1 - ay]]) {
+    if (Math.abs(p) < 1e-12) continue; const t = q / p;
+    if (p < 0) t0 = Math.max(t0, t); else t1 = Math.min(t1, t);
+  }
+  const pt = t => [+Math.min(1, Math.max(0, ax + t * dx)).toFixed(4), +Math.min(1, Math.max(0, ay + t * dy)).toFixed(4)];
+  Z.line = [pt(t0), pt(t1)]; drawZone();
+}
+function zoneMode(m) { Z.mode = m; Z.dirStart = null; Z.lineStart = null; if (m === "poly") { Z.poly = []; Z.line = null; } if (m === "line") { Z.line = null; Z.poly = []; } drawZone(); }
+function zoneClick(e) {
+  if (Z.justDragged) { Z.justDragged = false; return; }
+  const [x, y] = canvasXY(e);
+  if (Z.mode === "line") { if (!Z.lineStart) Z.lineStart = [snap(x), snap(y)]; else { Z.line = [Z.lineStart, [snap(x), snap(y)]]; Z.lineStart = null; Z.mode = "line-done"; } }
+  else if (Z.mode === "poly") Z.poly.push([+x.toFixed(4), +y.toFixed(4)]);
+  else if (!Z.dirStart) Z.dirStart = [x, y];
+  else { const dx = x - Z.dirStart[0], dy = y - Z.dirStart[1], n = Math.hypot(dx, dy) || 1; Z.dir = [+(dx / n).toFixed(3), +(dy / n).toFixed(3)]; Z.dirStart = null; Z.mode = "poly-done"; }
+  drawZone();
+}
+function drawZone() {
+  const cv = $("#zc"); if (!cv) return; const g = cv.getContext("2d"), W = cv.width, H = cv.height;
+  g.drawImage(Z.img, 0, 0);
+  if (Z.poly.length) {
+    g.beginPath(); Z.poly.forEach(([x, y], i) => i ? g.lineTo(x * W, y * H) : g.moveTo(x * W, y * H)); g.closePath();
+    g.fillStyle = "rgba(30,140,235,.28)"; g.fill(); g.strokeStyle = "#1e8ceb"; g.lineWidth = 2; g.stroke();
+    Z.poly.forEach(([x, y]) => { g.fillStyle = "#fff"; g.fillRect(x * W - 3, y * H - 3, 6, 6); });
+  }
+  if (Z.line) {
+    // neon glow: wide soft halo, then a bright near-white core
+    g.save(); g.lineCap = "round"; g.beginPath(); g.moveTo(Z.line[0][0] * W, Z.line[0][1] * H); g.lineTo(Z.line[1][0] * W, Z.line[1][1] * H);
+    g.shadowColor = "#2b8cff"; g.shadowBlur = 28; g.strokeStyle = "rgba(43,140,255,.55)"; g.lineWidth = 14; g.stroke(); g.stroke();
+    g.shadowBlur = 12; g.strokeStyle = "#bfe0ff"; g.lineWidth = 4; g.stroke(); g.restore();
+    Z.line.forEach(([x, y]) => { g.fillStyle = "#fff"; g.beginPath(); g.arc(x * W, y * H, 6, 0, 7); g.fill(); });
+  }
+  if (Z.lineStart) { g.fillStyle = "#1e8ceb"; g.beginPath(); g.arc(Z.lineStart[0] * W, Z.lineStart[1] * H, 6, 0, 7); g.fill(); }
+  const shape = Z.line || Z.poly;
+  if (Z.dir && shape.length) {
+    const cx = shape.reduce((a, p) => a + p[0], 0) / shape.length * W, cy = shape.reduce((a, p) => a + p[1], 0) / shape.length * H;
+    const L = Math.min(W, H) * .1, ex = cx + Z.dir[0] * L, ey = cy + Z.dir[1] * L;
+    g.strokeStyle = "#fff"; g.lineWidth = 3; g.beginPath(); g.moveTo(cx - Z.dir[0] * L, cy - Z.dir[1] * L); g.lineTo(ex, ey); g.stroke();
+    const a = Math.atan2(Z.dir[1], Z.dir[0]); g.beginPath(); g.moveTo(ex, ey); g.lineTo(ex - 14 * Math.cos(a - .5), ey - 14 * Math.sin(a - .5)); g.lineTo(ex - 14 * Math.cos(a + .5), ey - 14 * Math.sin(a + .5)); g.closePath(); g.fillStyle = "#fff"; g.fill();
+  }
+  if (Z.dirStart) { g.fillStyle = "#ffb84d"; g.beginPath(); g.arc(Z.dirStart[0] * W, Z.dirStart[1] * H, 6, 0, 7); g.fill(); }
+  $("#zhelp").textContent = Z.mode === "dir" ? (Z.dirStart ? "Spausk, kur mašinos važiuoja." : "Spausk, iš kur mašinos atvažiuoja.") :
+    Z.mode === "line" ? (Z.lineStart ? "Spausk antrą linijos galą." : "Spausk pirmą linijos galą.") :
+    `${Z.line ? "Linija nubrėžta" : `Zonos taškų: ${Z.poly.length}`}. Kryptis: ${Z.dir ? "viena (rodyklė)" : "abi"}. Nepamiršk „Išsaugoti“.`;
+}
+async function saveParams(reprocess) {
+  const num = id => parseFloat($("#p-" + id).value);
+  const body = {conf:num("conf"), min_frames:parseInt($("#p-min_frames").value), min_travel:num("min_travel"), lost_buffer:parseInt($("#p-lost_buffer").value),
+    match_thresh:num("match_thresh"), merge_gap:parseInt($("#p-merge_gap").value), merge_dist:num("merge_dist"), anchor:$("#p-anchor").value, model:$("#p-model").value,
+    fps:num("fps"), classes:[...document.querySelectorAll(".p-cls:checked")].map(x => x.value), skip_initial:$("#p-skip_initial").checked,
+    blur_plates:$("#p-blur_plates").checked, track_activation:num("conf")};
+  if (Z) { if (Z.poly.length && Z.poly.length < 3) { toast("Zonai reikia bent 3 taškų", true); return; } body.zone = Z.line ? [] : Z.poly; body.line = Z.line; body.direction = Z.dir; }
+  S.cam.params = await api(`/api/cameras/${S.cam.id}/params`, {method:"PUT", json:body});
+  toast("Parametrai išsaugoti.");
+  if (reprocess) reprocessAll();
+  loadCams();
+}
+
+// ── labeling ─────────────────────────────────────────────────────────────
+let L = null;
+const CLS_COLORS = {car:"#3cc864", truck:"#ffb84d", bus:"#c77dff", motorcycle:"#4dd2ff", bicycle:"#ff7aa2"};
+async function renderLabel() {
+  const el = sec("label");
+  const clips = (await loadClips()).filter(c => c.cv_count != null);
+  if (!clips.length) { el.innerHTML = '<div class="muted">Pirmiausia įkelk ir suskaičiuok klipų.</div>'; return; }
+  const cid = S.labelClip && clips.find(c => c.id === S.labelClip) ? S.labelClip : clips[0].id;
+  el.innerHTML = `<div class="row"><select id="lclip" onchange="S.labelClip=this.value;renderLabel()">${clips.map(c => `<option value="${c.id}" ${c.id === cid ? "selected" : ""}>${esc(c.recorded_at.slice(0, 16).replace("T", " "))} · ${c.labeled_frames} žym.</option>`).join("")}</select>
+    <select id="lcls">${Object.keys(CLS_COLORS).map(k => `<option>${k}</option>`).join("")}</select>
+    <button onclick="labelSave(true)" class="primary">Išsaugoti ir kitas <span class="kbd">S</span></button>
+    <button onclick="labelGo(-1)">← <span class="kbd">A</span></button><button onclick="labelGo(1)"><span class="kbd">D</span> →</button>
+    <button onclick="labelDelete()">Ištrinti pažymėtą <span class="kbd">Del</span></button>
+    <button onclick="exportLabels()">Eksportuoti COCO (YOLOX mokymui)</button></div>
+    <div class="muted">Tempk pele — naujas rėmelis. Spausk ant rėmelio — pažymėti (klasę keisk sąraše). Pradžioje rodomi detektoriaus spėjimai (punktyras) — pataisyk ir išsaugok.
+    Žymėk <b>kiekvieną</b> matomą transporto priemonę, ir toli esančias.</div>
+    <div class="strip" id="lstrip"></div><canvas id="lc"></canvas><div class="muted" id="linfo"></div>`;
+  const fr = await api(`/api/clips/${cid}/frames`);
+  L = {clip:cid, frames:fr.frames, labeled:new Set(fr.labeled), i:0, boxes:[], sel:-1, drag:null, img:new Image(), source:"", dirty:false};
+  const firstTodo = L.frames.findIndex(f => !L.labeled.has(f)); L.i = firstTodo < 0 ? 0 : firstTodo;
+  const cv = $("#lc"); cv.onmousedown = labelDown; cv.onmousemove = labelMove; cv.onmouseup = labelUp;
+  $("#lcls").onchange = () => { if (L.sel >= 0) { L.boxes[L.sel].cls = $("#lcls").value; L.dirty = true; drawLabel(); } };
+  labelLoad();
+}
+function drawStrip() { $("#lstrip").innerHTML = L.frames.map((f, i) => `<span class="${L.labeled.has(f) ? "done" : ""} ${i === L.i ? "cur" : ""}" onclick="labelJump(${i})">${f}</span>`).join(""); }
+async function labelLoad() {
+  const f = L.frames[L.i]; const d = await api(`/api/clips/${L.clip}/labels/${f}`);
+  L.boxes = d.boxes.map(b => ({cls:b.cls, box:b.box, pred:d.source === "detector"})); L.source = d.source; L.sel = -1; L.dirty = d.source === "detector";
+  L.img.onload = () => { const cv = $("#lc"); cv.width = L.img.naturalWidth; cv.height = L.img.naturalHeight; drawLabel(); };
+  L.img.src = `/api/clips/${L.clip}/frame/${f}.jpg`; drawStrip();
+}
+function drawLabel() {
+  const cv = $("#lc"), g = cv.getContext("2d"); g.drawImage(L.img, 0, 0);
+  L.boxes.forEach((b, i) => { const [x1, y1, x2, y2] = b.box; g.setLineDash(b.pred ? [6, 4] : []); g.lineWidth = i === L.sel ? 3 : 2;
+    g.strokeStyle = CLS_COLORS[b.cls] || "#fff"; g.strokeRect(x1, y1, x2 - x1, y2 - y1); g.setLineDash([]);
+    g.fillStyle = CLS_COLORS[b.cls] || "#fff"; g.font = "12px sans-serif"; g.fillText(b.cls, x1 + 2, y1 - 3); });
+  if (L.drag && L.drag.new) { const [x1, y1, x2, y2] = L.drag.box; g.strokeStyle = "#fff"; g.strokeRect(x1, y1, x2 - x1, y2 - y1); }
+  $("#linfo").textContent = `Kadras ${L.frames[L.i]} (${L.i + 1}/${L.frames.length}) · rėmelių: ${L.boxes.length} · ${L.source === "labels" ? "išsaugota" : "detektoriaus spėjimai, dar neišsaugota"} · pažymėta kadrų: ${L.labeled.size}`;
+}
+function cpos(e) { const cv = $("#lc"), r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]; }
+function labelDown(e) {
+  const [x, y] = cpos(e);
+  const hit = L.boxes.map((b, i) => [b, i]).filter(([b]) => x >= b.box[0] && x <= b.box[2] && y >= b.box[1] && y <= b.box[3])
+    .sort((a, b) => (a[0].box[2] - a[0].box[0]) * (a[0].box[3] - a[0].box[1]) - (b[0].box[2] - b[0].box[0]) * (b[0].box[3] - b[0].box[1]))[0];
+  if (hit && !e.shiftKey) { L.sel = hit[1]; $("#lcls").value = L.boxes[L.sel].cls; L.drag = {move:true, start:[x, y], orig:[...L.boxes[L.sel].box]}; }
+  else { L.sel = -1; L.drag = {new:true, start:[x, y], box:[x, y, x, y]}; }
+  drawLabel();
+}
+function labelMove(e) {
+  if (!L.drag) return; const [x, y] = cpos(e);
+  if (L.drag.new) L.drag.box = [Math.min(L.drag.start[0], x), Math.min(L.drag.start[1], y), Math.max(L.drag.start[0], x), Math.max(L.drag.start[1], y)];
+  else { const dx = x - L.drag.start[0], dy = y - L.drag.start[1], o = L.drag.orig; L.boxes[L.sel].box = [o[0] + dx, o[1] + dy, o[2] + dx, o[3] + dy]; L.dirty = true; }
+  drawLabel();
+}
+function labelUp() {
+  if (L.drag && L.drag.new) { const b = L.drag.box; if (b[2] - b[0] > 4 && b[3] - b[1] > 4) { L.boxes.push({cls:$("#lcls").value, box:b.map(v => Math.round(v * 10) / 10)}); L.sel = L.boxes.length - 1; L.dirty = true; } }
+  L.drag = null; drawLabel();
+}
+function labelDelete() { if (L.sel >= 0) { L.boxes.splice(L.sel, 1); L.sel = -1; L.dirty = true; drawLabel(); } }
+async function labelSave(next) {
+  const f = L.frames[L.i];
+  await api(`/api/clips/${L.clip}/labels/${f}`, {method:"PUT", json:{boxes:L.boxes.map(b => ({cls:b.cls, box:b.box})), width:$("#lc").width, height:$("#lc").height}});
+  L.labeled.add(f); L.dirty = false; if (next) labelGo(1); else labelLoad();
+}
+function labelGo(d) { const i = L.i + d; if (i < 0 || i >= L.frames.length) { toast(d > 0 ? "Paskutinis kadras." : "Pirmas kadras."); return; } L.i = i; labelLoad(); }
+function labelJump(i) { L.i = i; labelLoad(); }
+function labelKey(e) {
+  if (!L || ["INPUT", "SELECT"].includes(document.activeElement.tagName)) return;
+  if (e.key === "s" || e.key === "S") { e.preventDefault(); labelSave(true); }
+  else if (e.key === "d" || e.key === "D" || e.key === "ArrowRight") labelGo(1);
+  else if (e.key === "a" || e.key === "A" || e.key === "ArrowLeft") labelGo(-1);
+  else if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); labelDelete(); }
+  else if (/^[1-5]$/.test(e.key)) { const k = Object.keys(CLS_COLORS)[+e.key - 1]; $("#lcls").value = k; if (L.sel >= 0) { L.boxes[L.sel].cls = k; drawLabel(); } }
+}
+async function exportLabels() {
+  const r = await api("/api/export", {method:"POST", json:{}});
+  toast("Eksportuojama…");
+  watchJob(r.job, j => j.result && toast(`Eksportuota: ${j.result.path} (train ${j.result.train2017.images} kadrų, val ${j.result.val2017.images})`));
+}
+
+// ── report ───────────────────────────────────────────────────────────────
+async function renderReport() {
+  const el = sec("report"); el.innerHTML = '<div class="muted">Skaičiuojama…</div>';
+  const r = await api(`/api/cameras/${S.cam.id}/report`);
+  $("#cam-ready").innerHTML = r.ready ? '<span class="ok">✔ paruošta žaidimui</span>' : '<span class="warn">dar nepasiekė slenksčio</span>';
+  el.innerHTML = `<div class="cards">
+    <div class="card"><span class="muted">Įvertinta klipų</span><b>${r.n}</b></div>
+    <div class="card"><span class="muted">Teisingame intervale</span><b class="${(r.in_bucket || 0) >= .95 ? "ok" : "warn"}">${pct(r.in_bucket)}</b></div>
+    <div class="card"><span class="muted">Tikslus skaičius</span><b>${pct(r.exact)}</b></div>
+    <div class="card"><span class="muted">Vid. abs. paklaida</span><b>${r.mae ?? "—"}</b></div>
+    <div class="card"><span class="muted">Praleista mašinų (viso)</span><b>${r.under}</b></div>
+    <div class="card"><span class="muted">Per daug įskaityta (viso)</span><b>${r.over}</b></div>
+    <div class="card"><span class="muted">Pagal paspaudimus</span><b style="font-size:15px">praleista ${r.taps.missed}, nereikalingai ${r.taps.extra}</b><span class="muted">${r.taps.clips} klipuose</span></div></div>
+    <p class="muted">Intervalai: ${esc(r.buckets.join(" · "))} (${esc(r.buckets_source)}). Įjungimo sąlyga: ${esc(r.ready_rule)}.
+    ${r.bias > 0 ? "Sistema linkusi <b>per daug</b> skaičiuoti (dvigubi įskaitymai, blyksintys aptikimai) — didink N ar conf, mažink merge." : r.bias < 0 ? "Sistema linkusi <b>praleisti</b> — mažink conf, tikrink zoną/kryptį, didink sekimo atmintį." : ""}</p>
+    <div class="row"><button class="${r.ready ? "good" : ""}" onclick="enableCam(${!S.cam.enabled})">${S.cam.enabled ? "Išjungti iš žaidimo" : "Įjungti į žaidimą"}</button></div>
+    <h2>Didžiausios paklaidos</h2><table><tr><th>Klipas</th><th>CV</th><th>Tikras</th><th>Paklaida</th><th>Praleista ties</th><th>Nereikalingai ties</th></tr>
+    ${r.worst.map(w => `<tr class="click" onclick="openClip('${w.clip_id}')"><td>${w.clip_id}</td><td>${w.cv}</td><td>${w.true}</td><td class="${w.err ? "bad" : "ok"}">${w.err > 0 ? "+" : ""}${w.err}</td>
+      <td class="muted">${(w.missed_at || []).map(t => t.toFixed(1) + "s").join(", ")}</td><td class="muted">${(w.extra_at || []).map(t => t.toFixed(1) + "s").join(", ")}</td></tr>`).join("")}</table>`;
+}
+async function enableCam(on) { await api(`/api/cameras/${S.cam.id}`, {method:"PUT", json:{enabled:on ? 1 : 0}}); await loadCams(); renderReport(); }
+
+// ── search ───────────────────────────────────────────────────────────────
+function renderSearch() {
+  const el = sec("search");
+  el.innerHTML = `<p class="muted">Perskaičiuoja visus įvertintus klipus su kiekvienu parametrų deriniu (iš detekcijų talpyklos — detektorius nepaleidžiamas) ir rodo geriausius.
+    Vertės — kableliais.</p><div class="form">
+    ${[["conf", "0.25, 0.35, 0.45"], ["min_frames", "2, 3, 5"], ["lost_buffer", "15, 30, 60"], ["match_thresh", "0.7, 0.8, 0.9"], ["min_travel", ""], ["merge_gap", ""], ["merge_dist", ""]]
+      .map(([k, v]) => `<label>${k} <input id="g-${k}" value="${v}" placeholder="(nekeisti)" style="width:180px"></label>`).join("")}</div>
+    <div class="row"><button class="primary" onclick="runSearch()">Ieškoti</button><div class="pbar" id="gp" style="display:none"><div style="width:0"></div></div><span id="gpt" class="muted"></span></div><div id="gres"></div>`;
+}
+async function runSearch() {
+  const axes = {};
+  for (const k of ["conf", "min_frames", "lost_buffer", "match_thresh", "min_travel", "merge_gap", "merge_dist"]) {
+    const v = $("#g-" + k).value.split(",").map(s => s.trim()).filter(Boolean).map(Number); if (v.length) axes[k] = v;
+  }
+  const r = await api(`/api/cameras/${S.cam.id}/search`, {method:"POST", json:{axes}});
+  $("#gp").style.display = ""; $("#gres").innerHTML = "";
+  const cb = j => { $("#gp").style.display = "none"; $("#gpt").textContent = ""; if (j.result) showSearch(j.result); };
+  cb.progress = j => { $("#gpt").textContent = j.progress || ""; const m = /(\d+)\/(\d+)/.exec(j.progress || ""); if (m) $("#gp div").style.width = (100 * m[1] / m[2]) + "%"; };
+  watchJob(r.job, cb);
+}
+function showSearch(res) {
+  if (!res.results.length) { $("#gres").innerHTML = `<div class="warn">${esc(res.note || "Nėra rezultatų")}</div>`; return; }
+  const keys = ["conf", "min_frames", "lost_buffer", "match_thresh", "min_travel", "merge_gap", "merge_dist"];
+  const row = (r, cur) => `<tr ${cur ? 'style="background:#1d2533"' : ""}><td>${pct(r.in_bucket)}</td><td>${pct(r.exact)}</td><td>${r.mae}</td><td>${r.under}/${r.over}</td>${keys.map(k => `<td>${r.params[k]}</td>`).join("")}
+    <td>${cur ? "dabartiniai" : `<button onclick='applyParams(${JSON.stringify(JSON.stringify(r.params))})'>Pritaikyti</button>`}</td></tr>`;
+  $("#gres").innerHTML = `<p class="muted">Išbandyta ${res.tested} derinių ant ${res.clips} klipų${res.skipped ? `, praleista ${res.skipped} (talpykla neatitinka modelio)` : ""}.</p>
+    <table><tr><th>Intervale</th><th>Tikslus</th><th>MAE</th><th>praleista/per daug</th>${keys.map(k => `<th>${k}</th>`).join("")}<th></th></tr>${row(res.current, true)}${res.results.map(r => row(r, false)).join("")}</table>`;
+}
+async function applyParams(s) {
+  const p = JSON.parse(s);
+  S.cam.params = await api(`/api/cameras/${S.cam.id}/params`, {method:"PUT", json:p});
+  toast("Pritaikyta — perskaičiuojami klipai."); reprocessAll(); loadCams();
+}
+
+loadCams();
+</script>
+</body>
+</html>

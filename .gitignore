@@ -10,3 +10,7 @@ __pycache__/
 data/*.db
 data/*.db-journal
 data/*.db-wal
+
+# Traffic worker: clips, caches, labels and model weights are local data.
+data/traffic/
+models/
