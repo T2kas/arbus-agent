@@ -929,7 +929,7 @@ WEATHER_DECLINE_HOURS = _env_int("WEATHER_DECLINE_HOURS", 2)
 # forecast), a 14:00 Vilnius auto-close, and the city's own image. Creation runs
 # in the evening (fresh forecast) and needs the service_role key.
 APP_CREATE_RPC = os.environ.get("APP_CREATE_RPC", "").strip() or "admin_create_market"
-WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 50000)
+WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 8500)
 WEATHER_HORIZON_DAYS = _env_int("WEATHER_HORIZON_DAYS", 2)      # tomorrow + day after
 WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 18)       # create from this Vilnius hour
 # Daily-max forecast spread °C — the std of the actual forecast error, and the
@@ -963,9 +963,9 @@ WEATHER_STATE_PATH = os.environ.get("WEATHER_STATE_PATH", "state/weather_state.j
 # and an LLM key (ANTHROPIC/PERPLEXITY/…). Gate the schedule with SERIES_ENABLED.
 SERIES_CINEMA_ENABLED = os.environ.get("SERIES_CINEMA_ENABLED", "on").strip().lower() != "off"
 SERIES_MUSIC_ENABLED = os.environ.get("SERIES_MUSIC_ENABLED", "on").strip().lower() != "off"
-# Weekly liquidity (team direction: 50k for these).
-SERIES_CINEMA_LIQUIDITY = _env_int("SERIES_CINEMA_LIQUIDITY", 50000)
-SERIES_MUSIC_LIQUIDITY = _env_int("SERIES_MUSIC_LIQUIDITY", 50000)
+# Weekly liquidity (team direction 2026-10-04: 50k -> 8.5k, see sql/reduce_liquidity.sql).
+SERIES_CINEMA_LIQUIDITY = _env_int("SERIES_CINEMA_LIQUIDITY", 8500)
+SERIES_MUSIC_LIQUIDITY = _env_int("SERIES_MUSIC_LIQUIDITY", 8500)
 # App category for the created markets (resolution does not depend on it).
 SERIES_CINEMA_CATEGORY = os.environ.get("SERIES_CINEMA_CATEGORY", "").strip() or "kultura"
 SERIES_MUSIC_CATEGORY = os.environ.get("SERIES_MUSIC_CATEGORY", "").strip() or "kultura"
@@ -1007,7 +1007,7 @@ BOT_STATE_PATH = os.environ.get("BOT_STATE_PATH", "state/bot_state.json")
 # or highest-price markets. Needs the service_role key. Opt-in via FUEL_ENABLED.
 FUEL_ENABLED = os.environ.get("FUEL_ENABLED", "on").strip().lower() not in ("off", "false", "0", "no")
 FUEL_CATEGORY = _env_str("FUEL_CATEGORY", "ekonomika")
-FUEL_LIQUIDITY = _env_int("FUEL_LIQUIDITY", 50000)
+FUEL_LIQUIDITY = _env_int("FUEL_LIQUIDITY", 8500)
 FUEL_IMAGE = _env_str("FUEL_IMAGE", "")           # reused from an existing fuel market if empty
 # Daily change std €/l — how far tomorrow's average lands from today's. Fuel
 # moves ~1–2 cents/day, so the buckets are ~1 cent wide.
