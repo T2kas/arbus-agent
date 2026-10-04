@@ -149,3 +149,11 @@ def test_structure_failure_is_reported_not_hidden(monkeypatch, tmp_path):
     monkeypatch.setattr(batch_create, "validate", lambda s, now=None: [])
     reports, _ = batch_create.run(str(f), dry_run=False, alert=False)
     assert reports[0]["status"] == "error" and "FAILED" in reports[0]["detail"]
+
+
+def test_two_named_outcomes_get_the_dual_line_chart():
+    from arbus.app import wants_dual_chart
+
+    assert wants_dual_chart([{"label": "LSDP"}, {"label": "„Nemuno aušra“"}])
+    assert not wants_dual_chart([{"label": "Taip"}, {"label": "Ne"}])
+    assert not wants_dual_chart([{"label": "A"}, {"label": "B"}, {"label": "C"}])

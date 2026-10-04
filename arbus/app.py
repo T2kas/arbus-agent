@@ -370,6 +370,13 @@ def _resolve_error_hint(error: str) -> str:
     return _with_auth_hint(error)
 
 
+def wants_dual_chart(options: list[dict]) -> bool:
+    """Two named outcomes (LSDP vs "Nemuno aušra") chart both lines; a plain
+    Taip/Ne market charts only "Taip". Team rule 2026-10-04."""
+    labels = {str(o.get("label") or "").strip().lower() for o in options}
+    return len(options) == 2 and labels != {"taip", "ne"}
+
+
 def create_market(spec: dict) -> tuple[bool, str]:
     """Create a market via the app's admin_create_market RPC. Returns (ok, id or
     error). Needs the service_role key. `spec` carries the ready fields."""
@@ -385,7 +392,7 @@ def create_market(spec: dict) -> tuple[bool, str]:
         "p_rules": spec.get("rules") or None,
         "p_context": spec.get("context") or None,
         "p_options": spec["options"],
-        "p_dual_line_chart": False,
+        "p_dual_line_chart": spec.get("dual_line_chart", wants_dual_chart(spec["options"])),
         "p_closes_at": spec.get("closes_at"),
     }
     rows, error = _rpc(config.APP_CREATE_RPC, payload, key=config.ARBUS_WRITE_KEY)
