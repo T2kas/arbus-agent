@@ -140,7 +140,7 @@
   "station": "klaipedos-ams"
  },
  "0b0b1bf2-13b2-44e8-ae8b-faccfcda950b": {
-  "checksum": "75b5b583d5365669c45a736e3c75af3296191594322d20a2b78b1dda37350f6d",
+  "checksum": "02a0944067774bcdbe9f11084cd50d0729cbe5db9116b8ee572cfdfbb719f1bd",
   "current_maximum": null,
   "date": "2026-10-05",
   "measurements": {},
@@ -3243,7 +3243,7 @@
   "station": "kauno-ams"
  },
  "45039045-507f-4862-b9f6-53eb30879c9f": {
-  "checksum": "fb736aba9291ee504aeb9776678792af9c07f0bcf3e4667e1233a7d44b5f964e",
+  "checksum": "ea2aba8f1027d78277770e43363f13688b67e000c6ca96db927ca201ea067073",
   "current_maximum": null,
   "date": "2026-10-05",
   "measurements": {},
@@ -3251,7 +3251,7 @@
   "station": "kauno-ams"
  },
  "456a1735-4a76-4c8e-96ea-1ea9e1f88342": {
-  "checksum": "fb736aba9291ee504aeb9776678792af9c07f0bcf3e4667e1233a7d44b5f964e",
+  "checksum": "ea2aba8f1027d78277770e43363f13688b67e000c6ca96db927ca201ea067073",
   "current_maximum": null,
   "date": "2026-10-06",
   "measurements": {},
@@ -7898,7 +7898,7 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "cfc29238-c66a-483d-ad2f-6f506c801c83": {
-  "checksum": "75b5b583d5365669c45a736e3c75af3296191594322d20a2b78b1dda37350f6d",
+  "checksum": "02a0944067774bcdbe9f11084cd50d0729cbe5db9116b8ee572cfdfbb719f1bd",
   "current_maximum": null,
   "date": "2026-10-06",
   "measurements": {},
@@ -7915,7 +7915,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261001/"
  },
  "d400d4c5-1809-45d9-aa75-cf18824c5fa0": {
-  "checksum": "99f772f913bc902c0fedde4a6a77e1dd946d5e0791bc94493ca12c6cc21b9227",
+  "checksum": "a25994f97ba11b662abc1e7808fbb2ee4cb4f348f2f8512ce9840c1b594d2acd",
   "current_maximum": null,
   "date": "2026-10-05",
   "measurements": {},
@@ -8343,7 +8343,7 @@
   "station": "klaipedos-ams"
  },
  "ddd933a5-2a7a-415d-8b13-f5b630128df6": {
-  "checksum": "99f772f913bc902c0fedde4a6a77e1dd946d5e0791bc94493ca12c6cc21b9227",
+  "checksum": "a25994f97ba11b662abc1e7808fbb2ee4cb4f348f2f8512ce9840c1b594d2acd",
   "current_maximum": null,
   "date": "2026-10-06",
   "measurements": {},
