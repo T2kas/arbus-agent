@@ -4,27 +4,39 @@
     "subtitle": "Atranka baigiasi 2027 m. vasario–kovo lange",
     "category": "sportas",
     "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/326a47c1-fef0-434f-9c27-046ba76ab313.jpg",
-    "liquidity": 20000,
+    "liquidity": 10000,
     "rules": "Rinka bus išspręsta „Taip“, jeigu Lietuvos vyrų krepšinio rinktinė, baigus 2027 m. FIBA pasaulio taurės Europos atrankos turnyrą, oficialiai užsitikrins vietą 2027 m. FIBA pasaulio taurės finaliniame turnyre.\n\nVertinamas FIBA paskelbtas galutinis atrankos rezultatas: kurios rinktinės iš Lietuvos atrankos grupės patenka į pasaulio taurę. Pakanka, kad FIBA oficialiai patvirtintų Lietuvos patekimą; tolimesnis atsisakymas dalyvauti rezultato nekeičia.\n\nRinka išsprendžiama „Ne“, jeigu po paskutinių atrankos rungtynių Lietuva nepatenka tarp į pasaulio taurę keliaujančių rinktinių. Jei patekimas ar nepatekimas matematiškai paaiškėja anksčiau, rinka gali būti išspręsta anksčiau.\n\nJeigu FIBA pakeistų atrankos formatą ar pakviestų papildomų komandų, vertinamas oficialus FIBA sprendimas dėl Lietuvos dalyvavimo, paskelbtas iki 2027 m. balandžio 30 d.\n\nRezultato šaltiniai yra FIBA (fiba.basketball), Lietuvos krepšinio federacija ir nacionaliniai naujienų portalai.",
     "context": "Lietuva atrankos J grupėje turi 4 pergales ir 4 pralaimėjimus ir yra ketvirta – už Turkijos (8–0), Serbijos (6–2) ir Italijos (5–3). Į pasaulio taurę patenka trys geriausios grupės komandos. Rugsėjį rinktinę paliko Rimas Kurtinaitis su visu štabu, jos vairą perėmė Dainius Adomaitis, o lapkričio 26 d. laukia mūšis namie su Serbija ir lapkričio 29 d. išvykoje su Bosnija ir Hercegovina. Jei Lietuva nepatektų, pasaulio taurę praleistų pirmą kartą per 24 metus.",
     "closes_at": "2027-02-23T21:59:00+00:00",
     "options": [
-      {"label": "Taip", "probability": 40},
-      {"label": "Ne", "probability": 60}
+      {
+        "label": "Taip",
+        "probability": 40
+      },
+      {
+        "label": "Ne",
+        "probability": 60
+      }
     ]
   },
   {
-    "title": "Kas laimės lapkričio 26 d.: Lietuva ar Serbija?",
-    "subtitle": "FIBA pasaulio taurės atranka, Adomaičio debiutas",
+    "title": "Lietuva vs Serbija",
+    "subtitle": "FIBA pasaulio taurės atranka, 2026 m. lapkričio 26 d.",
     "category": "sportas",
     "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/326a47c1-fef0-434f-9c27-046ba76ab313.jpg",
-    "liquidity": 20000,
+    "liquidity": 4000,
     "rules": "Rinka bus išspręsta pagal 2026 m. lapkričio 26 d. vyksiančių Lietuvos ir Serbijos vyrų krepšinio rinktinių 2027 m. FIBA pasaulio taurės atrankos rungtynių galutinį rezultatą.\n\nVertinamas oficialus FIBA užfiksuotas galutinis rezultatas, įskaitant pratęsimus.\n\nJeigu rungtynės perkeliamos į kitą datą, bet sužaidžiamos iki 2026 m. gruodžio 31 d., vertinamas jų rezultatas. Jeigu jos atšaukiamos arba nesužaidžiamos iki šios datos, arba FIBA rezultatą nustato techniniu sprendimu be sužaistų rungtynių, rinka anuliuojama ir statymai grąžinami.\n\nRezultato šaltiniai yra FIBA (fiba.basketball), Lietuvos krepšinio federacija ir nacionaliniai naujienų portalai.",
     "context": "Tai pirmos Dainiaus Adomaičio rungtynės grąžinus jį prie rinktinės vairo ir vienos svarbiausių kovoje dėl vietos pasaulio taurėje. Serbija grupėje turi 6 pergales ir 2 pralaimėjimus, Lietuva – 4 ir 4. Lapkričio lange nedalyvauja NBA, o dauguma Eurolygos žaidėjų, todėl abi komandos žais su antrinėmis sudėtimis, o lietuviai turės namų aikštės pranašumą.",
     "closes_at": "2026-11-26T15:59:00+00:00",
     "options": [
-      {"label": "Lietuva", "probability": 45},
-      {"label": "Serbija", "probability": 55}
+      {
+        "label": "Lietuva",
+        "probability": 45
+      },
+      {
+        "label": "Serbija",
+        "probability": 55
+      }
     ]
   },
   {
@@ -32,71 +44,755 @@
     "subtitle": "Pergalės iki 2026 m. spalio 31 d.",
     "category": "sportas",
     "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
-    "liquidity": 20000,
+    "liquidity": 5500,
     "rules": "Rinka bus išspręsta pagal Kauno „Žalgirio“ pergalių skaičių 2026–2027 m. Eurolygos reguliariajame sezone, įskaitant visas rungtynes, sužaistas iki 2026 m. spalio 31 d. 23:59 Lietuvos laiku imtinai.\n\nSkaičiuojamos visos oficialios Eurolygos reguliariojo sezono pergalės nuo sezono pradžios, taip pat ir rugsėjį iškovotos. LKL, draugiškos ir kitų turnyrų rungtynės nesiskaičiuoja.\n\nJeigu rungtynės iki spalio 31 d. perkeliamos į vėlesnę datą, jos neįskaičiuojamos. Jeigu Eurolyga vėliau pakeičia rezultatą techniniu sprendimu, naudojamas iki 2026 m. lapkričio 15 d. paskelbtas oficialus rezultatas.\n\nRezultato šaltiniai yra euroleaguebasketball.net turnyrinė lentelė, zalgiris.lt ir nacionaliniai sporto portalai.",
     "context": "„Žalgiris“ sezoną pradėjo pergale Belgrade prieš „Crvena Zvezda“, bet vėliau pralaimėjo Pirėjo „Olympiacos“ ir Paryžiuje – po trijų turų balansas 1–2. Spalį laukia sunkus grafikas: išvykos į Barseloną, Stambulą (prieš „Fenerbahče“) ir Bolonijoje, o namie – „Anadolu Efes“, ASVEL ir „Partizan“. Ar Kaunas spalį pakils į atkrintamųjų zoną?",
     "closes_at": "2026-10-30T15:59:00+00:00",
     "options": [
-      {"label": "3 arba mažiau", "probability": 38},
-      {"label": "4", "probability": 31},
-      {"label": "5", "probability": 20},
-      {"label": "6 arba daugiau", "probability": 11}
+      {
+        "label": "3 arba mažiau",
+        "probability": 38
+      },
+      {
+        "label": "4",
+        "probability": 31
+      },
+      {
+        "label": "5",
+        "probability": 20
+      },
+      {
+        "label": "6 arba daugiau",
+        "probability": 11
+      }
     ]
   },
   {
-    "title": "Kas laimės LKL derbį gruodžio 6 d.: „Žalgiris“ ar „Rytas“?",
-    "subtitle": "„Žalgirio“ arena, Kaunas",
+    "title": "Kurią vietą „Žalgiris“ užims Eurolygos reguliariajame sezone?",
+    "subtitle": "2026–2027 m. Eurolygos reguliariojo sezono galutinė lentelė",
     "category": "sportas",
     "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
-    "liquidity": 20000,
-    "rules": "Rinka bus išspręsta pagal 2026 m. gruodžio 6 d. Kauno „Žalgirio“ arenoje vyksiančių LKL reguliariojo sezono rungtynių tarp Kauno „Žalgirio“ ir Vilniaus „Ryto“ galutinį rezultatą.\n\nVertinamas oficialus lkl.lt užfiksuotas galutinis rezultatas, įskaitant pratęsimus.\n\nJeigu rungtynės perkeliamos, bet sužaidžiamos iki 2027 m. sausio 31 d., vertinamas jų rezultatas. Jeigu jos nesužaidžiamos iki šios datos arba rezultatas nustatomas techniniu sprendimu be sužaistų rungtynių, rinka anuliuojama ir statymai grąžinami.\n\nRezultato šaltiniai yra lkl.lt ir nacionaliniai sporto portalai.",
-    "context": "Didžiausias Lietuvos krepšinio derbis grįžta į Kauną. „Žalgiris“ namie prieš „Rytą“ dažniausiai būna favoritas, tačiau Vilniaus klubas pastaraisiais sezonais ne kartą išplėšė pergales ir „Žalgirio“ arenoje. Gruodį „Žalgiris“ žais itin įtemptu Eurolygos grafiku, todėl nuovargis gali tapti „Ryto“ šansu.",
-    "closes_at": "2026-12-06T14:49:00+00:00",
+    "liquidity": 10000,
+    "rules": "Rinka bus išspręsta pagal Kauno „Žalgirio“ vietą oficialioje galutinėje 2026–2027 m. Eurolygos reguliariojo sezono turnyrinėje lentelėje, sužaidus visus 38 turus.\n\nVertinama Eurolygos paskelbta vieta, nustatyta pagal oficialius vietų nustatymo kriterijus, įskaitant tarpusavio rezultatus. Atkrintamųjų, „play-in“ etapo ir Finalo ketverto rezultatai vietos nekeičia.\n\nJeigu sezonas būtų sutrumpintas, naudojama Eurolygos paskelbta galutinė reguliariojo sezono lentelė. Jeigu lentelė vėliau pataisoma dėl techninių rezultatų ar sankcijų, naudojama naujausia iki 2027 m. gegužės 31 d. paskelbta oficiali versija.\n\nRezultato šaltiniai yra euroleaguebasketball.net turnyrinė lentelė ir oficialus Kauno „Žalgirio“ puslapis.",
+    "context": "Ekspertai „Žalgirį“ prieš sezoną rikiavo tarp 6–8 vietų: „Eurohoops“ reitinge kauniečiai šešti, oficialiame Eurolygos – aštunti. Lažybų bendrovės patekimą į TOP-8 vertina maždaug 45 % tikimybe. Sezonas prasidėjo pergale Belgrade, bet po trijų turų balansas 1–2, o lyga dar niekada nebuvo tokia ilga – 38 turai.",
+    "closes_at": "2027-03-31T20:59:00+00:00",
     "options": [
-      {"label": "„Žalgiris“", "probability": 72},
-      {"label": "„Rytas“", "probability": 28}
+      {
+        "label": "1–4 vieta",
+        "probability": 14
+      },
+      {
+        "label": "5–6 vieta",
+        "probability": 19
+      },
+      {
+        "label": "7–10 vieta",
+        "probability": 25
+      },
+      {
+        "label": "11–20 vieta",
+        "probability": 42
+      }
     ]
   },
   {
-    "title": "Ar Vilniuje iki lapkričio 15 d. pasirodys sniego danga?",
-    "subtitle": "LHMT Vilniaus meteorologijos stotis",
-    "category": "orai",
-    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/893ae1af-8b97-4d37-af1e-11a1d3077ede.jpg",
-    "liquidity": 20000,
-    "rules": "Rinka bus išspręsta „Taip“, jeigu nuo prekybos pradžios iki 2026 m. lapkričio 15 d. 23:59 Lietuvos laiku bent viename Lietuvos hidrometeorologijos tarnybos (LHMT) Vilniaus automatinės meteorologijos stoties stebėjime užfiksuotas sniego dangos storis yra 1 cm arba didesnis.\n\nNaudojami oficialūs LHMT stebėjimų duomenys, viešai skelbiami api.meteo.lt (stotis „vilniaus-ams“, laukas „snowDepth“) arba meteo.lt. Vien snigimas, šlapdriba ar kruša be užfiksuotos sniego dangos neįskaitomi.\n\nJeigu sąlyga įvykdoma anksčiau, rinka gali būti išspręsta „Taip“ iš karto. Jeigu iki termino sniego danga neužfiksuojama, rinka išsprendžiama „Ne“.\n\nJeigu stotis tuo metu neveikia arba duomenys neprieinami, naudojamas LHMT paskelbtas oficialus sniego dangos stebėjimas Vilniuje.",
-    "context": "Pirmasis sniegas Lietuvoje vidutiniškai iškrenta apie lapkričio 4 d., rytinėje šalies dalyje – kiek anksčiau, tačiau sniego danga paprastai nusistovi tik gruodžio antroje pusėje. Pastaraisiais rudenimis pirmasis tikras sniegas Vilniuje dažniau pasirodydavo antroje lapkričio pusėje. Ar šiemet žiema į sostinę ateis anksčiau?",
-    "closes_at": "2026-11-15T21:59:00+00:00",
+    "title": "Kas laimės 2026–2027 m. Eurolygą?",
+    "subtitle": "2027 m. Eurolygos Finalo ketvertas",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/e0817cae-a154-4885-9e43-2a553fb3ac89.jfif",
+    "liquidity": 10000,
+    "rules": "Rinka bus išspręsta pagal komandą, kuri laimės 2026–2027 m. Eurolygos čempionų titulą – Finalo ketverto finalo nugalėtoją.\n\nVertinamas oficialus Eurolygos paskelbtas čempionas. Reguliariojo sezono, atkrintamųjų ar kitų turnyrų rezultatai nenaudojami.\n\nJeigu čempione taps atskirai tarp baigčių nepaminėta komanda, laimės „Kita komanda“.\n\nJeigu Finalo ketvertas būtų atidėtas, laukiama jo rezultato iki 2027 m. rugsėjo 30 d. Jeigu iki šios datos čempionas nebus paskelbtas, galutinis rezultatas bus paskirstytas po lygiai visoms baigtims.\n\nRezultato šaltiniai yra euroleaguebasketball.net ir nacionaliniai sporto portalai.",
+    "context": "Lažybų bendrovės didžiausiais favoritais laiko Graikijos klubus – Atėnų „Panathinaikos“ (koeficientas ~4,0) ir praėjusio sezono čempionus Pirėjo „Olympiacos“ (~3,5–4,3). Toliau rikiuojasi „Fenerbahçe“ ir „Real“ (~6–8), o Kauno „Žalgirio“ titulo koeficientas siekia apie 21. Sezono pradžioje nepralaimėję „Fenerbahçe“, „Valencia“ ir „Partizan“ jau rodo, kad kova bus atvira.",
+    "closes_at": "2027-05-21T15:59:00+00:00",
     "options": [
-      {"label": "Taip", "probability": 35},
-      {"label": "Ne", "probability": 65}
+      {
+        "label": "Atėnų „Panathinaikos“",
+        "probability": 22
+      },
+      {
+        "label": "Pirėjo „Olympiacos“",
+        "probability": 22
+      },
+      {
+        "label": "Stambulo „Fenerbahçe“",
+        "probability": 13
+      },
+      {
+        "label": "Madrido „Real“",
+        "probability": 11
+      },
+      {
+        "label": "Barselonos „Barcelona“",
+        "probability": 5
+      },
+      {
+        "label": "„Monaco“",
+        "probability": 5
+      },
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 4
+      },
+      {
+        "label": "Kita komanda",
+        "probability": 18
+      }
     ]
   },
   {
-    "title": "Ar Valdas Benkunskas bus perrinktas Vilniaus meru?",
-    "subtitle": "2027 m. savivaldybių merų rinkimai",
-    "category": "politika",
-    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/ff5daddd-1d03-4389-a4fc-a1d8ee18ca76.jpeg",
-    "liquidity": 20000,
-    "rules": "Rinka bus išspręsta „Taip“, jeigu Valdas Benkunskas pagal Vyriausiosios rinkimų komisijos (VRK) paskelbtus galutinius 2027 m. savivaldybių merų rinkimų rezultatus (įskaitant pakartotinį balsavimą) bus išrinktas Vilniaus miesto savivaldybės meru.\n\nRinka išsprendžiama „Ne“, jeigu meru išrenkamas kitas kandidatas, jeigu V. Benkunskas nekandidatuoja, atsiima kandidatūrą arba yra išbraukiamas iš kandidatų sąrašo.\n\nJeigu rinkimai atidedami, laukiama jų rezultato iki 2027 m. birželio 30 d. Jeigu iki šios datos rinkimai neįvyksta, rinka išsprendžiama „Ne“.\n\nRezultato šaltinis yra VRK (vrk.lt) ir nacionaliniai naujienų portalai.",
-    "context": "Savivaldybių tarybų ir merų rinkimai vyks 2027 m. kovą. Gegužės „Spinter tyrimų“ apklausoje dabartinį merą konservatorių Valdą Benkunską palankiausiai vertino 30 % vilniečių, Artūrą Zuoką – 15 %. Zuokas jau paskelbė kandidatuosiąs kaip nepartinis, Nacionalinis susivienijimas kelia Vytautą Sinicą, o pats Benkunskas dar nepasakė, ar sieks antros kadencijos.",
-    "closes_at": "2027-03-06T21:59:00+00:00",
+    "title": "Barselonos „Barcelona“ vs Kauno „Žalgiris“",
+    "subtitle": "Eurolyga, 2026 m. spalio 9 d. 21:30 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Barselonos „Barcelona“ ir Kauno „Žalgiris“ 2026–2027 m. Eurolygos reguliariojo sezono rungtynių, numatytų 2026 m. spalio 9 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 8 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "„Žalgiris“ po trijų turų turi 1 pergalę ir 2 pralaimėjimus, o Barselona yra viena sunkiausių išvykų lygoje. Katalonai namuose tradiciškai stiprūs, tačiau kauniečiai praėjusiais sezonais ne kartą sugebėjo ten nustebinti.",
+    "closes_at": "2026-10-09T18:30:00+00:00",
     "options": [
-      {"label": "Taip", "probability": 50},
-      {"label": "Ne", "probability": 50}
+      {
+        "label": "Barselonos „Barcelona“",
+        "probability": 67
+      },
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 33
+      }
     ]
   },
   {
-    "title": "Ar Visvaldas Matijošaitis ketvirtą kartą taps Kauno meru?",
-    "subtitle": "2027 m. savivaldybių merų rinkimai",
-    "category": "politika",
-    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/ff5daddd-1d03-4389-a4fc-a1d8ee18ca76.jpeg",
-    "liquidity": 20000,
-    "rules": "Rinka bus išspręsta „Taip“, jeigu Visvaldas Matijošaitis pagal Vyriausiosios rinkimų komisijos (VRK) paskelbtus galutinius 2027 m. savivaldybių merų rinkimų rezultatus (įskaitant pakartotinį balsavimą) bus išrinktas Kauno miesto savivaldybės meru.\n\nRinka išsprendžiama „Ne“, jeigu meru išrenkamas kitas kandidatas, jeigu V. Matijošaitis nekandidatuoja, atsiima kandidatūrą arba yra išbraukiamas iš kandidatų sąrašo.\n\nJeigu rinkimai atidedami, laukiama jų rezultato iki 2027 m. birželio 30 d. Jeigu iki šios datos rinkimai neįvyksta, rinka išsprendžiama „Ne“.\n\nRezultato šaltinis yra VRK (vrk.lt) ir nacionaliniai naujienų portalai.",
-    "context": "Kauną nuo 2015 m. valdantis Visvaldas Matijošaitis LRT patvirtino sieksiantis ketvirtos kadencijos. Trijų kadencijų iš eilės apribojimas jam netaikomas atgaline tvarka, nes įsigaliojo tik 2022 m. Vieni kauniečiai „ūkvedžiui“ ploja, kiti švilpia – ar kas nors pagaliau jį įveiks?",
-    "closes_at": "2027-03-06T21:59:00+00:00",
+    "title": "Stambulo „Fenerbahçe“ vs Kauno „Žalgiris“",
+    "subtitle": "Eurolyga, 2026 m. spalio 13 d. 20:45 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Stambulo „Fenerbahçe“ ir Kauno „Žalgiris“ 2026–2027 m. Eurolygos reguliariojo sezono rungtynių, numatytų 2026 m. spalio 13 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 12 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "„Fenerbahçe“ sezoną pradėjo trimis pergalėmis iš trijų ir priklauso titulo favoritų grupei. „Žalgiriui“ tai antroji iš eilės sunki išvyka – Stambule kauniečiai bus aiškūs autsaideriai.",
+    "closes_at": "2026-10-13T17:45:00+00:00",
     "options": [
-      {"label": "Taip", "probability": 65},
-      {"label": "Ne", "probability": 35}
+      {
+        "label": "Stambulo „Fenerbahçe“",
+        "probability": 72
+      },
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 28
+      }
+    ]
+  },
+  {
+    "title": "Kauno „Žalgiris“ vs Stambulo „Anadolu Efes“",
+    "subtitle": "Eurolyga, 2026 m. spalio 16 d. 20:00 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Kauno „Žalgiris“ ir Stambulo „Anadolu Efes“ 2026–2027 m. Eurolygos reguliariojo sezono rungtynių, numatytų 2026 m. spalio 16 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 15 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "Po dviejų išvykų „Žalgiris“ grįžta į savo areną, kur žiūrovų palaikymas dažnai tampa lemiamu. „Anadolu Efes“ – pajėgi, bet nepastovi komanda, todėl tai viena lygiausių spalio dvikovų.",
+    "closes_at": "2026-10-16T17:00:00+00:00",
+    "options": [
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 55
+      },
+      {
+        "label": "Stambulo „Anadolu Efes“",
+        "probability": 45
+      }
+    ]
+  },
+  {
+    "title": "Kauno „Žalgiris“ vs Vilerbano ASVEL",
+    "subtitle": "Eurolyga, 2026 m. spalio 23 d. 20:00 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Kauno „Žalgiris“ ir Vilerbano ASVEL 2026–2027 m. Eurolygos reguliariojo sezono rungtynių, numatytų 2026 m. spalio 23 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 22 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "ASVEL tradiciškai rikiuojasi Eurolygos lentelės apačioje, o „Žalgirio“ arenoje kauniečiai yra aiškūs favoritai. Tai rungtynės, kurias „Žalgiris“ privalo laimėti norėdamas kovoti dėl atkrintamųjų.",
+    "closes_at": "2026-10-23T17:00:00+00:00",
+    "options": [
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 72
+      },
+      {
+        "label": "Vilerbano ASVEL",
+        "probability": 28
+      }
+    ]
+  },
+  {
+    "title": "Bolonijos „Virtus“ vs Kauno „Žalgiris“",
+    "subtitle": "Eurolyga, 2026 m. spalio 28 d. 21:30 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Bolonijos „Virtus“ ir Kauno „Žalgiris“ 2026–2027 m. Eurolygos reguliariojo sezono rungtynių, numatytų 2026 m. spalio 28 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 27 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "Bolonijoje „Žalgirio“ laukia vidutinio pajėgumo, bet namuose pavojingas varžovas. Tai pirmosios iš dviejų spalio pabaigos rungtynių per tris dienas, todėl svarbus bus ir rotacijos gylis.",
+    "closes_at": "2026-10-28T19:30:00+00:00",
+    "options": [
+      {
+        "label": "Bolonijos „Virtus“",
+        "probability": 58
+      },
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 42
+      }
+    ]
+  },
+  {
+    "title": "Kauno „Žalgiris“ vs Belgrado „Partizan“",
+    "subtitle": "Eurolyga, 2026 m. spalio 30 d. 20:00 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Kauno „Žalgiris“ ir Belgrado „Partizan“ 2026–2027 m. Eurolygos reguliariojo sezono rungtynių, numatytų 2026 m. spalio 30 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 29 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "„Partizan“ sezoną pradėjo trimis pergalėmis ir atvyks į Kauną su gausiu sirgalių būriu. Abi komandos turi aistringiausius Eurolygos žiūrovus, o tarpusavio dvikovos dažnai sprendžiasi paskutinėmis minutėmis.",
+    "closes_at": "2026-10-30T18:00:00+00:00",
+    "options": [
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 52
+      },
+      {
+        "label": "Belgrado „Partizan“",
+        "probability": 48
+      }
+    ]
+  },
+  {
+    "title": "Stambulo „Beşiktaş“ vs Kauno „Žalgiris“",
+    "subtitle": "Eurolyga, 2026 m. lapkričio 6 d. 19:00 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Stambulo „Beşiktaş“ ir Kauno „Žalgiris“ 2026–2027 m. Eurolygos reguliariojo sezono rungtynių, numatytų 2026 m. lapkričio 6 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. gruodžio 6 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "„Žalgiris“ vėl vyks į Stambulą, šįkart prieš „Beşiktaş“. Namų aikštė suteikia turkams nedidelį pranašumą, tačiau kauniečiai šiame susitikime yra visai realūs pretendentai į pergalę.",
+    "closes_at": "2026-11-06T17:00:00+00:00",
+    "options": [
+      {
+        "label": "Stambulo „Beşiktaş“",
+        "probability": 55
+      },
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 45
+      }
+    ]
+  },
+  {
+    "title": "Kėdainių „Nevėžis-Paskolų klubas“ vs Kauno „Žalgiris“",
+    "subtitle": "LKL, 2026 m. spalio 11 d. 17:00 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Kėdainių „Nevėžis-Paskolų klubas“ ir Kauno „Žalgiris“ 2026–2027 m. LKL reguliariojo sezono rungtynių, numatytų 2026 m. spalio 11 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 10 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus LKL rungtynių puslapis (lkl.lt) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "LKL lentelėje „Žalgiris“ pirmauja be pralaimėjimų (4–0), o Kėdainių komanda kol kas neturi nė vienos pergalės (0–3). Vienintelis klausimas – ar kauniečiai po Eurolygos išvykos į Barseloną neatsipalaiduos.",
+    "closes_at": "2026-10-11T14:00:00+00:00",
+    "options": [
+      {
+        "label": "Kėdainių „Nevėžis-Paskolų klubas“",
+        "probability": 12
+      },
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 88
+      }
+    ]
+  },
+  {
+    "title": "Kauno „Žalgiris“ vs „Tauragė“",
+    "subtitle": "LKL, 2026 m. spalio 18 d. 19:00 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Kauno „Žalgiris“ ir „Tauragė“ 2026–2027 m. LKL reguliariojo sezono rungtynių, numatytų 2026 m. spalio 18 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 17 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus LKL rungtynių puslapis (lkl.lt) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "„Žalgiris“ LKL žengia be pralaimėjimų, o „Tauragė“ sezoną pradėjo 1–1. Kauniečiai yra ryškūs favoritai, nors tarp dviejų sunkių Eurolygos savaičių treneris gali daugiau laiko suteikti rezervistams.",
+    "closes_at": "2026-10-18T16:00:00+00:00",
+    "options": [
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 90
+      },
+      {
+        "label": "„Tauragė“",
+        "probability": 10
+      }
+    ]
+  },
+  {
+    "title": "Kauno „Žalgiris“ vs „Hipocredit“",
+    "subtitle": "LKL, 2026 m. spalio 25 d. 16:50 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Kauno „Žalgiris“ ir „Hipocredit“ 2026–2027 m. LKL reguliariojo sezono rungtynių, numatytų 2026 m. spalio 25 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. lapkričio 24 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus LKL rungtynių puslapis (lkl.lt) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "„Hipocredit“ lentelėje turi 1 pergalę ir 2 pralaimėjimus, o „Žalgiris“ LKL kol kas nepralaimi. Rungtynės vyks savaitgalį tarp dviejų Eurolygos dvikovų, todėl kauniečiai gali rotuoti sudėtį.",
+    "closes_at": "2026-10-25T14:50:00+00:00",
+    "options": [
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 90
+      },
+      {
+        "label": "„Hipocredit“",
+        "probability": 10
+      }
+    ]
+  },
+  {
+    "title": "Vilniaus „Rytas“ vs Kauno „Žalgiris“",
+    "subtitle": "LKL, 2026 m. lapkričio 2 d. 16:30 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Vilniaus „Rytas“ ir Kauno „Žalgiris“ 2026–2027 m. LKL reguliariojo sezono rungtynių, numatytų 2026 m. lapkričio 2 d., rezultatą.\n\nVertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\nJeigu rungtynės bus nutrauktos, tačiau lyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\nJeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos dvikovos rezultatas, jeigu ji įvyks iki 2026 m. gruodžio 2 d. imtinai. Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nRezultato šaltiniai yra oficialus LKL rungtynių puslapis (lkl.lt) ir oficialus Kauno „Žalgirio“ tvarkaraštis.",
+    "context": "Pirmasis sezono Lietuvos krepšinio derbis. „Žalgiris“ LKL žengia be pralaimėjimų, o „Rytas“ sezoną pradėjo nesėkmingai, tačiau Vilniuje prieš kauniečius jis visada žaidžia papildomai motyvuotas.",
+    "closes_at": "2026-11-02T14:30:00+00:00",
+    "options": [
+      {
+        "label": "Vilniaus „Rytas“",
+        "probability": 32
+      },
+      {
+        "label": "Kauno „Žalgiris“",
+        "probability": 68
+      }
+    ]
+  },
+  {
+    "title": "FK „Žalgiris“ vs Marijampolės „Sūduva“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 10 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų FK „Žalgiris“ ir Marijampolės „Sūduva“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 10 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 9 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje FK „Žalgiris“ yra 4-oje vietoje su 44 taškais, Marijampolės „Sūduva“ – 2-oje su 50 taškais (duomenys po rugsėjo 20 d. turo). Tai atidėtos 22-ojo turo rungtynės. „Sūduva“ kovoja dėl čempionų titulo ir atsilieka vos taško nuo lyderių, todėl išvykoje Vilniuje jai svarbus kiekvienas taškas.",
+    "closes_at": "2026-10-10T11:15:00+00:00",
+    "options": [
+      {
+        "label": "FK „Žalgiris“",
+        "probability": 38
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 28
+      },
+      {
+        "label": "Marijampolės „Sūduva“",
+        "probability": 34
+      }
+    ]
+  },
+  {
+    "title": "FK „Panevėžys“ vs Gargždų „Banga“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 17 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų FK „Panevėžys“ ir Gargždų „Banga“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 17 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 16 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje FK „Panevėžys“ yra 7-oje vietoje su 32 taškais, Gargždų „Banga“ – 5-oje su 41 taškais (duomenys po rugsėjo 20 d. turo). „Banga“ dar vejasi trečiąją vietą ir Europos taurių bilietą, o „Panevėžys“ sezoną baigia lentelės viduryje.",
+    "closes_at": "2026-10-17T11:15:00+00:00",
+    "options": [
+      {
+        "label": "FK „Panevėžys“",
+        "probability": 35
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 28
+      },
+      {
+        "label": "Gargždų „Banga“",
+        "probability": 37
+      }
+    ]
+  },
+  {
+    "title": "Telšių „Džiugas“ vs Vilniaus „TransINVEST“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 17 d. 17:30",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Telšių „Džiugas“ ir Vilniaus „TransINVEST“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 17 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 16 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Telšių „Džiugas“ yra 6-oje vietoje su 38 taškais, Vilniaus „TransINVEST“ – 3-oje su 45 taškais (duomenys po rugsėjo 20 d. turo). „TransINVEST“ kovoja dėl medalių, o Telšių „Džiugas“ namuose šį sezoną ne kartą sukėlė staigmenų.",
+    "closes_at": "2026-10-17T14:30:00+00:00",
+    "options": [
+      {
+        "label": "Telšių „Džiugas“",
+        "probability": 37
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 28
+      },
+      {
+        "label": "Vilniaus „TransINVEST“",
+        "probability": 35
+      }
+    ]
+  },
+  {
+    "title": "FK „Žalgiris“ vs „Hegelmann“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 18 d. 17:00",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų FK „Žalgiris“ ir „Hegelmann“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 18 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 17 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje FK „Žalgiris“ yra 4-oje vietoje su 44 taškais, „Hegelmann“ – 8-oje su 26 taškais (duomenys po rugsėjo 20 d. turo). Vilniaus „Žalgiris“ namuose yra aiškus favoritas prieš lentelės apačioje esantį „Hegelmann“, tačiau po pralaimėjimo „TransINVEST“ jam būtina reabilitacija.",
+    "closes_at": "2026-10-18T14:00:00+00:00",
+    "options": [
+      {
+        "label": "FK „Žalgiris“",
+        "probability": 63
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 24
+      },
+      {
+        "label": "„Hegelmann“",
+        "probability": 13
+      }
+    ]
+  },
+  {
+    "title": "Marijampolės „Sūduva“ vs „Kauno Žalgiris“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 19 d. 18:45",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Marijampolės „Sūduva“ ir „Kauno Žalgiris“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 19 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 18 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Marijampolės „Sūduva“ yra 2-oje vietoje su 50 taškais, „Kauno Žalgiris“ – 1-oje su 51 taškais (duomenys po rugsėjo 20 d. turo). Galimai lemiamos sezono rungtynės: du lyderiai, juos skiria vienas taškas. Pernai „Kauno Žalgiris“ Marijampolėje ne kartą buvo sutriuškinęs „Sūduvą“, bet šįkart namų pranašumas – marijampoliečių pusėje.",
+    "closes_at": "2026-10-19T15:45:00+00:00",
+    "options": [
+      {
+        "label": "Marijampolės „Sūduva“",
+        "probability": 43
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 27
+      },
+      {
+        "label": "„Kauno Žalgiris“",
+        "probability": 30
+      }
+    ]
+  },
+  {
+    "title": "Vilniaus „TransINVEST“ vs „Hegelmann“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 24 d. 17:30",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Vilniaus „TransINVEST“ ir „Hegelmann“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 24 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 23 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Vilniaus „TransINVEST“ yra 3-oje vietoje su 45 taškais, „Hegelmann“ – 8-oje su 26 taškais (duomenys po rugsėjo 20 d. turo). „TransINVEST“ siekia išsaugoti vietą prizininkų trejete, o „Hegelmann“ sezoną baigia be didesnių tikslų.",
+    "closes_at": "2026-10-24T14:30:00+00:00",
+    "options": [
+      {
+        "label": "Vilniaus „TransINVEST“",
+        "probability": 64
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 24
+      },
+      {
+        "label": "„Hegelmann“",
+        "probability": 12
+      }
+    ]
+  },
+  {
+    "title": "Gargždų „Banga“ vs FK „Šiauliai“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 25 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Gargždų „Banga“ ir FK „Šiauliai“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 25 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 24 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Gargždų „Banga“ yra 5-oje vietoje su 41 taškais, FK „Šiauliai“ – 9-oje su 17 taškais (duomenys po rugsėjo 20 d. turo). „Banga“ namuose prieš lentelės autsaiderį „Šiaulius“ yra aiški favoritė.",
+    "closes_at": "2026-10-25T12:15:00+00:00",
+    "options": [
+      {
+        "label": "Gargždų „Banga“",
+        "probability": 69
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 21
+      },
+      {
+        "label": "FK „Šiauliai“",
+        "probability": 10
+      }
+    ]
+  },
+  {
+    "title": "Telšių „Džiugas“ vs FK „Panevėžys“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 25 d. 17:00",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Telšių „Džiugas“ ir FK „Panevėžys“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 25 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 24 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Telšių „Džiugas“ yra 6-oje vietoje su 38 taškais, FK „Panevėžys“ – 7-oje su 32 taškais (duomenys po rugsėjo 20 d. turo). Lentelės viduriuko dvikova – abi komandos kovoja dėl penktosios–šeštosios vietos.",
+    "closes_at": "2026-10-25T15:00:00+00:00",
+    "options": [
+      {
+        "label": "Telšių „Džiugas“",
+        "probability": 50
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 26
+      },
+      {
+        "label": "FK „Panevėžys“",
+        "probability": 24
+      }
+    ]
+  },
+  {
+    "title": "„Kauno Žalgiris“ vs FK „Žalgiris“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 26 d. 18:45",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų „Kauno Žalgiris“ ir FK „Žalgiris“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 26 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 25 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje „Kauno Žalgiris“ yra 1-oje vietoje su 51 taškais, FK „Žalgiris“ – 4-oje su 44 taškais (duomenys po rugsėjo 20 d. turo). Didysis „Žalgirių“ derbis Kaune. Rugsėjo 16 d. Vilniuje FK „Žalgiris“ laimėjo 3:2, o šį sezoną tarpusavio rungtynes dažniausiai laimėdavo svečiai. Kauniečiams pergalė gali reikšti čempionų titulą.",
+    "closes_at": "2026-10-26T16:45:00+00:00",
+    "options": [
+      {
+        "label": "„Kauno Žalgiris“",
+        "probability": 51
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 26
+      },
+      {
+        "label": "FK „Žalgiris“",
+        "probability": 23
+      }
+    ]
+  },
+  {
+    "title": "FK „Panevėžys“ vs Vilniaus „TransINVEST“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 31 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų FK „Panevėžys“ ir Vilniaus „TransINVEST“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 31 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 30 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje FK „Panevėžys“ yra 7-oje vietoje su 32 taškais, Vilniaus „TransINVEST“ – 3-oje su 45 taškais (duomenys po rugsėjo 20 d. turo). „TransINVEST“ kovoja dėl medalių, o „Panevėžys“ namuose gali sugadinti vilniečių planus.",
+    "closes_at": "2026-10-31T12:15:00+00:00",
+    "options": [
+      {
+        "label": "FK „Panevėžys“",
+        "probability": 31
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 29
+      },
+      {
+        "label": "Vilniaus „TransINVEST“",
+        "probability": 40
+      }
+    ]
+  },
+  {
+    "title": "FK „Šiauliai“ vs Telšių „Džiugas“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 31 d. 17:30",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų FK „Šiauliai“ ir Telšių „Džiugas“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 31 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 30 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje FK „Šiauliai“ yra 9-oje vietoje su 17 taškais, Telšių „Džiugas“ – 6-oje su 38 taškais (duomenys po rugsėjo 20 d. turo). „Šiauliai“ – lentelės autsaideriai, tačiau namuose prieš „Džiugą“ turi bent minimalių šansų.",
+    "closes_at": "2026-10-31T15:30:00+00:00",
+    "options": [
+      {
+        "label": "FK „Šiauliai“",
+        "probability": 22
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 30
+      },
+      {
+        "label": "Telšių „Džiugas“",
+        "probability": 48
+      }
+    ]
+  },
+  {
+    "title": "„Hegelmann“ vs „Kauno Žalgiris“",
+    "subtitle": "TOPLYGA, 2026 m. spalio 31 d. 18:30",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų „Hegelmann“ ir „Kauno Žalgiris“ TOPLYGOS rungtynių, numatytų 2026 m. spalio 31 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 30 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje „Hegelmann“ yra 8-oje vietoje su 26 taškais, „Kauno Žalgiris“ – 1-oje su 51 taškais (duomenys po rugsėjo 20 d. turo). Priešpaskutinis turas: „Kauno Žalgiriui“ kova dėl titulo neleidžia prarasti taškų, o „Hegelmann“ Raudondvaryje žais be spaudimo.",
+    "closes_at": "2026-10-31T16:30:00+00:00",
+    "options": [
+      {
+        "label": "„Hegelmann“",
+        "probability": 18
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 31
+      },
+      {
+        "label": "„Kauno Žalgiris“",
+        "probability": 51
+      }
+    ]
+  },
+  {
+    "title": "Marijampolės „Sūduva“ vs Gargždų „Banga“",
+    "subtitle": "TOPLYGA, 2026 m. lapkričio 1 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Marijampolės „Sūduva“ ir Gargždų „Banga“ TOPLYGOS rungtynių, numatytų 2026 m. lapkričio 1 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. gruodžio 1 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Marijampolės „Sūduva“ yra 2-oje vietoje su 50 taškais, Gargždų „Banga“ – 5-oje su 41 taškais (duomenys po rugsėjo 20 d. turo). „Sūduva“ namuose turi laimėti, jeigu nori išlaikyti šansus į čempionų titulą.",
+    "closes_at": "2026-11-01T12:15:00+00:00",
+    "options": [
+      {
+        "label": "Marijampolės „Sūduva“",
+        "probability": 53
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 26
+      },
+      {
+        "label": "Gargždų „Banga“",
+        "probability": 21
+      }
+    ]
+  },
+  {
+    "title": "Vilniaus „TransINVEST“ vs „Kauno Žalgiris“",
+    "subtitle": "TOPLYGA, 2026 m. lapkričio 8 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Vilniaus „TransINVEST“ ir „Kauno Žalgiris“ TOPLYGOS rungtynių, numatytų 2026 m. lapkričio 8 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. gruodžio 8 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Vilniaus „TransINVEST“ yra 3-oje vietoje su 45 taškais, „Kauno Žalgiris“ – 1-oje su 51 taškais (duomenys po rugsėjo 20 d. turo). Paskutinis sezono turas. Jeigu kova dėl titulo nebus išspręsta anksčiau, „Kauno Žalgirio“ išvyka pas „TransINVEST“ gali lemti čempioną.",
+    "closes_at": "2026-11-08T12:15:00+00:00",
+    "options": [
+      {
+        "label": "Vilniaus „TransINVEST“",
+        "probability": 38
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 28
+      },
+      {
+        "label": "„Kauno Žalgiris“",
+        "probability": 34
+      }
+    ]
+  },
+  {
+    "title": "Gargždų „Banga“ vs FK „Žalgiris“",
+    "subtitle": "TOPLYGA, 2026 m. lapkričio 8 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Gargždų „Banga“ ir FK „Žalgiris“ TOPLYGOS rungtynių, numatytų 2026 m. lapkričio 8 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. gruodžio 8 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Gargždų „Banga“ yra 5-oje vietoje su 41 taškais, FK „Žalgiris“ – 4-oje su 44 taškais (duomenys po rugsėjo 20 d. turo). Paskutinis turas Gargžduose: abi komandos gali kovoti dėl galutinės vietos trejete arba Europos taurių kelialapio.",
+    "closes_at": "2026-11-08T12:15:00+00:00",
+    "options": [
+      {
+        "label": "Gargždų „Banga“",
+        "probability": 41
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 27
+      },
+      {
+        "label": "FK „Žalgiris“",
+        "probability": 32
+      }
+    ]
+  },
+  {
+    "title": "Marijampolės „Sūduva“ vs Telšių „Džiugas“",
+    "subtitle": "TOPLYGA, 2026 m. lapkričio 8 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų Marijampolės „Sūduva“ ir Telšių „Džiugas“ TOPLYGOS rungtynių, numatytų 2026 m. lapkričio 8 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. gruodžio 8 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje Marijampolės „Sūduva“ yra 2-oje vietoje su 50 taškais, Telšių „Džiugas“ – 6-oje su 38 taškais (duomenys po rugsėjo 20 d. turo). Paskutinis turas: jeigu „Sūduva“ dar kovos dėl titulo, namuose prieš „Džiugą“ jai reikės tik pergalės.",
+    "closes_at": "2026-11-08T12:15:00+00:00",
+    "options": [
+      {
+        "label": "Marijampolės „Sūduva“",
+        "probability": 56
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 25
+      },
+      {
+        "label": "Telšių „Džiugas“",
+        "probability": 19
+      }
+    ]
+  },
+  {
+    "title": "FK „Panevėžys“ vs FK „Šiauliai“",
+    "subtitle": "TOPLYGA, 2026 m. lapkričio 8 d. 14:15",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/d3a1ee67-6338-47c5-acb5-549a707c0656.jfif",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal oficialų FK „Panevėžys“ ir FK „Šiauliai“ TOPLYGOS rungtynių, numatytų 2026 m. lapkričio 8 d., rezultatą.\n\nVertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\nJeigu rungtynės bus sustabdytos, tačiau Lietuvos futbolo federacija oficialiai patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas šis rezultatas.\n\nJeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki 2026 m. gruodžio 8 d. imtinai. Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai visoms trims baigtims.\n\nRezultato šaltiniai yra oficialus TOPLYGOS tvarkaraštis (toplyga.lt) ir Lietuvos futbolo federacija.",
+    "context": "Lentelėje FK „Panevėžys“ yra 7-oje vietoje su 32 taškais, FK „Šiauliai“ – 9-oje su 17 taškais (duomenys po rugsėjo 20 d. turo). Sezono uždarymas Panevėžyje – abi komandos baigia sezoną be didesnių turnyrinių tikslų.",
+    "closes_at": "2026-11-08T12:15:00+00:00",
+    "options": [
+      {
+        "label": "FK „Panevėžys“",
+        "probability": 60
+      },
+      {
+        "label": "Lygiosios",
+        "probability": 25
+      },
+      {
+        "label": "FK „Šiauliai“",
+        "probability": 15
+      }
+    ]
+  },
+  {
+    "title": "Kiek migrantų bus neįleista iš Baltarusijos šią savaitę?",
+    "subtitle": "Spalio 5–11 d. imtinai",
+    "category": "geopolitika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/10b9acc6-8aa8-46ed-bd03-40a9b1d76e38.jpg",
+    "liquidity": 4000,
+    "rules": "Rinka bus išspręsta pagal bendrą Valstybės sienos apsaugos tarnybos paskelbtą iš Baltarusijos į Lietuvą neįleistų neteisėtų migrantų skaičių nuo 2026 m. spalio 5 d. 00:00 iki spalio 11 d. 23:59 Lietuvos laiku.\n\nSudedami visi septynių parų VSAT lentelės stulpelyje „į Lietuvą“ paskelbti skaičiai. Latvijos ir Lenkijos pasienio tarnybų paskelbti skaičiai neįtraukiami.\n\nSkaičiuojami VSAT užregistruoti neįleidimo atvejai. Tas pats asmuo, bandęs sieną kirsti daugiau nei vieną kartą ir VSAT statistikoje apskaitytas pakartotinai, papildomai neidentifikuojamas ir neatmetamas.\n\nJeigu VSAT patikslins kurios nors paros duomenis, naudojama naujausia oficiali reikšmė, paskelbta iki 2026 m. spalio 31 d. Jeigu atskirų parų duomenys nebus prieinami, rezultatas nustatomas pagal oficialių metinių kaupiamųjų skaičių skirtumą arba tuos pačius VSAT duomenis paskelbusius BNS ir ELTA pranešimus.\n\nJeigu galutinis skaičius tiksliai sutaps su intervalo riba, jis priskiriamas tam intervalui, kuriame ši riba aiškiai nurodyta.\n\nRezultato šaltiniai yra Valstybės sienos apsaugos tarnybos statistika, oficialūs VSAT pranešimai ir VSAT duomenis paskelbę nacionaliniai naujienų portalai, įskaitant 15min, LRT, Delfi bei TV3.",
+    "context": "Nuo metų pradžios pasieniečiai neįleido beveik 1 700 migrantų, o paskutinėmis savaitėmis spaudimas itin šokinėja: vieną parą apgręžiama 32–35 žmonės, kitą – nė vieno. Rudenį bandymų paprastai daugėja – praėjusių metų spalio 31 d. per parą neįleisti net 63 migrantai.",
+    "closes_at": "2026-10-11T20:59:00+00:00",
+    "options": [
+      {
+        "label": "0-19",
+        "probability": 30
+      },
+      {
+        "label": "20-39",
+        "probability": 30
+      },
+      {
+        "label": "40-59",
+        "probability": 20
+      },
+      {
+        "label": "60 arba daugiau",
+        "probability": 20
+      }
     ]
   }
 ]
