@@ -1,0 +1,291 @@
+[
+  {
+    "id": 30,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar „Gabrielius Vagelis“ iki spalio pasieks 100 tūkst. peržiūrų su daina „Nubučiuota“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-10-20",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka sprendžiama pagal oficialų Gabrielius Vagelis „YouTube“ vaizdo įrašo peržiūrų skaičių 2026 m. spalio 19 d. 23:59 Lietuvos laiku. Jei vaizdo įrašas bus pašalintas, paslėptas arba iki termino nebus pasiekiamas, sprendžiama „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.youtube.com/watch?v=y4OluuJEnaE"
+    ],
+    "rationale_en": "The song was among YouTube Trending LT items with 55,737 views, which is concrete attention evidence; the proposed target is within a plausible range but should be checked again immediately before publication because the current figure may have changed.",
+    "image_url": "",
+    "image_source": "",
+    "theme": "kultūra ir pramogos"
+  },
+  {
+    "id": 31,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar „Rytas“ FIBA tarpkontinentinėje taurėje pateks į finalą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-09-27",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka bus sprendžiama pagal oficialius FIBA Tarpkontinentinės taurės Pekine 2026 m. rezultatus: jei Vilniaus „Rytas“ sužais rungtynes dėl taurės (finalą), sprendžiama „Taip“, jei komanda finalo nepasieks arba turnyras komandai baigsis anksčiau – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrytas.lt/sportas/krepsinis/2026/09/21/news/-ryto-treneris-ivertino-varzovus-tarpkontinentineje-taureje-teks-pasirengti-nestandartiniam-zaidimui-44098892",
+      "https://www.lrt.lt/naujienos/sportas/10/3060043/rytas-pradeda-zygi-fiba-tarpkontinentineje-taureje-susitinka-su-ruandos-krepsininkais",
+      "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/teams/rytas-vilnius",
+      "https://www.lrytas.lt/sportas/krepsinis/2026/09/17/news/lrt-transliuos-vilniaus-ryto-fiba-tarpkontinentines-taures-kovas-44045656",
+      "https://toplyga.lt/tvarkarastis/1",
+      "https://toplyga.lt/komanda/k-zalgiris",
+      "https://toplyga.lt/naujiena/turo-anonsas-auksiniu-zalgirio-ambiciju-isbandymas/9567",
+      "https://toplyga.lt/"
+    ],
+    "rationale_en": "Vilniaus „Rytas“ debiutuoja FIBA tarpkontinentinėje taurėje Pekine 2026-09-22, žiniasklaida akcentuoja galimybę tapti antra Lietuvos komanda su šiuo trofėjumi, o LRT ir Lrytas plačiai nušviečia turnyrą ir varžovus, todėl klausimas „ar pateks į finalą“ yra emociškai užkabinantis, masiškai žinomas ir aiškiai išsprendžiamas pagal oficialius FIBA rezultatus.",
+    "image_url": "https://www.lrt.lt/img/2026/04/01/2358975-500617-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/sportas/10/3060043/rytas-pradeda-zygi-fiba-tarpkontinentineje-taureje-susitinka-su-ruandos-krepsininkais",
+    "theme": "sportas"
+  },
+  {
+    "id": 32,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar Skirmantas Malinauskas iki spalio paskelbs dar vieną vaizdo įrašą apie Domeikavos namų istoriją?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.65,
+      0.35
+    ],
+    "category": "influenceriai",
+    "resolve_by": "2026-10-01",
+    "duration_class": "medium",
+    "resolution_hint_lt": "„Taip“ laimi, jei iki 2026 m. rugsėjo 30 d. imtinai Skirmantas Malinauskas savo patvirtintame „YouTube“ kanale paskelbia naują vaizdo įrašą, kuriame minima Domeikavos namų istorija; kitu atveju laimi „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://kaunas.kasvyksta.lt/nuomones/s-malinauskas-po-viesumo-statybos-inspekcija-staiga-rado-pazeidimus-kuriu-pries-kelis-menesius-nemate"
+    ],
+    "rationale_en": "The topic has mass attention: the earlier episode exceeded 200,000 views, and reporting confirms a follow-up investigation was already underway.",
+    "image_url": "https://r.testifier.nl/Acbs8526SDKI/resizing_type:fill/width:1200/height:630/plain/https%3A%2F%2Fs3-newsifier.ams3.digitaloceanspaces.com%2Fkaunas.kasvyksta.lt%2Fimages%2F2026-09%2Fhqdefault-6aa652ae0df2d.jpg",
+    "image_source": "https://kaunas.kasvyksta.lt/nuomones/s-malinauskas-po-viesumo-statybos-inspekcija-staiga-rado-pazeidimus-kuriu-pries-kelis-menesius-nemate",
+    "theme": "influenceriai ir internetas"
+  },
+  {
+    "id": 33,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Kas laimės „Tautos bukiausią“?",
+    "market_type": "multi",
+    "options_lt": [
+      "Mantas Katleris",
+      "Mantas Bartuševičius",
+      "Simonа Lipnė",
+      "Kitas dalyvis"
+    ],
+    "probabilities": [
+      0.25,
+      0.2,
+      0.15,
+      0.4
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-11-02",
+    "duration_class": "long",
+    "resolution_hint_lt": "Laimi tas dalyvis, kurį TV3 paskelbia projekto nugalėtoju finalinėje laidoje arba oficialiuose projekto kanaluose; jei projektas nutraukiamas, sprendžiama pagal paskutinį TV3 paskelbtą projekto rezultatą. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://www.delfi.lt/veidai/filmai-ir-tv/susipazinkite-su-garsiausia-lietuvos-klase-paaiskejo-naujo-sou-tautos-bukiausias-dalyviai-120297317",
+      "https://www.tv3.lt/rubrika/naujienos/zmones"
+    ],
+    "rationale_en": "The show features 12 recognizable Lithuanian figures, including influencers, athletes, singers and politicians; TV3 coverage confirms the show is airing weekly from September 6, while a participant had already left by September 20.",
+    "image_url": "https://images.delfi.lt/media-api-image-cropper/v1/425016b6-e6d4-4f7e-9afe-25b3b1e23014.jpg?w=1200&h=800&fx=0.496413&fy=0.449371",
+    "image_source": "https://www.delfi.lt/veidai/filmai-ir-tv/susipazinkite-su-garsiausia-lietuvos-klase-paaiskejo-naujo-sou-tautos-bukiausias-dalyviai-120297317",
+    "theme": "influenceriai ir internetas"
+  },
+  {
+    "id": 34,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar Skirmanto Malinausko naujausias vaizdo įrašas apie Domeikavos namus iki spalio pasieks 250 tūkst. peržiūrų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "influenceriai",
+    "resolve_by": "2026-10-01",
+    "duration_class": "medium",
+    "resolution_hint_lt": "„Taip“ laimi, jei naujausias Skirmanto Malinausko kanalo vaizdo įrašas apie Domeikavos namų istoriją iki 2026 m. rugsėjo 30 d. 23:59 Lietuvos laiku pasiekia bent 250 000 „YouTube“ peržiūrų; kitu atveju laimi „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://kaunas.kasvyksta.lt/nuomones/s-malinauskas-po-viesumo-statybos-inspekcija-staiga-rado-pazeidimus-kuriu-pries-kelis-menesius-nemate"
+    ],
+    "rationale_en": "The previous episode had already exceeded 200,000 views, making 250,000 an uncertain but reachable target rather than an arbitrary milestone.",
+    "image_url": "https://r.testifier.nl/Acbs8526SDKI/resizing_type:fill/width:1200/height:630/plain/https%3A%2F%2Fs3-newsifier.ams3.digitaloceanspaces.com%2Fkaunas.kasvyksta.lt%2Fimages%2F2026-09%2Fhqdefault-6aa652ae0df2d.jpg",
+    "image_source": "https://kaunas.kasvyksta.lt/nuomones/s-malinauskas-po-viesumo-statybos-inspekcija-staiga-rado-pazeidimus-kuriu-pries-kelis-menesius-nemate",
+    "theme": "influenceriai ir internetas"
+  },
+  {
+    "id": 35,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar dyzelino kaina Lietuvoje iki spalio viršys 2,30 Eur už litrą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.45,
+      0.55
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-09-30",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka baigiasi „Taip“, jei 2026 m. rugsėjo 30 d. Lietuvos energetikos agentūros skelbiamuose Lietuvos degalinių vidutinių kainų duomenyse dyzelino kaina yra didesnė nei 2,30 Eur/l; kitu atveju — „Ne“. Jei duomenys tą dieną nepaskelbiami, sprendžiama pagal pirmą vėliau paskelbtą ataskaitą, aiškiai nurodančią rugsėjo 30 d. kainą. Jei kaina nepasiekia ribos arba duomenys nepatvirtina tokio viršijimo, rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.ena.lt/dk-pr-pr-duomenys/",
+      "https://www.lrt.lt/naujienos/eismas/7/3060180/lea-antradieni-degalu-kainos-lietuvoje-ugtelejo",
+      "https://www.lrytas.lt/verslas/rinkos-pulsas/2026/09/18/news/penktadienio-ryta-uz-litra-dyzelino-kai-kur-prasoma-jau-2-3-euro-skelbia-kur-pigiausi-degalai-44053865",
+      "https://www.reddit.com/r/lietuva/comments/1wn0olp/brangūs_degalai_nuo_naujųjų_dar_brangs_akcizas/",
+      "https://degalukaina.lt/",
+      "https://akcijos.lt/kuro-kainos/statistika",
+      "https://www.ena.lt/dk-pokyciai/",
+      "https://www.ena.lt/uploads/2026-TTP/EnerLIT/20260914/20260914-LEA-apzvalga_rinka__ZP.pdf"
+    ],
+    "rationale_en": "Diesel prices rose in September: on September 18, some fuel stations were already charging €2.30/l, while the average price on September 21 was about €2.24/l. The topic was further highlighted by several news publications and active discussion on Reddit. Because the average price had not yet reached the threshold but was close to it, the forecast remains uncertain.",
+    "image_url": "https://www.lrt.lt/img/2026/03/09/2340067-786369-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/eismas/7/3060180/lea-antradieni-degalu-kainos-lietuvoje-ugtelejo",
+    "theme": "kasdienybė ir ekonomika"
+  },
+  {
+    "id": 36,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar Seimas patvirtins 2026 m. „Sodros“ biudžetą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.75,
+      0.25
+    ],
+    "category": "politika",
+    "resolve_by": "2026-11-30",
+    "duration_class": "long",
+    "resolution_hint_lt": "„Taip“, jei Seimas iki 2026 m. lapkričio 30 d. priims įstatymą, patvirtinantį 2026 m. „Sodros“ biudžetą, pagal Lietuvos Respublikos Seimo balsavimo rezultatus. Jei balsavimas neįvyks, įstatymas nebus priimtas arba sprendimas bus nukeltas po šios datos, rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrs.lt/sip/portal.show?p_r=35435&p_k=1",
+      "https://www.tv3.lt/naujiena/verslas/sodra-sumazino-apskaitos-vienetus-ir-busima-pensija-ispeja-prisijungti-ir-pasitikrinti-n1550705"
+    ],
+    "rationale_en": "The term “Pensija” exceeded 1,000 Google Trends LT searches, and the Seimas agenda includes consideration of the 2026 “Sodros” budget.",
+    "image_url": "https://www.lrs.lt/SIPIS/portal/new_portal/images/seimas_logotipas.png",
+    "image_source": "https://www.lrs.lt/sip/portal.show?p_r=35435&p_k=1",
+    "theme": "valstybė ir aktualijos"
+  },
+  {
+    "id": 37,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar ECB spalį sumažins bazines palūkanų normas?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "ekonomika",
+    "resolve_by": "2026-10-29",
+    "duration_class": "long",
+    "resolution_hint_lt": "„Taip“, jei 2026 m. spalio 29 d. paskelbtame Europos Centrinio Banko pinigų politikos sprendime bus nurodyta, kad bent viena pagrindinė ECB palūkanų norma sumažinta, palyginti su 2026 m. rugsėjo 10 d. galiojusiu lygiu. Jei sprendimas nebus priimtas iki datos arba normos nebus sumažintos, rinka baigiasi „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html",
+      "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.sv.html",
+      "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.sk.html",
+      "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.lv.html",
+      "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.ro.html",
+      "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.da.html",
+      "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.de.html"
+    ],
+    "rationale_en": "The ECB decision has a clearly pre-announced date of October 28–29 and directly affects Lithuanian housing-loan and savings rates; the market direction remains uncertain.",
+    "image_url": "https://www.ecb.europa.eu/press/calendars/shared/img/socialmedia/social-default.jpg?0ac960d06f28082e72758f7715118ac5",
+    "image_source": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html",
+    "theme": "valstybė ir aktualijos"
+  },
+  {
+    "id": 38,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar iki spalio pabaigos bus patvirtintas naujas JAV karių kontingentas Lietuvoje?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.3,
+      0.7
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-10-31",
+    "duration_class": "long",
+    "resolution_hint_lt": "„Taip“, jei iki 2026 m. spalio 31 d. Lietuvos Respublikos Prezidentūra, Lietuvos kariuomenė arba JAV kariuomenė viešai patvirtins naujo JAV karių kontingento atvykimą į Lietuvą arba jo dislokavimą Lietuvoje. Vien pranešimas, kad kariai yra pakeliui, nelaikomas nauju patvirtintu kontingentu. Jei patvirtinimo nebus iki datos, rinka baigiasi „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/lietuvoje/2/3060197/prezidentas-nauja-jav-kariu-pamaina-pakeliui-i-lietuva",
+      "https://www.15min.lt/naujiena/aktualu/lietuva/prezidentas-nauja-jav-kariu-pamaina-pakeliui-i-lietuva-56-2769050"
+    ],
+    "rationale_en": "A new U.S. troop rotation was reported by several major portals within two days, while Lithuanian security is directly relevant to a broad audience.",
+    "image_url": "https://www.lrt.lt/img/2026/09/16/2490395-464707-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/lietuvoje/2/3060197/prezidentas-nauja-jav-kariu-pamaina-pakeliui-i-lietuva",
+    "theme": "valstybė ir aktualijos"
+  },
+  {
+    "id": 39,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar Jessica Shy ir Igoris Kofas iki spalio išleis bendrą vaizdo klipą dainai „Kas kaltas“?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.38,
+      0.62
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-10-15",
+    "duration_class": "medium",
+    "resolution_hint_lt": "„Taip“ laimi tik tuo atveju, jei iki 2026-10-15 Jessica Shy arba Igorio Kofo patvirtintoje paskyroje arba oficialiame jų leidybos kanale paskelbiamas naujas oficialus dainos „Kas kaltas“ vaizdo klipas; dainos atlikimas koncerte ar gerbėjų vaizdo įrašas nelaikomas klipu. Jei klipas nepaskelbiamas iki nustatyto termino, rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.apple.com/lt/itunes/charts/songs/",
+      "https://www.lrt.lt/naujienos/muzika/680/3035375/istorinis-jessicos-shy-vakaras-sausakimsa-vingio-parka-drebino-ispudinga-jos-koncertas",
+      "https://www.15min.lt/zmones/naujiena/muzika/jessica-shy-diena-pradejo-stulbinama-zinia-ivykis-liecia-ir-brangu-zmogu-1054-2717550"
+    ],
+    "rationale_en": "“Kas kaltas?” is reported as highly popular, while Jessica Shy and Igoris Kofas performed the song together; however, no clear confirmation or announcement of an official music video was found. This could generate discussion among young Lithuanian music and internet-culture audiences.",
+    "image_url": "https://www.lrt.lt/img/2026/08/28/2474505-967011-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/muzika/680/3035375/istorinis-jessicos-shy-vakaras-sausakimsa-vingio-parka-drebino-ispudinga-jos-koncertas",
+    "theme": "kultūra ir pramogos"
+  }
+]

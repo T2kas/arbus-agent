@@ -1,0 +1,288 @@
+[
+  {
+    "id": 10,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Kiek Jessica Shy kūrinių bus Apple Music LT Top 5 09-27?",
+    "market_type": "multi",
+    "options_lt": [
+      "0–1",
+      "2–3",
+      "4–5"
+    ],
+    "probabilities": [
+      0.15,
+      0.45,
+      0.4
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-27",
+    "duration_class": "medium",
+    "resolution_hint_lt": "2026-09-27 dieną 21:00–23:59 val. Lietuvos laiku suskaičiuojama, kiek Jessica Shy kūrinių yra pozicijose 1–5 Apple Music Lietuva „Top 100/Top Songs“ sąraše; pasirenkamas paskutinis tą vakarą viešai matomas reitingas. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
+      "https://www.kworb.net/charts/apple_s/lt.html?utm_source=openai"
+    ],
+    "rationale_en": "Jessica Shy currently occupies most of Apple Music LT Top 5, making a near-term count market both familiar and exciting to track.",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/33/1c/c6/331cc6aa-a909-cda0-c314-04000f295ac2/3dd1c3de-efc3-4119-8ee0-706598d5da0b.png/1200x630wp-60.jpg",
+    "image_source": "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
+    "theme": "kultūra ir pramogos"
+  },
+  {
+    "id": 11,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "„Rytas“ pateks į Tarpkontinentinės taurės finalą?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.55,
+      0.45
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-09-27",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka sprendžiama pagal 2026 m. FIBA Tarpkontinentinės taurės (Beijing) oficialius turnyro rezultatus – jei „Rytas“ žais čempionato finale, „Taip“, kitu atveju „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026",
+      "https://www.fiba.basketball/en/news/all-you-need-to-know-about-the-fiba-intercontinental-cup-2026",
+      "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/meet-the-team-rytas-vilnius-2026"
+    ],
+    "rationale_en": "FIBA confirmed “Rytas Vilnius” in Beijing with group games Sep 22 and 24, final Sep 27, covered by LRT/FIBA news (multi outlets). ([fiba.basketball](https://www.fiba.basketball/en/news/all-you-need-to-know-about-the-fiba-intercontinental-cup-2026?utm_source=openai))",
+    "image_url": "https://assets.fiba.basketball/image/upload/w_1230,h_630,c_fill/f_auto/q_auto/l_.asset_mainlogo--competition_209126/c_fit,w_598,h_504/fl_layer_apply/.asset_simplifiedbackground--competition_209126?buster=20718",
+    "image_source": "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026",
+    "theme": "sportas"
+  },
+  {
+    "id": 12,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "„Rytas“ – RSSB Tigers: kas laimės?",
+    "market_type": "multi",
+    "options_lt": [
+      "„Rytas“",
+      "RSSB Tigers"
+    ],
+    "probabilities": [
+      0.62,
+      0.38
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-09-22",
+    "duration_class": "short",
+    "resolution_hint_lt": "Sprendžiama pagal oficialų rungtynių Beijing National Indoor Stadium rezultatą (FIBA rungtynių protokolas) – nugalėtojas pagal galutinį rezultatą po ketvirčių/pratęsimo. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/games/136822-VILN-RSSB",
+      "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/meet-the-team-rytas-vilnius-2026",
+      "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/meet-the-team-rssb-tigers"
+    ],
+    "rationale_en": "FIBA lists Rytas vs RSSB Tigers on September 22 at 10:30 LT time; match page live on FIBA site. ([fiba.basketball](https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/games/136822-VILN-RSSB?utm_source=openai))",
+    "image_url": "https://assets.fiba.basketball/image/upload/w_1230,h_630,c_fill/f_auto/q_auto/l_.asset_mainlogo--competition_209126/c_fit,w_598,h_504/fl_layer_apply/.asset_simplifiedbackground--competition_209126?buster=20718",
+    "image_source": "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/games/136822-VILN-RSSB",
+    "theme": "sportas"
+  },
+  {
+    "id": 13,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "„Žalgiris“ nugalės „Crvena Zvezda“ Eurolygos starte?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.4,
+      0.6
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-09-24",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal Eurolygos oficialų rungtynių rezultatą – jei Kauno „Žalgiris“ laimi pirmąsias 2026–2027 m. sezono rungtynes Belgrade prieš „Crvena Zvezda“, „Taip“, kitu atveju „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
+      "https://www.lrt.lt/naujienos/sportas/10/3005106/paskelbtas-eurolygos-tvarkarastis-zalgirio-arenoje-pirmieji-apsilankys-cempionai",
+      "https://kkcrvenazvezda.rs/news/evroliga-kalendar-kk-crvena-zvezda-za-takmicarsku-sezonu-2026-2027"
+    ],
+    "rationale_en": "Euroleague and multiple outlets confirm opening night Crvena Zvezda vs Žalgiris on Sep 24 in Belgrade. ([mediacentre.euroleague.net](https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407?utm_source=openai))",
+    "image_url": "https://www.lrt.lt/img/2026/02/13/2315342-756766-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/sportas/10/3005106/paskelbtas-eurolygos-tvarkarastis-zalgirio-arenoje-pirmieji-apsilankys-cempionai",
+    "theme": "sportas"
+  },
+  {
+    "id": 14,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "„Kas Kaltas?“ #1 Apple Music Lietuvoje rugsėjį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.58,
+      0.42
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-28",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal Apple Music „Top 100: Lithuania“/„Top Songs“ reitingą 2026-09-28 dieną; jei „Kas Kaltas?“ tądien yra #1 Lietuvoje, rinka baigiasi „Taip“, kitu atveju – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
+      "https://music.apple.com/lt/album/kas-kaltas/6784728491?i=6784728497",
+      "https://www.kworb.net/charts/apple_s/lt.html?utm_source=openai"
+    ],
+    "rationale_en": "Apple Music LT shows Jessica Shy’s “Kas Kaltas?” at #1 and multiple Jessica Shy tracks dominating the chart — a highly visible, short-window music question.",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/33/1c/c6/331cc6aa-a909-cda0-c314-04000f295ac2/3dd1c3de-efc3-4119-8ee0-706598d5da0b.png/1200x630wp-60.jpg",
+    "image_source": "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
+    "theme": "kultūra ir pramogos"
+  },
+  {
+    "id": 15,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "„Nubučiuota“ pasieks ≥65 000 peržiūrų „YouTube“ rugsėjį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.64,
+      0.36
+    ],
+    "category": "influenceriai",
+    "resolve_by": "2026-09-24",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Skaičiuojama oficialaus vaizdo klipo „YouTube“ peržiūrų skaitikliu; jei iki 2026-09-24 23:59 Lietuvos laiku rodoma ≥65 000 peržiūrų, rinka „Taip“, kitu atveju – „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.youtube.com/watch?v=y4OluuJEnaE",
+      "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli",
+      "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli?utm_source=openai"
+    ],
+    "rationale_en": "New Gabrielius Vagelis single “Nubučiuota” just dropped and is picking up attention; fresh LRT coverage plus YouTube Trending LT listing (48,035 views) signal quick growth potential.",
+    "image_url": "https://www.lrt.lt/img/2026/09/18/2492215-757057-1287x836.png",
+    "image_source": "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli",
+    "theme": "kultūra ir pramogos"
+  },
+  {
+    "id": 16,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Aurimas Valujavičius — 200 000 „YouTube“ prenumeratorių rugsėjį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.75,
+      0.25
+    ],
+    "category": "influenceriai",
+    "resolve_by": "2026-09-30",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal „YouTube“ kanalo @aurimasvalujavicius viešai rodomą prenumeratorių skaičių 2026-09-30 23:59 EEST; jei iki šio laiko skaičius ≥200 000, rinka „Taip“, kitu atveju „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://socialblade.com/youtube/handle/aurimasvalujavicius",
+      "https://zek.lt/",
+      "https://www.youtube.com/@aurimasvalujavicius"
+    ],
+    "rationale_en": "Mainstream LT creator with ~199k subs and active discussion/buzz; SocialBlade shows 199k on Sep 8, 2026, making 200k an imminent but uncertain milestone. ([socialblade.com](https://socialblade.com/youtube/handle/aurimasvalujavicius?utm_source=openai))",
+    "image_url": "https://images.socialblade.com/http://web.default.svc.cluster.local:3000/api/opengraph/youtube/UCU_EuxEpEbMD4K16mDcTaXA.webp",
+    "image_source": "https://socialblade.com/youtube/handle/aurimasvalujavicius",
+    "theme": "influenceriai ir internetas"
+  },
+  {
+    "id": 17,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "deMiko sekmadienio transliacija truks ≥2 val. šį savaitgalį?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.6,
+      0.4
+    ],
+    "category": "influenceriai",
+    "resolve_by": "2026-09-28",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Sprendžiama pagal 2026-09-27 sekmadienio tiesioginės transliacijos įrašo (VOD) trukmę „Twitch“ kanale twitch.tv/pauldemiko arba „YouTube“ VOD, jei transliacija bus perkelta; jei tądien transliacija neįvyks ar VOD nebus prieinamas, rinka baigiasi „Ne“.",
+    "sources": [
+      "https://demiko.lt/",
+      "https://www.twitch.tv/pauldemiko",
+      "https://www.youtube.com/@pauldemiko"
+    ],
+    "rationale_en": "Playful, checkable “absurd-angle” on a top LT YouTuber’s weekly live — site states weekly Sunday 20:00 streams, making a ≥2h runtime a fun near-term call. ([demiko.lt](https://demiko.lt/?utm_source=openai))",
+    "image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/65e77f17-9419-4ffa-aa77-4916112b3fb1-profile_image-300x300.png",
+    "image_source": "https://www.twitch.tv/pauldemiko",
+    "theme": "influenceriai ir internetas"
+  },
+  {
+    "id": 18,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar Vilniuje bus ≥20 °C iki spalio pradžios?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.58,
+      0.42
+    ],
+    "category": "orai",
+    "resolve_by": "2026-10-06",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka laikoma „Taip“, jei bent vieną dieną laikotarpiu 2026-09-21–2026-10-06 Vilniaus AMS stotyje (Vilnius) oficialiai užfiksuota dienos maksimali oro temperatūra ≥20,0 °C; tikrinama Lietuvos hidrometeorologijos tarnybos (Meteo.lt) archyve ar API; jei per laikotarpį tokios dienos nebus — „Ne“. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://api.meteo.lt/",
+      "https://beta.meteo.lt/?date=2026-03-07&pid=archyvas&station=vilniaus-ams",
+      "https://www.lrt.lt/naujienos/lietuvoje/2/3059011/orai-numatomas-lietus-susils-iki-18-laipsniu",
+      "https://www.lrytas.lt/gamta/gamtaorai/2026/09/21/news/sinoptike-atnaujino-oru-prognoze-ispeja-ne-tik-del-porcijos-lietaus-bet-ir-perkunijos-bei-ledeku-44077633",
+      "https://www.tv3.lt/naujiena/lietuva/meteorologai-siuncia-zinia-netrukus-sulauksime-bobu-vasaros-n1553149"
+    ],
+    "rationale_en": "Pulse + headlines show active “bobų vasara” talk this week in Lithuania (multiple fresh articles), so a simple, checkable 20 °C-in-Vilnius threshold fits everyday life and can be verified via LHMT.",
+    "image_url": "https://www.lrt.lt/img/2025/11/03/2230064-26225-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/lietuvoje/2/3059011/orai-numatomas-lietus-susils-iki-18-laipsniu",
+    "theme": "kasdienybė ir ekonomika"
+  },
+  {
+    "id": 19,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Usmanovas ir Fridmanas ES sankcijų sąraše: koks sprendimas rugsėjį?",
+    "market_type": "multi",
+    "options_lt": [
+      "Abu išbraukti",
+      "Išbrauktas tik vienas",
+      "Abu lieka"
+    ],
+    "probabilities": [
+      0.5,
+      0.25,
+      0.25
+    ],
+    "category": "geopolitika",
+    "resolve_by": "2026-09-30",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka sprendžiama pagal ES Tarybos priimtą ir Oficialiajame leidinyje paskelbtą aktą iki 2026-09-30: jei abu (A. Usmanovas ir M. Fridmanas) išbraukiami – „Abu išbraukti“, jei tik vienas – „Išbrauktas tik vienas“, jei nė vienas arba sprendimas nepriimtas iki datos – „Abu lieka“. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/pasaulyje/6/3059426/diplomatai-es-pasirengusi-panaikinti-sankcijas-dviem-rusijos-oligarchams",
+      "https://www.15min.lt/naujiena/aktualu/pasaulis/ukraina-kritikuoja-sieki-panaikinti-es-sankcijas-dviem-rusijos-oligarchams-57-2768538",
+      "https://www.euronews.com/my-europe/2026/09/21/removing-usmanov-from-sanctions-list-risks-making-eu-look-weak-lithuanian-finance-minister",
+      "https://www.lemonde.fr/en/international/article/2026/09/16/europe-baffled-by-france-s-sudden-leniency-toward-russian-oligarch-usmanov_6757593_4.html"
+    ],
+    "rationale_en": "Multiple outlets report EU ambassadors debating delisting Alisher Usmanov and Mikhail Fridman this week, with public pushback from Ukraine—high salience in LT given sanctions policy and official Lithuanian comments.",
+    "image_url": "https://www.lrt.lt/img/2026/09/21/2494400-272538-1287x836.jpg",
+    "image_source": "https://www.lrt.lt/naujienos/pasaulyje/6/3059426/diplomatai-es-pasirengusi-panaikinti-sankcijas-dviem-rusijos-oligarchams",
+    "theme": "valstybė ir aktualijos"
+  }
+]

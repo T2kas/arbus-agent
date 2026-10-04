@@ -1,0 +1,185 @@
+[
+  {
+    "id": 20,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "„Nubučiuota“ Top 10 Apple Music Lietuvoje — iki kada?",
+    "market_type": "multi",
+    "options_lt": [
+      "Iki 2026-09-24",
+      "Iki 2026-09-26",
+      "Iki 2026-09-30",
+      "Iki 2026-10-07",
+      "Iki 2026-10-21",
+      "Ne iki 2026-10-21"
+    ],
+    "probabilities": [
+      0.18,
+      0.12,
+      0.15,
+      0.17,
+      0.13,
+      0.25
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-10-21",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Tikrinama, kada Gabrieliaus Vagelio daina „Nubučiuota“ pirmąkart pasiekia Top 10 Apple Music „Top 100: Lithuania“; jei pasiekia iki pasirinktos datos (23:59 EEST) – atitinkama parinktis laimi; jei iki 2026-10-21 dar nebūna Top 10 – laimi „Ne iki 2026-10-21“. Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli",
+      "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli?utm_source=openai",
+      "https://www.15min.lt/video/gabrielius-vagelis-nubuciuota-283518",
+      "https://www.15min.lt/video/gabrielius-vagelis-nubuciuota-283518?utm_source=openai",
+      "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
+      "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea?utm_source=openai"
+    ],
+    "rationale_en": "Pulse: fresh release “Nubučiuota” just dropped and is picking up attention (new LRT/15min premieres), so a quick Top 10 climb is a live, hypey question a mass audience follows. ([lrt.lt](https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli?utm_source=openai))",
+    "image_url": "https://www.lrt.lt/img/2026/09/18/2492215-757057-1287x836.png",
+    "image_source": "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli",
+    "theme": "kultūra ir pramogos"
+  },
+  {
+    "id": 21,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Ar „Rytas“ laimės FIBA Tarpkontinentinę taurę šiemet?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "sportas",
+    "resolve_by": "2026-09-27",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Rinka sprendžiama pagal oficialius FIBA Intercontinental Cup 2026 rezultatus; jei turnyras neįvyks ar nebus paskelbtas čempionas iki 2026-09-27 imtinai, rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/meet-the-team-rytas-vilnius-2026",
+      "https://www.lrt.lt/naujienos/sportas/10/3059100/lrt-trumpai-kas-laukia-ryto-fiba-tarpkontinentineje-taureje"
+    ],
+    "rationale_en": "High-attention Lithuanian sports topic this week — Rytas opens the Intercontinental Cup on Sep 22 with group games and the final on Sep 27, covered by LRT and FIBA. (fiba.basketball)",
+    "image_url": "http://assets.fiba.basketball/image/upload/w_2000/f_auto/q_auto/v1789470396/ekltw4geizhhovphy5ng.jpg",
+    "image_source": "https://www.fiba.basketball/en/events/fiba-intercontinental-cup-2026/news/meet-the-team-rytas-vilnius-2026",
+    "theme": "sportas"
+  },
+  {
+    "id": 22,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Kiek Jessica Shy dainų bus Apple Music LT Top 5 sekmadienį?",
+    "market_type": "multi",
+    "options_lt": [
+      "5",
+      "4",
+      "3 ar mažiau"
+    ],
+    "probabilities": [
+      0.2,
+      0.55,
+      0.25
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-27",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Skaičiuojamos visos dainos, kuriose Jessica Shy yra atlikėja ar bendraatlikėja; tikrinamas Apple Music Lietuva „Top 100: Lithuania“ dainų sąrašas 2026-09-27 23:59 (LT laiku); jei reitingas nepateikia laiko, vertinama tą dieną archyvuota būklė (ekrano kopija). Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
+      "https://soundcharts.com/en/charts/apple-music/lithuania",
+      "https://music.apple.com/lt/album/kas-kaltas/6784728491?i=6784728497"
+    ],
+    "rationale_en": "Apple Music LT currently shows Jessica Shy dominating the Top 5 (pulse: Apple Music LT list provided; Soundcharts corroborates live rankings). (music.apple.com: https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea?utm_source=openai)",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/33/1c/c6/331cc6aa-a909-cda0-c314-04000f295ac2/3dd1c3de-efc3-4119-8ee0-706598d5da0b.png/1200x630wp-60.jpg",
+    "image_source": "https://music.apple.com/lt/playlist/top-100-lithuania/pl.e96de57d836e42dca30f7da24c64bbea",
+    "theme": "kultūra ir pramogos"
+  },
+  {
+    "id": 23,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "Kas #1 Spotify Lietuva penktadienį?",
+    "market_type": "multi",
+    "options_lt": [
+      "Jessica Shy & Igoris Kofas – „Kas Kaltas?“",
+      "Different Dimension & QV – „Palangoj“",
+      "Kita lietuviška daina",
+      "Užsienio kūrinys"
+    ],
+    "probabilities": [
+      0.7,
+      0.18,
+      0.07,
+      0.05
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-25",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Vertinama 2026-09-25 „Spotify Top 200 – Lithuania“ dienos sąrašo 1 vieta; patikrinama pagal Spotify charts (spotifycharts.com) arba konsoliduotus atvaizdavimus (pvz., KWORB). Jei iki nurodytos datos oficialus rezultatas nebus paskelbtas (įvykis atšauktas ar nukeltas), rinka sprendžiama pagal pirmą oficialų rezultatą, paskelbtą po tos datos.",
+    "sources": [
+      "https://kworb.net/spotify/country/lt_daily.html",
+      "https://spotify-top.com/charts/lt/daily",
+      "https://soundcharts.com/en/charts/spotify/lithuania"
+    ],
+    "rationale_en": "Spotify LT daily shows „Kas Kaltas?“ at #1 and Jessica Shy dominating the Top 10 this week, making a clear, high-attention, checkable race for Friday’s #1. (kworb.net)",
+    "image_url": "https://spotify-top.com/og.png",
+    "image_source": "https://spotify-top.com/charts/lt/daily",
+    "theme": "influenceriai ir internetas"
+  },
+  {
+    "id": 24,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "7 Jessica Shy dainos Spotify LT Top 10 — iki rugsėjo 30?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-30",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Skaičiuojama, ar bet kurią dieną iki ir įskaitytinai 2026-09-30 „Spotify Top 200 – Lithuania“ dienos sąrašo Top 10 yra ≥7 Jessica Shy kūriniai; jei neįvyksta — „Ne“.",
+    "sources": [
+      "https://kworb.net/spotify/country/lt_daily.html",
+      "https://www.kworb.net/spotify/artist/0CinAWYkte8opxVAPI3nMu.html"
+    ],
+    "rationale_en": "As of 2026-09-19, Spotify LT daily lists 6 Jessica Shy songs in the Top 10, creating a playful but measurable “can she hit 7?” milestone fans are actively watching. (kworb.net)",
+    "image_url": "",
+    "image_source": "",
+    "theme": "influenceriai ir internetas"
+  },
+  {
+    "id": 25,
+    "verify_verdict": "UNCLEAR",
+    "verify_note": "verification skipped",
+    "question_lt": "„Nubučiuota“: ar rugsėjį bus ≥75 000 peržiūrų?",
+    "market_type": "binary",
+    "options_lt": [
+      "Taip",
+      "Ne"
+    ],
+    "probabilities": [
+      0.35,
+      0.65
+    ],
+    "category": "kultura",
+    "resolve_by": "2026-09-29",
+    "duration_class": "medium",
+    "resolution_hint_lt": "Skaičius tikrinamas oficialiame „YouTube“ vaizdo įrašo „Gabrielius Vagelis – Nubučiuota“ puslapyje; vertinama, ar iki 2026-09-24 23:59 Lietuvos laiku bendras peržiūrų skaitiklis yra ≥75 000; skaičiuojama bendra (kaupiama) peržiūrų suma; jei riba pasiekiama anksčiau, tai laikoma įvykusiu rezultatu. Jei įvykis neįvyks, bus atšauktas arba nukeltas vėlesniam laikui nei nurodyta data — rinka baigiasi „Ne“.",
+    "sources": [
+      "https://www.youtube.com/watch?v=y4OluuJEnaE",
+      "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli",
+      "https://www.15min.lt/video/gabrielius-vagelis-nubuciuota-283518"
+    ],
+    "rationale_en": "YouTube Trending LT shows “Nubučiuota” at 54,876 views and rising, plus fresh LRT/15min coverage confirms release buzz (pulse: YouTube Trending LT figure). (lrt.lt: https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli?utm_source=openai)",
+    "image_url": "https://www.lrt.lt/img/2026/09/18/2492215-757057-1287x836.png",
+    "image_source": "https://www.lrt.lt/naujienos/muzika/680/3056159/gabrielius-vagelis-pristato-klipa-nubuciuota-jis-nukelia-i-svajoniu-pasauli",
+    "theme": "kultūra ir pramogos"
+  }
+]
