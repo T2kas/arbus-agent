@@ -1,0 +1,102 @@
+[
+  {
+    "title": "Ar Lietuva pateks į 2027 m. FIBA pasaulio krepšinio taurę?",
+    "subtitle": "Atranka baigiasi 2027 m. vasario–kovo lange",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/326a47c1-fef0-434f-9c27-046ba76ab313.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta „Taip“, jeigu Lietuvos vyrų krepšinio rinktinė, baigus 2027 m. FIBA pasaulio taurės Europos atrankos turnyrą, oficialiai užsitikrins vietą 2027 m. FIBA pasaulio taurės finaliniame turnyre.\n\nVertinamas FIBA paskelbtas galutinis atrankos rezultatas: kurios rinktinės iš Lietuvos atrankos grupės patenka į pasaulio taurę. Pakanka, kad FIBA oficialiai patvirtintų Lietuvos patekimą; tolimesnis atsisakymas dalyvauti rezultato nekeičia.\n\nRinka išsprendžiama „Ne“, jeigu po paskutinių atrankos rungtynių Lietuva nepatenka tarp į pasaulio taurę keliaujančių rinktinių. Jei patekimas ar nepatekimas matematiškai paaiškėja anksčiau, rinka gali būti išspręsta anksčiau.\n\nJeigu FIBA pakeistų atrankos formatą ar pakviestų papildomų komandų, vertinamas oficialus FIBA sprendimas dėl Lietuvos dalyvavimo, paskelbtas iki 2027 m. balandžio 30 d.\n\nRezultato šaltiniai yra FIBA (fiba.basketball), Lietuvos krepšinio federacija ir nacionaliniai naujienų portalai.",
+    "context": "Lietuva atrankos J grupėje turi 4 pergales ir 4 pralaimėjimus ir yra ketvirta – už Turkijos (8–0), Serbijos (6–2) ir Italijos (5–3). Į pasaulio taurę patenka trys geriausios grupės komandos. Rugsėjį rinktinę paliko Rimas Kurtinaitis su visu štabu, jos vairą perėmė Dainius Adomaitis, o lapkričio 26 d. laukia mūšis namie su Serbija ir lapkričio 29 d. išvykoje su Bosnija ir Hercegovina. Jei Lietuva nepatektų, pasaulio taurę praleistų pirmą kartą per 24 metus.",
+    "closes_at": "2027-02-23T21:59:00+00:00",
+    "options": [
+      {"label": "Taip", "probability": 40},
+      {"label": "Ne", "probability": 60}
+    ]
+  },
+  {
+    "title": "Kas laimės lapkričio 26 d.: Lietuva ar Serbija?",
+    "subtitle": "FIBA pasaulio taurės atranka, Adomaičio debiutas",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/326a47c1-fef0-434f-9c27-046ba76ab313.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta pagal 2026 m. lapkričio 26 d. vyksiančių Lietuvos ir Serbijos vyrų krepšinio rinktinių 2027 m. FIBA pasaulio taurės atrankos rungtynių galutinį rezultatą.\n\nVertinamas oficialus FIBA užfiksuotas galutinis rezultatas, įskaitant pratęsimus.\n\nJeigu rungtynės perkeliamos į kitą datą, bet sužaidžiamos iki 2026 m. gruodžio 31 d., vertinamas jų rezultatas. Jeigu jos atšaukiamos arba nesužaidžiamos iki šios datos, arba FIBA rezultatą nustato techniniu sprendimu be sužaistų rungtynių, rinka anuliuojama ir statymai grąžinami.\n\nRezultato šaltiniai yra FIBA (fiba.basketball), Lietuvos krepšinio federacija ir nacionaliniai naujienų portalai.",
+    "context": "Tai pirmos Dainiaus Adomaičio rungtynės grąžinus jį prie rinktinės vairo ir vienos svarbiausių kovoje dėl vietos pasaulio taurėje. Serbija grupėje turi 6 pergales ir 2 pralaimėjimus, Lietuva – 4 ir 4. Lapkričio lange nedalyvauja NBA, o dauguma Eurolygos žaidėjų, todėl abi komandos žais su antrinėmis sudėtimis, o lietuviai turės namų aikštės pranašumą.",
+    "closes_at": "2026-11-26T15:59:00+00:00",
+    "options": [
+      {"label": "Lietuva", "probability": 45},
+      {"label": "Serbija", "probability": 55}
+    ]
+  },
+  {
+    "title": "Kiek pergalių „Žalgiris“ turės Eurolygoje spalio pabaigoje?",
+    "subtitle": "Pergalės iki 2026 m. spalio 31 d.",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta pagal Kauno „Žalgirio“ pergalių skaičių 2026–2027 m. Eurolygos reguliariajame sezone, įskaitant visas rungtynes, sužaistas iki 2026 m. spalio 31 d. 23:59 Lietuvos laiku imtinai.\n\nSkaičiuojamos visos oficialios Eurolygos reguliariojo sezono pergalės nuo sezono pradžios, taip pat ir rugsėjį iškovotos. LKL, draugiškos ir kitų turnyrų rungtynės nesiskaičiuoja.\n\nJeigu rungtynės iki spalio 31 d. perkeliamos į vėlesnę datą, jos neįskaičiuojamos. Jeigu Eurolyga vėliau pakeičia rezultatą techniniu sprendimu, naudojamas iki 2026 m. lapkričio 15 d. paskelbtas oficialus rezultatas.\n\nRezultato šaltiniai yra euroleaguebasketball.net turnyrinė lentelė, zalgiris.lt ir nacionaliniai sporto portalai.",
+    "context": "„Žalgiris“ sezoną pradėjo pergale Belgrade prieš „Crvena Zvezda“, bet vėliau pralaimėjo Pirėjo „Olympiacos“ ir Paryžiuje – po trijų turų balansas 1–2. Spalį laukia sunkus grafikas: išvykos į Barseloną, Stambulą (prieš „Fenerbahče“) ir Bolonijoje, o namie – „Anadolu Efes“, ASVEL ir „Partizan“. Ar Kaunas spalį pakils į atkrintamųjų zoną?",
+    "closes_at": "2026-10-30T15:59:00+00:00",
+    "options": [
+      {"label": "3 arba mažiau", "probability": 38},
+      {"label": "4", "probability": 31},
+      {"label": "5", "probability": 20},
+      {"label": "6 arba daugiau", "probability": 11}
+    ]
+  },
+  {
+    "title": "Kas laimės LKL derbį gruodžio 6 d.: „Žalgiris“ ar „Rytas“?",
+    "subtitle": "„Žalgirio“ arena, Kaunas",
+    "category": "sportas",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta pagal 2026 m. gruodžio 6 d. Kauno „Žalgirio“ arenoje vyksiančių LKL reguliariojo sezono rungtynių tarp Kauno „Žalgirio“ ir Vilniaus „Ryto“ galutinį rezultatą.\n\nVertinamas oficialus lkl.lt užfiksuotas galutinis rezultatas, įskaitant pratęsimus.\n\nJeigu rungtynės perkeliamos, bet sužaidžiamos iki 2027 m. sausio 31 d., vertinamas jų rezultatas. Jeigu jos nesužaidžiamos iki šios datos arba rezultatas nustatomas techniniu sprendimu be sužaistų rungtynių, rinka anuliuojama ir statymai grąžinami.\n\nRezultato šaltiniai yra lkl.lt ir nacionaliniai sporto portalai.",
+    "context": "Didžiausias Lietuvos krepšinio derbis grįžta į Kauną. „Žalgiris“ namie prieš „Rytą“ dažniausiai būna favoritas, tačiau Vilniaus klubas pastaraisiais sezonais ne kartą išplėšė pergales ir „Žalgirio“ arenoje. Gruodį „Žalgiris“ žais itin įtemptu Eurolygos grafiku, todėl nuovargis gali tapti „Ryto“ šansu.",
+    "closes_at": "2026-12-06T14:49:00+00:00",
+    "options": [
+      {"label": "„Žalgiris“", "probability": 72},
+      {"label": "„Rytas“", "probability": 28}
+    ]
+  },
+  {
+    "title": "Ar Vilniuje iki lapkričio 15 d. pasirodys sniego danga?",
+    "subtitle": "LHMT Vilniaus meteorologijos stotis",
+    "category": "orai",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/893ae1af-8b97-4d37-af1e-11a1d3077ede.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta „Taip“, jeigu nuo prekybos pradžios iki 2026 m. lapkričio 15 d. 23:59 Lietuvos laiku bent viename Lietuvos hidrometeorologijos tarnybos (LHMT) Vilniaus automatinės meteorologijos stoties stebėjime užfiksuotas sniego dangos storis yra 1 cm arba didesnis.\n\nNaudojami oficialūs LHMT stebėjimų duomenys, viešai skelbiami api.meteo.lt (stotis „vilniaus-ams“, laukas „snowDepth“) arba meteo.lt. Vien snigimas, šlapdriba ar kruša be užfiksuotos sniego dangos neįskaitomi.\n\nJeigu sąlyga įvykdoma anksčiau, rinka gali būti išspręsta „Taip“ iš karto. Jeigu iki termino sniego danga neužfiksuojama, rinka išsprendžiama „Ne“.\n\nJeigu stotis tuo metu neveikia arba duomenys neprieinami, naudojamas LHMT paskelbtas oficialus sniego dangos stebėjimas Vilniuje.",
+    "context": "Pirmasis sniegas Lietuvoje vidutiniškai iškrenta apie lapkričio 4 d., rytinėje šalies dalyje – kiek anksčiau, tačiau sniego danga paprastai nusistovi tik gruodžio antroje pusėje. Pastaraisiais rudenimis pirmasis tikras sniegas Vilniuje dažniau pasirodydavo antroje lapkričio pusėje. Ar šiemet žiema į sostinę ateis anksčiau?",
+    "closes_at": "2026-11-15T21:59:00+00:00",
+    "options": [
+      {"label": "Taip", "probability": 35},
+      {"label": "Ne", "probability": 65}
+    ]
+  },
+  {
+    "title": "Ar Valdas Benkunskas bus perrinktas Vilniaus meru?",
+    "subtitle": "2027 m. savivaldybių merų rinkimai",
+    "category": "politika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/ff5daddd-1d03-4389-a4fc-a1d8ee18ca76.jpeg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta „Taip“, jeigu Valdas Benkunskas pagal Vyriausiosios rinkimų komisijos (VRK) paskelbtus galutinius 2027 m. savivaldybių merų rinkimų rezultatus (įskaitant pakartotinį balsavimą) bus išrinktas Vilniaus miesto savivaldybės meru.\n\nRinka išsprendžiama „Ne“, jeigu meru išrenkamas kitas kandidatas, jeigu V. Benkunskas nekandidatuoja, atsiima kandidatūrą arba yra išbraukiamas iš kandidatų sąrašo.\n\nJeigu rinkimai atidedami, laukiama jų rezultato iki 2027 m. birželio 30 d. Jeigu iki šios datos rinkimai neįvyksta, rinka išsprendžiama „Ne“.\n\nRezultato šaltinis yra VRK (vrk.lt) ir nacionaliniai naujienų portalai.",
+    "context": "Savivaldybių tarybų ir merų rinkimai vyks 2027 m. kovą. Gegužės „Spinter tyrimų“ apklausoje dabartinį merą konservatorių Valdą Benkunską palankiausiai vertino 30 % vilniečių, Artūrą Zuoką – 15 %. Zuokas jau paskelbė kandidatuosiąs kaip nepartinis, Nacionalinis susivienijimas kelia Vytautą Sinicą, o pats Benkunskas dar nepasakė, ar sieks antros kadencijos.",
+    "closes_at": "2027-03-06T21:59:00+00:00",
+    "options": [
+      {"label": "Taip", "probability": 50},
+      {"label": "Ne", "probability": 50}
+    ]
+  },
+  {
+    "title": "Ar Visvaldas Matijošaitis ketvirtą kartą taps Kauno meru?",
+    "subtitle": "2027 m. savivaldybių merų rinkimai",
+    "category": "politika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/ff5daddd-1d03-4389-a4fc-a1d8ee18ca76.jpeg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta „Taip“, jeigu Visvaldas Matijošaitis pagal Vyriausiosios rinkimų komisijos (VRK) paskelbtus galutinius 2027 m. savivaldybių merų rinkimų rezultatus (įskaitant pakartotinį balsavimą) bus išrinktas Kauno miesto savivaldybės meru.\n\nRinka išsprendžiama „Ne“, jeigu meru išrenkamas kitas kandidatas, jeigu V. Matijošaitis nekandidatuoja, atsiima kandidatūrą arba yra išbraukiamas iš kandidatų sąrašo.\n\nJeigu rinkimai atidedami, laukiama jų rezultato iki 2027 m. birželio 30 d. Jeigu iki šios datos rinkimai neįvyksta, rinka išsprendžiama „Ne“.\n\nRezultato šaltinis yra VRK (vrk.lt) ir nacionaliniai naujienų portalai.",
+    "context": "Kauną nuo 2015 m. valdantis Visvaldas Matijošaitis LRT patvirtino sieksiantis ketvirtos kadencijos. Trijų kadencijų iš eilės apribojimas jam netaikomas atgaline tvarka, nes įsigaliojo tik 2022 m. Vieni kauniečiai „ūkvedžiui“ ploja, kiti švilpia – ar kas nors pagaliau jį įveiks?",
+    "closes_at": "2027-03-06T21:59:00+00:00",
+    "options": [
+      {"label": "Taip", "probability": 65},
+      {"label": "Ne", "probability": 35}
+    ]
+  }
+]
