@@ -3212,6 +3212,14 @@
   "resolved": false,
   "station": "kauno-ams"
  },
+ "456a1735-4a76-4c8e-96ea-1ea9e1f88342": {
+  "checksum": "621f2806027fe7972ca5bd04b9d0e273133cbc4c9fc6037eb7314e0ff5311d23",
+  "current_maximum": null,
+  "date": "2026-10-06",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "4dc5de32-e283-4766-b7bb-a16dc9d9a185": {
   "checksum": "0c0cdce88eae2098e4063c43d6f5fad5ef18f77f9e9cf3756ee7e16ddb4a9d9c",
   "current_maximum": 19.1,
@@ -7835,6 +7843,14 @@
   "resolved_via": "music",
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
+ "cfc29238-c66a-483d-ad2f-6f506c801c83": {
+  "checksum": "49a07c67d2c656373522ece5deea2d28ec36ac27a1cf0ddf8fa1cff1e9a64bbc",
+  "current_maximum": null,
+  "date": "2026-10-06",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "cfee8c11-99c8-4cc6-858a-40cdf310db3c": {},
  "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {
   "resolved": true,
@@ -8270,6 +8286,14 @@
   "resolved_temp": 17.8,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+  "station": "klaipedos-ams"
+ },
+ "ddd933a5-2a7a-415d-8b13-f5b630128df6": {
+  "checksum": "33c65df06d4a966c4296d2308502ece3726d9ac85ff57d8fed09ddc9958a1690",
+  "current_maximum": null,
+  "date": "2026-10-06",
+  "measurements": {},
+  "resolved": false,
   "station": "klaipedos-ams"
  },
  "e0e7f93d-d80d-4e44-8af3-d2ea3c9a3748": {
