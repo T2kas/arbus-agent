@@ -1,0 +1,46 @@
+[
+  {
+    "title": "Nedarbo lygis spalį?",
+    "subtitle": "2026 m. spalio 31 d.",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/42fd90e8-e6ed-46e6-8302-5971cf6ef36e.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta pagal Užimtumo tarnybos paskelbtą oficialų registruoto nedarbo rodiklį, apibūdinantį padėtį 2026 m. spalio pabaigoje.\n\nNaudojamas Užimtumo tarnybos lapkričio pradžioje paskelbtas registruotų bedarbių procentas, kurio duomenų laikotarpis baigiasi 2026 m. spalio 31 d. arba duomenų data nurodoma 2026 m. lapkričio 1 d.\n\nNedarbo lygis pagal gyventojų apklausas, „Sodros“ apdraustųjų pokytis, laisvų darbo vietų skaičius ir kitų institucijų apskaičiuoti rodikliai nenaudojami.\n\nNaudojama Užimtumo tarnybos paskelbta vieno skaičiaus po kablelio reikšmė. Jeigu ji iki 2026 m. lapkričio 30 d. bus oficialiai pataisyta, naudojama pataisyta reikšmė.\n\nRezultato šaltinis yra Užimtumo tarnyba.",
+    "context": "Rugsėjo pradžioje registruotas nedarbas siekė 8,0% – 0,8 proc. punkto mažiau nei prieš metus. Rudenį nedarbas paprastai mažėja: pernai nuo rugsėjo iki lapkričio pradžios jis nukrito nuo 8,8% iki 8,2%. Jei tendencija pasikartos, spalio pabaigoje rodiklis gali priartėti prie 7,5%, tačiau mažėjantis laisvų darbo vietų skaičius gali šį kritimą sustabdyti.",
+    "closes_at": "2026-10-31T21:59:00+00:00",
+    "options": [
+      {"label": "7,2% arba mažesnis", "probability": 16},
+      {"label": "Nuo 7,3% iki 7,4%", "probability": 27},
+      {"label": "Nuo 7,5% iki 7,6%", "probability": 31},
+      {"label": "7,7% arba didesnis", "probability": 26}
+    ]
+  },
+  {
+    "title": "Populiaresnis premjeras spalį: M. Sinkevičius ar R. Žemaitaitis?",
+    "subtitle": "Spalio „Spinter tyrimų“ apklausoje",
+    "category": "politika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/6d237bf6-43e3-4271-9463-a03a07051490.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta pagal pirmą nuo 2026 m. spalio 16 d. iki 2026 m. lapkričio 15 d. imtinai viešai paskelbtą reprezentatyvią Lietuvos gyventojų apklausą, kurią „Delfi“ užsakymu atliks bendrovė „Spinter tyrimai“.\n\nLaimės asmuo, kurį didesnė respondentų dalis nurodys kaip tinkamiausią Lietuvos ministrą pirmininką. Naudojami viešai paskelbti procentai, jų papildomai neperskaičiuojant.\n\nJeigu abiejų politikų rezultatai bus vienodi, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nJeigu iki 2026 m. lapkričio 15 d. tinkama apklausa nebus paskelbta, naudojama pirmoji vėliau paskelbta kvalifikuojama „Spinter tyrimų“ apklausa, tačiau ne vėlesnė nei 2026 m. gruodžio 31 d. Jeigu nauja apklausa nepasirodys ir iki šios datos, naudojama paskutinė iki 2026 m. gruodžio 31 d. viešai paskelbta „Spinter tyrimų“ apklausa.\n\nRezultato šaltiniai yra „Delfi“, „Spinter tyrimai“ ir apklausos rezultatus perspausdinę nacionaliniai naujienų portalai, įskaitant LRT, 15min ir BNS.",
+    "context": "Rugsėjo „Spinter tyrimų“ apklausoje Remigijus Žemaitaitis tinkamiausiu premjeru laikytas 7,8%, o dabartinis premjeras Mindaugas Sinkevičius – 4,7% apklaustųjų. Žemaitaitis Sinkevičių lenkia jau kelis mėnesius iš eilės, o rugsėjį skirtumas dar padidėjo. Vis dėlto abiejų rezultatai nedideli, todėl Vyriausybės sprendimai ar koalicijos konfliktai per mėnesį gali jį pakeisti.",
+    "closes_at": "2026-10-25T20:59:00+00:00",
+    "options": [
+      {"label": "M. Sinkevičius", "probability": 20},
+      {"label": "R. Žemaitaitis", "probability": 80}
+    ]
+  },
+  {
+    "title": "Kuri partija bus populiaresnė spalį: LSDP ar „Nemuno aušra“?",
+    "subtitle": "Spalio „Spinter tyrimų“ apklausoje",
+    "category": "politika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/f292778f-a6bc-449c-8fdc-89fb8e390481.jpg",
+    "liquidity": 20000,
+    "rules": "Rinka bus išspręsta pagal pirmą nuo 2026 m. spalio 16 d. iki 2026 m. lapkričio 15 d. imtinai viešai paskelbtą reprezentatyvią Lietuvos gyventojų apklausą, kurią „Delfi“ užsakymu atliks bendrovė „Spinter tyrimai“.\n\nLaimės partija, kuriai apklausoje bus nurodytas didesnis respondentų palaikymas atsakant į klausimą, už kurią partiją jie balsuotų Seimo rinkimuose. Naudojami viešai paskelbti procentai, jų papildomai neperskaičiuojant.\n\nJeigu abiejų partijų rezultatai bus vienodi, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nJeigu iki 2026 m. lapkričio 15 d. tinkama apklausa nebus paskelbta, naudojama pirmoji vėliau paskelbta kvalifikuojama „Spinter tyrimų“ apklausa, tačiau ne vėlesnė nei 2026 m. gruodžio 31 d. Jeigu nauja apklausa nepasirodys ir iki šios datos, naudojama paskutinė iki 2026 m. gruodžio 31 d. viešai paskelbta „Spinter tyrimų“ apklausa.\n\nRezultato šaltiniai yra „Delfi“, „Spinter tyrimai“ ir apklausos rezultatus perspausdinę nacionaliniai naujienų portalai, įskaitant LRT bei 15min.",
+    "context": "Rugsėjo „Spinter tyrimų“ apklausoje LSDP palaikė 8,8%, o „Nemuno aušrą“ – 8,3% respondentų. Liepą skirtumas buvo didesnis (10,1% ir 8,5%), tad valdančiųjų socialdemokratų persvara tirpsta. Puse procentinio punkto skirtumas yra mažesnis už apklausos paklaidą, todėl spalio apklausoje lyderis gali pasikeisti.",
+    "closes_at": "2026-10-25T20:59:00+00:00",
+    "options": [
+      {"label": "LSDP", "probability": 55},
+      {"label": "„Nemuno aušra“", "probability": 45}
+    ]
+  }
+]
