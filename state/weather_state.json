@@ -1,5 +1,12 @@
 {
- "03460f7f-f2b2-41b4-8f39-51f978587c89": {},
+ "03460f7f-f2b2-41b4-8f39-51f978587c89": {
+  "resolved": true,
+  "resolved_at": "2026-10-05T09:01:17.141327+00:00",
+  "resolved_label": "Nuo 1,934 iki 1,944 €/l",
+  "resolved_option_id": "855c0461-7c6e-4631-8301-5f1c4b9bea09",
+  "resolved_price": 1.934,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261005/"
+ },
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
  "08cdd6b7-cc77-401c-ac4b-b95662e867e5": {
   "checksum": "ff9710c6a75cb8e489313ceb4aaeded69a6df509002ccf7e80d653948649a07e",
@@ -4342,7 +4349,14 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260924/"
  },
  "7d740c69-845c-4455-86cd-bfc551d86096": {},
- "80850939-436a-479f-aaf3-c228c45c79d3": {},
+ "80850939-436a-479f-aaf3-c228c45c79d3": {
+  "resolved": true,
+  "resolved_at": "2026-10-05T09:01:17.141327+00:00",
+  "resolved_label": "Nuo 2,234 iki 2,244 €/l",
+  "resolved_option_id": "cfc751a4-c030-42dc-9d25-24ccc235e921",
+  "resolved_price": 2.239,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261005/"
+ },
  "81dbe47c-618a-4d8d-adee-0ee658c15578": {
   "checksum": "ae0c337ea7761f638e88abf322cd14777a6d6d3c35477adb18c69472fa8a5512",
   "current_maximum": 19.1,
