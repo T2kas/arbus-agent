@@ -3519,7 +3519,7 @@
   "station": "kauno-ams"
  },
  "456a1735-4a76-4c8e-96ea-1ea9e1f88342": {
-  "checksum": "8b72165831b8770cc8ea177450e60dec9e946fbfe23997cb62731f441bafa5c6",
+  "checksum": "02585cff87aac1c80270269041937b90afad4494cd0566e6422048fad35fc98b",
   "current_maximum": null,
   "date": "2026-10-06",
   "measurements": {},
@@ -6041,7 +6041,7 @@
   "station": "kauno-ams"
  },
  "a5fd861d-81fd-4a86-bbca-1dfb01d08dd3": {
-  "checksum": "079be5b39eea923ffb4326b2f084b0a8c255159d480cf62f0f24342bcbd790a8",
+  "checksum": "adb168076be956702b13e6f429313fd8059331be7ebd37c0cadcb3d6ad5d37e9",
   "current_maximum": null,
   "date": "2026-10-07",
   "measurements": {},
@@ -7336,7 +7336,7 @@
   "station": "kauno-ams"
  },
  "c0cbbcca-c7f8-4c1f-a81c-4dade514b985": {
-  "checksum": "8b72165831b8770cc8ea177450e60dec9e946fbfe23997cb62731f441bafa5c6",
+  "checksum": "02585cff87aac1c80270269041937b90afad4494cd0566e6422048fad35fc98b",
   "current_maximum": null,
   "date": "2026-10-07",
   "measurements": {},
@@ -8191,7 +8191,7 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "cfc29238-c66a-483d-ad2f-6f506c801c83": {
-  "checksum": "079be5b39eea923ffb4326b2f084b0a8c255159d480cf62f0f24342bcbd790a8",
+  "checksum": "adb168076be956702b13e6f429313fd8059331be7ebd37c0cadcb3d6ad5d37e9",
   "current_maximum": null,
   "date": "2026-10-06",
   "measurements": {},
@@ -8208,7 +8208,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261001/"
  },
  "d400d4c5-1809-45d9-aa75-cf18824c5fa0": {
-  "checksum": "a6f370bc8241811e8908db4ee23f10307f9b3e2cf3d73cd1d00f457ae0a5cb52",
+  "checksum": "2861c1b67f84c42386bf9673f3a4ede56ba41e81ca26b708f0c89b3a632ad1fb",
   "current_maximum": 15.8,
   "date": "2026-10-05",
   "eliminated": [
@@ -8345,6 +8345,12 @@
    "2026-10-05 18:00:00": {
     "checksum": "a6f370bc8241811e8908db4ee23f10307f9b3e2cf3d73cd1d00f457ae0a5cb52",
     "received_at": "2026-10-05T18:10:44.857053+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 15.6
+   },
+   "2026-10-05 19:00:00": {
+    "checksum": "2861c1b67f84c42386bf9673f3a4ede56ba41e81ca26b708f0c89b3a632ad1fb",
+    "received_at": "2026-10-05T19:11:00.573567+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 15.6
    }
@@ -8774,7 +8780,7 @@
   "station": "klaipedos-ams"
  },
  "ddd933a5-2a7a-415d-8b13-f5b630128df6": {
-  "checksum": "a6f370bc8241811e8908db4ee23f10307f9b3e2cf3d73cd1d00f457ae0a5cb52",
+  "checksum": "2861c1b67f84c42386bf9673f3a4ede56ba41e81ca26b708f0c89b3a632ad1fb",
   "current_maximum": null,
   "date": "2026-10-06",
   "measurements": {},
@@ -9788,7 +9794,7 @@
   "station": "klaipedos-ams"
  },
  "ecbcffe7-93ed-4182-b326-b40a78ba5456": {
-  "checksum": "a6f370bc8241811e8908db4ee23f10307f9b3e2cf3d73cd1d00f457ae0a5cb52",
+  "checksum": "2861c1b67f84c42386bf9673f3a4ede56ba41e81ca26b708f0c89b3a632ad1fb",
   "current_maximum": null,
   "date": "2026-10-07",
   "measurements": {},
