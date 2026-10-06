@@ -1019,6 +1019,16 @@ FUEL_HORIZON_DAYS = _env_int("FUEL_HORIZON_DAYS", 1)     # create tomorrow's
 # from the weather 18:00 creation.
 FUEL_CREATE_HOUR = _env_int("FUEL_CREATE_HOUR", 12)
 FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 10)
+
+# ── Game markets (arbus games): LKL + TOPLYGA, created ~a week ahead ─────────
+# Each run creates a market for every game starting within GAMES_HORIZON_DAYS
+# that has no market yet (dedupe by title). Prices from official standings.
+GAMES_LEAGUES = {x.strip() for x in _env_str("GAMES_LEAGUES", "lkl,toplyga").split(",") if x.strip()}
+GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 7)
+GAMES_MIN_LEAD_HOURS = _env_int("GAMES_MIN_LEAD_HOURS", 3)   # never open a market minutes before tip-off
+GAMES_LIQUIDITY = _env_int("GAMES_LIQUIDITY", 20000)         # team scale 2026-10-06: games = medium
+GAMES_LKL_IMAGE = _env_str("GAMES_LKL_IMAGE", "")             # empty -> the Žalgiris image
+GAMES_TOP_IMAGE = _env_str("GAMES_TOP_IMAGE", "")             # empty -> the TOPLYGA image
 FUEL_CLOSE_MINUTE = _env_int("FUEL_CLOSE_MINUTE", 0)
 
 # ── Market health (arbus stats) ─────────────────────────────────────────────

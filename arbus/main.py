@@ -340,6 +340,20 @@ def _watch_once(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_games(args: argparse.Namespace) -> int:
+    """Create LKL / TOPLYGA game markets about a week ahead."""
+    from . import games
+
+    reports = games.run(dry_run=args.dry_run, alert=not args.no_telegram)
+    for r in reports:
+        extra = r.get("detail") or " / ".join(f"{o['label']} {o['probability']}%"
+                                              for o in r.get("options", []))
+        print(f"{r['status']:13} {r['title']}  {extra}")
+    if not reports:
+        print("nėra naujų rungtynių per artimiausią savaitę")
+    return 1 if any(r["status"] == "error" for r in reports) else 0
+
+
 def cmd_weather(args: argparse.Namespace) -> int:
     """Resolve daily-max-temperature (orai) markets from the official Meteo LT API.
 
@@ -1065,6 +1079,11 @@ def main() -> int:
     wt.add_argument("--interval", type=int, default=0,
                     help="keep running, scanning every N seconds (0 = once)")
     wt.set_defaults(func=cmd_watch)
+
+    gm = sub.add_parser("games", help="create LKL/TOPLYGA game markets ~a week ahead")
+    gm.add_argument("--dry-run", action="store_true", help="list, do not create")
+    gm.add_argument("--no-telegram", action="store_true")
+    gm.set_defaults(func=cmd_games)
 
     wx = sub.add_parser("weather",
                         help="create + resolve daily-max-temperature (orai) markets from Meteo LT")

@@ -1,0 +1,56 @@
+name: games-bot
+
+# Creates LKL (basketball) and TOPLYGA (football) game markets about a week
+# ahead: every morning it reads lkl.lt / toplyga.lt and creates a market for each
+# game starting within GAMES_HORIZON_DAYS (default 7) that has no market yet.
+# Prices come from the official standings; no LLM, so it costs nothing to run.
+# On by default (team request 2026-10-06); set Variable GAMES_ENABLED=false to
+# stop the schedule. Telegram lists what was created.
+
+on:
+  schedule:
+    - cron: "0 6 * * *"            # 08:00/09:00 Vilnius
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only list, do not create"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: games
+  cancel-in-progress: false
+
+jobs:
+  games:
+    if: github.event_name == 'workflow_dispatch' || vars.GAMES_ENABLED != 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Create game markets
+        env:
+          PYTHONUNBUFFERED: "1"
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          APP_CREATE_RPC: ${{ vars.APP_CREATE_RPC }}
+          GAMES_LEAGUES: ${{ vars.GAMES_LEAGUES }}
+          GAMES_HORIZON_DAYS: ${{ vars.GAMES_HORIZON_DAYS }}
+          GAMES_LIQUIDITY: ${{ vars.GAMES_LIQUIDITY }}
+          GAMES_LKL_IMAGE: ${{ vars.GAMES_LKL_IMAGE }}
+          GAMES_TOP_IMAGE: ${{ vars.GAMES_TOP_IMAGE }}
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then FLAGS="--dry-run"; fi
+          python -m arbus games $FLAGS
