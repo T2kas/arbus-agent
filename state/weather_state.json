@@ -3520,13 +3520,13 @@
   "station": "kauno-ams"
  },
  "456a1735-4a76-4c8e-96ea-1ea9e1f88342": {
-  "checksum": "52b3989d832a2768e0dee64bbcdeaf3dfefc0deb44d0494c588f1a33453d2bee",
-  "current_maximum": 14.2,
+  "checksum": "30ed12b69fca81594b4965fa1717965800012ce685f1d0ae6a80c6ff4661b6dc",
+  "current_maximum": 14.5,
   "date": "2026-10-06",
   "eliminated": [
    "22d878f9-24bd-4137-aeb1-4bf8a81a6f81"
   ],
-  "max_received_at": "2026-10-06T06:10:47.334108+00:00",
+  "max_received_at": "2026-10-06T07:10:51.932155+00:00",
   "measurements": {
    "2026-10-05 21:00:00": {
     "checksum": "3933f01cd16b4849cc3ec9c4006aef8e0210487e7c746a86c77b19b295dbc447",
@@ -3587,6 +3587,12 @@
     "received_at": "2026-10-06T06:10:47.334108+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 14.2
+   },
+   "2026-10-06 07:00:00": {
+    "checksum": "30ed12b69fca81594b4965fa1717965800012ce685f1d0ae6a80c6ff4661b6dc",
+    "received_at": "2026-10-06T07:10:51.932155+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 14.5
    }
   },
   "resolved": false,
@@ -6108,7 +6114,7 @@
   "station": "kauno-ams"
  },
  "a5fd861d-81fd-4a86-bbca-1dfb01d08dd3": {
-  "checksum": "df6802739e8f898a24556301f82a353e358cd545b8b97bb3b2a4a6408f8b0058",
+  "checksum": "12d29e861025c682037fd85d46748d1b09abfe55b8133141f4e6193d8d002ac6",
   "current_maximum": null,
   "date": "2026-10-07",
   "measurements": {},
@@ -7403,7 +7409,7 @@
   "station": "kauno-ams"
  },
  "c0cbbcca-c7f8-4c1f-a81c-4dade514b985": {
-  "checksum": "52b3989d832a2768e0dee64bbcdeaf3dfefc0deb44d0494c588f1a33453d2bee",
+  "checksum": "30ed12b69fca81594b4965fa1717965800012ce685f1d0ae6a80c6ff4661b6dc",
   "current_maximum": null,
   "date": "2026-10-07",
   "measurements": {},
@@ -8258,10 +8264,10 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "cfc29238-c66a-483d-ad2f-6f506c801c83": {
-  "checksum": "df6802739e8f898a24556301f82a353e358cd545b8b97bb3b2a4a6408f8b0058",
-  "current_maximum": 11.9,
+  "checksum": "12d29e861025c682037fd85d46748d1b09abfe55b8133141f4e6193d8d002ac6",
+  "current_maximum": 12.3,
   "date": "2026-10-06",
-  "max_received_at": "2026-10-06T06:10:47.334108+00:00",
+  "max_received_at": "2026-10-06T07:10:51.932155+00:00",
   "measurements": {
    "2026-10-05 21:00:00": {
     "checksum": "8b8b24f6544f309af8f26950a43ad3b4a998113342f4f184510593a130ea68ec",
@@ -8322,6 +8328,12 @@
     "received_at": "2026-10-06T06:10:47.334108+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 11.9
+   },
+   "2026-10-06 07:00:00": {
+    "checksum": "12d29e861025c682037fd85d46748d1b09abfe55b8133141f4e6193d8d002ac6",
+    "received_at": "2026-10-06T07:10:51.932155+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 12.3
    }
   },
   "resolved": false,
@@ -8927,7 +8939,7 @@
   "station": "klaipedos-ams"
  },
  "ddd933a5-2a7a-415d-8b13-f5b630128df6": {
-  "checksum": "63aa18193bb01a0025d21e5517299c1839a5f35a4c06cab6c057d363a81e1e8e",
+  "checksum": "4f003adc92d6a74844a2651abad34927c47043cd47a3eacd4e07f743becae34f",
   "current_maximum": 16.3,
   "date": "2026-10-06",
   "eliminated": [
@@ -8994,6 +9006,12 @@
     "received_at": "2026-10-06T06:10:47.334108+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 15.8
+   },
+   "2026-10-06 07:00:00": {
+    "checksum": "4f003adc92d6a74844a2651abad34927c47043cd47a3eacd4e07f743becae34f",
+    "received_at": "2026-10-06T07:10:51.932155+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 16.0
    }
   },
   "resolved": false,
@@ -10007,7 +10025,7 @@
   "station": "klaipedos-ams"
  },
  "ecbcffe7-93ed-4182-b326-b40a78ba5456": {
-  "checksum": "63aa18193bb01a0025d21e5517299c1839a5f35a4c06cab6c057d363a81e1e8e",
+  "checksum": "4f003adc92d6a74844a2651abad34927c47043cd47a3eacd4e07f743becae34f",
   "current_maximum": null,
   "date": "2026-10-07",
   "measurements": {},
