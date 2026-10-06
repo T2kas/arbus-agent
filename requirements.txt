@@ -5,3 +5,5 @@ rapidfuzz>=3.9
 requests>=2.32
 tzdata>=2024.1            # IANA zones for zoneinfo (Windows has no system db)
 openpyxl>=3.1             # read .xlsx data-file sources in the resolution check
+pillow>=10.1               # game-market VS images (arbus games)
+resvg-py>=0.1             # render LKL SVG logos without system libraries

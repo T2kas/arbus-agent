@@ -1,17 +1,19 @@
 """Auto-create game markets for LKL (basketball) and TOPLYGA (football).
 
-Every run reads the official schedules (lkl.lt, toplyga.lt) and creates a
-market for each game that starts within the next GAMES_HORIZON_DAYS days and
-does not exist yet — so each game appears about a week ahead. Opening prices
-come from the official standings:
+Every run reads the official schedules (lkl.lt, toplyga.lt) and, for each game
+starting within GAMES_HORIZON_DAYS that has no market yet, looks up the
+bookmakers' odds (betodds.py). Only games whose odds are published are created:
+opening prices are the bookmaker consensus with the margin removed; games
+without odds wait for the next run. Each market gets a "logo VS logo" picture
+(matchimage.py) built from the leagues' own logos. LKL markets have two named
+outcomes (dual chart), TOPLYGA three with „Lygiosios“.
 
-* LKL: a pre-season strength prior blended with the current win %, log5, plus a
-  home-court edge; no draws, two named outcomes (dual chart).
-* TOPLYGA: points per game + home advantage, three outcomes with „Lygiosios“.
+The standings model (lkl_home_prob / top_probs) only feeds the context text and
+tests — it never prices a live market.
 
 Titles and templates match the hand-made October markets exactly ("Kauno
 „Žalgiris“ vs Vilniaus „Rytas“"), so an existing market is never duplicated.
-No LLM is used. Creation writes to the app, so the workflow is opt-in.
+No LLM is used.
 """
 
 from __future__ import annotations
@@ -73,6 +75,8 @@ class Game:
     home: str              # source key: LKL short name / TOPLYGA slug
     away: str
     venue: str = ""
+    home_logo: str = ""    # official logo URL (LKL: SVG, TOPLYGA: full-size PNG)
+    away_logo: str = ""
 
 
 def _clean(s: str) -> str:
@@ -89,7 +93,14 @@ _LT_DATE = re.compile(r"(\d{4}) m\. (\w+) (\d{1,2}) d\.")
 
 
 def parse_lkl_schedule(page: str) -> list[Game]:
-    """Upcoming LKL games ("VS" = not played yet) under their date headings."""
+    """Upcoming LKL games ("VS" = not played yet) under their date headings.
+
+    The page also lists the King Mindaugas Cup (data-championship="kmt"); only
+    the LKL section is read, because the market rules say "LKL regular season"."""
+    start = page.find('data-championship="lkl"')
+    if start >= 0:
+        end = page.find('data-championship=', start + 10)
+        page = page[start:end if end > 0 else len(page)]
     games, day = [], None
     for m in re.finditer(r'<div class="font-semibold text-2xl[^"]*">(.*?)</div>'
                          r'|<div class="result-item">(.*?)(?=<div class="result-item">'
@@ -104,13 +115,15 @@ def parse_lkl_schedule(page: str) -> list[Game]:
         if day is None or not re.search(r'rungtynes/\d+">\s*VS\s*<', block):
             continue
         tm = re.search(r'text-lg font-bold">\s*(\d{1,2}):(\d{2})', block)
-        teams = re.findall(r'<img src="[^"]*" alt="([^"]+)"', block)
-        if not tm or len(teams) < 2:
+        imgs = re.findall(r'<img src="([^"]*)" alt="([^"]+)"', block)
+        if not tm or len(imgs) < 2:
             continue
         venue = re.search(r'text-lg font-bold">.*?</div>\s*<div>(.*?)</div>', block, flags=re.S)
         start = datetime(*day, int(tm.group(1)), int(tm.group(2)), tzinfo=TZ)
-        games.append(Game("lkl", start, teams[0], teams[1],
-                          _clean(venue.group(1)) if venue else ""))
+        logo = lambda src: src if src.startswith("http") else "https://lkl.lt" + src
+        games.append(Game("lkl", start, imgs[0][1], imgs[1][1],
+                          _clean(venue.group(1)) if venue else "",
+                          logo(imgs[0][0]), logo(imgs[1][0])))
     return games
 
 
@@ -142,10 +155,19 @@ def parse_top_schedule(page: str) -> list[Game]:
             continue                                     # already played
         cells = re.findall(r'<td class="tr">(.*?)</td>', row, flags=re.S)
         venue = _clean(cells[-2]) if len(cells) >= 2 else ""
+        logos = [full_size_logo(u) for u in
+                 re.findall(r'<img class="f[lr]" src="([^"]+/storage/team/[^"]+)"', row)]
         y, mo, d, hh, mm = map(int, dm.groups())
         games.append(Game("toplyga", datetime(y, mo, d, hh, mm, tzinfo=TZ),
-                          slugs[0], slugs[1], venue))
+                          slugs[0], slugs[1], venue,
+                          logos[0] if len(logos) > 0 else "", logos[1] if len(logos) > 1 else ""))
     return games
+
+
+def full_size_logo(url: str) -> str:
+    """toplyga.lt/storage/team/a/b/conversions/x-small.png -> .../a/b/x.png (1000+ px)."""
+    m = re.match(r"(.*/storage/team/[^/]+/[^/]+/)conversions/(.+?)-(?:small|medium)\.png$", url)
+    return f"{m.group(1)}{m.group(2)}.png" if m else url
 
 
 def parse_top_table(page: str) -> dict[str, tuple[int, int, int]]:
@@ -193,9 +215,9 @@ def _close(g: Game) -> str:
     return g.start.astimezone(timezone.utc).isoformat()
 
 
-def lkl_spec(g: Game, table) -> dict:
+def lkl_spec(g: Game, table, probs: list[int] | None = None) -> dict:
     home, away = LKL_NAMES.get(g.home, f"„{g.home}“"), LKL_NAMES.get(g.away, f"„{g.away}“")
-    p = lkl_home_prob(g.home, g.away, table)
+    p = probs[0] if probs else lkl_home_prob(g.home, g.away, table)
     deadline = lt_date(g.start + timedelta(days=30))
     hw, hl = table.get(g.home, (0, 0))
     aw, al = table.get(g.away, (0, 0))
@@ -222,9 +244,9 @@ def lkl_spec(g: Game, table) -> dict:
     }
 
 
-def top_spec(g: Game, table) -> dict:
+def top_spec(g: Game, table, probs: list[int] | None = None) -> dict:
     home, away = TOP_NAMES.get(g.home, f"„{g.home}“"), TOP_NAMES.get(g.away, f"„{g.away}“")
-    ph, pd, pa = top_probs(g.home, g.away, table)
+    ph, pd, pa = probs if probs else top_probs(g.home, g.away, table)
     deadline = lt_date(g.start + timedelta(days=30))
     hp, ap = table.get(g.home), table.get(g.away)
     ctx = (f"TOPLYGOS lentelėje {home} yra {hp[0]}-oje vietoje su {hp[2]} taškais, "
@@ -261,55 +283,103 @@ def _get(url: str) -> str:
 
 
 def plan(now: datetime | None = None, horizon_days: int | None = None,
-         fetch=_get, existing_titles: set[str] | None = None) -> tuple[list[dict], list[str]]:
-    """Specs for games starting within the horizon that have no market yet."""
+         fetch=_get, existing_titles: set[str] | None = None,
+         odds_fetch=None) -> tuple[list[dict], list[str], list[str]]:
+    """Specs for games within the horizon that have no market yet AND published
+    bookmaker odds. Returns (specs, waiting, errors): `waiting` lists games
+    skipped because odds are not out yet — they are retried on the next run."""
+    from . import betodds
+
+    odds_fetch = odds_fetch or betodds._get
     now = now or datetime.now(timezone.utc)
     horizon = now + timedelta(days=horizon_days or config.GAMES_HORIZON_DAYS)
     min_lead = now + timedelta(hours=config.GAMES_MIN_LEAD_HOURS)
-    errors, specs = [], []
+    errors, waiting, candidates = [], [], []
+
+    if existing_titles is None:
+        rows, err = app_api.markets(600)
+        if err:
+            return [], [], [f"app: {err}"]          # cannot dedupe -> create nothing
+        existing_titles = {r.get("title") for r in rows if r.get("status") != "resolved"}
+
     sources = []
     if "lkl" in config.GAMES_LEAGUES:
-        sources.append(("LKL", LKL_SCHEDULE, LKL_TABLE, parse_lkl_schedule, parse_lkl_table, lkl_spec))
+        sources.append(("lkl", "LKL", LKL_SCHEDULE, LKL_TABLE, parse_lkl_schedule, parse_lkl_table, lkl_spec))
     if "toplyga" in config.GAMES_LEAGUES:
-        sources.append(("TOPLYGA", TOP_SCHEDULE, TOP_TABLE, parse_top_schedule, parse_top_table, top_spec))
-    for name, sched_url, table_url, parse_s, parse_t, make in sources:
+        sources.append(("toplyga", "TOPLYGA", TOP_SCHEDULE, TOP_TABLE, parse_top_schedule, parse_top_table, top_spec))
+    for league, name, sched_url, table_url, parse_s, parse_t, make in sources:
         try:
             games = parse_s(fetch(sched_url))
             table = parse_t(fetch(table_url))
         except Exception as e:          # one league down must not stop the other
             errors.append(f"{name}: {type(e).__name__}: {e}")
             continue
-        for g in games:
-            if min_lead <= g.start <= horizon:
-                specs.append(make(g, table))
-    if existing_titles is None:
-        rows, err = app_api.markets(600)
-        if err:
-            errors.append(f"app: {err}")
-            return [], errors           # cannot dedupe -> create nothing
-        existing_titles = {r.get("title") for r in rows if r.get("status") != "resolved"}
+        todo = [g for g in games if min_lead <= g.start <= horizon
+                and make(g, table)["title"] not in existing_titles]
+        if not todo:
+            continue
+        try:
+            fixtures = betodds.fixtures_for(league, odds_fetch)
+        except Exception as e:
+            errors.append(f"{name} koeficientai: {type(e).__name__}: {e}")
+            continue
+        for g in todo:
+            title = make(g, table)["title"]
+            fx = betodds.find(fixtures, g.home, g.away, g.start)
+            mo = None
+            if fx:
+                try:
+                    mo = betodds.match_odds(league, fx, odds_fetch)
+                except Exception as e:
+                    errors.append(f"{title}: koeficientai {type(e).__name__}: {e}")
+                    continue
+            if mo is None:
+                waiting.append(title)
+                continue
+            spec = make(g, table, betodds.to_percent(mo.probs))
+            spec["_odds_bookmakers"] = mo.bookmakers
+            spec["_logos"] = [g.home_logo, g.away_logo] if g.home_logo and g.away_logo else mo.logos
+            spec["_image_name"] = re.sub(r"[^a-z0-9]+", "-", betodds.fold(
+                f"{league} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-")
+            spec["_caption"] = f"{'LKL' if league == 'lkl' else 'TOPLYGA'} · {MONTHS[g.start.month - 1]} {g.start.day} d. {g.start:%H:%M}"
+            candidates.append(spec)
+
     seen, fresh = set(), []
-    for s in specs:
-        if s["title"] not in existing_titles and s["title"] not in seen:
+    for s in candidates:
+        if s["title"] not in seen:
             seen.add(s["title"])
             fresh.append(s)
-    return fresh, errors
+    return fresh, waiting, errors
+
+
+def _public_spec(spec: dict) -> dict:
+    return {k: v for k, v in spec.items() if not k.startswith("_")}
 
 
 def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
-    specs, errors = plan()
+    from . import matchimage
+
+    specs, waiting, errors = plan()
     reports = []
     for s in specs:
+        odds_note = f"koef. iš {s['_odds_bookmakers']} bendrovių"
         if dry_run:
-            reports.append({"title": s["title"], "status": "would-create", "options": s["options"]})
+            reports.append({"title": s["title"], "status": "would-create", "options": s["options"],
+                            "detail": odds_note})
             continue
-        ok, detail = app_api.create_market(s)
-        reports.append({"title": s["title"], "status": "created" if ok else "error", "detail": detail})
-    if alert and not dry_run and (reports or errors):
+        img = matchimage.game_image(s["_logos"], s["_image_name"], s["_caption"])
+        if img:
+            s["image_url"] = img
+        ok, detail = app_api.create_market(_public_spec(s))
+        reports.append({"title": s["title"], "status": "created" if ok else "error",
+                        "detail": detail if not ok else odds_note + ("" if img else ", be VS paveikslėlio")})
+    for t in waiting:
+        reports.append({"title": t, "status": "waiting", "detail": "laukiama koeficientų"})
+    if alert and not dry_run and (any(r["status"] != "waiting" for r in reports) or errors):
         made = [r for r in reports if r["status"] == "created"]
         bad = [r for r in reports if r["status"] == "error"]
-        lines = [f"🏀⚽ Rungtynių rinkos: sukurta {len(made)}"]
-        lines += [f"✅ {r['title']}" for r in made]
+        lines = [f"🏀⚽ Rungtynių rinkos: sukurta {len(made)}, laukia koeficientų {len(waiting)}"]
+        lines += [f"✅ {r['title']} ({r['detail']})" for r in made]
         lines += [f"❌ {r['title']}: {r['detail']}" for r in bad]
         lines += [f"⚠️ {e}" for e in errors]
         notify.send("\n".join(lines))

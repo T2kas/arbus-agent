@@ -114,25 +114,116 @@ def test_specs_match_the_hand_made_templates():
     assert [o["label"] for o in ft["options"]][1] == "Lygiosios"
 
 
-def test_plan_creates_only_games_inside_the_week_and_not_existing():
+BE_LKL_FIXTURES = """
+<table><tr><td class="h-text-left"><a href="/basketball/lithuania/lkl/bc-rytas-neptunas/xfh9p4BG/" class="in-match"><span>BC Rytas</span> - <span>Neptunas</span></a></td>
+<td class="table-main__datetime">10.10. 14:50</td></tr>
+<tr><td><a href="/basketball/lithuania/lkl/nevezis-zalgiris-kaunas/AbCdEfGh/" class="in-match"><span>Nevezis</span> - <span>Zalgiris Kaunas</span></a></td>
+<td class="table-main__datetime">11.10. 15:00</td></tr></table>
+"""
+BE_TOP_FIXTURES = """
+<table><tr><td><a href="/football/lithuania/toplyga/zalgiris-suduva/ppFZhH74/" class="in-match"><span>Zalgiris</span> - <span>Suduva</span></a></td>
+<td class="table-main__datetime">10.10. 12:15</td></tr></table>
+"""
+ODDS_HA = {"odds": "<table><tr><td>a</td><td data-odd=\"1.40\"></td><td data-odd=\"3.00\"></td></tr>"
+                   "<tr><td>b</td><td data-odd=\"1.38\"></td><td data-odd=\"3.10\"></td></tr>"
+                   "<tr><td>c</td><td data-odd=\"1.44\"></td><td data-odd=\"2.90\"></td></tr></table>"}
+ODDS_1X2 = {"odds": "".join(f"<tr><td data-odd=\"{h}\"></td><td data-odd=\"{d}\"></td><td data-odd=\"{a}\"></td></tr>"
+                            for h, d, a in [(2.6, 3.2, 2.7), (2.5, 3.3, 2.8), (2.55, 3.25, 2.75)])}
+NO_ODDS = {"odds": "<div class=\"nodata\">Unfortunately there wasn't any bookmaker offering odds</div>"}
+
+
+def _fetchers(odds_by_id):
+    import json
+
     pages = {games.LKL_SCHEDULE: LKL_SCHEDULE, games.LKL_TABLE: LKL_TABLE,
              games.TOP_SCHEDULE: TOP_SCHEDULE, games.TOP_TABLE: TOP_TABLE}
+
+    def odds_fetch(url, **headers):
+        if url.endswith("/lkl/fixtures/"):
+            return BE_LKL_FIXTURES
+        if url.endswith("/toplyga/fixtures/"):
+            return BE_TOP_FIXTURES
+        for mid, body in odds_by_id.items():
+            if f"/match-odds-old/{mid}/" in url:
+                return json.dumps(body)
+        return "<html></html>"                       # match page: no logos
+    return pages.__getitem__, odds_fetch
+
+
+def test_plan_creates_only_games_with_published_odds():
+    fetch, odds_fetch = _fetchers({"xfh9p4BG": ODDS_HA, "ppFZhH74": ODDS_1X2})
     now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
     existing = {"Kėdainių „Nevėžis-Paskolų klubas“ vs Kauno „Žalgiris“"}
-    specs, errors = games.plan(now, 7, fetch=pages.__getitem__, existing_titles=existing)
-    assert errors == []
-    assert [s["title"] for s in specs] == ["Vilniaus „Rytas“ vs Klaipėdos „Neptūnas“",
-                                           "FK „Žalgiris“ vs Marijampolės „Sūduva“"]
-    # a week later nothing in the horizon
-    later = datetime(2026, 10, 20, tzinfo=timezone.utc)
-    assert games.plan(later, 7, fetch=pages.__getitem__, existing_titles=set())[0] == []
+    specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles=existing,
+                                        odds_fetch=odds_fetch)
+    assert errors == [] and waiting == []
+    titles = [s["title"] for s in specs]
+    assert titles == ["Vilniaus „Rytas“ vs Klaipėdos „Neptūnas“",
+                      "FK „Žalgiris“ vs Marijampolės „Sūduva“"]
+    rytas = specs[0]["options"]
+    assert 66 <= rytas[0]["probability"] <= 70 and sum(o["probability"] for o in rytas) == 100
+    foot = [o["probability"] for o in specs[1]["options"]]
+    assert sum(foot) == 100 and 25 <= foot[1] <= 33          # draw from the bookmakers
+    assert specs[0]["_logos"][0].endswith(".svg")            # official LKL logo
+
+
+def test_no_odds_means_wait_not_create():
+    fetch, odds_fetch = _fetchers({"xfh9p4BG": NO_ODDS, "ppFZhH74": NO_ODDS, "AbCdEfGh": NO_ODDS})
+    now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
+    specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles=set(),
+                                        odds_fetch=odds_fetch)
+    assert specs == [] and len(waiting) == 3
 
 
 def test_a_league_outage_does_not_stop_the_other():
+    _, odds_fetch = _fetchers({"ppFZhH74": ODDS_1X2})
+
     def fetch(url):
         if "lkl" in url:
             raise OSError("down")
         return {games.TOP_SCHEDULE: TOP_SCHEDULE, games.TOP_TABLE: TOP_TABLE}[url]
     now = datetime(2026, 10, 6, tzinfo=timezone.utc)
-    specs, errors = games.plan(now, 7, fetch=fetch, existing_titles=set())
+    specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles=set(),
+                                        odds_fetch=odds_fetch)
     assert len(specs) == 1 and errors and errors[0].startswith("LKL")
+
+
+def test_betexplorer_names_map_to_our_teams():
+    from arbus import betodds
+
+    assert betodds.team_key("lkl", "Zalgiris Kaunas") == "Žalgiris"
+    assert betodds.team_key("lkl", "Neptunas Klaipeda") == "Neptūnas"
+    assert betodds.team_key("lkl", "Jonava") == "Hipocredit"
+    assert betodds.team_key("toplyga", "FK Kauno Zalgiris") == "k-zalgiris"
+    assert betodds.team_key("toplyga", "Zalgiris") == "zalgiris"
+    assert betodds.team_key("toplyga", "FA Siauliai") == "fa-siauliai"
+    assert betodds.team_key("toplyga", "Dziugas Telsiai") == "dziugas"
+
+
+def test_consensus_removes_margin_and_needs_three_books():
+    from arbus import betodds
+
+    probs, n = betodds.parse_odds(ODDS_HA["odds"], 2)
+    assert n == 3 and abs(sum(probs) - 1) < 1e-9 and 0.67 < probs[0] < 0.69
+    assert betodds.parse_odds(NO_ODDS["odds"], 2) == ([], 0)
+    assert betodds.to_percent([0.995, 0.005]) == [97, 3]       # floor keeps the long shot tradable
+
+
+def test_toplyga_logo_upgraded_to_full_size():
+    assert games.full_size_logo("https://toplyga.lt/storage/team/19/18974/conversions/logo-1202-small.png") \
+        == "https://toplyga.lt/storage/team/19/18974/logo-1202.png"
+
+
+def test_vs_image_renders():
+    pytest = __import__("pytest")
+    pytest.importorskip("PIL")
+    import io
+
+    from PIL import Image
+
+    from arbus import matchimage
+
+    buf = io.BytesIO()
+    Image.new("RGBA", (40, 40), (200, 0, 0, 255)).save(buf, "PNG")
+    png = matchimage.compose(buf.getvalue(), buf.getvalue(), "LKL")
+    assert Image.open(io.BytesIO(png)).size == (1200, 675)

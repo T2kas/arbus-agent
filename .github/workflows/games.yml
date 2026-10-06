@@ -1,15 +1,18 @@
 name: games-bot
 
-# Creates LKL (basketball) and TOPLYGA (football) game markets about a week
-# ahead: every morning it reads lkl.lt / toplyga.lt and creates a market for each
-# game starting within GAMES_HORIZON_DAYS (default 7) that has no market yet.
-# Prices come from the official standings; no LLM, so it costs nothing to run.
+# Creates LKL (basketball) and TOPLYGA (football) game markets: twice a day it
+# reads lkl.lt / toplyga.lt and, for each game starting within
+# GAMES_HORIZON_DAYS (default 7) that has no market yet, looks up the
+# bookmakers' odds on BetExplorer. Only games WITH published odds are created
+# (opening prices = bookmaker consensus, margin removed); the rest wait for the
+# next run. Each market gets a "home logo VS away logo" picture uploaded to
+# Supabase Storage. No LLM, so it costs nothing to run.
 # On by default (team request 2026-10-06); set Variable GAMES_ENABLED=false to
 # stop the schedule. Telegram lists what was created.
 
 on:
   schedule:
-    - cron: "0 6 * * *"            # 08:00/09:00 Vilnius
+    - cron: "0 6,15 * * *"         # 09:00 and 18:00 Vilnius (summer time)
   workflow_dispatch:
     inputs:
       dry_run:

@@ -346,8 +346,8 @@ def cmd_games(args: argparse.Namespace) -> int:
 
     reports = games.run(dry_run=args.dry_run, alert=not args.no_telegram)
     for r in reports:
-        extra = r.get("detail") or " / ".join(f"{o['label']} {o['probability']}%"
-                                              for o in r.get("options", []))
+        extra = " / ".join(f"{o['label']} {o['probability']}%" for o in r.get("options", []))
+        extra = f"{extra}  ({r['detail']})" if extra and r.get("detail") else extra or r.get("detail", "")
         print(f"{r['status']:13} {r['title']}  {extra}")
     if not reports:
         print("nėra naujų rungtynių per artimiausią savaitę")
