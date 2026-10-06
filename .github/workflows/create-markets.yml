@@ -1,12 +1,18 @@
 name: create-markets
 
 # Creates a reviewed batch of markets from a JSON file in the repo (e.g. the
-# monthly markets in markets/2026-10.json). Manual only: Actions -> create-markets
-# -> Run workflow. Every spec is validated first (nothing is created if any is
-# invalid) and titles that already exist in the app are skipped, so running it
-# twice cannot create duplicates. A Telegram message lists what was created.
+# monthly markets in markets/2026-10.json). Runs automatically for every
+# markets/*.json file added or changed by a push to main, or by hand: Actions ->
+# create-markets -> Run workflow. Every spec is validated first (nothing is
+# created if any is invalid) and titles that already exist in the app are
+# skipped, so running it twice cannot create duplicates. A Telegram message
+# lists what was created. Drafts that must NOT be created live in
+# markets/ideas/ (not matched by the push trigger).
 
 on:
+  push:
+    branches: [main]
+    paths: ["markets/*.json"]
   workflow_dispatch:
     inputs:
       file:
@@ -30,6 +36,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -47,4 +55,14 @@ jobs:
         run: |
           FLAGS=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then FLAGS="--dry-run"; fi
-          python -m arbus create-batch "${{ github.event.inputs.file }}" $FLAGS
+          if [ "${{ github.event_name }}" = "push" ]; then
+            # every markets/*.json added or modified by this push (not deleted)
+            FILES=$(git diff --name-only --diff-filter=AM "${{ github.event.before }}" "${{ github.sha }}" -- 'markets/*.json')
+          else
+            FILES="${{ github.event.inputs.file }}"
+          fi
+          if [ -z "$FILES" ]; then echo "no batch files to create"; exit 0; fi
+          for f in $FILES; do
+            echo "== $f"
+            python -m arbus create-batch "$f" $FLAGS
+          done
