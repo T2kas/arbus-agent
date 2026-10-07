@@ -3988,7 +3988,14 @@
   "resolved_price": 1.974,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260924/"
  },
- "5dda36c5-4aa5-4ee0-af7f-353812d0b5f2": {},
+ "5dda36c5-4aa5-4ee0-af7f-353812d0b5f2": {
+  "resolved": true,
+  "resolved_at": "2026-10-07T08:31:07.196382+00:00",
+  "resolved_label": "2,233 €/l arba mažiau",
+  "resolved_option_id": "cb62a608-2179-4b5c-a812-0fed60fd8cfd",
+  "resolved_price": 2.22,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261007/"
+ },
  "5ede0c49-6a11-4471-ace1-48543975e05c": {
   "checksum": "4ab01e6d61ae56678be83712be88d5be56dda194fdf06388d462752d2be32cb3",
   "current_maximum": 17.3,
@@ -5920,7 +5927,14 @@
   "station": "kauno-ams"
  },
  "9a0b166d-0ef9-478c-9eef-3ce5b1dfeeff": {},
- "9ff3105f-0119-4adc-9c74-a3fff16f8177": {},
+ "9ff3105f-0119-4adc-9c74-a3fff16f8177": {
+  "resolved": true,
+  "resolved_at": "2026-10-07T08:31:07.196382+00:00",
+  "resolved_label": "1,933 €/l arba mažiau",
+  "resolved_option_id": "5fc8fae9-b41b-46ca-81c2-f3e28bf7bd0c",
+  "resolved_price": 1.925,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261007/"
+ },
  "a0b2dd38-05be-44d8-b5d2-631098b85c18": {
   "checksum": "78fcc2846cda12c0c35a3955ef87c96c6dc540977cfe9858f5ac6774d8bcf77b",
   "current_maximum": 16.8,
