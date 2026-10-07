@@ -7619,7 +7619,23 @@
   "station": "kauno-ams"
  },
  "bdba3af2-82de-4465-b379-54c834bc233e": {},
+ "bef2b059-3048-4041-8a47-7d4cf42305af": {
+  "checksum": "f5993a6c13d31cc7f3f934021a3ce7f257b75118cbbb498a06210597a4195a79",
+  "current_maximum": null,
+  "date": "2026-10-09",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "bf69449c-15ab-4b82-8a3b-1ed262bac8f8": {},
+ "c0bb8833-7694-453d-b569-cda5363a76f6": {
+  "checksum": "0c16ced99e11363682567154277a31fb2b56fb807306bebc462b65ae26aca8cb",
+  "current_maximum": null,
+  "date": "2026-10-09",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "c0cbbcca-c7f8-4c1f-a81c-4dade514b985": {
   "checksum": "f5993a6c13d31cc7f3f934021a3ce7f257b75118cbbb498a06210597a4195a79",
   "current_maximum": 16.9,
@@ -9204,6 +9220,14 @@
   "resolved_option_id": "d4c1b6aa-f073-4d9e-bcc6-c5eac0fa3d0c",
   "resolved_price": 1.952,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
+ },
+ "daae5682-0737-4442-96ad-a7ad92672760": {
+  "checksum": "00339b9cb7e20153f91886339e6cd90eed412c27db1ca5c27caec7a04e6f3850",
+  "current_maximum": null,
+  "date": "2026-10-09",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "dbaf9489-c5a2-4a7b-bfa8-031abc90a44c": {
   "fuel_alerted": true
