@@ -7636,7 +7636,7 @@
  },
  "bdba3af2-82de-4465-b379-54c834bc233e": {},
  "bef2b059-3048-4041-8a47-7d4cf42305af": {
-  "checksum": "2866f3e11401e594542f2926ea5dde574781aa96191c86f85acef32864654ced",
+  "checksum": "096b8bf9baaf3a03bf4dc1d949da1e7737b1cd8b8af003a759daab3392d3a4ba",
   "current_maximum": null,
   "date": "2026-10-09",
   "measurements": {},
@@ -7645,7 +7645,7 @@
  },
  "bf69449c-15ab-4b82-8a3b-1ed262bac8f8": {},
  "c0bb8833-7694-453d-b569-cda5363a76f6": {
-  "checksum": "db7bd74e2624ea104205b4943acf748782af49236f1a00e9ce6861b5d83f79ff",
+  "checksum": "e657f0ae71dc300ddc014fe5d02074f78b4f0b3860cdaf1678510fc4745561ff",
   "current_maximum": null,
   "date": "2026-10-09",
   "measurements": {},
@@ -8786,10 +8786,10 @@
   "station": "vilniaus-ams"
  },
  "cfcd004a-cab4-4d8e-8578-6d0883c5291d": {
-  "checksum": "2866f3e11401e594542f2926ea5dde574781aa96191c86f85acef32864654ced",
-  "current_maximum": 9.0,
+  "checksum": "096b8bf9baaf3a03bf4dc1d949da1e7737b1cd8b8af003a759daab3392d3a4ba",
+  "current_maximum": 10.0,
   "date": "2026-10-08",
-  "max_received_at": "2026-10-08T01:10:48.220465+00:00",
+  "max_received_at": "2026-10-08T06:11:24.105999+00:00",
   "measurements": {
    "2026-10-07 21:00:00": {
     "checksum": "d47e5046f5a50feeded8ea03a14bb5b9dc159a06a127247cbc988ec9dfdfd96d",
@@ -8844,6 +8844,12 @@
     "received_at": "2026-10-08T05:10:45.995251+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 8.8
+   },
+   "2026-10-08 06:00:00": {
+    "checksum": "096b8bf9baaf3a03bf4dc1d949da1e7737b1cd8b8af003a759daab3392d3a4ba",
+    "received_at": "2026-10-08T06:11:24.105999+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 10.0
    }
   },
   "resolved": false,
@@ -9311,7 +9317,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
  },
  "daae5682-0737-4442-96ad-a7ad92672760": {
-  "checksum": "f482e4be5bd40ffe91dff7c5453e0b9475a97b7fd8f7b85df2e9123d017104e8",
+  "checksum": "b8e6da0e57f2223cb46a1244babcf4f4b8320a33e6101bb5f04c585f1b5d2d47",
   "current_maximum": null,
   "date": "2026-10-09",
   "measurements": {},
@@ -10885,7 +10891,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "ee42c6c0-f03d-416d-b1f5-cd4e437a137b": {
-  "checksum": "f482e4be5bd40ffe91dff7c5453e0b9475a97b7fd8f7b85df2e9123d017104e8",
+  "checksum": "b8e6da0e57f2223cb46a1244babcf4f4b8320a33e6101bb5f04c585f1b5d2d47",
   "current_maximum": 10.8,
   "date": "2026-10-08",
   "max_received_at": "2026-10-07T21:10:49.867133+00:00",
@@ -10943,6 +10949,12 @@
     "received_at": "2026-10-08T05:10:45.995251+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 10.1
+   },
+   "2026-10-08 06:00:00": {
+    "checksum": "b8e6da0e57f2223cb46a1244babcf4f4b8320a33e6101bb5f04c585f1b5d2d47",
+    "received_at": "2026-10-08T06:11:24.105999+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 10.6
    }
   },
   "resolved": false,
@@ -11514,10 +11526,10 @@
   "station": "vilniaus-ams"
  },
  "fee761b0-e846-4329-af22-7bef1c1c701f": {
-  "checksum": "db7bd74e2624ea104205b4943acf748782af49236f1a00e9ce6861b5d83f79ff",
-  "current_maximum": 9.5,
+  "checksum": "e657f0ae71dc300ddc014fe5d02074f78b4f0b3860cdaf1678510fc4745561ff",
+  "current_maximum": 10.3,
   "date": "2026-10-08",
-  "max_received_at": "2026-10-08T04:10:53.698147+00:00",
+  "max_received_at": "2026-10-08T06:11:24.105999+00:00",
   "measurements": {
    "2026-10-07 21:00:00": {
     "checksum": "ccfd3a5137decb545a6b8dd9684faf5473b19b7327ca64f85029c07051f26d7d",
@@ -11572,6 +11584,12 @@
     "received_at": "2026-10-08T05:10:45.995251+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 9.5
+   },
+   "2026-10-08 06:00:00": {
+    "checksum": "e657f0ae71dc300ddc014fe5d02074f78b4f0b3860cdaf1678510fc4745561ff",
+    "received_at": "2026-10-08T06:11:24.105999+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 10.3
    }
   },
   "resolved": false,
