@@ -156,6 +156,7 @@
   "resolved_price": 2.251,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
  },
+ "0a1902a1-3778-4858-9249-db8c726aac6f": {},
  "0b0b1bf2-13b2-44e8-ae8b-faccfcda950b": {
   "checksum": "946218d33b2cae3970500633874a55d821c57092a5c51eec59bf0d22ad189eeb",
   "current_maximum": 14.1,
@@ -5650,6 +5651,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "94c5b270-8d4e-42d1-a1f1-dc05c4165469": {},
+ "95049270-733d-4557-957f-525265beeacc": {},
  "956c8c08-465d-47b2-9447-b7eb2adfc48a": {
   "checksum": "f3936d002e3b96744570502199cbdeb892aa811132c4cb8ca3c529677312eb55",
   "current_maximum": 13.6,
@@ -7636,20 +7638,44 @@
  },
  "bdba3af2-82de-4465-b379-54c834bc233e": {},
  "bef2b059-3048-4041-8a47-7d4cf42305af": {
-  "checksum": "13ba20e9e4785a31cfc32bb8f1d61f469a7d1519db3339248172f2c43b8637f2",
-  "current_maximum": null,
+  "checksum": "7827f0fdc262f33c31062af50c0cf4cd7fb3d17019eb936dca695cf6a3106b04",
+  "current_maximum": 14.7,
   "date": "2026-10-09",
-  "measurements": {},
+  "eliminated": [
+   "174b3974-a0b1-4f3d-971b-4303ccd824c2"
+  ],
+  "max_received_at": "2026-10-08T21:10:46.227287+00:00",
+  "measurements": {
+   "2026-10-08 21:00:00": {
+    "checksum": "7827f0fdc262f33c31062af50c0cf4cd7fb3d17019eb936dca695cf6a3106b04",
+    "received_at": "2026-10-08T21:10:46.227287+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 14.7
+   }
+  },
   "resolved": false,
+  "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
  "bf69449c-15ab-4b82-8a3b-1ed262bac8f8": {},
  "c0bb8833-7694-453d-b569-cda5363a76f6": {
-  "checksum": "58b522964c44b69d5e47c190c673df67cf24e53194beca4dfc73227e2a68df7d",
-  "current_maximum": null,
+  "checksum": "af7d71d91a187b891e633fdfee55c58383917d1fb2c5d095861f7cfb218e7bfa",
+  "current_maximum": 14.2,
   "date": "2026-10-09",
-  "measurements": {},
+  "eliminated": [
+   "ab2a9b97-eef9-434c-8880-e8877ee09713"
+  ],
+  "max_received_at": "2026-10-08T21:10:46.227287+00:00",
+  "measurements": {
+   "2026-10-08 21:00:00": {
+    "checksum": "af7d71d91a187b891e633fdfee55c58383917d1fb2c5d095861f7cfb218e7bfa",
+    "received_at": "2026-10-08T21:10:46.227287+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 14.2
+   }
+  },
   "resolved": false,
+  "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
  "c0cbbcca-c7f8-4c1f-a81c-4dade514b985": {
@@ -8346,7 +8372,7 @@
   "station": "klaipedos-ams"
  },
  "c5e99fe2-3a58-4041-b319-8829cf7b3aa2": {
-  "checksum": "13ba20e9e4785a31cfc32bb8f1d61f469a7d1519db3339248172f2c43b8637f2",
+  "checksum": "7827f0fdc262f33c31062af50c0cf4cd7fb3d17019eb936dca695cf6a3106b04",
   "current_maximum": null,
   "date": "2026-10-10",
   "measurements": {},
@@ -9398,11 +9424,24 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
  },
  "daae5682-0737-4442-96ad-a7ad92672760": {
-  "checksum": "896348f7924e91b3d35e2dc3f1a933ea20f3ac242cf7ba5d307ecf159510fc7e",
-  "current_maximum": null,
+  "checksum": "a9e533e176dc80232d8219a37f9e6d7ca00edc26368591801b913f158f762503",
+  "current_maximum": 16.0,
   "date": "2026-10-09",
-  "measurements": {},
+  "eliminated": [
+   "d64fc111-ace8-498e-97c2-6b317a21717a",
+   "dbe13d16-a44d-4e1c-9672-d05b44a4a1df"
+  ],
+  "max_received_at": "2026-10-08T21:10:46.227287+00:00",
+  "measurements": {
+   "2026-10-08 21:00:00": {
+    "checksum": "a9e533e176dc80232d8219a37f9e6d7ca00edc26368591801b913f158f762503",
+    "received_at": "2026-10-08T21:10:46.227287+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 16.0
+   }
+  },
   "resolved": false,
+  "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
  "dbaf9489-c5a2-4a7b-bfa8-031abc90a44c": {
@@ -11409,7 +11448,7 @@
   "station": "kauno-ams"
  },
  "f274ee30-8351-4655-892a-dce1a387cf6d": {
-  "checksum": "58b522964c44b69d5e47c190c673df67cf24e53194beca4dfc73227e2a68df7d",
+  "checksum": "af7d71d91a187b891e633fdfee55c58383917d1fb2c5d095861f7cfb218e7bfa",
   "current_maximum": null,
   "date": "2026-10-10",
   "measurements": {},
@@ -12110,7 +12149,7 @@
  },
  "ffc33a33-0eb5-4c0a-ba7b-d1c930372c10": {},
  "ffe440e4-b046-40af-b3b2-bd98435b7fb0": {
-  "checksum": "896348f7924e91b3d35e2dc3f1a933ea20f3ac242cf7ba5d307ecf159510fc7e",
+  "checksum": "a9e533e176dc80232d8219a37f9e6d7ca00edc26368591801b913f158f762503",
   "current_maximum": null,
   "date": "2026-10-10",
   "measurements": {},
