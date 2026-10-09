@@ -2721,7 +2721,7 @@
   "station": "klaipedos-ams"
  },
  "3ba4e8fa-aa8d-4e96-b15f-c5646e41c406": {
-  "checksum": "931c0f25b53958325bc629cc5da8dde2848d063bd4f9ec12cba9756a2cce2fd4",
+  "checksum": "1aa64c5a9d265cb012259be9d1d33266e6ca39c81427cae0967fe1b29ccc55eb",
   "current_maximum": null,
   "date": "2026-10-11",
   "measurements": {},
@@ -5664,7 +5664,7 @@
  },
  "8eb227df-cb87-4eee-bed8-a934c69aea13": {},
  "8fe4f113-a0e9-4466-98dd-c1dcdfdb15cc": {
-  "checksum": "a7a7612533d29c95a60ba5a5503c61a45d1288e6246da36a9b657ac5fc5d3848",
+  "checksum": "d942d6c7c73c05a6ad29ee0e20f9c4fbc63086707b630d4acd1e84de0f316d51",
   "current_maximum": null,
   "date": "2026-10-11",
   "measurements": {},
@@ -8645,7 +8645,7 @@
   "station": "klaipedos-ams"
  },
  "c5e99fe2-3a58-4041-b319-8829cf7b3aa2": {
-  "checksum": "0704b22bb110cad6eb3ae71b730f9ae7be2a377ec45223cc6d190c33c2fc8563",
+  "checksum": "26f9e929c6946372bc2ec804d610fbcc465b14e50496b09af7c37d85c17169c9",
   "current_maximum": null,
   "date": "2026-10-10",
   "measurements": {},
@@ -9697,7 +9697,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
  },
  "d855d68e-5061-488e-afd3-fd29bc009b5c": {
-  "checksum": "0704b22bb110cad6eb3ae71b730f9ae7be2a377ec45223cc6d190c33c2fc8563",
+  "checksum": "26f9e929c6946372bc2ec804d610fbcc465b14e50496b09af7c37d85c17169c9",
   "current_maximum": null,
   "date": "2026-10-11",
   "measurements": {},
@@ -11847,7 +11847,7 @@
   "station": "kauno-ams"
  },
  "f274ee30-8351-4655-892a-dce1a387cf6d": {
-  "checksum": "a7a7612533d29c95a60ba5a5503c61a45d1288e6246da36a9b657ac5fc5d3848",
+  "checksum": "d942d6c7c73c05a6ad29ee0e20f9c4fbc63086707b630d4acd1e84de0f316d51",
   "current_maximum": null,
   "date": "2026-10-10",
   "measurements": {},
@@ -12548,7 +12548,7 @@
  },
  "ffc33a33-0eb5-4c0a-ba7b-d1c930372c10": {},
  "ffe440e4-b046-40af-b3b2-bd98435b7fb0": {
-  "checksum": "931c0f25b53958325bc629cc5da8dde2848d063bd4f9ec12cba9756a2cce2fd4",
+  "checksum": "1aa64c5a9d265cb012259be9d1d33266e6ca39c81427cae0967fe1b29ccc55eb",
   "current_maximum": null,
   "date": "2026-10-10",
   "measurements": {},
