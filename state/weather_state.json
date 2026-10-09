@@ -4618,7 +4618,14 @@
   "resolved_price": 2.281,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260924/"
  },
- "7d740c69-845c-4455-86cd-bfc551d86096": {},
+ "7d740c69-845c-4455-86cd-bfc551d86096": {
+  "resolved": true,
+  "resolved_at": "2026-10-09T07:05:38.779669+00:00",
+  "resolved_label": "Different Dimension & QV – „Sakartvelas – Special Version“",
+  "resolved_option_id": "3edb156d-198e-4204-aea6-99f8b59e94ab",
+  "resolved_via": "music",
+  "resolved_winner": "Different Dimension,QV – Sakartvelas – Special Version"
+ },
  "80850939-436a-479f-aaf3-c228c45c79d3": {
   "resolved": true,
   "resolved_at": "2026-10-05T09:01:17.141327+00:00",
