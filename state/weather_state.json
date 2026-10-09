@@ -7713,7 +7713,7 @@
  },
  "bf69449c-15ab-4b82-8a3b-1ed262bac8f8": {},
  "c0bb8833-7694-453d-b569-cda5363a76f6": {
-  "checksum": "10776c7e0c3f62ce02d9a40246f6db2dd963ea52f93be2dfbc8847a95a83fb24",
+  "checksum": "ad6338f5f9688c80078fa63bd1d08d539525dfe4e0fd0f1f8ec3368b31ae71fa",
   "current_maximum": 14.3,
   "date": "2026-10-09",
   "eliminated": [
@@ -11610,7 +11610,7 @@
   "station": "kauno-ams"
  },
  "f274ee30-8351-4655-892a-dce1a387cf6d": {
-  "checksum": "10776c7e0c3f62ce02d9a40246f6db2dd963ea52f93be2dfbc8847a95a83fb24",
+  "checksum": "ad6338f5f9688c80078fa63bd1d08d539525dfe4e0fd0f1f8ec3368b31ae71fa",
   "current_maximum": null,
   "date": "2026-10-10",
   "measurements": {},
