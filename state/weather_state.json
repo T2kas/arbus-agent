@@ -156,7 +156,14 @@
   "resolved_price": 2.251,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
  },
- "0a1902a1-3778-4858-9249-db8c726aac6f": {},
+ "0a1902a1-3778-4858-9249-db8c726aac6f": {
+  "resolved": true,
+  "resolved_at": "2026-10-09T08:31:08.582009+00:00",
+  "resolved_label": "Nuo 2,195 iki 2,204 €/l",
+  "resolved_option_id": "e8dd1a8e-9cf6-4188-87f5-75ff0b439619",
+  "resolved_price": 2.2,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261009/"
+ },
  "0b0b1bf2-13b2-44e8-ae8b-faccfcda950b": {
   "checksum": "946218d33b2cae3970500633874a55d821c57092a5c51eec59bf0d22ad189eeb",
   "current_maximum": 14.1,
@@ -5658,7 +5665,14 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "94c5b270-8d4e-42d1-a1f1-dc05c4165469": {},
- "95049270-733d-4557-957f-525265beeacc": {},
+ "95049270-733d-4557-957f-525265beeacc": {
+  "resolved": true,
+  "resolved_at": "2026-10-09T08:31:08.582009+00:00",
+  "resolved_label": "Nuo 1,905 iki 1,914 €/l",
+  "resolved_option_id": "bd802ffb-a950-42f1-b4cc-6c436b7a1a62",
+  "resolved_price": 1.914,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261009/"
+ },
  "956c8c08-465d-47b2-9447-b7eb2adfc48a": {
   "checksum": "f3936d002e3b96744570502199cbdeb892aa811132c4cb8ca3c529677312eb55",
   "current_maximum": 13.6,
