@@ -1435,19 +1435,25 @@
   "station": "kauno-ams"
  },
  "1b7493e6-c0d0-4b2f-9661-883d3b0739bd": {
-  "checksum": "e2da15e959cc2aaa061f5ee75487094eda4f419500793c6440a119de6f9fa7bd",
-  "current_maximum": 11.8,
+  "checksum": "c84b009cf292aac624d232a5330fb85beef81ae31cdb45d906fb23d88474c081",
+  "current_maximum": 12.2,
   "date": "2026-10-12",
   "eliminated": [
    "6a4da48b-b3cd-4a4f-a92f-15b67c1978e5"
   ],
-  "max_received_at": "2026-10-11T21:10:47.015865+00:00",
+  "max_received_at": "2026-10-11T22:10:46.830112+00:00",
   "measurements": {
    "2026-10-11 21:00:00": {
     "checksum": "e2da15e959cc2aaa061f5ee75487094eda4f419500793c6440a119de6f9fa7bd",
     "received_at": "2026-10-11T21:10:47.015865+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 11.8
+   },
+   "2026-10-11 22:00:00": {
+    "checksum": "c84b009cf292aac624d232a5330fb85beef81ae31cdb45d906fb23d88474c081",
+    "received_at": "2026-10-11T22:10:46.830112+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 12.2
    }
   },
   "resolved": false,
@@ -3840,7 +3846,7 @@
   "station": "kauno-ams"
  },
  "48ccbe86-d277-4536-8ac4-5c46366b89f0": {
-  "checksum": "bc3251f2f0109827f791efdf3503e025c680506226f6efc59a32337ffce8a137",
+  "checksum": "b1b8f4bd7cfb0fe35330a3e570229c216433d0ec5a293425e5900d950ff02612",
   "current_maximum": null,
   "date": "2026-10-13",
   "measurements": {},
@@ -4800,7 +4806,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260924/"
  },
  "79d598d4-774b-4ef2-b5c2-1e67fb3e1dea": {
-  "checksum": "bc3251f2f0109827f791efdf3503e025c680506226f6efc59a32337ffce8a137",
+  "checksum": "b1b8f4bd7cfb0fe35330a3e570229c216433d0ec5a293425e5900d950ff02612",
   "current_maximum": 8.9,
   "date": "2026-10-12",
   "max_received_at": "2026-10-11T21:10:47.015865+00:00",
@@ -4810,6 +4816,12 @@
     "received_at": "2026-10-11T21:10:47.015865+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 8.9
+   },
+   "2026-10-11 22:00:00": {
+    "checksum": "b1b8f4bd7cfb0fe35330a3e570229c216433d0ec5a293425e5900d950ff02612",
+    "received_at": "2026-10-11T22:10:46.830112+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 7.7
    }
   },
   "resolved": false,
@@ -5103,7 +5115,7 @@
   "station": "vilniaus-ams"
  },
  "85e48ceb-9886-43c0-bcd3-80d806673cac": {
-  "checksum": "2628b783db869d06323b6b97ba9ac0d7c95381a182ea8b82cab8daaf25ba6ad3",
+  "checksum": "0bf0f6bd91803169df1ef7f88f976bfe1b0fdcf966c2f4b1e758e0561838417f",
   "current_maximum": 9.0,
   "date": "2026-10-12",
   "eliminated": [
@@ -5116,6 +5128,12 @@
     "received_at": "2026-10-11T21:10:47.015865+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 9.0
+   },
+   "2026-10-11 22:00:00": {
+    "checksum": "0bf0f6bd91803169df1ef7f88f976bfe1b0fdcf966c2f4b1e758e0561838417f",
+    "received_at": "2026-10-11T22:10:46.830112+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 8.6
    }
   },
   "resolved": false,
@@ -6454,7 +6472,7 @@
   "station": "klaipedos-ams"
  },
  "a10351bf-410a-4843-af93-868c74ffff2f": {
-  "checksum": "2628b783db869d06323b6b97ba9ac0d7c95381a182ea8b82cab8daaf25ba6ad3",
+  "checksum": "0bf0f6bd91803169df1ef7f88f976bfe1b0fdcf966c2f4b1e758e0561838417f",
   "current_maximum": null,
   "date": "2026-10-13",
   "measurements": {},
@@ -7586,7 +7604,7 @@
   "station": "vilniaus-ams"
  },
  "baa1bc1c-4c11-482c-a202-27b42de5edf5": {
-  "checksum": "e2da15e959cc2aaa061f5ee75487094eda4f419500793c6440a119de6f9fa7bd",
+  "checksum": "c84b009cf292aac624d232a5330fb85beef81ae31cdb45d906fb23d88474c081",
   "current_maximum": null,
   "date": "2026-10-13",
   "measurements": {},
@@ -13366,6 +13384,7 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "ff85a984-2939-4133-a07f-920cf6758883": {},
  "ffc33a33-0eb5-4c0a-ba7b-d1c930372c10": {},
  "ffe440e4-b046-40af-b3b2-bd98435b7fb0": {
   "checksum": "e9585f8a935d45de30d6b521964fc94d1fa086864d3a4f2b2fe8b231f56e5e85",
