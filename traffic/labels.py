@@ -107,6 +107,12 @@ def export_coco(conn, out_dir: str | Path, cam_id: str | None = None, val_frac: 
     splits = {"train2017": [], "val2017": []}
     for r in rows:
         splits["val2017" if r["clip_id"] in val_clips else "train2017"].append(r)
+    if not splits["val2017"]:
+        # a single labeled clip: YOLOX needs a non-empty val set, so hold out
+        # every 5th frame (leaky, but only until more clips are labeled)
+        train = splits["train2017"]
+        splits = {"train2017": [r for i, r in enumerate(train) if i % 5 != 4],
+                  "val2017": [r for i, r in enumerate(train) if i % 5 == 4]}
 
     (out / "annotations").mkdir(parents=True, exist_ok=True)
     summary = {}
@@ -138,15 +144,20 @@ def export_coco(conn, out_dir: str | Path, cam_id: str | None = None, val_frac: 
                "categories": [{"id": i, "name": n} for i, n in COCO_CATEGORIES]}
         (out / "annotations" / f"instances_{split}.json").write_text(json.dumps(doc))
         summary[split] = {"images": len(images), "boxes": len(anns)}
-    (out / "arbus_yolox_exp.py").write_text(EXP_TEMPLATE.format(data_dir=out.resolve().as_posix()),
+    (out / "arbus_yolox_exp.py").write_text(EXP_TEMPLATE,
                                             encoding="utf-8")
+    # one file to upload to Colab: the folder zipped next to itself
+    import shutil as _sh
+
+    summary["zip"] = _sh.make_archive(str(out), "zip", root_dir=out)
     return summary
 
 
 EXP_TEMPLATE = '''# YOLOX experiment for fine-tuning yolox_s on Arbus traffic frames.
 # Usage (from a YOLOX checkout, see traffic/README.md "Mokymas"):
-#   python tools/train.py -f {data_dir}/arbus_yolox_exp.py -c yolox_s.pth -d 1 -b 8 --fp16 -o
-#   python tools/export_onnx.py -f {data_dir}/arbus_yolox_exp.py -c YOLOX_outputs/arbus_yolox_exp/best_ckpt.pth --output-name yolox_s_arbus.onnx
+# Easiest: traffic/train_yolox_colab.ipynb (free GPU). By hand, from a YOLOX checkout:
+#   python tools/train.py -f <this folder>/arbus_yolox_exp.py -c yolox_s.pth -d 1 -b 8 --fp16 -o
+#   python tools/export_onnx.py -f <this folder>/arbus_yolox_exp.py -c YOLOX_outputs/arbus_yolox_exp/best_ckpt.pth --output-name yolox_s_arbus.onnx
 import os
 from yolox.exp import Exp as MyExp
 
@@ -157,7 +168,7 @@ class Exp(MyExp):
         self.depth = 0.33
         self.width = 0.50
         self.num_classes = 80          # keep the COCO head; we fine-tune it
-        self.data_dir = "{data_dir}"
+        self.data_dir = os.path.dirname(os.path.abspath(__file__))   # the export folder
         self.train_ann = "instances_train2017.json"
         self.val_ann = "instances_val2017.json"
         self.max_epoch = 30

@@ -173,6 +173,11 @@ class ZoneCounter:
         return len(self.events)
 
 
+# Tracks whose largest box is under this share of the frame (0.3 % ≈ 40x40 px
+# at 960x540) are ignored by the fragmentation quality check.
+MIN_TRACK_AREA = 0.003
+
+
 def line_pixels(params: CameraParams, w: int, h: int) -> np.ndarray | None:
     if not params.line:
         return None
@@ -194,6 +199,9 @@ class CountResult:
     rows: np.ndarray                         # (K, 9): f, id, x1, y1, x2, y2, cls, conf, counted
     n_tracks: int
     short_tracks: int                        # tracks shorter than 3 frames (fragmentation)
+    # n_tracks / short_tracks above only count tracks whose box is big enough
+    # to matter: tiny far-away vehicles flicker by nature and say nothing about
+    # whether the counted vehicles were tracked well.
     n_frames: int
     fps: float
 
@@ -254,6 +262,8 @@ def count_tracked(tracked_frames: list, params: CameraParams, w: int, h: int,
 
     rows: list[list[float]] = []
     lengths: dict[int, int] = {}
+    areas: dict[int, float] = {}
+    min_area = MIN_TRACK_AREA * w * h
     for f, tracked in enumerate(tracked_frames):
         if len(tracked) == 0:
             counter.update(f, [], np.zeros((0, 2)), [])
@@ -264,6 +274,7 @@ def count_tracked(tracked_frames: list, params: CameraParams, w: int, h: int,
         for i, tid in enumerate(tracked.tracker_id):
             lengths[int(tid)] = lengths.get(int(tid), 0) + 1
             x1, y1, x2, y2 = tracked.xyxy[i]
+            areas[int(tid)] = max(areas.get(int(tid), 0.0), float((x2 - x1) * (y2 - y1)))
             rows.append([f, int(tid), x1, y1, x2, y2, int(tracked.class_id[i]),
                          float(tracked.confidence[i]) if tracked.confidence is not None else 0.0,
                          1.0 if counter.is_counted(tid) else 0.0])
@@ -272,8 +283,8 @@ def count_tracked(tracked_frames: list, params: CameraParams, w: int, h: int,
         count=counter.count,
         events=list(counter.events),
         rows=np.array(rows, dtype=np.float32).reshape(-1, 9),
-        n_tracks=len(lengths),
-        short_tracks=sum(1 for n in lengths.values() if n < 3),
+        n_tracks=sum(1 for t in lengths if areas[t] >= min_area),
+        short_tracks=sum(1 for t, n in lengths.items() if n < 3 and areas[t] >= min_area),
         n_frames=len(tracked_frames),
         fps=fps,
     )

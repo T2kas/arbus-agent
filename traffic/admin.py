@@ -131,6 +131,14 @@ def create_app():
     def index():
         return send_file(STATIC / "admin.html")
 
+    @app.get("/api/models")
+    def models():
+        """Standard YOLOX names + every .onnx in models/ (e.g. a fine-tuned one)."""
+        names = list(config.YOLOX_MODELS)
+        if config.MODELS_DIR.exists():
+            names += sorted(p.stem for p in config.MODELS_DIR.glob("*.onnx") if p.stem not in names)
+        return jsonify(names)
+
     @app.get("/api/cameras")
     def cameras():
         out = []

@@ -100,17 +100,18 @@ odd angle, far away). For that, mark frames:
    `python -m traffic export-labels out/arbus-coco`). This writes a COCO
    dataset (split by clip, so near-identical frames never leak into
    validation) plus `arbus_yolox_exp.py`.
-4. Fine-tune (needs a GPU machine or Colab; torch is not needed for anything else):
+4. Fine-tune. Easiest: open `traffic/train_yolox_colab.ipynb` in Google Colab
+   (free T4 GPU), upload the export `.zip`, run the cells, download
+   `yolox_s_arbus.onnx`. By hand on a GPU machine:
    ```sh
    git clone https://github.com/Megvii-BaseDetection/YOLOX && cd YOLOX && pip install -v -e .
    wget https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_s.pth
    python tools/train.py -f <out>/arbus_yolox_exp.py -c yolox_s.pth -d 1 -b 8 --fp16 -o
    python tools/export_onnx.py -f <out>/arbus_yolox_exp.py -c YOLOX_outputs/arbus_yolox_exp/best_ckpt.pth --output-name yolox_s_arbus.onnx
    ```
-5. Copy `yolox_s_arbus.onnx` to `models/` and set the camera's model to it:
-   `python -m traffic camera set vilnius-test 'model="models/yolox_s_arbus.onnx"'`,
-   then "Perskaičiuoti visus" (this re-runs detection, so it is slower) and
-   compare the report.
+5. Copy `yolox_s_arbus.onnx` to `models/`, pick it in **Zona ir parametrai →
+   Modelis** (every `.onnx` in `models/` is listed), "Išsaugoti ir
+   perskaičiuoti" (re-runs detection, slower) and compare the report.
 
 The export keeps all 80 COCO classes so the pretrained head is fine-tuned
 rather than replaced. With a small dataset that is far more reliable.
@@ -125,6 +126,11 @@ once it has 30+ clips, defaults `0–4 / 5–8 / 9–12 / 13+` before that.
 ## Recording, privacy, retention
 
 * Only cameras with `permission_status = granted` are recorded.
+* Quality gate: clips are rejected when too dark, foggy/blurred, frozen, or
+  when tracking keeps breaking (more than 45 % of the vehicle tracks shorter
+  than 3 frames; tiny far-away vehicles under 0.3 % of the frame are ignored).
+  A rejected clip is still counted, reviewable and labelable — it is only
+  kept out of game rounds.
 * Recording uses `-an`, a ≤960 px width and 15 fps. Plates are rarely
   legible at that size; where they are, enable `blur_plates` (blurs the lower
   part of every vehicle box in the rendered video).

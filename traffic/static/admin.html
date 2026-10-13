@@ -220,6 +220,7 @@ function labelClip() { S.labelClip = S.clip.id; showTab("label"); }
 // ── zone & params ────────────────────────────────────────────────────────
 let Z = null;
 async function renderZone() {
+  S.models = await api("/api/models").catch(() => S.models || []);
   const el = sec("zone"); const p = S.cam.params;
   const clips = await loadClips(); const ref = [...clips].reverse().find(c => c.cv_count != null);
   el.innerHTML = `<div class="split"><div>
@@ -240,7 +241,7 @@ async function renderZone() {
     <label>Sujungimo tarpas, kadrai (merge_gap) <input type="number" min="0" id="p-merge_gap" value="${p.merge_gap}"></label>
     <label>Sujungimo atstumas (merge_dist) <input type="number" step="0.01" min="0" id="p-merge_dist" value="${p.merge_dist}"></label>
     <label>Taškas <select id="p-anchor"><option value="bottom_center" ${p.anchor === "bottom_center" ? "selected" : ""}>apačios centras</option><option value="center" ${p.anchor === "center" ? "selected" : ""}>centras</option></select></label>
-    <label>Modelis <select id="p-model">${["yolox_nano","yolox_tiny","yolox_s","yolox_m","yolox_l"].map(m => `<option ${p.model === m ? "selected" : ""}>${m}</option>`).join("")}${p.model.endsWith(".onnx") ? `<option selected>${esc(p.model)}</option>` : ""}</select></label>
+    <label>Modelis <select id="p-model">${[...new Set([...(S.models || []), p.model])].map(m => `<option ${p.model === m ? "selected" : ""}>${esc(m)}</option>`).join("")}</select></label>
     <label>Kadrų/s apdorojimui <input type="number" min="5" max="25" id="p-fps" value="${p.fps}"></label>
     <div>Klasės: ${["car","truck","bus","motorcycle","bicycle"].map(k => `<label style="display:inline-flex;gap:4px;margin-right:8px"><input type="checkbox" class="p-cls" value="${k}" ${p.classes.includes(k) ? "checked" : ""}>${k}</label>`).join("")}</div>
     <label><span>Neskaičiuoti jau esančių zonoje pradžioje</span><input type="checkbox" id="p-skip_initial" ${p.skip_initial ? "checked" : ""}></label>
