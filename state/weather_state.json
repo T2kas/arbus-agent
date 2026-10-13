@@ -4370,7 +4370,15 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "566b1822-3bdb-4b9d-937c-0de6df8b904f": {},
+ "566b1822-3bdb-4b9d-937c-0de6df8b904f": {
+  "resolved": true,
+  "resolved_adm": 26348.0,
+  "resolved_at": "2026-10-13T07:40:50.633922+00:00",
+  "resolved_label": "„Odisėja“",
+  "resolved_option_id": "20d85a2e-6711-4365-a686-1307d3513e8e",
+  "resolved_via": "cinema",
+  "resolved_winner": "Odisėja"
+ },
  "5789f935-206c-49c2-a607-ea46e922656e": {
   "resolved": true,
   "resolved_at": "2026-09-24T10:15:40.196371+00:00",
