@@ -736,7 +736,7 @@
   "station": "kauno-ams"
  },
  "10bd3e86-f3ab-4804-9b53-c3eeadd4a630": {
-  "checksum": "83d98ae4550700a2f2c1b39025de217777e4b85d54821f31bb92dd2356441061",
+  "checksum": "3f9a97f67a1c049fd7db7dd6186fbe2580389a43a88239d6886ef2916d1a5589",
   "current_maximum": null,
   "date": "2026-10-14",
   "measurements": {},
@@ -2457,7 +2457,7 @@
   "station": "vilniaus-ams"
  },
  "2af16351-3b23-4f4d-984d-35f4d6aef164": {
-  "checksum": "e451ca3c0e1451b3bf3c595118c1628970dc1bd2a3c57356e9777621c0884059",
+  "checksum": "cf239810f43e98934ec8e7148183eab1c9cd799e5e9689461a7781f052adddee",
   "current_maximum": null,
   "date": "2026-10-14",
   "measurements": {},
@@ -5667,7 +5667,7 @@
   "station": "vilniaus-ams"
  },
  "86b06902-2df7-41b6-b657-6f291fa936b0": {
-  "checksum": "e451ca3c0e1451b3bf3c595118c1628970dc1bd2a3c57356e9777621c0884059",
+  "checksum": "cf239810f43e98934ec8e7148183eab1c9cd799e5e9689461a7781f052adddee",
   "current_maximum": null,
   "date": "2026-10-15",
   "measurements": {},
@@ -7992,7 +7992,7 @@
   "station": "kauno-ams"
  },
  "b956de9e-b261-4cc4-b409-9be75b71d77b": {
-  "checksum": "16c0eb6b7e8dd296e4c7afe5ecad49ad559e2f784fb084ab0497b9d72b583358",
+  "checksum": "3fa84d77b308fc5ae90c3df3e6f75f986e61674bd60269e81aff104275147a44",
   "current_maximum": null,
   "date": "2026-10-15",
   "measurements": {},
@@ -10599,7 +10599,7 @@
  },
  "d29b84c7-746a-4f27-90c4-661752790d16": {},
  "d3883220-0778-446e-b50e-c89ed570d890": {
-  "checksum": "83d98ae4550700a2f2c1b39025de217777e4b85d54821f31bb92dd2356441061",
+  "checksum": "3f9a97f67a1c049fd7db7dd6186fbe2580389a43a88239d6886ef2916d1a5589",
   "current_maximum": null,
   "date": "2026-10-15",
   "measurements": {},
@@ -11637,7 +11637,7 @@
   "station": "klaipedos-ams"
  },
  "e0635ead-4500-4d90-8714-3e67c7f6e03a": {
-  "checksum": "16c0eb6b7e8dd296e4c7afe5ecad49ad559e2f784fb084ab0497b9d72b583358",
+  "checksum": "3fa84d77b308fc5ae90c3df3e6f75f986e61674bd60269e81aff104275147a44",
   "current_maximum": null,
   "date": "2026-10-14",
   "measurements": {},
