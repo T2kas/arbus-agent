@@ -2901,7 +2901,14 @@
   "resolved_winner": "Žmogus-voras: nauja diena"
  },
  "3815a973-d28a-4d0e-8ffa-c35bd538f0c7": {},
- "38f90d25-70d0-47ff-b2d2-f5ee3fdc0135": {},
+ "38f90d25-70d0-47ff-b2d2-f5ee3fdc0135": {
+  "resolved": true,
+  "resolved_at": "2026-10-14T08:20:51.906629+00:00",
+  "resolved_label": "Nuo 1,964 iki 1,974 €/l",
+  "resolved_option_id": "ef366462-b3da-455d-a615-41f697c6ceb3",
+  "resolved_price": 1.966,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261014/"
+ },
  "3938528f-7613-44b3-93e6-4ceecfd3282f": {
   "checksum": "55c3a6ab735ae4d2ced7f87a66f8f24a6baff0fe8718bf816f965485b817b479",
   "current_maximum": 19.7,
@@ -4934,7 +4941,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "63e6b3be-5300-4625-9267-62c67e5169e0": {},
+ "63e6b3be-5300-4625-9267-62c67e5169e0": {
+  "resolved": true,
+  "resolved_at": "2026-10-14T08:20:51.906629+00:00",
+  "resolved_label": "Nuo 2,224 iki 2,234 €/l",
+  "resolved_option_id": "238558f4-05e0-48c9-a6c3-dabd89ce18ca",
+  "resolved_price": 2.226,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261014/"
+ },
  "6b96c073-3c0f-474e-9444-288220e0a358": {
   "checksum": "46f3d3edc66c851f3c50ac01cc8f3a7444f767ee89bed9e58ed146467367ad90",
   "current_maximum": 17.2,
