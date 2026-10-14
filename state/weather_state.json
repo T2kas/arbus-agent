@@ -4689,6 +4689,22 @@
   "resolved_via": "cinema",
   "resolved_winner": "Odisėja"
  },
+ "570d514c-5be6-49cc-9ec8-f9c25b122058": {
+  "checksum": "17ec1f0d19ee4b8460f7f39b60b87acd3b69ac1aec2055c4180c2135361b24e1",
+  "current_maximum": null,
+  "date": "2026-10-16",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
+ "576f3359-9889-4356-aae6-cefe1a2b2832": {
+  "checksum": "55701a1d106a6195574cc371aec79c03f046f5e3fbef795141792dfe020ef4ee",
+  "current_maximum": null,
+  "date": "2026-10-16",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "5789f935-206c-49c2-a607-ea46e922656e": {
   "resolved": true,
   "resolved_at": "2026-09-24T10:15:40.196371+00:00",
@@ -7103,6 +7119,14 @@
   "station": "kauno-ams"
  },
  "9a0b166d-0ef9-478c-9eef-3ce5b1dfeeff": {},
+ "9a6115e1-bdc9-41b2-9c5c-bf98089d1431": {
+  "checksum": "133d39fd1f96aa006cb9933ca9ec9205118fd4138ef5ed5e40ce4f1795730f31",
+  "current_maximum": null,
+  "date": "2026-10-16",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "9ff3105f-0119-4adc-9c74-a3fff16f8177": {
   "resolved": true,
   "resolved_at": "2026-10-07T08:31:07.196382+00:00",
