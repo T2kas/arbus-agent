@@ -3149,7 +3149,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "3ad1691a-70ef-42fe-af47-365f4f38a2ee": {},
+ "3ad1691a-70ef-42fe-af47-365f4f38a2ee": {
+  "resolved": true,
+  "resolved_at": "2026-10-15T08:31:11.198816+00:00",
+  "resolved_label": "1,953 €/l arba mažiau",
+  "resolved_option_id": "45a5344d-8eaf-497e-9c74-ef0f5da9d814",
+  "resolved_price": 1.944,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261015/"
+ },
  "3ba4e8fa-aa8d-4e96-b15f-c5646e41c406": {
   "checksum": "f2ea4538ed7f480565a4c97a93996bb3a10924b9eb863ee9505a18f1e99fbb83",
   "current_maximum": 14.1,
@@ -4547,7 +4554,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "516d2053-d58d-4b64-825a-ffea4bd6a4cb": {},
+ "516d2053-d58d-4b64-825a-ffea4bd6a4cb": {
+  "resolved": true,
+  "resolved_at": "2026-10-15T08:31:11.198816+00:00",
+  "resolved_label": "2,213 €/l arba mažiau",
+  "resolved_option_id": "2458e3b7-5694-4071-a859-2d92e9c3b8bc",
+  "resolved_price": 2.211,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261015/"
+ },
  "52834b90-4b28-4907-85de-0979bea5e216": {},
  "536e58af-ae24-4f98-b812-84af16b7a13f": {
   "checksum": "50a09d82b9540cf5f18b30df98c441ca49cef7f33d20c1848a6a9e9461b1922b",
