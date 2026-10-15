@@ -1,6 +1,6 @@
 {
  "0106635b-d538-4aed-b983-ff0754d75824": {
-  "checksum": "03b6babb6fed360a78cc7e84ddff728d5184087573f31b00da48cee15210a1e1",
+  "checksum": "54445c45785e3fec3155c9e4adce8bcde6d40beb4213e80dd50c5bbf1639a6ad",
   "current_maximum": null,
   "date": "2026-10-17",
   "measurements": {},
@@ -1582,7 +1582,7 @@
   "station": "kauno-ams"
  },
  "1b2fbaac-8262-4507-9012-2924284d42e9": {
-  "checksum": "aab49becbedb77a06b4af4f2f1a2e6fba13efdd47cb3e6ab18b89ea9752aefdd",
+  "checksum": "0753cb9d2c10e0f19b7dbef28c11a66e7777697a7cd8f8f6f43d95a88c69951a",
   "current_maximum": null,
   "date": "2026-10-17",
   "measurements": {},
@@ -2882,7 +2882,7 @@
  },
  "2d45eb0c-5b2d-4379-876b-d8356eaa72c9": {},
  "32c45dd8-31c4-48d2-b926-7d8499314e42": {
-  "checksum": "87beaa42cb946766002914479a883e0b1d4e51300171162202be4392f693fe0d",
+  "checksum": "7bc495ce337b05288fed5e487d8bfffe5a9d45db2814c7a8d69759a561706221",
   "current_maximum": null,
   "date": "2026-10-17",
   "measurements": {},
@@ -4762,7 +4762,7 @@
   "resolved_winner": "Odisėja"
  },
  "570d514c-5be6-49cc-9ec8-f9c25b122058": {
-  "checksum": "aab49becbedb77a06b4af4f2f1a2e6fba13efdd47cb3e6ab18b89ea9752aefdd",
+  "checksum": "0753cb9d2c10e0f19b7dbef28c11a66e7777697a7cd8f8f6f43d95a88c69951a",
   "current_maximum": null,
   "date": "2026-10-16",
   "measurements": {},
@@ -4770,7 +4770,7 @@
   "station": "klaipedos-ams"
  },
  "576f3359-9889-4356-aae6-cefe1a2b2832": {
-  "checksum": "03b6babb6fed360a78cc7e84ddff728d5184087573f31b00da48cee15210a1e1",
+  "checksum": "54445c45785e3fec3155c9e4adce8bcde6d40beb4213e80dd50c5bbf1639a6ad",
   "current_maximum": null,
   "date": "2026-10-16",
   "measurements": {},
@@ -7329,7 +7329,7 @@
  },
  "9a0b166d-0ef9-478c-9eef-3ce5b1dfeeff": {},
  "9a6115e1-bdc9-41b2-9c5c-bf98089d1431": {
-  "checksum": "87beaa42cb946766002914479a883e0b1d4e51300171162202be4392f693fe0d",
+  "checksum": "7bc495ce337b05288fed5e487d8bfffe5a9d45db2814c7a8d69759a561706221",
   "current_maximum": null,
   "date": "2026-10-16",
   "measurements": {},
