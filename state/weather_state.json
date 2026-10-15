@@ -4732,7 +4732,7 @@
   "station": "klaipedos-ams"
  },
  "576f3359-9889-4356-aae6-cefe1a2b2832": {
-  "checksum": "3bce01961b8256bc6c18eb02f880df191864ce4c8fc1656b453935cfb88894d6",
+  "checksum": "0706e6c1a7c497c10846a39e72fca9cc5316158e455c5dd0ec41fb097b23a73e",
   "current_maximum": null,
   "date": "2026-10-16",
   "measurements": {},
@@ -5962,7 +5962,7 @@
   "station": "vilniaus-ams"
  },
  "86b06902-2df7-41b6-b657-6f291fa936b0": {
-  "checksum": "3bce01961b8256bc6c18eb02f880df191864ce4c8fc1656b453935cfb88894d6",
+  "checksum": "0706e6c1a7c497c10846a39e72fca9cc5316158e455c5dd0ec41fb097b23a73e",
   "current_maximum": 8.9,
   "date": "2026-10-15",
   "max_received_at": "2026-10-15T02:10:48.975011+00:00",
