@@ -1,6 +1,6 @@
 {
  "0106635b-d538-4aed-b983-ff0754d75824": {
-  "checksum": "f9e5789c57b1ccf28b95a217efb3ad5064833ff47ce4eb4a38be829ee9e89cb2",
+  "checksum": "b11671234a80cd8140a1e864d21ce369dd66d0497de4c8ad42cf8a6d73185077",
   "current_maximum": null,
   "date": "2026-10-17",
   "measurements": {},
@@ -1582,7 +1582,7 @@
   "station": "kauno-ams"
  },
  "1b2fbaac-8262-4507-9012-2924284d42e9": {
-  "checksum": "68225bf7ee63b56c0f8fdd28dd8f9fd3da7d84980dc2a66c5c4e53084363be2c",
+  "checksum": "b1c50b4e61ad4447c98d76b140eba4e4cc857461a20c3bc77d758f52877462be",
   "current_maximum": null,
   "date": "2026-10-17",
   "measurements": {},
@@ -2890,7 +2890,7 @@
  },
  "2d45eb0c-5b2d-4379-876b-d8356eaa72c9": {},
  "32c45dd8-31c4-48d2-b926-7d8499314e42": {
-  "checksum": "a867754ad323ee8aea7292ce8381eb56c6b4597f6f87300ad71364c929e9d071",
+  "checksum": "f9527276e41dcb8dc49ffaf688fd813664e8742a8b395000431e4317dc413870",
   "current_maximum": null,
   "date": "2026-10-17",
   "measurements": {},
@@ -8297,7 +8297,7 @@
   "station": "vilniaus-ams"
  },
  "a873e8a5-29cb-4b91-b45d-12b352a8b214": {
-  "checksum": "f9e5789c57b1ccf28b95a217efb3ad5064833ff47ce4eb4a38be829ee9e89cb2",
+  "checksum": "b11671234a80cd8140a1e864d21ce369dd66d0497de4c8ad42cf8a6d73185077",
   "current_maximum": null,
   "date": "2026-10-18",
   "measurements": {},
@@ -9870,7 +9870,7 @@
  },
  "bdba3af2-82de-4465-b379-54c834bc233e": {},
  "beb0b7f9-f487-45fe-a65a-f4f332275876": {
-  "checksum": "a867754ad323ee8aea7292ce8381eb56c6b4597f6f87300ad71364c929e9d071",
+  "checksum": "f9527276e41dcb8dc49ffaf688fd813664e8742a8b395000431e4317dc413870",
   "current_maximum": null,
   "date": "2026-10-18",
   "measurements": {},
@@ -12664,7 +12664,7 @@
   "station": "klaipedos-ams"
  },
  "dd086d4a-3de4-4a38-905d-cdbc295efbec": {
-  "checksum": "68225bf7ee63b56c0f8fdd28dd8f9fd3da7d84980dc2a66c5c4e53084363be2c",
+  "checksum": "b1c50b4e61ad4447c98d76b140eba4e4cc857461a20c3bc77d758f52877462be",
   "current_maximum": null,
   "date": "2026-10-18",
   "measurements": {},
