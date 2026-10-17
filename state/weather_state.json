@@ -8028,7 +8028,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "9a0b166d-0ef9-478c-9eef-3ce5b1dfeeff": {},
+ "9a0b166d-0ef9-478c-9eef-3ce5b1dfeeff": {
+  "resolved": true,
+  "resolved_at": "2026-10-17T16:31:02.974779+00:00",
+  "resolved_label": "Lygiosios",
+  "resolved_option_id": "ee215fd0-c91e-455b-9d5e-6f8b9ef8332e",
+  "resolved_score": "Džiugas 3:3 TransInvest",
+  "resolved_via": "sports"
+ },
  "9a6115e1-bdc9-41b2-9c5c-bf98089d1431": {
   "checksum": "673750dedd7086d19d48ce7b25faf444fbfb73002486a8087cc7d60575bda928",
   "current_maximum": 8.4,
