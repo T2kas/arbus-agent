@@ -1305,7 +1305,7 @@
  },
  "11fab923-6861-4250-be3d-e10979676e60": {},
  "13593653-5906-4fd7-a5b0-45ded84e4b0c": {
-  "checksum": "c3da379d23a9b64dc283893d68932f8bd2635f806110772d1560c997b43743c6",
+  "checksum": "2cc544f20f5923c17f98ed0c883697a14e1019e1b244bb6c4a912eefec59e0ea",
   "current_maximum": null,
   "date": "2026-10-20",
   "measurements": {},
@@ -1448,7 +1448,7 @@
   "station": "vilniaus-ams"
  },
  "1509c2ac-88de-4dd6-bb5a-d014e025acbe": {
-  "checksum": "d994b95aa5c95cb08dfe2dab42a6b66b5e84d218a54f101dd55fe4bb7d28e4e4",
+  "checksum": "925ca433dded888f2e9416ab691dafba66deb7c58a1cb199c3de7930a0c76e70",
   "current_maximum": null,
   "date": "2026-10-20",
   "measurements": {},
@@ -3453,7 +3453,7 @@
   "station": "kauno-ams"
  },
  "376009e8-4705-4d84-82d7-7e684f55f062": {
-  "checksum": "d994b95aa5c95cb08dfe2dab42a6b66b5e84d218a54f101dd55fe4bb7d28e4e4",
+  "checksum": "925ca433dded888f2e9416ab691dafba66deb7c58a1cb199c3de7930a0c76e70",
   "current_maximum": null,
   "date": "2026-10-19",
   "measurements": {},
@@ -6268,7 +6268,7 @@
   "station": "kauno-ams"
  },
  "7c6d32c0-f5c2-4b10-a1a1-805cfb9b9408": {
-  "checksum": "3ca30c0bf24ec9e06951035fa55cf781ed552dc9876dbf83b5aa60eec3b14a68",
+  "checksum": "13f8bc869d019b3bc8cef3611caea327e3075dbaeaf6dff4bec7e7ed0f0af54b",
   "current_maximum": null,
   "date": "2026-10-19",
   "measurements": {},
@@ -6570,7 +6570,7 @@
   "station": "vilniaus-ams"
  },
  "85080f62-f127-4cca-ad9e-74ca1c0c7109": {
-  "checksum": "c3da379d23a9b64dc283893d68932f8bd2635f806110772d1560c997b43743c6",
+  "checksum": "2cc544f20f5923c17f98ed0c883697a14e1019e1b244bb6c4a912eefec59e0ea",
   "current_maximum": null,
   "date": "2026-10-19",
   "measurements": {},
@@ -8188,7 +8188,7 @@
   "station": "vilniaus-ams"
  },
  "9e2c7729-a104-4824-81e5-b81e0f0540e5": {
-  "checksum": "3ca30c0bf24ec9e06951035fa55cf781ed552dc9876dbf83b5aa60eec3b14a68",
+  "checksum": "13f8bc869d019b3bc8cef3611caea327e3075dbaeaf6dff4bec7e7ed0f0af54b",
   "current_maximum": null,
   "date": "2026-10-20",
   "measurements": {},
