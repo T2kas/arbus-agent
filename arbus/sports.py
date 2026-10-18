@@ -19,7 +19,7 @@ import html as _html
 import logging
 import re
 import unicodedata
-from datetime import date
+from datetime import date, timedelta
 
 import requests
 
@@ -57,7 +57,7 @@ def _rules_date(text: str) -> str:
 # ── Euroleague (JSON feed) ───────────────────────────────────────────────────
 
 _EL_FEED = ("https://feeds.incrowdsports.com/provider/euroleague-feeds/v2/"
-            "competitions/E/seasons/E{year}/games")
+            "competitions/E/seasons/E{year}/games?limit=1000")
 
 
 def euroleague_season_year(text: str) -> int | None:
@@ -171,3 +171,72 @@ def toplyga_result(target_iso: str, tokens_a: set, tokens_b: set) -> dict | None
     return {"home": teams[0], "away": teams[1],
             "home_score": score[0], "away_score": score[1],
             "url": url, "date": target_iso, "finished": _toplyga_finished(html)}
+
+
+# ── LKL (BetExplorer results page) ───────────────────────────────────────────
+# lkl.lt drops finished games from its schedule and the game page carries only a
+# winner flag, so final scores come from BetExplorer's results list (the same
+# site the games bot reads odds from). Team names are mapped to the LKL short
+# names via betodds.ALIASES; a game is matched by its team pair and a date within
+# a day of the market's date (BetExplorer shows its own timezone).
+_BE_LKL_RESULTS = "https://www.betexplorer.com/basketball/lithuania/lkl/results/"
+
+
+def parse_be_results(page: str, league: str, today: date) -> list[dict]:
+    from . import betodds
+
+    out = []
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", page, flags=re.S):
+        m = re.search(r'href="(/[^"]+)" class="in-match"[^>]*>(.*?)</a>', row, flags=re.S)
+        if not m:
+            continue
+        names = [re.sub(r"<[^>]+>", "", x).strip()
+                 for x in re.findall(r"<span>(.*?)</span>", m.group(2), flags=re.S)]
+        sc = re.search(r'<a href="[^"]+">\s*(\d+):(\d+)', row)
+        dt = re.findall(r'h-text-right[^>]*>\s*([^<]*?)\s*<', row)
+        if len(names) < 2 or not sc or not dt:
+            continue
+        label = dt[-1]
+        if label.lower() == "today":
+            day = today
+        elif label.lower() == "yesterday":
+            day = today - timedelta(days=1)
+        else:
+            dm = re.match(r"(\d{1,2})\.(\d{1,2})\.(\d{4})?", label)
+            if not dm:
+                continue
+            year = int(dm.group(3) or today.year)
+            day = date(year, int(dm.group(2)), int(dm.group(1)))
+            if day > today + timedelta(days=1):          # "28.12." seen in January
+                day = date(year - 1, day.month, day.day)
+        out.append({"home_key": betodds.team_key(league, names[0]),
+                    "away_key": betodds.team_key(league, names[1]),
+                    "home": names[0], "away": names[1], "day": day,
+                    "home_score": int(sc.group(1)), "away_score": int(sc.group(2)),
+                    "url": "https://www.betexplorer.com" + m.group(1), "finished": True})
+    return out
+
+
+def lkl_result(target_iso: str, option_labels: list[str], today: date | None = None) -> dict | None:
+    """Final LKL score for the game between the two option teams on target_iso.
+
+    Returns the game with home/away renamed to the market's own option labels
+    (so the caller's token matching is exact), or None if not final yet."""
+    from . import betodds, games
+
+    inverse = {v: k for k, v in games.LKL_NAMES.items()}
+    keys = [inverse.get(lbl.strip()) for lbl in option_labels]
+    if None in keys or len(keys) != 2:
+        return None
+    target = date.fromisoformat(target_iso)
+    today = today or date.today()
+    for g in parse_be_results(betodds._get(_BE_LKL_RESULTS), "lkl", today):
+        if {g["home_key"], g["away_key"]} != set(keys):
+            continue
+        if abs((g["day"] - target).days) > 1:
+            continue
+        g = dict(g)
+        g["home"] = games.LKL_NAMES[g["home_key"]]
+        g["away"] = games.LKL_NAMES[g["away_key"]]
+        return g
+    return None

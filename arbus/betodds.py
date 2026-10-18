@@ -21,6 +21,7 @@ UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
 LEAGUES = {
     "lkl": ("basketball/lithuania/lkl", "ha"),
     "toplyga": ("football/lithuania/toplyga", "1x2"),
+    "euroleague": ("basketball/europe/euroleague", "ha"),
 }
 MIN_BOOKMAKERS = 3
 
@@ -36,6 +37,19 @@ ALIASES = {
         "zalgiris": "zalgiris", "kauno zalgiris": "k-zalgiris", "suduva": "suduva",
         "transinvest": "transinvest", "banga": "banga", "dziugas": "dziugas",
         "panevezys": "panevezys", "hegelmann": "hegelmann", "siauliai": "fa-siauliai",
+    },
+    "euroleague": {
+        "zalgiris": "Zalgiris Kaunas", "barcelona": "FC Barcelona",
+        "fenerbahce": "Fenerbahce Tarfin Istanbul", "anadolu efes": "Anadolu Efes Istanbul",
+        "villeurbanne": "LDLC ASVEL Villeurbanne", "asvel": "LDLC ASVEL Villeurbanne",
+        "virtus bologna": "Virtus Bologna", "partizan": "Partizan Mozzart Bet Belgrade",
+        "besiktas": "Besiktas Istanbul", "olimpia milano": "Armani Olimpia Milan",
+        "bayern": "FC Bayern Munich", "panathinaikos": "Panathinaikos AKTOR Athens",
+        "real madrid": "Real Madrid", "olympiacos": "Olympiacos Piraeus",
+        "crvena zvezda": "Crvena Zvezda Meridianbet Belgrade", "dubai": "Dubai Basketball",
+        "hapoel tel aviv": "Hapoel IBI Tel Aviv", "maccabi tel aviv": "Maccabi Rapyd Tel Aviv",
+        "baskonia": "Kosner Baskonia Vitoria-Gasteiz", "paris": "Paris Basketball",
+        "valencia": "Valencia Basket",
     },
 }
 _DROP = {"bc", "fk", "fc", "fa", "kk", "bk", "kaunas", "klaipeda", "vilnius",

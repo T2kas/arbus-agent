@@ -733,7 +733,6 @@ def cinema_fact(question: str, rules: str = "", closes_at: str = "") -> str:
 # ("2026 37-os savaitės klausomiausi (TOP 100)"); the table columns are
 # Vieta | Praeitą savaitę | Savaičių tope | Atlikėjas/grupė | Pavadinimas.
 _AGATA_BASE = "https://www.agata.lt"
-_AGATA_LIST_URL = _AGATA_BASE + "/lt/naujienos/?cat=top-100"
 _AGATA_WEEK_RE = re.compile(r"(\d{1,2})\s*-?\s*os(?:ios)?\s+savait")
 
 
@@ -762,18 +761,48 @@ def _agata_page_week(html: str) -> tuple[int, int] | None:
     return None
 
 
-def _agata_url(year: int, week: int) -> tuple[str, str] | None:
-    """(url, html) of the chart for (year, week), verified by its title."""
+def _agata_new_page_week(html: str) -> tuple[int, int] | None:
+    """Week shown on the 2026 redesign ("2026 m. 42 savaitė")."""
+    m = re.search(r"(20\d{2}) m\. (\d{1,2}) savait", _html.unescape(html))
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+
+def parse_agata_rows(html: str) -> list[tuple[int, str, str]]:
+    """(rank, artist, title) from the redesigned chart (div.chart-row)."""
+    out = []
+    for m in re.finditer(r'<div class="row-pos">\s*(\d+)\s*</div>.*?<div class="row-artist">(.*?)</div>'
+                         r'.*?<div class="row-title">(.*?)</div>', html, re.S):
+        artist = re.sub(r"<span[^>]*lt-badge[^>]*>.*?</span>", "", m.group(2), flags=re.S)
+        clean = lambda x: re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", x))).strip()
+        out.append((int(m.group(1)), clean(artist).replace(",", ", ").replace(",  ", ", "),
+                    clean(m.group(3))))
+    out.sort(key=lambda x: x[0])
+    return out
+
+
+def _agata_url(year: int, week: int, want: str = "singles") -> tuple[str, str] | None:
+    """(url, html) of the chart for (year, week), verified by the week it shows.
+
+    The site was redesigned in October 2026: charts now live at
+    /savaites-topas/singlai/<year>-W<week>. An unpublished week returns an
+    empty page, so a chart is only accepted when its own heading names the
+    requested week AND it has rows. The old /lt/naujienos/s<week>-5/ article
+    path is kept as a fallback for older weeks."""
+    kind = "albumai" if want == "albums" else "singlai"
+    url = f"{_AGATA_BASE}/savaites-topas/{kind}/{year}-W{week:02d}"
+    try:
+        html = _get_text(url)
+        if _agata_new_page_week(html) == (year, week) and parse_agata_rows(html):
+            return url, html
+    except Exception as exc:
+        log.debug("agata new page %s failed: %s", url, exc)
     cand = f"{_AGATA_BASE}/lt/naujienos/s{week}-5/"
-    html = _get_text(cand)
-    if _agata_page_week(html) == (year, week):
-        return cand, html
-    listing = _get_text(_AGATA_LIST_URL)                # fall back to the listing
-    for href in re.findall(rf'href="([^"]*naujienos/s{week}-[^"]*)"', listing, re.I):
-        url = urljoin(_AGATA_BASE, href)
-        h = _get_text(url)
-        if _agata_page_week(h) == (year, week):
-            return url, h
+    try:
+        html = _get_text(cand)
+        if _agata_page_week(html) == (year, week):
+            return cand, html
+    except Exception:
+        pass
     return None
 
 
@@ -847,11 +876,11 @@ def agata_top(question: str, rules: str = "") -> dict | None:
     low = _cnorm(f"{question}\n{rules}")
     want = "albums" if ("album" in low and "singl" not in low) else "singles"
     try:
-        found = _agata_url(year, week)
+        found = _agata_url(year, week, want)
         if not found:
             return None
         url, html = found
-        chart = parse_agata(html, want)
+        chart = parse_agata_rows(html) or parse_agata(html, want)
     except Exception as exc:
         log.debug("agata %s w%s failed: %s", year, week, exc)
         return None

@@ -227,3 +227,51 @@ def test_vs_image_renders():
     Image.new("RGBA", (40, 40), (200, 0, 0, 255)).save(buf, "PNG")
     png = matchimage.compose(buf.getvalue(), buf.getvalue(), "LKL")
     assert Image.open(io.BytesIO(png)).size == (1200, 675)
+
+
+import pytest as _pytest
+
+
+@_pytest.fixture(autouse=True)
+def _only_lkl_and_toplyga(monkeypatch):
+    """The fixtures above cover LKL + TOPLYGA; EuroLeague has its own tests."""
+    from arbus import config
+
+    monkeypatch.setattr(config, "GAMES_LEAGUES", {"lkl", "toplyga"})
+
+
+EL_FEED_JSON = """{"data": [
+ {"status": "result", "date": "2026-10-16T17:00:00.000Z",
+  "home": {"name": "Zalgiris Kaunas", "score": 70, "imageUrls": {"crest": "https://x/zal.png"}},
+  "away": {"name": "Anadolu Efes Istanbul", "score": 85, "imageUrls": {"crest": "https://x/efes.png"}}},
+ {"status": "confirmed", "date": "2026-11-12T19:30:00.000Z",
+  "home": {"name": "Armani Olimpia Milan", "score": 0, "imageUrls": {"crest": "https://x/mil.png"}},
+  "away": {"name": "Zalgiris Kaunas", "score": 0, "imageUrls": {"crest": "https://x/zal.png"}}},
+ {"status": "confirmed", "date": "2026-11-12T19:30:00.000Z",
+  "home": {"name": "Real Madrid", "score": 0}, "away": {"name": "Valencia Basket", "score": 0}}
+]}"""
+
+
+def test_euroleague_schedule_only_zalgiris_with_crests():
+    gs = games.parse_el_schedule(EL_FEED_JSON)
+    assert [(g.home, g.away) for g in gs] == [("Armani Olimpia Milan", "Zalgiris Kaunas")]
+    assert gs[0].start.hour == 21 and gs[0].home_logo.endswith("mil.png")   # 19:30Z = 21:30 LT
+    t = games.parse_el_table(EL_FEED_JSON)
+    assert t["Zalgiris Kaunas"] == (0, 1) and t["Anadolu Efes Istanbul"] == (1, 0)
+    s = games.el_spec(gs[0], t, [62, 38])
+    assert s["title"] == "Milano „Olimpia“ vs Kauno „Žalgiris“"
+    assert "2026–2027 m. Eurolygos" in s["rules"] and s["closes_at"] == "2026-11-12T19:30:00+00:00"
+
+
+def test_renamed_market_is_still_recognised_as_existing():
+    spec = {"options": [{"label": "Kauno „Žalgiris“"}, {"label": "Jonavos „Hipocredit“"}]}
+    start = datetime(2026, 10, 25, 14, 50, tzinfo=timezone.utc)
+    assert games._already_listed(spec, start, [("Kauno „Žalgiris“ vs Jonavos „Hipocredit“",
+                                                "2026-10-25T14:50:00+00:00")])
+    # same teams, a month apart (second round) -> not the same game
+    assert not games._already_listed(spec, start, [("Kauno „Žalgiris“ vs Jonavos „Hipocredit“",
+                                                    "2026-11-25T14:50:00+00:00")])
+    # FK Žalgiris title does not hide a Kauno Žalgiris game
+    spec2 = {"options": [{"label": "„Kauno Žalgiris“"}, {"label": "Lygiosios"}, {"label": "FK „Žalgiris“"}]}
+    assert not games._already_listed(spec2, start, [("FK „Žalgiris“ vs Gargždų „Banga“",
+                                                     "2026-10-25T12:00:00+00:00")])

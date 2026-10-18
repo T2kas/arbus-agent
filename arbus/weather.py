@@ -876,6 +876,8 @@ def _sports_league(rules: str) -> str | None:
     low = _strip_diacritics(rules).lower()
     if "eurolyg" in low:
         return "euroleague"
+    if re.search(r"(?<![a-z])lkl(?![a-z])", low):
+        return "lkl"
     if "toplyg" in low or "a lyga" in low or "a lygos" in low:
         return "toplyga"
     return None
@@ -923,7 +925,7 @@ def _sports_alert_message(market: dict, why: str, detail: str = "") -> str:
 
 def _resolve_sports(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
                     *, alert: bool, do_resolve: bool) -> tuple[list[dict], bool]:
-    """Resolve single-match markets (Euroleague / TOPLYGA) once the game is final.
+    """Resolve single-match markets (Euroleague / LKL / TOPLYGA) once the game is final.
     Resolves only on a clean, unambiguous result; alerts an admin otherwise."""
     reports, changed = [], False
     today = now.astimezone(tz).date().isoformat()
@@ -956,6 +958,12 @@ def _resolve_sports(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
                 if not year:
                     continue
                 game = _find_el_game(sports.euroleague_games(year), team_opts)
+            elif league == "lkl":
+                iso = sports._rules_date(rules)
+                if not iso or iso > today:             # not played yet
+                    continue
+                labels = [str(app_api._pick(o, "label", "name", "title", default="")) for o in team_opts]
+                game = sports.lkl_result(iso, labels, now.astimezone(tz).date())
             else:  # toplyga football
                 iso = sports._rules_date(rules)
                 if not iso or iso > today:             # not played yet

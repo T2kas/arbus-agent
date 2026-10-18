@@ -13,7 +13,8 @@ tests — it never prices a live market.
 
 Titles and templates match the hand-made October markets exactly ("Kauno
 „Žalgiris“ vs Vilniaus „Rytas“"), so an existing market is never duplicated.
-No LLM is used.
+EuroLeague: only games of GAMES_EL_TEAMS (default Žalgiris), schedule and
+crests from the official EuroLeague feed. No LLM is used.
 """
 
 from __future__ import annotations
@@ -40,7 +41,7 @@ TOP_TABLE = "https://toplyga.lt/turnyrine-lentele/1"
 LKL_NAMES = {
     "Žalgiris": "Kauno „Žalgiris“", "Rytas": "Vilniaus „Rytas“",
     "Nevėžis-Paskolų klubas": "Kėdainių „Nevėžis-Paskolų klubas“",
-    "Tauragė": "„Tauragė“", "Hipocredit": "„Hipocredit“", "Gargždai": "„Gargždai“",
+    "Tauragė": "„Tauragė“", "Hipocredit": "Jonavos „Hipocredit“", "Gargždai": "„Gargždai“",
     "Juventus": "Utenos „Juventus“", "Lietkabelis": "Panevėžio „Lietkabelis“",
     "Neptūnas": "Klaipėdos „Neptūnas“", "Šiauliai": "„Šiauliai“",
 }
@@ -61,6 +62,24 @@ TOP_NAMES = {
     "panevezys": "FK „Panevėžys“", "hegelmann": "„Hegelmann“", "siauliai": "FK „Šiauliai“",
     "fa-siauliai": "FK „Šiauliai“",
 }
+
+# EuroLeague: official feed team name -> Lithuanian display name (titles must
+# match the hand-made October markets: "Barselonos „Barcelona“ vs Kauno „Žalgiris“").
+EL_NAMES = {
+    "Zalgiris Kaunas": "Kauno „Žalgiris“", "FC Barcelona": "Barselonos „Barcelona“",
+    "Fenerbahce Tarfin Istanbul": "Stambulo „Fenerbahçe“", "Anadolu Efes Istanbul": "Stambulo „Anadolu Efes“",
+    "LDLC ASVEL Villeurbanne": "Vilerbano ASVEL", "Virtus Bologna": "Bolonijos „Virtus“",
+    "Partizan Mozzart Bet Belgrade": "Belgrado „Partizan“", "Besiktas Istanbul": "Stambulo „Beşiktaş“",
+    "Armani Olimpia Milan": "Milano „Olimpia“", "FC Bayern Munich": "Miuncheno „Bayern“",
+    "Panathinaikos AKTOR Athens": "Atėnų „Panathinaikos“", "Real Madrid": "Madrido „Real“",
+    "Olympiacos Piraeus": "Pirėjo „Olympiacos“",
+    "Crvena Zvezda Meridianbet Belgrade": "Belgrado „Crvena zvezda“",
+    "Dubai Basketball": "„Dubai Basketball“", "Hapoel IBI Tel Aviv": "Tel Avivo „Hapoel“",
+    "Maccabi Rapyd Tel Aviv": "Tel Avivo „Maccabi“", "Kosner Baskonia Vitoria-Gasteiz": "Vitorijos „Baskonia“",
+    "Paris Basketball": "„Paris Basketball“", "Valencia Basket": "Valensijos „Valencia“",
+}
+EL_FEED = ("https://feeds.incrowdsports.com/provider/euroleague-feeds/v2/"
+           "competitions/E/seasons/E{year}/games?limit=1000")
 
 IMG_ZAL = ("https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/"
            "72281ef3-6b91-4f7c-b0ce-92b7c6ebac6c/77cffeba-467d-49a3-bbe5-c5bfe7115a6f.jpg")
@@ -162,6 +181,82 @@ def parse_top_schedule(page: str) -> list[Game]:
                           slugs[0], slugs[1], venue,
                           logos[0] if len(logos) > 0 else "", logos[1] if len(logos) > 1 else ""))
     return games
+
+
+def el_season_year(now: datetime) -> int:
+    """EuroLeague season code year: a season starting in autumn Y is E<Y>."""
+    return now.year if now.month >= 7 else now.year - 1
+
+
+def parse_el_schedule(page: str) -> list[Game]:
+    """Upcoming EuroLeague games involving GAMES_EL_TEAMS, from the official feed."""
+    import json
+
+    out = []
+    for g in json.loads(page).get("data", []):
+        if str(g.get("status", "")).lower() == "result":
+            continue
+        home, away = g.get("home") or {}, g.get("away") or {}
+        hn, an = home.get("name", ""), away.get("name", "")
+        if not ({hn, an} & config.GAMES_EL_TEAMS):
+            continue
+        try:
+            start = datetime.fromisoformat(g["date"].replace("Z", "+00:00")).astimezone(TZ)
+        except (KeyError, ValueError):
+            continue
+        arena = (g.get("venue") or {}).get("name", "") if isinstance(g.get("venue"), dict) else ""
+        out.append(Game("euroleague", start, hn, an, arena,
+                        (home.get("imageUrls") or {}).get("crest", ""),
+                        (away.get("imageUrls") or {}).get("crest", "")))
+    return out
+
+
+def parse_el_table(page: str) -> dict[str, tuple[int, int]]:
+    """Feed team name -> (wins, losses) from finished games."""
+    import json
+
+    rec: dict[str, list[int]] = {}
+    for g in json.loads(page).get("data", []):
+        if str(g.get("status", "")).lower() != "result":
+            continue
+        h, a = g.get("home") or {}, g.get("away") or {}
+        try:
+            hs, as_ = int(h.get("score")), int(a.get("score"))
+        except (TypeError, ValueError):
+            continue
+        for team, won in ((h.get("name", ""), hs > as_), (a.get("name", ""), as_ > hs)):
+            r = rec.setdefault(team, [0, 0])
+            r[0 if won else 1] += 1
+    return {k: (v[0], v[1]) for k, v in rec.items()}
+
+
+def el_spec(g: Game, table, probs: list[int] | None = None) -> dict:
+    home, away = EL_NAMES.get(g.home, f"„{g.home}“"), EL_NAMES.get(g.away, f"„{g.away}“")
+    p = probs[0] if probs else 50
+    deadline = lt_date(g.start + timedelta(days=30))
+    season = el_season_year(g.start)
+    hw, hl = table.get(g.home, (0, 0))
+    aw, al = table.get(g.away, (0, 0))
+    ctx = (f"Eurolygoje {home} šį sezoną turi {hw} pergal{'ę' if hw == 1 else 'es'} ir {hl} "
+           f"pralaimėjim{'ą' if hl == 1 else 'us'}, {away} – {aw}–{al}. "
+           f"Rungtynės vyks {'Kaune, „Žalgirio“ arenoje' if g.home == 'Zalgiris Kaunas' else 'išvykoje'}.")
+    return {
+        "title": f"{home} vs {away}",
+        "subtitle": f"Eurolyga, {lt_date(g.start)} {g.start:%H:%M} Lietuvos laiku",
+        "category": "sportas",
+        "image_url": config.GAMES_EL_IMAGE or IMG_ZAL,
+        "liquidity": config.GAMES_LIQUIDITY,
+        "rules": (
+            f"Rinka bus išspręsta pagal oficialų {home} ir {away} {season}–{season + 1} m. Eurolygos reguliariojo sezono rungtynių, numatytų {lt_date(g.start)}, rezultatą.\n\n"
+            "Vertinamas galutinis rezultatas, įskaitant visus pratęsimus. Lygiosios nėra galima baigtis.\n\n"
+            "Jeigu rungtynės bus nutrauktos, tačiau Eurolyga patvirtins galutinį rezultatą arba vienai komandai skirs techninę pergalę, naudojamas oficialus sprendimas.\n\n"
+            f"Jeigu rungtynės bus nukeltos, vertinamas tos pačios suplanuotos Eurolygos dvikovos rezultatas, jeigu ji įvyks iki {deadline} imtinai. "
+            "Jeigu iki šios datos nebus sužaista ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\n"
+            "Rezultato šaltiniai yra oficialus Eurolygos rungtynių puslapis (euroleaguebasketball.net) ir oficialus Kauno „Žalgirio“ tvarkaraštis."),
+        "context": ctx,
+        "closes_at": _close(g),
+        "options": [{"label": home, "probability": p}, {"label": away, "probability": 100 - p}],
+    }
 
 
 def full_size_logo(url: str) -> str:
@@ -284,7 +379,8 @@ def _get(url: str) -> str:
 
 def plan(now: datetime | None = None, horizon_days: int | None = None,
          fetch=_get, existing_titles: set[str] | None = None,
-         odds_fetch=None) -> tuple[list[dict], list[str], list[str]]:
+         odds_fetch=None, existing: list[tuple[str, str]] | None = None
+         ) -> tuple[list[dict], list[str], list[str]]:
     """Specs for games within the horizon that have no market yet AND published
     bookmaker odds. Returns (specs, waiting, errors): `waiting` lists games
     skipped because odds are not out yet — they are retried on the next run."""
@@ -297,16 +393,22 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
     errors, waiting, candidates = [], [], []
 
     if existing_titles is None:
-        rows, err = app_api.markets(600)
+        rows, err = app_api.markets(1000)
         if err:
             return [], [], [f"app: {err}"]          # cannot dedupe -> create nothing
-        existing_titles = {r.get("title") for r in rows if r.get("status") != "resolved"}
+        live = [r for r in rows if r.get("status") != "resolved"]
+        existing_titles = {r.get("title") for r in live}
+        existing = [(r.get("title") or "", r.get("closes_at") or "") for r in live]
+    existing = existing or []
 
     sources = []
     if "lkl" in config.GAMES_LEAGUES:
         sources.append(("lkl", "LKL", LKL_SCHEDULE, LKL_TABLE, parse_lkl_schedule, parse_lkl_table, lkl_spec))
     if "toplyga" in config.GAMES_LEAGUES:
         sources.append(("toplyga", "TOPLYGA", TOP_SCHEDULE, TOP_TABLE, parse_top_schedule, parse_top_table, top_spec))
+    if "euroleague" in config.GAMES_LEAGUES:
+        feed = EL_FEED.format(year=el_season_year(now))
+        sources.append(("euroleague", "Eurolyga", feed, feed, parse_el_schedule, parse_el_table, el_spec))
     for league, name, sched_url, table_url, parse_s, parse_t, make in sources:
         try:
             games = parse_s(fetch(sched_url))
@@ -315,7 +417,8 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
             errors.append(f"{name}: {type(e).__name__}: {e}")
             continue
         todo = [g for g in games if min_lead <= g.start <= horizon
-                and make(g, table)["title"] not in existing_titles]
+                and make(g, table)["title"] not in existing_titles
+                and not _already_listed(make(g, table), g.start, existing)]
         if not todo:
             continue
         try:
@@ -341,7 +444,8 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
             spec["_logos"] = [g.home_logo, g.away_logo] if g.home_logo and g.away_logo else mo.logos
             spec["_image_name"] = re.sub(r"[^a-z0-9]+", "-", betodds.fold(
                 f"{league} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-")
-            spec["_caption"] = f"{'LKL' if league == 'lkl' else 'TOPLYGA'} · {MONTHS[g.start.month - 1]} {g.start.day} d. {g.start:%H:%M}"
+            spec["_caption"] = (f"{ {'lkl': 'LKL', 'toplyga': 'TOPLYGA', 'euroleague': 'EUROLYGA'}[league] } · "
+                                f"{MONTHS[g.start.month - 1]} {g.start.day} d. {g.start:%H:%M}")
             candidates.append(spec)
 
     seen, fresh = set(), []
@@ -350,6 +454,27 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
             seen.add(s["title"])
             fresh.append(s)
     return fresh, waiting, errors
+
+
+def _already_listed(spec: dict, start: datetime, existing: list[tuple[str, str]]) -> bool:
+    """True if a live market already covers this game even under another title
+    (an admin renamed „Hipocredit“ to „Jonavos „Hipocredit““): both teams' words
+    appear in its title and it closes within 36 h of the tip-off."""
+    from . import betodds
+
+    teams = [o["label"] for o in spec["options"] if o["label"] != "Lygiosios"]
+    need = [set(betodds.fold(t).split()) for t in teams]
+    for title, closes in existing:
+        words = set(betodds.fold(title).split())
+        if not all(n and n <= words for n in need):
+            continue
+        try:
+            when = datetime.fromisoformat(closes.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if abs((when - start).total_seconds()) <= 36 * 3600:
+            return True
+    return False
 
 
 def _public_spec(spec: dict) -> dict:

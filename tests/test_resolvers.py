@@ -224,3 +224,22 @@ def test_diagnose_weather_reports_meteo_failure(monkeypatch):
 
 def test_diagnose_empty_when_no_feed_applies():
     assert resolvers.diagnose("Ar Seimas priims biudžetą?") == []
+
+
+AGATA_NEW = """<button>2026 m. 42 savaitė<span>calendar_month</span></button>
+<div class="ty-body-5">Spalio 12–18 d.</div>
+<div class="chart-row"><div class="row-pos">1</div><div class="row-trend tr-same">0</div>
+<div class="row-meta"><div class="row-artist">Different Dimension,QV<span class="lt-badge">LT</span></div>
+<div class="row-title">Sakartvelas - Special Version</div></div><div class="row-num row-lastweek">1</div></div>
+<div class="chart-row"><div class="row-pos">2</div><div class="row-meta"><div class="row-artist">Jessica Shy<span class="lt-badge">LT</span></div>
+<div class="row-title">Kas Kaltas (feat. Igoris Kofas)</div></div></div>"""
+
+
+def test_agata_redesigned_chart_rows_and_week():
+    from arbus import resolvers
+
+    rows = resolvers.parse_agata_rows(AGATA_NEW)
+    assert rows[0] == (1, "Different Dimension, QV", "Sakartvelas - Special Version")
+    assert rows[1][1] == "Jessica Shy"
+    assert resolvers._agata_new_page_week(AGATA_NEW) == (2026, 42)
+    assert resolvers.parse_agata_rows("<html>empty future week</html>") == []

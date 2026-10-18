@@ -160,3 +160,35 @@ def test_football_match_day_resolves_once_full_time(monkeypatch):
     reports, _ = weather._resolve_sports([_today_market()], datetime.now(timezone.utc),
                                          weather._tz(), {}, alert=True, do_resolve=True)
     assert calls["resolve"] == [("m9", "o0")]                      # FK Žalgiris (home) won
+
+
+BE_RESULTS = """<table>
+<tr><td><a href="/basketball/lithuania/lkl/juventus-gargzdai/a1/" class="in-match"><span>Juventus</span> - <span>Gargzdai</span></a></td>
+<td><a href="/basketball/lithuania/lkl/juventus-gargzdai/a1/">100:90</a></td><td class="h-text-right">Today</td></tr>
+<tr><td><a href="/basketball/lithuania/lkl/nevezis-zalgiris-kaunas/M35zlwI8/" class="in-match"><span>Nevezis</span> - <span>Zalgiris Kaunas</span></a></td>
+<td><a href="/basketball/lithuania/lkl/nevezis-zalgiris-kaunas/M35zlwI8/">76:80</a></td><td class="h-text-right">11.10.</td></tr>
+</table>"""
+
+
+def test_lkl_results_from_betexplorer(monkeypatch):
+    from datetime import date
+
+    from arbus import betodds, sports
+
+    monkeypatch.setattr(betodds, "_get", lambda url, **h: BE_RESULTS)
+    g = sports.lkl_result("2026-10-11", ["Kėdainių „Nevėžis-Paskolų klubas“", "Kauno „Žalgiris“"],
+                          today=date(2026, 10, 18))
+    assert (g["home_score"], g["away_score"]) == (76, 80)
+    assert g["home"] == "Kėdainių „Nevėžis-Paskolų klubas“" and g["away"] == "Kauno „Žalgiris“"
+    today = sports.parse_be_results(BE_RESULTS, "lkl", date(2026, 10, 18))[0]
+    assert today["day"] == date(2026, 10, 18) and today["home_key"] == "Juventus"
+    # wrong date -> not this game
+    assert sports.lkl_result("2026-11-20", ["Kėdainių „Nevėžis-Paskolų klubas“", "Kauno „Žalgiris“"],
+                             today=date(2026, 11, 21)) is None
+
+
+def test_sports_league_detects_lkl():
+    from arbus import weather
+
+    assert weather._sports_league("2026–2027 m. LKL reguliariojo sezono rungtynių") == "lkl"
+    assert weather._sports_league("Eurolygos reguliariojo sezono") == "euroleague"

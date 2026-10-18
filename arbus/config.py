@@ -1023,8 +1023,12 @@ FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 10)
 # ── Game markets (arbus games): LKL + TOPLYGA, created ~a week ahead ─────────
 # Each run creates a market for every game starting within GAMES_HORIZON_DAYS
 # that has no market yet (dedupe by title). Prices from official standings.
-GAMES_LEAGUES = {x.strip() for x in _env_str("GAMES_LEAGUES", "lkl,toplyga").split(",") if x.strip()}
-GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 7)
+GAMES_LEAGUES = {x.strip() for x in _env_str("GAMES_LEAGUES", "lkl,toplyga,euroleague").split(",") if x.strip()}
+# Look up to a month ahead (team request 2026-10-18); a game is still created
+# only once bookmakers publish odds, which is usually 1-5 days before.
+GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 30)
+GAMES_EL_TEAMS = {x.strip() for x in _env_str("GAMES_EL_TEAMS", "Zalgiris Kaunas").split(",") if x.strip()}
+GAMES_EL_IMAGE = _env_str("GAMES_EL_IMAGE", "")
 GAMES_MIN_LEAD_HOURS = _env_int("GAMES_MIN_LEAD_HOURS", 3)   # never open a market minutes before tip-off
 GAMES_LIQUIDITY = _env_int("GAMES_LIQUIDITY", 20000)         # team scale 2026-10-06: games = medium
 GAMES_LKL_IMAGE = _env_str("GAMES_LKL_IMAGE", "")             # empty -> the Žalgiris image
