@@ -12056,6 +12056,7 @@
  },
  "ceaa8855-3859-409e-9869-b324b256b366": {},
  "cee8af63-11ae-4d18-ad54-ebed0c21f892": {},
+ "cf6e9a3b-df73-448b-a107-0ac27b507289": {},
  "cfc29238-c66a-483d-ad2f-6f506c801c83": {
   "checksum": "f2f1e363a8452591affe2a614cf3fe5702b6ebf1d23937a471a3953924f56909",
   "current_maximum": 14.9,
@@ -12345,6 +12346,7 @@
   "station": "kauno-ams"
  },
  "cfee8c11-99c8-4cc6-858a-40cdf310db3c": {},
+ "d12a480a-f4e4-4b08-88d6-b533b72c2941": {},
  "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {
   "resolved": true,
   "resolved_at": "2026-10-01T08:31:02.936037+00:00",
@@ -12941,6 +12943,7 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "d5085f22-c5a7-4aad-97f7-4fa730012079": {},
  "d5ba064d-74f0-47ab-8b3a-d36b78c95ba9": {
   "resolved": true,
   "resolved_at": "2026-10-06T08:20:51.549540+00:00",
@@ -16421,7 +16424,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "ff85a984-2939-4133-a07f-920cf6758883": {},
+ "ff85a984-2939-4133-a07f-920cf6758883": {
+  "resolved": true,
+  "resolved_at": "2026-10-18T16:25:35.199965+00:00",
+  "resolved_label": "Different Dimension, QV – „Sakartvelas – Special Version“",
+  "resolved_option_id": "1303797b-caa4-4c93-a9a2-428417a8da14",
+  "resolved_via": "music",
+  "resolved_winner": "Different Dimension, QV – Sakartvelas - Special Version"
+ },
  "ffc33a33-0eb5-4c0a-ba7b-d1c930372c10": {},
  "ffe440e4-b046-40af-b3b2-bd98435b7fb0": {
   "checksum": "e9585f8a935d45de30d6b521964fc94d1fa086864d3a4f2b2fe8b231f56e5e85",
