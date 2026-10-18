@@ -10461,7 +10461,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "bdba3af2-82de-4465-b379-54c834bc233e": {},
+ "bdba3af2-82de-4465-b379-54c834bc233e": {
+  "resolved": true,
+  "resolved_at": "2026-10-18T15:55:40.902688+00:00",
+  "resolved_label": "FK „Žalgiris“",
+  "resolved_option_id": "02d0887e-5a56-403d-9a86-700e0fc253d2",
+  "resolved_score": "Žalgiris 4:1 Hegelmann",
+  "resolved_via": "sports"
+ },
  "beb0b7f9-f487-45fe-a65a-f4f332275876": {
   "checksum": "dfaa5c2bba8b028fd643d1f396f576dfd1a8bcc708d19803da419e0b07b845a3",
   "current_maximum": 8.8,
