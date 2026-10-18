@@ -3437,7 +3437,7 @@
   "station": "kauno-ams"
  },
  "376009e8-4705-4d84-82d7-7e684f55f062": {
-  "checksum": "846f2782c1542cd53448449d86568308ea82525b1b35649703005200d8019b0c",
+  "checksum": "fefda76f6ed181dfb49841d185ba14d7e0c55d3c45c2c4572dc8ca518cfc0b3f",
   "current_maximum": null,
   "date": "2026-10-19",
   "measurements": {},
@@ -6252,7 +6252,7 @@
   "station": "kauno-ams"
  },
  "7c6d32c0-f5c2-4b10-a1a1-805cfb9b9408": {
-  "checksum": "385ac6d58d25a054b6ccf5fb3a7117589e3aaa256f7d7e7b56f0cf28a0a3b149",
+  "checksum": "bc96dc47737820f7d65197cb6ca9f9802ce3e25d0f2cfafe389f0808a72ea365",
   "current_maximum": null,
   "date": "2026-10-19",
   "measurements": {},
@@ -6554,7 +6554,7 @@
   "station": "vilniaus-ams"
  },
  "85080f62-f127-4cca-ad9e-74ca1c0c7109": {
-  "checksum": "f372707dab40ddc3449450b2bb2d993d06f0a88e0edc80077ee813209e336740",
+  "checksum": "c481a2b6550930b1fc6c69ba008116d4ff93a5b99b3a0a5e6cf7be2d9cc5c115",
   "current_maximum": null,
   "date": "2026-10-19",
   "measurements": {},
@@ -8736,7 +8736,7 @@
   "station": "vilniaus-ams"
  },
  "a873e8a5-29cb-4b91-b45d-12b352a8b214": {
-  "checksum": "846f2782c1542cd53448449d86568308ea82525b1b35649703005200d8019b0c",
+  "checksum": "fefda76f6ed181dfb49841d185ba14d7e0c55d3c45c2c4572dc8ca518cfc0b3f",
   "current_maximum": 9.3,
   "date": "2026-10-18",
   "eliminated": [
@@ -8827,6 +8827,12 @@
     "received_at": "2026-10-18T10:10:46.635101+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 9.3
+   },
+   "2026-10-18 11:00:00": {
+    "checksum": "fefda76f6ed181dfb49841d185ba14d7e0c55d3c45c2c4572dc8ca518cfc0b3f",
+    "received_at": "2026-10-18T11:10:49.996765+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 8.9
    }
   },
   "resolved": false,
@@ -10399,10 +10405,10 @@
  },
  "bdba3af2-82de-4465-b379-54c834bc233e": {},
  "beb0b7f9-f487-45fe-a65a-f4f332275876": {
-  "checksum": "385ac6d58d25a054b6ccf5fb3a7117589e3aaa256f7d7e7b56f0cf28a0a3b149",
-  "current_maximum": 7.9,
+  "checksum": "bc96dc47737820f7d65197cb6ca9f9802ce3e25d0f2cfafe389f0808a72ea365",
+  "current_maximum": 8.4,
   "date": "2026-10-18",
-  "max_received_at": "2026-10-18T10:10:46.635101+00:00",
+  "max_received_at": "2026-10-18T11:10:49.996765+00:00",
   "measurements": {
    "2026-10-17 21:00:00": {
     "checksum": "fc8352dd8b8babdd6c9d3d0460a3dd1bfde75f85e94bd2aa88a26313ece0539e",
@@ -10487,6 +10493,12 @@
     "received_at": "2026-10-18T10:10:46.635101+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 7.9
+   },
+   "2026-10-18 11:00:00": {
+    "checksum": "bc96dc47737820f7d65197cb6ca9f9802ce3e25d0f2cfafe389f0808a72ea365",
+    "received_at": "2026-10-18T11:10:49.996765+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 8.4
    }
   },
   "resolved": false,
@@ -13280,13 +13292,13 @@
   "station": "klaipedos-ams"
  },
  "dd086d4a-3de4-4a38-905d-cdbc295efbec": {
-  "checksum": "f372707dab40ddc3449450b2bb2d993d06f0a88e0edc80077ee813209e336740",
-  "current_maximum": 11.2,
+  "checksum": "c481a2b6550930b1fc6c69ba008116d4ff93a5b99b3a0a5e6cf7be2d9cc5c115",
+  "current_maximum": 11.8,
   "date": "2026-10-18",
   "eliminated": [
    "bf5de042-9baf-430b-bd36-05079f7e475c"
   ],
-  "max_received_at": "2026-10-18T10:10:46.635101+00:00",
+  "max_received_at": "2026-10-18T11:10:49.996765+00:00",
   "measurements": {
    "2026-10-17 21:00:00": {
     "checksum": "700e190063a842b8d00a76edd1b235e1851683f3ba3a19c108028ee01455731f",
@@ -13371,6 +13383,12 @@
     "received_at": "2026-10-18T10:10:46.635101+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 11.2
+   },
+   "2026-10-18 11:00:00": {
+    "checksum": "c481a2b6550930b1fc6c69ba008116d4ff93a5b99b3a0a5e6cf7be2d9cc5c115",
+    "received_at": "2026-10-18T11:10:49.996765+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 11.8
    }
   },
   "resolved": false,
