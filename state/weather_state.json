@@ -12943,7 +12943,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "d5085f22-c5a7-4aad-97f7-4fa730012079": {},
+ "d5085f22-c5a7-4aad-97f7-4fa730012079": {
+  "resolved": true,
+  "resolved_at": "2026-10-18T18:15:50.303813+00:00",
+  "resolved_label": "Kauno „Žalgiris“",
+  "resolved_option_id": "1cbd7f43-e920-4af4-9812-f660c4ccdb75",
+  "resolved_score": "Kauno „Žalgiris“ 96:76 „Tauragė“",
+  "resolved_via": "sports"
+ },
  "d5ba064d-74f0-47ab-8b3a-d36b78c95ba9": {
   "resolved": true,
   "resolved_at": "2026-10-06T08:20:51.549540+00:00",
