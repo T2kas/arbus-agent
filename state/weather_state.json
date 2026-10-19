@@ -1305,7 +1305,7 @@
  },
  "11fab923-6861-4250-be3d-e10979676e60": {},
  "13593653-5906-4fd7-a5b0-45ded84e4b0c": {
-  "checksum": "e7337ada5257b3f6d5d644a6970d5dbad507a9aaf7ac4cb00fffd42bf0753695",
+  "checksum": "d263cba46f83975df207b2f4b892547d8b12b4351a0fe5e31f1731c46c542f4f",
   "current_maximum": null,
   "date": "2026-10-20",
   "measurements": {},
@@ -1448,7 +1448,7 @@
   "station": "vilniaus-ams"
  },
  "1509c2ac-88de-4dd6-bb5a-d014e025acbe": {
-  "checksum": "1d0132c66029ff14f9a8f46067d170d279f30136aaa6634531cfd3fdf9b3e4ef",
+  "checksum": "78ed995ca96c8d8a8bc369d0c575ef2d70fc66eedc1b706a3eb76072fcde87f4",
   "current_maximum": null,
   "date": "2026-10-20",
   "measurements": {},
@@ -3453,10 +3453,10 @@
   "station": "kauno-ams"
  },
  "376009e8-4705-4d84-82d7-7e684f55f062": {
-  "checksum": "1d0132c66029ff14f9a8f46067d170d279f30136aaa6634531cfd3fdf9b3e4ef",
-  "current_maximum": 4.6,
+  "checksum": "78ed995ca96c8d8a8bc369d0c575ef2d70fc66eedc1b706a3eb76072fcde87f4",
+  "current_maximum": 5.2,
   "date": "2026-10-19",
-  "max_received_at": "2026-10-18T21:10:49.692179+00:00",
+  "max_received_at": "2026-10-19T09:10:52.227442+00:00",
   "measurements": {
    "2026-10-18 21:00:00": {
     "checksum": "8d262a486a9fe63c9c0731c7973eab27e6d35d6793e18f930618807729b2d17d",
@@ -3529,6 +3529,12 @@
     "received_at": "2026-10-19T08:10:44.978187+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 4.4
+   },
+   "2026-10-19 09:00:00": {
+    "checksum": "78ed995ca96c8d8a8bc369d0c575ef2d70fc66eedc1b706a3eb76072fcde87f4",
+    "received_at": "2026-10-19T09:10:52.227442+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 5.2
    }
   },
   "resolved": false,
@@ -6351,7 +6357,7 @@
   "station": "kauno-ams"
  },
  "7c6d32c0-f5c2-4b10-a1a1-805cfb9b9408": {
-  "checksum": "c3f9c83161a1375dd5b2cf0fcba0a708f14c41d89f3c6010117960c7b778d9f5",
+  "checksum": "46ac50e04466899476e32f5785f1dba5ebdad974507e104be8e0c6b0bdc7bc5a",
   "current_maximum": 6.6,
   "date": "2026-10-19",
   "max_received_at": "2026-10-18T21:10:49.692179+00:00",
@@ -6427,6 +6433,12 @@
     "received_at": "2026-10-19T08:10:44.978187+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 5.9
+   },
+   "2026-10-19 09:00:00": {
+    "checksum": "46ac50e04466899476e32f5785f1dba5ebdad974507e104be8e0c6b0bdc7bc5a",
+    "received_at": "2026-10-19T09:10:52.227442+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 6.6
    }
   },
   "resolved": false,
@@ -6728,10 +6740,13 @@
   "station": "vilniaus-ams"
  },
  "85080f62-f127-4cca-ad9e-74ca1c0c7109": {
-  "checksum": "e7337ada5257b3f6d5d644a6970d5dbad507a9aaf7ac4cb00fffd42bf0753695",
-  "current_maximum": 5.8,
+  "checksum": "d263cba46f83975df207b2f4b892547d8b12b4351a0fe5e31f1731c46c542f4f",
+  "current_maximum": 7.5,
   "date": "2026-10-19",
-  "max_received_at": "2026-10-19T08:10:44.978187+00:00",
+  "eliminated": [
+   "a8b2c5bb-2c1e-4f1f-926b-1ba82eb346e5"
+  ],
+  "max_received_at": "2026-10-19T09:10:52.227442+00:00",
   "measurements": {
    "2026-10-18 21:00:00": {
     "checksum": "cba1067e4f3d476dcf0a4412dc90fd0c24d41c31aa757cbf3d59fcbbe4a948dd",
@@ -6804,6 +6819,12 @@
     "received_at": "2026-10-19T08:10:44.978187+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 5.8
+   },
+   "2026-10-19 09:00:00": {
+    "checksum": "d263cba46f83975df207b2f4b892547d8b12b4351a0fe5e31f1731c46c542f4f",
+    "received_at": "2026-10-19T09:10:52.227442+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 7.5
    }
   },
   "resolved": false,
@@ -8421,7 +8442,7 @@
   "station": "vilniaus-ams"
  },
  "9e2c7729-a104-4824-81e5-b81e0f0540e5": {
-  "checksum": "c3f9c83161a1375dd5b2cf0fcba0a708f14c41d89f3c6010117960c7b778d9f5",
+  "checksum": "46ac50e04466899476e32f5785f1dba5ebdad974507e104be8e0c6b0bdc7bc5a",
   "current_maximum": null,
   "date": "2026-10-20",
   "measurements": {},
