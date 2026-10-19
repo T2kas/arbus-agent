@@ -16172,7 +16172,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "f5262b27-0bed-4255-990f-0a6825e9d38d": {},
+ "f5262b27-0bed-4255-990f-0a6825e9d38d": {
+  "resolved": true,
+  "resolved_at": "2026-10-19T17:45:52.990689+00:00",
+  "resolved_label": "„Kauno Žalgiris“",
+  "resolved_option_id": "4d4228f4-d98c-42cb-9bb5-01fa318163c3",
+  "resolved_score": "Sūduva 0:1 K. Žalgiris",
+  "resolved_via": "sports"
+ },
  "fa5e0aca-3c33-4673-b01a-938576a07813": {
   "resolved": true,
   "resolved_at": "2026-10-02T08:25:36.656093+00:00",
