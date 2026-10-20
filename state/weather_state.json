@@ -1305,13 +1305,13 @@
  },
  "11fab923-6861-4250-be3d-e10979676e60": {},
  "13593653-5906-4fd7-a5b0-45ded84e4b0c": {
-  "checksum": "88c9bf318240067535f34f5458d6c0ec62a547fe7e394621e1058f5120a6b888",
-  "current_maximum": 11.0,
+  "checksum": "993a4c781416330dc28e0fb728a1056ea18e8765581b28b6236aa7f4aee49ece",
+  "current_maximum": 11.2,
   "date": "2026-10-20",
   "eliminated": [
    "3d927fa9-dc76-4926-8756-90da679e592a"
   ],
-  "max_received_at": "2026-10-20T12:10:48.227393+00:00",
+  "max_received_at": "2026-10-20T17:10:49.168726+00:00",
   "measurements": {
    "2026-10-19 21:00:00": {
     "checksum": "260eb8587dbbfcd49f2fd94ce2e7a8a2d64f40d9db4d5450ac2a328f5d102624",
@@ -1432,6 +1432,12 @@
     "received_at": "2026-10-20T16:10:46.946593+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 10.7
+   },
+   "2026-10-20 17:00:00": {
+    "checksum": "993a4c781416330dc28e0fb728a1056ea18e8765581b28b6236aa7f4aee49ece",
+    "received_at": "2026-10-20T17:10:49.168726+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 11.2
    }
   },
   "resolved": false,
@@ -1845,7 +1851,7 @@
   "station": "kauno-ams"
  },
  "1846b5e2-c5e2-4ed0-8eb1-88a7f60b3b37": {
-  "checksum": "2c5d4ba626e9e0218fb6441c31114b0edc2bb53b90d56cacddc1bbf21e46cec1",
+  "checksum": "a7e02b980a167c44b9e4a4f4699f3374a94ff6aa3c76e6e7974e7ac195e77bb0",
   "current_maximum": null,
   "date": "2026-10-22",
   "measurements": {},
@@ -2887,7 +2893,7 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "236fb3d7-c9b2-479e-9108-6f29b6316eb7": {
-  "checksum": "6b3e8a584a70860c3a9ad10bcce8d72cce80c7abc303af8729f5d17ffdbdcdeb",
+  "checksum": "6d800d6a869b37d8eb2e31d027f4c87d60e10665f7611ca8731a7adebd3c7d64",
   "current_maximum": null,
   "date": "2026-10-22",
   "measurements": {},
@@ -9364,7 +9370,7 @@
   "station": "vilniaus-ams"
  },
  "a106a129-696e-45d2-812e-90abeca8d4a4": {
-  "checksum": "6b3e8a584a70860c3a9ad10bcce8d72cce80c7abc303af8729f5d17ffdbdcdeb",
+  "checksum": "6d800d6a869b37d8eb2e31d027f4c87d60e10665f7611ca8731a7adebd3c7d64",
   "current_maximum": null,
   "date": "2026-10-21",
   "measurements": {},
@@ -10360,7 +10366,7 @@
   "station": "kauno-ams"
  },
  "b6b61694-af04-43cb-9b0c-778eac043163": {
-  "checksum": "2c5d4ba626e9e0218fb6441c31114b0edc2bb53b90d56cacddc1bbf21e46cec1",
+  "checksum": "a7e02b980a167c44b9e4a4f4699f3374a94ff6aa3c76e6e7974e7ac195e77bb0",
   "current_maximum": null,
   "date": "2026-10-21",
   "measurements": {},
@@ -16327,7 +16333,7 @@
   "station": "klaipedos-ams"
  },
  "f06dad9c-6427-4365-8f55-1db6546454e0": {
-  "checksum": "88c9bf318240067535f34f5458d6c0ec62a547fe7e394621e1058f5120a6b888",
+  "checksum": "993a4c781416330dc28e0fb728a1056ea18e8765581b28b6236aa7f4aee49ece",
   "current_maximum": null,
   "date": "2026-10-21",
   "measurements": {},
@@ -16335,7 +16341,7 @@
   "station": "klaipedos-ams"
  },
  "f168b8c8-8ea8-48e2-822b-3b0fb6c73420": {
-  "checksum": "88c9bf318240067535f34f5458d6c0ec62a547fe7e394621e1058f5120a6b888",
+  "checksum": "993a4c781416330dc28e0fb728a1056ea18e8765581b28b6236aa7f4aee49ece",
   "current_maximum": null,
   "date": "2026-10-22",
   "measurements": {},
