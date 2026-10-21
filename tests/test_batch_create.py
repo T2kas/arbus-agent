@@ -157,3 +157,24 @@ def test_two_named_outcomes_get_the_dual_line_chart():
     assert wants_dual_chart([{"label": "LSDP"}, {"label": "„Nemuno aušra“"}])
     assert not wants_dual_chart([{"label": "Taip"}, {"label": "Ne"}])
     assert not wants_dual_chart([{"label": "A"}, {"label": "B"}, {"label": "C"}])
+
+
+def test_vs_image_replaces_image_url_and_strips_helper_fields(monkeypatch):
+    from arbus import batch_create, matchimage
+
+    seen = {}
+
+    def fake(urls, name, caption="", fetch_bytes=None, style="logos"):
+        seen.update(urls=urls, name=name, caption=caption, style=style)
+        return "https://x.supabase.co/storage/v1/object/public/market-images/auto/games/a.png"
+    monkeypatch.setattr(matchimage, "game_image", fake)
+    spec = {"title": "Naglis Kanišauskas vs Ignas Pauliukevičius", "image_url": "https://fallback/x.jpg",
+            "image_vs": ["https://a.png", "https://b.png"], "image_style": "fighters",
+            "image_caption": "UTMA 20"}
+    out = batch_create.with_vs_image(spec)
+    assert out["image_url"].endswith("/a.png")
+    assert not any(k in out for k in ("image_vs", "image_style", "image_caption"))
+    assert seen["style"] == "fighters" and seen["urls"] == ["https://a.png", "https://b.png"]
+    # upload failure -> keep the fallback image
+    monkeypatch.setattr(matchimage, "game_image", lambda *a, **k: None)
+    assert batch_create.with_vs_image(spec)["image_url"] == "https://fallback/x.jpg"

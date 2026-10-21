@@ -49,8 +49,12 @@ def _logo(data: bytes, box: int):
     return img
 
 
-def compose(home_logo: bytes, away_logo: bytes, caption: str = "") -> bytes:
-    """1200x675 PNG: gradient, both logos on white discs, a big VS between."""
+def compose(home_logo: bytes, away_logo: bytes, caption: str = "",
+            style: str = "logos") -> bytes:
+    """1200x675 PNG: gradient + a big VS between the two sides.
+
+    style "logos": team logos on white discs. style "fighters": cut-out athlete
+    photos (transparent PNG) standing full height on the bottom edge."""
     from PIL import Image, ImageDraw
 
     canvas = Image.new("RGB", (W, H))
@@ -59,15 +63,29 @@ def compose(home_logo: bytes, away_logo: bytes, caption: str = "") -> bytes:
         t = y / (H - 1)
         d.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
     r, cy = 210, H // 2 - 10
-    for cx, data in ((W // 4 + 20, home_logo), (3 * W // 4 - 20, away_logo)):
-        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(255, 255, 255))
-        logo = _logo(data, int(r * 1.35))
-        canvas.paste(logo, (cx - logo.width // 2, cy - logo.height // 2), logo)
+    if style == "fighters":
+        for cx, data in ((W // 4 + 10, home_logo), (3 * W // 4 - 10, away_logo)):
+            img = Image.open(io.BytesIO(data)).convert("RGBA")
+            bbox = img.getbbox()
+            if bbox:
+                img = img.crop(bbox)
+            scale = (H - 40) / img.height
+            img = img.resize((int(img.width * scale), H - 40), Image.LANCZOS)
+            if img.width > W // 2 - 40:
+                img.thumbnail((W // 2 - 40, H - 40), Image.LANCZOS)
+            canvas.paste(img, (cx - img.width // 2, H - img.height), img)
+    else:
+        for cx, data in ((W // 4 + 20, home_logo), (3 * W // 4 - 20, away_logo)):
+            d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(255, 255, 255))
+            logo = _logo(data, int(r * 1.35))
+            canvas.paste(logo, (cx - logo.width // 2, cy - logo.height // 2), logo)
     vs = _font(110)
     d.text((W // 2, cy), "VS", font=vs, fill=(255, 255, 255), anchor="mm",
            stroke_width=4, stroke_fill=(10, 14, 24))
     if caption:
-        d.text((W // 2, H - 45), caption, font=_font(38), fill=(220, 228, 245), anchor="mm")
+        cap_y = 45 if style == "fighters" else H - 45      # fighters fill the bottom
+        d.text((W // 2, cap_y), caption, font=_font(38), fill=(220, 228, 245), anchor="mm",
+               stroke_width=3 if style == "fighters" else 0, stroke_fill=(10, 14, 24))
     out = io.BytesIO()
     canvas.save(out, "PNG", optimize=True)
     return out.getvalue()
@@ -94,7 +112,8 @@ def upload(png: bytes, name: str) -> str | None:
     return f"{base}/storage/v1/object/public/{BUCKET}/{path}"
 
 
-def game_image(logo_urls: list[str], name: str, caption: str = "", fetch_bytes=None) -> str | None:
+def game_image(logo_urls: list[str], name: str, caption: str = "", fetch_bytes=None,
+               style: str = "logos") -> str | None:
     """Build + upload the VS picture; None on any failure."""
     if len(logo_urls) < 2:
         return None
@@ -106,7 +125,7 @@ def game_image(logo_urls: list[str], name: str, caption: str = "", fetch_bytes=N
                 resp = requests.get(u, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
                 resp.raise_for_status()
                 return resp.content
-        png = compose(fetch_bytes(logo_urls[0]), fetch_bytes(logo_urls[1]), caption)
+        png = compose(fetch_bytes(logo_urls[0]), fetch_bytes(logo_urls[1]), caption, style)
         return upload(png, name)
     except Exception:
         return None

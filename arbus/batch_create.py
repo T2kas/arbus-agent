@@ -72,6 +72,27 @@ def validate(spec: dict, now: datetime | None = None) -> list[str]:
     return errs
 
 
+def with_vs_image(spec: dict) -> dict:
+    """A spec may carry "image_vs": [url_a, url_b] (+ optional "image_caption",
+    "image_style": "logos"|"fighters"). The "A VS B" picture is built and
+    uploaded here — the write key lives only in CI — and replaces image_url;
+    on any failure the spec's own image_url stays."""
+    pair = spec.get("image_vs")
+    if not pair:
+        return spec
+    import re as _re
+
+    from . import matchimage
+
+    name = "batch-" + _re.sub(r"[^a-z0-9]+", "-", spec["title"].lower()).strip("-")[:80]
+    url = matchimage.game_image(list(pair), name, spec.get("image_caption", ""),
+                                style=spec.get("image_style", "logos"))
+    out = {k: v for k, v in spec.items() if not k.startswith("image_") or k == "image_url"}
+    if url:
+        out["image_url"] = url
+    return out
+
+
 def existing_titles(rows: list[dict]) -> set[str]:
     """Titles of app markets that are not resolved — a new one with the same
     title would be a duplicate."""
@@ -101,6 +122,7 @@ def run(path: str, *, dry_run: bool, alert: bool = True) -> tuple[list[dict], st
                             "detail": " / ".join(f"{o['label']} {o['probability']}%"
                                                  for o in s["options"])})
             continue
+        s = with_vs_image(s)
         ok, detail = app_api.create_market(s)
         structure = s.get("outcome_structure") or "single_outcome"
         if ok and structure != "single_outcome":
