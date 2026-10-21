@@ -741,6 +741,14 @@
   "resolved_price": 1.973,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260930/"
  },
+ "0f405f6c-a96e-4d3d-a721-4aab9d5062f9": {
+  "checksum": "265c1271681e509262b5d15f968a1b512b3ddaa0d7697125e6ab992fbc16072c",
+  "current_maximum": null,
+  "date": "2026-10-23",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "0fe27902-82c0-4dcc-a6d4-f303ad44ce62": {
   "checksum": "2be00583a932739cd372abcc64ac0669723618a4c024ac10a6f643376b7578a5",
   "current_maximum": 15.9,
@@ -8829,6 +8837,14 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
+ },
+ "9851c4ab-6b09-4482-85fb-7c8bd15116e9": {
+  "checksum": "c23723e3288cf70a4c13b3ee60964d0bf925dd63d34061d63563e334de277d8f",
+  "current_maximum": null,
+  "date": "2026-10-23",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "9a0b166d-0ef9-478c-9eef-3ce5b1dfeeff": {
   "resolved": true,
@@ -17048,6 +17064,14 @@
   "resolved_option_id": "4d4228f4-d98c-42cb-9bb5-01fa318163c3",
   "resolved_score": "Sūduva 0:1 K. Žalgiris",
   "resolved_via": "sports"
+ },
+ "f622f7d0-e2a0-470c-bbda-f25be263942d": {
+  "checksum": "43958930fd42598174abbf9b55e219fcdac89ef7aab135adf853eb69da09588b",
+  "current_maximum": null,
+  "date": "2026-10-23",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
  },
  "fa5e0aca-3c33-4673-b01a-938576a07813": {
   "resolved": true,
