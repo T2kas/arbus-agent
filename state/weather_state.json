@@ -742,7 +742,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260930/"
  },
  "0f405f6c-a96e-4d3d-a721-4aab9d5062f9": {
-  "checksum": "427fefcd51278140095bb1285dfca50920a770fb21fe3fa88c5bb181a83bf8b9",
+  "checksum": "5f325475bc40cafdfa6407b8d6f8dceb457719866f270ffcb984b6df8709c251",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
@@ -1887,7 +1887,7 @@
   "station": "kauno-ams"
  },
  "1846b5e2-c5e2-4ed0-8eb1-88a7f60b3b37": {
-  "checksum": "d75899d3e74997b4e2aa58823fd5c09f309a9ef8bc4e3a7c67b2454796d22062",
+  "checksum": "fbf7f9caed8b2be13b10c703db4326ec341be773a60879a5078ce6cba6ab5870",
   "current_maximum": null,
   "date": "2026-10-22",
   "measurements": {},
@@ -2929,7 +2929,7 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "236fb3d7-c9b2-479e-9108-6f29b6316eb7": {
-  "checksum": "64f5ce639928764d3ba494d5bf9968874694f98accf886f5b8d3dad6da946326",
+  "checksum": "f2ecf421a6bb31d0de3c1d78541017301a08d1be90f5530794c271e8e62d3f30",
   "current_maximum": null,
   "date": "2026-10-22",
   "measurements": {},
@@ -8839,7 +8839,7 @@
   "station": "kauno-ams"
  },
  "9851c4ab-6b09-4482-85fb-7c8bd15116e9": {
-  "checksum": "64f5ce639928764d3ba494d5bf9968874694f98accf886f5b8d3dad6da946326",
+  "checksum": "f2ecf421a6bb31d0de3c1d78541017301a08d1be90f5530794c271e8e62d3f30",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
@@ -16804,7 +16804,7 @@
   "station": "klaipedos-ams"
  },
  "f168b8c8-8ea8-48e2-822b-3b0fb6c73420": {
-  "checksum": "427fefcd51278140095bb1285dfca50920a770fb21fe3fa88c5bb181a83bf8b9",
+  "checksum": "5f325475bc40cafdfa6407b8d6f8dceb457719866f270ffcb984b6df8709c251",
   "current_maximum": null,
   "date": "2026-10-22",
   "measurements": {},
@@ -17126,7 +17126,7 @@
   "resolved_via": "sports"
  },
  "f622f7d0-e2a0-470c-bbda-f25be263942d": {
-  "checksum": "d75899d3e74997b4e2aa58823fd5c09f309a9ef8bc4e3a7c67b2454796d22062",
+  "checksum": "fbf7f9caed8b2be13b10c703db4326ec341be773a60879a5078ce6cba6ab5870",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
