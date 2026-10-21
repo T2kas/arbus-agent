@@ -943,11 +943,22 @@ WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 18)       # create from th
 # exposing the house on a genuine outlier day. History: 2.0 → 1.4 (2026-09-19,
 # 21 markets) → 1.2 (2026-09-24, 36 markets, tail-calibrated).
 WEATHER_FORECAST_SIGMA = _env_float("WEATHER_FORECAST_SIGMA", 1.2)
-# Auto-close (closes_at) time of day, Vilnius. 15:30 stops trading just before the
-# afternoon peak (peak is ~13–14 UTC ≈ 16:00+ Vilnius), so the winning bucket is
-# still uncertain at close.
-WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 14)
-WEATHER_CLOSE_MINUTE = _env_int("WEATHER_CLOSE_MINUTE", 20)
+# Per-city (bias °C added to the Meteo LT forecast, σ °C), from 116 resolved
+# markets (2026-10-21): Klaipėda's sea-moderated max misses by only ±0.76 °C
+# (σ 1.2 overpriced its tails ~2×), Kaunas comes in ~0.5 °C below the forecast,
+# Vilnius slightly below with a wider spread. Log-loss 1.006 → ~0.95. A city not
+# listed falls back to (0, WEATHER_FORECAST_SIGMA).
+WEATHER_CITY_CALIBRATION = {
+    "vilnius": (-0.2, 1.3),
+    "kaunas": (-0.5, 1.3),
+    "klaipeda": (0.0, 0.8),
+}
+# Auto-close (closes_at) time of day, Vilnius. Measured on 116 markets: by 14:00
+# the running max already sat in the final bucket 58% of the time (median only
+# 0.9 °C below the final max) — the last hours were trading on a known answer.
+# At 11:00 that drops to ~20% (median 2.7 °C still to come). Was 14:20.
+WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 11)
+WEATHER_CLOSE_MINUTE = _env_int("WEATHER_CLOSE_MINUTE", 0)
 # Committed JSON so a stateless CI run remembers each market's running max, the
 # measurements already seen (dedup), the last response checksum, and whether it
 # has already been resolved (never resolve twice).
@@ -976,6 +987,15 @@ SERIES_MUSIC_IMAGE = os.environ.get("SERIES_MUSIC_IMAGE", "").strip()
 # Trading closes at the end of the evaluation week (Vilnius); the winner is
 # published a few days later, and the resolver settles then.
 SERIES_CLOSE_HOUR = _env_int("SERIES_CLOSE_HOUR", 23)
+# AGATA publishes the week-N singles chart on FRIDAY morning of week N, so the
+# music market closes Thursday evening — never open while the answer is public.
+SERIES_MUSIC_CLOSE_WEEKDAY = _env_int("SERIES_MUSIC_CLOSE_WEEKDAY", 3)   # 3 = Thursday
+SERIES_MUSIC_CLOSE_HOUR = _env_int("SERIES_MUSIC_CLOSE_HOUR", 21)
+# Music opening prices come from AGATA history, not the LLM: in 2026 weeks
+# 22-42 last week's #1 stayed #1 17/20 times, a new release debuted at #1 2/20,
+# last week's #2 took over 1/20. The LLM had priced the incumbent at 45-58%.
+# Shares for last week's #1..#5, the rest to "Kita daina".
+SERIES_MUSIC_POSITION_PROBS = (80, 6, 3, 1, 1)
 SERIES_CLOSE_MINUTE = _env_int("SERIES_CLOSE_MINUTE", 0)
 # Research budget for one weekly market (searches + output tokens). One call per
 # market per week, so this is a small recurring spend, reported each time.
@@ -1010,8 +1030,23 @@ FUEL_CATEGORY = _env_str("FUEL_CATEGORY", "ekonomika")
 FUEL_LIQUIDITY = _env_int("FUEL_LIQUIDITY", 8500)
 FUEL_IMAGE = _env_str("FUEL_IMAGE", "")           # reused from an existing fuel market if empty
 # Daily change std €/l — how far tomorrow's average lands from today's. Fuel
-# moves ~1–2 cents/day, so the buckets are ~1 cent wide.
+# moves ~1–2 cents/day, so the buckets are ~1 cent wide. Fallback only: the
+# weekday table below is what prices the markets.
 FUEL_FORECAST_SIGMA = _env_float("FUEL_FORECAST_SIGMA", 0.012)
+# Lithuanian pump prices run a weekly cycle: a jump on TUESDAY (+4.5 ct on
+# average, 8/8 Tuesdays) then a slow slide the rest of the week. With a flat
+# forecast and σ 1.2 ct the outer buckets won 55% of 42 markets while priced at
+# ~22% (log-loss 1.91, worse than uniform 1.61). Per weekday of the market's
+# date: (drift €/l added to the latest LEA price, σ €/l); drifts shrunk toward 0
+# (k=2), σ = 1.15 × observed sd, floor 1 ct. Leave-one-out log-loss 1.38.
+# Weekday 0 = Monday (its base price is Friday's bulletin).
+FUEL_WEEKDAY_MODEL = {
+    0: (-0.006, 0.010),
+    1: (+0.036, 0.022),
+    2: (-0.005, 0.030),
+    3: (-0.014, 0.010),
+    4: (-0.007, 0.025),
+}
 FUEL_HORIZON_DAYS = _env_int("FUEL_HORIZON_DAYS", 1)     # create tomorrow's
 # LEA publishes each day's average mid-morning (~11:00 Vilnius), when the market
 # resolves. So close at 10:00 (before it is knowable) and create the next day's

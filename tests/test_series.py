@@ -123,6 +123,7 @@ def test_series_research_uses_openai_when_configured(monkeypatch):
         series.SeriesDraft(options=[series.SeriesOption(label="A", probability=50),
                                     series.SeriesOption(label="B", probability=30)],
                            context="c"))[1])
+    monkeypatch.setattr(series, "music_spec_from_chart", lambda *a, **k: None)   # force the LLM path
     spec, meta = series.build_spec(series._music_series(), (2026, 40), "", series._tz())
     assert spec is not None
     assert seen == {"research": "openai", "structure": "openai"}
@@ -133,3 +134,34 @@ def test_series_provider_falls_back_without_key(monkeypatch):
     monkeypatch.setattr(series.config, "SERIES_LLM_PROVIDER", "openai")
     monkeypatch.setattr(llm, "available_providers", lambda: ["anthropic"])
     assert series.series_provider() is None      # → normal provider choice
+
+
+def test_music_priced_from_last_weeks_chart_without_llm(monkeypatch):
+    from arbus import llm, resolvers
+
+    chart = [(1, "Different Dimension, QV", "Sakartvelas - Special Version"),
+             (2, "Jessica Shy", "Kas Kaltas"), (3, "Different Dimension, QV", "Palangoj"),
+             (4, "Jessica Shy", "Jeigu Būčiau"), (5, "Jessica Shy", "Žvėris")]
+    asked = []
+    monkeypatch.setattr(resolvers, "_agata_url", lambda y, w, *a: (asked.append((y, w)), ("u", "h"))[1])
+    monkeypatch.setattr(resolvers, "parse_agata_rows", lambda html: chart)
+
+    def no_llm(*a, **k):
+        raise AssertionError("music must not call the LLM")
+    monkeypatch.setattr(llm, "research", no_llm)
+    spec, meta = series.build_spec(series._music_series(), (2026, 43), "img", series._tz())
+    assert asked == [(2026, 42)]                                  # last week's chart
+    probs = [o["probability"] for o in spec["options"]]
+    assert probs == [80, 6, 3, 1, 1, 9] and sum(probs) == 100
+    assert spec["options"][0]["label"] == "Different Dimension, QV – „Sakartvelas - Special Version“"
+    assert spec["options"][-1]["label"] == "Kita daina"
+    assert spec["closes_at"].startswith("2026-10-22T21:00")       # Thursday, before Friday's chart
+
+
+def test_music_week_one_reads_last_years_final_week(monkeypatch):
+    from arbus import resolvers
+
+    asked = []
+    monkeypatch.setattr(resolvers, "_agata_url", lambda y, w, *a: (asked.append((y, w)), None)[1])
+    assert series.music_spec_from_chart(series._music_series(), (2027, 1), "", "r", "s", series._tz()) is None
+    assert asked == [(2026, 53)]

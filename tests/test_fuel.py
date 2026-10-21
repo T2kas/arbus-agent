@@ -179,3 +179,20 @@ def test_weekend_market_is_flagged_not_guessed(monkeypatch):
     # alerted once only
     fuel.resolve_markets([m], now, fuel._tz(), state, alert=True, do_resolve=True)
     assert len(calls["tg"]) == 1
+
+
+def test_tuesday_jump_moves_the_book_up():
+    from zoneinfo import ZoneInfo
+
+    from arbus import fuel
+
+    tz = ZoneInfo("Europe/Vilnius")
+    tue = fuel.market_spec("benzinas", "2026-10-27", "", 1.950, tz)    # Tuesday
+    thu = fuel.market_spec("benzinas", "2026-10-29", "", 1.950, tz)    # Thursday
+    # Tuesday's middle bucket sits ~3.6 ct above the last published price
+    lo_mid = fuel.parse_price_bucket(tue["options"][2]["label"])[0]
+    assert lo_mid >= 1.980
+    assert "Antradieniais" in tue["context"]
+    # Thursday drifts down and is tight (σ 1 ct): the middle bucket is the favourite
+    p = [o["probability"] for o in thu["options"]]
+    assert p[2] == max(p) and fuel.parse_price_bucket(thu["options"][2]["label"])[1] < 1.950

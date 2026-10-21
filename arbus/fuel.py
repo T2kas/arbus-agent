@@ -313,20 +313,24 @@ def _rules_text(fuel: str, date_text: str) -> str:
     )
 
 
-def _context_text(fuel: str, forecast: float) -> str:
+def _context_text(fuel: str, forecast: float, d: date | None = None) -> str:
     name = FUELS[fuel]["loc"]
+    cycle = (" Antradieniais degalinių kainos Lietuvoje dažniausiai šokteli aukštyn, "
+             "o likusią savaitės dalį pamažu slenka žemyn." if d and d.weekday() == 1 else "")
     return (
         f"Degalų kainos Lietuvoje kinta beveik kasdien. Paskutinė paskelbta "
         f"vidutinė {name} kaina — apie {_fmt(forecast)} €/l, bet net kelių centų "
-        "pokytis per dieną gali pakeisti galutinę baigtį."
+        f"pokytis per dieną gali pakeisti galutinę baigtį.{cycle}"
     )
 
 
 def market_spec(fuel: str, target_iso: str, image_url: str,
                 forecast: float, tz: ZoneInfo) -> dict:
     d = date.fromisoformat(target_iso)
-    buckets = build_buckets(forecast)
-    pcts = bucket_probabilities(forecast, buckets, config.FUEL_FORECAST_SIGMA)
+    drift, sigma = config.FUEL_WEEKDAY_MODEL.get(d.weekday(), (0.0, config.FUEL_FORECAST_SIGMA))
+    expected = forecast + drift              # weekly pump-price cycle (Tuesday jump)
+    buckets = build_buckets(expected)
+    pcts = bucket_probabilities(expected, buckets, sigma)
     closes_at = datetime.combine(
         d, dtime(hour=config.FUEL_CLOSE_HOUR, minute=config.FUEL_CLOSE_MINUTE), tzinfo=tz)
     return {
@@ -338,7 +342,7 @@ def market_spec(fuel: str, target_iso: str, image_url: str,
         "image_url": image_url or config.FUEL_IMAGE,
         "liquidity": config.FUEL_LIQUIDITY,
         "rules": _rules_text(fuel, _lt_date_text(d)),
-        "context": _context_text(fuel, forecast),
+        "context": _context_text(fuel, forecast, d),
         "options": [{"label": b["label"], "probability": p} for b, p in zip(buckets, pcts)],
         "closes_at": closes_at.isoformat(),
         "forecast": forecast,

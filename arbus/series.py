@@ -307,6 +307,54 @@ def target_period(series: dict, today: date) -> tuple | None:
     return music_target_week(today)
 
 
+# ── music: priced from AGATA history (no LLM) ────────────────────────────────
+
+def music_options_from_chart(chart: list[tuple[int, str, str]]) -> list[dict] | None:
+    """Last week's top 5 + „Kita daina“, priced by how #1 actually moves week to
+    week (config.SERIES_MUSIC_POSITION_PROBS); None if the chart is too short."""
+    top = chart[:len(config.SERIES_MUSIC_POSITION_PROBS)]
+    if len(top) < len(config.SERIES_MUSIC_POSITION_PROBS):
+        return None
+    shares = list(config.SERIES_MUSIC_POSITION_PROBS)
+    opts = [{"label": f"{artist} – „{title}“", "probability": p}
+            for (_r, artist, title), p in zip(top, shares)]
+    opts.append({"label": "Kita daina", "probability": 100 - sum(shares)})
+    return opts
+
+
+def music_close(year: int, week: int, tz: ZoneInfo) -> datetime:
+    """Thursday evening of the target week: AGATA posts the chart Friday morning."""
+    d = date.fromisocalendar(year, week, 1) + timedelta(days=config.SERIES_MUSIC_CLOSE_WEEKDAY)
+    return datetime.combine(d, dtime(hour=config.SERIES_MUSIC_CLOSE_HOUR), tzinfo=tz)
+
+
+def music_spec_from_chart(series: dict, period: tuple, image: str, rules: str,
+                          subtitle: str, tz: ZoneInfo) -> dict | None:
+    year, week = period
+    prev = date.fromisocalendar(year, week, 1) - timedelta(days=7)
+    py, pw, _ = prev.isocalendar()
+    try:
+        found = resolvers._agata_url(py, pw)
+        chart = resolvers.parse_agata_rows(found[1]) if found else []
+    except Exception as exc:                            # noqa: BLE001 — fall back to research
+        log.warning("music chart %s-W%s unavailable: %s", py, pw, exc)
+        return None
+    options = music_options_from_chart(chart)
+    if not options:
+        return None
+    leader = options[0]["label"]
+    return {
+        "series": series["key"], "period": period, "title": series["title"],
+        "subtitle": subtitle, "category": series["category"], "image_url": image,
+        "liquidity": series["liquidity"], "rules": rules,
+        "context": (f"Praėjusios savaitės AGATA singlų topo lyderis – {leader}. "
+                    "Lyderis dažniausiai išlieka pirmas ir kitą savaitę, bet naujas "
+                    "populiaraus atlikėjo singlas gali iš karto užimti pirmą vietą."),
+        "options": options,
+        "closes_at": music_close(year, week, tz).isoformat(),
+    }
+
+
 # ── building one market spec via research ────────────────────────────────────
 
 def _week_bounds(series: dict, period: tuple) -> tuple[str, str]:
@@ -334,6 +382,11 @@ def build_spec(series: dict, period: tuple, image: str,
         rules = music_rules(year, week, start_iso, end_iso)
         subtitle = f"{year} m. {week} savaitė"
 
+    if series["key"] == "music":
+        det = music_spec_from_chart(series, period, image, rules, subtitle, tz)
+        if det is not None:
+            return det, _meta("")
+
     llm.reset_usage()
     system = ("Rašyk aiškia lietuvių kalba, naudok lietuviškas kabutes, remkis tik "
               "realiais, patikrinamais faktais ir nekurk neegzistuojančių pavadinimų.")
@@ -357,6 +410,8 @@ def build_spec(series: dict, period: tuple, image: str,
     close_dt = datetime.combine(date.fromisoformat(end_iso),
                                 dtime(hour=config.SERIES_CLOSE_HOUR,
                                       minute=config.SERIES_CLOSE_MINUTE), tzinfo=tz)
+    if series["key"] == "music":
+        close_dt = music_close(*period, tz)
     spec = {
         "series": series["key"],
         "period": period,

@@ -504,14 +504,17 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
     """The full admin_create_market payload for one city+day, or None if there is
     no forecast for that day."""
     tz = tz or _tz()
-    sigma = config.WEATHER_FORECAST_SIGMA if sigma is None else sigma
+    bias, city_sigma = config.WEATHER_CITY_CALIBRATION.get(
+        city_key, (0.0, config.WEATHER_FORECAST_SIGMA))
+    sigma = city_sigma if sigma is None else sigma
     c = CITIES[city_key]
     tf = forecast_daily_max(c["place"], target_iso, tz)
     if tf is None:
         return None
     d = date.fromisoformat(target_iso)
-    buckets = build_buckets(tf)
-    pcts = bucket_probabilities(tf, buckets, sigma)
+    expected = tf + bias                      # the forecast corrected for the city's bias
+    buckets = build_buckets(expected)
+    pcts = bucket_probabilities(expected, buckets, sigma)
     closes_at = datetime.combine(
         d, dtime(hour=config.WEATHER_CLOSE_HOUR, minute=config.WEATHER_CLOSE_MINUTE),
         tzinfo=tz)

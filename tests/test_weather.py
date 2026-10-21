@@ -343,3 +343,18 @@ def test_eliminate_impossible_buckets(monkeypatch):
     weather._eliminate_impossible(market, "m1", buckets, 25.0, st, True, True)
     assert "b4" not in st["eliminated"]                # top (unbounded) never eliminated
     assert not weather._eliminate_impossible(market, "m1", buckets, 25.0, st, True, True)  # idempotent
+
+
+def test_city_calibration_shifts_and_tightens(monkeypatch):
+    from arbus import weather
+
+    monkeypatch.setattr(weather, "forecast_daily_max", lambda *a, **k: 12.0)
+    kl = weather.market_spec("klaipeda", "2026-10-25")
+    ka = weather.market_spec("kaunas", "2026-10-25")
+    p_kl = [o["probability"] for o in kl["options"]]
+    p_ka = [o["probability"] for o in ka["options"]]
+    # Klaipėda's σ 0.8: the open tails are cheaper than in Kaunas (σ 1.3)
+    assert p_kl[0] + p_kl[3] < p_ka[0] + p_ka[3]
+    # Kaunas runs ~0.5 °C below the forecast: the lower middle bucket is favoured
+    assert p_ka[1] > p_ka[2]
+    assert kl["closes_at"].startswith("2026-10-25T11:00")
