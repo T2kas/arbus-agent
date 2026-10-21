@@ -2921,7 +2921,7 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "236fb3d7-c9b2-479e-9108-6f29b6316eb7": {
-  "checksum": "ab765307469825429f25d5d5d34c0b8569d4c3667d7639fafac79a2f55826297",
+  "checksum": "40af17ec4cf6402195816d0293a927eccd8f8d388959a5cea2fe7dcbc4cdba06",
   "current_maximum": null,
   "date": "2026-10-22",
   "measurements": {},
@@ -9399,7 +9399,7 @@
   "station": "vilniaus-ams"
  },
  "a106a129-696e-45d2-812e-90abeca8d4a4": {
-  "checksum": "ab765307469825429f25d5d5d34c0b8569d4c3667d7639fafac79a2f55826297",
+  "checksum": "40af17ec4cf6402195816d0293a927eccd8f8d388959a5cea2fe7dcbc4cdba06",
   "current_maximum": 8.6,
   "date": "2026-10-21",
   "max_received_at": "2026-10-20T21:10:48.694352+00:00",
