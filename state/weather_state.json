@@ -742,7 +742,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260930/"
  },
  "0f405f6c-a96e-4d3d-a721-4aab9d5062f9": {
-  "checksum": "ea8d3b6413ab9da7259650a29e4294ba42b10627d5dddd0e30360e3160e120fc",
+  "checksum": "96ebe2debf7e04995c71c4c1f3e4c4076ce3ec8f677691a5347b9b342f8ca7a9",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
@@ -1887,7 +1887,7 @@
   "station": "kauno-ams"
  },
  "1846b5e2-c5e2-4ed0-8eb1-88a7f60b3b37": {
-  "checksum": "d75acb5565ebb89c0e8cf7b45ff46aeb55998f0541d5013ed019be8d402e17d0",
+  "checksum": "ffdbcd7a6429156fa28e7f598cc0e6d269907cf23c2d92efded7c0e128d9f81e",
   "current_maximum": 13.9,
   "date": "2026-10-22",
   "max_received_at": "2026-10-22T11:10:51.546671+00:00",
@@ -1993,6 +1993,12 @@
     "received_at": "2026-10-22T13:10:53.842982+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 13.2
+   },
+   "2026-10-22 14:00:00": {
+    "checksum": "ffdbcd7a6429156fa28e7f598cc0e6d269907cf23c2d92efded7c0e128d9f81e",
+    "received_at": "2026-10-22T14:10:53.197114+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 12.8
    }
   },
   "resolved": false,
@@ -17030,7 +17036,7 @@
   "station": "klaipedos-ams"
  },
  "f168b8c8-8ea8-48e2-822b-3b0fb6c73420": {
-  "checksum": "ea8d3b6413ab9da7259650a29e4294ba42b10627d5dddd0e30360e3160e120fc",
+  "checksum": "96ebe2debf7e04995c71c4c1f3e4c4076ce3ec8f677691a5347b9b342f8ca7a9",
   "current_maximum": 14.0,
   "date": "2026-10-22",
   "eliminated": [
@@ -17139,6 +17145,12 @@
     "received_at": "2026-10-22T13:10:53.842982+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 14.0
+   },
+   "2026-10-22 14:00:00": {
+    "checksum": "96ebe2debf7e04995c71c4c1f3e4c4076ce3ec8f677691a5347b9b342f8ca7a9",
+    "received_at": "2026-10-22T14:10:53.197114+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 13.8
    }
   },
   "resolved": false,
@@ -17460,7 +17472,7 @@
   "resolved_via": "sports"
  },
  "f622f7d0-e2a0-470c-bbda-f25be263942d": {
-  "checksum": "d75acb5565ebb89c0e8cf7b45ff46aeb55998f0541d5013ed019be8d402e17d0",
+  "checksum": "ffdbcd7a6429156fa28e7f598cc0e6d269907cf23c2d92efded7c0e128d9f81e",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
