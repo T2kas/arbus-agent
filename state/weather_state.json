@@ -742,7 +742,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260930/"
  },
  "0f405f6c-a96e-4d3d-a721-4aab9d5062f9": {
-  "checksum": "5a02bc86f489dd0636007afc7893144d7b7ee3f90ff01b829c9b438757a17283",
+  "checksum": "82ab47aecbd771e8eff141720dbbade8557a80e53195b8d5721ef1a546eb3354",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
@@ -1887,10 +1887,10 @@
   "station": "kauno-ams"
  },
  "1846b5e2-c5e2-4ed0-8eb1-88a7f60b3b37": {
-  "checksum": "333638346a6d2b2f56f2f9db04afc4bac211712dccc3776ef38db8c48ba59fc6",
-  "current_maximum": 12.7,
+  "checksum": "f3f47ad21961d332125693997e7b88995bb8c9caf4d07a31cece9fc1777e1a7e",
+  "current_maximum": 13.6,
   "date": "2026-10-22",
-  "max_received_at": "2026-10-22T09:10:50.911010+00:00",
+  "max_received_at": "2026-10-22T10:10:48.652805+00:00",
   "measurements": {
    "2026-10-21 21:00:00": {
     "checksum": "39b6d6f1c909ad76c68c9c9f2b8e2bb895424a36fa47e4db4a121cb40cd94778",
@@ -1969,6 +1969,12 @@
     "received_at": "2026-10-22T09:10:50.911010+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 12.7
+   },
+   "2026-10-22 10:00:00": {
+    "checksum": "f3f47ad21961d332125693997e7b88995bb8c9caf4d07a31cece9fc1777e1a7e",
+    "received_at": "2026-10-22T10:10:48.652805+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 13.6
    }
   },
   "resolved": false,
@@ -3010,7 +3016,7 @@
   "resolved_winner": "Jessica Shy – Liepa"
  },
  "236fb3d7-c9b2-479e-9108-6f29b6316eb7": {
-  "checksum": "84a3a71ce1ef840e785be12d8a13bb4a2ea58a93d51264cc91e4c0ee1fe77e44",
+  "checksum": "143d99fa8b52eeabb7a8378958a34ab6520e48d10a2ccc3805e86425c9e1efed",
   "current_maximum": 11.9,
   "date": "2026-10-22",
   "max_received_at": "2026-10-21T22:10:51.091501+00:00",
@@ -3092,6 +3098,12 @@
     "received_at": "2026-10-22T09:10:50.911010+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 11.1
+   },
+   "2026-10-22 10:00:00": {
+    "checksum": "143d99fa8b52eeabb7a8378958a34ab6520e48d10a2ccc3805e86425c9e1efed",
+    "received_at": "2026-10-22T10:10:48.652805+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 11.9
    }
   },
   "resolved": false,
@@ -9009,7 +9021,7 @@
   "station": "kauno-ams"
  },
  "9851c4ab-6b09-4482-85fb-7c8bd15116e9": {
-  "checksum": "84a3a71ce1ef840e785be12d8a13bb4a2ea58a93d51264cc91e4c0ee1fe77e44",
+  "checksum": "143d99fa8b52eeabb7a8378958a34ab6520e48d10a2ccc3805e86425c9e1efed",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
@@ -16982,10 +16994,13 @@
   "station": "klaipedos-ams"
  },
  "f168b8c8-8ea8-48e2-822b-3b0fb6c73420": {
-  "checksum": "5a02bc86f489dd0636007afc7893144d7b7ee3f90ff01b829c9b438757a17283",
-  "current_maximum": 13.8,
+  "checksum": "82ab47aecbd771e8eff141720dbbade8557a80e53195b8d5721ef1a546eb3354",
+  "current_maximum": 14.0,
   "date": "2026-10-22",
-  "max_received_at": "2026-10-22T09:10:50.911010+00:00",
+  "eliminated": [
+   "e09f6361-9754-4bf1-8276-c09b18a883ab"
+  ],
+  "max_received_at": "2026-10-22T10:10:48.652805+00:00",
   "measurements": {
    "2026-10-21 21:00:00": {
     "checksum": "5e550ae217f629b7ca79218834cbc3df92752dbc653025f235434e3d040ee0ee",
@@ -17064,6 +17079,12 @@
     "received_at": "2026-10-22T09:10:50.911010+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 13.8
+   },
+   "2026-10-22 10:00:00": {
+    "checksum": "82ab47aecbd771e8eff141720dbbade8557a80e53195b8d5721ef1a546eb3354",
+    "received_at": "2026-10-22T10:10:48.652805+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 14.0
    }
   },
   "resolved": false,
@@ -17385,7 +17406,7 @@
   "resolved_via": "sports"
  },
  "f622f7d0-e2a0-470c-bbda-f25be263942d": {
-  "checksum": "333638346a6d2b2f56f2f9db04afc4bac211712dccc3776ef38db8c48ba59fc6",
+  "checksum": "f3f47ad21961d332125693997e7b88995bb8c9caf4d07a31cece9fc1777e1a7e",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
