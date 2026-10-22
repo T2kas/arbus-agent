@@ -1887,7 +1887,7 @@
   "station": "kauno-ams"
  },
  "1846b5e2-c5e2-4ed0-8eb1-88a7f60b3b37": {
-  "checksum": "f3f47ad21961d332125693997e7b88995bb8c9caf4d07a31cece9fc1777e1a7e",
+  "checksum": "201324e5326715747d88774c67ec6421fd1633324a05f6cfc05afeaa31085689",
   "current_maximum": 13.6,
   "date": "2026-10-22",
   "max_received_at": "2026-10-22T10:10:48.652805+00:00",
@@ -17406,7 +17406,7 @@
   "resolved_via": "sports"
  },
  "f622f7d0-e2a0-470c-bbda-f25be263942d": {
-  "checksum": "f3f47ad21961d332125693997e7b88995bb8c9caf4d07a31cece9fc1777e1a7e",
+  "checksum": "201324e5326715747d88774c67ec6421fd1633324a05f6cfc05afeaa31085689",
   "current_maximum": null,
   "date": "2026-10-23",
   "measurements": {},
