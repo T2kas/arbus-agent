@@ -6079,7 +6079,7 @@
   "station": "klaipedos-ams"
  },
  "56564650-01bd-434f-9381-6f76a4af5630": {
-  "checksum": "67919e07f1a7e446d90f80d7cbb8e4e5704be20016a7c3e1c30d17360935ffd6",
+  "checksum": "0e1ac4d5ba34e67b1c95752538430618474976bcdbf4a4c44acd51a6cd9d5f6e",
   "current_maximum": null,
   "date": "2026-10-25",
   "measurements": {},
@@ -6541,7 +6541,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261001/"
  },
  "60faea33-c396-47e2-857f-0bbf38693a01": {
-  "checksum": "67919e07f1a7e446d90f80d7cbb8e4e5704be20016a7c3e1c30d17360935ffd6",
+  "checksum": "0e1ac4d5ba34e67b1c95752538430618474976bcdbf4a4c44acd51a6cd9d5f6e",
   "current_maximum": null,
   "date": "2026-10-24",
   "measurements": {},
@@ -7018,7 +7018,7 @@
   "station": "kauno-ams"
  },
  "7409076a-ff90-4718-874d-6472d2a29cdc": {
-  "checksum": "65177cfaae824967849a69dd297648391a4d5ff99f4cd83b3b3ae5d6e5081435",
+  "checksum": "a06bc5541be9e29588a3fc09c1d37e56b732e1060a11b288000fdd263d124628",
   "current_maximum": null,
   "date": "2026-10-25",
   "measurements": {},
@@ -10136,7 +10136,7 @@
   "station": "vilniaus-ams"
  },
  "a23ed683-e9e9-473b-8ce2-34dd8d4fcd72": {
-  "checksum": "65177cfaae824967849a69dd297648391a4d5ff99f4cd83b3b3ae5d6e5081435",
+  "checksum": "a06bc5541be9e29588a3fc09c1d37e56b732e1060a11b288000fdd263d124628",
   "current_maximum": null,
   "date": "2026-10-24",
   "measurements": {},
@@ -13710,7 +13710,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261016/"
  },
  "cd4ae9b4-7dc4-4935-9ac4-9d5b60d8c015": {
-  "checksum": "98e3ba022cafda9a260e9e2f1ae43595d460f868158bb82fed64b4d7cb61f245",
+  "checksum": "bab1024a4a921b27a6e159dc84f18a9355e865badfb9d466801c1f62cc6fa9ee",
   "current_maximum": null,
   "date": "2026-10-25",
   "measurements": {},
@@ -13867,7 +13867,14 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "ceaa8855-3859-409e-9869-b324b256b366": {},
- "cee8af63-11ae-4d18-ad54-ebed0c21f892": {},
+ "cee8af63-11ae-4d18-ad54-ebed0c21f892": {
+  "resolved": true,
+  "resolved_at": "2026-10-23T19:10:46.482090+00:00",
+  "resolved_label": "Kauno „Žalgiris“",
+  "resolved_option_id": "97e03144-18dd-4ff3-90fb-a7a2200ff5b4",
+  "resolved_score": "Zalgiris Kaunas 105:85 LDLC ASVEL Villeurbanne",
+  "resolved_via": "sports"
+ },
  "cf6e9a3b-df73-448b-a107-0ac27b507289": {},
  "cfc29238-c66a-483d-ad2f-6f506c801c83": {
   "checksum": "f2f1e363a8452591affe2a614cf3fe5702b6ebf1d23937a471a3953924f56909",
@@ -18696,7 +18703,7 @@
   "station": "klaipedos-ams"
  },
  "ff5c3348-5842-4eb6-bb74-d311597e9280": {
-  "checksum": "98e3ba022cafda9a260e9e2f1ae43595d460f868158bb82fed64b4d7cb61f245",
+  "checksum": "bab1024a4a921b27a6e159dc84f18a9355e865badfb9d466801c1f62cc6fa9ee",
   "current_maximum": null,
   "date": "2026-10-24",
   "measurements": {},
