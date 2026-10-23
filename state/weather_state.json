@@ -18122,7 +18122,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "fde9d754-e3ec-4ae5-a2c2-e22bf0968c86": {},
+ "fde9d754-e3ec-4ae5-a2c2-e22bf0968c86": {
+  "resolved": true,
+  "resolved_at": "2026-10-23T10:55:37.530295+00:00",
+  "resolved_label": "Different Dimension, QV – „Sakartvelas – Special Version“",
+  "resolved_option_id": "7604463e-70d7-4992-b9f6-12d232dbeb79",
+  "resolved_via": "music",
+  "resolved_winner": "Different Dimension, QV – Sakartvelas - Special Version"
+ },
  "fee761b0-e846-4329-af22-7bef1c1c701f": {
   "checksum": "be6f46cd67055ecec75a3658a620740dd7dd6c0c10c2ec490069e3278cbbb725",
   "current_maximum": 19.3,
