@@ -742,7 +742,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260930/"
  },
  "0f405f6c-a96e-4d3d-a721-4aab9d5062f9": {
-  "checksum": "846a47623495c84a71e516237119ea02f9a2d15d0262830024d1b54c1fb4e9a6",
+  "checksum": "10b1aeb4e847fe62755c182a3affa4316207164ef7e39b601f6a83b6942cefb9",
   "current_maximum": 12.3,
   "date": "2026-10-23",
   "eliminated": [
@@ -821,6 +821,12 @@
     "received_at": "2026-10-23T08:11:03.807216+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 11.0
+   },
+   "2026-10-23 09:00:00": {
+    "checksum": "10b1aeb4e847fe62755c182a3affa4316207164ef7e39b601f6a83b6942cefb9",
+    "received_at": "2026-10-23T09:10:46.686534+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 11.2
    }
   },
   "resolved": false,
@@ -3133,7 +3139,14 @@
   "resolved_via": "music",
   "resolved_winner": "Jessica Shy – Liepa"
  },
- "230564d7-7754-4962-887a-7ab3eef72408": {},
+ "230564d7-7754-4962-887a-7ab3eef72408": {
+  "resolved": true,
+  "resolved_at": "2026-10-23T09:10:46.686534+00:00",
+  "resolved_label": "1,945 €/l arba daugiau",
+  "resolved_option_id": "510f3332-05a4-4c46-a8ed-9a1ab5d9fea4",
+  "resolved_price": 1.945,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261023/"
+ },
  "236fb3d7-c9b2-479e-9108-6f29b6316eb7": {
   "checksum": "4bd2ed34c10eb0e39cfd609cebc80c62d50555b7a755dae1fd559cd60656c6a3",
   "current_maximum": 12.1,
@@ -6467,7 +6480,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261001/"
  },
  "60faea33-c396-47e2-857f-0bbf38693a01": {
-  "checksum": "3057888b864c778b7f06c908a79dc92c3d3b31d33ad387aaffc8c726bfebb2b0",
+  "checksum": "be6ff02ce7675c3df958fa65a3960aacf1904158f44ee1e23e153877a0d16a4e",
   "current_maximum": null,
   "date": "2026-10-24",
   "measurements": {},
@@ -9188,7 +9201,7 @@
   "station": "kauno-ams"
  },
  "9851c4ab-6b09-4482-85fb-7c8bd15116e9": {
-  "checksum": "7c9b9b95e5e5584829ea7463a88e1bf257f44ea19e0620a809e0d680821cf783",
+  "checksum": "a48045bddecaf06349a8f0128566ebe0dc38f640a4c0eeddbeb277644c4314ff",
   "current_maximum": 11.6,
   "date": "2026-10-23",
   "eliminated": [
@@ -9267,6 +9280,12 @@
     "received_at": "2026-10-23T08:11:03.807216+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 11.2
+   },
+   "2026-10-23 09:00:00": {
+    "checksum": "a48045bddecaf06349a8f0128566ebe0dc38f640a4c0eeddbeb277644c4314ff",
+    "received_at": "2026-10-23T09:10:46.686534+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 11.5
    }
   },
   "resolved": false,
@@ -10001,7 +10020,7 @@
   "station": "vilniaus-ams"
  },
  "a23ed683-e9e9-473b-8ce2-34dd8d4fcd72": {
-  "checksum": "846a47623495c84a71e516237119ea02f9a2d15d0262830024d1b54c1fb4e9a6",
+  "checksum": "10b1aeb4e847fe62755c182a3affa4316207164ef7e39b601f6a83b6942cefb9",
   "current_maximum": null,
   "date": "2026-10-24",
   "measurements": {},
@@ -17699,7 +17718,7 @@
   "resolved_via": "sports"
  },
  "f622f7d0-e2a0-470c-bbda-f25be263942d": {
-  "checksum": "3057888b864c778b7f06c908a79dc92c3d3b31d33ad387aaffc8c726bfebb2b0",
+  "checksum": "be6ff02ce7675c3df958fa65a3960aacf1904158f44ee1e23e153877a0d16a4e",
   "current_maximum": 12.3,
   "date": "2026-10-23",
   "eliminated": [
@@ -17779,6 +17798,12 @@
     "received_at": "2026-10-23T08:11:03.807216+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 11.4
+   },
+   "2026-10-23 09:00:00": {
+    "checksum": "be6ff02ce7675c3df958fa65a3960aacf1904158f44ee1e23e153877a0d16a4e",
+    "received_at": "2026-10-23T09:10:46.686534+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 11.6
    }
   },
   "resolved": false,
@@ -17915,7 +17940,14 @@
  "fb207a0a-d83d-4d02-8b5e-bc0d569fe64d": {
   "fuel_alerted": true
  },
- "fb5515da-3232-4443-9d43-3996e31c8d66": {},
+ "fb5515da-3232-4443-9d43-3996e31c8d66": {
+  "resolved": true,
+  "resolved_at": "2026-10-23T09:10:46.686534+00:00",
+  "resolved_label": "Nuo 2,225 iki 2,234 €/l",
+  "resolved_option_id": "a1dabf96-3c9d-4639-89d7-df034d9ec056",
+  "resolved_price": 2.231,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261023/"
+ },
  "fc7a0660-ffcf-49c8-95ea-a9a1defb2e62": {},
  "fce0f1b5-db3f-4964-9c76-13560ca3da0c": {
   "resolved": true,
@@ -18487,7 +18519,7 @@
   "station": "klaipedos-ams"
  },
  "ff5c3348-5842-4eb6-bb74-d311597e9280": {
-  "checksum": "7c9b9b95e5e5584829ea7463a88e1bf257f44ea19e0620a809e0d680821cf783",
+  "checksum": "a48045bddecaf06349a8f0128566ebe0dc38f640a4c0eeddbeb277644c4314ff",
   "current_maximum": null,
   "date": "2026-10-24",
   "measurements": {},
