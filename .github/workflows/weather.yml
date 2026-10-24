@@ -68,6 +68,11 @@ jobs:
           WEATHER_DECLINE_HOURS: ${{ vars.WEATHER_DECLINE_HOURS }}
           WEATHER_CREATE_HOUR: ${{ vars.WEATHER_CREATE_HOUR }}
           WEATHER_FORECAST_SIGMA: ${{ vars.WEATHER_FORECAST_SIGMA }}
+          # Pricing = Meteo LT + Open-Meteo models blend (on by default).
+          # WEATHER_MODEL_BLEND=off → Meteo LT alone; WEATHER_MODELS overrides the list.
+          WEATHER_MODEL_BLEND: ${{ vars.WEATHER_MODEL_BLEND }}
+          WEATHER_MODELS: ${{ vars.WEATHER_MODELS }}
+          WEATHER_DIVERGENCE_ALERT: ${{ vars.WEATHER_DIVERGENCE_ALERT }}
           WEATHER_LIQUIDITY: ${{ vars.WEATHER_LIQUIDITY }}
           WEATHER_CLOSE_HOUR: ${{ vars.WEATHER_CLOSE_HOUR }}
           WEATHER_HORIZON_DAYS: ${{ vars.WEATHER_HORIZON_DAYS }}

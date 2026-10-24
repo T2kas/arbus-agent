@@ -394,10 +394,13 @@ _LT_MONTH_GEN = ["", "sausio", "vasario", "kovo", "balandžio", "gegužės",
 # code, and Lithuanian name forms (locative for titles, genitive for the rules).
 CITIES = {
     "vilnius": {"station": "vilniaus-ams", "place": "vilnius",
+                "lat": 54.625992, "lon": 25.107064,          # the AMS itself (Meteo LT)
                 "loc": "Vilniuje", "gen": "Vilniaus", "image": ""},
     "kaunas": {"station": "kauno-ams", "place": "kaunas",
+               "lat": 54.88396, "lon": 23.83588,
                "loc": "Kaune", "gen": "Kauno", "image": ""},
     "klaipeda": {"station": "klaipedos-ams", "place": "klaipeda",
+                 "lat": 55.73135, "lon": 21.09157,
                  "loc": "Klaipėdoje", "gen": "Klaipėdos",
                  "image": "https://orai.kasvyksta.lt/wp-content/uploads/2023/09/Klaipeda_rez.jpg"},
 }
@@ -424,6 +427,75 @@ def forecast_daily_max(place: str, target_iso: str,
         if valid_temp(v) and dt is not None and dt.astimezone(tz).date().isoformat() == target_iso:
             temps.append(float(v))
     return max(temps) if temps else None
+
+
+def models_url(lat: float, lon: float, target_iso: str) -> str:
+    return ("https://api.open-meteo.com/v1/forecast"
+            f"?latitude={lat}&longitude={lon}&hourly=temperature_2m"
+            f"&models={','.join(config.WEATHER_MODELS)}"
+            f"&timezone={config.WEATHER_TZ}&start_date={target_iso}&end_date={target_iso}")
+
+
+def parse_models_max(data: dict) -> dict[str, float]:
+    """{model: daily max} from an Open-Meteo hourly response for one local day.
+    A model with fewer than 20 valid hours is dropped (a partial day would
+    understate the max)."""
+    hourly = (data or {}).get("hourly") or {}
+    out = {}
+    for m in config.WEATHER_MODELS:
+        vals = hourly.get(f"temperature_2m_{m}")
+        if vals is None and len(config.WEATHER_MODELS) == 1:
+            vals = hourly.get("temperature_2m")       # single-model responses drop the suffix
+        temps = [float(v) for v in (vals or []) if valid_temp(v)]
+        if len(temps) >= 20:
+            out[m] = max(temps)
+    return out
+
+
+def models_forecast_max(city_key: str, target_iso: str) -> dict[str, float]:
+    """Each model's forecast daily max at the city's station (free Open-Meteo,
+    keyless). {} if unavailable — pricing then falls back to Meteo LT alone."""
+    c = CITIES[city_key]
+    try:
+        data, _ = fetch(models_url(c["lat"], c["lon"], target_iso))
+    except Exception as exc:                           # noqa: BLE001
+        log.warning("weather: models forecast %s failed: %s", city_key, exc)
+        return {}
+    return parse_models_max(data)
+
+
+def blend_forecast(city_key: str, lt_max: float | None, models: dict[str, float],
+                   month: int) -> dict | None:
+    """The market's centre and spread from the Meteo LT forecast and the models.
+
+    mu    = w·(Meteo LT + its city bias) + (1−w)·(models' mean + month bias)
+    sigma = scale·√(base·(1−0.3w) + (1−w)·models' variance + (LT−models)²/4)
+
+    With fewer than 2 models (or the blend switched off) it is the old Meteo LT
+    pricing: mu = LT + bias, sigma = the city's σ. With no Meteo LT forecast it
+    prices from the models alone. None when there is no forecast at all."""
+    lt_bias, lt_sigma = config.WEATHER_CITY_CALIBRATION.get(
+        city_key, (0.0, config.WEATHER_FORECAST_SIGMA))
+    cal = config.WEATHER_BLEND_CALIBRATION.get(city_key)
+    vals = list(models.values())
+    if not (config.WEATHER_MODEL_BLEND and cal and len(vals) >= 2):
+        if lt_max is None:
+            return None
+        return {"mu": lt_max + lt_bias, "sigma": lt_sigma, "lt": lt_max,
+                "models_mean": None, "divergence": None}
+    w, scale, base, month_bias = cal
+    mean = sum(vals) / len(vals)
+    var = sum((v - mean) ** 2 for v in vals) / len(vals)
+    mu_m = mean + month_bias[month - 1]
+    if lt_max is None:
+        w, mu_lt, gap = 0.0, mu_m, 0.0
+    else:
+        mu_lt = lt_max + lt_bias
+        gap = mu_lt - mu_m
+    mu = w * mu_lt + (1 - w) * mu_m
+    sigma = scale * math.sqrt(base * (1 - 0.3 * w) + (1 - w) * var + gap * gap / 4)
+    return {"mu": mu, "sigma": sigma, "lt": lt_max, "models_mean": mu_m,
+            "divergence": None if lt_max is None else abs(gap)}
 
 
 def build_buckets(forecast_max: float) -> list[dict]:
@@ -504,15 +576,15 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
     """The full admin_create_market payload for one city+day, or None if there is
     no forecast for that day."""
     tz = tz or _tz()
-    bias, city_sigma = config.WEATHER_CITY_CALIBRATION.get(
-        city_key, (0.0, config.WEATHER_FORECAST_SIGMA))
-    sigma = city_sigma if sigma is None else sigma
     c = CITIES[city_key]
-    tf = forecast_daily_max(c["place"], target_iso, tz)
-    if tf is None:
-        return None
     d = date.fromisoformat(target_iso)
-    expected = tf + bias                      # the forecast corrected for the city's bias
+    tf = forecast_daily_max(c["place"], target_iso, tz)
+    models = models_forecast_max(city_key, target_iso)
+    blend = blend_forecast(city_key, tf, models, d.month)
+    if blend is None:
+        return None
+    expected = blend["mu"]                    # bias-corrected Meteo LT + models
+    sigma = blend["sigma"] if sigma is None else sigma
     buckets = build_buckets(expected)
     pcts = bucket_probabilities(expected, buckets, sigma)
     closes_at = datetime.combine(
@@ -528,11 +600,15 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
         "image_url": image_url or c.get("image", ""),
         "liquidity": config.WEATHER_LIQUIDITY,
         "rules": _rules_text(c["gen"], _lt_date_text(d)),
-        "context": _context_text(c["loc"], _LT_MONTH_GEN[d.month], tf),
+        "context": _context_text(c["loc"], _LT_MONTH_GEN[d.month], expected),
         "options": [{"label": b["label"], "probability": p}
                     for b, p in zip(buckets, pcts)],
         "closes_at": closes_at.isoformat(),
-        "forecast_max": tf,
+        "forecast_max": tf,                   # Meteo LT alone (None if it was down)
+        "forecast_mu": round(expected, 2),
+        "forecast_sigma": round(sigma, 2),
+        "forecast_models": models,
+        "forecast_divergence": blend["divergence"],
     }
 
 
@@ -575,6 +651,7 @@ def create_markets(specs: list[dict], *, alert: bool, do_create: bool) -> list[d
         if not do_create:
             reports.append({"status": "would-create", "city": s["city"],
                             "date": s["date"], "forecast_max": s["forecast_max"],
+                            "forecast_mu": s.get("forecast_mu"),
                             "options": s["options"]})
             continue
         ok, detail = app_api.create_market(s)
@@ -582,20 +659,33 @@ def create_markets(specs: list[dict], *, alert: bool, do_create: bool) -> list[d
             notify.send(_created_message(s, detail))
         reports.append({"status": "created" if ok else "error", "city": s["city"],
                         "date": s["date"], "detail": detail,
-                        "options": s["options"], "forecast_max": s["forecast_max"]})
+                        "options": s["options"], "forecast_max": s["forecast_max"],
+                        "forecast_mu": s.get("forecast_mu")})
     return reports
 
 
 def _created_message(spec: dict, market_id: str) -> str:
     opts = " · ".join(f"{o['label']} {o['probability']}%" for o in spec["options"])
-    return "\n".join([
+    centre = spec.get("forecast_mu", spec.get("forecast_max"))
+    lines = [
         "🆕 SUKURTA ORŲ RINKA",
         "",
         f"· {spec['title']}",
-        f"  Prognozė ~{_fmt(round(spec['forecast_max']))} °C | uždaroma "
+        f"  Prognozė ~{_fmt(round(centre))} °C | uždaroma "
         f"{config.WEATHER_CLOSE_HOUR:02d}:{config.WEATHER_CLOSE_MINUTE:02d}",
         f"  {opts}",
-    ])
+    ]
+    models = spec.get("forecast_models") or {}
+    if models:
+        lt = spec.get("forecast_max")
+        lines.append("  Meteo LT " + (_fmt(lt) if lt is not None else "—") + " | "
+                     + " · ".join(f"{m.split('_')[0]} {_fmt(v)}" for m, v in models.items())
+                     + f" | σ {_fmt(spec.get('forecast_sigma', 0))}")
+    div = spec.get("forecast_divergence")
+    if div is not None and div >= config.WEATHER_DIVERGENCE_ALERT:
+        lines.append(f"  ⚠️ Modeliai ir Meteo LT skiriasi {_fmt(div)} °C — "
+                     "uodegos įkainotos plačiau, verta stebėti.")
+    return "\n".join(lines)
 
 
 # ── cinema markets: LKC weekly most-watched film (proactive resolve) ─────────

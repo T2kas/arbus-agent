@@ -295,6 +295,7 @@ def test_bucket_probabilities_sum_100_and_positive():
 def test_plan_skips_existing_and_reuses_city_image(monkeypatch):
     from datetime import timezone as _tz2
     monkeypatch.setattr(weather, "forecast_daily_max", lambda place, iso, tz=None: 18.0)
+    monkeypatch.setattr(weather, "models_forecast_max", lambda city, iso: {})
     tz = weather._tz()
     now = datetime(2026, 9, 9, 20, 0, tzinfo=_tz2.utc)
     existing = [{"id": "v10", "category": "orai", "image_url": "vilnius.png",
@@ -349,6 +350,7 @@ def test_city_calibration_shifts_and_tightens(monkeypatch):
     from arbus import weather
 
     monkeypatch.setattr(weather, "forecast_daily_max", lambda *a, **k: 12.0)
+    monkeypatch.setattr(weather, "models_forecast_max", lambda *a, **k: {})   # Meteo LT only
     kl = weather.market_spec("klaipeda", "2026-10-25")
     ka = weather.market_spec("kaunas", "2026-10-25")
     p_kl = [o["probability"] for o in kl["options"]]
@@ -358,3 +360,79 @@ def test_city_calibration_shifts_and_tightens(monkeypatch):
     # Kaunas runs ~0.5 °C below the forecast: the lower middle bucket is favoured
     assert p_ka[1] > p_ka[2]
     assert kl["closes_at"].startswith("2026-10-25T11:00")
+
+
+# ── multi-model blend (Meteo LT + Open-Meteo models) ─────────────────────────
+
+def test_parse_models_max_drops_partial_days(monkeypatch):
+    monkeypatch.setattr(config, "WEATHER_MODELS", ("ecmwf_ifs025", "gfs_seamless", "icon_seamless"))
+    data = {"hourly": {"time": [f"2026-10-24T{h:02d}:00" for h in range(24)],
+                       "temperature_2m_ecmwf_ifs025": [8.0] * 23 + [13.1],
+                       "temperature_2m_gfs_seamless": [9.0] * 10 + [None] * 14,   # partial day
+                       "temperature_2m_icon_seamless": [11.8] * 24}}
+    assert weather.parse_models_max(data) == {"ecmwf_ifs025": 13.1, "icon_seamless": 11.8}
+    assert weather.parse_models_max({}) == {}
+
+
+def test_blend_falls_back_to_meteo_lt_without_models():
+    bias, sigma = config.WEATHER_CITY_CALIBRATION["kaunas"]
+    b = weather.blend_forecast("kaunas", 15.0, {}, 10)
+    assert b["mu"] == pytest.approx(15.0 + bias) and b["sigma"] == sigma
+    b1 = weather.blend_forecast("kaunas", 15.0, {"ecmwf_ifs025": 16.0}, 10)   # one model is not enough
+    assert b1["mu"] == pytest.approx(15.0 + bias)
+    assert weather.blend_forecast("kaunas", None, {}, 10) is None
+
+
+def test_blend_models_only_when_meteo_lt_is_down():
+    b = weather.blend_forecast("vilnius", None, {"a": 14.0, "b": 16.0}, 10)
+    month_bias = config.WEATHER_BLEND_CALIBRATION["vilnius"][3][9]
+    assert b["mu"] == pytest.approx(15.0 + month_bias) and b["divergence"] is None
+
+
+def test_blend_widens_sigma_when_sources_disagree(monkeypatch):
+    monkeypatch.setattr(config, "WEATHER_MODEL_BLEND", True)
+    agree = weather.blend_forecast("klaipeda", 12.0, {"a": 11.9, "b": 12.1}, 10)
+    split = weather.blend_forecast("klaipeda", 12.0, {"a": 9.9, "b": 14.1}, 10)
+    far = weather.blend_forecast("klaipeda", 9.0, {"a": 11.9, "b": 12.1}, 10)
+    assert split["sigma"] > agree["sigma"] and far["sigma"] > agree["sigma"]
+    assert far["divergence"] > 2.5
+    monkeypatch.setattr(config, "WEATHER_MODEL_BLEND", False)    # kill switch
+    assert weather.blend_forecast("klaipeda", 12.0, {"a": 9.9, "b": 14.1}, 10)["sigma"] == \
+        config.WEATHER_CITY_CALIBRATION["klaipeda"][1]
+
+
+def test_klaipeda_oct24_top_bucket_no_longer_1pct(monkeypatch):
+    # The exploited market: Meteo LT 11 °C, the models ~12–13 °C, real max 13.2 °C.
+    monkeypatch.setattr(weather, "forecast_daily_max", lambda *a, **k: 11.0)
+    monkeypatch.setattr(weather, "models_forecast_max", lambda *a, **k: {
+        "ecmwf_ifs025": 12.5, "icon_seamless": 11.8, "gfs_seamless": 12.8, "best_match": 12.4})
+    spec = weather.market_spec("klaipeda", "2026-10-24")
+    p = [o["probability"] for o in spec["options"]]
+    assert sum(p) == 100 and all(1 <= x < 100 for x in p)
+    # Re-centred on ~12 °C: the real max 13,2 °C now sits in a ~50 % middle
+    # bucket instead of a 1 % tail.
+    win = weather.bucket_for_temp(weather.buckets_from_market(
+        {"market_options": [{"id": str(i), "label": o["label"]}
+                            for i, o in enumerate(spec["options"])]}), 13.2)
+    assert win["label"] == "12,0 iki 13,9 °C" and p[int(win["option_id"])] >= 40
+    assert spec["forecast_max"] == 11.0 and spec["forecast_mu"] > 11.0
+    assert set(spec["forecast_models"]) == {"ecmwf_ifs025", "icon_seamless",
+                                            "gfs_seamless", "best_match"}
+    assert "apie 12,0 °C" in spec["context"]          # context shows the blended centre
+
+
+def test_market_spec_skips_when_no_forecast_at_all(monkeypatch):
+    monkeypatch.setattr(weather, "forecast_daily_max", lambda *a, **k: None)
+    monkeypatch.setattr(weather, "models_forecast_max", lambda *a, **k: {})
+    assert weather.market_spec("vilnius", "2026-10-24") is None
+
+
+def test_created_message_warns_on_divergence():
+    spec = {"title": "T", "forecast_max": 11.0, "forecast_mu": 12.0, "forecast_sigma": 1.4,
+            "forecast_models": {"ecmwf_ifs025": 13.1, "gfs_seamless": 12.9},
+            "forecast_divergence": 1.8,
+            "options": [{"label": "a", "probability": 50}, {"label": "b", "probability": 50}]}
+    msg = weather._created_message(spec, "id")
+    assert "Meteo LT 11,0" in msg and "ecmwf 13,1" in msg and "⚠️" in msg
+    spec["forecast_divergence"] = 0.4
+    assert "⚠️" not in weather._created_message(spec, "id")

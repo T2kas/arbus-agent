@@ -380,10 +380,12 @@ def cmd_weather(args: argparse.Namespace) -> int:
         tz = weather._tz()
         specs = weather.plan_new_markets(rows, datetime.now(timezone.utc), tz,
                                          skip_existing=False)
-        print(f"🔮 Peržiūra — {len(specs)} rinka(-os) (σ={config.WEATHER_FORECAST_SIGMA}):\n")
+        print(f"🔮 Peržiūra — {len(specs)} rinka(-os):\n")
         for s in specs:
-            print(f"· {s['title']}  (prognozė ~{s['forecast_max']:.1f}°C, "
-                  f"uždaroma {s['closes_at']})")
+            lt = s.get("forecast_max")
+            print(f"· {s['title']}  (centras ~{s['forecast_mu']:.1f}°C, σ {s['forecast_sigma']:.2f}, "
+                  f"Meteo LT {'—' if lt is None else f'{lt:.1f}'}, "
+                  f"modeliai {s.get('forecast_models') or '—'}, uždaroma {s['closes_at']})")
             for o in s["options"]:
                 print(f"    {o['probability']:>3}%  {o['label']}")
             print()
@@ -424,7 +426,7 @@ def cmd_weather(args: argparse.Namespace) -> int:
             if r.get("status") in ("created", "would-create", "error") and r.get("city"):
                 opts = " · ".join(f"{o['probability']}% {o['label']}" for o in r.get("options", []))
                 print(f"{icon} {r['status']} {r['city']} {r['date']} "
-                      f"(~{r.get('forecast_max', 0):.1f}°C) — {opts} "
+                      f"(~{r.get('forecast_mu', r.get('forecast_max')) or 0:.1f}°C) — {opts} "
                       f"{r.get('detail', '')}")
                 continue
             mx = r.get("max")

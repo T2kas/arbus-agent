@@ -953,6 +953,37 @@ WEATHER_CITY_CALIBRATION = {
     "kaunas": (-0.5, 1.3),
     "klaipeda": (0.0, 0.8),
 }
+# Multi-model blend (2026-10-24). The Meteo LT forecast alone left the tails
+# exploitable: when the global models disagreed with it by ≥1.5 °C a tail bucket
+# won 5/15 times, and the 1–2 % buckets won 3/23 (13 %) — e.g. Klaipėda 10-24,
+# Meteo LT 11 °C vs ECMWF/GFS ~13 °C, "≥13 °C" priced 1 %, max 13.2 °C. The
+# market now centres on a weighted mean of the Meteo LT forecast (bias-corrected
+# as above) and the mean of these Open-Meteo models at the station's own
+# coordinates (bias-corrected per city and month, since the station ≠ the model
+# grid cell). σ widens with the models' spread and with how far the models sit
+# from Meteo LT. Fitted on ~420 days per station (2025-09 → 2026-10, 2-day-old
+# runs vs the station's real max) and checked on the 129 real markets: log-loss
+# 1.005 (Meteo LT only) → 0.82 (table built only from data before the markets);
+# buckets priced ≤3 % won 1 %, 3–15 % → 5 %, 15–40 % → 27 %, >40 % → 57 %.
+WEATHER_MODELS = tuple(m.strip() for m in (
+    os.environ.get("WEATHER_MODELS", "").strip()
+    or "ecmwf_ifs025,icon_seamless,gfs_seamless,best_match").split(",") if m.strip())
+# Set WEATHER_MODEL_BLEND=off to price from the Meteo LT forecast alone again.
+WEATHER_MODEL_BLEND = (os.environ.get("WEATHER_MODEL_BLEND", "").strip().lower()
+                       or "on") not in ("off", "false", "0", "no")
+# Per city: Meteo LT weight, σ scale, the models' base error variance (°C²) and
+# the models' mean bias by month Jan..Dec (station max − models' mean, °C).
+WEATHER_BLEND_CALIBRATION = {
+    "vilnius": (0.35, 0.9, 0.78,
+                (0.28, 0.87, 1.13, 0.65, 0.31, 0.38, 0.35, 0.19, -0.05, -0.40, -0.54, -0.20)),
+    "kaunas": (0.35, 0.9, 0.94,
+               (-0.05, 0.30, 0.63, 0.39, 0.04, 0.13, 0.34, 0.30, 0.03, -0.42, -0.61, -0.31)),
+    "klaipeda": (0.5, 0.9, 1.28,
+                 (0.47, 0.52, 0.00, -0.50, -0.18, 0.21, 0.30, 0.59, 0.65, 0.18, -0.11, 0.13)),
+}
+# Telegram warning on creation when the models' mean and Meteo LT differ by at
+# least this many °C — the days the tails used to be mispriced.
+WEATHER_DIVERGENCE_ALERT = _env_float("WEATHER_DIVERGENCE_ALERT", 1.5)
 # Auto-close (closes_at) time of day, Vilnius. Measured on 116 markets: by 14:00
 # the running max already sat in the final bucket 58% of the time (median only
 # 0.9 °C below the final max) — the last hours were trading on a known answer.
