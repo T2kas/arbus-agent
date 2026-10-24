@@ -5764,7 +5764,14 @@
   "resolved_score": "Žalgiris 4:0 Sūduva",
   "resolved_via": "sports"
  },
- "4be3b8ba-a87c-45f1-98f7-215b5d169db0": {},
+ "4be3b8ba-a87c-45f1-98f7-215b5d169db0": {
+  "resolved": true,
+  "resolved_at": "2026-10-24T16:25:38.477846+00:00",
+  "resolved_label": "Vilniaus „TransINVEST“",
+  "resolved_option_id": "5b242101-d346-4119-82a8-41771fb6e638",
+  "resolved_score": "TransInvest 2:0 Hegelmann",
+  "resolved_via": "sports"
+ },
  "4dc5de32-e283-4766-b7bb-a16dc9d9a185": {
   "checksum": "0c0cdce88eae2098e4063c43d6f5fad5ef18f77f9e9cf3756ee7e16ddb4a9d9c",
   "current_maximum": 19.1,
