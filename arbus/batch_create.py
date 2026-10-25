@@ -100,6 +100,15 @@ def existing_titles(rows: list[dict]) -> set[str]:
             if app_api.status_of(r) != "resolved"}
 
 
+def _open_row(rows: list[dict], title: str) -> dict | None:
+    """The newest not-resolved app market with this exact title (markets() is
+    newest-first)."""
+    for r in rows:
+        if app_api.question_of(r).strip() == title and app_api.status_of(r) != "resolved":
+            return r
+    return None
+
+
 def run(path: str, *, dry_run: bool, alert: bool = True) -> tuple[list[dict], str]:
     specs = load(path)
     problems = {s.get("title", f"#{i}"): validate(s) for i, s in enumerate(specs)}
@@ -114,7 +123,17 @@ def run(path: str, *, dry_run: bool, alert: bool = True) -> tuple[list[dict], st
     reports = []
     for s in specs:
         title = s["title"].strip()
+        structure = s.get("outcome_structure") or "single_outcome"
         if title in have:
+            row = _open_row(rows, title)
+            if (not dry_run and row is not None and structure != "single_outcome"
+                    and (row.get("outcome_structure") or "single_outcome") != structure):
+                # an earlier run created it but could not switch the structure
+                ok2, d2 = app_api.set_market_structure(str(row.get("id")), structure)
+                reports.append({"status": "created" if ok2 else "error", "title": title,
+                                "detail": f"structure set to {structure}" if ok2
+                                else f"setting structure {structure} FAILED: {d2}"})
+                continue
             reports.append({"status": "skipped", "title": title, "detail": "already exists"})
             continue
         if dry_run:
@@ -124,9 +143,13 @@ def run(path: str, *, dry_run: bool, alert: bool = True) -> tuple[list[dict], st
             continue
         s = with_vs_image(s)
         ok, detail = app_api.create_market(s)
-        structure = s.get("outcome_structure") or "single_outcome"
         if ok and structure != "single_outcome":
             # The create RPC always makes a one-winner market; switch it now.
+            if detail in ("", "ok"):
+                # the RPC returned no id: find the market we just made by title
+                fresh, _ = app_api.markets(50)
+                row = _open_row(fresh or [], title)
+                detail = str(row.get("id")) if row is not None else detail
             if detail in ("", "ok"):
                 ok, detail = False, (f"created, but no market id returned — set "
                                      f"structure {structure} by hand")

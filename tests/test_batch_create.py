@@ -151,6 +151,42 @@ def test_structure_failure_is_reported_not_hidden(monkeypatch, tmp_path):
     assert reports[0]["status"] == "error" and "FAILED" in reports[0]["detail"]
 
 
+def test_missing_id_is_looked_up_by_title(monkeypatch, tmp_path):
+    f = tmp_path / "b.json"
+    f.write_text(json.dumps([_multi(title="Ar Q?")]), "utf-8")
+    calls, made = [], []
+    monkeypatch.setattr(batch_create.app_api, "markets",
+                        lambda n: ([{"id": "mkt-9", "title": "Ar Q?", "status": "open"}]
+                                   if made else [], ""))
+    monkeypatch.setattr(batch_create.app_api, "create_market",
+                        lambda s: (made.append(1), (True, "ok"))[1])
+    monkeypatch.setattr(batch_create.app_api, "set_market_structure",
+                        lambda mid, st: (calls.append((mid, st)), (True, st))[1])
+    monkeypatch.setattr(batch_create, "validate", lambda s, now=None: [])
+    reports, _ = batch_create.run(str(f), dry_run=False, alert=False)
+    assert reports[0]["status"] == "created" and calls == [("mkt-9", "multi_winner")]
+
+
+def test_rerun_fixes_structure_of_existing_market(monkeypatch, tmp_path):
+    f = tmp_path / "b.json"
+    f.write_text(json.dumps([_multi(title="Ar Q?")]), "utf-8")
+    calls = []
+    row = {"id": "mkt-7", "title": "Ar Q?", "status": "open",
+           "outcome_structure": "single_outcome"}
+    monkeypatch.setattr(batch_create.app_api, "markets", lambda n: ([row], ""))
+    monkeypatch.setattr(batch_create.app_api, "create_market",
+                        lambda s: (_ for _ in ()).throw(AssertionError("no create")))
+    monkeypatch.setattr(batch_create.app_api, "set_market_structure",
+                        lambda mid, st: (calls.append((mid, st)), (True, st))[1])
+    monkeypatch.setattr(batch_create, "validate", lambda s, now=None: [])
+    reports, _ = batch_create.run(str(f), dry_run=False, alert=False)
+    assert calls == [("mkt-7", "multi_winner")] and reports[0]["status"] == "created"
+    row["outcome_structure"] = "multi_winner"
+    calls.clear()
+    reports, _ = batch_create.run(str(f), dry_run=False, alert=False)
+    assert calls == [] and reports[0]["status"] == "skipped"
+
+
 def test_two_named_outcomes_get_the_dual_line_chart():
     from arbus.app import wants_dual_chart
 
