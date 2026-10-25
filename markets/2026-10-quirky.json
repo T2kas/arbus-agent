@@ -1,0 +1,171 @@
+[
+  {
+    "title": "Vilniuje iškris sniegas iki...?",
+    "subtitle": "Pirmoji sniego danga Vilniuje",
+    "category": "orai",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Vilnius_Cathedral_and_its_belfry_in_winter_in_2022.jpg/1280px-Vilnius_Cathedral_and_its_belfry_in_winter_in_2022.jpg",
+    "liquidity": 8500,
+    "outcome_structure": "cumulative_date",
+    "rules": "„Taip“ laimi, jeigu nuo rinkos pradžios iki atitinkamos datos 23:59 Lietuvos laiku Vilniaus automatinėje meteorologijos stotyje (Meteo LT, „vilniaus-ams“) bent viename valandiniame stebėjime užfiksuojamas sniego dangos storis 1 cm arba daugiau.\n\nVertinami tik Lietuvos hidrometeorologijos tarnybos (Meteo LT) oficialūs stoties stebėjimo duomenys (api.meteo.lt, laukas „snowDepth“). Sniegas ar šlapdriba be susidariusios dangos, sniegas kitose Vilniaus vietose, nuotraukos socialiniuose tinkluose ir kitų orų tarnybų duomenys neįskaitomi.\n\nJeigu stoties duomenys laikinai neprieinami, naudojamas Meteo LT faktinių orų apžvalga arba oficialus Meteo LT pranešimas apie sniego dangą Vilniuje.\n\nJeigu „Taip“ laimi ankstesnei datai, „Taip“ laimi ir visoms vėlesnėms datoms.\n\nRezultato šaltinis – Meteo LT (api.meteo.lt) Vilniaus AMS stebėjimų duomenys.",
+    "context": "Šį rudenį Vilniuje dar nesnigo, o prognozė iki lapkričio pradžios šilta: naktimis +2…+8 °C, lietus. Per 2016–2025 m. pirmoji sniego danga Vilniaus stotyje susidarydavo nuo spalio 29 d. iki lapkričio 30 d., o 2019 ir 2024 m. jos nebuvo net iki gruodžio vidurio. Iki lapkričio pabaigos sniegas iškrito 8 metus iš 10.",
+    "closes_at": "2026-12-31T21:59:00+00:00",
+    "options": [
+      {
+        "label": "2026 m. lapkričio 15 d.",
+        "probability": 15
+      },
+      {
+        "label": "2026 m. lapkričio 30 d.",
+        "probability": 65
+      },
+      {
+        "label": "2026 m. gruodžio 15 d.",
+        "probability": 80
+      },
+      {
+        "label": "2026 m. gruodžio 31 d.",
+        "probability": 88
+      }
+    ]
+  },
+  {
+    "title": "Žinomas žmogus bus sulaikytas neblaivus prie vairo iki...?",
+    "subtitle": null,
+    "category": "kultura",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/New_Lithuanian_Police_car_livery_%282018%29.jpg/1280px-New_Lithuanian_Police_car_livery_%282018%29.jpg",
+    "liquidity": 8500,
+    "outcome_structure": "cumulative_date",
+    "rules": "„Taip“ laimi, jeigu nuo rinkos pradžios iki atitinkamos datos 23:59 Lietuvos laiku Lietuvoje arba užsienyje policija sulaiko ar nustato neblaivų (0,41 promilės ar daugiau) automobilio, motociklo ar kitos motorinės transporto priemonės vairuotoją, kuris yra žinomas žmogus, ir apie tai pranešama bent viename iš šių portalų: LRT, 15min, Delfi, TV3.\n\nŽinomu žmogumi laikomas asmuo, kurį pranešimas įvardija vardu ir pavarde (arba policija patvirtina jo tapatybę), ir kuris yra bent vienas iš šių: Seimo narys, ministras, meras ar kitas aukšto rango valstybės pareigūnas; profesionalus sportininkas ar treneris, žaidžiantis aukščiausioje Lietuvos ar užsienio lygoje arba atstovavęs Lietuvos rinktinei; atlikėjas, aktorius, TV ar radijo laidų vedėjas; influenceris ar tinklaraštininkas, turintis bent 50 tūkst. sekėjų viename socialiniame tinkle; žinomas verslininkas ar sporto vadovas, apie kurį anksčiau rašė šie portalai.\n\nNeįskaitoma: neįvardyti asmenys („žinomo žmogaus vyras“ be vardo), atsisakymas pasitikrinti be nustatyto neblaivumo, įvykiai, įvykę iki rinkos pradžios, net jeigu apie juos pranešama vėliau. Svarbi sulaikymo data, ne pranešimo data.\n\nJeigu „Taip“ laimi ankstesnei datai, „Taip“ laimi ir visoms vėlesnėms datoms. Ginčytinais atvejais sprendžia Arbus komanda pagal šias taisykles.\n\nRezultato šaltiniai – LRT, 15min, Delfi, TV3 ir policijos pranešimai.",
+    "context": "Spalio 5 d. Kaune neblaivus (1,07 promilės) prie vairo sulaikytas „Žalgirio“ gynėjas Carsenas Edwardsas, o anksčiau šiemet – krepšinio vadybininkas Jonas Vainauskas (2,4 promilės). Tokios naujienos pasirodo kas kelis mėnesius – klausimas, kas bus kitas ir kada.",
+    "closes_at": "2027-02-28T21:59:00+00:00",
+    "options": [
+      {
+        "label": "2026 m. lapkričio 30 d.",
+        "probability": 20
+      },
+      {
+        "label": "2026 m. gruodžio 31 d.",
+        "probability": 32
+      },
+      {
+        "label": "2027 m. vasario 28 d.",
+        "probability": 48
+      }
+    ]
+  },
+  {
+    "title": "Autobusų bilietai atpigs perpus iki...?",
+    "subtitle": "50 % nuolaida tarpmiestiniams autobusams",
+    "category": "ekonomika",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Vilnius_bus_station_September_2022.jpg/1280px-Vilnius_bus_station_September_2022.jpg",
+    "liquidity": 8500,
+    "outcome_structure": "cumulative_date",
+    "rules": "„Taip“ laimi, jeigu iki atitinkamos datos imtinai įsigalioja ir pradedama taikyti valstybės finansuojama ne mažesnė kaip 50 % nuolaida tarpmiestinių (tolimojo susisiekimo) autobusų bilietams visiems keleiviams arba bent toms pačioms keleivių grupėms, kurioms nuo 2026 m. spalio 9 d. taikoma 50 % nuolaida traukinių bilietams.\n\nVertinama įstatymo ar kito teisės akto įsigaliojimo data, paskelbta Teisės aktų registre (e-tar.lt), ir faktinis nuolaidos taikymas. Seimo balsavimas, Prezidento pasirašymas ar paskelbimas be įsigaliojimo nesiskaito. Atskirų vežėjų akcijos, miesto ar priemiestinių autobusų nuolaidos neįskaitomos.\n\nJeigu nuolaida įsigalioja tik daliai maršrutų ar vežėjų, ji įskaitoma, jeigu ją taiko bent didieji tarpmiestinių maršrutų vežėjai pagal valstybės sprendimą.\n\nJeigu „Taip“ laimi ankstesnei datai, „Taip“ laimi ir visoms vėlesnėms datoms.\n\nRezultato šaltiniai – Teisės aktų registras (e-tar.lt), Seimas (lrs.lt), Susisiekimo ministerija ir LRT.",
+    "context": "Traukinių bilietai perpus pigesni nuo spalio 9 d., o autobusams žadėta nuolaida nuo lapkričio 1 d. vėluoja. Spalio 20 d. Seimas pradėjo svarstyti pataisas (74 už, 1 prieš, 9 susilaikė), kitas svarstymas – lapkričio 5 d. Ministerijos teigimu, geriausiu atveju pataisos būtų priimtos lapkričio 12 d., o Prezidentas turi iki 10 dienų joms pasirašyti.",
+    "closes_at": "2027-02-28T21:59:00+00:00",
+    "options": [
+      {
+        "label": "2026 m. lapkričio 30 d.",
+        "probability": 50
+      },
+      {
+        "label": "2026 m. gruodžio 31 d.",
+        "probability": 80
+      },
+      {
+        "label": "2027 m. vasario 28 d.",
+        "probability": 88
+      }
+    ]
+  },
+  {
+    "title": "Lietuvoje bus užfiksuotas neteisėtai įskridęs dronas iki...?",
+    "subtitle": "Nuo spalio 26 d.",
+    "category": "geopolitika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/8409e5cf-a4be-4691-95f3-a3edf64dd6cb.jfif",
+    "liquidity": 8500,
+    "outcome_structure": "cumulative_date",
+    "rules": "„TAIP“ laimi, jei nuo prekybos pradžios iki konkrečios datos 23:59:59 Lietuvos laiku bent vieną kartą įvyksta naujas bepiločio orlaivio įskridimas į Lietuvos Respublikos oro erdvę iš užsienio, o Lietuvos kariuomenė, Krašto apsaugos ministerija arba Nacionalinis krizių valdymo centras viešai patvirtina, kad objektas buvo dronas ir kad jis neteisėtai kirto Lietuvos oro erdvės ribą.\n\nDronas įskaitomas nepriklausomai nuo to, ar jis nukrenta, yra numušamas, išskrenda, turi sprogmenų ir ar vėliau nustatoma jo valstybė arba operatorius. Svarbus įskridimo laikas, ne patvirtinimo paskelbimo laikas: po termino paskelbtas oficialus patvirtinimas gali išspręsti rinką kaip TAIP, jei institucija nustatys, kad įskridimas įvyko iki termino.\n\nNeįskaitomi spalio 18 d. incidentas Pasvalio rajone ir bet kuris kitas įvykis, įvykęs iki faktinės rinkos pradžios. Taip pat neįskaitomi Lietuvoje teisėtai vykdomi skrydžiai, Lietuvoje paleistas ir iš jos neišskridęs dronas, meteorologinis ar kontrabandos balionas, pilotuojamas orlaivis, paukščiai, vien radarų žyma, vien įtarimas arba perspėjimas, jei vėliau nepatvirtinamas tikras drono įskridimas.\n\nJei iki nustatytos datos nėra reikalaujamo įvykio, laimi „NE“. Jei termino metu tiriamas galimas įvykis, išsprendimas atidedamas iki oficialios išvados; vien tai, kad institucijos jos dar nepaskelbė, nelaikoma „NE“. Jei institucijos galiausiai paskelbia, kad objektas nebuvo dronas arba įskridimas nepatvirtintas, laimi „NE“.\n\nJei įskridimas patvirtinamas, TAIP laimi ir visose vėlesnės datos rinkose. Po tokio patvirtinimo vėlesnės rinkos nepaliekamos prekybai.\n\nRezultato šaltiniai – Lietuvos kariuomenė, Krašto apsaugos ministerija ir Vyriausybės informacija apie Nacionalinį krizių valdymo centrą.",
+    "context": "Spalio 18 d. į Lietuvą įskridęs dronas su sprogmenimis sprogo Pasvalio rajone – šįkart jis atskrido ne iš Baltarusijos, o iš Šengeno erdvės pusės. Prieš tai dronas įskrido rugsėjo 15 d., o gegužę buvo keli incidentai Utenos rajone. Ši rinka klausia apie kitą, po rinkos pradžios įvykusį ir oficialiai patvirtintą įskridimą.",
+    "closes_at": "2027-06-30T20:59:00+00:00",
+    "options": [
+      {
+        "label": "2026 m. lapkričio 30 d.",
+        "probability": 40
+      },
+      {
+        "label": "2026 m. gruodžio 31 d.",
+        "probability": 55
+      },
+      {
+        "label": "2027 m. kovo 31 d.",
+        "probability": 78
+      },
+      {
+        "label": "2027 m. birželio 30 d.",
+        "probability": 88
+      }
+    ]
+  },
+  {
+    "title": "Lietuvos YouTube tinklalaidžių #1 spalį?",
+    "subtitle": "Repsense „Lietuvos tinklalaidžių apžvalga“, 2026 m. spalis",
+    "category": "kultura",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Microphones_in_SPNN_Podcast_studio.jpg/1280px-Microphones_in_SPNN_Podcast_studio.jpg",
+    "liquidity": 8500,
+    "rules": "Laimi kūrėjas arba tinklalaidė, užimanti pirmą vietą duomenų analitikos įmonės Repsense „Lietuvos tinklalaidžių apžvalgoje“ už 2026 m. spalį (bendras reitingas).\n\nVertinama pirmoji oficiali Repsense paskelbta spalio apžvalga (repsense.io) arba jos pagrindu parengtas 15min ar kito naujienų portalo straipsnis. Vėlesni reitingo pataisymai rezultato nekeičia.\n\n„Kita“ laimi, jeigu pirma vieta atitenka bet kuriam kitam kūrėjui ar tinklalaidei, nei išvardyti atskirai.\n\nJeigu Repsense iki 2026 m. lapkričio 20 d. nepaskelbia spalio apžvalgos, rinka atšaukiama.\n\nRezultato šaltiniai – Repsense (repsense.io/tinklalaides) ir 15min.lt.",
+    "context": "Rugsėjo reitinge pirmavo Skirmantas Malinauskas (4 vaizdo įrašai, ~800 tūkst. peržiūrų), rugpjūtį nuvainikavęs ilgai pirmavusį Aurimą Valujavičių. Trečias – Lukas Vainavičius, ketvirti – „nešvankiai“, o „Negyvas eteris“ rugsėjį peržiūras padidino keturis kartus. Rugsėjo apžvalga paskelbta spalio 8 d., todėl spalio rezultatas tikėtinas apie lapkričio 6–10 d.",
+    "closes_at": "2026-10-31T21:59:00+00:00",
+    "options": [
+      {
+        "label": "Skirmantas Malinauskas",
+        "probability": 38
+      },
+      {
+        "label": "Aurimas Valujavičius",
+        "probability": 22
+      },
+      {
+        "label": "Negyvas eteris",
+        "probability": 10
+      },
+      {
+        "label": "Lukas Vainavičius",
+        "probability": 10
+      },
+      {
+        "label": "nešvankiai",
+        "probability": 8
+      },
+      {
+        "label": "Kita",
+        "probability": 12
+      }
+    ]
+  },
+  {
+    "title": "Lietuvoje bus matoma šiaurės pašvaistė iki...?",
+    "subtitle": null,
+    "category": "kita",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/%C5%A0iaur%C4%97s_pa%C5%A1vaist%C4%97_Katinuose.JPG/1280px-%C5%A0iaur%C4%97s_pa%C5%A1vaist%C4%97_Katinuose.JPG",
+    "liquidity": 8500,
+    "outcome_structure": "cumulative_date",
+    "rules": "„Taip“ laimi, jeigu nuo rinkos pradžios iki atitinkamos datos 23:59 Lietuvos laiku įvyksta geomagnetinė audra, kurios metu šiaurės pašvaistė matoma bent dalyje Lietuvos.\n\nKad rezultatas būtų aiškus ir nepriklausytų nuo debesų, nuotraukų ar nuomonių, pašvaistė laikoma matoma Lietuvoje, kai planetinis geomagnetinio aktyvumo indeksas Kp pasiekia 6− (5,67) arba daugiau (G2 audra ar stipresnė). Tokio stiprumo audrų metu pašvaistė Lietuvos platumose paprastai matoma šiaurinėje dangaus dalyje, ypač šalies šiaurėje ir atokiau nuo miestų šviesų.\n\nVertinamos GFZ Potsdam (kp.gfz.de) paskelbtos Kp reikšmės, atsarginis šaltinis – NOAA SWPC planetinis Kp indeksas. Prognozės, perspėjimai ir vietiniai magnetometrai neįskaitomi. Jeigu šaltiniai skiriasi, naudojama GFZ reikšmė.\n\nJeigu „Taip“ laimi ankstesnei datai, „Taip“ laimi ir visoms vėlesnėms datoms.\n\nRezultato šaltiniai – GFZ Potsdam (kp.gfz.de) ir NOAA Space Weather Prediction Center.",
+    "context": "Dabar – Saulės aktyvumo ciklo pikas: 2024–2025 m. pašvaistė Lietuvoje matyta daugybę kartų, o 2026 m. Kp 6− ar daugiau pasiektas 15 dienų – sausį, kovą, balandį, gegužę, birželį, liepą, rugpjūtį ir spalio 10 d. Saulės aktyvumas pamažu silpsta, tad kiekviena audra tampa vis retesnė.",
+    "closes_at": "2026-12-31T21:59:00+00:00",
+    "options": [
+      {
+        "label": "2026 m. lapkričio 15 d.",
+        "probability": 40
+      },
+      {
+        "label": "2026 m. lapkričio 30 d.",
+        "probability": 60
+      },
+      {
+        "label": "2026 m. gruodžio 31 d.",
+        "probability": 78
+      }
+    ]
+  }
+]
