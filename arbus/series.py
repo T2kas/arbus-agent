@@ -151,7 +151,12 @@ def cinema_target_span(today: date) -> tuple[str, str] | None:
 
 
 def music_target_week(today: date) -> tuple[int, int]:
-    """(ISO year, ISO week) of the running week — the AGATA chart to be published."""
+    """(ISO year, ISO week) of the AGATA chart to trade on. AGATA's week-N chart
+    counts Fri (week N-1) .. Thu (week N) and is out Friday morning, so once the
+    Thursday close has passed the market rolls to next week's chart: the market
+    then lives Fri..Thu, matching the counting window, with no weekend gap."""
+    if today.weekday() > config.SERIES_MUSIC_CLOSE_WEEKDAY:
+        today += timedelta(days=7)
     iso = today.isocalendar()
     return iso[0], iso[1]
 

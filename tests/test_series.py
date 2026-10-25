@@ -103,6 +103,14 @@ def test_music_target_week_is_todays_iso_week():
     assert series.music_target_week(d) == d.isocalendar()[:2]
 
 
+def test_music_target_week_rolls_forward_after_thursday_close():
+    assert series.music_target_week(date(2026, 10, 22)) == (2026, 43)   # Thu
+    assert series.music_target_week(date(2026, 10, 23)) == (2026, 44)   # Fri
+    assert series.music_target_week(date(2026, 10, 25)) == (2026, 44)   # Sun
+    assert series.music_target_week(date(2026, 12, 25)) == (2026, 53)
+    assert series.music_target_week(date(2027, 1, 1)) == (2027, 1)
+
+
 def test_newest_image_reused_from_existing_row():
     rows = [{"title": "Kuris filmas bus žiūrimiausias Lietuvoje?",
              "image_url": "https://img/cinema.jpg", "rules": "", "status": "open"}]

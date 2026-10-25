@@ -929,7 +929,7 @@ WEATHER_DECLINE_HOURS = _env_int("WEATHER_DECLINE_HOURS", 2)
 # forecast), a 14:00 Vilnius auto-close, and the city's own image. Creation runs
 # in the evening (fresh forecast) and needs the service_role key.
 APP_CREATE_RPC = os.environ.get("APP_CREATE_RPC", "").strip() or "admin_create_market"
-WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 8500)
+WEATHER_LIQUIDITY = _env_int("WEATHER_LIQUIDITY", 6500)        # team 2026-10-25: weather 6.5k
 WEATHER_HORIZON_DAYS = _env_int("WEATHER_HORIZON_DAYS", 2)      # tomorrow + day after
 WEATHER_CREATE_HOUR = _env_int("WEATHER_CREATE_HOUR", 18)       # create from this Vilnius hour
 # Daily-max forecast spread °C — the std of the actual forecast error, and the
@@ -1058,7 +1058,7 @@ BOT_STATE_PATH = os.environ.get("BOT_STATE_PATH", "state/bot_state.json")
 # or highest-price markets. Needs the service_role key. Opt-in via FUEL_ENABLED.
 FUEL_ENABLED = os.environ.get("FUEL_ENABLED", "on").strip().lower() not in ("off", "false", "0", "no")
 FUEL_CATEGORY = _env_str("FUEL_CATEGORY", "ekonomika")
-FUEL_LIQUIDITY = _env_int("FUEL_LIQUIDITY", 8500)
+FUEL_LIQUIDITY = _env_int("FUEL_LIQUIDITY", 6500)              # daily data market, like weather
 FUEL_IMAGE = _env_str("FUEL_IMAGE", "")           # reused from an existing fuel market if empty
 # Daily change std €/l — how far tomorrow's average lands from today's. Fuel
 # moves ~1–2 cents/day, so the buckets are ~1 cent wide. Fallback only: the
@@ -1096,7 +1096,7 @@ GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 30)
 GAMES_EL_TEAMS = {x.strip() for x in _env_str("GAMES_EL_TEAMS", "Zalgiris Kaunas").split(",") if x.strip()}
 GAMES_EL_IMAGE = _env_str("GAMES_EL_IMAGE", "")
 GAMES_MIN_LEAD_HOURS = _env_int("GAMES_MIN_LEAD_HOURS", 3)   # never open a market minutes before tip-off
-GAMES_LIQUIDITY = _env_int("GAMES_LIQUIDITY", 20000)         # team scale 2026-10-06: games = medium
+GAMES_LIQUIDITY = _env_int("GAMES_LIQUIDITY", 10000)         # team 2026-10-25: sport 10k (was 20k)
 GAMES_LKL_IMAGE = _env_str("GAMES_LKL_IMAGE", "")             # empty -> the Žalgiris image
 GAMES_TOP_IMAGE = _env_str("GAMES_TOP_IMAGE", "")             # empty -> the TOPLYGA image
 FUEL_CLOSE_MINUTE = _env_int("FUEL_CLOSE_MINUTE", 0)
