@@ -1,0 +1,19 @@
+[
+  {
+    "title": "Vilniaus oro uostas vėl bus uždarytas dėl balionų iki...?",
+    "subtitle": "Nuo spalio 26 d.",
+    "category": "geopolitika",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/EYVI-VNO_by_Augustas_Didzgalvis.jpg/1280px-EYVI-VNO_by_Augustas_Didzgalvis.jpg",
+    "liquidity": 8500,
+    "outcome_structure": "cumulative_date",
+    "rules": "„Taip“ laimi, jeigu nuo rinkos pradžios iki atitinkamos datos 23:59 Lietuvos laiku bent vieną kartą dėl kontrabandinių ar kitų iš Baltarusijos atskridusių balionų (įskaitant radaruose stebimas balionams būdingas žymas) apribojama oro erdvė virš Vilniaus oro uosto arba sustabdoma Vilniaus oro uosto veikla – orlaiviai negali kilti ir (ar) leistis.\n\nĮskaitomas bet kokios trukmės apribojimas ar sustabdymas, net jeigu jis truko kelias minutes ir nepaveikė nė vieno skrydžio. Svarbus apribojimo pradžios laikas, ne pranešimo paskelbimo laikas.\n\nNeįskaitoma: apribojimai kituose oro uostuose (Kaune, Palangoje ir kt.), uždarymai dėl dronų, oro sąlygų, techninių gedimų ar kitų su balionais nesusijusių priežasčių, taip pat vien perspėjimai, kai oro uosto veikla neapribojama. Įvykiai iki rinkos pradžios neįskaitomi.\n\nJeigu „Taip“ laimi ankstesnei datai, „Taip“ laimi ir visoms vėlesnėms datoms.\n\nRezultato šaltiniai – „Lietuvos oro uostai“ (ltou.lt), Nacionalinis krizių valdymo centras, LRT ir BNS pranešimai.",
+    "context": "Šiemet Vilniaus oro uostas dėl kontrabandinių balionų grėsmės stabdė darbą maždaug 10 kartų; paskutinį kartą rugsėjo 22 d. naktį oro erdvė buvo uždaryta daugiau nei 3 val., paveikti 17 skrydžių ir per 3 100 keleivių. Spalio 24–25 d. naktį dėl balionų ribota oro erdvė virš Kauno oro uosto. Pernai spalį–gruodį Vilniaus oro uostas buvo uždaromas beveik kas naktį.",
+    "closes_at": "2027-02-28T21:59:00+00:00",
+    "options": [
+      {"label": "2026 m. lapkričio 15 d.", "probability": 40},
+      {"label": "2026 m. lapkričio 30 d.", "probability": 58},
+      {"label": "2026 m. gruodžio 31 d.", "probability": 75},
+      {"label": "2027 m. vasario 28 d.", "probability": 85}
+    ]
+  }
+]
