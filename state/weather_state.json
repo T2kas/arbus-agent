@@ -5926,7 +5926,14 @@
   "resolved_price": 2.211,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261015/"
  },
- "52834b90-4b28-4907-85de-0979bea5e216": {},
+ "52834b90-4b28-4907-85de-0979bea5e216": {
+  "resolved": true,
+  "resolved_at": "2026-10-25T17:01:23.502227+00:00",
+  "resolved_label": "Telšių „Džiugas“",
+  "resolved_option_id": "4ae8c16d-5743-4b23-ba0f-fc1d54dc6026",
+  "resolved_score": "Džiugas 2:1 Panevėžys",
+  "resolved_via": "sports"
+ },
  "52e1021c-e9c2-45f8-a2c8-539381e3811d": {
   "resolved": true,
   "resolved_at": "2026-10-22T08:45:50.437667+00:00",
