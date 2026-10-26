@@ -8220,7 +8220,7 @@
   "station": "kauno-ams"
  },
  "8473ca6d-de00-420a-a9e3-e390b0ede792": {
-  "checksum": "eaadcfc93ec58d427f9062131edb9698755c2fc0682534e5e967e069fe664625",
+  "checksum": "53f26dd7a8f56a7e826a9f771775c979a72c0515ffcdf305b8c1859948b5dad6",
   "current_maximum": null,
   "date": "2026-10-28",
   "measurements": {},
@@ -11710,7 +11710,7 @@
   "station": "klaipedos-ams"
  },
  "adb7089d-5e64-4e93-8e05-3b57de9cd717": {
-  "checksum": "e8d2ec86bcfb3b994749aba6d4f0ad887fffb18943f13af60238d5c53aa9830d",
+  "checksum": "92dfa497043afd2ecb2585ba1def865b964833170daba98c3081e9e53e61e42c",
   "current_maximum": null,
   "date": "2026-10-28",
   "measurements": {},
@@ -15328,7 +15328,7 @@
   "resolved_via": "sports"
  },
  "d2adb383-3e7a-4f60-819e-985a7adf2e8e": {
-  "checksum": "f99a1a852ebf245c5df3062e7f79f3543a050b724c7f237509122ceca9d02822",
+  "checksum": "69a333b0238fff59be15bb1a7f4db3ddabadcc3107f9cd5176ea2f5a9edf518f",
   "current_maximum": null,
   "date": "2026-10-28",
   "measurements": {},
@@ -17300,7 +17300,7 @@
   "station": "klaipedos-ams"
  },
  "e54da4ac-89ab-44ea-bd64-2671a34df9b8": {
-  "checksum": "e8d2ec86bcfb3b994749aba6d4f0ad887fffb18943f13af60238d5c53aa9830d",
+  "checksum": "92dfa497043afd2ecb2585ba1def865b964833170daba98c3081e9e53e61e42c",
   "current_maximum": null,
   "date": "2026-10-27",
   "measurements": {},
@@ -18703,7 +18703,7 @@
   "station": "klaipedos-ams"
  },
  "f1775a4d-856f-45b5-b608-8d69ca967180": {
-  "checksum": "f99a1a852ebf245c5df3062e7f79f3543a050b724c7f237509122ceca9d02822",
+  "checksum": "69a333b0238fff59be15bb1a7f4db3ddabadcc3107f9cd5176ea2f5a9edf518f",
   "current_maximum": null,
   "date": "2026-10-27",
   "measurements": {},
@@ -19017,7 +19017,7 @@
   "station": "vilniaus-ams"
  },
  "f4504094-3488-45c5-ac21-ab941c7a33cc": {
-  "checksum": "eaadcfc93ec58d427f9062131edb9698755c2fc0682534e5e967e069fe664625",
+  "checksum": "53f26dd7a8f56a7e826a9f771775c979a72c0515ffcdf305b8c1859948b5dad6",
   "current_maximum": null,
   "date": "2026-10-27",
   "measurements": {},
