@@ -6713,7 +6713,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "5cf0cf1b-dad7-4401-90f5-99053f5eced0": {},
+ "5cf0cf1b-dad7-4401-90f5-99053f5eced0": {
+  "resolved": true,
+  "resolved_at": "2026-10-26T09:55:39.509136+00:00",
+  "resolved_label": "Nuo 1,925 iki 1,934 €/l",
+  "resolved_option_id": "61f66bf6-a157-41b5-a67d-4d8916d98165",
+  "resolved_price": 1.925,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
+ },
  "5dda36c5-4aa5-4ee0-af7f-353812d0b5f2": {
   "resolved": true,
   "resolved_at": "2026-10-07T08:31:07.196382+00:00",
@@ -7635,7 +7642,14 @@
   "resolved_price": 2.281,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260924/"
  },
- "794f2739-4821-4058-9226-d45deba5da7d": {},
+ "794f2739-4821-4058-9226-d45deba5da7d": {
+  "resolved": true,
+  "resolved_at": "2026-10-26T09:55:39.509136+00:00",
+  "resolved_label": "Nuo 2,215 iki 2,224 €/l",
+  "resolved_option_id": "ee8617d3-b00b-45c0-9f94-e85a9d1e9634",
+  "resolved_price": 2.222,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
+ },
  "79d598d4-774b-4ef2-b5c2-1e67fb3e1dea": {
   "checksum": "caef5de1ed1d081ebeeefdb2ca2315581aa37d3b1c13feeaf0010d8390a63cc2",
   "current_maximum": 11.6,
