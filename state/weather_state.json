@@ -15319,7 +15319,14 @@
   "resolved_price": 2.268,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261001/"
  },
- "d29b84c7-746a-4f27-90c4-661752790d16": {},
+ "d29b84c7-746a-4f27-90c4-661752790d16": {
+  "resolved": true,
+  "resolved_at": "2026-10-26T18:45:54.249367+00:00",
+  "resolved_label": "Lygiosios",
+  "resolved_option_id": "271c1eb0-8ff0-4378-8c84-4eafec36bccf",
+  "resolved_score": "K. Žalgiris 0:0 Žalgiris",
+  "resolved_via": "sports"
+ },
  "d2adb383-3e7a-4f60-819e-985a7adf2e8e": {
   "checksum": "c72a86eb924a54f8a218b011f5f23038ded770708703b762becf19ada9ac55c4",
   "current_maximum": null,
