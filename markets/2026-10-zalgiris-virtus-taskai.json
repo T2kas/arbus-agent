@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Rezultatyviausias „Žalgirio“ žaidėjas rungtynėse su „Virtus“?",
+    "subtitle": "Eurolyga, 2026 m. spalio 28 d. 21:30 Lietuvos laiku",
+    "category": "sportas",
+    "image_url": "https://www.arbus.lt/market-images/sportas-virtus-zalgirisk.jpg",
+    "liquidity": 10000,
+    "outcome_structure": "single_outcome",
+    "rules": "Rinka bus išspręsta pagal tai, kuris Kauno „Žalgirio“ krepšininkas pelnys daugiausiai taškų 2026 m. spalio 28 d. Eurolygos 8-ojo turo rungtynėse su Bolonijos „Virtus“.\n\nSkaičiuojami visi žaidėjo per rungtynes pelnyti taškai, įskaitant pratęsimus, pagal oficialų Eurolygos rungtynių protokolą. Vertinami tik „Žalgirio“ žaidėjai – „Virtus“ krepšininkų taškai neįskaitomi.\n\n„Kitas „Žalgirio“ žaidėjas“ laimi, jeigu daugiausiai taškų pelnys bet kuris atskirai neišvardytas „Žalgirio“ krepšininkas.\n\nJeigu keli žaidėjai pelnys po vienodą didžiausią taškų skaičių, galutinis rezultatas bus paskirstytas po lygiai tarp jiems priklausančių baigčių: dviem baigtims – po 50%, trims – po 33,3% ir t. t. Jeigu daugiausiai taškų vienodai pelnys keli atskirai neišvardyti žaidėjai, jie visi kartu laikomi viena baigtimi „Kitas „Žalgirio“ žaidėjas“.\n\nJeigu išvardytas žaidėjas rungtynėse nežais, jo baigtis pralaimi – statymai negrąžinami.\n\nJeigu rungtynės bus nukeltos, vertinamos tų pačių komandų šio turo rungtynės, jeigu jos įvyks iki 2026 m. lapkričio 4 d. 23:59 Lietuvos laiku. Jeigu iki tol rungtynės neįvyks arba bus nutrauktos ir Eurolyga nepatvirtins galutinio protokolo, rinka atšaukiama.\n\nNaudojamas oficialus protokolas ir jo pataisymai, paskelbti per 24 valandas nuo rungtynių pabaigos. Vėlesni pataisymai rezultato nekeičia.\n\nRezultato šaltiniai – oficialus Eurolygos rungtynių protokolas (euroleaguebasketball.net), „Žalgirio“ (zalgiris.lt) ir basketnews.lt rungtynių statistika.",
+    "context": "Šį Eurolygos sezoną C. Edwardsas vidutiniškai renka 17,0 taško ir buvo rezultatyviausias 5 iš 7 „Žalgirio“ rungtynių (13, 16, 19, 19, 20, 16, 16 tšk.). Toliau rikiuojasi Ą. Tubelis (11,7 tšk.), S. Brownas ir J. Valančiūnas (po 10,9 tšk.). Kitose dviejose rungtynėse rezultatyviausi buvo S. Brownas (20 tšk. prieš „Olympiacos“) ir N. Williamsas-Gossas, kuris dėl traumos šiose rungtynėse nežais. Debiutuoti turėtų sugrįžęs K. Evansas. C. Edwardsas Bolonijoje susitiks su savo buvusia komanda. Lažybų bendrovės rungtynes laiko lygiomis (TOPsport: „Virtus“ 1,85, „Žalgiris“ 1,96).",
+    "closes_at": "2026-10-28T19:30:00+00:00",
+    "options": [
+      {"label": "Carsen Edwards", "probability": 58},
+      {"label": "Ąžuolas Tubelis", "probability": 15},
+      {"label": "Jonas Valančiūnas", "probability": 11},
+      {"label": "Sterling Brown", "probability": 10},
+      {"label": "Kitas „Žalgirio“ žaidėjas", "probability": 6}
+    ]
+  }
+]
