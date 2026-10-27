@@ -149,6 +149,14 @@
  },
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
  "05c8d26a-73f3-4eb7-86fe-038ca9c2fae9": {},
+ "074548e2-7e3b-4a39-bfad-f3864bffee4a": {
+  "checksum": "2746fb735a49ccf6ab2034e0ecab50eb0117ab50ba7ad9a87213f57f640762b3",
+  "current_maximum": null,
+  "date": "2026-10-29",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "08cdd6b7-cc77-401c-ac4b-b95662e867e5": {
   "checksum": "ff9710c6a75cb8e489313ceb4aaeded69a6df509002ccf7e80d653948649a07e",
   "current_maximum": 18.7,
@@ -7305,6 +7313,14 @@
   "resolved_price": 2.226,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261014/"
  },
+ "65334da9-0aae-4e63-8442-822f644d8869": {
+  "checksum": "b55595a3884e1d15959cc59a45bdb91d48958e8ffd9b9a5faa0457e1d76c9135",
+  "current_maximum": null,
+  "date": "2026-10-29",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "6b96c073-3c0f-474e-9444-288220e0a358": {
   "checksum": "46f3d3edc66c851f3c50ac01cc8f3a7444f767ee89bed9e58ed146467367ad90",
   "current_maximum": 17.2,
@@ -7769,6 +7785,14 @@
   "resolved_option_id": "ee8617d3-b00b-45c0-9f94-e85a9d1e9634",
   "resolved_price": 2.222,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
+ },
+ "7997dbdf-9bd9-493f-a77b-a86f5ebc8478": {
+  "checksum": "bbcba02a17838937e959395ba60bb587cbaee0745c5bb0813319f6ec5cf93f53",
+  "current_maximum": null,
+  "date": "2026-10-29",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "79d598d4-774b-4ef2-b5c2-1e67fb3e1dea": {
   "checksum": "caef5de1ed1d081ebeeefdb2ca2315581aa37d3b1c13feeaf0010d8390a63cc2",
