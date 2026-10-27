@@ -4172,7 +4172,14 @@
   "station": "vilniaus-ams"
  },
  "34eeeb70-1027-42dc-996b-127bd8a8f219": {},
- "350ed06e-8902-486d-a779-e472df70ef72": {},
+ "350ed06e-8902-486d-a779-e472df70ef72": {
+  "resolved": true,
+  "resolved_at": "2026-10-27T11:01:25.750738+00:00",
+  "resolved_label": "Nuo 2,265 iki 2,274 €/l",
+  "resolved_option_id": "36cb66a4-1880-4e26-9ab1-de78d1aea387",
+  "resolved_price": 2.265,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261027/"
+ },
  "35673c42-e212-489d-9b0a-256985f46083": {},
  "365bba16-e62b-47e4-914b-6d56cafdfb93": {
   "checksum": "1ed8b6c06b254f75e549b9422ec22355769e8b811d4c19aba6ee14ac708bc8de",
@@ -6051,7 +6058,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "4e64758c-5fd2-4fbc-b94b-8f0bf3c22f9f": {},
+ "4e64758c-5fd2-4fbc-b94b-8f0bf3c22f9f": {
+  "resolved": true,
+  "resolved_at": "2026-10-27T11:01:25.750738+00:00",
+  "resolved_label": "Nuo 1,955 iki 1,964 €/l",
+  "resolved_option_id": "b1a42edc-2a34-436e-9fa1-d157f1cca867",
+  "resolved_price": 1.958,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261027/"
+ },
  "516d2053-d58d-4b64-825a-ffea4bd6a4cb": {
   "resolved": true,
   "resolved_at": "2026-10-15T08:31:11.198816+00:00",
