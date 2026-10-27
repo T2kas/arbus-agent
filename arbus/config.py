@@ -953,36 +953,41 @@ WEATHER_CITY_CALIBRATION = {
     "kaunas": (-0.5, 1.3),
     "klaipeda": (0.0, 0.8),
 }
-# Multi-model blend (2026-10-24). The Meteo LT forecast alone left the tails
-# exploitable: when the global models disagreed with it by ≥1.5 °C a tail bucket
-# won 5/15 times, and the 1–2 % buckets won 3/23 (13 %) — e.g. Klaipėda 10-24,
-# Meteo LT 11 °C vs ECMWF/GFS ~13 °C, "≥13 °C" priced 1 %, max 13.2 °C. The
-# market now centres on a weighted mean of the Meteo LT forecast (bias-corrected
-# as above) and the mean of these Open-Meteo models at the station's own
-# coordinates (bias-corrected per city and month, since the station ≠ the model
-# grid cell). σ widens with the models' spread and with how far the models sit
-# from Meteo LT. Fitted on ~420 days per station (2025-09 → 2026-10, 2-day-old
-# runs vs the station's real max) and checked on the 129 real markets: log-loss
-# 1.005 (Meteo LT only) → 0.82 (table built only from data before the markets);
-# buckets priced ≤3 % won 1 %, 3–15 % → 5 %, 15–40 % → 27 %, >40 % → 57 %.
+# Model pricing (2026-10-27). The market centres on a weighted mean of global
+# models at the station's coordinates — Meteo LT is no longer part of the price.
+# Picked from 26 Open-Meteo models' archived runs (previous-runs API, 1/2/3 days
+# old) vs the three stations' real max, 2025-06 → 2026-10, ~500 days each,
+# leave-one-month-out: ECMWF AIFS (the AI model) is the best single model, and
+# AIFS 0.5 + ICON 0.25 + UKMO 0.25 the best combination — 2-day MAE 0.89 °C vs
+# 1.01 for the old ifs025+icon+gfs+best_match set, better at every lead and in
+# 10 of 12 months. Meteo LT on 123 real markets: MAE 0.85 vs these models' 0.64;
+# any weight on it made the centre worse (35 % → 0.65), and the old month biases
+# (Oct −0.4 °C, from a single year) pushed the centre the wrong way — traders
+# reading the plain models beat it. On 141 real markets: log-loss 1.08 (our real
+# prices) → 0.79. A missing model drops out and the rest are re-weighted.
+WEATHER_MODEL_WEIGHTS = {
+    "ecmwf_aifs025_single": 0.5,
+    "icon_seamless": 0.25,
+    "ukmo_seamless": 0.25,
+}
 WEATHER_MODELS = tuple(m.strip() for m in (
     os.environ.get("WEATHER_MODELS", "").strip()
-    or "ecmwf_ifs025,icon_seamless,gfs_seamless,best_match").split(",") if m.strip())
+    or ",".join(WEATHER_MODEL_WEIGHTS)).split(",") if m.strip())
 # Set WEATHER_MODEL_BLEND=off to price from the Meteo LT forecast alone again.
 WEATHER_MODEL_BLEND = (os.environ.get("WEATHER_MODEL_BLEND", "").strip().lower()
                        or "on") not in ("off", "false", "0", "no")
-# Per city: Meteo LT weight, σ scale, the models' base error variance (°C²) and
-# the models' mean bias by month Jan..Dec (station max − models' mean, °C).
+# Per city: (bias °C = station max − weighted models' mean, σ0 °C at a 2-day
+# lead, k) with σ = √(σ0² + k·models' variance). A constant bias: rolling or
+# seasonal ones gained ≤0.04 °C MAE and no log-loss. Fitted on all ~500 days.
 WEATHER_BLEND_CALIBRATION = {
-    "vilnius": (0.35, 0.9, 0.78,
-                (0.28, 0.87, 1.13, 0.65, 0.31, 0.38, 0.35, 0.19, -0.05, -0.40, -0.54, -0.20)),
-    "kaunas": (0.35, 0.9, 0.94,
-               (-0.05, 0.30, 0.63, 0.39, 0.04, 0.13, 0.34, 0.30, 0.03, -0.42, -0.61, -0.31)),
-    "klaipeda": (0.5, 0.9, 1.28,
-                 (0.47, 0.52, 0.00, -0.50, -0.18, 0.21, 0.30, 0.59, 0.65, 0.18, -0.11, 0.13)),
+    "vilnius": (0.62, 0.85, 1.0),
+    "kaunas": (0.30, 0.90, 0.5),
+    "klaipeda": (0.28, 1.05, 1.5),
 }
-# Telegram warning on creation when the models' mean and Meteo LT differ by at
-# least this many °C — the days the tails used to be mispriced.
+# σ0 changes by this much per day of lead (fitted: 1-day ≈ σ0 − 0.15, 3-day ≈ +0.15).
+WEATHER_SIGMA_PER_LEAD_DAY = 0.15
+# Telegram warning on creation when the models' centre and Meteo LT differ by at
+# least this many °C — worth a look, but the models are trusted.
 WEATHER_DIVERGENCE_ALERT = _env_float("WEATHER_DIVERGENCE_ALERT", 1.5)
 # Auto-close (closes_at) time of day, Vilnius. Measured on 116 markets: by 14:00
 # the running max already sat in the final bucket 58% of the time (median only

@@ -465,37 +465,46 @@ def models_forecast_max(city_key: str, target_iso: str) -> dict[str, float]:
 
 
 def blend_forecast(city_key: str, lt_max: float | None, models: dict[str, float],
-                   month: int) -> dict | None:
-    """The market's centre and spread from the Meteo LT forecast and the models.
+                   lead_days: float = 2.0) -> dict | None:
+    """The market's centre and spread from the models (see config).
 
-    mu    = w·(Meteo LT + its city bias) + (1−w)·(models' mean + month bias)
-    sigma = scale·√(base·(1−0.3w) + (1−w)·models' variance + (LT−models)²/4)
+    mu    = weighted models' mean + city bias
+    sigma = √(σ0(lead)² + k·models' variance)
 
-    With fewer than 2 models (or the blend switched off) it is the old Meteo LT
-    pricing: mu = LT + bias, sigma = the city's σ. With no Meteo LT forecast it
-    prices from the models alone. None when there is no forecast at all."""
+    Meteo LT only sets `divergence` (an alert), never the price — unless fewer
+    than 2 models answered (or the blend is switched off): then it is the old
+    Meteo LT pricing, mu = LT + bias, sigma = the city's σ. None when there is
+    no forecast at all."""
     lt_bias, lt_sigma = config.WEATHER_CITY_CALIBRATION.get(
         city_key, (0.0, config.WEATHER_FORECAST_SIGMA))
     cal = config.WEATHER_BLEND_CALIBRATION.get(city_key)
-    vals = list(models.values())
-    if not (config.WEATHER_MODEL_BLEND and cal and len(vals) >= 2):
+    weights = {m: config.WEATHER_MODEL_WEIGHTS.get(m, 1.0 / max(len(models), 1))
+               for m in models}
+    if not (config.WEATHER_MODEL_BLEND and cal and len(models) >= 2):
         if lt_max is None:
             return None
         return {"mu": lt_max + lt_bias, "sigma": lt_sigma, "lt": lt_max,
                 "models_mean": None, "divergence": None}
-    w, scale, base, month_bias = cal
-    mean = sum(vals) / len(vals)
-    var = sum((v - mean) ** 2 for v in vals) / len(vals)
-    mu_m = mean + month_bias[month - 1]
-    if lt_max is None:
-        w, mu_lt, gap = 0.0, mu_m, 0.0
-    else:
-        mu_lt = lt_max + lt_bias
-        gap = mu_lt - mu_m
-    mu = w * mu_lt + (1 - w) * mu_m
-    sigma = scale * math.sqrt(base * (1 - 0.3 * w) + (1 - w) * var + gap * gap / 4)
-    return {"mu": mu, "sigma": sigma, "lt": lt_max, "models_mean": mu_m,
-            "divergence": None if lt_max is None else abs(gap)}
+    bias, sigma0, k = cal
+    total = sum(weights.values())
+    mean = sum(weights[m] * v for m, v in models.items()) / total
+    vals = list(models.values())
+    plain = sum(vals) / len(vals)
+    var = sum((v - plain) ** 2 for v in vals) / len(vals)
+    s0 = max(sigma0 + config.WEATHER_SIGMA_PER_LEAD_DAY * (lead_days - 2.0), 0.6)
+    mu = mean + bias
+    return {"mu": mu, "sigma": math.sqrt(s0 * s0 + k * var), "lt": lt_max,
+            "models_mean": mu,
+            "divergence": None if lt_max is None else abs(lt_max - mu)}
+
+
+def lead_days(target_iso: str, now: datetime | None = None,
+              tz: ZoneInfo | None = None) -> float:
+    """Days from now to the target day's ~13:00 (when the max usually falls)."""
+    tz = tz or _tz()
+    now = now or datetime.now(tz)
+    peak = datetime.combine(date.fromisoformat(target_iso), dtime(hour=13), tzinfo=tz)
+    return max((peak - now).total_seconds() / 86400.0, 0.0)
 
 
 def build_buckets(forecast_max: float) -> list[dict]:
@@ -572,7 +581,8 @@ def _context_text(loc: str, month_name: str, forecast_max: float) -> str:
 
 
 def market_spec(city_key: str, target_iso: str, image_url: str = "",
-                sigma: float | None = None, tz: ZoneInfo | None = None) -> dict | None:
+                sigma: float | None = None, tz: ZoneInfo | None = None,
+                now: datetime | None = None) -> dict | None:
     """The full admin_create_market payload for one city+day, or None if there is
     no forecast for that day."""
     tz = tz or _tz()
@@ -580,10 +590,10 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
     d = date.fromisoformat(target_iso)
     tf = forecast_daily_max(c["place"], target_iso, tz)
     models = models_forecast_max(city_key, target_iso)
-    blend = blend_forecast(city_key, tf, models, d.month)
+    blend = blend_forecast(city_key, tf, models, lead_days(target_iso, now, tz))
     if blend is None:
         return None
-    expected = blend["mu"]                    # bias-corrected Meteo LT + models
+    expected = blend["mu"]                    # bias-corrected weighted models
     sigma = blend["sigma"] if sigma is None else sigma
     buckets = build_buckets(expected)
     pcts = bucket_probabilities(expected, buckets, sigma)
@@ -639,7 +649,7 @@ def plan_new_markets(existing_rows: list[dict], now: datetime, tz: ZoneInfo,
             if skip_existing and (c["station"], iso) in have:
                 continue
             image = images.get(c["station"]) or c.get("image", "")   # reuse latest, else city default
-            spec = market_spec(city_key, iso, image, tz=tz)
+            spec = market_spec(city_key, iso, image, tz=tz, now=now)
             if spec:
                 specs.append(spec)
     return specs
@@ -684,7 +694,7 @@ def _created_message(spec: dict, market_id: str) -> str:
     div = spec.get("forecast_divergence")
     if div is not None and div >= config.WEATHER_DIVERGENCE_ALERT:
         lines.append(f"  ⚠️ Modeliai ir Meteo LT skiriasi {_fmt(div)} °C — "
-                     "uodegos įkainotos plačiau, verta stebėti.")
+                     "kaina pagal modelius, verta stebėti.")
     return "\n".join(lines)
 
 
