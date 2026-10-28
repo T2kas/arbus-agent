@@ -4646,7 +4646,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "39da6411-523f-4c76-bf76-988008df7f4d": {},
+ "39da6411-523f-4c76-bf76-988008df7f4d": {
+  "resolved": true,
+  "resolved_at": "2026-10-28T09:31:13.966601+00:00",
+  "resolved_label": "2,235 €/l arba daugiau",
+  "resolved_option_id": "7c9c488e-94cd-44d3-bcf4-623b9fdc542e",
+  "resolved_price": 2.247,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261028/"
+ },
  "3ad1691a-70ef-42fe-af47-365f4f38a2ee": {
   "resolved": true,
   "resolved_at": "2026-10-15T08:31:11.198816+00:00",
@@ -7315,7 +7322,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261014/"
  },
  "65334da9-0aae-4e63-8442-822f644d8869": {
-  "checksum": "757a751bdc18bbd0e946aa02b4c0bed2485d24042bcd2284b54cd8f9cecdcae9",
+  "checksum": "4b70eff11c3141fbbced3e79b656b0c590de6ed0695bd52bf7185d1fb5c8d264",
   "current_maximum": null,
   "date": "2026-10-29",
   "measurements": {},
@@ -9677,7 +9684,14 @@
   "resolved_price": 2.246,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261021/"
  },
- "8c9b29d2-e084-4f74-be90-fbae85db498a": {},
+ "8c9b29d2-e084-4f74-be90-fbae85db498a": {
+  "resolved": true,
+  "resolved_at": "2026-10-28T09:31:13.966601+00:00",
+  "resolved_label": "Nuo 1,925 iki 1,934 €/l",
+  "resolved_option_id": "5af4cbc1-9f25-4604-879b-076325e2be72",
+  "resolved_price": 1.929,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261028/"
+ },
  "8eb227df-cb87-4eee-bed8-a934c69aea13": {},
  "8fe4f113-a0e9-4466-98dd-c1dcdfdb15cc": {
   "checksum": "957d6052de9bd672bebbe476012ba264f73cb6f83452beadf311e53de5e06228",
@@ -15526,7 +15540,7 @@
   "resolved_via": "sports"
  },
  "d2adb383-3e7a-4f60-819e-985a7adf2e8e": {
-  "checksum": "757a751bdc18bbd0e946aa02b4c0bed2485d24042bcd2284b54cd8f9cecdcae9",
+  "checksum": "4b70eff11c3141fbbced3e79b656b0c590de6ed0695bd52bf7185d1fb5c8d264",
   "current_maximum": 6.2,
   "date": "2026-10-28",
   "max_received_at": "2026-10-28T09:10:49.719346+00:00",
