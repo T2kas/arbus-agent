@@ -150,7 +150,7 @@
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
  "05c8d26a-73f3-4eb7-86fe-038ca9c2fae9": {},
  "074548e2-7e3b-4a39-bfad-f3864bffee4a": {
-  "checksum": "5196e1fb0961dd6411a20a533c0cab297547017193c03721aec5e40d2731f21e",
+  "checksum": "1592cdf7760b8c07038b2ec0a945aa4dd0714e31635572ae1386695d95df759a",
   "current_maximum": null,
   "date": "2026-10-29",
   "measurements": {},
@@ -7322,7 +7322,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261014/"
  },
  "65334da9-0aae-4e63-8442-822f644d8869": {
-  "checksum": "764a8a0968f2382992fbf14c3216d26ebad17a7e77bbfb4c66f56d7f3aa5934b",
+  "checksum": "73f30a787c6d162d6d392a1f54fa89531c57c83e8e3dc018492ef5349f6076e7",
   "current_maximum": null,
   "date": "2026-10-29",
   "measurements": {},
@@ -7779,7 +7779,7 @@
   "station": "klaipedos-ams"
  },
  "74f12b7a-c16b-4e99-bcec-af12630c0a50": {
-  "checksum": "c551fc0c28e35f9b2a3c39932406d05a64f7fc6ad22a9c0ce3ff93c390b546e8",
+  "checksum": "3aabf563cebebf2ed6cc25657a1ac37df1d1207cf3d23ce025313465f98ca9d8",
   "current_maximum": null,
   "date": "2026-10-30",
   "measurements": {},
@@ -7803,7 +7803,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
  },
  "7997dbdf-9bd9-493f-a77b-a86f5ebc8478": {
-  "checksum": "c551fc0c28e35f9b2a3c39932406d05a64f7fc6ad22a9c0ce3ff93c390b546e8",
+  "checksum": "3aabf563cebebf2ed6cc25657a1ac37df1d1207cf3d23ce025313465f98ca9d8",
   "current_maximum": null,
   "date": "2026-10-29",
   "measurements": {},
@@ -7955,7 +7955,7 @@
   "station": "kauno-ams"
  },
  "7c6b9c18-26bc-4501-be1a-b98d1c4c611f": {
-  "checksum": "764a8a0968f2382992fbf14c3216d26ebad17a7e77bbfb4c66f56d7f3aa5934b",
+  "checksum": "73f30a787c6d162d6d392a1f54fa89531c57c83e8e3dc018492ef5349f6076e7",
   "current_maximum": null,
   "date": "2026-10-30",
   "measurements": {},
@@ -11913,7 +11913,7 @@
   "station": "klaipedos-ams"
  },
  "adb7089d-5e64-4e93-8e05-3b57de9cd717": {
-  "checksum": "5196e1fb0961dd6411a20a533c0cab297547017193c03721aec5e40d2731f21e",
+  "checksum": "1592cdf7760b8c07038b2ec0a945aa4dd0714e31635572ae1386695d95df759a",
   "current_maximum": 9.9,
   "date": "2026-10-28",
   "eliminated": [
@@ -12052,6 +12052,12 @@
     "received_at": "2026-10-28T19:10:51.608788+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 8.8
+   },
+   "2026-10-28 20:00:00": {
+    "checksum": "1592cdf7760b8c07038b2ec0a945aa4dd0714e31635572ae1386695d95df759a",
+    "received_at": "2026-10-28T20:10:46.051420+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 9.0
    }
   },
   "resolved": false,
@@ -12200,7 +12206,7 @@
   "station": "vilniaus-ams"
  },
  "af909ad6-f6e8-4ade-912e-ba06b8b9a26f": {
-  "checksum": "5196e1fb0961dd6411a20a533c0cab297547017193c03721aec5e40d2731f21e",
+  "checksum": "1592cdf7760b8c07038b2ec0a945aa4dd0714e31635572ae1386695d95df759a",
   "current_maximum": null,
   "date": "2026-10-30",
   "measurements": {},
