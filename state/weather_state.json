@@ -15382,7 +15382,14 @@
   "resolved_via": "music",
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
- "ceaa8855-3859-409e-9869-b324b256b366": {},
+ "ceaa8855-3859-409e-9869-b324b256b366": {
+  "resolved": true,
+  "resolved_at": "2026-10-28T21:45:44.310550+00:00",
+  "resolved_label": "Kauno „Žalgiris“",
+  "resolved_option_id": "ffa61d13-845f-46f4-a70b-ed88d6a2c705",
+  "resolved_score": "Virtus Bologna 74:91 Zalgiris Kaunas",
+  "resolved_via": "sports"
+ },
  "cee8af63-11ae-4d18-ad54-ebed0c21f892": {
   "resolved": true,
   "resolved_at": "2026-10-23T19:10:46.482090+00:00",
