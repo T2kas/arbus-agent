@@ -6050,6 +6050,14 @@
   "resolved_score": "Žalgiris 4:0 Sūduva",
   "resolved_via": "sports"
  },
+ "4bd2f833-f368-4e98-98e7-a1bbb0aa9330": {
+  "checksum": "ce7938083f475ce5aac30e71360b252f3a2510e31001a87f57890a2314cf564d",
+  "current_maximum": null,
+  "date": "2026-10-31",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "4be3b8ba-a87c-45f1-98f7-215b5d169db0": {
   "resolved": true,
   "resolved_at": "2026-10-24T16:25:38.477846+00:00",
@@ -10991,6 +10999,14 @@
   "resolved_option_id": "fe5b800f-4ffd-4a79-9ebe-71c5050cd408",
   "resolved_price": 2.226,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261022/"
+ },
+ "9f54cf1a-0845-4716-9b4a-273102cd1f96": {
+  "checksum": "fd223d514f3feaf1cc95a69a2b7824a60c36a768065744f2126cd519f26b5cef",
+  "current_maximum": null,
+  "date": "2026-10-31",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "9ff3105f-0119-4adc-9c74-a3fff16f8177": {
   "resolved": true,
@@ -17550,6 +17566,14 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
+ },
+ "dde6dc20-619c-41f9-b99b-c9c0158990cf": {
+  "checksum": "f31d21cc5341185a50db739220c99666fa44caae55c6cabd8fb1f55f3f36ee9b",
+  "current_maximum": null,
+  "date": "2026-10-31",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "e0635ead-4500-4d90-8714-3e67c7f6e03a": {
   "checksum": "1b9cc0fae3e42ea69828ebf6958b70931c98e99ce7c204271c7ffb55cae1b9f8",
