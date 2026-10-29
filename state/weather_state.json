@@ -150,10 +150,10 @@
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
  "05c8d26a-73f3-4eb7-86fe-038ca9c2fae9": {},
  "074548e2-7e3b-4a39-bfad-f3864bffee4a": {
-  "checksum": "d24c50a3d319885edd63a2598b039ad57061ac1a57d96cf93ded8ed9b8e61c13",
-  "current_maximum": 8.7,
+  "checksum": "430a6776383560d29418ec971ba2e731ec29d36e3756e5f8d2d1d1040306e8ba",
+  "current_maximum": 9.2,
   "date": "2026-10-29",
-  "max_received_at": "2026-10-29T10:10:47.041821+00:00",
+  "max_received_at": "2026-10-29T11:10:48.039268+00:00",
   "measurements": {
    "2026-10-28 22:00:00": {
     "checksum": "91068cb01fb9b7104363947ee9edbb570c46effe1fa81d0841e4bcacd774f5aa",
@@ -232,6 +232,12 @@
     "received_at": "2026-10-29T10:10:47.041821+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 8.7
+   },
+   "2026-10-29 11:00:00": {
+    "checksum": "430a6776383560d29418ec971ba2e731ec29d36e3756e5f8d2d1d1040306e8ba",
+    "received_at": "2026-10-29T11:10:48.039268+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 9.2
    }
   },
   "resolved": false,
@@ -7405,13 +7411,13 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261014/"
  },
  "65334da9-0aae-4e63-8442-822f644d8869": {
-  "checksum": "c2c7bd4b2df9b534f4bbc558460412f10bc88dcfb5c52408319dfe187f495a5c",
-  "current_maximum": 9.7,
+  "checksum": "aeaf64c9e8f8639934c228c028d509a7c180a03dbe967bf244bf276c8c148e6c",
+  "current_maximum": 9.8,
   "date": "2026-10-29",
   "eliminated": [
    "44199a68-3b4b-431e-acb3-6ca5c28f5495"
   ],
-  "max_received_at": "2026-10-29T10:10:47.041821+00:00",
+  "max_received_at": "2026-10-29T11:10:48.039268+00:00",
   "measurements": {
    "2026-10-28 22:00:00": {
     "checksum": "c0b74d25d2c55242dd9c15ec95afc8f1721b0e0197e159aefd3c3fd544ce1da3",
@@ -7490,6 +7496,12 @@
     "received_at": "2026-10-29T10:10:47.041821+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 9.7
+   },
+   "2026-10-29 11:00:00": {
+    "checksum": "aeaf64c9e8f8639934c228c028d509a7c180a03dbe967bf244bf276c8c148e6c",
+    "received_at": "2026-10-29T11:10:48.039268+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 9.8
    }
   },
   "resolved": false,
@@ -7946,7 +7958,7 @@
   "station": "klaipedos-ams"
  },
  "74f12b7a-c16b-4e99-bcec-af12630c0a50": {
-  "checksum": "6d47e5769d9c8a2e9972e689d6f946094ba3e0efa92036888b0f1ffbb507f067",
+  "checksum": "8e46cdf5f2a813d6b25bb7ee2411d291855ea6950f6f029013e1f114cca57d64",
   "current_maximum": null,
   "date": "2026-10-30",
   "measurements": {},
@@ -7970,13 +7982,13 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
  },
  "7997dbdf-9bd9-493f-a77b-a86f5ebc8478": {
-  "checksum": "6d47e5769d9c8a2e9972e689d6f946094ba3e0efa92036888b0f1ffbb507f067",
-  "current_maximum": 9.1,
+  "checksum": "8e46cdf5f2a813d6b25bb7ee2411d291855ea6950f6f029013e1f114cca57d64",
+  "current_maximum": 9.8,
   "date": "2026-10-29",
   "eliminated": [
    "65bad068-70a0-48c4-b3cc-40868f178f51"
   ],
-  "max_received_at": "2026-10-29T10:10:47.041821+00:00",
+  "max_received_at": "2026-10-29T11:10:48.039268+00:00",
   "measurements": {
    "2026-10-28 22:00:00": {
     "checksum": "fed8677c9d2c431c02deabad5e3e9de44f23b0507d37ae5ed320b2b8aa5c89ab",
@@ -8055,6 +8067,12 @@
     "received_at": "2026-10-29T10:10:47.041821+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 9.1
+   },
+   "2026-10-29 11:00:00": {
+    "checksum": "8e46cdf5f2a813d6b25bb7ee2411d291855ea6950f6f029013e1f114cca57d64",
+    "received_at": "2026-10-29T11:10:48.039268+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 9.8
    }
   },
   "resolved": false,
@@ -8206,7 +8224,7 @@
   "station": "kauno-ams"
  },
  "7c6b9c18-26bc-4501-be1a-b98d1c4c611f": {
-  "checksum": "c2c7bd4b2df9b534f4bbc558460412f10bc88dcfb5c52408319dfe187f495a5c",
+  "checksum": "aeaf64c9e8f8639934c228c028d509a7c180a03dbe967bf244bf276c8c148e6c",
   "current_maximum": null,
   "date": "2026-10-30",
   "measurements": {},
@@ -12473,7 +12491,7 @@
   "station": "vilniaus-ams"
  },
  "af909ad6-f6e8-4ade-912e-ba06b8b9a26f": {
-  "checksum": "d24c50a3d319885edd63a2598b039ad57061ac1a57d96cf93ded8ed9b8e61c13",
+  "checksum": "430a6776383560d29418ec971ba2e731ec29d36e3756e5f8d2d1d1040306e8ba",
   "current_maximum": null,
   "date": "2026-10-30",
   "measurements": {},
