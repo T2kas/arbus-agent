@@ -11254,7 +11254,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261022/"
  },
  "9f54cf1a-0845-4716-9b4a-273102cd1f96": {
-  "checksum": "28acd7b2fdb4383519abd0dda2c7f375a224cb720853af6e06f920a3a325704e",
+  "checksum": "4a850f60e59f63c529f4e6e79d3e11c33182c03d266080f2ec0b01bce3b6f6c0",
   "current_maximum": null,
   "date": "2026-10-31",
   "measurements": {},
@@ -12851,7 +12851,7 @@
   "station": "vilniaus-ams"
  },
  "af909ad6-f6e8-4ade-912e-ba06b8b9a26f": {
-  "checksum": "28acd7b2fdb4383519abd0dda2c7f375a224cb720853af6e06f920a3a325704e",
+  "checksum": "4a850f60e59f63c529f4e6e79d3e11c33182c03d266080f2ec0b01bce3b6f6c0",
   "current_maximum": 12.2,
   "date": "2026-10-30",
   "eliminated": [
