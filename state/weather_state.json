@@ -427,7 +427,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "08f8662a-237d-4524-8b65-fe4a42aece00": {},
+ "08f8662a-237d-4524-8b65-fe4a42aece00": {
+  "resolved": true,
+  "resolved_at": "2026-10-30T07:45:46.561449+00:00",
+  "resolved_label": "Different Dimension, QV – „Sakartvelas - Special Version“",
+  "resolved_option_id": "91fa07d7-5484-4b61-ad9b-32378b23193e",
+  "resolved_via": "music",
+  "resolved_winner": "Different Dimension, QV – Sakartvelas - Special Version"
+ },
  "0911a5b7-82ae-4ce0-ae39-5f5f52a53b2d": {
   "resolved": true,
   "resolved_at": "2026-10-06T08:20:51.549540+00:00",
