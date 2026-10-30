@@ -1,6 +1,6 @@
 {
  "00166e00-5e26-4d23-801d-cc5a025294cb": {
-  "checksum": "85a012076df11b30b91833910e07b7b5d7c974f1cdf8cf473b95a04f7b254c46",
+  "checksum": "0282b2c5433070ab263e6e9da2c09b7055dcbc2ffbfc2474b90b5bbfe3ccd37a",
   "current_maximum": null,
   "date": "2026-11-01",
   "measurements": {},
@@ -6091,7 +6091,7 @@
   "resolved_via": "sports"
  },
  "4bd2f833-f368-4e98-98e7-a1bbb0aa9330": {
-  "checksum": "8cb86c206071258cf9fbc5305179fc3c6f8ad9dcb448c903874bea4409955880",
+  "checksum": "398637d5ab7bef5fc40dd117f16cceb2a00f42fcfa42f8665c62f0d5c52f18bb",
   "current_maximum": null,
   "date": "2026-10-31",
   "measurements": {},
@@ -10625,7 +10625,14 @@
   "resolved_via": "cinema",
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
- "94c5b270-8d4e-42d1-a1f1-dc05c4165469": {},
+ "94c5b270-8d4e-42d1-a1f1-dc05c4165469": {
+  "resolved": true,
+  "resolved_at": "2026-10-30T20:10:49.704071+00:00",
+  "resolved_label": "Kauno „Žalgiris“",
+  "resolved_option_id": "760e7b72-7320-4d1a-befa-0113e9eca962",
+  "resolved_score": "Zalgiris Kaunas 87:80 Partizan Mozzart Bet Belgrade",
+  "resolved_via": "sports"
+ },
  "95049270-733d-4557-957f-525265beeacc": {
   "resolved": true,
   "resolved_at": "2026-10-09T08:31:08.582009+00:00",
@@ -10911,7 +10918,7 @@
   "station": "kauno-ams"
  },
  "96ed1197-3da8-4508-a8b3-ac39cb8e78b2": {
-  "checksum": "8cb86c206071258cf9fbc5305179fc3c6f8ad9dcb448c903874bea4409955880",
+  "checksum": "398637d5ab7bef5fc40dd117f16cceb2a00f42fcfa42f8665c62f0d5c52f18bb",
   "current_maximum": null,
   "date": "2026-11-01",
   "measurements": {},
@@ -11350,7 +11357,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261022/"
  },
  "9f54cf1a-0845-4716-9b4a-273102cd1f96": {
-  "checksum": "4fc096a756d9aed3b0a58c5f46d09e97eeae0717443ab5a3eb8a7a46cf83ff29",
+  "checksum": "cd558969fa1a51721e9ae5f2f5526861f4d1c2ef35ddc9656b205b7043da7b6e",
   "current_maximum": null,
   "date": "2026-10-31",
   "measurements": {},
@@ -15630,7 +15637,7 @@
   "station": "klaipedos-ams"
  },
  "c523610f-cd1a-4f82-9238-5685017a4103": {
-  "checksum": "4fc096a756d9aed3b0a58c5f46d09e97eeae0717443ab5a3eb8a7a46cf83ff29",
+  "checksum": "cd558969fa1a51721e9ae5f2f5526861f4d1c2ef35ddc9656b205b7043da7b6e",
   "current_maximum": null,
   "date": "2026-11-01",
   "measurements": {},
@@ -18056,7 +18063,7 @@
   "station": "klaipedos-ams"
  },
  "dde6dc20-619c-41f9-b99b-c9c0158990cf": {
-  "checksum": "85a012076df11b30b91833910e07b7b5d7c974f1cdf8cf473b95a04f7b254c46",
+  "checksum": "0282b2c5433070ab263e6e9da2c09b7055dcbc2ffbfc2474b90b5bbfe3ccd37a",
   "current_maximum": null,
   "date": "2026-10-31",
   "measurements": {},
