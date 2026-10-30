@@ -1,6 +1,6 @@
 {
  "00166e00-5e26-4d23-801d-cc5a025294cb": {
-  "checksum": "3e8f69cfaba7029b272465298359d70db150df1df9f835c8d689c1df87cce696",
+  "checksum": "ac719760ce10c9a86b8a3fe4a07406998da5b3af19e8904449efffa5041f3f45",
   "current_maximum": null,
   "date": "2026-11-01",
   "measurements": {},
@@ -6091,7 +6091,7 @@
   "resolved_via": "sports"
  },
  "4bd2f833-f368-4e98-98e7-a1bbb0aa9330": {
-  "checksum": "b83f7caffdeb3e95eba274da77ea0a571d8b74f94757ca621d4dae7ee0a2fbd7",
+  "checksum": "76c0826eba7db31d6bfb84dff58b846ab1729d4363e86c7387190931396b5f7b",
   "current_maximum": null,
   "date": "2026-10-31",
   "measurements": {},
@@ -10911,7 +10911,7 @@
   "station": "kauno-ams"
  },
  "96ed1197-3da8-4508-a8b3-ac39cb8e78b2": {
-  "checksum": "b83f7caffdeb3e95eba274da77ea0a571d8b74f94757ca621d4dae7ee0a2fbd7",
+  "checksum": "76c0826eba7db31d6bfb84dff58b846ab1729d4363e86c7387190931396b5f7b",
   "current_maximum": null,
   "date": "2026-11-01",
   "measurements": {},
@@ -11350,7 +11350,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261022/"
  },
  "9f54cf1a-0845-4716-9b4a-273102cd1f96": {
-  "checksum": "95460c84f9789243435d07df511e23d38e48adb03b41632c6eff2e815a75603c",
+  "checksum": "082db020de55a5b0e05914a0af25a517512ec92583b0ba8e4e345b71ec6bac96",
   "current_maximum": null,
   "date": "2026-10-31",
   "measurements": {},
@@ -15630,7 +15630,7 @@
   "station": "klaipedos-ams"
  },
  "c523610f-cd1a-4f82-9238-5685017a4103": {
-  "checksum": "95460c84f9789243435d07df511e23d38e48adb03b41632c6eff2e815a75603c",
+  "checksum": "082db020de55a5b0e05914a0af25a517512ec92583b0ba8e4e345b71ec6bac96",
   "current_maximum": null,
   "date": "2026-11-01",
   "measurements": {},
@@ -18056,7 +18056,7 @@
   "station": "klaipedos-ams"
  },
  "dde6dc20-619c-41f9-b99b-c9c0158990cf": {
-  "checksum": "3e8f69cfaba7029b272465298359d70db150df1df9f835c8d689c1df87cce696",
+  "checksum": "ac719760ce10c9a86b8a3fe4a07406998da5b3af19e8904449efffa5041f3f45",
   "current_maximum": null,
   "date": "2026-10-31",
   "measurements": {},
