@@ -156,7 +156,14 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261005/"
  },
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
- "05c8d26a-73f3-4eb7-86fe-038ca9c2fae9": {},
+ "05c8d26a-73f3-4eb7-86fe-038ca9c2fae9": {
+  "resolved": true,
+  "resolved_at": "2026-10-31T14:50:44.816719+00:00",
+  "resolved_label": "FK „Panevėžys“",
+  "resolved_option_id": "d96c2d3f-d4ce-4885-8dd4-76412b21a8d0",
+  "resolved_score": "Panevėžys 1:0 TransInvest",
+  "resolved_via": "sports"
+ },
  "074548e2-7e3b-4a39-bfad-f3864bffee4a": {
   "checksum": "7fe55310d63b5ef4254b9601ed7f902843267394546d087f4b3cbe2a3265fb0d",
   "current_maximum": 12.3,
