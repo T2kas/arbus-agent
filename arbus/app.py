@@ -457,6 +457,20 @@ def resolve_option(option_id: str, outcome: str) -> tuple[bool, str]:
     return True, "ok"
 
 
+def settle_option(market_id: str, option_id: str, outcome: str) -> tuple[bool, str]:
+    """One ladder option yes/no by the path the bot's key can use. "no" goes
+    through admin_eliminate_options, which accepts the service_role key
+    (admin_resolve_option checks auth.uid() and refuses the bot with "not
+    authenticated" — verified 2026-11-01). "yes" (and a "no" on the last open
+    option) needs admin_resolve_option; if that refuses, the caller alerts the
+    admin."""
+    if outcome == "no":
+        ok, detail = eliminate_options(market_id, [option_id])
+        if ok or "cannot eliminate all" not in detail:
+            return ok, detail
+    return resolve_option(option_id, outcome)
+
+
 def resolve_split(market_id: str, option_ids: list[str]) -> tuple[bool, str]:
     """Resolve a market with the payout split equally between `option_ids` (a
     tie, or the rules' "po 50 %" clause) via admin_resolve_market_split."""

@@ -116,7 +116,7 @@ def execute(a: dict) -> tuple[bool, str]:
     if a["kind"] == "split":
         return app_api.resolve_split(mid, [o["id"] for o in a["options"]])
     if a["kind"] == "option":
-        return app_api.resolve_option(a["option"]["id"], a["outcome"])
+        return app_api.settle_option(mid, a["option"]["id"], a["outcome"])
     return True, "skip"
 
 

@@ -252,7 +252,7 @@ def resolve_markets(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
                     reports.append({"status": "would-resolve", "market_id": mid,
                                     "option": f"{o['label']} → {word}"})
                     continue
-                ok, detail = app_api.resolve_option(str(o["id"]), outcome)
+                ok, detail = app_api.settle_option(mid, str(o["id"]), outcome)
                 reports.append({"status": "resolved" if ok else "error", "market_id": mid,
                                 "option": f"{o['label']} → {word}", "via": "fuel-threshold"})
                 why = (f"riba {_fmt(th)} €/l pasiekta {hit.isoformat()} ({_fmt(prices[hit])} €/l)"

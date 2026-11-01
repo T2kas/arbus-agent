@@ -57,7 +57,9 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then FLAGS="--dry-run"; fi
           if [ "${{ github.event_name }}" = "push" ]; then
             # every markets/*.json added or modified by this push (not deleted)
-            FILES=$(git diff --name-only --diff-filter=AM "${{ github.event.before }}" "${{ github.sha }}" -- 'markets/*.json')
+            # top-level markets/*.json only — git's glob also matches subfolders
+            # (markets/resolutions/, markets/ideas/), which are not batches.
+            FILES=$(git diff --name-only --diff-filter=AM "${{ github.event.before }}" "${{ github.sha }}" -- 'markets/*.json' | grep -E '^markets/[^/]+\.json$' || true)
           else
             FILES="${{ github.event.inputs.file }}"
           fi

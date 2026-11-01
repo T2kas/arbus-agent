@@ -92,7 +92,7 @@ def test_max_eliminates_buckets_below_running_max(monkeypatch):
 
 def test_threshold_ladder_yes_and_no(monkeypatch):
     got = []
-    monkeypatch.setattr(app_api, "resolve_option", lambda oid, out: (got.append((oid, out)), (True, "ok"))[1])
+    monkeypatch.setattr(app_api, "settle_option", lambda mid, oid, out: (got.append((oid, out)), (True, "ok"))[1])
     # never reached by Oct 31 -> Oct 31 "no"; Dec 31 still open
     fetch, _ = _fake_fetch({"2026-09-23": 2.297, "2026-10-20": 2.268}, default=2.2)
     now = datetime(2026, 11, 2, 12, tzinfo=timezone.utc)
@@ -145,3 +145,17 @@ def test_november_decision_and_batch_files_are_valid():
         assert "spal" not in s["title"]
     for e in manual_resolve.load("markets/resolutions/2026-11-01.json"):
         assert e["market_id"] and e["title"] and e["source"].startswith("https://")
+
+
+def test_settle_option_routes_no_through_elimination(monkeypatch):
+    calls = []
+    monkeypatch.setattr(app_api, "eliminate_options", lambda mid, ids: (calls.append("elim"), (True, "ok"))[1])
+    monkeypatch.setattr(app_api, "resolve_option", lambda oid, out: (calls.append(out), (False, "not authenticated"))[1])
+    assert app_api.settle_option("m", "o", "no") == (True, "ok") and calls == ["elim"]
+    calls.clear()
+    assert app_api.settle_option("m", "o", "yes")[0] is False and calls == ["yes"]
+    calls.clear()
+    monkeypatch.setattr(app_api, "eliminate_options",
+                        lambda mid, ids: (False, "cannot eliminate all remaining options; resolve a winner instead"))
+    app_api.settle_option("m", "o", "no")
+    assert calls == ["no"]                     # last open option -> resolve_option
