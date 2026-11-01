@@ -16081,7 +16081,14 @@
   "resolved_via": "cinema",
   "resolved_winner": "Praktinė magija 2 (Practical Magic 2)"
  },
- "c44d4268-2b02-487c-a186-5b3f4efb2011": {},
+ "c44d4268-2b02-487c-a186-5b3f4efb2011": {
+  "resolved": true,
+  "resolved_at": "2026-11-01T16:40:48.728335+00:00",
+  "resolved_label": "Marijampolės „Sūduva“",
+  "resolved_option_id": "e1e560a3-7983-4aab-83b5-9a3aedc9d289",
+  "resolved_score": "Sūduva 2:1 Banga",
+  "resolved_via": "sports"
+ },
  "c49b4bf6-2626-48ea-9232-d4ddfbc7945e": {
   "checksum": "6a976ee738a0ba25d3956c6c1e88220609a0f1c01d82af56d08d374b604e5d53",
   "current_maximum": 19.4,
