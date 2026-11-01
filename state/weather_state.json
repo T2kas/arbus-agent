@@ -7420,6 +7420,7 @@
   "resolved_score": "Žalgiris 3:2 K. Žalgiris",
   "resolved_via": "sports"
  },
+ "60a43535-792a-4b0f-abaa-173f787da237": {},
  "60d6e769-5bea-4236-be14-7ee79c5d0045": {
   "resolved": true,
   "resolved_at": "2026-10-01T08:31:02.936037+00:00",
@@ -9224,6 +9225,7 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "83428f70-d6db-4b22-adf0-aaa754cb1687": {},
  "8473ca6d-de00-420a-a9e3-e390b0ede792": {
   "checksum": "1a2c89c970c322063778967b79753969255ca93c7e0034fc8b89b6cf521b3042",
   "current_maximum": 11.3,
@@ -11827,6 +11829,14 @@
   "resolved_option_id": "5fc8fae9-b41b-46ca-81c2-f3e28bf7bd0c",
   "resolved_price": 1.925,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261007/"
+ },
+ "_lea_missing": {
+  "benzinas": [],
+  "dyzelinas": []
+ },
+ "_lea_prices": {
+  "benzinas": {},
+  "dyzelinas": {}
  },
  "a0b2dd38-05be-44d8-b5d2-631098b85c18": {
   "checksum": "78fcc2846cda12c0c35a3955ef87c96c6dc540977cfe9858f5ac6774d8bcf77b",
@@ -18774,6 +18784,7 @@
   "resolved": false,
   "station": "klaipedos-ams"
  },
+ "df673038-4c88-4471-a669-245ea65b7062": {},
  "e0635ead-4500-4d90-8714-3e67c7f6e03a": {
   "checksum": "1b9cc0fae3e42ea69828ebf6958b70931c98e99ce7c204271c7ffb55cae1b9f8",
   "current_maximum": 13.9,
