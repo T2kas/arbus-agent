@@ -1,0 +1,354 @@
+[
+  {
+    "title": "Kuris filmas bus žiūrimiausias Lietuvoje lapkritį?",
+    "subtitle": "2026 m. lapkričio 1–30 d.",
+    "category": "kultura",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/215e94e9-1219-44f4-94a8-8ec6b5139b80.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal filmą, kuris oficialioje Lietuvos kino centro 2026 m. lapkričio mėnesio filmų TOP lentelėje turės didžiausią žiūrovų skaičių.\n\nVertinami visi nuo 2026 m. lapkričio 1 d. 00:00 iki lapkričio 30 d. 23:59 Lietuvos laiku Lietuvos kino teatruose užregistruoti žiūrovai, kuriuos Lietuvos kino centras įtrauks į lapkričio mėnesio ataskaitą.\n\nNaudojamas ataskaitoje nurodytas žiūrovų skaičius. Bilietų pajamos, seansų skaičius, užimtų ekranų skaičius, pasaulinės pajamos, transliacijų platformų peržiūros ir kitų valstybių rezultatai nenaudojami.\n\nĮ rinką įtraukiami visi Lietuvos kino teatruose rodyti filmai, nepriklausomai nuo jų gamybos šalies ar premjeros datos. Filmas neprivalo būti pasirodęs lapkritį – skaičiuojami tik jo lapkričio mėnesio žiūrovai.\n\nBaigtį lemia Lietuvos kino centro lentelėje vartojamas filmo pavadinimas:\n\ndubliuotos, subtitruotos, 2D, 3D, IMAX ir kitos to paties filmo versijos sumuojamos, jeigu Lietuvos kino centras jas pateiks vienoje eilutėje;\njeigu skirtingos versijos bus pateiktos atskiromis eilutėmis, jos laikomos atskirais rezultatais ir papildomai nesumuojamos;\npakartotinis rodymas ar restauruota versija laikoma atskiru filmu, jeigu taip ją išskirs Lietuvos kino centras;\nbaigtis „Kitas filmas“ reiškia vieną konkretų sąraše nepaminėtą filmą, o ne visų kitų filmų žiūrovų sumą.\n\nJeigu du ar daugiau filmų turės vienodą didžiausią žiūrovų skaičių, rezultatas bus paskirstytas po lygiai tarp jų baigčių. Jeigu Lietuvos kino centras filmus oficialiai išrikiuos nepaisydamas vienodo paskelbto skaičiaus, naudojama jo nustatyta pirmoji vieta.\n\nNaudojama naujausia oficiali lapkričio ataskaitos versija, paskelbta arba pataisyta iki 2027 m. vasario 28 d. 23:59 Lietuvos laiku. Vėlesni pataisymai rinkos rezultato nekeičia.\n\nJeigu iki 2027 m. kovo 31 d. Lietuvos kino centras nepaskelbs 2026 m. lapkričio mėnesio TOP lentelės, rinka atšaukiama ir visos pozicijos grąžinamos. Savaitinių rezultatų sumavimas kaip pakaitalas nenaudojamas, nes savaitės gali apimti spalio arba gruodžio dienas.\n\nRezultato šaltinis – Lietuvos kino centro naujausios kino teatrų ataskaitos, skiltis „Mėnesio TOP“.",
+    "context": "Spalio 30 d. kino teatruose pasirodė lietuviška komedija „Instruktorius“ – lietuviškos komedijos Lietuvoje dažniausiai surenka daugiausia žiūrovų per pirmąsias 3–4 savaites, todėl ji laikoma lapkričio favorite. Savaitės TOP šiuo metu pirmauja ilgai rodomas „Absoliutus blogis“, gerai sekasi ir animacinei „Monstriukei Mijai“.\n\nLapkričio 20 d. pasirodo „Bado žaidynės: aukų dienai auštant“ – didžiausia mėnesio Holivudo premjera, tačiau lapkritį ji bus rodoma tik 11 dienų. Lapkričio 27 d. pasirodo animacinis Disney „Kerų karalystė“.",
+    "closes_at": "2026-11-30T23:59:00+02:00",
+    "options": [
+      {
+        "label": "„Instruktorius“",
+        "probability": 36
+      },
+      {
+        "label": "„Bado žaidynės: aukų dienai auštant“",
+        "probability": 22
+      },
+      {
+        "label": "„Absoliutus blogis“",
+        "probability": 14
+      },
+      {
+        "label": "„Monstriukė Mija“",
+        "probability": 8
+      },
+      {
+        "label": "„Kerų karalystė“",
+        "probability": 4
+      },
+      {
+        "label": "Kitas filmas",
+        "probability": 16
+      }
+    ]
+  },
+  {
+    "title": "Kokia bus metinė infliacija lapkritį?",
+    "subtitle": "2026 m. lapkričio mėn. duomenys",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/e5574320-31fe-4e7a-93f6-e23e51fd124f.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal Valstybės duomenų agentūros paskelbtą 2026 m. lapkričio mėnesio metinį vartotojų kainų pokytį, apskaičiuotą pagal vartotojų kainų indeksą.\n\nVertinamas 2026 m. lapkričio kainų pokytis, palyginti su 2025 m. lapkričiu. Mėnesinė infliacija, vidutinė metinė infliacija ir pagal suderintą vartotojų kainų indeksą apskaičiuotas Europos Sąjungos rodiklis nenaudojami.\n\nNaudojama oficialiai paskelbta vieno skaičiaus po kablelio reikšmė, jos papildomai neperskaičiuojant. Jeigu Valstybės duomenų agentūra iki 2026 m. gruodžio 31 d. paskelbs aiškų pirminio rezultato pataisymą, naudojama pataisyta reikšmė.\n\nRezultato šaltiniai yra Valstybės duomenų agentūros Oficialiosios statistikos portalas ir jos oficialūs vartotojų kainų pranešimai.",
+    "context": "Išankstiniais Valstybės duomenų agentūros duomenimis, spalį metinė infliacija Lietuvoje siekė 6,1 % – tiek pat, kiek ir rugsėjį, o per mėnesį kainos pakilo 0,1 %. Vidutinė 12 mėnesių infliacija – 4,7 %.\n\nSpalio pabaigoje degalai kiek atpigo: spalio 30 d. benzinas A95 kainavo 1,908 €/l, dyzelinas – 2,248 €/l. Lapkričio rezultatą lems degalų ir šildymo kainos bei tai, kiek kainos kilo prieš metus lapkritį (bazės efektas).",
+    "closes_at": "2026-11-25T23:59:00+02:00",
+    "options": [
+      {
+        "label": "5,4% arba mažesnė",
+        "probability": 8
+      },
+      {
+        "label": "Nuo 5,5% iki 5,9%",
+        "probability": 34
+      },
+      {
+        "label": "Nuo 6,0% iki 6,4%",
+        "probability": 43
+      },
+      {
+        "label": "6,5% arba didesnė",
+        "probability": 15
+      }
+    ]
+  },
+  {
+    "title": "Kuri elektromobilių markė bus populiariausia lapkritį?",
+    "subtitle": "Lapkričio 1–30 d. imtinai",
+    "category": "technologijos",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/10c87753-62f8-4ff6-93dc-229d51f64aca.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal 2026 m. lapkritį pirmą kartą Lietuvoje įregistruotų M1 klasės tik elektra varomų automobilių skaičių.\n\nSkaičiuojami nuo 2026 m. lapkričio 1 d. iki lapkričio 30 d. imtinai pirmą kartą Lietuvoje įregistruoti nauji ir naudoti M1 klasės elektromobiliai. Iš išorės įkraunami hibridai, įprasti hibridai, N1 klasės transporto priemonės ir anksčiau Lietuvoje registruotų automobilių savininkų pasikeitimai neskaičiuojami.\n\nLaimės markė, kurios bendras naujų ir naudotų elektromobilių registracijų skaičius lapkritį bus didžiausias.\n\nBaigtis „Kita markė“ laimės, jeigu daugiausia elektromobilių bus įregistruota markės, kuri nėra atskirai išvardyta tarp pasirinkimų.\n\nJeigu didžiausią rezultatą pasieks dvi arba daugiau markių, galutinis rezultatas bus paskirstytas po lygiai tarp atitinkamų baigčių. Jeigu viena iš lyderiaujančių markių priklausys baigčiai „Kita markė“, ši baigtis laikoma viena lygiaverte baigtimi.\n\nRezultato šaltinis yra naujausia AB „Regitra“ paskelbta 2026 m. M1 klasės elektromobilių markių lentelė, kurioje registracijos pateikiamos pagal mėnesį. Papildomai gali būti naudojami „Regitros“ transporto priemonių statistikos puslapis ir Susisiekimo ministerijos elektromobilių statistika.",
+    "context": "„Tesla“ šiais metais išlieka populiariausia elektromobilių markė Lietuvoje – jai tenka maždaug kas penktas įregistruotas grynasis elektromobilis, toliau rikiuojasi „Volkswagen“, „Audi“ ir „Škoda“. Spalio 1 d. Lietuvoje buvo 32 409 grynieji elektromobiliai, o vien rugsėjį įregistruotas 581 naujas elektromobilis.\n\nĮ rinką skaičiuojami ir pirmą kartą Lietuvoje registruojami naudoti elektromobiliai, todėl didesnė naudotų „Tesla“ ar „Volkswagen“ partija gali nulemti mėnesio lyderį.",
+    "closes_at": "2026-11-30T23:59:00+02:00",
+    "options": [
+      {
+        "label": "Tesla",
+        "probability": 52
+      },
+      {
+        "label": "Volkswagen",
+        "probability": 20
+      },
+      {
+        "label": "Škoda",
+        "probability": 8
+      },
+      {
+        "label": "Audi",
+        "probability": 4
+      },
+      {
+        "label": "BMW",
+        "probability": 4
+      },
+      {
+        "label": "Kia",
+        "probability": 2
+      },
+      {
+        "label": "Hyundai",
+        "probability": 2
+      },
+      {
+        "label": "Nissan",
+        "probability": 2
+      },
+      {
+        "label": "Kita markė",
+        "probability": 6
+      }
+    ]
+  },
+  {
+    "title": "Kuris naujas automobilio modelis bus populiariausias lapkritį?",
+    "subtitle": "2026 m. lapkričio 1–30 d.",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/06466127-1666-411f-adf7-f326708aedf9.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal naują M1 kategorijos lengvojo automobilio modelį, kurio Lietuvoje per laikotarpį nuo 2026 m. lapkričio 1 d. iki lapkričio 30 d. imtinai bus įregistruota daugiausia.\n\nSkaičiuojamos tik:\n\nnaujos M1 kategorijos transporto priemonės;\n2026 m. lapkritį pirmą kartą Lietuvoje įregistruoti automobiliai;\nregistracijos, įtrauktos į galutinę „AutoTyrimų“ arba „Regitros“ lapkričio mėnesio statistiką.\n\nNeskaičiuojami:\n\nnaudoti ir iš užsienio įvežti automobiliai;\nLietuvoje jau registruotų automobilių savininkų pasikeitimai;\nN1 kategorijos komercinės transporto priemonės;\nmotociklai, autobusai ir sunkvežimiai;\nužsienio valstybių registracijos.\n\nSkirtingos to paties modelio variklio, pavaros, kėbulo ar komplektacijos versijos sumuojamos, jeigu galutinis šaltinis jas pateikia vienu modelio pavadinimu. Atskiri modeliai, pavyzdžiui, „Yaris“ ir „Yaris Cross“ arba „Corolla“ ir „Corolla Cross“, nesumuojami.\n\nAtnaujinta modelio versija arba „facelift“ priskiriama tam pačiam modeliui, jeigu šaltinyje išlaikomas tas pats modelio pavadinimas. Nauja karta taip pat sumuojama, jeigu statistikoje ji nėra išskirta atskirai.\n\nBaigtis „Kitas modelis“ reiškia vieną konkretų sąraše nepaminėtą modelį, o ne visų kitų modelių registracijų sumą.\n\nJeigu keli modeliai turės vienodą didžiausią registracijų skaičių, rezultatas bus paskirstytas po lygiai tarp juos atitinkančių baigčių.\n\nPirmenybė teikiama „AutoTyrimų“ 2026 m. lapkričio mėnesio naujų automobilių registracijų suvestinei. Jeigu joje nebus pateikti lapkričio rezultatai pagal modelius, naudojami oficialūs „Regitros“ duomenys. Jei reikšmės skirsis, naudojama „AutoTyrimų“ ES reglamentuota naujų automobilių registracijų metodika.\n\nNaudojama naujausia iki 2026 m. gruodžio 31 d. paskelbta arba pataisyta lapkričio reikšmė. Vėlesni pataisymai rezultato nekeičia.\n\nRezultato šaltiniai – „AutoTyrimai“ ir „Regitros“ atviri duomenys.",
+    "context": "Rugpjūtį daugiausia naujų automobilių Lietuvoje įregistruota „Volkswagen Tiguan“ (323), „Toyota RAV4“ (217) ir „Škoda Octavia“ (211). Pirmąjį 2026 m. ketvirtį pirmavo „Toyota Yaris Cross“, antrąjį – „Volkswagen T-Roc“, vos trimis automobiliais aplenkęs „Tiguan“. Rugsėjį naujų lengvųjų automobilių rinka augo 3,4 % iki 3 921 vnt.\n\nMėnesio lyderis keičiasi dažnai, todėl net vienas didesnis įmonių automobilių parko užsakymas gali nulemti rezultatą. „Tiguan“ laikomas nedideliu favoritu.",
+    "closes_at": "2026-11-30T23:59:00+02:00",
+    "options": [
+      {
+        "label": "„Volkswagen Tiguan“",
+        "probability": 25
+      },
+      {
+        "label": "„Toyota RAV4“",
+        "probability": 17
+      },
+      {
+        "label": "„Škoda Octavia“",
+        "probability": 15
+      },
+      {
+        "label": "„Volkswagen T-Roc“",
+        "probability": 12
+      },
+      {
+        "label": "„Toyota Yaris Cross“",
+        "probability": 11
+      },
+      {
+        "label": "„Toyota Corolla“",
+        "probability": 6
+      },
+      {
+        "label": "„Škoda Kodiaq“",
+        "probability": 5
+      },
+      {
+        "label": "Kitas modelis",
+        "probability": 9
+      }
+    ]
+  },
+  {
+    "title": "Kuri nauja automobilių markė bus populiariausia lapkritį?",
+    "subtitle": "2026 m. lapkričio 1–30 d.",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/06466127-1666-411f-adf7-f326708aedf9.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal automobilių markę, kurios naujų M1 kategorijos lengvųjų automobilių Lietuvoje per laikotarpį nuo 2026 m. lapkričio 1 d. iki lapkričio 30 d. imtinai bus įregistruota daugiausia.\n\nSkaičiuojamos visos tos markės naujų M1 kategorijos automobilių registracijos, nepriklausomai nuo modelio. Naudoti ir iš užsienio įvežti automobiliai, Lietuvoje jau registruotų automobilių savininkų pasikeitimai, N1 kategorijos komercinės transporto priemonės, motociklai, autobusai ir sunkvežimiai neskaičiuojami.\n\nMarkė vertinama pagal šaltinyje nurodytą pavadinimą. Skirtingos tos pačios grupės markės, pavyzdžiui, „Volkswagen“, „Škoda“, „Audi“, „Cupra“ ir „Seat“, nesumuojamos.\n\nBaigtis „Kita markė“ reiškia vieną konkrečią sąraše nepaminėtą markę, o ne visų kitų markių registracijų sumą.\n\nJeigu kelios markės turės vienodą didžiausią registracijų skaičių, rezultatas bus paskirstytas po lygiai tarp jas atitinkančių baigčių.\n\nPirmenybė teikiama „AutoTyrimų“ 2026 m. lapkričio mėnesio naujų automobilių registracijų suvestinei. Jeigu joje nebus pateikti lapkričio rezultatai pagal markes, naudojami oficialūs „Regitros“ duomenys. Jei reikšmės skirsis, naudojama „AutoTyrimų“ ES reglamentuota naujų automobilių registracijų metodika.\n\nNaudojama naujausia iki 2026 m. gruodžio 31 d. paskelbta arba pataisyta lapkričio reikšmė. Vėlesni pataisymai rezultato nekeičia.\n\nRezultato šaltiniai – „AutoTyrimai“ ir „Regitros“ atviri duomenys.",
+    "context": "Rugsėjį daugiausia naujų automobilių Lietuvoje įregistravo „Škoda“ (678), „Toyota“ (674) ir „Volkswagen“ (621) – lyderius skyrė vos keli automobiliai. Rugpjūtį pirmavo „Toyota“ (795), antras buvo „Volkswagen“ (736), trečia – „Škoda“ (633).\n\nTrys markės kas mėnesį keičiasi vietomis, todėl lapkričio lyderį gali nulemti vienas didesnis pristatymas ar įmonių parko užsakymas.",
+    "closes_at": "2026-11-30T23:59:00+02:00",
+    "options": [
+      {
+        "label": "Toyota",
+        "probability": 36
+      },
+      {
+        "label": "Škoda",
+        "probability": 30
+      },
+      {
+        "label": "Volkswagen",
+        "probability": 28
+      },
+      {
+        "label": "Kita markė",
+        "probability": 6
+      }
+    ]
+  },
+  {
+    "title": "Aukščiausia vidutinė dyzelino kaina lapkritį?",
+    "subtitle": "2026 m. lapkričio 1–30 d. imtinai",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/7d9a91c6-899f-4ff1-bd5b-3143ae5ad681.jpg",
+    "liquidity": 6500,
+    "rules": "Rinka bus išspręsta pagal aukščiausią Lietuvos energetikos agentūros paskelbtą vienos dienos vidutinę dyzelino kainą nuo 2026 m. lapkričio 1 d. iki lapkričio 30 d. imtinai.\n\nSkaičiuojamas nacionalinis visų duomenis pateikusių Lietuvos degalinių dyzelino kainų vidurkis apie 10:00 val.\n\nAtskirų degalinių, tinklų, miestų ar savivaldybių kainos bei mažiausios, didžiausios ir didmeninės kainos nenaudojamos. Kaina papildomai neapvalinama – naudojama Lietuvos energetikos agentūros paskelbta trijų skaičių po kablelio reikšmė.\n\nIntervalų ribos įtraukiamos taip:\n\n2,249 €/l arba mažiau apima visas reikšmes iki šios ribos imtinai;\n2,250–2,274 €/l apima abi nurodytas ribas;\ntokia pati taisyklė taikoma kitiems intervalams;\ntiksliai 2,350 €/l priskiriama paskutinei baigčiai.\n\nJeigu tam tikrą dieną Lietuvos energetikos agentūra duomenų nepaskelbs (pavyzdžiui, savaitgaliais ar švenčių dienomis), ši diena praleidžiama. Naudojama naujausia konkrečios dienos reikšmė, paskelbta arba pataisyta iki kitos kalendorinės dienos 12:00 val.\n\nJeigu iki 2026 m. gruodžio 7 d. nebus paskelbta nė viena tinkama vertinamo laikotarpio reikšmė, rinka atšaukiama.\n\nRezultato šaltinis – Lietuvos energetikos agentūros kasdien skelbiamos degalų kainos.",
+    "context": "Spalį vidutinė dyzelino kaina svyravo nuo 2,197 iki 2,268 €/l – aukščiausia buvo spalio 1 ir 20 d. Spalio 30 d. vidurkis siekė 2,248 €/l.\n\nLEA duomenys rodo savaitinį ciklą: antradieniais kaina dažniausiai šokteli 4–6 ct, o vėliau per savaitę pamažu mažėja. Todėl mėnesio maksimumą dažniausiai lemia didžiausias antradienio šuolis.",
+    "closes_at": "2026-11-27T10:00:00+02:00",
+    "options": [
+      {
+        "label": "2,249 €/l arba mažiau",
+        "probability": 10
+      },
+      {
+        "label": "Nuo 2,250 iki 2,274 €/l",
+        "probability": 26
+      },
+      {
+        "label": "Nuo 2,275 iki 2,299 €/l",
+        "probability": 31
+      },
+      {
+        "label": "Nuo 2,300 iki 2,349 €/l",
+        "probability": 23
+      },
+      {
+        "label": "2,350 €/l arba daugiau",
+        "probability": 10
+      }
+    ]
+  },
+  {
+    "title": "Aukščiausia vidutinė benzino A95 kaina lapkritį?",
+    "subtitle": "2026 m. lapkričio 1–30 d. imtinai",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/b172018e-2282-4d58-bd9c-47fdcb5e0a38.jpg",
+    "liquidity": 6500,
+    "rules": "Rinka bus išspręsta pagal aukščiausią Lietuvos energetikos agentūros paskelbtą vienos dienos vidutinę benzino A95 kainą nuo 2026 m. lapkričio 1 d. iki lapkričio 30 d. imtinai.\n\nSkaičiuojamas nacionalinis visų duomenis pateikusių Lietuvos degalinių benzino A95 kainų vidurkis apie 10:00 val. Kitų benzino rūšių kainos nenaudojamos.\n\nAtskirų degalinių, tinklų, miestų ar savivaldybių kainos bei mažiausios, didžiausios ir didmeninės kainos nenaudojamos. Kaina papildomai neapvalinama – naudojama Lietuvos energetikos agentūros paskelbta trijų skaičių po kablelio reikšmė.\n\nIntervalų ribos įtraukiamos taip:\n\n1,939 €/l arba mažiau apima visas reikšmes iki šios ribos imtinai;\n1,940–1,964 €/l apima abi nurodytas ribas;\ntokia pati taisyklė taikoma kitiems intervalams;\ntiksliai 2,015 €/l priskiriama paskutinei baigčiai.\n\nJeigu tam tikrą dieną Lietuvos energetikos agentūra duomenų nepaskelbs (pavyzdžiui, savaitgaliais ar švenčių dienomis), ši diena praleidžiama. Naudojama naujausia konkrečios dienos reikšmė, paskelbta arba pataisyta iki kitos kalendorinės dienos 12:00 val.\n\nJeigu iki 2026 m. gruodžio 7 d. nebus paskelbta nė viena tinkama vertinamo laikotarpio reikšmė, rinka atšaukiama.\n\nRezultato šaltinis – Lietuvos energetikos agentūros kasdien skelbiamos degalų kainos.",
+    "context": "Spalį vidutinė benzino A95 kaina svyravo nuo 1,905 iki 1,989 €/l – 2 €/l riba nebuvo pasiekta nė karto. Aukščiausia kaina užfiksuota spalio 20 d., o spalio 30 d. vidurkis siekė 1,908 €/l.\n\nKaip ir dyzelino, benzino kaina dažniausiai šokteli antradieniais ir vėliau per savaitę mažėja. Ar lapkritį vėl bus priartėta prie 2 €/l, lems naftos ir didmeninių degalų kainos.",
+    "closes_at": "2026-11-27T10:00:00+02:00",
+    "options": [
+      {
+        "label": "1,939 €/l arba mažiau",
+        "probability": 9
+      },
+      {
+        "label": "Nuo 1,940 iki 1,964 €/l",
+        "probability": 28
+      },
+      {
+        "label": "Nuo 1,965 iki 1,989 €/l",
+        "probability": 31
+      },
+      {
+        "label": "Nuo 1,990 iki 2,014 €/l",
+        "probability": 20
+      },
+      {
+        "label": "2,015 €/l arba daugiau",
+        "probability": 12
+      }
+    ]
+  },
+  {
+    "title": "Nedarbo lygis lapkritį?",
+    "subtitle": "2026 m. lapkričio 30 d.",
+    "category": "ekonomika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/42fd90e8-e6ed-46e6-8302-5971cf6ef36e.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal Užimtumo tarnybos paskelbtą oficialų registruoto nedarbo rodiklį, apibūdinantį padėtį 2026 m. lapkričio pabaigoje.\n\nNaudojamas Užimtumo tarnybos gruodžio pradžioje paskelbtas registruotų bedarbių procentas, kurio duomenų laikotarpis baigiasi 2026 m. lapkričio 30 d. arba duomenų data nurodoma 2026 m. gruodžio 1 d.\n\nNedarbo lygis pagal gyventojų apklausas, „Sodros“ apdraustųjų pokytis, laisvų darbo vietų skaičius ir kitų institucijų apskaičiuoti rodikliai nenaudojami.\n\nNaudojama Užimtumo tarnybos paskelbta vieno skaičiaus po kablelio reikšmė. Jeigu ji iki 2026 m. gruodžio 31 d. bus oficialiai pataisyta, naudojama pataisyta reikšmė.\n\nRezultato šaltinis yra Užimtumo tarnyba.",
+    "context": "Spalio 1 d. registruotas nedarbas siekė 7,7 % – 0,3 proc. punkto mažiau nei mėnesiu anksčiau ir 0,6 punkto mažiau nei prieš metus. Pernai rudenį nedarbas mažėjo iki lapkričio pradžios (8,2 %), o žiemą vėl ima augti.\n\nLapkričio pabaigos rodiklis tikėtinas apie 7,5–7,8 %: sezoninis kritimas baigiasi, todėl lemiamas bus darbdavių aktyvumas prieš žiemą.",
+    "closes_at": "2026-11-30T23:59:00+02:00",
+    "options": [
+      {
+        "label": "7,4% arba mažesnis",
+        "probability": 18
+      },
+      {
+        "label": "Nuo 7,5% iki 7,6%",
+        "probability": 37
+      },
+      {
+        "label": "Nuo 7,7% iki 7,8%",
+        "probability": 32
+      },
+      {
+        "label": "7,9% arba didesnis",
+        "probability": 13
+      }
+    ]
+  },
+  {
+    "title": "Populiaresnis premjeras lapkritį: M. Sinkevičius ar R. Žemaitaitis?",
+    "subtitle": "Lapkričio „Spinter tyrimų“ apklausoje",
+    "category": "politika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/6d237bf6-43e3-4271-9463-a03a07051490.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal pirmą nuo 2026 m. lapkričio 16 d. iki 2026 m. gruodžio 15 d. imtinai viešai paskelbtą reprezentatyvią Lietuvos gyventojų apklausą, kurią „Delfi“ užsakymu atliks bendrovė „Spinter tyrimai“.\n\nLaimės asmuo, kurį didesnė respondentų dalis nurodys kaip tinkamiausią Lietuvos ministrą pirmininką. Naudojami viešai paskelbti procentai, jų papildomai neperskaičiuojant.\n\nJeigu abiejų politikų rezultatai bus vienodi, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nJeigu iki 2026 m. gruodžio 15 d. tinkama apklausa nebus paskelbta, naudojama pirmoji vėliau paskelbta kvalifikuojama „Spinter tyrimų“ apklausa, tačiau ne vėlesnė nei 2027 m. sausio 31 d. Jeigu nauja apklausa nepasirodys ir iki šios datos, naudojama paskutinė iki 2027 m. sausio 31 d. viešai paskelbta „Spinter tyrimų“ apklausa.\n\nRezultato šaltiniai yra „Delfi“, „Spinter tyrimai“ ir apklausos rezultatus perspausdinę nacionaliniai naujienų portalai, įskaitant LRT, 15min ir BNS.",
+    "context": "Rugsėjo „Spinter tyrimų“ apklausoje (rugsėjo 16–26 d.) Remigijus Žemaitaitis tinkamiausiu premjeru laikytas 7,8 %, o dabartinis premjeras Mindaugas Sinkevičius – 4,7 % apklaustųjų. Liepą jų rezultatai buvo 7,3 % ir 6,4 %, tad skirtumas didėja.\n\nAbiejų rezultatai nedideli, todėl biudžeto priėmimas, koalicijos ginčai ar Žemaitaičio teismo byla per mėnesį gali pakeisti lyderį.",
+    "closes_at": "2026-11-25T23:59:00+02:00",
+    "options": [
+      {
+        "label": "M. Sinkevičius",
+        "probability": 22
+      },
+      {
+        "label": "R. Žemaitaitis",
+        "probability": 78
+      }
+    ]
+  },
+  {
+    "title": "Kuri partija bus populiaresnė lapkritį: LSDP ar „Nemuno aušra“?",
+    "subtitle": "Lapkričio „Spinter tyrimų“ apklausoje",
+    "category": "politika",
+    "image_url": "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/f292778f-a6bc-449c-8fdc-89fb8e390481.jpg",
+    "liquidity": 8500,
+    "rules": "Rinka bus išspręsta pagal pirmą nuo 2026 m. lapkričio 16 d. iki 2026 m. gruodžio 15 d. imtinai viešai paskelbtą reprezentatyvią Lietuvos gyventojų apklausą, kurią „Delfi“ užsakymu atliks bendrovė „Spinter tyrimai“.\n\nLaimės partija, kuriai apklausoje bus nurodytas didesnis respondentų palaikymas atsakant į klausimą, už kurią partiją jie balsuotų Seimo rinkimuose. Naudojami viešai paskelbti procentai, jų papildomai neperskaičiuojant.\n\nJeigu abiejų partijų rezultatai bus vienodi, galutinis rezultatas bus paskirstytas po 50% abiem baigtims.\n\nJeigu iki 2026 m. gruodžio 15 d. tinkama apklausa nebus paskelbta, naudojama pirmoji vėliau paskelbta kvalifikuojama „Spinter tyrimų“ apklausa, tačiau ne vėlesnė nei 2027 m. sausio 31 d. Jeigu nauja apklausa nepasirodys ir iki šios datos, naudojama paskutinė iki 2027 m. sausio 31 d. viešai paskelbta „Spinter tyrimų“ apklausa.\n\nRezultato šaltiniai yra „Delfi“, „Spinter tyrimai“ ir apklausos rezultatus perspausdinę nacionaliniai naujienų portalai, įskaitant LRT bei 15min.",
+    "context": "Rugsėjo „Spinter tyrimų“ apklausoje LSDP palaikė 8,8 %, o „Nemuno aušrą“ – 8,3 % respondentų. Liepą skirtumas buvo didesnis (10,1 % ir 8,5 %), tad valdančiųjų socialdemokratų persvara tirpsta. Kitos bendrovės „Baltijos tyrimai“ spalio apklausoje LSDP tebėra antra (12,1 %).\n\nPuse procentinio punkto skirtumas yra mažesnis už apklausos paklaidą, todėl lapkričio apklausoje lyderis gali pasikeisti.",
+    "closes_at": "2026-11-25T23:59:00+02:00",
+    "options": [
+      {
+        "label": "LSDP",
+        "probability": 54
+      },
+      {
+        "label": "„Nemuno aušra“",
+        "probability": 46
+      }
+    ]
+  },
+  {
+    "title": "Lietuvos YouTube tinklalaidžių #1 lapkritį?",
+    "subtitle": "Repsense „Lietuvos tinklalaidžių apžvalga“, 2026 m. lapkritis",
+    "category": "kultura",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Microphones_in_SPNN_Podcast_studio.jpg/1280px-Microphones_in_SPNN_Podcast_studio.jpg",
+    "liquidity": 8500,
+    "rules": "Laimi kūrėjas arba tinklalaidė, užimanti pirmą vietą duomenų analitikos įmonės Repsense „Lietuvos tinklalaidžių apžvalgoje“ už 2026 m. lapkritį (bendras reitingas).\n\nVertinama pirmoji oficiali Repsense paskelbta lapkričio apžvalga (repsense.io) arba jos pagrindu parengtas 15min ar kito naujienų portalo straipsnis. Vėlesni reitingo pataisymai rezultato nekeičia.\n\n„Kita“ laimi, jeigu pirma vieta atitenka bet kuriam kitam kūrėjui ar tinklalaidei, nei išvardyti atskirai.\n\nJeigu Repsense iki 2026 m. gruodžio 20 d. nepaskelbia lapkričio apžvalgos, rinka atšaukiama.\n\nRezultato šaltiniai – Repsense (repsense.io/tinklalaides) ir 15min.lt.",
+    "context": "Rugsėjo reitinge pirmavo Skirmantas Malinauskas (~800 tūkst. peržiūrų), rugpjūtį nuvainikavęs ilgai pirmavusį Aurimą Valujavičių. Trečias – Lukas Vainavičius, ketvirti – „nešvankiai“, o „Negyvas eteris“ peržiūras padidino keturis kartus.\n\nSpalio apžvalga tikėtina apie lapkričio 6–10 d., o lapkričio – gruodžio pradžioje.",
+    "closes_at": "2026-11-30T23:59:00+02:00",
+    "options": [
+      {
+        "label": "Skirmantas Malinauskas",
+        "probability": 36
+      },
+      {
+        "label": "Aurimas Valujavičius",
+        "probability": 22
+      },
+      {
+        "label": "Negyvas eteris",
+        "probability": 12
+      },
+      {
+        "label": "Lukas Vainavičius",
+        "probability": 10
+      },
+      {
+        "label": "nešvankiai",
+        "probability": 8
+      },
+      {
+        "label": "Kita",
+        "probability": 12
+      }
+    ]
+  }
+]

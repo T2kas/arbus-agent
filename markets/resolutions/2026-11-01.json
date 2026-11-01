@@ -1,0 +1,73 @@
+[
+  {
+    "market_id": "1e9ea133-8f84-4a32-9857-2a6abcff194d",
+    "title": "Aukščiausia vidutinė benzino A95 kaina spalį?",
+    "resolve": "1,999 €/l arba mažiau",
+    "source": "https://www.ena.lt/Naujiena/kdk-20261020/",
+    "note": "LEA spalio 1–30 d. dienos vidurkiai: didžiausias A95 1,989 €/l (spalio 20 d.); spalio 31 d. – šeštadienis, duomenų nėra."
+  },
+  {
+    "market_id": "dc2ef1a2-0bad-4a23-b760-5f3390f36119",
+    "title": "Aukščiausia vidutinė dyzelino kaina spalį?",
+    "resolve": "2,299 €/l arba mažiau",
+    "source": "https://www.ena.lt/Naujiena/kdk-20261001/",
+    "note": "LEA spalio 1–30 d.: didžiausias dyzelino vidurkis 2,268 €/l (spalio 1 ir 20 d.)."
+  },
+  {
+    "market_id": "20e36fcf-4f25-4e34-97bf-569a3b427bc2",
+    "title": "Vidutinė benzino A95 kaina Lietuvoje pasieks 2 €/l iki...?",
+    "options": {
+      "2026 m. spalio 31 d.": "no"
+    },
+    "source": "https://www.ena.lt/Naujiena/kdk-20261020/",
+    "note": "Nuo rugsėjo 23 d. iki spalio 31 d. A95 maksimumas 1,996 €/l (rugsėjo 29 d.) — 2,000 nepasiekta."
+  },
+  {
+    "market_id": "d9e4849c-8d23-404e-8136-7530931f323a",
+    "title": "Vidutinė dyzelino kaina Lietuvoje pasieks 2,40 €/l iki...?",
+    "options": {
+      "2026 m. spalio 31 d.": "no"
+    },
+    "source": "https://www.ena.lt/Naujiena/kdk-20260923/",
+    "note": "Nuo rugsėjo 23 d. iki spalio 31 d. dyzelino maksimumas 2,297 €/l (rugsėjo 23 d.) — 2,400 nepasiekta."
+  },
+  {
+    "market_id": "cf444f1c-2268-48ec-8336-dafba98ee775",
+    "title": "Kokia bus metinė infliacija spalį?",
+    "resolve": "Nuo 6,0% iki 6,4%",
+    "source": "https://www.15min.lt/verslas/naujiena/finansai/spali-isankstine-61-proc-metine-01proc-menesio-infliacija-662-2794044",
+    "note": "VDA: spalio metinė infliacija 6,1 % (išankstiniai duomenys)."
+  },
+  {
+    "market_id": "a1cea179-796e-4848-b199-6d292b74d66b",
+    "title": "Ar Jessica Shy išleis naują singlą iki spalio 31 d.?",
+    "resolve": "Ne",
+    "source": "https://music.apple.com/lt/artist/jessica-shy/1453345402",
+    "note": "Apple Music: paskutiniai leidiniai – albumas „Liepa“ (liepos 3 d.) ir „šalis nepaliesta (Live)“ (liepos 22 d.); rugsėjo 1 – spalio 31 d. naujo singlo nėra."
+  },
+  {
+    "market_id": "04b1ead0-3475-433f-b2e9-aca2da04f6ec",
+    "title": "Ar Lietuva atnaujins sienos kontrolę su Latvija iki spalio 31 d.?",
+    "resolve": "Ne",
+    "source": "https://www.lrt.lt/naujienos/lietuvoje/2/2965242/vrm-siekiant-mazinti-neteiseta-antrine-migracija-stiprinama-sienos-su-latvija-stebesena",
+    "note": "Laikina vidaus sienų kontrolė su Latvija nebuvo įvesta – tik sustiprinta stebėsena (VRM: tai nėra kontrolės atkūrimas)."
+  },
+  {
+    "market_id": "566a0cbd-edd6-49b7-8fbd-2c63d3ff72be",
+    "title": "Ar Seimas priims Civilinės sąjungos įstatymą iki...?",
+    "options": {
+      "2026 m. spalio 31 d.": "no"
+    },
+    "source": "https://www.lrs.lt",
+    "note": "Iki spalio 31 d. galutinio Seimo balsavimo dėl Civilinės sąjungos įstatymo nebuvo."
+  },
+  {
+    "market_id": "22ae814a-6b80-45e8-b976-d20d3c803de9",
+    "title": "Ar Mindaugas Sinkevičius išliks premjeru iki...?",
+    "options": {
+      "2026 m. spalio 31 d.": "yes"
+    },
+    "source": "https://kaunas.kasvyksta.lt/politika/premjeras-atskleide-kada-prasides-kelio-kaunas-prienai-rekonstrukcija-o-nemuna-siulo-isnaudoti-per-krize",
+    "note": "M. Sinkevičius spalio 30 d. lankėsi Prienų r. ir Birštone kaip premjeras; atsistatydinimo ar atleidimo nebuvo."
+  }
+]
