@@ -1,18 +1,21 @@
 name: games-bot
-
-# Creates LKL (basketball) and TOPLYGA (football) game markets: twice a day it
-# reads lkl.lt / toplyga.lt and, for each game starting within
-# GAMES_HORIZON_DAYS (default 7) that has no market yet, looks up the
-# bookmakers' odds on BetExplorer. Only games WITH published odds are created
-# (opening prices = bookmaker consensus, margin removed); the rest wait for the
-# next run. Each market gets a "home logo VS away logo" picture uploaded to
-# Supabase Storage. No LLM, so it costs nothing to run.
-# On by default (team request 2026-10-06); set Variable GAMES_ENABLED=false to
-# stop the schedule. Telegram lists what was created.
-
+# Creates LKL (basketball), TOPLYGA (football) and Žalgiris EuroLeague game
+# markets about a week ahead (GAMES_HORIZON_DAYS, default 8):
+#   • Monday 07:30 Vilnius — the main run: every game of the coming week whose
+#     bookmaker odds are already out;
+#   • every day 08:00 and 17:00 — catch-up: games whose odds appeared since
+#     (bookmakers publish ~1-5 days before tip-off, so a Monday-only run would
+#     miss the weekend games).
+# Opening prices = bookmaker consensus (median over ~10-20 bookmakers, margin
+# removed with the power method so the favourite keeps its edge). Games without
+# odds wait. lkl.lt blocks GitHub's servers (Cloudflare 403), so in CI the LKL
+# schedule falls back to BetExplorer and those markets close at 12:00 on game
+# day. Each market gets a "home logo VS away logo" picture. No LLM, costs 0.
+# On by default; set Variable GAMES_ENABLED=false to stop the schedule.
 on:
   schedule:
-    - cron: "0 6,15 * * *"         # 09:00 and 18:00 Vilnius (summer time)
+    - cron: "30 5 * * 1"           # Monday 07:30 Vilnius — weekly main run
+    - cron: "0 6,15 * * *"         # daily 08:00 / 17:00 Vilnius — catch-up for new odds
   workflow_dispatch:
     inputs:
       dry_run:

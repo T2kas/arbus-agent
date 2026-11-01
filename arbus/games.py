@@ -96,6 +96,7 @@ class Game:
     venue: str = ""
     home_logo: str = ""    # official logo URL (LKL: SVG, TOPLYGA: full-size PNG)
     away_logo: str = ""
+    time_known: bool = True  # False: date only (fallback source) -> close at noon
 
 
 def _clean(s: str) -> str:
@@ -144,6 +145,28 @@ def parse_lkl_schedule(page: str) -> list[Game]:
                           _clean(venue.group(1)) if venue else "",
                           logo(imgs[0][0]), logo(imgs[1][0])))
     return games
+
+
+LKL_FALLBACK_CLOSE_HOUR = 12     # LKL never tips off before noon
+
+
+def lkl_games_from_fixtures(fixtures, now: datetime) -> list[Game]:
+    """LKL games from BetExplorer's fixture list — used only when lkl.lt is
+    unreachable (its Cloudflare blocks GitHub's servers with a 403). BetExplorer
+    gives teams + date but not a trustworthy local tip-off time, so the game is
+    placed at 12:00 Vilnius time on its day: the market closes early (safe)
+    rather than staying open into the game."""
+    out = []
+    today = now.astimezone(TZ).date()
+    for fx in fixtures:
+        d, mth = fx.day
+        year = today.year + (1 if mth < today.month - 6 else 0)
+        try:
+            start = datetime(year, mth, d, LKL_FALLBACK_CLOSE_HOUR, tzinfo=TZ)
+        except ValueError:
+            continue
+        out.append(Game("lkl", start, fx.home, fx.away, time_known=False))
+    return out
 
 
 def parse_lkl_table(page: str) -> dict[str, tuple[int, int]]:
@@ -316,13 +339,15 @@ def lkl_spec(g: Game, table, probs: list[int] | None = None) -> dict:
     deadline = lt_date(g.start + timedelta(days=30))
     hw, hl = table.get(g.home, (0, 0))
     aw, al = table.get(g.away, (0, 0))
-    ctx = (f"LKL lentelėje {home} turi {hw} pergal{'ę' if hw == 1 else 'es'} ir {hl} pralaimėjim{'ą' if hl == 1 else 'us'}, "
-           f"{away} – {aw}–{al}. Rungtynės vyks {g.venue or 'šeimininkų arenoje'}."
+    record = (f"LKL lentelėje {home} turi {hw} pergal{'ę' if hw == 1 else 'es'} ir {hl} pralaimėjim{'ą' if hl == 1 else 'us'}, "
+              f"{away} – {aw}–{al}. " if table else "")
+    ctx = (record + f"Rungtynės vyks {g.venue or 'šeimininkų arenoje'}."
            + (" Kauno „Žalgiris“ LKL yra aiškus favoritas, todėl įdomiausia – ar varžovai sugebės nustebinti."
               if "Žalgiris" in (g.home, g.away) and "Rytas" not in (g.home, g.away) else ""))
     return {
         "title": f"{home} vs {away}",
-        "subtitle": f"LKL, {lt_date(g.start)} {g.start:%H:%M} Lietuvos laiku",
+        "subtitle": (f"LKL, {lt_date(g.start)} {g.start:%H:%M} Lietuvos laiku" if g.time_known
+                     else f"LKL, {lt_date(g.start)}"),
         "category": "sportas",
         "image_url": config.GAMES_LKL_IMAGE or IMG_ZAL,
         "liquidity": config.GAMES_LIQUIDITY,
@@ -414,8 +439,15 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
             games = parse_s(fetch(sched_url))
             table = parse_t(fetch(table_url))
         except Exception as e:          # one league down must not stop the other
-            errors.append(f"{name}: {type(e).__name__}: {e}")
-            continue
+            if league != "lkl":
+                errors.append(f"{name}: {type(e).__name__}: {e}")
+                continue
+            try:                        # lkl.lt blocks CI servers -> BetExplorer
+                games = lkl_games_from_fixtures(betodds.fixtures_for("lkl", odds_fetch), now)
+                table = {}
+            except Exception as e2:
+                errors.append(f"{name}: {type(e).__name__}: {e}; atsarginis: {type(e2).__name__}: {e2}")
+                continue
         todo = [g for g in games if min_lead <= g.start <= horizon
                 and make(g, table)["title"] not in existing_titles
                 and not _already_listed(make(g, table), g.start, existing)]
@@ -445,7 +477,8 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
             spec["_image_name"] = re.sub(r"[^a-z0-9]+", "-", betodds.fold(
                 f"{league} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-")
             spec["_caption"] = (f"{ {'lkl': 'LKL', 'toplyga': 'TOPLYGA', 'euroleague': 'EUROLYGA'}[league] } · "
-                                f"{MONTHS[g.start.month - 1]} {g.start.day} d. {g.start:%H:%M}")
+                                f"{MONTHS[g.start.month - 1]} {g.start.day} d."
+                                + (f" {g.start:%H:%M}" if g.time_known else ""))
             candidates.append(spec)
 
     seen, fresh = set(), []
