@@ -183,9 +183,39 @@ def test_a_league_outage_does_not_stop_the_other():
             raise OSError("down")
         return {games.TOP_SCHEDULE: TOP_SCHEDULE, games.TOP_TABLE: TOP_TABLE}[url]
     now = datetime(2026, 10, 6, tzinfo=timezone.utc)
+
+    def odds_no_lkl(url, **h):                      # BetExplorer LKL list down too
+        if url.endswith("/lkl/fixtures/"):
+            raise OSError("down")
+        return odds_fetch(url, **h)
+    specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles=set(),
+                                        odds_fetch=odds_no_lkl)
+    assert len(specs) == 1 and errors and errors[0].startswith("LKL")
+
+
+def test_lkl_site_blocked_falls_back_to_betexplorer_and_closes_at_noon():
+    _, odds_fetch = _fetchers({"xfh9p4BG": ODDS_HA, "ppFZhH74": ODDS_1X2, "AbCdEfGh": NO_ODDS})
+
+    def fetch(url):
+        if "lkl" in url:
+            raise OSError("403 Forbidden")              # lkl.lt Cloudflare vs CI servers
+        return {games.TOP_SCHEDULE: TOP_SCHEDULE, games.TOP_TABLE: TOP_TABLE}[url]
+    now = datetime(2026, 10, 6, tzinfo=timezone.utc)
     specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles=set(),
                                         odds_fetch=odds_fetch)
-    assert len(specs) == 1 and errors and errors[0].startswith("LKL")
+    assert errors == []
+    lkl = [s for s in specs if s["title"] == "Vilniaus „Rytas“ vs Klaipėdos „Neptūnas“"][0]
+    assert lkl["closes_at"] == "2026-10-10T09:00:00+00:00"        # 12:00 Vilnius on game day
+    assert lkl["subtitle"] == "LKL, 2026 m. spalio 10 d." and "lentelėje" not in lkl["context"]
+    assert "Kėdainių „Nevėžis-Paskolų klubas“ vs Kauno „Žalgiris“" in waiting   # no odds yet
+
+
+def test_power_devig_keeps_more_for_the_favourite():
+    from arbus import betodds
+
+    prop = betodds.devig([1.30, 3.50], "proportional")
+    power = betodds.devig([1.30, 3.50], "power")
+    assert abs(sum(power) - 1) < 1e-9 and power[0] > prop[0]
 
 
 def test_betexplorer_names_map_to_our_teams():
@@ -204,7 +234,8 @@ def test_consensus_removes_margin_and_needs_three_books():
     from arbus import betodds
 
     probs, n = betodds.parse_odds(ODDS_HA["odds"], 2)
-    assert n == 3 and abs(sum(probs) - 1) < 1e-9 and 0.67 < probs[0] < 0.69
+    # power de-vig: the 1.40 favourite keeps a bit more than proportional (~0.68)
+    assert n == 3 and abs(sum(probs) - 1) < 1e-9 and 0.68 < probs[0] < 0.71
     assert betodds.parse_odds(NO_ODDS["odds"], 2) == ([], 0)
     assert betodds.to_percent([0.995, 0.005]) == [97, 3]       # floor keeps the long shot tradable
 

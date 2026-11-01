@@ -1362,6 +1362,12 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
                                                      alert=alert, do_resolve=do_resolve)
         reports += f_reports
         changed = changed or f_changed
+        # Period fuel markets: monthly/yearly maximum + "pasieks X €/l iki...?"
+        from . import fuel_period
+        p_reports, p_changed = fuel_period.resolve_markets(rows, now, tz, state,
+                                                           alert=alert, do_resolve=do_resolve)
+        reports += p_reports
+        changed = changed or p_changed
     if changed:
         save_state(state)
 

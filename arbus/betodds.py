@@ -116,19 +116,50 @@ class MatchOdds:
     logos: list[str] = field(default_factory=list)   # absolute PNG URLs, home first
 
 
-def parse_odds(odds_html: str, n_outcomes: int) -> tuple[list[float], int]:
+def devig(prices: list[float], method: str = "power") -> list[float]:
+    """Fair probabilities from one bookmaker's decimal prices.
+
+    "proportional" divides 1/odds by their sum — it spreads the margin evenly,
+    which leaves longshots too expensive (bookmakers load more margin on them:
+    the favourite–longshot bias). "power" finds k with Σ(1/oᵢ)ᵏ = 1 and uses
+    (1/oᵢ)ᵏ: the margin comes mostly off the longshot, so a 1.30 favourite keeps
+    ~75 % instead of ~72 %. Both return probabilities summing to 1."""
+    inv = [1 / p for p in prices]
+    if method != "power":
+        s = sum(inv)
+        return [x / s for x in inv]
+    lo, hi = 0.2, 5.0                       # Σ inv^k falls as k grows (inv < 1)
+    for _ in range(80):
+        k = (lo + hi) / 2
+        if sum(x ** k for x in inv) > 1:
+            lo = k
+        else:
+            hi = k
+    out = [x ** ((lo + hi) / 2) for x in inv]
+    s = sum(out)
+    return [x / s for x in out]
+
+
+def parse_odds(odds_html: str, n_outcomes: int, method: str | None = None) -> tuple[list[float], int]:
+    if method is None:
+        from . import config
+        method = config.GAMES_DEVIG
     per_book = []
     for row in re.findall(r"<tr[^>]*>(.*?)</tr>", odds_html, flags=re.S):
         prices = [float(x) for x in re.findall(r'data-odd="([\d.]+)"', row)]
         if len(prices) != n_outcomes or any(p <= 1.0 for p in prices):
             continue
-        inv = [1 / p for p in prices]
-        s = sum(inv)
-        per_book.append([x / s for x in inv])
+        per_book.append(devig(prices, method))
     if not per_book:
         return [], 0
-    avg = [sum(b[i] for b in per_book) / len(per_book) for i in range(n_outcomes)]
-    return avg, len(per_book)
+    # median per outcome (robust to one stale/outlier bookmaker), renormalised
+    med = []
+    for i in range(n_outcomes):
+        xs = sorted(b[i] for b in per_book)
+        mid = len(xs) // 2
+        med.append(xs[mid] if len(xs) % 2 else (xs[mid - 1] + xs[mid]) / 2)
+    s = sum(med)
+    return [x / s for x in med], len(per_book)
 
 
 def find(fixtures: list[Fixture], home: str, away: str, when: datetime) -> Fixture | None:

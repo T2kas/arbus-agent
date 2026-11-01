@@ -1,0 +1,69 @@
+name: resolve-markets
+# Resolves markets from a reviewed decision file (markets/resolutions/*.json):
+# outcomes no automatic feed can settle (polls, laws, releases, fights) are
+# researched, written to a file and reviewed in the repo; pushing it to main
+# runs this job with the service_role key. Every entry is checked against the
+# app first (id + exact title + option labels) and the WHOLE file is refused if
+# anything does not match, so nothing is paid on a typo. Already-resolved
+# markets/options are skipped, so re-running a file is a no-op. Telegram lists
+# what was resolved. Manual: Actions -> resolve-markets -> Run workflow.
+on:
+  push:
+    branches: [main]
+    paths: ["markets/resolutions/*.json"]
+  workflow_dispatch:
+    inputs:
+      file:
+        description: "Decision file to apply"
+        required: true
+      dry_run:
+        description: "Only validate and list, do not resolve"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: resolve-markets
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Resolve markets
+        env:
+          PYTHONUNBUFFERED: "1"
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          ARBUS_WRITE_KEY: ${{ secrets.ARBUS_WRITE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          APP_RESOLVE_RPC: ${{ vars.APP_RESOLVE_RPC }}
+          APP_RESOLVE_OPTION_RPC: ${{ vars.APP_RESOLVE_OPTION_RPC }}
+          APP_RESOLVE_SPLIT_RPC: ${{ vars.APP_RESOLVE_SPLIT_RPC }}
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then FLAGS="--dry-run"; fi
+          if [ "${{ github.event_name }}" = "push" ]; then
+            FILES=$(git diff --name-only --diff-filter=AM "${{ github.event.before }}" "${{ github.sha }}" -- 'markets/resolutions/*.json')
+          else
+            FILES="${{ github.event.inputs.file }}"
+          fi
+          if [ -z "$FILES" ]; then echo "no decision files"; exit 0; fi
+          STATUS=0
+          for f in $FILES; do
+            echo "== $f"
+            python -m arbus resolve-batch "$f" $FLAGS || STATUS=1
+          done
+          exit $STATUS

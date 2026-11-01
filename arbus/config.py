@@ -887,6 +887,11 @@ APP_RESOLVE_RPC = os.environ.get("APP_RESOLVE_RPC", "").strip() or "admin_resolv
 # open on the rest — used to kill impossible temperature buckets as the day's max
 # climbs. Needs the app RPC below (SQL provided). Off if the RPC is absent.
 APP_ELIMINATE_RPC = os.environ.get("APP_ELIMINATE_RPC", "").strip() or "admin_eliminate_options"
+# One option of a date ladder settled yes/no: admin_resolve_option(p_option_id,
+# p_outcome 'yes'|'no'); an equal-split result: admin_resolve_market_split(
+# p_market_id, p_option_ids). Both signatures confirmed from PostgREST.
+APP_RESOLVE_OPTION_RPC = os.environ.get("APP_RESOLVE_OPTION_RPC", "").strip() or "admin_resolve_option"
+APP_RESOLVE_SPLIT_RPC = os.environ.get("APP_RESOLVE_SPLIT_RPC", "").strip() or "admin_resolve_market_split"
 # Early per-bucket "Ne" elimination — ON (2026-09-24, team re-enabled after the
 # app side was sorted): once the running daily max climbs past a bucket's upper
 # bound, that bucket can no longer contain the day's max (temperature only
@@ -1095,9 +1100,16 @@ FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 10)
 # Each run creates a market for every game starting within GAMES_HORIZON_DAYS
 # that has no market yet (dedupe by title). Prices from official standings.
 GAMES_LEAGUES = {x.strip() for x in _env_str("GAMES_LEAGUES", "lkl,toplyga,euroleague").split(",") if x.strip()}
-# Look up to a month ahead (team request 2026-10-18); a game is still created
-# only once bookmakers publish odds, which is usually 1-5 days before.
-GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 30)
+# About a week ahead (owner 2026-11-01: "ne per toli į priekį, kad
+# neatsiliktų kainos"; was 30 since 2026-10-18). The Monday run fills the
+# coming week; the daily runs only add games whose odds appeared later
+# (bookmakers publish ~1-5 days before tip-off).
+GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 8)
+# How bookmaker odds become opening prices: "power" (default) removes each
+# bookmaker's margin with the power method — favourites keep more of their
+# price than with plain proportional scaling, which over-prices longshots
+# (the favourite–longshot bias); "proportional" is the old behaviour.
+GAMES_DEVIG = _env_str("GAMES_DEVIG", "power")
 GAMES_EL_TEAMS = {x.strip() for x in _env_str("GAMES_EL_TEAMS", "Zalgiris Kaunas").split(",") if x.strip()}
 GAMES_EL_IMAGE = _env_str("GAMES_EL_IMAGE", "")
 GAMES_MIN_LEAD_HOURS = _env_int("GAMES_MIN_LEAD_HOURS", 3)   # never open a market minutes before tip-off

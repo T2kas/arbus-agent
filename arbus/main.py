@@ -519,6 +519,23 @@ def cmd_series(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_resolve_batch(args: argparse.Namespace) -> int:
+    """Resolve markets from a reviewed decision file (needs the service_role
+    key). The whole file is refused if any entry does not match the app."""
+    from . import manual_resolve
+
+    reports, error = manual_resolve.run(args.file, dry_run=args.dry_run,
+                                        alert=not args.no_telegram)
+    if error:
+        print(error)
+        return 1
+    for r in reports:
+        icon = {"resolved": "✅", "would-resolve": "📝", "skip": "⏭️",
+                "error": "❌"}.get(r["status"], "·")
+        print(f"{icon} {r['detail']}")
+    return 1 if any(r["status"] == "error" for r in reports) else 0
+
+
 def cmd_create_batch(args: argparse.Namespace) -> int:
     """Create a reviewed batch of markets from a JSON file (needs the service_role
     key). Validates every spec first; skips titles that already exist."""
@@ -1121,6 +1138,14 @@ def main() -> int:
                     help="validate + show what would be created, write nothing")
     cb.add_argument("--no-telegram", action="store_true")
     cb.set_defaults(func=cmd_create_batch)
+
+    rbt = sub.add_parser("resolve-batch",
+                         help="resolve markets from a reviewed decision file")
+    rbt.add_argument("file", help="e.g. markets/resolutions/2026-11-01.json")
+    rbt.add_argument("--dry-run", action="store_true",
+                     help="validate + show what would be resolved, write nothing")
+    rbt.add_argument("--no-telegram", action="store_true")
+    rbt.set_defaults(func=cmd_resolve_batch)
 
     stt = sub.add_parser("stats", help="market health: dead, important, overdue")
     stt.add_argument("--days", type=int, default=config.DEAD_MARKET_DAYS)

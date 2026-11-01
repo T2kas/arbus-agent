@@ -440,6 +440,38 @@ def eliminate_options(market_id: str, option_ids: list[str]) -> tuple[bool, str]
     return True, "ok"
 
 
+def resolve_option(option_id: str, outcome: str) -> tuple[bool, str]:
+    """Settle ONE option "yes"/"no" via admin_resolve_option(p_option_id,
+    p_outcome) — for date ladders ("... iki...?"), where each date is its own
+    Taip/Ne and the market stays open on the later dates. Needs the
+    service_role key."""
+    if not config.ARBUS_WRITE_KEY:
+        return False, "reikia ARBUS_WRITE_KEY (service_role)"
+    if outcome not in ("yes", "no"):
+        return False, f"outcome must be 'yes' or 'no', not {outcome!r}"
+    rows, error = _rpc(config.APP_RESOLVE_OPTION_RPC,
+                       {"p_option_id": option_id, "p_outcome": outcome},
+                       key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, _resolve_error_hint(error)
+    return True, "ok"
+
+
+def resolve_split(market_id: str, option_ids: list[str]) -> tuple[bool, str]:
+    """Resolve a market with the payout split equally between `option_ids` (a
+    tie, or the rules' "po 50 %" clause) via admin_resolve_market_split."""
+    if not config.ARBUS_WRITE_KEY:
+        return False, "reikia ARBUS_WRITE_KEY (service_role)"
+    if len(option_ids) < 2:
+        return False, "split needs at least 2 options"
+    rows, error = _rpc(config.APP_RESOLVE_SPLIT_RPC,
+                       {"p_market_id": market_id, "p_option_ids": option_ids},
+                       key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, _resolve_error_hint(error)
+    return True, "ok"
+
+
 def resolution_proposals(limit: int = 50) -> tuple[list[dict], str]:
     """Resolution proposals users submitted (market_resolution_proposals): which
     market, the option they claim won (`proposed_option_id`), their cited
