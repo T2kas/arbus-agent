@@ -1,0 +1,16 @@
+[
+  {
+    "market_id": "f65415d2-c3af-4b6e-8cd8-f4d0b0ed06cd",
+    "title": "Kuri elektromobilių markė bus populiariausia rugsėjį?",
+    "resolve": "Tesla",
+    "source": "https://www.regitra.lt/wp-content/uploads/2025/03/Populiariausios-2026-m.-sausio-rugsejo-men.-iregistruotu-M1-klases-elektromobiliu-markes.xlsx",
+    "note": "Regitra, 2026 m. rugsėjis (BEV M1, nauji + naudoti): Tesla 206+156=362, Volkswagen 85+28=113, Audi 69+17=86."
+  },
+  {
+    "market_id": "4f5e7ab4-a6f9-442d-ab95-ef6374c9e712",
+    "title": "Lietuvoje bus matoma šiaurės pašvaistė iki...?",
+    "freeze": true,
+    "source": "https://kp.gfz.de/app/json/?start=2026-10-31T00:00:00Z&end=2026-11-01T00:00:00Z&index=Kp",
+    "note": "GFZ Kp 5,667 (6−) 2026-10-31 18–21 UTC, NOAA 6,0 → „Taip“ visoms datoms; „Taip“ baigtis turi paspausti adminas."
+  }
+]

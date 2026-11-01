@@ -18,6 +18,8 @@ Entry forms (one per market):
    "source": "...", "note": "..."}               # date ladders ("... iki...?")
   {"market_id": "...", "title": "...", "split": ["<label>", "<label>"],
    "source": "...", "note": "..."}               # rules' equal-split clause
+  {"market_id": "...", "title": "...", "freeze": true, "note": "..."}
+                                                 # stop trading; an admin decides
 """
 
 from __future__ import annotations
@@ -56,11 +58,19 @@ def plan(entries: list[dict], rows: list[dict]) -> tuple[list[dict], list[str]]:
         if app_api.question_of(m).strip() != title.strip():
             errors.append(f"#{i}: title mismatch for {mid}: app has {app_api.question_of(m)!r}")
             continue
-        kinds = [k for k in ("resolve", "options", "split") if k in e]
+        kinds = [k for k in ("resolve", "options", "split", "freeze") if k in e]
         if len(kinds) != 1:
-            errors.append(f"#{i}: give exactly one of resolve / options / split")
+            errors.append(f"#{i}: give exactly one of resolve / options / split / freeze")
             continue
         kind = kinds[0]
+        if kind == "freeze":
+            # stop trading now (the outcome needs an admin-only step, e.g. a
+            # ladder "Taip" that admin_resolve_option refuses from the bot)
+            if app_api.status_of(m) != "open":
+                actions.append({"kind": "skip", "market": m, "entry": e, "why": f"jau {app_api.status_of(m)}"})
+            else:
+                actions.append({"kind": "freeze", "market": m, "entry": e})
+            continue
         if kind == "resolve":
             o = _option_by_label(m, e["resolve"])
             if not o:
@@ -106,6 +116,8 @@ def _describe(a: dict) -> str:
     if a["kind"] == "option":
         word = "Taip" if a["outcome"] == "yes" else "Ne"
         return f"{title} · {a['option']['label']} → {word}"
+    if a["kind"] == "freeze":
+        return f"{title} → sustabdyta prekyba (laukia admino sprendimo)"
     return f"{title} (praleista: {a['why']})"
 
 
@@ -117,6 +129,8 @@ def execute(a: dict) -> tuple[bool, str]:
         return app_api.resolve_split(mid, [o["id"] for o in a["options"]])
     if a["kind"] == "option":
         return app_api.settle_option(mid, a["option"]["id"], a["outcome"])
+    if a["kind"] == "freeze":
+        return app_api.freeze_market(mid)
     return True, "skip"
 
 

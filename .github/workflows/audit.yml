@@ -1,0 +1,54 @@
+name: market-audit
+# What needs resolving + which prices went stale, reported to Telegram.
+#   • every day 08:30 Vilnius — FREE checks only (no LLM): markets past their
+#     date still unresolved, ladder dates passed, the aurora market vs GFZ Kp.
+#     Sends a message only when something needs action.
+#   • Monday 07:00 Vilnius — the same + the AI review of every long-running
+#     market (is it already decided? is the price still realistic?), ~1.5 € a run.
+# Nothing is resolved or changed by this job; it only reports.
+on:
+  schedule:
+    - cron: "30 6 * * *"          # daily free check
+    - cron: "0 5 * * 1"           # Monday: + AI review
+  workflow_dispatch:
+    inputs:
+      llm:
+        description: "Include the AI review (~1.5 €)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    if: github.event_name == 'workflow_dispatch' || vars.AUDIT_ENABLED != 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Audit markets
+        env:
+          PYTHONUNBUFFERED: "1"
+          ARBUS_API_URL: ${{ secrets.ARBUS_API_URL }}
+          ARBUS_API_KEY: ${{ secrets.ARBUS_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          LLM_PROVIDER_AUDIT: ${{ vars.LLM_PROVIDER_AUDIT || 'openai' }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.schedule }}" = "0 5 * * 1" ] || [ "${{ github.event.inputs.llm }}" = "true" ]; then FLAGS="--llm"; fi
+          python -m arbus audit $FLAGS

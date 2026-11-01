@@ -536,6 +536,16 @@ def cmd_resolve_batch(args: argparse.Namespace) -> int:
     return 1 if any(r["status"] == "error" for r in reports) else 0
 
 
+def cmd_audit(args: argparse.Namespace) -> int:
+    """Daily free check + (with --llm) the weekly AI review of every market."""
+    from . import audit
+
+    text, findings = audit.run(use_llm=args.llm, alert=not args.no_telegram,
+                               limit=args.limit)
+    print(text)
+    return 0
+
+
 def cmd_create_batch(args: argparse.Namespace) -> int:
     """Create a reviewed batch of markets from a JSON file (needs the service_role
     key). Validates every spec first; skips titles that already exist."""
@@ -1146,6 +1156,13 @@ def main() -> int:
                      help="validate + show what would be resolved, write nothing")
     rbt.add_argument("--no-telegram", action="store_true")
     rbt.set_defaults(func=cmd_resolve_batch)
+
+    au = sub.add_parser("audit", help="what needs resolving + stale prices (Telegram report)")
+    au.add_argument("--llm", action="store_true",
+                    help="also run the AI review of every long-running market (costs ~€)")
+    au.add_argument("--limit", type=int, default=None, help="AI-review only the first N markets")
+    au.add_argument("--no-telegram", action="store_true")
+    au.set_defaults(func=cmd_audit)
 
     stt = sub.add_parser("stats", help="market health: dead, important, overdue")
     stt.add_argument("--days", type=int, default=config.DEAD_MARKET_DAYS)
