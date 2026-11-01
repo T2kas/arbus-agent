@@ -89,7 +89,12 @@ def _get(url: str, **headers) -> str:
     return r.text
 
 
-def parse_fixtures(league: str, page: str) -> list[Fixture]:
+def parse_fixtures(league: str, page: str, today=None) -> list[Fixture]:
+    """`today` (a date) resolves BetExplorer's relative labels: games in the
+    next two days show "Today 18:10" / "Tomorrow 15:50" instead of "05.11."."""
+    if today is None:
+        from datetime import date as _date
+        today = _date.today()
     out, last_day = [], None
     for row in re.findall(r"<tr[^>]*>(.*?)</tr>", page, flags=re.S):
         m = re.search(r'href="(/[^"]+/([A-Za-z0-9]{8})/)" class="in-match"[^>]*>(.*?)</a>',
@@ -101,7 +106,14 @@ def parse_fixtures(league: str, page: str) -> list[Fixture]:
         if len(names) < 2:
             continue
         dt = re.search(r"table-main__datetime[^>]*>\s*(\d{1,2})\.(\d{1,2})\.", row)
-        day = (int(dt.group(1)), int(dt.group(2))) if dt else last_day
+        rel = re.search(r"table-main__datetime[^>]*>\s*(Today|Tomorrow)", row)
+        if dt:
+            day = (int(dt.group(1)), int(dt.group(2)))
+        elif rel:
+            d = today + timedelta(days=1 if rel.group(1) == "Tomorrow" else 0)
+            day = (d.day, d.month)
+        else:
+            day = last_day
         last_day = day
         home, away = team_key(league, names[0]), team_key(league, names[1])
         if home and away and day:

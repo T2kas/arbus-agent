@@ -297,6 +297,25 @@ rewriting that one file, not the engine.
 Reputation is accumulated and displayable only; per the spec it does **not**
 change bond or reward sizes in v1.
 
+### What resolves itself, and what goes through a decision file
+
+| Market type | Resolved by | Source |
+|---|---|---|
+| Daily max temperature (orai) | weather bot, every ~5 min | api.meteo.lt |
+| Daily fuel price | weather bot | LEA (ena.lt) bulletin of that exact date |
+| Monthly / yearly **max** fuel price | weather bot (`fuel_period.py`) — dead buckets eliminated as the max climbs, winner once the period's last bulletin is final | LEA |
+| "… pasieks X €/l iki...?" ladders | weather bot (`fuel_period.py`) — each date Taip/Ne | LEA |
+| Weekly / monthly film, weekly song | weather bot | LKC xlsx, AGATA |
+| LKL / TOPLYGA / Žalgiris EuroLeague games | weather bot | BetExplorer results, toplyga.lt, EuroLeague feed |
+| Everything else (polls, laws, releases, fights…) | **decision file** | researched by hand |
+
+A decision file is `markets/resolutions/<date>.json` — a list of
+`{"market_id", "title", "resolve": "<label>" | "options": {"<date label>": "yes"|"no"} | "split": [labels], "source", "note"}`.
+Pushing it to `main` runs the **resolve-markets** workflow (service_role key).
+Every entry is checked against the app (id + exact title + labels) and the whole
+file is refused on any mismatch; already-resolved markets are skipped. Check it
+locally first: `python -m arbus resolve-batch <file> --dry-run`.
+
 ## Backing up the database
 
 `data/arbus.db` is **local state, not source**, and is deliberately untracked.

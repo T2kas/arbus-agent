@@ -306,3 +306,14 @@ def test_renamed_market_is_still_recognised_as_existing():
     spec2 = {"options": [{"label": "„Kauno Žalgiris“"}, {"label": "Lygiosios"}, {"label": "FK „Žalgiris“"}]}
     assert not games._already_listed(spec2, start, [("FK „Žalgiris“ vs Gargždų „Banga“",
                                                      "2026-10-25T12:00:00+00:00")])
+
+
+def test_betexplorer_relative_dates_are_parsed():
+    from datetime import date
+    from arbus import betodds
+
+    page = ('<table><tr><td class="table-main__datetime">Tomorrow 15:50</td><td>'
+            '<a href="/basketball/lithuania/lkl/bc-rytas-zalgiris-kaunas/lfF6KAhm/" class="in-match">'
+            '<span>Rytas</span> - <span>Zalgiris Kaunas</span></a></td></tr></table>')
+    fx = betodds.parse_fixtures("lkl", page, today=date(2026, 11, 1))
+    assert [(f.home, f.away, f.day) for f in fx] == [("Rytas", "Žalgiris", (2, 11))]
