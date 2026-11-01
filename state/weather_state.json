@@ -1,6 +1,6 @@
 {
  "00166e00-5e26-4d23-801d-cc5a025294cb": {
-  "checksum": "4ba453bd0b68b161f8690c47da16d833cc339283d501fb3d943e0a3440386112",
+  "checksum": "b0bb44c3a251a3062e1a1e592ede716307674b4dd75f4316e3c126512662051e",
   "current_maximum": 7.2,
   "date": "2026-11-01",
   "eliminated": [
@@ -116,9 +116,25 @@
     "received_at": "2026-11-01T15:10:41.864494+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 6.4
+   },
+   "2026-11-01 16:00:00": {
+    "checksum": "b0bb44c3a251a3062e1a1e592ede716307674b4dd75f4316e3c126512662051e",
+    "received_at": "2026-11-01T16:10:53.050331+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 6.0
    }
   },
-  "resolved": false,
+  "resolved": true,
+  "resolved_at": "2026-11-01T16:10:53.050331+00:00",
+  "resolved_label": "7,0 iki 8,9 °C",
+  "resolved_option_id": "70bfc259-00c3-45b9-9e2c-da4f9d464aff",
+  "resolved_peak_lt": "2026-11-01T14:00:00+02:00",
+  "resolved_sources": [
+   "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/2026-10-31",
+   "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/2026-11-01"
+  ],
+  "resolved_temp": 7.2,
+  "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
@@ -6508,7 +6524,7 @@
   "station": "vilniaus-ams"
  },
  "4e2f4852-df4b-4b5e-a914-cc680bd02d09": {
-  "checksum": "4ba453bd0b68b161f8690c47da16d833cc339283d501fb3d943e0a3440386112",
+  "checksum": "b0bb44c3a251a3062e1a1e592ede716307674b4dd75f4316e3c126512662051e",
   "current_maximum": null,
   "date": "2026-11-02",
   "measurements": {},
@@ -9113,7 +9129,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261013/"
  },
  "80132391-fe30-4971-954c-e4bad86c665f": {
-  "checksum": "aa5681ec69fd237434cbdd21a4b11403d13a3e5566addf7c7feb5d3a82811557",
+  "checksum": "fef9ed8ecf5a77086bb6850781ee357338585cb8f5d3b000319175a131258f91",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -10103,7 +10119,7 @@
   "station": "klaipedos-ams"
  },
  "879a2241-2eb0-46bd-a427-6b58beab3c7f": {
-  "checksum": "c548662aabb5293f94833cedb68840565a4d4c55f1743ee93e3c2fb27ffcfcd5",
+  "checksum": "50684de37e04383cccc4a0b191dde1a73712d784713fcf262eef962f054e8f0f",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -11198,7 +11214,7 @@
   "station": "kauno-ams"
  },
  "96ed1197-3da8-4508-a8b3-ac39cb8e78b2": {
-  "checksum": "aa5681ec69fd237434cbdd21a4b11403d13a3e5566addf7c7feb5d3a82811557",
+  "checksum": "fef9ed8ecf5a77086bb6850781ee357338585cb8f5d3b000319175a131258f91",
   "current_maximum": 7.4,
   "date": "2026-11-01",
   "eliminated": [
@@ -11314,9 +11330,25 @@
     "received_at": "2026-11-01T15:10:41.864494+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 6.4
+   },
+   "2026-11-01 16:00:00": {
+    "checksum": "fef9ed8ecf5a77086bb6850781ee357338585cb8f5d3b000319175a131258f91",
+    "received_at": "2026-11-01T16:10:53.050331+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 6.1
    }
   },
-  "resolved": false,
+  "resolved": true,
+  "resolved_at": "2026-11-01T16:10:53.050331+00:00",
+  "resolved_label": "7,0 iki 8,9 °C",
+  "resolved_option_id": "5896257e-09ff-4f40-8917-14afe623c2f1",
+  "resolved_peak_lt": "2026-11-01T13:00:00+02:00",
+  "resolved_sources": [
+   "https://api.meteo.lt/v1/stations/kauno-ams/observations/2026-10-31",
+   "https://api.meteo.lt/v1/stations/kauno-ams/observations/2026-11-01"
+  ],
+  "resolved_temp": 7.4,
+  "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
@@ -11603,7 +11635,7 @@
   "station": "vilniaus-ams"
  },
  "9ad5bcb1-7576-407a-a5a3-0f8450fd221e": {
-  "checksum": "aa5681ec69fd237434cbdd21a4b11403d13a3e5566addf7c7feb5d3a82811557",
+  "checksum": "fef9ed8ecf5a77086bb6850781ee357338585cb8f5d3b000319175a131258f91",
   "current_maximum": null,
   "date": "2026-11-02",
   "measurements": {},
@@ -16186,7 +16218,7 @@
   "station": "klaipedos-ams"
  },
  "c523610f-cd1a-4f82-9238-5685017a4103": {
-  "checksum": "c548662aabb5293f94833cedb68840565a4d4c55f1743ee93e3c2fb27ffcfcd5",
+  "checksum": "50684de37e04383cccc4a0b191dde1a73712d784713fcf262eef962f054e8f0f",
   "current_maximum": 9.6,
   "date": "2026-11-01",
   "eliminated": [
@@ -16302,9 +16334,25 @@
     "received_at": "2026-11-01T15:10:41.864494+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 7.7
+   },
+   "2026-11-01 16:00:00": {
+    "checksum": "50684de37e04383cccc4a0b191dde1a73712d784713fcf262eef962f054e8f0f",
+    "received_at": "2026-11-01T16:10:53.050331+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 6.9
    }
   },
-  "resolved": false,
+  "resolved": true,
+  "resolved_at": "2026-11-01T16:10:53.050331+00:00",
+  "resolved_label": "8,0 iki 9,9 °C",
+  "resolved_option_id": "27832bf3-71ee-4c2b-bf7f-6292df89c4fe",
+  "resolved_peak_lt": "2026-11-01T14:00:00+02:00",
+  "resolved_sources": [
+   "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/2026-10-31",
+   "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/2026-11-01"
+  ],
+  "resolved_temp": 9.6,
+  "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
@@ -16616,7 +16664,7 @@
   "station": "vilniaus-ams"
  },
  "cbe89df5-1d5c-4f91-a01c-7d04819769c2": {
-  "checksum": "4ba453bd0b68b161f8690c47da16d833cc339283d501fb3d943e0a3440386112",
+  "checksum": "b0bb44c3a251a3062e1a1e592ede716307674b4dd75f4316e3c126512662051e",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -18891,7 +18939,7 @@
   "station": "vilniaus-ams"
  },
  "dee7882e-c6e1-474f-8de1-60e016a5de55": {
-  "checksum": "c548662aabb5293f94833cedb68840565a4d4c55f1743ee93e3c2fb27ffcfcd5",
+  "checksum": "50684de37e04383cccc4a0b191dde1a73712d784713fcf262eef962f054e8f0f",
   "current_maximum": null,
   "date": "2026-11-02",
   "measurements": {},
