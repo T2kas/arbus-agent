@@ -296,7 +296,7 @@
   "resolved_via": "sports"
  },
  "0691ec96-0da9-4942-8209-3602cabbb3f3": {
-  "checksum": "8b4079ddab66ac00fb38b8a901931c75dacd98e0b5787c48ad6c3a337f3b6d9b",
+  "checksum": "cd5f018f59672022f1c3b66bd32febc559e914a6b2b1625390352020c75f0d23",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -5248,7 +5248,7 @@
   "station": "klaipedos-ams"
  },
  "3f7384b1-c99d-4e52-9f97-d6e27136559c": {
-  "checksum": "13ad6f48c0064f4f29bb6c15da8ed62e6db35e02e6b1c2e313d595f933c02d59",
+  "checksum": "da2133007d5707a87554b11c076e35546370a25242eff096e3722de52d33a0a1",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -9276,7 +9276,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261013/"
  },
  "80132391-fe30-4971-954c-e4bad86c665f": {
-  "checksum": "e74894a05123f1e7b83ca4c067b1ea9790fb928979bee438a6100b9211fc590e",
+  "checksum": "dc955232f6454eb6246be93f78359745a13554a38ee117491aa0f1ef3c552921",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -10266,7 +10266,7 @@
   "station": "klaipedos-ams"
  },
  "879a2241-2eb0-46bd-a427-6b58beab3c7f": {
-  "checksum": "8b4079ddab66ac00fb38b8a901931c75dacd98e0b5787c48ad6c3a337f3b6d9b",
+  "checksum": "cd5f018f59672022f1c3b66bd32febc559e914a6b2b1625390352020c75f0d23",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -16949,7 +16949,7 @@
   "station": "vilniaus-ams"
  },
  "cbe89df5-1d5c-4f91-a01c-7d04819769c2": {
-  "checksum": "13ad6f48c0064f4f29bb6c15da8ed62e6db35e02e6b1c2e313d595f933c02d59",
+  "checksum": "da2133007d5707a87554b11c076e35546370a25242eff096e3722de52d33a0a1",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -22270,7 +22270,7 @@
   "station": "kauno-ams"
  },
  "fa367673-0cf0-44de-b919-0b1b1dee32a3": {
-  "checksum": "e74894a05123f1e7b83ca4c067b1ea9790fb928979bee438a6100b9211fc590e",
+  "checksum": "dc955232f6454eb6246be93f78359745a13554a38ee117491aa0f1ef3c552921",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
