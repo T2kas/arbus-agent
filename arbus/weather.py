@@ -759,9 +759,30 @@ def _reprice(market: dict, mid: str, station: str, iso: str, st: dict,
     share = sum(b["current"] for b in buckets)
     share = share if share > 0 else 100.0
     target = [t * share / 100 for t in target]
-    move = max(abs(t - b["current"]) for t, b in zip(target, buckets))
+    # Never undo a player's move: shift the CURRENT price only by how much the
+    # MODEL changed since the bot last priced it. Baseline = the bot's last
+    # target (or its creation price); with none (a market made before this),
+    # the first pass only records today's target.
+    last = st.get("model_target")
+    if last is None:
+        created = (root or {}).get("_created_targets", {}).pop(mid, None)
+        if created:
+            last = {b["option_id"]: created[o["label"]] for b, o in zip(buckets, opts)
+                    if o.get("label") in created}
+    if not last or any(b["option_id"] not in last for b in buckets):
+        st["model_target"] = {b["option_id"]: round(t, 2) for t, b in zip(target, buckets)}
+        return True
+    base = [float(last[b["option_id"]]) for b in buckets]
+    base_sum = sum(base) or 1.0
+    base = [x * share / base_sum for x in base]
+    delta = [t - x for t, x in zip(target, base)]
+    move = max(abs(d) for d in delta)
     if move < config.WEATHER_REPRICE_MIN_PP:
-        return False
+        return False                                  # model barely moved — leave it
+    new = [max(b["current"] + d, 1.0) for b, d in zip(buckets, delta)]
+    new = [x * share / sum(new) for x in new]
+    model_target = target
+    target = new
     ok, detail = app_api.reprice_market(
         mid, {b["option_id"]: round(t, 2) for t, b in zip(target, buckets)})
     flags = root if root is not None else st
@@ -775,6 +796,7 @@ def _reprice(market: dict, mid: str, station: str, iso: str, st: dict,
             return True
         return False
     flags.pop("_reprice_error_alerted", None)
+    st["model_target"] = {b["option_id"]: round(t, 2) for t, b in zip(model_target, buckets)}
     st["repriced_at"] = now.isoformat()
     st["reprice"] = {"mu": round(blend["mu"], 2), "sigma": round(blend["sigma"], 2),
                      "lead": round(lead_days(iso, now, tz), 2), "floor": floor,
@@ -888,7 +910,8 @@ def plan_new_markets(existing_rows: list[dict], now: datetime, tz: ZoneInfo,
     return specs
 
 
-def create_markets(specs: list[dict], *, alert: bool, do_create: bool) -> list[dict]:
+def create_markets(specs: list[dict], *, alert: bool, do_create: bool,
+                   state: dict | None = None) -> list[dict]:
     reports = []
     for s in specs:
         if not do_create:
@@ -898,6 +921,10 @@ def create_markets(specs: list[dict], *, alert: bool, do_create: bool) -> list[d
                             "options": s["options"]})
             continue
         ok, detail = app_api.create_market(s)
+        if ok and state is not None and detail and detail != "ok":
+            # the creation price is the repricer's first baseline (see _reprice)
+            state.setdefault("_created_targets", {})[str(detail)] = {
+                o["label"]: float(o["probability"]) for o in s["options"]}
         if ok and alert:
             notify.send(_created_message(s, detail))
         reports.append({"status": "created" if ok else "error", "city": s["city"],
@@ -1622,7 +1649,9 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
         vil_hour = now.astimezone(tz).hour
         if force_create or vil_hour >= config.WEATHER_CREATE_HOUR:
             specs = plan_new_markets(rows, now, tz, biases=biases)
-            reports += create_markets(specs, alert=alert, do_create=True)
+            reports += create_markets(specs, alert=alert, do_create=True, state=state)
+            if specs:
+                save_state(state)
         # Daily fuel markets: their OWN, earlier gate — create the next day's just
         # after the old one resolves (LEA publishes ~11:00), not at the weather hour.
         if config.FUEL_ENABLED and (force_create or vil_hour >= config.FUEL_CREATE_HOUR):

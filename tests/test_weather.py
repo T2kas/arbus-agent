@@ -550,28 +550,54 @@ def _reprice_setup(monkeypatch, probs=(1, 30, 64, 5), models=None):
     return m, sent
 
 
-def test_reprice_moves_stale_prices_to_newest_models(monkeypatch):
-    m, sent = _reprice_setup(monkeypatch)
-    st = {}
-    now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)   # evening before
-    assert weather._reprice(m, "m1", "kauno-ams", "2026-09-10", st, now,
-                            weather._tz(), None, True, {"kaunas": 0.3}) is True
-    (mid, pr), = sent
-    assert mid == "m1" and set(pr) == {"b1", "b2", "b3", "b4"}
+_M1 = {"ecmwf_aifs025_single": 17.5, "icon_seamless": 17.3, "ukmo_seamless": 17.7}   # → 17.8 °C
+_M2 = {"ecmwf_aifs025_single": 19.0, "icon_seamless": 18.8, "ukmo_seamless": 19.2}   # → 19.3 °C
+
+
+def _rp(m, st, now, cur_max=None, root=None):
+    return weather._reprice(m, "m1", "kauno-ams", "2026-09-10", st, now, weather._tz(),
+                            cur_max, True, {"kaunas": 0.3}, root=root)
+
+
+def test_reprice_shifts_by_the_model_change_only(monkeypatch):
+    m, sent = _reprice_setup(monkeypatch, models=_M1)
+    st, now = {}, datetime(2026, 9, 9, 15, 0, tzinfo=timezone.utc)
+    assert _rp(m, st, now) is True and sent == []            # first pass: baseline only
+    base = dict(st["model_target"])
+    assert _rp(m, st, now) is False and sent == []           # model unchanged → nothing
+    m2, sent2 = _reprice_setup(monkeypatch, models=_M2)      # new run: +1.5 °C
+    assert _rp(m2, st, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)) is True
+    (_, pr), = sent2
+    cur = {o["id"]: o["probability"] for o in m2["market_options"]}
+    tgt = st["model_target"]
+    raw = {k: max(cur[k] + tgt[k] - base[k], 1.0) for k in pr}   # current + model change
+    for k in pr:
+        assert pr[k] == pytest.approx(raw[k] * 100 / sum(raw.values()), abs=0.05)
     assert sum(pr.values()) == pytest.approx(100, abs=0.05)
-    assert pr["b2"] > 60 and pr["b2"] > pr["b3"]             # 17.8 °C → 17–18,9
-    assert st["reprice"]["mu"] == pytest.approx(17.8, abs=0.01)
+    assert pr["b3"] > cur["b3"] and pr["b2"] < cur["b2"]
 
 
-def test_reprice_skips_small_moves_closed_and_not_open(monkeypatch):
+def test_reprice_never_undoes_a_players_move(monkeypatch):
+    m, sent = _reprice_setup(monkeypatch, models=_M1)
+    st, now = {}, datetime(2026, 9, 9, 15, 0, tzinfo=timezone.utc)
+    _rp(m, st, now)
+    # a big bet pushes b3 from 64 → 85; models unchanged → the bot leaves it
+    pushed, _ = _reprice_setup(monkeypatch, probs=(1, 12, 85, 2), models=_M1)
+    assert _rp(pushed, st, now) is False
+
+
+def test_reprice_baseline_from_creation_price(monkeypatch):
+    m, sent = _reprice_setup(monkeypatch, models=_M2)
+    root = {"_created_targets": {"m1": {o["label"]: p for o, p in zip(_OPTS, (1, 30, 64, 5))}}}
+    assert _rp(m, {}, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc), root=root) is True
+    assert len(sent) == 1 and "m1" not in root["_created_targets"]
+
+
+def test_reprice_skips_closed_and_not_open(monkeypatch):
     m, sent = _reprice_setup(monkeypatch)
-    now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
     tz = weather._tz()
-    assert weather._reprice(m, "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, True, {"kaunas": 0.3})
-    m2, _ = _reprice_setup(monkeypatch, probs=tuple(sent[0][1][k] for k in ("b1", "b2", "b3", "b4")))
-    sent.clear()
-    assert not weather._reprice(m2, "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, True, {"kaunas": 0.3})
     after_close = datetime(2026, 9, 10, 8, 30, tzinfo=timezone.utc)
+    now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
     assert not weather._reprice(m, "m1", "kauno-ams", "2026-09-10", {}, after_close, tz, None, True, {})
     assert not weather._reprice(dict(m, status="frozen"), "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, True, {})
     assert not weather._reprice(m, "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, False, {})   # dry run
@@ -579,24 +605,23 @@ def test_reprice_skips_small_moves_closed_and_not_open(monkeypatch):
 
 
 def test_reprice_on_the_day_respects_running_max_and_eliminated(monkeypatch):
-    m, sent = _reprice_setup(monkeypatch)
+    m, sent = _reprice_setup(monkeypatch, models=_M1)
     m["market_options"][0]["resolved_outcome"] = "no"          # ≤16,9 already eliminated
     st = {"eliminated": ["b1"]}
-    now = datetime(2026, 9, 10, 6, 0, tzinfo=timezone.utc)    # 09:00 on the day
-    assert weather._reprice(m, "m1", "kauno-ams", "2026-09-10", st, now,
-                            weather._tz(), 19.2, True, {"kaunas": 0.3})
+    _rp(m, st, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc))          # baseline
+    assert _rp(m, st, datetime(2026, 9, 10, 6, 0, tzinfo=timezone.utc), cur_max=19.2)
     (_, pr), = sent
-    assert "b1" not in pr and pr["b2"] <= 1.1 and pr["b3"] > 80
+    assert "b1" not in pr and pr["b3"] > 64
 
 
 def test_reprice_failure_alerts_once(monkeypatch):
-    m, _ = _reprice_setup(monkeypatch)
+    m, _ = _reprice_setup(monkeypatch, models=_M2)
     msgs = []
     monkeypatch.setattr(weather.notify, "send", msgs.append)
     monkeypatch.setattr(weather.app_api, "reprice_market", lambda mid, pr: (False, "no function"))
     root = {}
     now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
-    for mid in ("m1", "m2", "m3"):                            # several markets, one alert
-        weather._reprice(m, mid, "kauno-ams", "2026-09-10", {}, now, weather._tz(),
-                         None, True, {}, root=root)
+    for _ in range(3):                                        # several markets, one alert
+        st = {"model_target": {"b1": 1, "b2": 30, "b3": 64, "b4": 5}}
+        _rp(m, st, now, root=root)
     assert len(msgs) == 1 and "reprice_market.sql" in msgs[0]

@@ -1021,7 +1021,8 @@ WEATHER_PREVIOUS_RUNS_URL = (os.environ.get("WEATHER_PREVIOUS_RUNS_URL", "").str
 # Repricing (2026-11-02): every pass the bot re-prices each OPEN orai market from
 # the newest model runs (σ by the lead left, the rolling bias, and on the day
 # itself only temperatures ≥ the running max), and moves the market's prices
-# there with admin_reprice_market — the way a bookmaker moves a line. Bettors
+# by the change in the model since its last price (never undoing a player's
+# move) with admin_reprice_market — the way a bookmaker moves a line. Bettors
 # then need to beat the newest models, not just read them. Needs the
 # service_role key and the SQL in sql/reprice_market.sql. A move smaller than
 # WEATHER_REPRICE_MIN_PP percentage points on every option is skipped.
