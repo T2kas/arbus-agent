@@ -9293,11 +9293,24 @@
   "date": "2026-11-03",
   "measurements": {},
   "model_target": {
-   "3c1318f6-6b25-4352-b4ee-c4289dba3896": 50.44,
+   "3c1318f6-6b25-4352-b4ee-c4289dba3896": 54.47,
    "75fdbd49-45aa-44f7-952f-211d55800886": 0.98,
    "cab1f501-558e-4445-a276-9bf9f6326433": 0.98,
-   "d3176b57-b067-4b44-822b-b357815b518c": 47.59
+   "d3176b57-b067-4b44-822b-b357815b518c": 43.57
   },
+  "reprice": {
+   "floor": null,
+   "lead": 0.61,
+   "models": {
+    "ecmwf_aifs025_single": 7.7,
+    "icon_seamless": 7.0,
+    "ukmo_seamless": 8.1
+   },
+   "move_pp": 4.0,
+   "mu": 7.86,
+   "sigma": 0.67
+  },
+  "repriced_at": "2026-11-02T20:15:51.406256+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -12336,7 +12349,6 @@
    "2026-11-01": 7.2
   }
  },
- "_reprice_error_alerted": "2026-11-02",
  "a0b2dd38-05be-44d8-b5d2-631098b85c18": {
   "checksum": "78fcc2846cda12c0c35a3955ef87c96c6dc540977cfe9858f5ac6774d8bcf77b",
   "current_maximum": 16.8,
@@ -22394,11 +22406,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "2e72ae6d-e3ab-4634-9b76-2b538bb7e8fb": 4.13,
-   "38f5ebbf-829c-4cb0-9b11-1e66b973d3d7": 31.42,
+   "2e72ae6d-e3ab-4634-9b76-2b538bb7e8fb": 4.6,
+   "38f5ebbf-829c-4cb0-9b11-1e66b973d3d7": 28.58,
    "60e39bce-7cda-4a23-b029-2e70fa9c3671": 0.99,
-   "e3a57eca-e250-47b0-990e-4c62901627b3": 63.46
+   "e3a57eca-e250-47b0-990e-4c62901627b3": 65.83
   },
+  "reprice": {
+   "floor": null,
+   "lead": 1.61,
+   "models": {
+    "ecmwf_aifs025_single": 6.8,
+    "icon_seamless": 5.6,
+    "ukmo_seamless": 5.7
+   },
+   "move_pp": 2.8,
+   "mu": 6.46,
+   "sigma": 0.9
+  },
+  "repriced_at": "2026-11-02T20:15:51.406256+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
