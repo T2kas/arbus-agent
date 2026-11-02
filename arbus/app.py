@@ -440,6 +440,22 @@ def eliminate_options(market_id: str, option_ids: list[str]) -> tuple[bool, str]
     return True, "ok"
 
 
+def reprice_market(market_id: str, probabilities: dict[str, float]) -> tuple[bool, str]:
+    """Set an open single-outcome market's option prices ({option_id: 0-100})
+    via admin_reprice_market (sql/reprice_market.sql) — the weather bot moving a
+    market to the newest forecast. Needs the service_role key."""
+    if not config.ARBUS_WRITE_KEY:
+        return False, "reikia ARBUS_WRITE_KEY (service_role)"
+    if not probabilities:
+        return False, "nėra kainų"
+    rows, error = _rpc(config.APP_REPRICE_RPC,
+                       {"p_market_id": market_id, "p_probabilities": probabilities},
+                       key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, _resolve_error_hint(error)
+    return True, "ok"
+
+
 def resolve_option(option_id: str, outcome: str) -> tuple[bool, str]:
     """Settle ONE option "yes"/"no" via admin_resolve_option(p_option_id,
     p_outcome) — for date ladders ("... iki...?"), where each date is its own

@@ -989,8 +989,46 @@ WEATHER_BLEND_CALIBRATION = {
     "kaunas": (0.30, 0.90, 0.5),
     "klaipeda": (0.28, 1.05, 1.5),
 }
-# σ0 changes by this much per day of lead (fitted: 1-day ≈ σ0 − 0.15, 3-day ≈ +0.15).
+# σ0 changes by this much per day of lead beyond the last point of
+# WEATHER_SIGMA_BY_LEAD (and for a city missing from it, around 2 days).
 WEATHER_SIGMA_PER_LEAD_DAY = 0.15
+# σ0 by lead (2026-11-02). Fitted on 16 months × 3 stations of archived runs
+# (Open-Meteo previous-runs: the latest run, 1 day old, 2 days old) vs the
+# stations' real max, log-loss over the market's own four buckets, with the
+# rolling bias below. Lead = days from now to 13:00 on the target day; points
+# are (lead, σ0), interpolated linearly. The error shrinks fast as the day
+# nears (2-day ≈ 1.1 °C, 1-day ≈ 0.9, latest run ≈ 0.65 for Vilnius/Kaunas), so
+# a market priced once at creation went stale with every new run — the gap the
+# top weather players traded (+32 % ROI betting the 1-day run's bucket against
+# a creation price, +83 % with the morning run). Klaipėda's sea-coast max is
+# harder to forecast all year (spring sea breezes), hence its wider σ.
+WEATHER_SIGMA_BY_LEAD = {
+    "vilnius": ((0.25, 0.45), (0.9, 0.60), (1.8, 0.65)),
+    "kaunas": ((0.25, 0.50), (0.9, 0.65), (1.8, 0.85)),
+    "klaipeda": ((0.25, 0.75), (0.9, 0.85), (1.8, 0.95)),
+}
+# Rolling bias: the models' error is seasonal (Vilnius +1.0…+1.7 °C in Jan–Mar,
+# Klaipėda −0.7 in spring and +0.8 in autumn, against constant 0.62 / 0.28). The
+# bias is the mean (station max − blended 1-day-old run) over the last
+# WEATHER_BIAS_DAYS finished days, shrunk toward the constant bias with
+# WEATHER_BIAS_SHRINK pseudo-days. Log-loss −0.02…−0.03 at every lead in the
+# backtest. Fetched once a day (Open-Meteo previous-runs + Meteo LT), cached in
+# the weather state; any failure falls back to the constant bias.
+WEATHER_BIAS_DAYS = _env_int("WEATHER_BIAS_DAYS", 21)
+WEATHER_BIAS_SHRINK = _env_float("WEATHER_BIAS_SHRINK", 10.0)
+WEATHER_PREVIOUS_RUNS_URL = (os.environ.get("WEATHER_PREVIOUS_RUNS_URL", "").strip()
+                             or "https://previous-runs-api.open-meteo.com/v1/forecast")
+# Repricing (2026-11-02): every pass the bot re-prices each OPEN orai market from
+# the newest model runs (σ by the lead left, the rolling bias, and on the day
+# itself only temperatures ≥ the running max), and moves the market's prices
+# there with admin_reprice_market — the way a bookmaker moves a line. Bettors
+# then need to beat the newest models, not just read them. Needs the
+# service_role key and the SQL in sql/reprice_market.sql. A move smaller than
+# WEATHER_REPRICE_MIN_PP percentage points on every option is skipped.
+WEATHER_REPRICE = (os.environ.get("WEATHER_REPRICE", "").strip().lower()
+                   or "on") not in ("off", "false", "0", "no")
+WEATHER_REPRICE_MIN_PP = _env_float("WEATHER_REPRICE_MIN_PP", 2.0)
+APP_REPRICE_RPC = os.environ.get("APP_REPRICE_RPC", "").strip() or "admin_reprice_market"
 # Telegram warning on creation when the models' centre and Meteo LT differ by at
 # least this many °C — worth a look, but the models are trusted.
 WEATHER_DIVERGENCE_ALERT = _env_float("WEATHER_DIVERGENCE_ALERT", 1.5)
@@ -1074,19 +1112,22 @@ FUEL_IMAGE = _env_str("FUEL_IMAGE", "")           # reused from an existing fuel
 # moves ~1–2 cents/day, so the buckets are ~1 cent wide. Fallback only: the
 # weekday table below is what prices the markets.
 FUEL_FORECAST_SIGMA = _env_float("FUEL_FORECAST_SIGMA", 0.012)
-# Lithuanian pump prices run a weekly cycle: a jump on TUESDAY (+4.5 ct on
-# average, 8/8 Tuesdays) then a slow slide the rest of the week. With a flat
-# forecast and σ 1.2 ct the outer buckets won 55% of 42 markets while priced at
-# ~22% (log-loss 1.91, worse than uniform 1.61). Per weekday of the market's
-# date: (drift €/l added to the latest LEA price, σ €/l); drifts shrunk toward 0
-# (k=2), σ = 1.15 × observed sd, floor 1 ct. Leave-one-out log-loss 1.38.
-# Weekday 0 = Monday (its base price is Friday's bulletin).
+# Lithuanian pump prices run a weekly cycle: a jump on TUESDAY then a slide the
+# rest of the week. Per weekday of the market's date: (drift €/l added to the
+# latest LEA price, σ €/l). Weekday 0 = Monday (its base is Friday's bulletin).
+# Refitted 2026-11-02 on all 122 LEA bulletins (2026-04-08 → 10-30, A95 and
+# diesel pooled, 226 day-to-day changes): the median change and its sd. The old
+# table (42 markets, drifts shrunk ×½ toward 0) priced Tuesday at +3.6 ct when
+# it is +6.2 ct and Wednesday at −0.5 ct when it is −2.7 ct; on 16 markets since
+# 10-20 its log-loss was 1.66 — worse than flat 20 % odds (1.61) — and the
+# favourite priced 32 % won 25 %. Leave-one-out log density at the real price:
+# 2.346 → 2.211.
 FUEL_WEEKDAY_MODEL = {
-    0: (-0.006, 0.010),
-    1: (+0.036, 0.022),
-    2: (-0.005, 0.030),
-    3: (-0.014, 0.010),
-    4: (-0.007, 0.025),
+    0: (-0.0095, 0.022),
+    1: (+0.0625, 0.027),
+    2: (-0.0270, 0.023),
+    3: (-0.0115, 0.0125),
+    4: (-0.0095, 0.018),
 }
 FUEL_HORIZON_DAYS = _env_int("FUEL_HORIZON_DAYS", 1)     # create tomorrow's
 # LEA publishes each day's average mid-morning (~11:00 Vilnius), when the market

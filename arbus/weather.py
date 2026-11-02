@@ -464,11 +464,27 @@ def models_forecast_max(city_key: str, target_iso: str) -> dict[str, float]:
     return parse_models_max(data)
 
 
+def sigma0_for_lead(city_key: str, lead: float) -> float:
+    """σ0 (before the models' spread) for a lead in days, from
+    config.WEATHER_SIGMA_BY_LEAD: linear between its points, flat below the
+    first, +WEATHER_SIGMA_PER_LEAD_DAY per day beyond the last."""
+    pts = config.WEATHER_SIGMA_BY_LEAD.get(city_key)
+    if not pts:
+        cal = config.WEATHER_BLEND_CALIBRATION.get(city_key, (0.0, config.WEATHER_FORECAST_SIGMA, 0.0))
+        return max(cal[1] + config.WEATHER_SIGMA_PER_LEAD_DAY * (lead - 2.0), 0.4)
+    if lead <= pts[0][0]:
+        return pts[0][1]
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        if lead <= x1:
+            return y0 + (y1 - y0) * (lead - x0) / (x1 - x0)
+    return pts[-1][1] + config.WEATHER_SIGMA_PER_LEAD_DAY * (lead - pts[-1][0])
+
+
 def blend_forecast(city_key: str, lt_max: float | None, models: dict[str, float],
-                   lead_days: float = 2.0) -> dict | None:
+                   lead_days: float = 2.0, bias: float | None = None) -> dict | None:
     """The market's centre and spread from the models (see config).
 
-    mu    = weighted models' mean + city bias
+    mu    = weighted models' mean + city bias (the rolling one when given)
     sigma = √(σ0(lead)² + k·models' variance)
 
     Meteo LT only sets `divergence` (an alert), never the price — unless fewer
@@ -485,17 +501,123 @@ def blend_forecast(city_key: str, lt_max: float | None, models: dict[str, float]
             return None
         return {"mu": lt_max + lt_bias, "sigma": lt_sigma, "lt": lt_max,
                 "models_mean": None, "divergence": None}
-    bias, sigma0, k = cal
+    const_bias, _sigma0, k = cal
     total = sum(weights.values())
     mean = sum(weights[m] * v for m, v in models.items()) / total
     vals = list(models.values())
     plain = sum(vals) / len(vals)
     var = sum((v - plain) ** 2 for v in vals) / len(vals)
-    s0 = max(sigma0 + config.WEATHER_SIGMA_PER_LEAD_DAY * (lead_days - 2.0), 0.6)
-    mu = mean + bias
+    s0 = sigma0_for_lead(city_key, lead_days)
+    mu = mean + (const_bias if bias is None else bias)
     return {"mu": mu, "sigma": math.sqrt(s0 * s0 + k * var), "lt": lt_max,
             "models_mean": mu,
             "divergence": None if lt_max is None else abs(lt_max - mu)}
+
+
+# ── rolling bias (station max − blended 1-day-old run, last N days) ──────────
+
+def blended_mean(models: dict[str, float]) -> float | None:
+    """Weighted models' mean with no bias; None with fewer than 2 models."""
+    if len(models) < 2:
+        return None
+    w = {m: config.WEATHER_MODEL_WEIGHTS.get(m, 1.0 / len(models)) for m in models}
+    return sum(w[m] * v for m, v in models.items()) / sum(w.values())
+
+
+def previous_runs_url(lat: float, lon: float, start_iso: str, end_iso: str) -> str:
+    return (f"{config.WEATHER_PREVIOUS_RUNS_URL}?latitude={lat}&longitude={lon}"
+            "&hourly=temperature_2m_previous_day1"
+            f"&models={','.join(config.WEATHER_MODELS)}"
+            f"&timezone={config.WEATHER_TZ}&start_date={start_iso}&end_date={end_iso}")
+
+
+def parse_previous_day1_max(data: dict) -> dict[str, dict[str, float]]:
+    """{date: {model: daily max of the 1-day-old run}} from a previous-runs
+    response. A model with fewer than 20 valid hours that day is dropped."""
+    hourly = (data or {}).get("hourly") or {}
+    times = hourly.get("time") or []
+    out: dict[str, dict[str, list[float]]] = {}
+    for m in config.WEATHER_MODELS:
+        vals = hourly.get(f"temperature_2m_previous_day1_{m}")
+        if vals is None and len(config.WEATHER_MODELS) == 1:
+            vals = hourly.get("temperature_2m_previous_day1")
+        for t, v in zip(times, vals or []):
+            if valid_temp(v):
+                out.setdefault(str(t)[:10], {}).setdefault(m, []).append(float(v))
+    return {d: {m: max(v) for m, v in ms.items() if len(v) >= 20} for d, ms in out.items()}
+
+
+def shrunk_bias(errors: list[float], prior: float,
+                shrink: float | None = None) -> float:
+    """Mean error shrunk toward `prior` with `shrink` pseudo-observations."""
+    shrink = config.WEATHER_BIAS_SHRINK if shrink is None else shrink
+    if not errors:
+        return prior
+    w = len(errors) / (len(errors) + shrink)
+    return (1 - w) * prior + w * (sum(errors) / len(errors))
+
+
+def station_day_max(station: str, iso: str, state: dict,
+                    tz: ZoneInfo | None = None) -> float | None:
+    """A finished LT day's official max at the station, cached in the state
+    (`_obs_max`), so each day is fetched once."""
+    cache = state.setdefault("_obs_max", {}).setdefault(station, {})
+    if iso in cache:
+        return cache[iso]
+    tz = tz or _tz()
+    obs, _, _ = fetch_lt_day(station, iso)
+    if not day_complete(obs, iso, tz):
+        return None
+    mx, _ = day_max(obs, iso, tz)
+    if mx is not None:
+        cache[iso] = mx
+    return mx
+
+
+def rolling_bias(city_key: str, state: dict, now: datetime,
+                 tz: ZoneInfo | None = None) -> float | None:
+    """The city's bias over the last WEATHER_BIAS_DAYS finished days, computed
+    once per Vilnius day and cached in the state (`_bias`). None if the models'
+    archive is unreachable (the caller then uses the constant bias)."""
+    tz = tz or _tz()
+    today = now.astimezone(tz).date()
+    cached = (state.get("_bias") or {}).get(city_key) or {}
+    if cached.get("on") == today.isoformat():
+        return cached.get("bias")
+    cal = config.WEATHER_BLEND_CALIBRATION.get(city_key)
+    if not cal or config.WEATHER_BIAS_DAYS <= 0:
+        return None
+    c = CITIES[city_key]
+    start = today - timedelta(days=config.WEATHER_BIAS_DAYS)
+    end = today - timedelta(days=1)
+    try:
+        data, _ = fetch(previous_runs_url(c["lat"], c["lon"], start.isoformat(), end.isoformat()))
+    except Exception as exc:                           # noqa: BLE001 — best effort
+        log.warning("weather: previous runs %s failed: %s", city_key, exc)
+        return None
+    per_day = parse_previous_day1_max(data)
+    errors = []
+    for iso, models in sorted(per_day.items()):
+        mean = blended_mean(models)
+        if mean is None:
+            continue
+        try:
+            mx = station_day_max(c["station"], iso, state, tz)
+        except Exception as exc:                       # noqa: BLE001
+            log.warning("weather: obs %s %s failed: %s", c["station"], iso, exc)
+            mx = None
+        if mx is not None:
+            errors.append(mx - mean)
+    bias = shrunk_bias(errors, cal[0])
+    state.setdefault("_bias", {})[city_key] = {
+        "on": today.isoformat(), "bias": round(bias, 3), "n": len(errors)}
+    # keep the obs cache to the window actually used
+    keep = {(start - timedelta(days=3) + timedelta(days=i)).isoformat()
+            for i in range(config.WEATHER_BIAS_DAYS + 5)}
+    obs_cache = state.get("_obs_max", {}).get(c["station"], {})
+    for iso in [k for k in obs_cache if k not in keep]:
+        del obs_cache[iso]
+    return bias
 
 
 def lead_days(target_iso: str, now: datetime | None = None,
@@ -551,6 +673,115 @@ def bucket_probabilities(forecast_max: float, buckets: list[dict],
     return pct
 
 
+def market_bucket_probabilities(mu: float, sigma: float, buckets: list[dict],
+                                floor_temp: float | None = None) -> list[float] | None:
+    """Percentages (each ≥1, summing to 100) for an EXISTING market's buckets
+    (low/high as parsed from the labels, inclusive at 0.1 °C) from N(mu, sigma)
+    — conditioned on max ≥ floor_temp when the day's running max is known (the
+    day can only end at or above it). None if no bucket can still win."""
+    weights = []
+    for b in buckets:
+        lo = None if b.get("low") is None else b["low"] - 0.05
+        hi = None if b.get("high") is None else b["high"] + 0.05
+        if floor_temp is not None:
+            lo = floor_temp if lo is None else max(lo, floor_temp)
+        if hi is not None and lo is not None and hi <= lo:
+            weights.append(0.0)
+            continue
+        p_lo = _phi((lo - mu) / sigma) if lo is not None else 0.0
+        p_hi = _phi((hi - mu) / sigma) if hi is not None else 1.0
+        weights.append(max(p_hi - p_lo, 0.0))
+    total = sum(weights)
+    if total <= 0:
+        return None
+    pct = [max(w / total * 100, 1.0) for w in weights]
+    scale = sum(pct)
+    return [round(x * 100 / scale, 2) for x in pct]
+
+
+def city_of_station(station: str) -> str | None:
+    for key, c in CITIES.items():
+        if c["station"] == station:
+            return key
+    return None
+
+
+def _closes_at(market: dict) -> datetime | None:
+    raw = str(market.get("closes_at") or "")
+    try:
+        return datetime.fromisoformat(raw.replace("Z", "+00:00")) if raw else None
+    except ValueError:
+        return None
+
+
+def _reprice(market: dict, mid: str, station: str, iso: str, st: dict,
+             now: datetime, tz: ZoneInfo, cur_max: float | None,
+             do_resolve: bool, biases: dict | None,
+             models_cache: dict | None = None, root: dict | None = None) -> bool:
+    """Move an open market's prices to the newest models (see
+    config.WEATHER_REPRICE). Returns True if it repriced (state changed)."""
+    if not (do_resolve and config.WEATHER_REPRICE and config.ARBUS_WRITE_KEY):
+        return False
+    if app_api.status_of(market) != "open":
+        return False
+    closes = _closes_at(market)
+    if closes is not None and now >= closes:
+        return False
+    city = city_of_station(station)
+    if city is None:
+        return False
+    done = set(st.get("eliminated") or [])
+    opts = [o for o in (market.get("market_options") or [])
+            if not o.get("resolved_outcome") and str(o.get("id")) not in done]
+    buckets = []
+    for o in opts:
+        low, high = parse_bucket(str(o.get("label") or ""))
+        buckets.append({"option_id": str(o.get("id")), "low": low, "high": high,
+                        "current": float(o.get("probability") or 0)})
+    if len(buckets) < 2 or any(b["low"] is None and b["high"] is None for b in buckets):
+        return False
+    key = (city, iso)
+    if models_cache is not None and key in models_cache:
+        models = models_cache[key]
+    else:
+        models = models_forecast_max(city, iso)
+        if models_cache is not None:
+            models_cache[key] = models
+    blend = blend_forecast(city, None, models, lead_days(iso, now, tz),
+                           bias=(biases or {}).get(city))
+    if blend is None or blend.get("models_mean") is None:      # needs ≥2 models
+        return False
+    floor = cur_max if now.astimezone(tz).date().isoformat() == iso else None
+    target = market_bucket_probabilities(blend["mu"], blend["sigma"], buckets, floor)
+    if target is None:
+        return False
+    # the open options share what the settled ones do not hold
+    share = sum(b["current"] for b in buckets)
+    share = share if share > 0 else 100.0
+    target = [t * share / 100 for t in target]
+    move = max(abs(t - b["current"]) for t, b in zip(target, buckets))
+    if move < config.WEATHER_REPRICE_MIN_PP:
+        return False
+    ok, detail = app_api.reprice_market(
+        mid, {b["option_id"]: round(t, 2) for t, b in zip(target, buckets)})
+    flags = root if root is not None else st
+    if not ok:
+        log.warning("weather reprice %s failed: %s", mid, detail)
+        today = now.astimezone(tz).date().isoformat()
+        if flags.get("_reprice_error_alerted") != today:     # one alert a day, all markets
+            flags["_reprice_error_alerted"] = today
+            notify.send(f"⚠️ ORŲ RINKOS: perkainoti nepavyko ({detail}) — "
+                        f"{app_api.question_of(market)}. Ar paleistas sql/reprice_market.sql?")
+            return True
+        return False
+    flags.pop("_reprice_error_alerted", None)
+    st["repriced_at"] = now.isoformat()
+    st["reprice"] = {"mu": round(blend["mu"], 2), "sigma": round(blend["sigma"], 2),
+                     "lead": round(lead_days(iso, now, tz), 2), "floor": floor,
+                     "models": models, "move_pp": round(move, 1)}
+    return True
+
+
 def _lt_date_text(d: date) -> str:
     return f"{d.year} m. {_LT_MONTH_GEN[d.month]} {d.day} d."
 
@@ -582,7 +813,7 @@ def _context_text(loc: str, month_name: str, forecast_max: float) -> str:
 
 def market_spec(city_key: str, target_iso: str, image_url: str = "",
                 sigma: float | None = None, tz: ZoneInfo | None = None,
-                now: datetime | None = None) -> dict | None:
+                now: datetime | None = None, bias: float | None = None) -> dict | None:
     """The full admin_create_market payload for one city+day, or None if there is
     no forecast for that day."""
     tz = tz or _tz()
@@ -590,7 +821,7 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
     d = date.fromisoformat(target_iso)
     tf = forecast_daily_max(c["place"], target_iso, tz)
     models = models_forecast_max(city_key, target_iso)
-    blend = blend_forecast(city_key, tf, models, lead_days(target_iso, now, tz))
+    blend = blend_forecast(city_key, tf, models, lead_days(target_iso, now, tz), bias=bias)
     if blend is None:
         return None
     expected = blend["mu"]                    # bias-corrected weighted models
@@ -624,7 +855,8 @@ def market_spec(city_key: str, target_iso: str, image_url: str = "",
 
 def plan_new_markets(existing_rows: list[dict], now: datetime, tz: ZoneInfo,
                      *, skip_existing: bool = True,
-                     horizon: int | None = None) -> list[dict]:
+                     horizon: int | None = None,
+                     biases: dict[str, float | None] | None = None) -> list[dict]:
     """Specs for the markets that should exist over the next `horizon` days for
     each city. With skip_existing, ones already in the app are left out."""
     horizon = config.WEATHER_HORIZON_DAYS if horizon is None else horizon
@@ -649,7 +881,8 @@ def plan_new_markets(existing_rows: list[dict], now: datetime, tz: ZoneInfo,
             if skip_existing and (c["station"], iso) in have:
                 continue
             image = images.get(c["station"]) or c.get("image", "")   # reuse latest, else city default
-            spec = market_spec(city_key, iso, image, tz=tz, now=now)
+            spec = market_spec(city_key, iso, image, tz=tz, now=now,
+                               bias=(biases or {}).get(city_key))
             if spec:
                 specs.append(spec)
     return specs
@@ -1212,7 +1445,9 @@ def _eliminate_impossible(market: dict, mid: str, buckets: list[dict],
 
 
 def _process_market(market: dict, mid: str, state: dict, now: datetime,
-                    tz: ZoneInfo, alert: bool, do_resolve: bool) -> tuple[dict, bool]:
+                    tz: ZoneInfo, alert: bool, do_resolve: bool,
+                    biases: dict | None = None,
+                    models_cache: dict | None = None) -> tuple[dict, bool]:
     target = weather_target(market)
     if not target:
         return {"market_id": mid, "status": "skip", "reason": "no station/date"}, False
@@ -1265,6 +1500,11 @@ def _process_market(market: dict, mid: str, state: dict, now: datetime,
     # in it (temperature only rises), so resolve that bucket to "Ne" now. The
     # WINNER is still decided after WEATHER_RESOLVE_MIN_HOUR (below).
     if _eliminate_impossible(market, mid, buckets, cur_max, st, alert, do_resolve):
+        changed = True
+    # ── reprice from the newest models (skipped right after an elimination:
+    # this pass's prices are stale; the next pass reprices) ──
+    elif _reprice(market, mid, station, iso, st, now, tz, cur_max, do_resolve,
+                  biases, models_cache, root=state):
         changed = True
 
     # ── end-of-day: authoritative, always correct (guaranteed fallback) ──
@@ -1327,6 +1567,10 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
     state = load_state()
     reports: list[dict] = []
     changed = False
+    bias_before = json.dumps(state.get("_bias"), sort_keys=True)
+    biases = {c: rolling_bias(c, state, now, tz) for c in CITIES}
+    changed = json.dumps(state.get("_bias"), sort_keys=True) != bias_before
+    models_cache: dict = {}
     for m in rows:
         if app_api.category_of(m) != config.WEATHER_CATEGORY:
             continue
@@ -1335,7 +1579,8 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
         if app_api.winning_option_of(m):                # already decided in the app
             continue
         mid = app_api.market_id_of(m)
-        report, mchanged = _process_market(m, mid, state, now, tz, alert, do_resolve)
+        report, mchanged = _process_market(m, mid, state, now, tz, alert, do_resolve,
+                                           biases, models_cache)
         reports.append(report)
         changed = changed or mchanged
 
@@ -1376,7 +1621,7 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
     if do_create:
         vil_hour = now.astimezone(tz).hour
         if force_create or vil_hour >= config.WEATHER_CREATE_HOUR:
-            specs = plan_new_markets(rows, now, tz)
+            specs = plan_new_markets(rows, now, tz, biases=biases)
             reports += create_markets(specs, alert=alert, do_create=True)
         # Daily fuel markets: their OWN, earlier gate — create the next day's just
         # after the old one resolves (LEA publishes ~11:00), not at the weather hour.

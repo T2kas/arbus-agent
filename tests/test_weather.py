@@ -126,6 +126,9 @@ def wired(monkeypatch, tmp_path):
     # Early per-bucket elimination has its own dedicated test; keep it out of the
     # resolution-flow tests (their fixture does not mock eliminate_options).
     monkeypatch.setattr(config, "WEATHER_ELIMINATE", False)
+    # Repricing and the rolling bias have their own tests (no network here).
+    monkeypatch.setattr(config, "WEATHER_REPRICE", False)
+    monkeypatch.setattr(config, "WEATHER_BIAS_DAYS", 0)
     return calls
 
 
@@ -456,3 +459,144 @@ def test_created_message_warns_on_divergence():
     assert "Meteo LT 11,0" in msg and "ecmwf 13,1" in msg and "⚠️" in msg
     spec["forecast_divergence"] = 0.4
     assert "⚠️" not in weather._created_message(spec, "id")
+
+
+# ── lead-dependent σ, rolling bias, repricing (2026-11-02) ───────────────────
+
+def test_sigma0_interpolates_by_lead(monkeypatch):
+    monkeypatch.setattr(config, "WEATHER_SIGMA_BY_LEAD",
+                        {"kaunas": ((0.25, 0.5), (0.9, 0.65), (1.8, 0.85))})
+    assert weather.sigma0_for_lead("kaunas", 0.0) == 0.5
+    assert weather.sigma0_for_lead("kaunas", 0.25) == 0.5
+    assert weather.sigma0_for_lead("kaunas", 1.35) == pytest.approx(0.75)
+    assert weather.sigma0_for_lead("kaunas", 2.8) == pytest.approx(0.85 + config.WEATHER_SIGMA_PER_LEAD_DAY)
+    # the morning of the day prices the favourite far higher than 2 days out
+    agree = {"ecmwf_aifs025_single": 12.0, "icon_seamless": 12.0, "ukmo_seamless": 12.0}
+    near = weather.blend_forecast("kaunas", None, agree, lead_days=0.1)["sigma"]
+    far = weather.blend_forecast("kaunas", None, agree, lead_days=1.8)["sigma"]
+    assert near == pytest.approx(0.5) and far == pytest.approx(0.85)
+
+
+def test_blend_uses_given_bias():
+    models = {"ecmwf_aifs025_single": 12.0, "icon_seamless": 11.0, "ukmo_seamless": 13.0}
+    assert weather.blend_forecast("vilnius", None, models, bias=1.5)["mu"] == pytest.approx(13.5)
+
+
+def test_market_bucket_probabilities_and_running_max_floor():
+    b = weather.buckets_from_market(_market(_OPTS))           # ≤16,9 | 17–18,9 | 19–20,9 | ≥21
+    p = weather.market_bucket_probabilities(19.0, 0.6, b)
+    assert sum(p) == pytest.approx(100, abs=0.05) and min(p) >= 0.9
+    assert p.index(max(p)) in (1, 2)
+    # by mid-morning it is already 19,4 °C → the two lower buckets are dead
+    q = weather.market_bucket_probabilities(19.0, 0.6, b, floor_temp=19.4)
+    assert q[0] < 1.1 and q[1] < 1.1 and q[2] > 80
+    assert weather.market_bucket_probabilities(19.0, 0.6, b[:2], floor_temp=25) is None
+
+
+def test_parse_previous_day1_and_shrunk_bias(monkeypatch):
+    monkeypatch.setattr(config, "WEATHER_MODELS", ("icon_seamless", "ukmo_seamless"))
+    times = [f"2026-10-20T{h:02d}:00" for h in range(24)] + [f"2026-10-21T{h:02d}:00" for h in range(24)]
+    data = {"hourly": {"time": times,
+                       "temperature_2m_previous_day1_icon_seamless": [5.0] * 47 + [9.0],
+                       "temperature_2m_previous_day1_ukmo_seamless": [6.0] * 24 + [None] * 24}}
+    assert weather.parse_previous_day1_max(data) == {
+        "2026-10-20": {"icon_seamless": 5.0, "ukmo_seamless": 6.0},
+        "2026-10-21": {"icon_seamless": 9.0}}
+    assert weather.shrunk_bias([], 0.3) == 0.3
+    assert weather.shrunk_bias([1.3] * 10, 0.3, shrink=10) == pytest.approx(0.8)
+
+
+def test_rolling_bias_cached_once_a_day(monkeypatch):
+    monkeypatch.setattr(config, "WEATHER_MODELS", ("icon_seamless", "ukmo_seamless"))
+    monkeypatch.setattr(config, "WEATHER_BIAS_DAYS", 3)
+    monkeypatch.setattr(config, "WEATHER_BIAS_SHRINK", 0.0)
+    days = ["2026-10-30", "2026-10-31", "2026-11-01"]
+    times = [f"{d}T{h:02d}:00" for d in days for h in range(24)]
+    calls = []
+
+    def fake_fetch(url, timeout=20):
+        calls.append(url)
+        return ({"hourly": {"time": times,
+                            "temperature_2m_previous_day1_icon_seamless": [8.0] * 72,
+                            "temperature_2m_previous_day1_ukmo_seamless": [10.0] * 72}}, "")
+    monkeypatch.setattr(weather, "fetch", fake_fetch)
+    monkeypatch.setattr(weather, "station_day_max", lambda st, iso, state, tz=None: 10.0)
+    state = {}
+    now = datetime(2026, 11, 2, 16, 0, tzinfo=timezone.utc)
+    assert weather.rolling_bias("kaunas", state, now) == pytest.approx(1.0)   # 10 − mean(8,10)
+    assert state["_bias"]["kaunas"]["n"] == 3
+    assert weather.rolling_bias("kaunas", state, now) == pytest.approx(1.0)
+    assert len(calls) == 1                                   # second call from the cache
+
+
+def test_rolling_bias_falls_back_when_archive_down(monkeypatch):
+    monkeypatch.setattr(config, "WEATHER_BIAS_DAYS", 21)
+    def boom(url, timeout=20):
+        raise RuntimeError("down")
+    monkeypatch.setattr(weather, "fetch", boom)
+    assert weather.rolling_bias("kaunas", {}, datetime(2026, 11, 2, 16, 0, tzinfo=timezone.utc)) is None
+
+
+def _reprice_setup(monkeypatch, probs=(1, 30, 64, 5), models=None):
+    opts = [dict(o, probability=p) for o, p in zip(_OPTS, probs)]
+    m = _market(opts, closes_at="2026-09-10T08:00:00+00:00")
+    sent = []
+    monkeypatch.setattr(config, "ARBUS_WRITE_KEY", "service-role")
+    monkeypatch.setattr(config, "WEATHER_REPRICE", True)
+    monkeypatch.setattr(weather.app_api, "reprice_market",
+                        lambda mid, pr: (sent.append((mid, pr)), (True, "ok"))[1])
+    monkeypatch.setattr(weather, "models_forecast_max", lambda c, iso: dict(models or {
+        "ecmwf_aifs025_single": 17.5, "icon_seamless": 17.3, "ukmo_seamless": 17.7}))
+    return m, sent
+
+
+def test_reprice_moves_stale_prices_to_newest_models(monkeypatch):
+    m, sent = _reprice_setup(monkeypatch)
+    st = {}
+    now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)   # evening before
+    assert weather._reprice(m, "m1", "kauno-ams", "2026-09-10", st, now,
+                            weather._tz(), None, True, {"kaunas": 0.3}) is True
+    (mid, pr), = sent
+    assert mid == "m1" and set(pr) == {"b1", "b2", "b3", "b4"}
+    assert sum(pr.values()) == pytest.approx(100, abs=0.05)
+    assert pr["b2"] > 60 and pr["b2"] > pr["b3"]             # 17.8 °C → 17–18,9
+    assert st["reprice"]["mu"] == pytest.approx(17.8, abs=0.01)
+
+
+def test_reprice_skips_small_moves_closed_and_not_open(monkeypatch):
+    m, sent = _reprice_setup(monkeypatch)
+    now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
+    tz = weather._tz()
+    assert weather._reprice(m, "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, True, {"kaunas": 0.3})
+    m2, _ = _reprice_setup(monkeypatch, probs=tuple(sent[0][1][k] for k in ("b1", "b2", "b3", "b4")))
+    sent.clear()
+    assert not weather._reprice(m2, "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, True, {"kaunas": 0.3})
+    after_close = datetime(2026, 9, 10, 8, 30, tzinfo=timezone.utc)
+    assert not weather._reprice(m, "m1", "kauno-ams", "2026-09-10", {}, after_close, tz, None, True, {})
+    assert not weather._reprice(dict(m, status="frozen"), "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, True, {})
+    assert not weather._reprice(m, "m1", "kauno-ams", "2026-09-10", {}, now, tz, None, False, {})   # dry run
+    assert sent == []
+
+
+def test_reprice_on_the_day_respects_running_max_and_eliminated(monkeypatch):
+    m, sent = _reprice_setup(monkeypatch)
+    m["market_options"][0]["resolved_outcome"] = "no"          # ≤16,9 already eliminated
+    st = {"eliminated": ["b1"]}
+    now = datetime(2026, 9, 10, 6, 0, tzinfo=timezone.utc)    # 09:00 on the day
+    assert weather._reprice(m, "m1", "kauno-ams", "2026-09-10", st, now,
+                            weather._tz(), 19.2, True, {"kaunas": 0.3})
+    (_, pr), = sent
+    assert "b1" not in pr and pr["b2"] <= 1.1 and pr["b3"] > 80
+
+
+def test_reprice_failure_alerts_once(monkeypatch):
+    m, _ = _reprice_setup(monkeypatch)
+    msgs = []
+    monkeypatch.setattr(weather.notify, "send", msgs.append)
+    monkeypatch.setattr(weather.app_api, "reprice_market", lambda mid, pr: (False, "no function"))
+    root = {}
+    now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
+    for mid in ("m1", "m2", "m3"):                            # several markets, one alert
+        weather._reprice(m, mid, "kauno-ams", "2026-09-10", {}, now, weather._tz(),
+                         None, True, {}, root=root)
+    assert len(msgs) == 1 and "reprice_market.sql" in msgs[0]

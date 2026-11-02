@@ -309,6 +309,14 @@ change bond or reward sizes in v1.
 | LKL / TOPLYGA / Žalgiris EuroLeague games | weather bot | BetExplorer results, toplyga.lt, EuroLeague feed |
 | Everything else (polls, laws, releases, fights…) | **decision file** | researched by hand |
 
+**Weather prices move with the models.** Every pass, each open orai market is
+re-priced from the newest ECMWF AIFS / ICON / UKMO runs: σ shrinks as the day
+nears (`WEATHER_SIGMA_BY_LEAD`), the bias is the last 21 days' model error
+(cached once a day in the weather state), and on the day itself only
+temperatures at or above the running max count. The prices are set through
+`admin_reprice_market` — run `sql/reprice_market.sql` once in the Supabase SQL
+editor. `WEATHER_REPRICE=off` stops it.
+
 A decision file is `markets/resolutions/<date>.json` — a list of
 `{"market_id", "title", "resolve": "<label>" | "options": {"<date label>": "yes"|"no"} | "split": [labels], "source", "note"}`.
 Pushing it to `main` runs the **resolve-markets** workflow (service_role key).
