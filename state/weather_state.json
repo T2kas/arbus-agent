@@ -296,7 +296,7 @@
   "resolved_via": "sports"
  },
  "0691ec96-0da9-4942-8209-3602cabbb3f3": {
-  "checksum": "4469050a2c25373bb238225c7fdc4af70075dc90e31d6f3c3925ec6c5c38bdd7",
+  "checksum": "db4127fd79aa6d65763e3e01357f7751e3c207a02f3e506106e4f97c05346c5c",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -5254,7 +5254,7 @@
   "station": "klaipedos-ams"
  },
  "3f7384b1-c99d-4e52-9f97-d6e27136559c": {
-  "checksum": "d6ffefeb00b3a6da0e381eead5085a6c8f5ae1cf0716ccaa48c81c0575a39032",
+  "checksum": "4754e3859793667ed11ae408c49b5ab639c3c2512d53d0024a044236ef665faa",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -9288,29 +9288,29 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261013/"
  },
  "80132391-fe30-4971-954c-e4bad86c665f": {
-  "checksum": "363ef4b1536d964c07cb8b552aeb26fb007ff1ab15dd4bc0d40aa869811ec7a7",
+  "checksum": "0a632e3877a9e3c17681de432fba9078713c7e86f427020c56c971757e681baf",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
   "model_target": {
-   "3c1318f6-6b25-4352-b4ee-c4289dba3896": 64.08,
+   "3c1318f6-6b25-4352-b4ee-c4289dba3896": 54.53,
    "75fdbd49-45aa-44f7-952f-211d55800886": 0.98,
    "cab1f501-558e-4445-a276-9bf9f6326433": 0.98,
-   "d3176b57-b067-4b44-822b-b357815b518c": 33.96
+   "d3176b57-b067-4b44-822b-b357815b518c": 43.5
   },
   "reprice": {
    "floor": null,
-   "lead": 0.59,
+   "lead": 0.58,
    "models": {
     "ecmwf_aifs025_single": 7.7,
     "icon_seamless": 7.0,
-    "ukmo_seamless": 7.5
+    "ukmo_seamless": 8.1
    },
-   "move_pp": 9.6,
-   "mu": 7.71,
-   "sigma": 0.61
+   "move_pp": 9.5,
+   "mu": 7.86,
+   "sigma": 0.66
   },
-  "repriced_at": "2026-11-02T20:50:52.296489+00:00",
+  "repriced_at": "2026-11-02T21:10:49.982321+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -10297,7 +10297,7 @@
   "station": "klaipedos-ams"
  },
  "879a2241-2eb0-46bd-a427-6b58beab3c7f": {
-  "checksum": "4469050a2c25373bb238225c7fdc4af70075dc90e31d6f3c3925ec6c5c38bdd7",
+  "checksum": "db4127fd79aa6d65763e3e01357f7751e3c207a02f3e506106e4f97c05346c5c",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -17087,7 +17087,7 @@
   "station": "vilniaus-ams"
  },
  "cbe89df5-1d5c-4f91-a01c-7d04819769c2": {
-  "checksum": "d6ffefeb00b3a6da0e381eead5085a6c8f5ae1cf0716ccaa48c81c0575a39032",
+  "checksum": "4754e3859793667ed11ae408c49b5ab639c3c2512d53d0024a044236ef665faa",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -22427,7 +22427,7 @@
   "station": "kauno-ams"
  },
  "fa367673-0cf0-44de-b919-0b1b1dee32a3": {
-  "checksum": "363ef4b1536d964c07cb8b552aeb26fb007ff1ab15dd4bc0d40aa869811ec7a7",
+  "checksum": "0a632e3877a9e3c17681de432fba9078713c7e86f427020c56c971757e681baf",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
