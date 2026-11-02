@@ -17564,7 +17564,14 @@
   "station": "kauno-ams"
  },
  "cfee8c11-99c8-4cc6-858a-40cdf310db3c": {},
- "d12a480a-f4e4-4b08-88d6-b533b72c2941": {},
+ "d12a480a-f4e4-4b08-88d6-b533b72c2941": {
+  "resolved": true,
+  "resolved_at": "2026-11-02T16:56:03.467052+00:00",
+  "resolved_label": "Kauno „Žalgiris“",
+  "resolved_option_id": "791abc44-9374-4b35-97e5-c99430b0fbb1",
+  "resolved_score": "Vilniaus „Rytas“ 89:94 Kauno „Žalgiris“",
+  "resolved_via": "sports"
+ },
  "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {
   "resolved": true,
   "resolved_at": "2026-10-01T08:31:02.936037+00:00",
