@@ -17093,10 +17093,23 @@
   "measurements": {},
   "model_target": {
    "3ee2ddf7-646a-4691-8c70-431d4ead09cb": 0.98,
-   "694b2545-885a-4192-bd92-d5549b3b70c2": 24.01,
+   "694b2545-885a-4192-bd92-d5549b3b70c2": 18.49,
    "69b3c7c2-04a8-4d8d-9c66-daed9e535502": 0.98,
-   "aa276bfa-a9f3-4fbb-86d1-0c7e11f10276": 74.02
+   "aa276bfa-a9f3-4fbb-86d1-0c7e11f10276": 79.55
   },
+  "reprice": {
+   "floor": null,
+   "lead": 0.59,
+   "models": {
+    "ecmwf_aifs025_single": 6.9,
+    "icon_seamless": 7.2,
+    "ukmo_seamless": 7.0
+   },
+   "move_pp": 5.5,
+   "mu": 7.43,
+   "sigma": 0.54
+  },
+  "repriced_at": "2026-11-02T20:45:49.409919+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
