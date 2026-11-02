@@ -9293,24 +9293,24 @@
   "date": "2026-11-03",
   "measurements": {},
   "model_target": {
-   "3c1318f6-6b25-4352-b4ee-c4289dba3896": 54.47,
+   "3c1318f6-6b25-4352-b4ee-c4289dba3896": 64.08,
    "75fdbd49-45aa-44f7-952f-211d55800886": 0.98,
    "cab1f501-558e-4445-a276-9bf9f6326433": 0.98,
-   "d3176b57-b067-4b44-822b-b357815b518c": 43.57
+   "d3176b57-b067-4b44-822b-b357815b518c": 33.96
   },
   "reprice": {
    "floor": null,
-   "lead": 0.61,
+   "lead": 0.59,
    "models": {
     "ecmwf_aifs025_single": 7.7,
     "icon_seamless": 7.0,
-    "ukmo_seamless": 8.1
+    "ukmo_seamless": 7.5
    },
-   "move_pp": 4.0,
-   "mu": 7.86,
-   "sigma": 0.67
+   "move_pp": 9.6,
+   "mu": 7.71,
+   "sigma": 0.61
   },
-  "repriced_at": "2026-11-02T20:15:51.406256+00:00",
+  "repriced_at": "2026-11-02T20:50:52.296489+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -10302,24 +10302,24 @@
   "date": "2026-11-03",
   "measurements": {},
   "model_target": {
-   "22ee8f83-7bc8-46b1-9170-e23f54eb2c26": 1.0,
-   "7c22e99b-e5de-4586-a6c7-dbf9d077bb6e": 47.67,
-   "b26d4629-4af0-4401-b3e5-79efe1882e1a": 50.34,
+   "22ee8f83-7bc8-46b1-9170-e23f54eb2c26": 1.67,
+   "7c22e99b-e5de-4586-a6c7-dbf9d077bb6e": 43.25,
+   "b26d4629-4af0-4401-b3e5-79efe1882e1a": 54.08,
    "cec0a3b4-7767-4544-b771-d24126ff2a32": 1.0
   },
   "reprice": {
    "floor": null,
-   "lead": 0.6,
+   "lead": 0.59,
    "models": {
     "ecmwf_aifs025_single": 9.6,
     "icon_seamless": 9.1,
-    "ukmo_seamless": 9.4
+    "ukmo_seamless": 9.8
    },
    "move_pp": 4.4,
-   "mu": 9.98,
-   "sigma": 0.84
+   "mu": 10.08,
+   "sigma": 0.88
   },
-  "repriced_at": "2026-11-02T20:40:49.676869+00:00",
+  "repriced_at": "2026-11-02T20:50:52.296489+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
