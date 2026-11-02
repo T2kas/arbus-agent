@@ -301,24 +301,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 1.71,
-   "807b244c-0fcd-4db9-b1b2-b5059855227b": 46.07,
-   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 49.98,
-   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 2.24
+   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 1.72,
+   "807b244c-0fcd-4db9-b1b2-b5059855227b": 48.11,
+   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 48.41,
+   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.76
   },
   "reprice": {
    "floor": null,
-   "lead": 1.53,
+   "lead": 1.52,
    "models": {
     "ecmwf_aifs025_single": 9.2,
-    "icon_seamless": 9.8,
+    "icon_seamless": 9.6,
     "ukmo_seamless": 9.6
    },
    "move_pp": 2.0,
-   "mu": 10.0,
-   "sigma": 0.97
+   "mu": 9.95,
+   "sigma": 0.95
   },
-  "repriced_at": "2026-11-02T22:15:48.466053+00:00",
+  "repriced_at": "2026-11-02T22:25:36.665373+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -5272,24 +5272,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "a580b5d2-138d-47d7-8eb0-0fe8a0bb0841": 36.68,
-   "b8d0160d-c1d8-4931-a04a-f1587ba1418a": 1.71,
+   "a580b5d2-138d-47d7-8eb0-0fe8a0bb0841": 48.21,
+   "b8d0160d-c1d8-4931-a04a-f1587ba1418a": 0.99,
    "cb549b6f-c078-478d-9fef-6756a58302ae": 0.99,
-   "f5a86dda-316b-4f6b-b0da-d8ef76fb4cc7": 60.61
+   "f5a86dda-316b-4f6b-b0da-d8ef76fb4cc7": 49.8
   },
   "reprice": {
    "floor": null,
-   "lead": 1.53,
+   "lead": 1.52,
    "models": {
     "ecmwf_aifs025_single": 5.8,
-    "icon_seamless": 4.7,
+    "icon_seamless": 5.7,
     "ukmo_seamless": 4.7
    },
    "move_pp": 11.5,
-   "mu": 5.68,
-   "sigma": 0.82
+   "mu": 5.93,
+   "sigma": 0.81
   },
-  "repriced_at": "2026-11-02T22:20:49.699695+00:00",
+  "repriced_at": "2026-11-02T22:25:36.665373+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -10346,24 +10346,24 @@
    }
   },
   "model_target": {
-   "22ee8f83-7bc8-46b1-9170-e23f54eb2c26": 1.59,
-   "7c22e99b-e5de-4586-a6c7-dbf9d077bb6e": 43.27,
-   "b26d4629-4af0-4401-b3e5-79efe1882e1a": 54.14,
-   "cec0a3b4-7767-4544-b771-d24126ff2a32": 1.0
+   "22ee8f83-7bc8-46b1-9170-e23f54eb2c26": 1.69,
+   "7c22e99b-e5de-4586-a6c7-dbf9d077bb6e": 34.73,
+   "b26d4629-4af0-4401-b3e5-79efe1882e1a": 62.59,
+   "cec0a3b4-7767-4544-b771-d24126ff2a32": 0.99
   },
   "reprice": {
    "floor": 6.4,
-   "lead": 0.53,
+   "lead": 0.52,
    "models": {
     "ecmwf_aifs025_single": 9.6,
-    "icon_seamless": 9.1,
+    "icon_seamless": 9.8,
     "ukmo_seamless": 9.8
    },
    "move_pp": 8.5,
-   "mu": 10.08,
-   "sigma": 0.87
+   "mu": 10.25,
+   "sigma": 0.8
   },
-  "repriced_at": "2026-11-02T22:10:47.194925+00:00",
+  "repriced_at": "2026-11-02T22:25:36.665373+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
