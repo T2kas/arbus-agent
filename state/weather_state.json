@@ -6524,7 +6524,7 @@
   "station": "vilniaus-ams"
  },
  "4e2f4852-df4b-4b5e-a914-cc680bd02d09": {
-  "checksum": "38d2599b4de71910ff2c5bc70e99e4aae036cc76cee0a33a79085565491c4232",
+  "checksum": "4d97ba5c78b44a97aef908145d9f7a80595102b58dfabf22e925fbd82cb1ca57",
   "current_maximum": 6.7,
   "date": "2026-11-02",
   "eliminated": [
@@ -6614,6 +6614,12 @@
    "2026-11-02 11:00:00": {
     "checksum": "38d2599b4de71910ff2c5bc70e99e4aae036cc76cee0a33a79085565491c4232",
     "received_at": "2026-11-02T11:10:50.915985+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 6.7
+   },
+   "2026-11-02 12:00:00": {
+    "checksum": "4d97ba5c78b44a97aef908145d9f7a80595102b58dfabf22e925fbd82cb1ca57",
+    "received_at": "2026-11-02T12:10:48.186699+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 6.7
    }
@@ -9220,7 +9226,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261013/"
  },
  "80132391-fe30-4971-954c-e4bad86c665f": {
-  "checksum": "19d0f70d1d1b6d13da152e877618790453b5588f07ed27b7f7175ea6eed0f2f5",
+  "checksum": "6d2f118124fa21e6fd033459b87900add158445fa0c9a21b12f74af745060597",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -10210,7 +10216,7 @@
   "station": "klaipedos-ams"
  },
  "879a2241-2eb0-46bd-a427-6b58beab3c7f": {
-  "checksum": "039cf45a3b143c4576c4446bacf2994fce785137d94d200190ba8ad0293dfd64",
+  "checksum": "f0e51b2dcac310967b16dfaa72ee2e9ab03392e17b1563f7777cdbf48c9d3bb3",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -11726,7 +11732,7 @@
   "station": "vilniaus-ams"
  },
  "9ad5bcb1-7576-407a-a5a3-0f8450fd221e": {
-  "checksum": "19d0f70d1d1b6d13da152e877618790453b5588f07ed27b7f7175ea6eed0f2f5",
+  "checksum": "6d2f118124fa21e6fd033459b87900add158445fa0c9a21b12f74af745060597",
   "current_maximum": 7.0,
   "date": "2026-11-02",
   "eliminated": [
@@ -11816,6 +11822,12 @@
    "2026-11-02 11:00:00": {
     "checksum": "19d0f70d1d1b6d13da152e877618790453b5588f07ed27b7f7175ea6eed0f2f5",
     "received_at": "2026-11-02T11:10:50.915985+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 7.0
+   },
+   "2026-11-02 12:00:00": {
+    "checksum": "6d2f118124fa21e6fd033459b87900add158445fa0c9a21b12f74af745060597",
+    "received_at": "2026-11-02T12:10:48.186699+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 7.0
    }
@@ -16853,7 +16865,7 @@
   "station": "vilniaus-ams"
  },
  "cbe89df5-1d5c-4f91-a01c-7d04819769c2": {
-  "checksum": "38d2599b4de71910ff2c5bc70e99e4aae036cc76cee0a33a79085565491c4232",
+  "checksum": "4d97ba5c78b44a97aef908145d9f7a80595102b58dfabf22e925fbd82cb1ca57",
   "current_maximum": null,
   "date": "2026-11-03",
   "measurements": {},
@@ -19128,14 +19140,14 @@
   "station": "vilniaus-ams"
  },
  "dee7882e-c6e1-474f-8de1-60e016a5de55": {
-  "checksum": "039cf45a3b143c4576c4446bacf2994fce785137d94d200190ba8ad0293dfd64",
-  "current_maximum": 9.8,
+  "checksum": "f0e51b2dcac310967b16dfaa72ee2e9ab03392e17b1563f7777cdbf48c9d3bb3",
+  "current_maximum": 10.0,
   "date": "2026-11-02",
   "eliminated": [
    "2e6ce01b-552d-45fd-8bf4-375e17de0d42",
    "3926733a-3455-48a5-a3fb-ec54cf87fc4a"
   ],
-  "max_received_at": "2026-11-02T11:10:50.915985+00:00",
+  "max_received_at": "2026-11-02T12:10:48.186699+00:00",
   "measurements": {
    "2026-11-01 22:00:00": {
     "checksum": "21f45699fc21e4560c2c69ba35e2c4191aec5bd2920b36274acb076d17a2f493",
@@ -19220,6 +19232,12 @@
     "received_at": "2026-11-02T11:10:50.915985+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 9.8
+   },
+   "2026-11-02 12:00:00": {
+    "checksum": "f0e51b2dcac310967b16dfaa72ee2e9ab03392e17b1563f7777cdbf48c9d3bb3",
+    "received_at": "2026-11-02T12:10:48.186699+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 10.0
    }
   },
   "resolved": false,
