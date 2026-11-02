@@ -295,6 +295,14 @@
   "resolved_score": "Panevėžys 1:0 TransInvest",
   "resolved_via": "sports"
  },
+ "0691ec96-0da9-4942-8209-3602cabbb3f3": {
+  "checksum": "5f6bcc1d6d9203d669b426572cd7a262d92ef0ee6abfd66b2acbc7355f83b02f",
+  "current_maximum": null,
+  "date": "2026-11-04",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "074548e2-7e3b-4a39-bfad-f3864bffee4a": {
   "checksum": "7fe55310d63b5ef4254b9601ed7f902843267394546d087f4b3cbe2a3265fb0d",
   "current_maximum": 12.3,
@@ -5238,6 +5246,14 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
+ },
+ "3f7384b1-c99d-4e52-9f97-d6e27136559c": {
+  "checksum": "5500c50191c75c7f5b6f0f25e78194b5abb9401059e5298c79af6795f861758c",
+  "current_maximum": null,
+  "date": "2026-11-04",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "40a604ff-5ce2-48ef-bf0b-e54666799d2a": {
   "checksum": "bc7bc6e8197b1f30ddb5183129f2491d01535282f1f43a4d06438cbc6d458303",
@@ -22196,6 +22212,14 @@
   "resolved_temp": 12.3,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+  "station": "kauno-ams"
+ },
+ "fa367673-0cf0-44de-b919-0b1b1dee32a3": {
+  "checksum": "2de4026032943c2a1383b7dc41101f28ee193d40099599876c430b1f8eea046a",
+  "current_maximum": null,
+  "date": "2026-11-04",
+  "measurements": {},
+  "resolved": false,
   "station": "kauno-ams"
  },
  "fa5e0aca-3c33-4673-b01a-938576a07813": {
