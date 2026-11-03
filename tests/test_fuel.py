@@ -1,3 +1,4 @@
+import pytest
 """Daily fuel-price markets: detection, bucket math, the exact-date LEA match,
 and the resolver (which must never settle on the wrong day's price)."""
 
@@ -196,3 +197,18 @@ def test_tuesday_jump_moves_the_book_up():
     # Thursday drifts down and is tight (σ 1 ct): the middle bucket is the favourite
     p = [o["probability"] for o in thu["options"]]
     assert p[2] == max(p) and fuel.parse_price_bucket(thu["options"][2]["label"])[1] < 1.950
+
+
+def test_drift_adds_days_without_a_bulletin():
+    from datetime import date
+    from arbus import config
+    m = config.FUEL_WEEKDAY_MODEL
+    tue = date(2026, 11, 3)
+    # normal Tuesday: base = Monday's bulletin
+    assert fuel.drift_and_sigma(tue, date(2026, 11, 2)) == pytest.approx(m[1])
+    # Monday 2 Nov 2026 was a holiday → base is Friday: Monday's drift is added
+    d, s = fuel.drift_and_sigma(tue, date(2026, 10, 30))
+    assert d == pytest.approx(m[0][0] + m[1][0])
+    assert s == pytest.approx((m[0][1] ** 2 + m[1][1] ** 2) ** 0.5)
+    # Monday from Friday is just Monday's coefficients (they already cover the weekend)
+    assert fuel.drift_and_sigma(date(2026, 11, 9), date(2026, 11, 6)) == pytest.approx(m[0])

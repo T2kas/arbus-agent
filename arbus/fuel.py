@@ -21,6 +21,7 @@ stays testable offline, the same discipline as weather.py and resolvers.py.
 from __future__ import annotations
 
 import logging
+import math
 import re
 from datetime import date, datetime, time as dtime, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -324,10 +325,27 @@ def _context_text(fuel: str, forecast: float, d: date | None = None) -> str:
     )
 
 
+def drift_and_sigma(target: date, base: date | None = None) -> tuple[float, float]:
+    """Expected change €/l from the base bulletin's price to the target day's,
+    and its σ. Each weekday's (drift, σ) in FUEL_WEEKDAY_MODEL is the change
+    from the PREVIOUS bulletin (Monday's covers the weekend). When working days
+    in between have no bulletin (a public holiday — e.g. Monday 2 Nov 2026,
+    Vėlinės, made Tuesday's market start from Friday's price), their drifts are
+    added too and the σ's combined."""
+    model = config.FUEL_WEEKDAY_MODEL
+    days = [target]
+    if base is not None and base < target:
+        days = [base + timedelta(days=i) for i in range(1, (target - base).days + 1)]
+        days = [x for x in days if x.weekday() < 5] or [target]
+    drift = sum(model.get(x.weekday(), (0.0, config.FUEL_FORECAST_SIGMA))[0] for x in days)
+    var = sum(model.get(x.weekday(), (0.0, config.FUEL_FORECAST_SIGMA))[1] ** 2 for x in days)
+    return drift, math.sqrt(var)
+
+
 def market_spec(fuel: str, target_iso: str, image_url: str,
-                forecast: float, tz: ZoneInfo) -> dict:
+                forecast: float, tz: ZoneInfo, base: date | None = None) -> dict:
     d = date.fromisoformat(target_iso)
-    drift, sigma = config.FUEL_WEEKDAY_MODEL.get(d.weekday(), (0.0, config.FUEL_FORECAST_SIGMA))
+    drift, sigma = drift_and_sigma(d, base)
     expected = forecast + drift              # weekly pump-price cycle (Tuesday jump)
     buckets = build_buckets(expected)
     pcts = bucket_probabilities(expected, buckets, sigma)
@@ -375,9 +393,11 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
             images[tgt[0]] = img
     specs = []
     for fuel in FUELS:
-        forecast = (forecasts or {}).get(fuel)
+        forecast, base = (forecasts or {}).get(fuel), None
         if forecast is None:
-            forecast, _ = latest_lea_price(fuel)
+            forecast, url = latest_lea_price(fuel)
+            m = re.search(r"(?:kdk|ndk)-(20\d{2})(\d{2})(\d{2})", url or "")
+            base = date(int(m[1]), int(m[2]), int(m[3])) if m else None
         if forecast is None:
             continue
         # Only days LEA actually publishes: Friday's run creates MONDAY's market.
@@ -385,7 +405,7 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
             iso = d.isoformat()
             if skip_existing and (fuel, iso) in have:
                 continue
-            specs.append(market_spec(fuel, iso, images.get(fuel, ""), forecast, tz))
+            specs.append(market_spec(fuel, iso, images.get(fuel, ""), forecast, tz, base))
     return specs
 
 
