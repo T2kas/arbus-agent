@@ -301,24 +301,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 4.67,
-   "807b244c-0fcd-4db9-b1b2-b5059855227b": 54.63,
-   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 39.11,
-   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.59
+   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 2.92,
+   "807b244c-0fcd-4db9-b1b2-b5059855227b": 50.88,
+   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 44.34,
+   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.86
   },
   "reprice": {
    "floor": null,
-   "lead": 1.1,
+   "lead": 1.09,
    "models": {
     "ecmwf_aifs025_single": 8.9,
     "icon_seamless": 9.9,
-    "ukmo_seamless": 8.9
+    "ukmo_seamless": 9.5
    },
    "move_pp": 5.2,
-   "mu": 9.7,
-   "sigma": 1.05
+   "mu": 9.85,
+   "sigma": 1.01
   },
-  "repriced_at": "2026-11-03T08:40:47.859325+00:00",
+  "repriced_at": "2026-11-03T08:50:51.021271+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -17331,9 +17331,9 @@
   },
   "model_target": {
    "3ee2ddf7-646a-4691-8c70-431d4ead09cb": 0.98,
-   "694b2545-885a-4192-bd92-d5549b3b70c2": 17.39,
+   "694b2545-885a-4192-bd92-d5549b3b70c2": 10.05,
    "69b3c7c2-04a8-4d8d-9c66-daed9e535502": 0.98,
-   "aa276bfa-a9f3-4fbb-86d1-0c7e11f10276": 80.64
+   "aa276bfa-a9f3-4fbb-86d1-0c7e11f10276": 87.99
   },
   "reprice": {
    "floor": 4.8,
@@ -17341,13 +17341,13 @@
    "models": {
     "ecmwf_aifs025_single": 7.0,
     "icon_seamless": 7.2,
-    "ukmo_seamless": 6.7
+    "ukmo_seamless": 7.2
    },
    "move_pp": 7.3,
-   "mu": 7.41,
-   "sigma": 0.49
+   "mu": 7.53,
+   "sigma": 0.46
   },
-  "repriced_at": "2026-11-03T08:45:50.583151+00:00",
+  "repriced_at": "2026-11-03T08:50:51.021271+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
