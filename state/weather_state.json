@@ -301,24 +301,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 3.08,
-   "807b244c-0fcd-4db9-b1b2-b5059855227b": 50.67,
-   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 44.26,
-   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.98
+   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 4.68,
+   "807b244c-0fcd-4db9-b1b2-b5059855227b": 54.61,
+   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 39.11,
+   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.59
   },
   "reprice": {
    "floor": null,
-   "lead": 1.22,
+   "lead": 1.1,
    "models": {
     "ecmwf_aifs025_single": 8.9,
     "icon_seamless": 9.9,
-    "ukmo_seamless": 9.5
+    "ukmo_seamless": 8.9
    },
-   "move_pp": 3.8,
-   "mu": 9.85,
-   "sigma": 1.02
+   "move_pp": 5.2,
+   "mu": 9.7,
+   "sigma": 1.05
   },
-  "repriced_at": "2026-11-03T05:40:54.264789+00:00",
+  "repriced_at": "2026-11-03T08:31:08.685769+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
