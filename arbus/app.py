@@ -536,6 +536,22 @@ def price_history(limit: int = 1000) -> tuple[list[dict], str]:
                      f"select=*&order=created_at.desc&limit={limit}")
 
 
+def opening_prices(market_id: str) -> dict[str, float]:
+    """{option_id: probability 0-100} of a market's FIRST price-history rows —
+    the price it was created at. {} if unavailable."""
+    rows, error = _endpoint("option_price_history",
+                            f"select=option_id,probability,created_at&market_id=eq.{market_id}"
+                            "&order=created_at.asc&limit=40")
+    if error:
+        return {}
+    out: dict[str, float] = {}
+    for r in rows:
+        oid = str(r.get("option_id") or "")
+        if oid and oid not in out and r.get("probability") is not None:
+            out[oid] = float(r["probability"])
+    return out
+
+
 def recent_trades() -> tuple[list[dict], str]:
     return _rpc("admin_recent_trades")
 

@@ -545,6 +545,7 @@ def _reprice_setup(monkeypatch, probs=(1, 30, 64, 5), models=None):
     monkeypatch.setattr(config, "WEATHER_REPRICE", True)
     monkeypatch.setattr(weather.app_api, "reprice_market",
                         lambda mid, pr: (sent.append((mid, pr)), (True, "ok"))[1])
+    monkeypatch.setattr(weather.app_api, "opening_prices", lambda mid: {})
     monkeypatch.setattr(weather, "models_forecast_max", lambda c, iso: dict(models or {
         "ecmwf_aifs025_single": 17.5, "icon_seamless": 17.3, "ukmo_seamless": 17.7}))
     return m, sent
@@ -566,7 +567,9 @@ def test_reprice_shifts_by_the_model_change_only(monkeypatch):
     base = dict(st["model_target"])
     assert _rp(m, st, now) is False and sent == []           # model unchanged → nothing
     m2, sent2 = _reprice_setup(monkeypatch, models=_M2)      # new run: +1.5 °C
-    assert _rp(m2, st, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)) is True
+    later = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
+    assert _rp(m2, st, later) is True and sent2 == []        # must hold for 2 passes
+    assert _rp(m2, st, later) is True
     (_, pr), = sent2
     cur = {o["id"]: o["probability"] for o in m2["market_options"]}
     tgt = st["model_target"]
@@ -586,11 +589,35 @@ def test_reprice_never_undoes_a_players_move(monkeypatch):
     assert _rp(pushed, st, now) is False
 
 
-def test_reprice_baseline_from_creation_price(monkeypatch):
+def test_reprice_baseline_is_the_opening_price(monkeypatch):
     m, sent = _reprice_setup(monkeypatch, models=_M2)
-    root = {"_created_targets": {"m1": {o["label"]: p for o, p in zip(_OPTS, (1, 30, 64, 5))}}}
-    assert _rp(m, {}, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc), root=root) is True
-    assert len(sent) == 1 and "m1" not in root["_created_targets"]
+    monkeypatch.setattr(weather.app_api, "opening_prices",
+                        lambda mid: {"b1": 1, "b2": 30, "b3": 64, "b4": 5})
+    st, now = {}, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
+    _rp(m, st, now)
+    assert st["model_target"] == {"b1": 1, "b2": 30, "b3": 64, "b4": 5} and sent == []
+    _rp(m, st, now)
+    assert len(sent) == 1 and sent[0][1]["b3"] > 64
+
+
+def test_reprice_ignores_flip_flopping_model_data(monkeypatch):
+    st, now = {}, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
+    m, sent = _reprice_setup(monkeypatch, models=_M1)
+    _rp(m, st, now)                                          # baseline
+    for models in (_M2, _M1, _M2, _M1):                      # servers alternate runs
+        m, sent = _reprice_setup(monkeypatch, models=models)
+        _rp(m, st, now)
+        assert sent == []
+
+
+def test_reprice_rebases_v1_baseline_of_bot_made_markets(monkeypatch):
+    m, sent = _reprice_setup(monkeypatch, models=_M1)
+    m["created_at"] = "2026-11-03T16:02:00+00:00"
+    monkeypatch.setattr(weather.app_api, "opening_prices",
+                        lambda mid: {"b1": 5, "b2": 60, "b3": 30, "b4": 5})
+    st = {"model_target": {"b1": 1, "b2": 30, "b3": 64, "b4": 5}}      # v1, wrong
+    _rp(m, st, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc))
+    assert st["mt_v"] == 2 and st["model_target"]["b2"] == 60
 
 
 def test_reprice_skips_closed_and_not_open(monkeypatch):
@@ -609,7 +636,9 @@ def test_reprice_on_the_day_respects_running_max_and_eliminated(monkeypatch):
     m["market_options"][0]["resolved_outcome"] = "no"          # ≤16,9 already eliminated
     st = {"eliminated": ["b1"]}
     _rp(m, st, datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc))          # baseline
-    assert _rp(m, st, datetime(2026, 9, 10, 6, 0, tzinfo=timezone.utc), cur_max=19.2)
+    day = datetime(2026, 9, 10, 6, 0, tzinfo=timezone.utc)
+    _rp(m, st, day, cur_max=19.2)
+    assert _rp(m, st, day, cur_max=19.2)
     (_, pr), = sent
     assert "b1" not in pr and pr["b3"] > 64
 
@@ -622,6 +651,7 @@ def test_reprice_failure_alerts_once(monkeypatch):
     root = {}
     now = datetime(2026, 9, 9, 18, 0, tzinfo=timezone.utc)
     for _ in range(3):                                        # several markets, one alert
-        st = {"model_target": {"b1": 1, "b2": 30, "b3": 64, "b4": 5}}
+        st = {"model_target": {"b1": 1, "b2": 30, "b3": 64, "b4": 5}, "mt_v": 2}
+        _rp(m, st, now, root=root)
         _rp(m, st, now, root=root)
     assert len(msgs) == 1 and "reprice_market.sql" in msgs[0]

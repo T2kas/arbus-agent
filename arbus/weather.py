@@ -763,22 +763,39 @@ def _reprice(market: dict, mid: str, station: str, iso: str, st: dict,
     # MODEL changed since the bot last priced it. Baseline = the bot's last
     # target (or its creation price); with none (a market made before this),
     # the first pass only records today's target.
+    target_now = {b["option_id"]: round(t, 2) for t, b in zip(target, buckets)}
     last = st.get("model_target")
-    if last is None:
-        created = (root or {}).get("_created_targets", {}).pop(mid, None)
-        if created:
-            last = {b["option_id"]: created[o["label"]] for b, o in zip(buckets, opts)
-                    if o.get("label") in created}
-    if not last or any(b["option_id"] not in last for b in buckets):
-        st["model_target"] = {b["option_id"]: round(t, 2) for t, b in zip(target, buckets)}
-        return True
+    if last is not None and st.get("mt_v") != 2:
+        # v1 baseline (2026-11-02/03): bot-made markets lost their creation
+        # price as the baseline — rebase those on the opening price once.
+        created = str(market.get("created_at") or "")
+        if created >= "2026-11-02T18:30":
+            last = None
+        st["mt_v"] = 2
+    if last is None or any(b["option_id"] not in last for b in buckets):
+        opening = app_api.opening_prices(mid)
+        if opening and all(b["option_id"] in opening for b in buckets):
+            last = {b["option_id"]: opening[b["option_id"]] for b in buckets}
+            st["model_target"], st["mt_v"] = last, 2
+        else:                                         # nothing to anchor on: record only
+            st["model_target"], st["mt_v"] = target_now, 2
+            return True
     base = [float(last[b["option_id"]]) for b in buckets]
     base_sum = sum(base) or 1.0
     base = [x * share / base_sum for x in base]
     delta = [t - x for t, x in zip(target, base)]
     move = max(abs(d) for d in delta)
     if move < config.WEATHER_REPRICE_MIN_PP:
+        st.pop("pending_target", None)
         return False                                  # model barely moved — leave it
+    # The model must say the same thing on two passes in a row: Open-Meteo's
+    # servers sometimes alternate between two runs for a while, which made
+    # prices flip back and forth every 5 minutes.
+    pend = st.get("pending_target") or {}
+    if not pend or any(abs(pend.get(k, -99) - v) > 1.0 for k, v in target_now.items()):
+        st["pending_target"] = target_now
+        return True
+    st.pop("pending_target", None)
     new = [max(b["current"] + d, 1.0) for b, d in zip(buckets, delta)]
     new = [x * share / sum(new) for x in new]
     model_target = target
@@ -921,10 +938,6 @@ def create_markets(specs: list[dict], *, alert: bool, do_create: bool,
                             "options": s["options"]})
             continue
         ok, detail = app_api.create_market(s)
-        if ok and state is not None and detail and detail != "ok":
-            # the creation price is the repricer's first baseline (see _reprice)
-            state.setdefault("_created_targets", {})[str(detail)] = {
-                o["label"]: float(o["probability"]) for o in s["options"]}
         if ok and alert:
             notify.send(_created_message(s, detail))
         reports.append({"status": "created" if ok else "error", "city": s["city"],
