@@ -4359,6 +4359,20 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
+  "checksum": "9722440b076bfbd8990b2481a34450a1f8a3dbc55a6912cb72979209787e4d76",
+  "current_maximum": null,
+  "date": "2026-11-05",
+  "measurements": {},
+  "model_target": {
+   "017052c8-5e72-42b5-bab9-79a641414886": 42.77,
+   "22c2a8f0-5034-423e-9416-d4da71375dd2": 1.59,
+   "294bb20e-4239-48ee-b3a5-2d6609ef54d5": 54.64,
+   "56c13f50-5c6f-4449-bf2e-960dc32f6fbb": 1.0
+  },
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "32c45dd8-31c4-48d2-b926-7d8499314e42": {
   "checksum": "a9ec18e863cb65db828c04a125f82ad6d47a2bde20418710eb5ed2ce06299896",
   "current_maximum": 12.1,
@@ -8996,6 +9010,20 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
+ },
+ "7bd77c6b-4b5a-4253-9421-703a222bf240": {
+  "checksum": "06f8955c77e80c562b8b59b3384560f16974f0f382dd3a2fc509cf20200f4272",
+  "current_maximum": null,
+  "date": "2026-11-05",
+  "measurements": {},
+  "model_target": {
+   "465d996a-777e-4ed1-af0a-f6422452b287": 36.15,
+   "cda14796-8948-4c6d-b4f5-5cf8303d167b": 58.66,
+   "d71f681c-5535-42d0-ae5a-610df519bca2": 4.19,
+   "fbe534f8-2f75-4363-a238-4251ee89524a": 1.0
+  },
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "7c6b9c18-26bc-4501-be1a-b98d1c4c611f": {
   "checksum": "b964af6107daeb0ca23ce9b0ef1a42a167475c61f973e038b524d816de875eef",
@@ -17802,6 +17830,20 @@
   "resolved_option_id": "ffa61d13-845f-46f4-a70b-ed88d6a2c705",
   "resolved_score": "Virtus Bologna 74:91 Zalgiris Kaunas",
   "resolved_via": "sports"
+ },
+ "cee72a09-cbac-4da9-a29e-29d5df09b4a0": {
+  "checksum": "37fa6e9c2c0709603196cfd886be0b4ae5a02a29b12a88304a18a590506553e6",
+  "current_maximum": null,
+  "date": "2026-11-05",
+  "measurements": {},
+  "model_target": {
+   "020d533b-ce8e-4d43-b3c2-b397eac6d53f": 0.99,
+   "5838c79f-40f5-49e9-bc09-5ecd266281ad": 9.48,
+   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 81.46,
+   "6d354be7-a0d7-49f3-8c76-29469ceb61da": 8.07
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "cee8af63-11ae-4d18-ad54-ebed0c21f892": {
   "resolved": true,
