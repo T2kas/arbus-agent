@@ -296,7 +296,7 @@
   "resolved_via": "sports"
  },
  "0691ec96-0da9-4942-8209-3602cabbb3f3": {
-  "checksum": "b3c3934ade365355b5f5972f5b7521622a2d72d0ab1221b1bbb81b3a63ca31bc",
+  "checksum": "369866d676fc150be0b5aaf9e0be42f879edfbcb74d570f59f33cfd18dc235bf",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -4361,7 +4361,7 @@
   "station": "vilniaus-ams"
  },
  "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
-  "checksum": "027b8a1c56f60fe09a96071ed4c3fd52e96ff776235adb1c1003bfaed953708c",
+  "checksum": "8e257cfe4b2651446c4e0d6bad11387de50166adb439c1dd13979016171a208f",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -5296,7 +5296,7 @@
   "station": "klaipedos-ams"
  },
  "3f7384b1-c99d-4e52-9f97-d6e27136559c": {
-  "checksum": "b99ce1aa23620f93a2411bd830f6c2dccca5cc7f56c9537ed855027c044ce54a",
+  "checksum": "945ab6d3ccdc99c1dd638fcff3ae8c9b8f27a489462cf7f192dead727557f880",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -9028,7 +9028,7 @@
   "station": "kauno-ams"
  },
  "7bd77c6b-4b5a-4253-9421-703a222bf240": {
-  "checksum": "b3c3934ade365355b5f5972f5b7521622a2d72d0ab1221b1bbb81b3a63ca31bc",
+  "checksum": "369866d676fc150be0b5aaf9e0be42f879edfbcb74d570f59f33cfd18dc235bf",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -17910,7 +17910,7 @@
   "resolved_via": "sports"
  },
  "cee72a09-cbac-4da9-a29e-29d5df09b4a0": {
-  "checksum": "b99ce1aa23620f93a2411bd830f6c2dccca5cc7f56c9537ed855027c044ce54a",
+  "checksum": "945ab6d3ccdc99c1dd638fcff3ae8c9b8f27a489462cf7f192dead727557f880",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -22949,7 +22949,7 @@
   "station": "kauno-ams"
  },
  "fa367673-0cf0-44de-b919-0b1b1dee32a3": {
-  "checksum": "027b8a1c56f60fe09a96071ed4c3fd52e96ff776235adb1c1003bfaed953708c",
+  "checksum": "8e257cfe4b2651446c4e0d6bad11387de50166adb439c1dd13979016171a208f",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
