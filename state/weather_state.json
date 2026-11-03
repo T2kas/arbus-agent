@@ -296,7 +296,7 @@
   "resolved_via": "sports"
  },
  "0691ec96-0da9-4942-8209-3602cabbb3f3": {
-  "checksum": "f33dbaf0614350c2aacdcff95a429b1d638930b816a7c32723c345519120ee33",
+  "checksum": "b3c3934ade365355b5f5972f5b7521622a2d72d0ab1221b1bbb81b3a63ca31bc",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -4361,7 +4361,7 @@
   "station": "vilniaus-ams"
  },
  "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
-  "checksum": "b58a560a3f02d1a2b06e4a9422b831add4b9057e98d28839f59120793cecb6f0",
+  "checksum": "027b8a1c56f60fe09a96071ed4c3fd52e96ff776235adb1c1003bfaed953708c",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -5296,7 +5296,7 @@
   "station": "klaipedos-ams"
  },
  "3f7384b1-c99d-4e52-9f97-d6e27136559c": {
-  "checksum": "73ed7b992055611103cc7305796b5fe055c2d5003092bd1df8170b4a0bd25467",
+  "checksum": "b99ce1aa23620f93a2411bd830f6c2dccca5cc7f56c9537ed855027c044ce54a",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -5306,6 +5306,7 @@
    "cb549b6f-c078-478d-9fef-6756a58302ae": 0.98,
    "f5a86dda-316b-4f6b-b0da-d8ef76fb4cc7": 66.55
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
    "lead": 0.71,
@@ -9027,7 +9028,7 @@
   "station": "kauno-ams"
  },
  "7bd77c6b-4b5a-4253-9421-703a222bf240": {
-  "checksum": "f33dbaf0614350c2aacdcff95a429b1d638930b816a7c32723c345519120ee33",
+  "checksum": "b3c3934ade365355b5f5972f5b7521622a2d72d0ab1221b1bbb81b3a63ca31bc",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -17909,7 +17910,7 @@
   "resolved_via": "sports"
  },
  "cee72a09-cbac-4da9-a29e-29d5df09b4a0": {
-  "checksum": "73ed7b992055611103cc7305796b5fe055c2d5003092bd1df8170b4a0bd25467",
+  "checksum": "b99ce1aa23620f93a2411bd830f6c2dccca5cc7f56c9537ed855027c044ce54a",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -22948,7 +22949,7 @@
   "station": "kauno-ams"
  },
  "fa367673-0cf0-44de-b919-0b1b1dee32a3": {
-  "checksum": "b58a560a3f02d1a2b06e4a9422b831add4b9057e98d28839f59120793cecb6f0",
+  "checksum": "027b8a1c56f60fe09a96071ed4c3fd52e96ff776235adb1c1003bfaed953708c",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
