@@ -12635,6 +12635,256 @@
    "on": "2026-11-03"
   }
  },
+ "_fuel_hist": {
+  "2026-08-04": {},
+  "2026-08-05": {},
+  "2026-08-06": {},
+  "2026-08-07": {},
+  "2026-08-10": {
+   "benzinas": 1.736,
+   "dyzelinas": 1.983
+  },
+  "2026-08-11": {
+   "benzinas": 1.79,
+   "dyzelinas": 2.045
+  },
+  "2026-08-12": {
+   "benzinas": 1.77,
+   "dyzelinas": 2.026
+  },
+  "2026-08-13": {
+   "benzinas": 1.761,
+   "dyzelinas": 2.018
+  },
+  "2026-08-14": {
+   "benzinas": 1.751,
+   "dyzelinas": 2.019
+  },
+  "2026-08-17": {
+   "benzinas": 1.742,
+   "dyzelinas": 2.011
+  },
+  "2026-08-18": {
+   "benzinas": 1.826,
+   "dyzelinas": 2.09
+  },
+  "2026-08-19": {
+   "benzinas": 1.796,
+   "dyzelinas": 2.061
+  },
+  "2026-08-20": {
+   "benzinas": 1.78,
+   "dyzelinas": 2.05
+  },
+  "2026-08-21": {
+   "benzinas": 1.773,
+   "dyzelinas": 2.054
+  },
+  "2026-08-24": {
+   "benzinas": 1.762,
+   "dyzelinas": 2.046
+  },
+  "2026-08-25": {
+   "benzinas": 1.829,
+   "dyzelinas": 2.114
+  },
+  "2026-08-26": {
+   "benzinas": 1.796,
+   "dyzelinas": 2.077
+  },
+  "2026-08-27": {
+   "benzinas": 1.788,
+   "dyzelinas": 2.064
+  },
+  "2026-08-28": {
+   "benzinas": 1.779,
+   "dyzelinas": 2.053
+  },
+  "2026-08-31": {
+   "benzinas": 1.787,
+   "dyzelinas": 2.04
+  },
+  "2026-09-01": {
+   "benzinas": 1.84,
+   "dyzelinas": 2.089
+  },
+  "2026-09-02": {
+   "benzinas": 1.828,
+   "dyzelinas": 2.076
+  },
+  "2026-09-03": {
+   "benzinas": 1.843,
+   "dyzelinas": 2.093
+  },
+  "2026-09-04": {
+   "benzinas": 1.869,
+   "dyzelinas": 2.112
+  },
+  "2026-09-07": {
+   "benzinas": 1.872,
+   "dyzelinas": 2.116
+  },
+  "2026-09-08": {
+   "benzinas": 1.952,
+   "dyzelinas": 2.201
+  },
+  "2026-09-09": {
+   "benzinas": 1.934,
+   "dyzelinas": 2.178
+  },
+  "2026-09-10": {
+   "benzinas": 1.93,
+   "dyzelinas": 2.169
+  },
+  "2026-09-11": {
+   "benzinas": 1.918,
+   "dyzelinas": 2.169
+  },
+  "2026-09-14": {
+   "benzinas": 1.917,
+   "dyzelinas": 2.18
+  },
+  "2026-09-15": {
+   "benzinas": 1.952,
+   "dyzelinas": 2.233
+  },
+  "2026-09-16": {
+   "benzinas": 1.95,
+   "dyzelinas": 2.224
+  },
+  "2026-09-17": {
+   "benzinas": 1.944,
+   "dyzelinas": 2.23
+  },
+  "2026-09-18": {
+   "benzinas": 1.939,
+   "dyzelinas": 2.241
+  },
+  "2026-09-21": {
+   "benzinas": 1.931,
+   "dyzelinas": 2.241
+  },
+  "2026-09-22": {
+   "benzinas": 2.021,
+   "dyzelinas": 2.324
+  },
+  "2026-09-23": {
+   "benzinas": 1.991,
+   "dyzelinas": 2.297
+  },
+  "2026-09-24": {
+   "benzinas": 1.974,
+   "dyzelinas": 2.281
+  },
+  "2026-09-25": {
+   "benzinas": 1.95,
+   "dyzelinas": 2.258
+  },
+  "2026-09-28": {
+   "benzinas": 1.944,
+   "dyzelinas": 2.249
+  },
+  "2026-09-29": {
+   "benzinas": 1.996,
+   "dyzelinas": 2.295
+  },
+  "2026-09-30": {
+   "benzinas": 1.973,
+   "dyzelinas": 2.279
+  },
+  "2026-10-01": {
+   "benzinas": 1.964,
+   "dyzelinas": 2.268
+  },
+  "2026-10-02": {
+   "benzinas": 1.947,
+   "dyzelinas": 2.255
+  },
+  "2026-10-05": {
+   "benzinas": 1.934,
+   "dyzelinas": 2.239
+  },
+  "2026-10-06": {
+   "benzinas": 1.952,
+   "dyzelinas": 2.251
+  },
+  "2026-10-07": {
+   "benzinas": 1.925,
+   "dyzelinas": 2.22
+  },
+  "2026-10-08": {
+   "benzinas": 1.907,
+   "dyzelinas": 2.197
+  },
+  "2026-10-09": {
+   "benzinas": 1.914,
+   "dyzelinas": 2.2
+  },
+  "2026-10-12": {
+   "benzinas": 1.914,
+   "dyzelinas": 2.2
+  },
+  "2026-10-13": {
+   "benzinas": 1.984,
+   "dyzelinas": 2.244
+  },
+  "2026-10-14": {
+   "benzinas": 1.966,
+   "dyzelinas": 2.226
+  },
+  "2026-10-15": {
+   "benzinas": 1.944,
+   "dyzelinas": 2.211
+  },
+  "2026-10-16": {
+   "benzinas": 1.96,
+   "dyzelinas": 2.223
+  },
+  "2026-10-19": {
+   "benzinas": 1.94,
+   "dyzelinas": 2.213
+  },
+  "2026-10-20": {
+   "benzinas": 1.989,
+   "dyzelinas": 2.268
+  },
+  "2026-10-21": {
+   "benzinas": 1.963,
+   "dyzelinas": 2.246
+  },
+  "2026-10-22": {
+   "benzinas": 1.938,
+   "dyzelinas": 2.226
+  },
+  "2026-10-23": {
+   "benzinas": 1.945,
+   "dyzelinas": 2.231
+  },
+  "2026-10-26": {
+   "benzinas": 1.925,
+   "dyzelinas": 2.222
+  },
+  "2026-10-27": {
+   "benzinas": 1.958,
+   "dyzelinas": 2.265
+  },
+  "2026-10-28": {
+   "benzinas": 1.929,
+   "dyzelinas": 2.247
+  },
+  "2026-10-29": {
+   "benzinas": 1.905,
+   "dyzelinas": 2.232
+  },
+  "2026-10-30": {
+   "benzinas": 1.908,
+   "dyzelinas": 2.248
+  },
+  "2026-11-03": {
+   "benzinas": 1.878,
+   "dyzelinas": 2.234
+  }
+ },
  "_lea_missing": {
   "benzinas": [],
   "dyzelinas": []
