@@ -301,24 +301,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 4.61,
-   "807b244c-0fcd-4db9-b1b2-b5059855227b": 54.72,
-   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 39.11,
-   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.55
+   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 5.2,
+   "807b244c-0fcd-4db9-b1b2-b5059855227b": 51.81,
+   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 40.6,
+   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 2.39
   },
   "reprice": {
    "floor": null,
    "lead": 1.05,
    "models": {
     "ecmwf_aifs025_single": 8.9,
-    "icon_seamless": 9.9,
+    "icon_seamless": 10.1,
     "ukmo_seamless": 8.9
    },
-   "move_pp": 5.2,
-   "mu": 9.7,
-   "sigma": 1.04
+   "move_pp": 2.9,
+   "mu": 9.75,
+   "sigma": 1.11
   },
-  "repriced_at": "2026-11-03T09:40:51.424206+00:00",
+  "repriced_at": "2026-11-03T09:45:47.900207+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -5272,24 +5272,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "a580b5d2-138d-47d7-8eb0-0fe8a0bb0841": 32.24,
+   "a580b5d2-138d-47d7-8eb0-0fe8a0bb0841": 37.07,
    "b8d0160d-c1d8-4931-a04a-f1587ba1418a": 0.99,
    "cb549b6f-c078-478d-9fef-6756a58302ae": 0.99,
-   "f5a86dda-316b-4f6b-b0da-d8ef76fb4cc7": 65.78
+   "f5a86dda-316b-4f6b-b0da-d8ef76fb4cc7": 60.96
   },
   "reprice": {
    "floor": null,
-   "lead": 1.22,
+   "lead": 1.05,
    "models": {
     "ecmwf_aifs025_single": 5.3,
-    "icon_seamless": 5.5,
-    "ukmo_seamless": 4.7
+    "icon_seamless": 5.7,
+    "ukmo_seamless": 4.9
    },
-   "move_pp": 10.9,
-   "mu": 5.63,
-   "sigma": 0.71
+   "move_pp": 4.8,
+   "mu": 5.73,
+   "sigma": 0.69
   },
-  "repriced_at": "2026-11-03T05:45:49.958852+00:00",
+  "repriced_at": "2026-11-03T09:45:47.900207+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
