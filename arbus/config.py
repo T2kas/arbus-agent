@@ -1136,12 +1136,19 @@ FUEL_HORIZON_DAYS = _env_int("FUEL_HORIZON_DAYS", 1)     # create tomorrow's
 # market at 12:00 — right after the old one has resolved. Its own gate, separate
 # from the weather 18:00 creation.
 FUEL_CREATE_HOUR = _env_int("FUEL_CREATE_HOUR", 12)
-# Closes at FUEL_CLOSE_HOUR on the day BEFORE the market's date (owner
-# 2026-11-03: no edge left). Live station prices are public in the morning
-# (chain apps, fuel-prices.eu), so a 10:00 same-day close let anyone read the
-# answer off the pumps. 0 days before = the old same-day close.
+# Closes at FUEL_CLOSE_HOUR:FUEL_CLOSE_MINUTE on the last LEA publication day
+# BEFORE the market's date (Monday's on Friday; owner 2026-11-03: no edge
+# left). LEA's live map degalukainos.ena.lt shows stations' prices as they are
+# submitted before 10:00 and voluntary real-time updates (weekends too), so the
+# old 10:00 same-day close let anyone read the answer. The map's average stayed
+# frozen from ~17:00 on 2026-11-03 (A95 1.879 vs bulletin 1.878), so a late
+# evening close gives nothing away. 0 days before = the old same-day close.
 FUEL_CLOSE_DAYS_BEFORE = _env_int("FUEL_CLOSE_DAYS_BEFORE", 1)
-FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 21)
+FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 23)
+# No market when a working day between the base bulletin and the market's date
+# had no bulletin (a holiday like Vėlinės 2026-11-02): the price moved unseen.
+FUEL_SKIP_AFTER_GAP = os.environ.get("FUEL_SKIP_AFTER_GAP", "on").strip().lower() not in (
+    "off", "false", "0", "no")
 # The weekday table is re-fitted every day on the last N weeks of LEA bulletins
 # (kept in the bot state); FUEL_WEEKDAY_MODEL above is only the fallback.
 # 0 = use the static table.
@@ -1169,7 +1176,7 @@ GAMES_MIN_LEAD_HOURS = _env_int("GAMES_MIN_LEAD_HOURS", 3)   # never open a mark
 GAMES_LIQUIDITY = _env_int("GAMES_LIQUIDITY", 10000)         # team 2026-10-25: sport 10k (was 20k)
 GAMES_LKL_IMAGE = _env_str("GAMES_LKL_IMAGE", "")             # empty -> the Žalgiris image
 GAMES_TOP_IMAGE = _env_str("GAMES_TOP_IMAGE", "")             # empty -> the TOPLYGA image
-FUEL_CLOSE_MINUTE = _env_int("FUEL_CLOSE_MINUTE", 0)
+FUEL_CLOSE_MINUTE = _env_int("FUEL_CLOSE_MINUTE", 30)
 
 # ── Market health (arbus stats) ─────────────────────────────────────────────
 # A market nobody trades is a wasted slot and, more usefully, evidence about

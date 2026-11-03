@@ -144,9 +144,9 @@ def test_new_market_reuses_previous_days_image(monkeypatch):
     specs = fuel.plan_new_markets([existing], now, fuel._tz())
     petrol = [s for s in specs if s["fuel"] == "benzinas"]
     assert petrol and petrol[0]["image_url"] == "https://img/yesterday.jpg"
-    # closes the evening BEFORE the market's date (Sept 23): live pump prices
-    # are public in the morning
-    assert petrol[0]["closes_at"].startswith("2026-09-22T21:00")
+    # closes late the evening BEFORE the market's date (Sept 23): LEA's live
+    # map shows the morning submissions
+    assert petrol[0]["closes_at"].startswith("2026-09-22T23:30")
 
 
 def test_publication_days_skip_weekends_and_holidays():
@@ -284,5 +284,19 @@ def test_plan_uses_the_recent_model(monkeypatch):
 def test_no_market_opened_after_its_evening_close(monkeypatch):
     from datetime import datetime, timezone
     monkeypatch.setattr(fuel, "latest_lea_price", lambda f, **k: (2.0, "u"))
-    late = datetime(2026, 9, 22, 18, 30, tzinfo=timezone.utc)      # 21:30 Vilnius
+    late = datetime(2026, 9, 22, 20, 0, tzinfo=timezone.utc)       # 23:00 Vilnius
     assert fuel.plan_new_markets([], late, fuel._tz()) == []
+
+
+def test_monday_market_closes_on_friday_and_holiday_gap_is_skipped(monkeypatch):
+    from datetime import datetime, timezone
+    monkeypatch.setattr(fuel, "latest_lea_price",
+                        lambda f, **k: (2.0, "https://www.ena.lt/Naujiena/kdk-20260925/"))
+    fri = datetime(2026, 9, 25, 10, tzinfo=timezone.utc)
+    specs = fuel.plan_new_markets([], fri, fuel._tz())
+    assert specs and all(s["closes_at"].startswith("2026-09-25T23:30") for s in specs)
+    # Monday 2 Nov 2026 (Vėlinės): Tuesday's market would start from Friday's price
+    monkeypatch.setattr(fuel, "latest_lea_price",
+                        lambda f, **k: (2.0, "https://www.ena.lt/Naujiena/kdk-20261030/"))
+    hol = datetime(2026, 11, 2, 11, tzinfo=timezone.utc)
+    assert fuel.plan_new_markets([], hol, fuel._tz()) == []

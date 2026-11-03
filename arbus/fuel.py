@@ -458,12 +458,18 @@ def market_spec(fuel: str, target_iso: str, image_url: str,
     expected = forecast + drift              # weekly pump-price cycle (Tuesday jump)
     buckets = build_buckets(expected)
     pcts = bucket_probabilities(expected, buckets, sigma)
-    # Closes the EVENING BEFORE (FUEL_CLOSE_DAYS_BEFORE=1): stations' live
-    # prices are public (chain apps, fuel-prices.eu), so a market still open on
-    # the morning the LEA average is collected can be read off the pumps.
+    # Closes late on the LAST PUBLICATION DAY BEFORE the market's date (Monday's
+    # market on Friday): LEA's own live map (degalukainos.ena.lt) shows each
+    # station's price as it is submitted before 10:00, plus voluntary real-time
+    # updates (also at weekends), so a market open on the morning — or over the
+    # weekend — before its date can be read off the map.
+    close_day = d
+    if config.FUEL_CLOSE_DAYS_BEFORE > 0:
+        close_day = d - timedelta(days=1)
+        while not is_publication_day(close_day):
+            close_day -= timedelta(days=1)
     closes_at = datetime.combine(
-        d - timedelta(days=config.FUEL_CLOSE_DAYS_BEFORE),
-        dtime(hour=config.FUEL_CLOSE_HOUR, minute=config.FUEL_CLOSE_MINUTE), tzinfo=tz)
+        close_day, dtime(hour=config.FUEL_CLOSE_HOUR, minute=config.FUEL_CLOSE_MINUTE), tzinfo=tz)
     return {
         "fuel": fuel,
         "date": target_iso,
@@ -524,6 +530,14 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
         for d in next_publication_days(today, horizon):
             iso = d.isoformat()
             if skip_existing and (fuel, iso) in have:
+                continue
+            if (config.FUEL_SKIP_AFTER_GAP and base is not None and any(
+                    (base + timedelta(days=i)).weekday() < 5 for i in range(1, (d - base).days))):
+                # A working day without a bulletin in between (a holiday, or
+                # today's bulletin not out yet): the price has moved unseen for a
+                # day while the live map may already show it — no market.
+                log.info("fuel %s %s: base bulletin %s is not the previous working day — skipped",
+                         fuel, iso, base)
                 continue
             model = recent_weekday_model(hist, d) if hist else None
             spec = market_spec(fuel, iso, images.get(fuel, ""), forecast, tz, base, model)
