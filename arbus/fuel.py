@@ -325,14 +325,122 @@ def _context_text(fuel: str, forecast: float, d: date | None = None) -> str:
     )
 
 
-def drift_and_sigma(target: date, base: date | None = None) -> tuple[float, float]:
+# ── recent weekday cycle, re-fitted every day from the bulletins themselves ───
+#
+# The weekly cycle is not stable: the Tuesday jump was +8.7 ct in May and
+# +4.4 ct in October, Friday went from −2.4 ct to +0.6 ct, and the spread of
+# each weekday shrank from 2–4 ct to ~0.5–1 ct. A table fitted once goes stale
+# and anyone who simply watches the last few weeks beats it. So the bot keeps
+# the LEA averages in its state and re-fits (median change, sd) per weekday on
+# the last FUEL_RECENT_WEEKS weeks. Walk-forward test on 2026-04 → 10-30 (log
+# density at the real price, lower = better): static table 2.257 → 12-week
+# window 2.150 (2.218 → 2.093 on the later half).
+
+def bulletin_prices(iso: str) -> dict[str, float]:
+    """Both fuels' LEA averages for the EXACT date (from its dated URL), or {}."""
+    for prefix in ("kdk", "ndk"):
+        try:
+            html = _get(_kdk_url(iso, prefix))
+        except Exception:                                # noqa: BLE001 — 404 = no bulletin
+            continue
+        out = {f: p for f in FUELS if (p := _price(html, f)) is not None}
+        if out:
+            return out
+    return {}
+
+
+def _bulletin_prices_with_sitemap():
+    """bulletin_prices, falling back to descriptive-slug bulletins found by the
+    date in their URL in the sitemap (fetched at most once per call)."""
+    slugs: dict[str, list[str]] | None = None
+
+    def fetch(iso: str) -> dict[str, float]:
+        nonlocal slugs
+        got = bulletin_prices(iso)
+        if got:
+            return got
+        if slugs is None:
+            slugs = {}
+            try:
+                for slug, y, mo, d in _KDK_SLUG_RE.findall(_get("https://www.ena.lt/sitemap.xml")):
+                    slugs.setdefault(f"{y}-{mo}-{d}", []).append(slug)
+            except Exception as exc:                     # noqa: BLE001
+                log.warning("fuel: sitemap fetch failed: %s", exc)
+        for slug in slugs.get(iso, []):
+            try:
+                html = _get(f"https://www.ena.lt/Naujiena/{slug}/")
+            except Exception:                            # noqa: BLE001
+                continue
+            out = {f: p for f in FUELS if (p := _price(html, f)) is not None}
+            if out:
+                return out
+        return {}
+    return fetch
+
+
+def update_history(state: dict, today: date, weeks: int | None = None,
+                   fetch=None) -> dict:
+    """Fill state["_fuel_hist"] = {iso: {fuel: price}} for the publication days
+    of the last `weeks` weeks (fetching only the missing ones; a day still
+    missing after 3 days is remembered as {} so it is not re-fetched forever)."""
+    weeks = config.FUEL_RECENT_WEEKS if weeks is None else weeks
+    fetch = fetch or _bulletin_prices_with_sitemap()
+    hist = state.setdefault("_fuel_hist", {})
+    start = today - timedelta(days=7 * weeks + 7)
+    for iso in [k for k in hist if k < start.isoformat()]:
+        del hist[iso]
+    d = start
+    while d <= today:
+        iso = d.isoformat()
+        if is_publication_day(d) and iso not in hist:
+            try:
+                got = fetch(iso)
+            except Exception as exc:                     # noqa: BLE001
+                log.warning("fuel history %s: %s", iso, exc)
+                got = {}
+            if got or (today - d).days >= 3:
+                hist[iso] = got
+        d += timedelta(days=1)
+    return hist
+
+
+def recent_weekday_model(hist: dict, target: date, weeks: int | None = None) -> dict:
+    """{weekday: (median change €/l, sd)} from consecutive bulletins (only a
+    weekend in between, never a holiday) of the last `weeks` weeks before
+    `target`, both fuels pooled. A weekday with too few changes keeps the
+    static FUEL_WEEKDAY_MODEL entry."""
+    weeks = config.FUEL_RECENT_WEEKS if weeks is None else weeks
+    lo = (target - timedelta(days=7 * weeks)).isoformat()
+    days = sorted(k for k, v in hist.items() if v and lo <= k < target.isoformat())
+    changes: dict[int, list[float]] = {}
+    for a, b in zip(days, days[1:]):
+        da, db = date.fromisoformat(a), date.fromisoformat(b)
+        if any((da + timedelta(days=i)).weekday() < 5 for i in range(1, (db - da).days)):
+            continue                                     # a working day (holiday/missing) in between
+        for f in FUELS:
+            if f in hist[a] and f in hist[b]:
+                changes.setdefault(db.weekday(), []).append(hist[b][f] - hist[a][f])
+    model = dict(config.FUEL_WEEKDAY_MODEL)
+    for wd, v in changes.items():
+        if len(v) < config.FUEL_RECENT_MIN_CHANGES:
+            continue
+        v = sorted(v)
+        mid = len(v) // 2
+        med = v[mid] if len(v) % 2 else (v[mid - 1] + v[mid]) / 2
+        sd = math.sqrt(sum((x - med) ** 2 for x in v) / (len(v) - 1))
+        model[wd] = (round(med, 4), round(max(sd, config.FUEL_SIGMA_FLOOR), 4))
+    return model
+
+
+def drift_and_sigma(target: date, base: date | None = None,
+                    model: dict | None = None) -> tuple[float, float]:
     """Expected change €/l from the base bulletin's price to the target day's,
     and its σ. Each weekday's (drift, σ) in FUEL_WEEKDAY_MODEL is the change
     from the PREVIOUS bulletin (Monday's covers the weekend). When working days
     in between have no bulletin (a public holiday — e.g. Monday 2 Nov 2026,
     Vėlinės, made Tuesday's market start from Friday's price), their drifts are
     added too and the σ's combined."""
-    model = config.FUEL_WEEKDAY_MODEL
+    model = model or config.FUEL_WEEKDAY_MODEL
     days = [target]
     if base is not None and base < target:
         days = [base + timedelta(days=i) for i in range(1, (target - base).days + 1)]
@@ -343,14 +451,19 @@ def drift_and_sigma(target: date, base: date | None = None) -> tuple[float, floa
 
 
 def market_spec(fuel: str, target_iso: str, image_url: str,
-                forecast: float, tz: ZoneInfo, base: date | None = None) -> dict:
+                forecast: float, tz: ZoneInfo, base: date | None = None,
+                model: dict | None = None) -> dict:
     d = date.fromisoformat(target_iso)
-    drift, sigma = drift_and_sigma(d, base)
+    drift, sigma = drift_and_sigma(d, base, model)
     expected = forecast + drift              # weekly pump-price cycle (Tuesday jump)
     buckets = build_buckets(expected)
     pcts = bucket_probabilities(expected, buckets, sigma)
+    # Closes the EVENING BEFORE (FUEL_CLOSE_DAYS_BEFORE=1): stations' live
+    # prices are public (chain apps, fuel-prices.eu), so a market still open on
+    # the morning the LEA average is collected can be read off the pumps.
     closes_at = datetime.combine(
-        d, dtime(hour=config.FUEL_CLOSE_HOUR, minute=config.FUEL_CLOSE_MINUTE), tzinfo=tz)
+        d - timedelta(days=config.FUEL_CLOSE_DAYS_BEFORE),
+        dtime(hour=config.FUEL_CLOSE_HOUR, minute=config.FUEL_CLOSE_MINUTE), tzinfo=tz)
     return {
         "fuel": fuel,
         "date": target_iso,
@@ -376,7 +489,8 @@ def _tz() -> ZoneInfo:
 def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
                      *, skip_existing: bool = True,
                      horizon: int | None = None,
-                     forecasts: dict | None = None) -> list[dict]:
+                     forecasts: dict | None = None,
+                     state: dict | None = None) -> list[dict]:
     """Specs for the daily fuel markets that should exist over the horizon. The
     newest image of an existing fuel market is reused per fuel."""
     horizon = config.FUEL_HORIZON_DAYS if horizon is None else horizon
@@ -391,6 +505,12 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
         img = str(m.get("image_url") or "")
         if img and tgt[0] not in images:
             images[tgt[0]] = img
+    hist = {}
+    if state is not None and config.FUEL_RECENT_WEEKS > 0:
+        try:
+            hist = update_history(state, today)
+        except Exception as exc:                         # noqa: BLE001 — fall back to the table
+            log.warning("fuel history update failed: %s", exc)
     specs = []
     for fuel in FUELS:
         forecast, base = (forecasts or {}).get(fuel), None
@@ -405,7 +525,12 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
             iso = d.isoformat()
             if skip_existing and (fuel, iso) in have:
                 continue
-            specs.append(market_spec(fuel, iso, images.get(fuel, ""), forecast, tz, base))
+            model = recent_weekday_model(hist, d) if hist else None
+            spec = market_spec(fuel, iso, images.get(fuel, ""), forecast, tz, base, model)
+            if datetime.fromisoformat(spec["closes_at"]) <= now + timedelta(hours=1):
+                log.info("fuel %s %s: too late to open (closes %s)", fuel, iso, spec["closes_at"])
+                continue
+            specs.append(spec)
     return specs
 
 

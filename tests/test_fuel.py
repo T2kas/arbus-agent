@@ -144,7 +144,9 @@ def test_new_market_reuses_previous_days_image(monkeypatch):
     specs = fuel.plan_new_markets([existing], now, fuel._tz())
     petrol = [s for s in specs if s["fuel"] == "benzinas"]
     assert petrol and petrol[0]["image_url"] == "https://img/yesterday.jpg"
-    assert petrol[0]["closes_at"].endswith("10:00:00+03:00")
+    # closes the evening BEFORE the market's date (Sept 23): live pump prices
+    # are public in the morning
+    assert petrol[0]["closes_at"].startswith("2026-09-22T21:00")
 
 
 def test_publication_days_skip_weekends_and_holidays():
@@ -212,3 +214,75 @@ def test_drift_adds_days_without_a_bulletin():
     assert s == pytest.approx((m[0][1] ** 2 + m[1][1] ** 2) ** 0.5)
     # Monday from Friday is just Monday's coefficients (they already cover the weekend)
     assert fuel.drift_and_sigma(date(2026, 11, 9), date(2026, 11, 6)) == pytest.approx(m[0])
+
+
+def _hist(changes_by_week, start="2026-08-03"):
+    """A bulletin history: each week Mon..Fri gets the given changes (€/l) from
+    the previous bulletin, both fuels the same."""
+    from datetime import date, timedelta
+    h, p, d = {}, 2.0, date.fromisoformat(start)
+    for week in changes_by_week:
+        for i, ch in enumerate(week):
+            p = round(p + ch, 4)
+            h[(d + timedelta(days=i)).isoformat()] = {"benzinas": p, "dyzelinas": p + 0.3}
+        d += timedelta(days=7)
+    return h
+
+
+def test_recent_weekday_model_follows_the_last_weeks():
+    from datetime import date
+    from arbus import config
+    week = [-0.01, +0.04, -0.02, -0.01, +0.005]
+    h = _hist([week] * 12)
+    m = fuel.recent_weekday_model(h, date(2026, 10, 27))
+    assert m[1][0] == pytest.approx(0.04)          # Tuesday jump re-fitted to +4 ct
+    assert m[4][0] == pytest.approx(0.005)         # Friday now rises
+    assert m[1][1] == config.FUEL_SIGMA_FLOOR      # no spread -> the σ floor
+    # too little history -> the static table
+    assert fuel.recent_weekday_model(_hist([week] * 2), date(2026, 8, 20)) == config.FUEL_WEEKDAY_MODEL
+
+
+def test_recent_model_skips_changes_across_a_holiday():
+    from datetime import date
+    h = _hist([[-0.01, +0.04, -0.02, -0.01, 0.0]] * 12)
+    h.pop("2026-10-19")                             # a Monday without a bulletin
+    h["2026-10-20"] = {"benzinas": 1.0, "dyzelinas": 1.3}   # wild Fri->Tue gap, then back
+    h["2026-10-21"] = dict(h["2026-10-20"])
+    m = fuel.recent_weekday_model(h, date(2026, 10, 27))
+    assert m[1][0] == pytest.approx(0.04)          # the Fri->Tue pair is not a "Tuesday"
+
+
+def test_update_history_fetches_only_missing_days():
+    from datetime import date
+    calls = []
+
+    def fetch(iso):
+        calls.append(iso)
+        return {} if iso == "2026-11-03" else {"benzinas": 1.9}
+    state = {}
+    fuel.update_history(state, date(2026, 11, 3), weeks=1, fetch=fetch)
+    assert "2026-11-02" not in calls                # Vėlinės: no bulletin, not fetched
+    assert "2026-11-03" not in state["_fuel_hist"]  # today's not out yet: retried later
+    n = len(calls)
+    fuel.update_history(state, date(2026, 11, 3), weeks=1, fetch=fetch)
+    assert calls[n:] == ["2026-11-03"]
+
+
+def test_plan_uses_the_recent_model(monkeypatch):
+    from datetime import datetime, timezone
+    monkeypatch.setattr(fuel, "latest_lea_price",
+                        lambda f, **k: (2.0, "https://www.ena.lt/Naujiena/kdk-20261026/"))
+    monkeypatch.setattr(fuel, "update_history",
+                        lambda state, today, **k: _hist([[-0.01, +0.03, -0.02, -0.01, 0.0]] * 12))
+    now = datetime(2026, 10, 26, 12, tzinfo=timezone.utc)          # Monday -> Tuesday's market
+    spec = [s for s in fuel.plan_new_markets([], now, fuel._tz(), state={})
+            if s["fuel"] == "benzinas"][0]
+    lo, hi = fuel.parse_price_bucket(spec["options"][2]["label"])
+    assert lo <= 2.03 <= hi                         # +3 ct, not the static +6.25 ct
+
+
+def test_no_market_opened_after_its_evening_close(monkeypatch):
+    from datetime import datetime, timezone
+    monkeypatch.setattr(fuel, "latest_lea_price", lambda f, **k: (2.0, "u"))
+    late = datetime(2026, 9, 22, 18, 30, tzinfo=timezone.utc)      # 21:30 Vilnius
+    assert fuel.plan_new_markets([], late, fuel._tz()) == []

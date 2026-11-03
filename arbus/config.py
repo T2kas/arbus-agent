@@ -1136,7 +1136,18 @@ FUEL_HORIZON_DAYS = _env_int("FUEL_HORIZON_DAYS", 1)     # create tomorrow's
 # market at 12:00 — right after the old one has resolved. Its own gate, separate
 # from the weather 18:00 creation.
 FUEL_CREATE_HOUR = _env_int("FUEL_CREATE_HOUR", 12)
-FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 10)
+# Closes at FUEL_CLOSE_HOUR on the day BEFORE the market's date (owner
+# 2026-11-03: no edge left). Live station prices are public in the morning
+# (chain apps, fuel-prices.eu), so a 10:00 same-day close let anyone read the
+# answer off the pumps. 0 days before = the old same-day close.
+FUEL_CLOSE_DAYS_BEFORE = _env_int("FUEL_CLOSE_DAYS_BEFORE", 1)
+FUEL_CLOSE_HOUR = _env_int("FUEL_CLOSE_HOUR", 21)
+# The weekday table is re-fitted every day on the last N weeks of LEA bulletins
+# (kept in the bot state); FUEL_WEEKDAY_MODEL above is only the fallback.
+# 0 = use the static table.
+FUEL_RECENT_WEEKS = _env_int("FUEL_RECENT_WEEKS", 12)
+FUEL_RECENT_MIN_CHANGES = _env_int("FUEL_RECENT_MIN_CHANGES", 8)   # per weekday, fuels pooled
+FUEL_SIGMA_FLOOR = _env_float("FUEL_SIGMA_FLOOR", 0.010)
 
 # ── Game markets (arbus games): LKL + TOPLYGA, created ~a week ahead ─────────
 # Each run creates a market for every game starting within GAMES_HORIZON_DAYS

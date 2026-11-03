@@ -1669,6 +1669,7 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
         # after the old one resolves (LEA publishes ~11:00), not at the weather hour.
         if config.FUEL_ENABLED and (force_create or vil_hour >= config.FUEL_CREATE_HOUR):
             from . import fuel                            # lazy: fuel imports weather
-            f_specs = fuel.plan_new_markets(rows, now, tz)
+            f_specs = fuel.plan_new_markets(rows, now, tz, state=state)
             reports += fuel.create_markets(f_specs, alert=alert, do_create=True)
+            save_state(state)                             # keeps the LEA history
     return reports, ""
