@@ -296,7 +296,7 @@
   "resolved_via": "sports"
  },
  "0691ec96-0da9-4942-8209-3602cabbb3f3": {
-  "checksum": "369866d676fc150be0b5aaf9e0be42f879edfbcb74d570f59f33cfd18dc235bf",
+  "checksum": "d16ca38b32061bb15f9892729770e772e1e5c46aefbdec174b944b029835b467",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -307,6 +307,12 @@
    "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "226ca8b8-f1df-45c1-9ef2-ffe5466dd072": 4.68,
+   "807b244c-0fcd-4db9-b1b2-b5059855227b": 58.95,
+   "eaff6edd-bd54-4ebe-9c81-70206ad80e3b": 35.38,
+   "f01fa820-49b8-4b8b-bb9e-d02cc26e253f": 1.0
+  },
   "reprice": {
    "floor": null,
    "lead": 0.58,
@@ -4361,7 +4367,7 @@
   "station": "vilniaus-ams"
  },
  "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
-  "checksum": "8e257cfe4b2651446c4e0d6bad11387de50166adb439c1dd13979016171a208f",
+  "checksum": "dd683bad2dc4265dc9e744e5b744b7ff4b03195c2e24ade866653a7135e079e4",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -5296,7 +5302,7 @@
   "station": "klaipedos-ams"
  },
  "3f7384b1-c99d-4e52-9f97-d6e27136559c": {
-  "checksum": "945ab6d3ccdc99c1dd638fcff3ae8c9b8f27a489462cf7f192dead727557f880",
+  "checksum": "2cc17be75c9f81be5f78d3302bd1447fc8ca47cd2388fcdef7704e5ea957691f",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
@@ -9028,7 +9034,7 @@
   "station": "kauno-ams"
  },
  "7bd77c6b-4b5a-4253-9421-703a222bf240": {
-  "checksum": "369866d676fc150be0b5aaf9e0be42f879edfbcb74d570f59f33cfd18dc235bf",
+  "checksum": "d16ca38b32061bb15f9892729770e772e1e5c46aefbdec174b944b029835b467",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
@@ -9039,6 +9045,12 @@
    "fbe534f8-2f75-4363-a238-4251ee89524a": 1.08
   },
   "mt_v": 2,
+  "pending_target": {
+   "465d996a-777e-4ed1-af0a-f6422452b287": 32.95,
+   "cda14796-8948-4c6d-b4f5-5cf8303d167b": 61.71,
+   "d71f681c-5535-42d0-ae5a-610df519bca2": 4.34,
+   "fbe534f8-2f75-4363-a238-4251ee89524a": 1.0
+  },
   "reprice": {
    "floor": null,
    "lead": 1.58,
@@ -18160,36 +18172,30 @@
   "resolved_via": "sports"
  },
  "cee72a09-cbac-4da9-a29e-29d5df09b4a0": {
-  "checksum": "945ab6d3ccdc99c1dd638fcff3ae8c9b8f27a489462cf7f192dead727557f880",
+  "checksum": "2cc17be75c9f81be5f78d3302bd1447fc8ca47cd2388fcdef7704e5ea957691f",
   "current_maximum": null,
   "date": "2026-11-05",
   "measurements": {},
   "model_target": {
    "020d533b-ce8e-4d43-b3c2-b397eac6d53f": 0.99,
-   "5838c79f-40f5-49e9-bc09-5ecd266281ad": 16.5,
-   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 78.37,
-   "6d354be7-a0d7-49f3-8c76-29469ceb61da": 4.13
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "020d533b-ce8e-4d43-b3c2-b397eac6d53f": 0.99,
    "5838c79f-40f5-49e9-bc09-5ecd266281ad": 15.61,
-   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 77.18,
+   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 77.19,
    "6d354be7-a0d7-49f3-8c76-29469ceb61da": 6.22
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
    "lead": 1.58,
    "models": {
     "ecmwf_aifs025_single": 8.6,
     "icon_seamless": 9.4,
-    "ukmo_seamless": 8.6
+    "ukmo_seamless": 8.3
    },
-   "move_pp": 2.2,
-   "mu": 9.23,
-   "sigma": 0.74
+   "move_pp": 2.1,
+   "mu": 9.16,
+   "sigma": 0.79
   },
-  "repriced_at": "2026-11-03T21:01:25.581097+00:00",
+  "repriced_at": "2026-11-03T21:10:49.043445+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -23205,7 +23211,7 @@
   "station": "kauno-ams"
  },
  "fa367673-0cf0-44de-b919-0b1b1dee32a3": {
-  "checksum": "8e257cfe4b2651446c4e0d6bad11387de50166adb439c1dd13979016171a208f",
+  "checksum": "dd683bad2dc4265dc9e744e5b744b7ff4b03195c2e24ade866653a7135e079e4",
   "current_maximum": null,
   "date": "2026-11-04",
   "measurements": {},
