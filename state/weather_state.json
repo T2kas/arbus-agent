@@ -22949,24 +22949,24 @@
   "date": "2026-11-04",
   "measurements": {},
   "model_target": {
-   "2e72ae6d-e3ab-4634-9b76-2b538bb7e8fb": 1.24,
-   "38f5ebbf-829c-4cb0-9b11-1e66b973d3d7": 20.45,
+   "2e72ae6d-e3ab-4634-9b76-2b538bb7e8fb": 1.5,
+   "38f5ebbf-829c-4cb0-9b11-1e66b973d3d7": 15.52,
    "60e39bce-7cda-4a23-b029-2e70fa9c3671": 0.99,
-   "e3a57eca-e250-47b0-990e-4c62901627b3": 77.32
+   "e3a57eca-e250-47b0-990e-4c62901627b3": 81.99
   },
   "reprice": {
    "floor": null,
-   "lead": 0.72,
+   "lead": 0.7,
    "models": {
     "ecmwf_aifs025_single": 6.3,
-    "icon_seamless": 6.5,
+    "icon_seamless": 6.1,
     "ukmo_seamless": 5.7
    },
-   "move_pp": 4.0,
-   "mu": 6.42,
-   "sigma": 0.65
+   "move_pp": 4.9,
+   "mu": 6.31,
+   "sigma": 0.63
   },
-  "repriced_at": "2026-11-03T17:45:52.192797+00:00",
+  "repriced_at": "2026-11-03T18:05:43.440127+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
