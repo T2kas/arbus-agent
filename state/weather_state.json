@@ -4463,31 +4463,25 @@
   "date": "2026-11-05",
   "measurements": {},
   "model_target": {
-   "017052c8-5e72-42b5-bab9-79a641414886": 37.54,
-   "22c2a8f0-5034-423e-9416-d4da71375dd2": 0.99,
-   "294bb20e-4239-48ee-b3a5-2d6609ef54d5": 60.48,
-   "56c13f50-5c6f-4449-bf2e-960dc32f6fbb": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
    "017052c8-5e72-42b5-bab9-79a641414886": 44.73,
    "22c2a8f0-5034-423e-9416-d4da71375dd2": 0.98,
-   "294bb20e-4239-48ee-b3a5-2d6609ef54d5": 53.3,
+   "294bb20e-4239-48ee-b3a5-2d6609ef54d5": 53.31,
    "56c13f50-5c6f-4449-bf2e-960dc32f6fbb": 0.98
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.24,
+   "lead": 0.95,
    "models": {
-    "ecmwf_aifs025_single": 9.7,
-    "icon_seamless": 10.3,
-    "ukmo_seamless": 10.0
+    "ecmwf_aifs025_single": 9.5,
+    "icon_seamless": 10.2,
+    "ukmo_seamless": 9.9
    },
-   "move_pp": 2.0,
-   "mu": 10.18,
-   "sigma": 0.75
+   "move_pp": 7.2,
+   "mu": 10.03,
+   "sigma": 0.69
   },
-  "repriced_at": "2026-11-04T05:10:46.283823+00:00",
+  "repriced_at": "2026-11-04T12:05:37.175165+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -9225,31 +9219,25 @@
   "date": "2026-11-05",
   "measurements": {},
   "model_target": {
-   "465d996a-777e-4ed1-af0a-f6422452b287": 32.61,
-   "cda14796-8948-4c6d-b4f5-5cf8303d167b": 61.2,
-   "d71f681c-5535-42d0-ae5a-610df519bca2": 5.18,
+   "465d996a-777e-4ed1-af0a-f6422452b287": 29.0,
+   "cda14796-8948-4c6d-b4f5-5cf8303d167b": 62.35,
+   "d71f681c-5535-42d0-ae5a-610df519bca2": 7.65,
    "fbe534f8-2f75-4363-a238-4251ee89524a": 1.0
   },
   "mt_v": 2,
-  "pending_target": {
-   "465d996a-777e-4ed1-af0a-f6422452b287": 29.01,
-   "cda14796-8948-4c6d-b4f5-5cf8303d167b": 62.34,
-   "d71f681c-5535-42d0-ae5a-610df519bca2": 7.66,
-   "fbe534f8-2f75-4363-a238-4251ee89524a": 1.0
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.22,
+   "lead": 0.95,
    "models": {
-    "ecmwf_aifs025_single": 10.7,
-    "icon_seamless": 11.0,
+    "ecmwf_aifs025_single": 10.4,
+    "icon_seamless": 11.1,
     "ukmo_seamless": 11.5
    },
-   "move_pp": 3.4,
-   "mu": 11.53,
-   "sigma": 0.97
+   "move_pp": 3.6,
+   "mu": 11.41,
+   "sigma": 1.02
   },
-  "repriced_at": "2026-11-04T05:45:46.144484+00:00",
+  "repriced_at": "2026-11-04T12:05:37.175165+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
