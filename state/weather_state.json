@@ -5281,6 +5281,27 @@
  },
  "3bd6abf2-a91e-40de-843e-27b876a5daeb": {},
  "3d649523-4039-4171-803f-50d97aa896b2": {},
+ "3d724955-f124-4129-ae6a-ea5a6f19750d": {
+  "checksum": "e3f30ab656634d92a862591d4287a824a59f6326e28a08002a018511329746f0",
+  "current_maximum": null,
+  "date": "2026-11-06",
+  "measurements": {},
+  "model_target": {
+   "672d1cfe-44af-4950-9bd4-65d9c0fa2d68": 50.0,
+   "691e8785-996d-4f69-9332-acf11c6944dd": 36.0,
+   "c4ad6792-d64a-44b2-8f3a-50f4d90b1460": 4.0,
+   "cfb3cbe0-4722-4898-99ae-97c2e67dcc40": 10.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "672d1cfe-44af-4950-9bd4-65d9c0fa2d68": 28.36,
+   "691e8785-996d-4f69-9332-acf11c6944dd": 66.99,
+   "c4ad6792-d64a-44b2-8f3a-50f4d90b1460": 3.66,
+   "cfb3cbe0-4722-4898-99ae-97c2e67dcc40": 0.99
+  },
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "3d9865b6-0d3a-4769-af36-c87b205a6af3": {
   "checksum": "1c4b16eded52f270cbe3d9a504d6b8672faa57abc1f840d580d190787248ab28",
   "current_maximum": 18.0,
@@ -9274,6 +9295,12 @@
    "fbe534f8-2f75-4363-a238-4251ee89524a": 1.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "465d996a-777e-4ed1-af0a-f6422452b287": 32.63,
+   "cda14796-8948-4c6d-b4f5-5cf8303d167b": 59.52,
+   "d71f681c-5535-42d0-ae5a-610df519bca2": 6.85,
+   "fbe534f8-2f75-4363-a238-4251ee89524a": 1.0
+  },
   "reprice": {
    "floor": null,
    "lead": 0.95,
@@ -14491,6 +14518,27 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
+ },
+ "ad4629e2-9e0d-4b66-9c1f-571240c6655e": {
+  "checksum": "43a2ab95c34a379ad57035b67602d07f690cc4bb8d06df006b5155c884fefd0c",
+  "current_maximum": null,
+  "date": "2026-11-06",
+  "measurements": {},
+  "model_target": {
+   "067b9973-2e1d-4d1e-ac7b-7e44085cf7f5": 10.0,
+   "0daebb6f-8d7a-4771-b125-8c3cd0f09754": 36.0,
+   "24724f8f-5a24-41e4-9421-e8ec20790766": 50.0,
+   "e8b378ee-9049-4adb-b158-865e91aa1f90": 4.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "067b9973-2e1d-4d1e-ac7b-7e44085cf7f5": 0.99,
+   "0daebb6f-8d7a-4771-b125-8c3cd0f09754": 77.71,
+   "24724f8f-5a24-41e4-9421-e8ec20790766": 20.05,
+   "e8b378ee-9049-4adb-b158-865e91aa1f90": 1.24
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "adb7089d-5e64-4e93-8e05-3b57de9cd717": {
   "checksum": "e0ccedb0ff6ed7e8934bb86226d7b8f406c05ab8a86fe5abd4bd676a7f5d7c40",
@@ -23739,6 +23787,27 @@
   "resolved_option_id": "1acabf0d-72ea-4c22-8606-21473e602720",
   "resolved_price": 2.244,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261013/"
+ },
+ "fd50d91b-e660-4262-9285-b4e6f37481e4": {
+  "checksum": "cd979f6ef7f90aea6a2fdf4e85ac66b70bba2a15378def1bf8c990fef3014828",
+  "current_maximum": null,
+  "date": "2026-11-06",
+  "measurements": {},
+  "model_target": {
+   "262d5a4e-6040-4d07-bab0-c372a6ccf264": 31.0,
+   "34117de7-c460-4324-9856-b5a56199ab05": 62.0,
+   "8bb54a04-eeeb-4cea-ac46-aceb35cbfb14": 1.0,
+   "b473173b-d17a-4b38-a568-2eac71d06245": 6.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "262d5a4e-6040-4d07-bab0-c372a6ccf264": 24.84,
+   "34117de7-c460-4324-9856-b5a56199ab05": 66.72,
+   "8bb54a04-eeeb-4cea-ac46-aceb35cbfb14": 0.99,
+   "b473173b-d17a-4b38-a568-2eac71d06245": 7.45
+  },
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "fd710f8e-afdd-4f2c-9d9b-7ae9b7d842a7": {
   "checksum": "930f6a6d7a4e865be4c1ddea3aca76bbf62ac51db6b2796c1cb7ddc2aa6dd834",
