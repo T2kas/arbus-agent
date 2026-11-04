@@ -4549,31 +4549,25 @@
    }
   },
   "model_target": {
-   "017052c8-5e72-42b5-bab9-79a641414886": 38.37,
+   "017052c8-5e72-42b5-bab9-79a641414886": 36.35,
    "22c2a8f0-5034-423e-9416-d4da71375dd2": 0.98,
-   "294bb20e-4239-48ee-b3a5-2d6609ef54d5": 59.66,
+   "294bb20e-4239-48ee-b3a5-2d6609ef54d5": 61.69,
    "56c13f50-5c6f-4449-bf2e-960dc32f6fbb": 0.98
   },
   "mt_v": 2,
-  "pending_target": {
-   "017052c8-5e72-42b5-bab9-79a641414886": 36.36,
-   "22c2a8f0-5034-423e-9416-d4da71375dd2": 0.98,
-   "294bb20e-4239-48ee-b3a5-2d6609ef54d5": 61.67,
-   "56c13f50-5c6f-4449-bf2e-960dc32f6fbb": 0.98
-  },
   "reprice": {
-   "floor": null,
-   "lead": 0.6,
+   "floor": 5.1,
+   "lead": 0.46,
    "models": {
-    "ecmwf_aifs025_single": 9.8,
-    "icon_seamless": 10.4,
+    "ecmwf_aifs025_single": 9.9,
+    "icon_seamless": 10.3,
     "ukmo_seamless": 9.5
    },
-   "move_pp": 8.7,
-   "mu": 10.13,
-   "sigma": 0.64
+   "move_pp": 2.0,
+   "mu": 10.15,
+   "sigma": 0.6
   },
-  "repriced_at": "2026-11-04T20:35:38.903321+00:00",
+  "repriced_at": "2026-11-04T23:55:32.444023+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
@@ -18595,30 +18589,24 @@
   },
   "model_target": {
    "020d533b-ce8e-4d43-b3c2-b397eac6d53f": 0.99,
-   "5838c79f-40f5-49e9-bc09-5ecd266281ad": 11.79,
-   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 81.92,
-   "6d354be7-a0d7-49f3-8c76-29469ceb61da": 5.29
+   "5838c79f-40f5-49e9-bc09-5ecd266281ad": 14.47,
+   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 82.16,
+   "6d354be7-a0d7-49f3-8c76-29469ceb61da": 2.37
   },
   "mt_v": 2,
-  "pending_target": {
-   "020d533b-ce8e-4d43-b3c2-b397eac6d53f": 0.99,
-   "5838c79f-40f5-49e9-bc09-5ecd266281ad": 14.49,
-   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 82.13,
-   "6d354be7-a0d7-49f3-8c76-29469ceb61da": 2.38
-  },
   "reprice": {
-   "floor": null,
-   "lead": 0.54,
+   "floor": 4.1,
+   "lead": 0.46,
    "models": {
-    "ecmwf_aifs025_single": 8.3,
+    "ecmwf_aifs025_single": 8.6,
     "icon_seamless": 9.4,
     "ukmo_seamless": 8.4
    },
-   "move_pp": 3.2,
-   "mu": 9.11,
-   "sigma": 0.72
+   "move_pp": 2.9,
+   "mu": 9.26,
+   "sigma": 0.66
   },
-  "repriced_at": "2026-11-04T22:05:37.445218+00:00",
+  "repriced_at": "2026-11-04T23:55:32.444023+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
