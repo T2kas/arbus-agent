@@ -18388,6 +18388,12 @@
    "6d354be7-a0d7-49f3-8c76-29469ceb61da": 7.82
   },
   "mt_v": 2,
+  "pending_target": {
+   "020d533b-ce8e-4d43-b3c2-b397eac6d53f": 0.99,
+   "5838c79f-40f5-49e9-bc09-5ecd266281ad": 8.91,
+   "5e4d81bb-a1d5-4a49-ba38-9a6877520626": 80.84,
+   "6d354be7-a0d7-49f3-8c76-29469ceb61da": 9.26
+  },
   "reprice": {
    "floor": null,
    "lead": 1.04,
