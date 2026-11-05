@@ -9678,18 +9678,25 @@
   "date": "2026-11-07",
   "measurements": {},
   "model_target": {
-   "bb5b3626-1883-4f10-9e07-9051a2c158f5": 49.0,
-   "c61b14c9-6cba-4d7a-8a9f-a7bc1a53d902": 38.0,
-   "d6d20038-c19c-4946-a8f6-b63626377d0e": 4.0,
-   "d824e52b-591c-4129-a85b-46bc8c8d8f1d": 9.0
+   "bb5b3626-1883-4f10-9e07-9051a2c158f5": 79.68,
+   "c61b14c9-6cba-4d7a-8a9f-a7bc1a53d902": 16.39,
+   "d6d20038-c19c-4946-a8f6-b63626377d0e": 0.99,
+   "d824e52b-591c-4129-a85b-46bc8c8d8f1d": 2.93
   },
   "mt_v": 2,
-  "pending_target": {
-   "bb5b3626-1883-4f10-9e07-9051a2c158f5": 79.67,
-   "c61b14c9-6cba-4d7a-8a9f-a7bc1a53d902": 16.4,
-   "d6d20038-c19c-4946-a8f6-b63626377d0e": 0.99,
-   "d824e52b-591c-4129-a85b-46bc8c8d8f1d": 2.94
+  "reprice": {
+   "floor": null,
+   "lead": 1.78,
+   "models": {
+    "ecmwf_aifs025_single": 5.3,
+    "icon_seamless": 5.2,
+    "ukmo_seamless": 4.7
+   },
+   "move_pp": 30.7,
+   "mu": 5.63,
+   "sigma": 0.7
   },
+  "repriced_at": "2026-11-05T16:20:44.882043+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -11163,18 +11170,25 @@
   "date": "2026-11-07",
   "measurements": {},
   "model_target": {
-   "3ee8094d-4eff-4978-8f12-648ef028ae68": 40.0,
-   "64cadce9-b07a-430d-b7ab-a19690f8db5a": 8.0,
-   "99645537-84c8-455d-b591-4ebae483b6fa": 5.0,
-   "fd1cc19c-e5c7-436a-9bb7-4e4d812cdab6": 47.0
+   "3ee8094d-4eff-4978-8f12-648ef028ae68": 68.03,
+   "64cadce9-b07a-430d-b7ab-a19690f8db5a": 0.99,
+   "99645537-84c8-455d-b591-4ebae483b6fa": 5.96,
+   "fd1cc19c-e5c7-436a-9bb7-4e4d812cdab6": 25.02
   },
   "mt_v": 2,
-  "pending_target": {
-   "3ee8094d-4eff-4978-8f12-648ef028ae68": 68.0,
-   "64cadce9-b07a-430d-b7ab-a19690f8db5a": 0.99,
-   "99645537-84c8-455d-b591-4ebae483b6fa": 5.98,
-   "fd1cc19c-e5c7-436a-9bb7-4e4d812cdab6": 25.04
+  "reprice": {
+   "floor": null,
+   "lead": 1.78,
+   "models": {
+    "ecmwf_aifs025_single": 6.7,
+    "icon_seamless": 6.2,
+    "ukmo_seamless": 5.6
+   },
+   "move_pp": 28.0,
+   "mu": 6.55,
+   "sigma": 0.9
   },
+  "repriced_at": "2026-11-05T16:20:44.882043+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
