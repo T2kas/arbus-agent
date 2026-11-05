@@ -3231,6 +3231,12 @@
    "ab0dbf84-50a3-490f-bc28-81e010f68bf8": 55.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "43990fa5-f9eb-4c31-bbeb-ec925f5db216": 3.85,
+   "454ed102-5329-4b83-8983-81b4d93f50e1": 41.84,
+   "9171365b-922e-48ac-8797-08076cfb81e9": 1.85,
+   "ab0dbf84-50a3-490f-bc28-81e010f68bf8": 52.46
+  },
   "resolved": false,
   "station": "klaipedos-ams"
  },
