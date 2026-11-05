@@ -4530,10 +4530,10 @@
   "station": "vilniaus-ams"
  },
  "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
-  "checksum": "2fac2c7d66bd3c22122261ac8a41c887e836803379f505b6333b7b8be05e4f25",
-  "current_maximum": 5.5,
+  "checksum": "021da47555fa81332fc7520168b6c51bde180f8ad36b868d834562f0029cad8c",
+  "current_maximum": 5.6,
   "date": "2026-11-05",
-  "max_received_at": "2026-11-05T01:10:40.485826+00:00",
+  "max_received_at": "2026-11-05T03:10:42.593273+00:00",
   "measurements": {
    "2026-11-04 22:00:00": {
     "checksum": "7dec0cf415ad59096f529b36d446123e3d7b0eba9eb77e843fc709d89c5e58ca",
@@ -4564,6 +4564,12 @@
     "received_at": "2026-11-05T02:10:46.273159+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 5.5
+   },
+   "2026-11-05 03:00:00": {
+    "checksum": "021da47555fa81332fc7520168b6c51bde180f8ad36b868d834562f0029cad8c",
+    "received_at": "2026-11-05T03:10:42.593273+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 5.6
    }
   },
   "model_target": {
@@ -5364,7 +5370,7 @@
  "3bd6abf2-a91e-40de-843e-27b876a5daeb": {},
  "3d649523-4039-4171-803f-50d97aa896b2": {},
  "3d724955-f124-4129-ae6a-ea5a6f19750d": {
-  "checksum": "2fac2c7d66bd3c22122261ac8a41c887e836803379f505b6333b7b8be05e4f25",
+  "checksum": "021da47555fa81332fc7520168b6c51bde180f8ad36b868d834562f0029cad8c",
   "current_maximum": null,
   "date": "2026-11-06",
   "measurements": {},
@@ -9389,7 +9395,7 @@
   "station": "kauno-ams"
  },
  "7bd77c6b-4b5a-4253-9421-703a222bf240": {
-  "checksum": "09a83e313dc2d0ace03bc600dc9d01a15126924f882e13a5ebbe940c2dda8279",
+  "checksum": "223edcb36365d78b78d2f6d8cee0421dfdb396326f034fb870839157195e14af",
   "current_maximum": 11.5,
   "date": "2026-11-05",
   "eliminated": [
@@ -9426,6 +9432,12 @@
     "received_at": "2026-11-05T02:10:46.273159+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 11.2
+   },
+   "2026-11-05 03:00:00": {
+    "checksum": "223edcb36365d78b78d2f6d8cee0421dfdb396326f034fb870839157195e14af",
+    "received_at": "2026-11-05T03:10:42.593273+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 11.0
    }
   },
   "model_target": {
@@ -14657,7 +14669,7 @@
   "station": "klaipedos-ams"
  },
  "ad4629e2-9e0d-4b66-9c1f-571240c6655e": {
-  "checksum": "2d56405b9614c46aea3985fa417837972f4723af66a78e343fbdefc891fe4433",
+  "checksum": "588a944b4924fc706fc08e39090e0ef4689c2511d79086fd7e1bb3c73f1846e5",
   "current_maximum": null,
   "date": "2026-11-06",
   "measurements": {},
@@ -18605,7 +18617,7 @@
   "resolved_via": "sports"
  },
  "cee72a09-cbac-4da9-a29e-29d5df09b4a0": {
-  "checksum": "2d56405b9614c46aea3985fa417837972f4723af66a78e343fbdefc891fe4433",
+  "checksum": "588a944b4924fc706fc08e39090e0ef4689c2511d79086fd7e1bb3c73f1846e5",
   "current_maximum": 6.0,
   "date": "2026-11-05",
   "eliminated": [
@@ -18640,6 +18652,12 @@
    "2026-11-05 02:00:00": {
     "checksum": "2d56405b9614c46aea3985fa417837972f4723af66a78e343fbdefc891fe4433",
     "received_at": "2026-11-05T02:10:46.273159+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 6.0
+   },
+   "2026-11-05 03:00:00": {
+    "checksum": "588a944b4924fc706fc08e39090e0ef4689c2511d79086fd7e1bb3c73f1846e5",
+    "received_at": "2026-11-05T03:10:42.593273+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 6.0
    }
@@ -23985,7 +24003,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261013/"
  },
  "fd50d91b-e660-4262-9285-b4e6f37481e4": {
-  "checksum": "09a83e313dc2d0ace03bc600dc9d01a15126924f882e13a5ebbe940c2dda8279",
+  "checksum": "223edcb36365d78b78d2f6d8cee0421dfdb396326f034fb870839157195e14af",
   "current_maximum": null,
   "date": "2026-11-06",
   "measurements": {},
@@ -23996,6 +24014,12 @@
    "b473173b-d17a-4b38-a568-2eac71d06245": 2.92
   },
   "mt_v": 2,
+  "pending_target": {
+   "262d5a4e-6040-4d07-bab0-c372a6ccf264": 38.18,
+   "34117de7-c460-4324-9856-b5a56199ab05": 58.07,
+   "8bb54a04-eeeb-4cea-ac46-aceb35cbfb14": 1.0,
+   "b473173b-d17a-4b38-a568-2eac71d06245": 2.75
+  },
   "reprice": {
    "floor": null,
    "lead": 1.33,
