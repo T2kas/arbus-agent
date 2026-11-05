@@ -4530,7 +4530,7 @@
   "station": "vilniaus-ams"
  },
  "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
-  "checksum": "819773e4c6bd9b6fbcbd733440efa979a88d3b358a98d583f8052fae2960bcb3",
+  "checksum": "dd1743621f8f791e82effc7875d418757d1ffae9d3d69b62a053fa6da5b46517",
   "current_maximum": 7.6,
   "date": "2026-11-05",
   "max_received_at": "2026-11-05T06:10:40.561143+00:00",
@@ -5388,7 +5388,7 @@
  "3bd6abf2-a91e-40de-843e-27b876a5daeb": {},
  "3d649523-4039-4171-803f-50d97aa896b2": {},
  "3d724955-f124-4129-ae6a-ea5a6f19750d": {
-  "checksum": "819773e4c6bd9b6fbcbd733440efa979a88d3b358a98d583f8052fae2960bcb3",
+  "checksum": "dd1743621f8f791e82effc7875d418757d1ffae9d3d69b62a053fa6da5b46517",
   "current_maximum": null,
   "date": "2026-11-06",
   "measurements": {},
@@ -14705,7 +14705,7 @@
   "station": "klaipedos-ams"
  },
  "ad4629e2-9e0d-4b66-9c1f-571240c6655e": {
-  "checksum": "c9ac2807a97b9dfe11fcd4f9874d7035dbd0334cfbbc78d96196b40b719213ae",
+  "checksum": "9c02eb7b515ee46061fbf5d8f1ad626b08c2de6a9183ca949858643af00a7f6b",
   "current_maximum": null,
   "date": "2026-11-06",
   "measurements": {},
@@ -18653,7 +18653,7 @@
   "resolved_via": "sports"
  },
  "cee72a09-cbac-4da9-a29e-29d5df09b4a0": {
-  "checksum": "c9ac2807a97b9dfe11fcd4f9874d7035dbd0334cfbbc78d96196b40b719213ae",
+  "checksum": "9c02eb7b515ee46061fbf5d8f1ad626b08c2de6a9183ca949858643af00a7f6b",
   "current_maximum": 6.9,
   "date": "2026-11-05",
   "eliminated": [
