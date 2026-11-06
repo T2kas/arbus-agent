@@ -1075,7 +1075,7 @@
   "resolved_via": "sports"
  },
  "0e09192d-9a3e-4306-947d-756188355035": {
-  "checksum": "2278195f9b33368f3628565bce4589bea582d75538f3ae053a3c81bcdb534c50",
+  "checksum": "78e0a43e0191794b8d65c8dbc96bde7fb24581202183470dbb10fc9edd786bee",
   "current_maximum": null,
   "date": "2026-11-08",
   "measurements": {},
@@ -3249,7 +3249,7 @@
   "station": "vilniaus-ams"
  },
  "1df0c787-e6b3-4cb8-b052-e149d191574a": {
-  "checksum": "2278195f9b33368f3628565bce4589bea582d75538f3ae053a3c81bcdb534c50",
+  "checksum": "78e0a43e0191794b8d65c8dbc96bde7fb24581202183470dbb10fc9edd786bee",
   "current_maximum": null,
   "date": "2026-11-07",
   "measurements": {},
@@ -6981,7 +6981,7 @@
   "station": "kauno-ams"
  },
  "48df0018-739b-411b-a62c-3560522d04df": {
-  "checksum": "705dddc796afff3665eec0cff70a15e9fec77092dc0b1ee27094118712edec08",
+  "checksum": "aceeb771374091146db0dd1c99318d8fed3c8220bb3220d0fce2cef2675b97e7",
   "current_maximum": null,
   "date": "2026-11-08",
   "measurements": {},
@@ -9896,7 +9896,7 @@
   "station": "klaipedos-ams"
  },
  "7c009ea0-2201-4b9a-bdce-85afa4ad24e2": {
-  "checksum": "705dddc796afff3665eec0cff70a15e9fec77092dc0b1ee27094118712edec08",
+  "checksum": "aceeb771374091146db0dd1c99318d8fed3c8220bb3220d0fce2cef2675b97e7",
   "current_maximum": null,
   "date": "2026-11-07",
   "measurements": {},
@@ -11388,7 +11388,7 @@
   "station": "klaipedos-ams"
  },
  "87396e7c-cb4c-4d2f-bd66-6c7a0dda01bf": {
-  "checksum": "9126a380678ab29a5be95499ba3495adde05feb90e9f6637cf035e33fdb0d328",
+  "checksum": "05a92f94cd75040a39f19bbaaeecf358a986b5748abbd604ae875d267026e416",
   "current_maximum": null,
   "date": "2026-11-07",
   "measurements": {},
@@ -24422,7 +24422,7 @@
   "station": "kauno-ams"
  },
  "f989f116-3d10-4e69-afe7-aa0d08be5106": {
-  "checksum": "9126a380678ab29a5be95499ba3495adde05feb90e9f6637cf035e33fdb0d328",
+  "checksum": "05a92f94cd75040a39f19bbaaeecf358a986b5748abbd604ae875d267026e416",
   "current_maximum": null,
   "date": "2026-11-08",
   "measurements": {},
