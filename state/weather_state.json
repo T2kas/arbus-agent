@@ -6979,6 +6979,12 @@
    "9366654e-fafc-423a-a038-6302ca5d603d": 1.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "193df290-0dd1-41e9-960f-ea98a7bb8045": 35.72,
+   "36be0853-7e8c-473f-8dd5-ac4fa84ec992": 62.31,
+   "5dad8e8b-bd7a-496e-b263-aec01a21e53d": 0.99,
+   "9366654e-fafc-423a-a038-6302ca5d603d": 0.99
+  },
   "resolved": false,
   "station": "vilniaus-ams"
  },
