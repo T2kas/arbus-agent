@@ -15,7 +15,7 @@ name: games-bot
 on:
   schedule:
     - cron: "30 5 * * 1"           # Monday 07:30 Vilnius — weekly main run
-    - cron: "0 6,15 * * *"         # daily 08:00 / 17:00 Vilnius — catch-up for new odds
+    - cron: "17 */3 * * *"         # every 3 hours — odds appear a few days before a game
   workflow_dispatch:
     inputs:
       dry_run:
