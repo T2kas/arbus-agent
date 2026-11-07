@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import os
 import sqlite3
 
@@ -34,8 +35,18 @@ def _credentials() -> tuple[str, str] | None:
     return (token, chat_id) if token and chat_id else None
 
 
+_RAW_ERROR = re.compile(r'HTTP \d{3}: \{[^{}]*"message"\s*:\s*"([^"]*)"[^{}]*\}')
+
+
+def tidy(text: str) -> str:
+    """Raw API errors read as their message only: 'HTTP 400: {"code":"P0001",...,"message":
+    "not authenticated"}' becomes 'not authenticated' (owner, 2026-11-07: clean messages)."""
+    return _RAW_ERROR.sub(lambda m: m.group(1), text)
+
+
 def send(text: str) -> bool:
     """Send one message to the configured chat (or group). Never raises."""
+    text = tidy(text)
     creds = _credentials()
     if creds is None:
         log.info("telegram not configured (TELEGRAM_BOT_TOKEN/CHAT_ID) — skipping alert")

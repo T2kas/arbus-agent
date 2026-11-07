@@ -631,14 +631,14 @@ def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
     # Only real errors (a market that failed to save, a parser that broke) are sent.
     transient = re.compile(r"\b(429|403|50[0-4])\b|Too Many Requests|timed out|Timeout|ConnectionError")
     errors_to_send = [e for e in errors if not transient.search(e)]
-    if alert and not dry_run and (any(r["status"] not in ("waiting",) for r in reports) or errors_to_send):
-        made = [r for r in reports if r["status"] == "created"]
-        bad = [r for r in reports if r["status"] == "error"]
-        lines = [f"🏀⚽ Rungtynių rinkos: sukurta {len(made)}, laukia koeficientų {len(waiting)}"]
-        lines += [f"✅ {r['title']} ({r['detail']})" for r in made]
-        lines += [f"↻ {r['title']}: {r['detail']}" for r in reports if r["status"] == "repriced"]
-        lines += [f"⬆ {r['title']}: {r['detail']}" for r in reports if r["status"] == "upgraded"]
-        lines += [f"❌ {r['title']}: {r['detail']}" for r in bad]
+    # Telegram: only what is new or needs a look (owner, 2026-11-07: clean messages). Repricing,
+    # upgrades and games still waiting for odds are routine and stay in the run's log.
+    made = [r for r in reports if r["status"] == "created"]
+    bad = [r for r in reports if r["status"] == "error"]
+    if alert and not dry_run and (made or bad or errors_to_send):
+        lines = []
+        lines += [f"🏀 Nauja rinka: {r['title']}" for r in made]
+        lines += [f"⚠️ Nepavyko: {r['title']} — {r['detail']}" for r in bad]
         lines += [f"⚠️ {e}" for e in errors_to_send]
         notify.send("\n".join(lines))
     for e in errors:

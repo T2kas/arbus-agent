@@ -87,6 +87,8 @@ def _call(method: str, url: str, key: str = "", **kwargs) -> tuple[list[dict], s
     try:
         return _unwrap(resp.json()), ""
     except ValueError:
+        if not (resp.text or "").strip():         # a void RPC answers 204 with no body: success
+            return [], ""
         return [], f"response is not JSON: {resp.text[:120]}"
 
 
