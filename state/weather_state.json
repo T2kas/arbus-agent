@@ -2827,31 +2827,25 @@
   "date": "2026-11-09",
   "measurements": {},
   "model_target": {
-   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 6.3,
-   "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 31.92,
-   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 60.79,
-   "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 1.0
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 6.21,
+   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 6.2,
    "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 38.13,
-   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 53.55,
+   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 53.56,
    "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 2.11
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.76,
+   "lead": 1.75,
    "models": {
     "ecmwf_aifs025_single": 5.6,
-    "icon_seamless": 6.1,
+    "icon_seamless": 6.8,
     "ukmo_seamless": 6.3
    },
-   "move_pp": 7.3,
-   "mu": 6.5,
-   "sigma": 1.01
+   "move_pp": 7.2,
+   "mu": 6.67,
+   "sigma": 1.12
   },
-  "repriced_at": "2026-11-07T16:40:51.029612+00:00",
+  "repriced_at": "2026-11-07T17:01:17.283888+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -24960,12 +24954,6 @@
    "c33bff72-fa4f-469a-88d5-e6e613b56da6": 0.99
   },
   "mt_v": 2,
-  "pending_target": {
-   "1d4f4fb7-c3c6-4ae2-8798-751cd784d0a0": 19.77,
-   "3c2277c5-8f38-460a-a44d-a3321aa6da81": 76.64,
-   "97fd04bc-c9d6-47a7-a5ab-8d814a360ebe": 2.6,
-   "c33bff72-fa4f-469a-88d5-e6e613b56da6": 0.99
-  },
   "reprice": {
    "floor": null,
    "lead": 0.76,
