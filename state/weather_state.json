@@ -2827,18 +2827,25 @@
   "date": "2026-11-09",
   "measurements": {},
   "model_target": {
-   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 6.0,
-   "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 38.0,
-   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 54.0,
-   "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 2.0
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 6.34,
+   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 6.33,
    "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 31.94,
-   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 60.72,
+   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 60.73,
    "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 1.0
   },
+  "mt_v": 2,
+  "reprice": {
+   "floor": null,
+   "lead": 1.78,
+   "models": {
+    "ecmwf_aifs025_single": 5.6,
+    "icon_seamless": 6.1,
+    "ukmo_seamless": 6.3
+   },
+   "move_pp": 6.7,
+   "mu": 6.5,
+   "sigma": 1.01
+  },
+  "repriced_at": "2026-11-07T16:15:50.325945+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -13225,18 +13232,25 @@
   "date": "2026-11-09",
   "measurements": {},
   "model_target": {
-   "08171ad8-396d-4768-9a7b-b2a4e0741542": 47.0,
-   "2eb0f6b2-92cd-457f-8704-cf86597cf012": 5.0,
-   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 8.0,
-   "c4869fe0-26c8-4d19-8691-c4264f49188f": 40.0
+   "08171ad8-396d-4768-9a7b-b2a4e0741542": 50.39,
+   "2eb0f6b2-92cd-457f-8704-cf86597cf012": 2.44,
+   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 4.01,
+   "c4869fe0-26c8-4d19-8691-c4264f49188f": 43.16
   },
   "mt_v": 2,
-  "pending_target": {
-   "08171ad8-396d-4768-9a7b-b2a4e0741542": 50.38,
-   "2eb0f6b2-92cd-457f-8704-cf86597cf012": 2.45,
-   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 4.02,
-   "c4869fe0-26c8-4d19-8691-c4264f49188f": 43.15
+  "reprice": {
+   "floor": null,
+   "lead": 1.78,
+   "models": {
+    "ecmwf_aifs025_single": 4.8,
+    "icon_seamless": 6.0,
+    "ukmo_seamless": 3.7
+   },
+   "move_pp": 4.0,
+   "mu": 5.07,
+   "sigma": 1.08
   },
+  "repriced_at": "2026-11-07T16:15:50.325945+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
