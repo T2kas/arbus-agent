@@ -3307,29 +3307,24 @@
    }
   },
   "model_target": {
-   "43990fa5-f9eb-4c31-bbeb-ec925f5db216": 1.54,
-   "454ed102-5329-4b83-8983-81b4d93f50e1": 16.58,
-   "ab0dbf84-50a3-490f-bc28-81e010f68bf8": 81.88
-  },
-  "mt_v": 2,
-  "pending_target": {
    "43990fa5-f9eb-4c31-bbeb-ec925f5db216": 3.66,
    "454ed102-5329-4b83-8983-81b4d93f50e1": 12.82,
    "ab0dbf84-50a3-490f-bc28-81e010f68bf8": 83.52
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 8.7,
-   "lead": 0.24,
+   "lead": 0.22,
    "models": {
-    "ecmwf_aifs025_single": 8.6,
+    "ecmwf_aifs025_single": 9.0,
     "icon_seamless": 8.7,
     "ukmo_seamless": 8.2
    },
-   "move_pp": 4.7,
-   "mu": 9.12,
-   "sigma": 0.8
+   "move_pp": 3.8,
+   "mu": 9.32,
+   "sigma": 0.85
   },
-  "repriced_at": "2026-11-07T05:15:48.036703+00:00",
+  "repriced_at": "2026-11-07T05:45:45.530908+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
@@ -7044,31 +7039,25 @@
   "date": "2026-11-08",
   "measurements": {},
   "model_target": {
-   "193df290-0dd1-41e9-960f-ea98a7bb8045": 13.17,
-   "36be0853-7e8c-473f-8dd5-ac4fa84ec992": 83.91,
-   "5dad8e8b-bd7a-496e-b263-aec01a21e53d": 0.99,
-   "9366654e-fafc-423a-a038-6302ca5d603d": 1.92
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "193df290-0dd1-41e9-960f-ea98a7bb8045": 10.43,
-   "36be0853-7e8c-473f-8dd5-ac4fa84ec992": 85.59,
+   "193df290-0dd1-41e9-960f-ea98a7bb8045": 10.42,
+   "36be0853-7e8c-473f-8dd5-ac4fa84ec992": 85.6,
    "5dad8e8b-bd7a-496e-b263-aec01a21e53d": 0.99,
    "9366654e-fafc-423a-a038-6302ca5d603d": 2.99
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.3,
+   "lead": 1.22,
    "models": {
-    "ecmwf_aifs025_single": 5.6,
+    "ecmwf_aifs025_single": 5.4,
     "icon_seamless": 5.8,
     "ukmo_seamless": 5.6
    },
-   "move_pp": 7.8,
-   "mu": 6.25,
-   "sigma": 0.63
+   "move_pp": 2.8,
+   "mu": 6.15,
+   "sigma": 0.64
   },
-  "repriced_at": "2026-11-07T03:45:45.463985+00:00",
+  "repriced_at": "2026-11-07T05:45:45.530908+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -10015,31 +10004,25 @@
    }
   },
   "model_target": {
-   "bb5b3626-1883-4f10-9e07-9051a2c158f5": 80.42,
-   "c61b14c9-6cba-4d7a-8a9f-a7bc1a53d902": 17.62,
-   "d6d20038-c19c-4946-a8f6-b63626377d0e": 0.98,
-   "d824e52b-591c-4129-a85b-46bc8c8d8f1d": 0.98
-  },
-  "mt_v": 2,
-  "pending_target": {
    "bb5b3626-1883-4f10-9e07-9051a2c158f5": 89.05,
    "c61b14c9-6cba-4d7a-8a9f-a7bc1a53d902": 8.99,
    "d6d20038-c19c-4946-a8f6-b63626377d0e": 0.98,
    "d824e52b-591c-4129-a85b-46bc8c8d8f1d": 0.98
   },
+  "mt_v": 2,
   "reprice": {
    "floor": -0.6,
-   "lead": 0.26,
+   "lead": 0.22,
    "models": {
-    "ecmwf_aifs025_single": 4.7,
+    "ecmwf_aifs025_single": 5.1,
     "icon_seamless": 5.1,
     "ukmo_seamless": 4.7
    },
-   "move_pp": 2.1,
-   "mu": 5.4,
+   "move_pp": 8.6,
+   "mu": 5.6,
    "sigma": 0.49
   },
-  "repriced_at": "2026-11-07T04:40:48.922233+00:00",
+  "repriced_at": "2026-11-07T05:45:45.530908+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
@@ -11564,31 +11547,25 @@
    }
   },
   "model_target": {
-   "3ee8094d-4eff-4978-8f12-648ef028ae68": 79.19,
-   "64cadce9-b07a-430d-b7ab-a19690f8db5a": 0.98,
-   "99645537-84c8-455d-b591-4ebae483b6fa": 0.98,
-   "fd1cc19c-e5c7-436a-9bb7-4e4d812cdab6": 18.85
-  },
-  "mt_v": 2,
-  "pending_target": {
    "3ee8094d-4eff-4978-8f12-648ef028ae68": 83.59,
    "64cadce9-b07a-430d-b7ab-a19690f8db5a": 0.98,
    "99645537-84c8-455d-b591-4ebae483b6fa": 0.98,
    "fd1cc19c-e5c7-436a-9bb7-4e4d812cdab6": 14.44
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 0.9,
-   "lead": 0.3,
+   "lead": 0.22,
    "models": {
-    "ecmwf_aifs025_single": 6.3,
+    "ecmwf_aifs025_single": 6.5,
     "icon_seamless": 6.3,
     "ukmo_seamless": 5.8
    },
-   "move_pp": 7.6,
-   "mu": 6.42,
+   "move_pp": 4.4,
+   "mu": 6.52,
    "sigma": 0.54
   },
-  "repriced_at": "2026-11-07T03:45:45.463985+00:00",
+  "repriced_at": "2026-11-07T05:45:45.530908+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
