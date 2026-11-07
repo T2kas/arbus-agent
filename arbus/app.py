@@ -210,6 +210,15 @@ def markets(limit: int = 100) -> tuple[list[dict], str]:
     return _call("GET", url_with(f"limit={limit}"))
 
 
+def unsettled_markets(limit: int = 1000) -> tuple[list[dict], str]:
+    """Every market not yet resolved, newest first. `markets()` reads only the newest N of all
+    markets, and a batch made weeks ahead (the Žalgiris EuroLeague season, 2026-10-06) fell out
+    of that window once a few hundred newer markets existed: its games were never resolved."""
+    if not configured():
+        return [], "ARBUS_API_URL is not set"
+    return _call("GET", url_with(f"status=neq.resolved&limit={limit}"))
+
+
 def is_frozen(row: dict) -> bool:
     """Trading stopped and nobody has been paid yet.
 
@@ -230,7 +239,7 @@ def frozen_markets(limit: int = 200) -> tuple[list[dict], str]:
     `arbus check` used to look only at this repo's SQLite, so a market paused
     in the app was invisible to it. The app's own status is the truth.
     """
-    rows, error = markets(limit)
+    rows, error = unsettled_markets(max(limit, 1000))
     if error:
         return [], error
     return [r for r in rows if is_frozen(r)], ""

@@ -673,7 +673,7 @@ def pending_app_markets(conn: sqlite3.Connection, limit: int = 20
     """
     from . import app as app_api
 
-    rows, error = app_api.markets(200)
+    rows, error = app_api.unsettled_markets()
     if error:
         return [], error
 
@@ -726,7 +726,7 @@ def pending_app_proposals(limit: int = 50) -> tuple[list[dict], str]:
     proposals, error = app_api.resolution_proposals(limit)
     if error:
         return [], error
-    markets, m_err = app_api.markets(200)
+    markets, m_err = app_api.unsettled_markets()
     by_id = {} if m_err else {app_api.market_id_of(m): m for m in markets}
     # Group by market: a proposal AND its dispute (a second proposal on the same
     # market, claiming the other outcome, with its own source) must be ONE check

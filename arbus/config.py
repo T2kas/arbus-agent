@@ -1036,8 +1036,11 @@ WEATHER_DIVERGENCE_ALERT = _env_float("WEATHER_DIVERGENCE_ALERT", 1.5)
 # Auto-close (closes_at) time of day, Vilnius. Measured on 116 markets: by 14:00
 # the running max already sat in the final bucket 58% of the time (median only
 # 0.9 °C below the final max) — the last hours were trading on a known answer.
-# At 11:00 that drops to ~20% (median 2.7 °C still to come). Was 14:20.
-WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 11)
+# At 11:00 that drops to ~20% (median 2.7 °C still to come). Was 14:20, then 11:00.
+# 13:00 since 2026-11-07 (owner): the bot now reprices open markets from the live readings
+# and eliminates buckets the running max has passed, so the extra two hours of trading
+# follow the known part of the day.
+WEATHER_CLOSE_HOUR = _env_int("WEATHER_CLOSE_HOUR", 13)
 WEATHER_CLOSE_MINUTE = _env_int("WEATHER_CLOSE_MINUTE", 0)
 # Committed JSON so a stateless CI run remembers each market's running max, the
 # measurements already seen (dedup), the last response checksum, and whether it
