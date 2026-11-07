@@ -33,7 +33,10 @@ concurrency:
 jobs:
   games:
     if: github.event_name == 'workflow_dispatch' || vars.GAMES_ENABLED != 'false'
-    runs-on: ubuntu-latest
+    # On the Arbus VPS (self-hosted runner, label arbus-vps): lkl.lt refuses GitHub's IPs (403)
+    # and BetExplorer rate-limits them (429), so from GitHub every game waited for odds forever.
+    # From the VPS the schedule comes from BetExplorer's fixtures and the odds load.
+    runs-on: [self-hosted, arbus-vps]
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
