@@ -1091,29 +1091,24 @@
    }
   },
   "model_target": {
-   "4d069c04-0946-4c71-a26c-a1fb2e93e63a": 32.45,
-   "7ec28442-745a-47c2-a5a8-f3674d7c927c": 65.39,
-   "a7066730-06b8-4bc9-aea1-3357d1d8e09e": 2.17
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "4d069c04-0946-4c71-a26c-a1fb2e93e63a": 34.66,
+   "4d069c04-0946-4c71-a26c-a1fb2e93e63a": 34.67,
    "7ec28442-745a-47c2-a5a8-f3674d7c927c": 63.92,
    "a7066730-06b8-4bc9-aea1-3357d1d8e09e": 1.41
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 8.2,
-   "lead": 0.53,
+   "lead": 0.52,
    "models": {
     "ecmwf_aifs025_single": 8.3,
-    "icon_seamless": 9.0,
+    "icon_seamless": 8.8,
     "ukmo_seamless": 8.4
    },
-   "move_pp": 10.5,
-   "mu": 9.12,
-   "sigma": 0.88
+   "move_pp": 2.2,
+   "mu": 9.07,
+   "sigma": 0.83
   },
-  "repriced_at": "2026-11-07T22:20:47.000356+00:00",
+  "repriced_at": "2026-11-07T22:35:38.364621+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
@@ -2849,6 +2844,12 @@
    "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 2.8
   },
   "mt_v": 2,
+  "pending_target": {
+   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 4.96,
+   "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 45.3,
+   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 44.48,
+   "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 5.25
+  },
   "reprice": {
    "floor": null,
    "lead": 1.64,
@@ -12889,30 +12890,24 @@
   "measurements": {},
   "model_target": {
    "34e5f2bc-a530-4172-8f34-d9fa000b259c": 0.99,
-   "3d3e9d7b-3050-4763-a56b-e0df614b92e5": 1.55,
-   "45013b18-75fd-4565-bb57-56b361584006": 19.17,
-   "f094acaa-b188-46de-bad6-db1d857ad5c0": 78.29
+   "3d3e9d7b-3050-4763-a56b-e0df614b92e5": 12.54,
+   "45013b18-75fd-4565-bb57-56b361584006": 17.29,
+   "f094acaa-b188-46de-bad6-db1d857ad5c0": 69.18
   },
   "mt_v": 2,
-  "pending_target": {
-   "34e5f2bc-a530-4172-8f34-d9fa000b259c": 0.99,
-   "3d3e9d7b-3050-4763-a56b-e0df614b92e5": 12.54,
-   "45013b18-75fd-4565-bb57-56b361584006": 17.3,
-   "f094acaa-b188-46de-bad6-db1d857ad5c0": 69.17
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.54,
+   "lead": 1.52,
    "models": {
     "ecmwf_aifs025_single": 4.1,
-    "icon_seamless": 4.1,
+    "icon_seamless": 5.4,
     "ukmo_seamless": 3.7
    },
-   "move_pp": 2.2,
-   "mu": 4.52,
-   "sigma": 0.66
+   "move_pp": 11.0,
+   "mu": 4.85,
+   "sigma": 0.96
   },
-  "repriced_at": "2026-11-07T22:05:38.486166+00:00",
+  "repriced_at": "2026-11-07T22:35:38.364621+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
