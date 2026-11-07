@@ -381,6 +381,27 @@ def wants_dual_chart(options: list[dict]) -> bool:
     return len(options) == 2 and labels != {"taip", "ne"}
 
 
+def update_market(row: dict, *, liquidity: float | None = None, image_url: str | None = None) -> tuple[bool, str]:
+    """Change an existing market's liquidity and/or picture via admin_update_market, every
+    other field passed back as it is (the RPC sets all of them). Needs the service_role key."""
+    if not config.ARBUS_WRITE_KEY:
+        return False, "reikia ARBUS_WRITE_KEY (service_role)"
+    payload = {
+        "p_market_id": str(row.get("id")),
+        "p_title": row.get("title"),
+        "p_subtitle": row.get("subtitle"),
+        "p_category": row.get("category"),
+        "p_image_url": image_url if image_url is not None else row.get("image_url"),
+        "p_liquidity": liquidity if liquidity is not None else row.get("liquidity"),
+        "p_rules": row.get("rules"),
+        "p_context": row.get("context"),
+    }
+    rows, error = _rpc("admin_update_market", payload, key=config.ARBUS_WRITE_KEY)
+    if error:
+        return False, _resolve_error_hint(error)
+    return True, "ok"
+
+
 def create_market(spec: dict) -> tuple[bool, str]:
     """Create a market via the app's admin_create_market RPC. Returns (ok, id or
     error). Needs the service_role key. `spec` carries the ready fields."""

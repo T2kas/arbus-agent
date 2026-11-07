@@ -49,6 +49,15 @@ def _logo(data: bytes, box: int):
     return img
 
 
+def _mostly_dark(img) -> bool:
+    """Whether a logo's visible pixels are mostly near-black (it would vanish on black)."""
+    px = [p for p in img.getdata() if p[3] > 128]
+    if not px:
+        return False
+    dark = sum(1 for r, g, b, _ in px if 0.299 * r + 0.587 * g + 0.114 * b < 70)
+    return dark / len(px) > 0.5
+
+
 def compose(home_logo: bytes, away_logo: bytes, caption: str = "",
             style: str = "logos") -> bytes:
     """1200x675 PNG: gradient + a big VS between the two sides.
@@ -56,6 +65,26 @@ def compose(home_logo: bytes, away_logo: bytes, caption: str = "",
     style "logos": team logos on white discs. style "fighters": cut-out athlete
     photos (transparent PNG) standing full height on the bottom edge."""
     from PIL import Image, ImageDraw
+
+    if style == "clean":
+        # Owner, 2026-11-07: the two logos on black, nothing else (no VS, no date). Close to
+        # the middle, so a square thumbnail (the app's market cards crop to the centre 675 px)
+        # still shows both whole.
+        canvas = Image.new("RGB", (W, H), (0, 0, 0))
+        d = ImageDraw.Draw(canvas)
+        box, gap = 290, 50
+        for cx, data in ((W // 2 - gap // 2 - box // 2, home_logo), (W // 2 + gap // 2 + box // 2, away_logo)):
+            logo = _logo(data, box)
+            if _mostly_dark(logo):
+                # A dark logo (Nevėžis: black lines on transparent) would vanish on black: it
+                # gets a white disc behind it, a little smaller than the light logos' size.
+                logo = _logo(data, int(box * 0.78))
+                r = int(box * 0.56)
+                d.ellipse((cx - r, H // 2 - r, cx + r, H // 2 + r), fill=(255, 255, 255))
+            canvas.paste(logo, (cx - logo.width // 2, H // 2 - logo.height // 2), logo)
+        out = io.BytesIO()
+        canvas.save(out, "PNG", optimize=True)
+        return out.getvalue()
 
     canvas = Image.new("RGB", (W, H))
     d = ImageDraw.Draw(canvas)
@@ -113,7 +142,7 @@ def upload(png: bytes, name: str) -> str | None:
 
 
 def game_image(logo_urls: list[str], name: str, caption: str = "", fetch_bytes=None,
-               style: str = "logos") -> str | None:
+               style: str = "clean") -> str | None:
     """Build + upload the VS picture; None on any failure."""
     if len(logo_urls) < 2:
         return None
@@ -122,6 +151,8 @@ def game_image(logo_urls: list[str], name: str, caption: str = "", fetch_bytes=N
             import requests
 
             def fetch_bytes(u):
+                if not u.startswith("http"):          # a logo kept in the repo (assets/logos)
+                    return Path(u).read_bytes()
                 resp = requests.get(u, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
                 resp.raise_for_status()
                 return resp.content

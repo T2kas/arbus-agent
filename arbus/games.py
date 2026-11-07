@@ -404,6 +404,10 @@ def _get(url: str) -> str:
 
 # The untraded markets the last plan() found off the bookmakers' price (see plan()).
 LAST_REPRICES: list[dict] = []
+# Open game markets the last plan() found below GAMES_LIQUIDITY or with the old picture.
+LAST_UPGRADES: list[dict] = []
+# In the file name of the clean (logos on black) pictures, so an old market is recognised.
+CLEAN_IMAGE_TAG = "-clean"
 
 
 def plan(now: datetime | None = None, horizon_days: int | None = None,
@@ -425,6 +429,10 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
     # Open game markets nobody has bet on yet, by title: their prices follow the bookmakers
     # (a market made before a change of pricing, or before the odds moved) until the first bet.
     untraded: dict[str, dict] = {}
+    # Open game markets already made: brought up to the current liquidity and picture style.
+    live_by_title: dict[str, dict] = {}
+    global LAST_UPGRADES
+    LAST_UPGRADES = []
 
     if existing_titles is None:
         rows, err = app_api.markets(1000, unresolved=True)
@@ -435,6 +443,7 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
         existing = [(r.get("title") or "", r.get("closes_at") or "") for r in live]
         untraded = {r.get("title"): r for r in live
                     if r.get("status") == "open" and not float(r.get("volume_credits") or 0)}
+        live_by_title.update({r.get("title"): r for r in live if r.get("status") == "open"})
     existing = existing or []
 
     sources = []
@@ -463,7 +472,12 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
                 and make(g, table)["title"] not in existing_titles
                 and not _already_listed(make(g, table), g.start, existing)]
         follow = [g for g in games if min_lead <= g.start <= horizon and make(g, table)["title"] in untraded]
-        if not todo and not follow:
+        for g in games:
+            row = live_by_title.get(make(g, table)["title"]) if min_lead <= g.start <= horizon else None
+            if row and (float(row.get("liquidity") or 0) < config.GAMES_LIQUIDITY
+                        or CLEAN_IMAGE_TAG not in str(row.get("image_url") or "")):
+                LAST_UPGRADES.append({"row": row, "game": g, "league": league})
+        if not todo and not follow and not LAST_UPGRADES:
             continue
         try:
             fixtures = betodds.fixtures_for(league, odds_fetch)
@@ -485,9 +499,9 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
                 continue
             spec = make(g, table, betodds.to_percent(mo.probs))
             spec["_odds_bookmakers"] = mo.bookmakers
-            spec["_logos"] = [g.home_logo, g.away_logo] if g.home_logo and g.away_logo else mo.logos
+            spec["_logos"] = local_logos(league, g) or ([g.home_logo, g.away_logo] if g.home_logo and g.away_logo else mo.logos)
             spec["_image_name"] = re.sub(r"[^a-z0-9]+", "-", betodds.fold(
-                f"{league} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-")
+                f"{league} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-") + CLEAN_IMAGE_TAG
             spec["_caption"] = (f"{ {'lkl': 'LKL', 'toplyga': 'TOPLYGA', 'euroleague': 'EUROLYGA'}[league] } · "
                                 f"{MONTHS[g.start.month - 1]} {g.start.day} d."
                                 + (f" {g.start:%H:%M}" if g.time_known else ""))
@@ -544,6 +558,22 @@ def _already_listed(spec: dict, start: datetime, existing: list[tuple[str, str]]
     return False
 
 
+LOGOS_DIR = __import__("pathlib").Path(__file__).resolve().parent.parent / "assets" / "logos"
+
+
+def local_logos(league: str, g) -> list[str]:
+    """The two teams' logos kept in the repo (assets/logos/<league>/<team>.svg), when both are
+    there: LKL's own vector logos, copied from lkl.lt (which refuses the servers the bot runs
+    on), crisp at any size where BetExplorer's are small PNGs."""
+    paths = [LOGOS_DIR / league / f"{re.sub(r'[^a-z0-9]+', '-', _fold_name(t)).strip('-')}.svg" for t in (g.home, g.away)]
+    return [str(p) for p in paths] if all(p.exists() for p in paths) else []
+
+
+def _fold_name(text: str) -> str:
+    from . import betodds
+    return betodds.fold(text)
+
+
 def _public_spec(spec: dict) -> dict:
     return {k: v for k, v in spec.items() if not k.startswith("_")}
 
@@ -572,16 +602,44 @@ def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
         ok, detail = app_api.reprice_market(r["market_id"], r["probabilities"])
         reports.append({"title": r["title"], "status": "repriced" if ok else "error",
                         "detail": r["note"] if ok else f"perkainavimas: {detail}"})
+    for u in LAST_UPGRADES:
+        row, g = u["row"], u["game"]
+        if dry_run:
+            reports.append({"title": row.get("title"), "status": "would-upgrade",
+                            "detail": f"likvidumas {row.get('liquidity')} -> {config.GAMES_LIQUIDITY}, paveikslėlis"})
+            continue
+        logos = local_logos(u["league"], g) or ([g.home_logo, g.away_logo] if g.home_logo and g.away_logo else [])
+        if not logos:
+            try:
+                from . import betodds
+                fx = betodds.find(betodds.fixtures_for(u["league"]), g.home, g.away, g.start)
+                mo = betodds.match_odds(u["league"], fx) if fx else None
+                logos = mo.logos if mo else []
+            except Exception:
+                logos = []
+        name = re.sub(r"[^a-z0-9]+", "-", _fold_name(f"{u['league']} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-") + CLEAN_IMAGE_TAG
+        img = matchimage.game_image(logos, name) if logos else None
+        ok, detail = app_api.update_market(row, liquidity=max(float(row.get("liquidity") or 0), config.GAMES_LIQUIDITY),
+                                           image_url=img)
+        reports.append({"title": row.get("title"), "status": "upgraded" if ok else "error",
+                        "detail": (f"likvidumas {config.GAMES_LIQUIDITY}" + ("" if img else ", paveikslėlis nepakeistas"))
+                                  if ok else f"atnaujinimas: {detail}"})
     for t in waiting:
         reports.append({"title": t, "status": "waiting", "detail": "laukiama koeficientų"})
-    if alert and not dry_run and (any(r["status"] != "waiting" for r in reports) or errors):
+    # A source refusing for a while (BetExplorer's 429 "Too Many Requests", lkl.lt's 403 to
+    # servers, a 5xx) is retried on the next run three hours later: not worth a Telegram message.
+    # Only real errors (a market that failed to save, a parser that broke) are sent.
+    transient = re.compile(r"\b(429|403|50[0-4])\b|Too Many Requests|timed out|Timeout|ConnectionError")
+    errors_to_send = [e for e in errors if not transient.search(e)]
+    if alert and not dry_run and (any(r["status"] not in ("waiting",) for r in reports) or errors_to_send):
         made = [r for r in reports if r["status"] == "created"]
         bad = [r for r in reports if r["status"] == "error"]
         lines = [f"🏀⚽ Rungtynių rinkos: sukurta {len(made)}, laukia koeficientų {len(waiting)}"]
         lines += [f"✅ {r['title']} ({r['detail']})" for r in made]
         lines += [f"↻ {r['title']}: {r['detail']}" for r in reports if r["status"] == "repriced"]
+        lines += [f"⬆ {r['title']}: {r['detail']}" for r in reports if r["status"] == "upgraded"]
         lines += [f"❌ {r['title']}: {r['detail']}" for r in bad]
-        lines += [f"⚠️ {e}" for e in errors]
+        lines += [f"⚠️ {e}" for e in errors_to_send]
         notify.send("\n".join(lines))
     for e in errors:
         reports.append({"title": "-", "status": "error", "detail": e})
