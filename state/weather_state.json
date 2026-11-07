@@ -1075,7 +1075,7 @@
   "resolved_via": "sports"
  },
  "0e09192d-9a3e-4306-947d-756188355035": {
-  "checksum": "085044db47c224509dc78c0a94171bcf50de22247ec527a5d6ab04d75208c2bd",
+  "checksum": "1c303e6ae8632132ad7c8a1769f575d10fdb6194bfe21fd3dc36697d58e50373",
   "current_maximum": null,
   "date": "2026-11-08",
   "measurements": {},
@@ -2822,7 +2822,7 @@
   "station": "kauno-ams"
  },
  "1a2394d2-08d6-4cea-94e8-20c5bf9525cc": {
-  "checksum": "085044db47c224509dc78c0a94171bcf50de22247ec527a5d6ab04d75208c2bd",
+  "checksum": "1c303e6ae8632132ad7c8a1769f575d10fdb6194bfe21fd3dc36697d58e50373",
   "current_maximum": null,
   "date": "2026-11-09",
   "measurements": {},
@@ -7142,7 +7142,7 @@
   "station": "kauno-ams"
  },
  "48df0018-739b-411b-a62c-3560522d04df": {
-  "checksum": "de8813a685927b2b9330dea94bb4b4e05d9a0eec82f4cc87de14d7bccfd7b7cd",
+  "checksum": "d8f66a12a46963b493fe11ca804bcc9d9f241ad06cf7c25e857a09bb9ae5df31",
   "current_maximum": null,
   "date": "2026-11-08",
   "measurements": {},
@@ -10057,13 +10057,14 @@
   "station": "klaipedos-ams"
  },
  "7c009ea0-2201-4b9a-bdce-85afa4ad24e2": {
-  "checksum": "de8813a685927b2b9330dea94bb4b4e05d9a0eec82f4cc87de14d7bccfd7b7cd",
-  "current_maximum": 4.8,
+  "checksum": "d8f66a12a46963b493fe11ca804bcc9d9f241ad06cf7c25e857a09bb9ae5df31",
+  "current_maximum": 5.0,
   "date": "2026-11-07",
   "eliminated": [
+   "c61b14c9-6cba-4d7a-8a9f-a7bc1a53d902",
    "d6d20038-c19c-4946-a8f6-b63626377d0e"
   ],
-  "max_received_at": "2026-11-07T19:10:44.707043+00:00",
+  "max_received_at": "2026-11-07T20:10:50.311716+00:00",
   "measurements": {
    "2026-11-06 22:00:00": {
     "checksum": "8618b750e4a36896e7ce9d10bbc983457690b0ad37969bc8c25bcffeea5e229f",
@@ -10196,6 +10197,12 @@
     "received_at": "2026-11-07T19:10:44.707043+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 4.8
+   },
+   "2026-11-07 20:00:00": {
+    "checksum": "d8f66a12a46963b493fe11ca804bcc9d9f241ad06cf7c25e857a09bb9ae5df31",
+    "received_at": "2026-11-07T20:10:50.311716+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 5.0
    }
   },
   "model_target": {
@@ -11687,7 +11694,7 @@
   "station": "klaipedos-ams"
  },
  "87396e7c-cb4c-4d2f-bd66-6c7a0dda01bf": {
-  "checksum": "bffeb7b9d45743fc14f752bfc00b95a9c2598dd0bf8d35ef3b15405dcad5d07d",
+  "checksum": "6fec1c053907ea193089aaa7dcec9fd4331437b3072af095d40c82e725c777c8",
   "current_maximum": 5.8,
   "date": "2026-11-07",
   "eliminated": [
@@ -11826,6 +11833,12 @@
     "received_at": "2026-11-07T19:10:44.707043+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 5.7
+   },
+   "2026-11-07 20:00:00": {
+    "checksum": "6fec1c053907ea193089aaa7dcec9fd4331437b3072af095d40c82e725c777c8",
+    "received_at": "2026-11-07T20:10:50.311716+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 4.8
    }
   },
   "model_target": {
@@ -12804,7 +12817,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "94901516-74bf-43a4-8e66-3add38bec35b": {
-  "checksum": "de8813a685927b2b9330dea94bb4b4e05d9a0eec82f4cc87de14d7bccfd7b7cd",
+  "checksum": "d8f66a12a46963b493fe11ca804bcc9d9f241ad06cf7c25e857a09bb9ae5df31",
   "current_maximum": null,
   "date": "2026-11-09",
   "measurements": {},
@@ -13263,7 +13276,7 @@
   "station": "kauno-ams"
  },
  "97270c63-a248-4313-9441-040033125fee": {
-  "checksum": "bffeb7b9d45743fc14f752bfc00b95a9c2598dd0bf8d35ef3b15405dcad5d07d",
+  "checksum": "6fec1c053907ea193089aaa7dcec9fd4331437b3072af095d40c82e725c777c8",
   "current_maximum": null,
   "date": "2026-11-09",
   "measurements": {},
@@ -24979,7 +24992,7 @@
   "station": "kauno-ams"
  },
  "f989f116-3d10-4e69-afe7-aa0d08be5106": {
-  "checksum": "bffeb7b9d45743fc14f752bfc00b95a9c2598dd0bf8d35ef3b15405dcad5d07d",
+  "checksum": "6fec1c053907ea193089aaa7dcec9fd4331437b3072af095d40c82e725c777c8",
   "current_maximum": null,
   "date": "2026-11-08",
   "measurements": {},
