@@ -137,6 +137,14 @@ def devig(prices: list[float], method: str = "power") -> list[float]:
     (1/oᵢ)ᵏ: the margin comes mostly off the longshot, so a 1.30 favourite keeps
     ~75 % instead of ~72 %. Both return probabilities summing to 1."""
     inv = [1 / p for p in prices]
+    if method == "favourite":
+        # Owner, 2026-11-07: the favourite is priced exactly as the bookmaker prices it
+        # (1/odds, margin left in), and the others share what is left in proportion to
+        # their own prices. The underdogs come out a little longer than the bookmaker's.
+        fav = min(range(len(prices)), key=lambda i: prices[i])
+        top = min(inv[fav], 0.97)
+        rest = sum(x for i, x in enumerate(inv) if i != fav)
+        return [top if i == fav else (1 - top) * x / rest for i, x in enumerate(inv)]
     if method != "power":
         s = sum(inv)
         return [x / s for x in inv]
@@ -170,6 +178,15 @@ def parse_odds(odds_html: str, n_outcomes: int, method: str | None = None) -> tu
         xs = sorted(b[i] for b in per_book)
         mid = len(xs) // 2
         med.append(xs[mid] if len(xs) % 2 else (xs[mid - 1] + xs[mid]) / 2)
+    if method == "favourite":
+        # The favourite at the strongest price any bookmaker gives it (owner, 2026-11-07: "the
+        # favourite should be the exact bookmaker odds"; the Lithuanian books he compares with,
+        # not on BetExplorer, price favourites shorter than the international median), and the
+        # others share the rest in proportion to their median.
+        fav = max(range(n_outcomes), key=lambda i: med[i])
+        top = max(b[fav] for b in per_book)
+        rest = sum(x for i, x in enumerate(med) if i != fav) or 1
+        return [top if i == fav else (1 - top) * x / rest for i, x in enumerate(med)], len(per_book)
     s = sum(med)
     return [x / s for x in med], len(per_book)
 

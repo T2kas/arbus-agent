@@ -161,7 +161,8 @@ def test_plan_creates_only_games_with_published_odds():
     assert titles == ["Vilniaus „Rytas“ vs Klaipėdos „Neptūnas“",
                       "FK „Žalgiris“ vs Marijampolės „Sūduva“"]
     rytas = specs[0]["options"]
-    assert 66 <= rytas[0]["probability"] <= 70 and sum(o["probability"] for o in rytas) == 100
+    # The favourite keeps exactly the bookmakers' 1/odds (1.40 -> 71%), the underdog the rest.
+    assert rytas[0]["probability"] >= 71 and sum(o["probability"] for o in rytas) == 100
     foot = [o["probability"] for o in specs[1]["options"]]
     assert sum(foot) == 100 and 25 <= foot[1] <= 33          # draw from the bookmakers
     assert specs[0]["_logos"][0].endswith(".svg")            # official LKL logo
@@ -234,8 +235,8 @@ def test_consensus_removes_margin_and_needs_three_books():
     from arbus import betodds
 
     probs, n = betodds.parse_odds(ODDS_HA["odds"], 2)
-    # power de-vig: the 1.40 favourite keeps a bit more than proportional (~0.68)
-    assert n == 3 and abs(sum(probs) - 1) < 1e-9 and 0.68 < probs[0] < 0.71
+    # The favourite at the strongest bookmaker price (owner, 2026-11-07), the rest to the other.
+    assert n == 3 and abs(sum(probs) - 1) < 1e-9 and probs[0] >= 1 / 1.40 - 1e-9
     assert betodds.parse_odds(NO_ODDS["odds"], 2) == ([], 0)
     assert betodds.to_percent([0.995, 0.005]) == [97, 3]       # floor keeps the long shot tradable
 
@@ -317,3 +318,13 @@ def test_betexplorer_relative_dates_are_parsed():
             '<span>Rytas</span> - <span>Zalgiris Kaunas</span></a></td></tr></table>')
     fx = betodds.parse_fixtures("lkl", page, today=date(2026, 11, 1))
     assert [(f.home, f.away, f.day) for f in fx] == [("Rytas", "Žalgiris", (2, 11))]
+
+
+def test_favourite_keeps_the_bookmaker_price():
+    from arbus import betodds
+
+    two = betodds.devig([1.05, 8.5], "favourite")
+    assert abs(two[0] - 1 / 1.05) < 1e-12 and abs(sum(two) - 1) < 1e-12
+    three = betodds.devig([1.60, 3.80, 5.00], "favourite")
+    assert abs(three[0] - 1 / 1.60) < 1e-12 and abs(sum(three) - 1) < 1e-12 and three[1] > three[2]
+    assert betodds.to_percent(two) == [95, 5]

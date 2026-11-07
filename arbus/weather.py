@@ -1602,7 +1602,7 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
         return [], (f"laiko juostos '{config.WEATHER_TZ}' nėra: {exc}. "
                     "Įdiek IANA zonas: pip install tzdata (jau requirements.txt).")
     # Every unresolved market, however old: sports markets are made weeks ahead.
-    rows, err = app_api.unsettled_markets(max(limit, 1000))
+    rows, err = app_api.markets(max(limit, 1000), unresolved=True)
     if err:
         return [], err
     state = load_state()

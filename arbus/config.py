@@ -1172,7 +1172,9 @@ GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 8)
 # bookmaker's margin with the power method — favourites keep more of their
 # price than with plain proportional scaling, which over-prices longshots
 # (the favourite–longshot bias); "proportional" is the old behaviour.
-GAMES_DEVIG = _env_str("GAMES_DEVIG", "power")
+# "favourite" (default since 2026-11-07, owner): the favourite keeps exactly the bookmakers'
+# 1/odds (median across bookmakers), the underdog (and the draw) share the rest.
+GAMES_DEVIG = _env_str("GAMES_DEVIG", "favourite")
 GAMES_EL_TEAMS = {x.strip() for x in _env_str("GAMES_EL_TEAMS", "Zalgiris Kaunas").split(",") if x.strip()}
 GAMES_EL_IMAGE = _env_str("GAMES_EL_IMAGE", "")
 GAMES_MIN_LEAD_HOURS = _env_int("GAMES_MIN_LEAD_HOURS", 3)   # never open a market minutes before tip-off

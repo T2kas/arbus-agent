@@ -195,7 +195,11 @@ def _timestamp_of(row: dict) -> datetime | None:
 
 # ── the endpoints ───────────────────────────────────────────────────────────
 
-def markets(limit: int = 100) -> tuple[list[dict], str]:
+def markets(limit: int = 100, unresolved: bool = False) -> tuple[list[dict], str]:
+    """The newest `limit` markets; with `unresolved`, the newest `limit` of those not yet
+    resolved. Newest-N of all markets misses old open ones: the Žalgiris EuroLeague season,
+    created in one batch on 2026-10-06, fell out of the newest 200 once a few hundred newer
+    markets existed and its games were never resolved by the bot."""
     if not configured():
         return [], "ARBUS_API_URL is not set"
     # Common misconfig: ARBUS_API_URL set to the RPC base (.../rest/v1/rpc) — the
@@ -207,16 +211,7 @@ def markets(limit: int = 100) -> tuple[list[dict], str]:
         return [], ("ARBUS_API_URL rodo į RPC endpoint'ą (.../rest/v1/rpc). Jis "
                     "turi būti MARKETS URL (.../rest/v1/markets?select=...). Freeze "
                     "RPC iš jo išvedamas automatiškai — atskiro rpc URL nereikia.")
-    return _call("GET", url_with(f"limit={limit}"))
-
-
-def unsettled_markets(limit: int = 1000) -> tuple[list[dict], str]:
-    """Every market not yet resolved, newest first. `markets()` reads only the newest N of all
-    markets, and a batch made weeks ahead (the Žalgiris EuroLeague season, 2026-10-06) fell out
-    of that window once a few hundred newer markets existed: its games were never resolved."""
-    if not configured():
-        return [], "ARBUS_API_URL is not set"
-    return _call("GET", url_with(f"status=neq.resolved&limit={limit}"))
+    return _call("GET", url_with(f"status=neq.resolved&limit={limit}" if unresolved else f"limit={limit}"))
 
 
 def is_frozen(row: dict) -> bool:
@@ -239,7 +234,7 @@ def frozen_markets(limit: int = 200) -> tuple[list[dict], str]:
     `arbus check` used to look only at this repo's SQLite, so a market paused
     in the app was invisible to it. The app's own status is the truth.
     """
-    rows, error = unsettled_markets(max(limit, 1000))
+    rows, error = markets(max(limit, 1000), unresolved=True)
     if error:
         return [], error
     return [r for r in rows if is_frozen(r)], ""

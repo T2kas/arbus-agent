@@ -402,6 +402,10 @@ def _get(url: str) -> str:
     return r.text
 
 
+# The untraded markets the last plan() found off the bookmakers' price (see plan()).
+LAST_REPRICES: list[dict] = []
+
+
 def plan(now: datetime | None = None, horizon_days: int | None = None,
          fetch=_get, existing_titles: set[str] | None = None,
          odds_fetch=None, existing: list[tuple[str, str]] | None = None
@@ -416,14 +420,21 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
     horizon = now + timedelta(days=horizon_days or config.GAMES_HORIZON_DAYS)
     min_lead = now + timedelta(hours=config.GAMES_MIN_LEAD_HOURS)
     errors, waiting, candidates = [], [], []
+    global LAST_REPRICES
+    LAST_REPRICES = []
+    # Open game markets nobody has bet on yet, by title: their prices follow the bookmakers
+    # (a market made before a change of pricing, or before the odds moved) until the first bet.
+    untraded: dict[str, dict] = {}
 
     if existing_titles is None:
-        rows, err = app_api.markets(1000)
+        rows, err = app_api.markets(1000, unresolved=True)
         if err:
             return [], [], [f"app: {err}"]          # cannot dedupe -> create nothing
         live = [r for r in rows if r.get("status") != "resolved"]
         existing_titles = {r.get("title") for r in live}
         existing = [(r.get("title") or "", r.get("closes_at") or "") for r in live]
+        untraded = {r.get("title"): r for r in live
+                    if r.get("status") == "open" and not float(r.get("volume_credits") or 0)}
     existing = existing or []
 
     sources = []
@@ -451,7 +462,8 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
         todo = [g for g in games if min_lead <= g.start <= horizon
                 and make(g, table)["title"] not in existing_titles
                 and not _already_listed(make(g, table), g.start, existing)]
-        if not todo:
+        follow = [g for g in games if min_lead <= g.start <= horizon and make(g, table)["title"] in untraded]
+        if not todo and not follow:
             continue
         try:
             fixtures = betodds.fixtures_for(league, odds_fetch)
@@ -480,6 +492,28 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
                                 f"{MONTHS[g.start.month - 1]} {g.start.day} d."
                                 + (f" {g.start:%H:%M}" if g.time_known else ""))
             candidates.append(spec)
+
+        for g in follow:
+            spec = make(g, table)
+            row = untraded[spec["title"]]
+            fx = betodds.find(fixtures, g.home, g.away, g.start)
+            try:
+                mo = betodds.match_odds(league, fx, odds_fetch) if fx else None
+            except Exception as e:
+                errors.append(f"{spec['title']}: koeficientai {type(e).__name__}: {e}")
+                continue
+            if mo is None:
+                continue
+            want = make(g, table, betodds.to_percent(mo.probs))["options"]
+            opts = row.get("market_options") or row.get("options") or []
+            by_label = {str(o.get("label")): o for o in opts}
+            if len(by_label) != len(want) or any(w["label"] not in by_label for w in want):
+                continue
+            new_probs = {str(by_label[w["label"]]["id"]): float(w["probability"]) for w in want}
+            if max(abs(float(by_label[w["label"]].get("probability") or 0) - float(w["probability"])) for w in want) >= 1:
+                LAST_REPRICES.append({"market_id": str(row.get("id")), "title": spec["title"],
+                                      "probabilities": new_probs,
+                                      "note": " / ".join(f"{w['label']} {w['probability']}%" for w in want)})
 
     seen, fresh = set(), []
     for s in candidates:
@@ -531,6 +565,13 @@ def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
         ok, detail = app_api.create_market(_public_spec(s))
         reports.append({"title": s["title"], "status": "created" if ok else "error",
                         "detail": detail if not ok else odds_note + ("" if img else ", be VS paveikslėlio")})
+    for r in LAST_REPRICES:
+        if dry_run:
+            reports.append({"title": r["title"], "status": "would-reprice", "detail": r["note"]})
+            continue
+        ok, detail = app_api.reprice_market(r["market_id"], r["probabilities"])
+        reports.append({"title": r["title"], "status": "repriced" if ok else "error",
+                        "detail": r["note"] if ok else f"perkainavimas: {detail}"})
     for t in waiting:
         reports.append({"title": t, "status": "waiting", "detail": "laukiama koeficientų"})
     if alert and not dry_run and (any(r["status"] != "waiting" for r in reports) or errors):
@@ -538,6 +579,7 @@ def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
         bad = [r for r in reports if r["status"] == "error"]
         lines = [f"🏀⚽ Rungtynių rinkos: sukurta {len(made)}, laukia koeficientų {len(waiting)}"]
         lines += [f"✅ {r['title']} ({r['detail']})" for r in made]
+        lines += [f"↻ {r['title']}: {r['detail']}" for r in reports if r["status"] == "repriced"]
         lines += [f"❌ {r['title']}: {r['detail']}" for r in bad]
         lines += [f"⚠️ {e}" for e in errors]
         notify.send("\n".join(lines))

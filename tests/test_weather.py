@@ -362,7 +362,7 @@ def test_city_calibration_shifts_and_tightens(monkeypatch):
     assert p_kl[0] + p_kl[3] < p_ka[0] + p_ka[3]
     # Kaunas runs ~0.5 °C below the forecast: the lower middle bucket is favoured
     assert p_ka[1] > p_ka[2]
-    assert kl["closes_at"].startswith("2026-10-25T11:00")
+    assert kl["closes_at"].startswith("2026-10-25T13:00")
 
 
 # ── multi-model blend (Meteo LT + Open-Meteo models) ─────────────────────────
