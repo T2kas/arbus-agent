@@ -2821,6 +2821,21 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "1a2394d2-08d6-4cea-94e8-20c5bf9525cc": {
+  "checksum": "61470b1f677a68bd9082f06d0fb419b0b2de4ef62bbd1c9d5b562cbb77c715b9",
+  "current_maximum": null,
+  "date": "2026-11-09",
+  "measurements": {},
+  "model_target": {
+   "af3fde44-5ad9-45b9-9af1-31090b9e360f": 6.0,
+   "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 38.0,
+   "f3195918-92c0-4580-bdb3-c809c9a71cbc": 54.0,
+   "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 2.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "1b2fbaac-8262-4507-9012-2924284d42e9": {
   "checksum": "603c6ac2c1e9ba2f027ef7bab65e1a0c8ae8c09213213c7d6b23cd77ca6f8686",
   "current_maximum": 11.7,
@@ -12711,6 +12726,27 @@
   "resolved_via": "cinema",
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
+ "94901516-74bf-43a4-8e66-3add38bec35b": {
+  "checksum": "79a181e5942aa04c2b337ff3db40f120d17560606a68b7604ce7b37daa242011",
+  "current_maximum": null,
+  "date": "2026-11-09",
+  "measurements": {},
+  "model_target": {
+   "34e5f2bc-a530-4172-8f34-d9fa000b259c": 5.0,
+   "3d3e9d7b-3050-4763-a56b-e0df614b92e5": 8.0,
+   "45013b18-75fd-4565-bb57-56b361584006": 40.0,
+   "f094acaa-b188-46de-bad6-db1d857ad5c0": 47.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "34e5f2bc-a530-4172-8f34-d9fa000b259c": 0.99,
+   "3d3e9d7b-3050-4763-a56b-e0df614b92e5": 1.86,
+   "45013b18-75fd-4565-bb57-56b361584006": 17.05,
+   "f094acaa-b188-46de-bad6-db1d857ad5c0": 80.1
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "94c5b270-8d4e-42d1-a1f1-dc05c4165469": {
   "resolved": true,
   "resolved_at": "2026-10-30T20:10:49.704071+00:00",
@@ -13140,6 +13176,27 @@
   "resolved_temp": 7.4,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+  "station": "kauno-ams"
+ },
+ "97270c63-a248-4313-9441-040033125fee": {
+  "checksum": "402a6bb0785352d0cfc5334c062811c325867ed38d563db7168e972565cecfa1",
+  "current_maximum": null,
+  "date": "2026-11-09",
+  "measurements": {},
+  "model_target": {
+   "08171ad8-396d-4768-9a7b-b2a4e0741542": 47.0,
+   "2eb0f6b2-92cd-457f-8704-cf86597cf012": 5.0,
+   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 8.0,
+   "c4869fe0-26c8-4d19-8691-c4264f49188f": 40.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "08171ad8-396d-4768-9a7b-b2a4e0741542": 51.01,
+   "2eb0f6b2-92cd-457f-8704-cf86597cf012": 2.58,
+   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 5.01,
+   "c4869fe0-26c8-4d19-8691-c4264f49188f": 41.39
+  },
+  "resolved": false,
   "station": "kauno-ams"
  },
  "9851c4ab-6b09-4482-85fb-7c8bd15116e9": {
