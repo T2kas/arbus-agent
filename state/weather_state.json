@@ -3412,7 +3412,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "1d836f91-6798-44e5-aed7-6a369a4357b6": {},
+ "1d836f91-6798-44e5-aed7-6a369a4357b6": {
+  "resolved": true,
+  "resolved_at": "2026-11-08T17:20:54.014252+00:00",
+  "resolved_label": "„Šiauliai“",
+  "resolved_option_id": "131eb355-2855-42ba-8888-ff005fea7604",
+  "resolved_score": "Kėdainių „Nevėžis-Paskolų klubas“ 76:83 „Šiauliai“",
+  "resolved_via": "sports"
+ },
  "1df0c787-e6b3-4cb8-b052-e149d191574a": {
   "checksum": "521a5727c9f687ea64670eedf92bce6d4583a45c9046e3b955052e18e9303cf4",
   "current_maximum": 9.0,
