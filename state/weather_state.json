@@ -5828,7 +5828,14 @@
   "resolved_via": "cinema",
   "resolved_winner": "Instruktorius"
  },
- "3d649523-4039-4171-803f-50d97aa896b2": {},
+ "3d649523-4039-4171-803f-50d97aa896b2": {
+  "resolved": true,
+  "resolved_at": "2026-11-08T15:01:14.409471+00:00",
+  "resolved_label": "Marijampolės „Sūduva“",
+  "resolved_option_id": "9486a4f2-c8bc-45ef-971e-f9ceb57a333b",
+  "resolved_score": "Sūduva 2:1 Džiugas",
+  "resolved_via": "sports"
+ },
  "3d724955-f124-4129-ae6a-ea5a6f19750d": {
   "checksum": "02b1c345ffd1a65fffc897f8dc67eb56855a7ee52e8733c11c611361d0b73279",
   "current_maximum": 7.2,
