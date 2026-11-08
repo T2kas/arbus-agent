@@ -7253,29 +7253,24 @@
    }
   },
   "model_target": {
-   "193df290-0dd1-41e9-960f-ea98a7bb8045": 16.47,
-   "36be0853-7e8c-473f-8dd5-ac4fa84ec992": 82.54,
-   "5dad8e8b-bd7a-496e-b263-aec01a21e53d": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
    "193df290-0dd1-41e9-960f-ea98a7bb8045": 26.35,
    "36be0853-7e8c-473f-8dd5-ac4fa84ec992": 72.66,
    "5dad8e8b-bd7a-496e-b263-aec01a21e53d": 0.99
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 5.0,
-   "lead": 0.45,
+   "lead": 0.21,
    "models": {
-    "ecmwf_aifs025_single": 5.5,
-    "icon_seamless": 6.5,
-    "ukmo_seamless": 5.5
+    "ecmwf_aifs025_single": 6.0,
+    "icon_seamless": 6.6,
+    "ukmo_seamless": 4.9
    },
-   "move_pp": 3.7,
-   "mu": 6.27,
-   "sigma": 0.68
+   "move_pp": 9.9,
+   "mu": 6.4,
+   "sigma": 0.84
   },
-  "repriced_at": "2026-11-08T00:15:49.043332+00:00",
+  "repriced_at": "2026-11-08T05:55:39.420329+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
@@ -25193,29 +25188,24 @@
    }
   },
   "model_target": {
-   "1d4f4fb7-c3c6-4ae2-8798-751cd784d0a0": 35.22,
-   "3c2277c5-8f38-460a-a44d-a3321aa6da81": 63.79,
-   "c33bff72-fa4f-469a-88d5-e6e613b56da6": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
    "1d4f4fb7-c3c6-4ae2-8798-751cd784d0a0": 40.97,
    "3c2277c5-8f38-460a-a44d-a3321aa6da81": 58.04,
    "c33bff72-fa4f-469a-88d5-e6e613b56da6": 0.99
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 5.2,
-   "lead": 0.28,
+   "lead": 0.21,
    "models": {
-    "ecmwf_aifs025_single": 6.6,
+    "ecmwf_aifs025_single": 6.8,
     "icon_seamless": 7.2,
     "ukmo_seamless": 5.8
    },
-   "move_pp": 6.6,
-   "mu": 6.7,
+   "move_pp": 5.8,
+   "mu": 6.8,
    "sigma": 0.65
   },
-  "repriced_at": "2026-11-08T04:20:51.259384+00:00",
+  "repriced_at": "2026-11-08T05:55:39.420329+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
