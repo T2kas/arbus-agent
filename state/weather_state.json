@@ -3854,6 +3854,27 @@
   "resolved_winner": "Different Dimension, QV – Sakartvelas - Special Version"
  },
  "211b92e5-5815-4f19-852d-344a365c9e31": {},
+ "219c3293-3d47-4748-b411-fade614b2643": {
+  "checksum": "d9f92932c897d54638053e4d68b00aa76f516e58a07bb01f30fed373101b6c8d",
+  "current_maximum": null,
+  "date": "2026-11-10",
+  "measurements": {},
+  "model_target": {
+   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 28.0,
+   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 2.0,
+   "68f3fc5f-901b-45f0-bcfe-951c6cc4aa8e": 1.0,
+   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 69.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 10.12,
+   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 26.09,
+   "68f3fc5f-901b-45f0-bcfe-951c6cc4aa8e": 0.99,
+   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 62.8
+  },
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "2262c4a2-324e-4994-84ee-9ea299fccf79": {
   "checksum": "910e22d64b55335c9ef21a94c5e03df69193a053346cb0f0c1adff062790eeb5",
   "current_maximum": 18.6,
@@ -12315,6 +12336,27 @@
   "resolved_price": 2.297,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260923/"
  },
+ "884280ad-57bc-40c6-bdd2-4fc70dfd5d0e": {
+  "checksum": "d1d18356f0fc50ae6efa518db837d3ea938e7c7862048d3ae0db3c2f0ed9fa25",
+  "current_maximum": null,
+  "date": "2026-11-10",
+  "measurements": {},
+  "model_target": {
+   "058259ee-9443-42e7-8b2a-621aaf76ca04": 47.0,
+   "5343672b-5713-4dce-9865-4c12e90d8004": 40.0,
+   "e2a720ef-fee6-4c68-96dc-227008f4f12e": 8.0,
+   "fe44816f-725a-447c-ae19-c37d0cae91a5": 5.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "058259ee-9443-42e7-8b2a-621aaf76ca04": 81.32,
+   "5343672b-5713-4dce-9865-4c12e90d8004": 1.87,
+   "e2a720ef-fee6-4c68-96dc-227008f4f12e": 15.82,
+   "fe44816f-725a-447c-ae19-c37d0cae91a5": 0.99
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "88606d38-3b8e-48e8-bfb1-6d769bc9ec23": {
   "checksum": "748bf8ad49cf5bf3c3eddedbac8c4e168eee1f6ac550f9e419f35416ad358bda",
   "current_maximum": 19.4,
@@ -18740,6 +18782,21 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
+ },
+ "c153a4f1-ac28-4c28-b75f-7c90bc7b5255": {
+  "checksum": "c9b7d2172a874cbfaa8f6630f80ea3d470de5aefea93ebc63a7d9e931d4d7b34",
+  "current_maximum": null,
+  "date": "2026-11-10",
+  "measurements": {},
+  "model_target": {
+   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 38.0,
+   "ad9b18e2-7282-495a-93e1-f86171f0eb44": 1.0,
+   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 2.0,
+   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 59.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "kauno-ams"
  },
  "c19a3b41-8b70-4640-9200-9723924e42e5": {
   "checksum": "2b1bd838d045bf86b40190b6fd16d894e45675fdbaab885e8f78b62b3371bd94",
