@@ -2064,7 +2064,14 @@
   "resolved_price": 2.258,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260925/"
  },
- "11fab923-6861-4250-be3d-e10979676e60": {},
+ "11fab923-6861-4250-be3d-e10979676e60": {
+  "resolved": true,
+  "resolved_at": "2026-11-08T14:20:45.898411+00:00",
+  "resolved_label": "FK „Šiauliai“",
+  "resolved_option_id": "5473b90a-4717-4f1e-b8ee-46ee98866fee",
+  "resolved_score": "Panevėžys 1:2 Šiauliai",
+  "resolved_via": "sports"
+ },
  "13593653-5906-4fd7-a5b0-45ded84e4b0c": {
   "checksum": "6d0ec46e544e1a6b9ba4372f37acdb7cc130ec53b908195a75a83dd24139689f",
   "current_maximum": 11.3,
@@ -4728,7 +4735,14 @@
   "resolved_price": 2.223,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261016/"
  },
- "2d45eb0c-5b2d-4379-876b-d8356eaa72c9": {},
+ "2d45eb0c-5b2d-4379-876b-d8356eaa72c9": {
+  "resolved": true,
+  "resolved_at": "2026-11-08T14:20:45.898411+00:00",
+  "resolved_label": "FK „Žalgiris“",
+  "resolved_option_id": "b07e9d26-38f6-4faf-8e90-fc50c6d0ea8c",
+  "resolved_score": "Banga 1:2 Žalgiris",
+  "resolved_via": "sports"
+ },
  "2e6976a6-ccb3-4b66-b5cc-caf399b01b84": {
   "checksum": "2cae6df85f816cd3e69e2c23a473cd8118884bac20a0171fa0e010a0a2f21071",
   "current_maximum": 12.7,
@@ -8931,7 +8945,14 @@
   "resolved_price": 1.944,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260928/"
  },
- "62944714-e126-45c7-ac19-bbc3f22b356a": {},
+ "62944714-e126-45c7-ac19-bbc3f22b356a": {
+  "resolved": true,
+  "resolved_at": "2026-11-08T14:20:45.898411+00:00",
+  "resolved_label": "Vilniaus „TransINVEST“",
+  "resolved_option_id": "ab032671-c261-4ac4-85d7-568acc7a49c3",
+  "resolved_score": "TransInvest 4:1 K. Žalgiris",
+  "resolved_via": "sports"
+ },
  "63354551-a59b-4b37-beb8-1eb116336122": {
   "checksum": "4c26c89dee9169740b4663571d0bf982e4ede8e5224bb80d641fbfb5e11bc6a6",
   "current_maximum": 18.1,
