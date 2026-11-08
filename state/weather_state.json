@@ -2958,7 +2958,7 @@
   "station": "kauno-ams"
  },
  "1a2394d2-08d6-4cea-94e8-20c5bf9525cc": {
-  "checksum": "c86d33be450cc70681107f1409a9c91197eed6d20b6322ca7ea58e99b9d6a93b",
+  "checksum": "0d0838d035c23c8be760c33657942f777619c06ca52976b5c83c919d67df564a",
   "current_maximum": null,
   "date": "2026-11-09",
   "measurements": {},
@@ -3885,7 +3885,7 @@
   "resolved_via": "sports"
  },
  "219c3293-3d47-4748-b411-fade614b2643": {
-  "checksum": "c86d33be450cc70681107f1409a9c91197eed6d20b6322ca7ea58e99b9d6a93b",
+  "checksum": "0d0838d035c23c8be760c33657942f777619c06ca52976b5c83c919d67df564a",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -12390,7 +12390,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260923/"
  },
  "884280ad-57bc-40c6-bdd2-4fc70dfd5d0e": {
-  "checksum": "079483dc12f8d84ef87e2d873d512f98e43fab950ec6f85566b06e15b2832551",
+  "checksum": "6eabca2401415c904df7e116f21df13e50420c0acc6e7c2c0fd2c5a347986ad2",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -13205,7 +13205,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "94901516-74bf-43a4-8e66-3add38bec35b": {
-  "checksum": "079483dc12f8d84ef87e2d873d512f98e43fab950ec6f85566b06e15b2832551",
+  "checksum": "6eabca2401415c904df7e116f21df13e50420c0acc6e7c2c0fd2c5a347986ad2",
   "current_maximum": null,
   "date": "2026-11-09",
   "measurements": {},
@@ -13664,7 +13664,7 @@
   "station": "kauno-ams"
  },
  "97270c63-a248-4313-9441-040033125fee": {
-  "checksum": "0babaddfff0d08ac6deee8a2577700228fdb8d4b14012a1b4a9350bb261f76a8",
+  "checksum": "601d68d4132be97386e9435773d267c45db55c3a2b80e565dda3d87bc1c29b9a",
   "current_maximum": null,
   "date": "2026-11-09",
   "measurements": {},
@@ -18844,7 +18844,7 @@
   "station": "vilniaus-ams"
  },
  "c153a4f1-ac28-4c28-b75f-7c90bc7b5255": {
-  "checksum": "0babaddfff0d08ac6deee8a2577700228fdb8d4b14012a1b4a9350bb261f76a8",
+  "checksum": "601d68d4132be97386e9435773d267c45db55c3a2b80e565dda3d87bc1c29b9a",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -19162,7 +19162,14 @@
   "resolved_price": 1.914,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261012/"
  },
- "c34f13be-6cf6-41cb-9521-990844ec0509": {},
+ "c34f13be-6cf6-41cb-9521-990844ec0509": {
+  "resolved": true,
+  "resolved_at": "2026-11-08T19:10:50.037773+00:00",
+  "resolved_label": "„Gargždai“",
+  "resolved_option_id": "086d4bc0-cafd-4534-965e-7bc4ac873d7a",
+  "resolved_score": "Jonavos „Hipocredit“ 70:91 „Gargždai“",
+  "resolved_via": "sports"
+ },
  "c36d241f-670e-4e86-bc91-8b46405922ef": {
   "resolved": true,
   "resolved_adm": 7894.0,
