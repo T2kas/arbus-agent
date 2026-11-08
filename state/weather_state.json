@@ -1109,29 +1109,24 @@
    }
   },
   "model_target": {
-   "4d069c04-0946-4c71-a26c-a1fb2e93e63a": 34.97,
-   "7ec28442-745a-47c2-a5a8-f3674d7c927c": 63.4,
-   "a7066730-06b8-4bc9-aea1-3357d1d8e09e": 1.63
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "4d069c04-0946-4c71-a26c-a1fb2e93e63a": 32.61,
+   "4d069c04-0946-4c71-a26c-a1fb2e93e63a": 32.62,
    "7ec28442-745a-47c2-a5a8-f3674d7c927c": 65.3,
    "a7066730-06b8-4bc9-aea1-3357d1d8e09e": 2.09
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 8.3,
    "lead": 0.4,
    "models": {
     "ecmwf_aifs025_single": 8.0,
     "icon_seamless": 8.9,
-    "ukmo_seamless": 8.4
+    "ukmo_seamless": 8.7
    },
    "move_pp": 2.4,
-   "mu": 8.94,
-   "sigma": 0.9
+   "mu": 9.02,
+   "sigma": 0.91
   },
-  "repriced_at": "2026-11-08T01:20:49.185068+00:00",
+  "repriced_at": "2026-11-08T01:31:04.809454+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
@@ -13376,31 +13371,25 @@
   "date": "2026-11-09",
   "measurements": {},
   "model_target": {
-   "08171ad8-396d-4768-9a7b-b2a4e0741542": 61.57,
+   "08171ad8-396d-4768-9a7b-b2a4e0741542": 62.79,
    "2eb0f6b2-92cd-457f-8704-cf86597cf012": 1.0,
-   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 5.0,
-   "c4869fe0-26c8-4d19-8691-c4264f49188f": 32.44
+   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 5.82,
+   "c4869fe0-26c8-4d19-8691-c4264f49188f": 30.4
   },
   "mt_v": 2,
-  "pending_target": {
-   "08171ad8-396d-4768-9a7b-b2a4e0741542": 62.77,
-   "2eb0f6b2-92cd-457f-8704-cf86597cf012": 1.0,
-   "8437eac0-5e55-4890-8364-9cb96b8d9f13": 5.83,
-   "c4869fe0-26c8-4d19-8691-c4264f49188f": 30.41
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.64,
+   "lead": 1.4,
    "models": {
     "ecmwf_aifs025_single": 4.9,
-    "icon_seamless": 6.2,
-    "ukmo_seamless": 4.5
+    "icon_seamless": 6.6,
+    "ukmo_seamless": 4.7
    },
-   "move_pp": 9.0,
-   "mu": 5.37,
-   "sigma": 0.96
+   "move_pp": 2.0,
+   "mu": 5.43,
+   "sigma": 0.97
   },
-  "repriced_at": "2026-11-07T19:40:48.083726+00:00",
+  "repriced_at": "2026-11-08T01:31:04.809454+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
