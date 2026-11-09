@@ -1177,7 +1177,7 @@ GAMES_HORIZON_DAYS = _env_int("GAMES_HORIZON_DAYS", 8)
 GAMES_DEVIG = _env_str("GAMES_DEVIG", "favourite")
 GAMES_EL_TEAMS = {x.strip() for x in _env_str("GAMES_EL_TEAMS", "Zalgiris Kaunas").split(",") if x.strip()}
 GAMES_EL_IMAGE = _env_str("GAMES_EL_IMAGE", "")
-GAMES_MODEL_FALLBACK = _env_str("GAMES_MODEL_FALLBACK", "true").lower() != "false"   # LKL/TOPLYGA open on the table model until bookmakers publish
+GAMES_MODEL_FALLBACK = _env_str("GAMES_MODEL_FALLBACK", "false").lower() == "true"   # LKL/TOPLYGA open on the table model until bookmakers publish
 GAMES_MIN_LEAD_HOURS = _env_int("GAMES_MIN_LEAD_HOURS", 3)   # never open a market minutes before tip-off
 GAMES_LIQUIDITY = _env_int("GAMES_LIQUIDITY", 20000)         # owner 2026-11-07: sport 20k (10k since 2026-10-25)
 GAMES_LKL_IMAGE = _env_str("GAMES_LKL_IMAGE", "")             # empty -> the Žalgiris image

@@ -169,7 +169,7 @@ def test_plan_creates_only_games_with_published_odds():
 
 
 def test_no_odds_means_wait_not_create(monkeypatch):
-    monkeypatch.setattr(games.config, "GAMES_MODEL_FALLBACK", False)
+    pass
     fetch, odds_fetch = _fetchers({"xfh9p4BG": NO_ODDS, "ppFZhH74": NO_ODDS, "AbCdEfGh": NO_ODDS})
     now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
     specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles=set(),
@@ -196,7 +196,7 @@ def test_a_league_outage_does_not_stop_the_other():
 
 
 def test_lkl_site_blocked_falls_back_to_betexplorer_and_closes_at_noon(monkeypatch):
-    monkeypatch.setattr(games.config, "GAMES_MODEL_FALLBACK", False)
+    pass
     _, odds_fetch = _fetchers({"xfh9p4BG": ODDS_HA, "ppFZhH74": ODDS_1X2, "AbCdEfGh": NO_ODDS})
 
     def fetch(url):
@@ -332,7 +332,8 @@ def test_favourite_keeps_the_bookmaker_price():
     assert betodds.to_percent(two) == [95, 5]
 
 
-def test_lkl_without_odds_opens_on_the_model():
+def test_lkl_without_odds_opens_on_the_model(monkeypatch):
+    monkeypatch.setattr(games.config, "GAMES_MODEL_FALLBACK", True)
     fetch, odds_fetch = _fetchers({"xfh9p4BG": {"odds": ""}, "ppFZhH74": ODDS_1X2})
     now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
     specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles={"Kėdainių „Nevėžis-Paskolų klubas“ vs Kauno „Žalgiris“"},

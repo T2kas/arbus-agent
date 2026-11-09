@@ -27,7 +27,7 @@ LEAGUES = {
 # Every competition Lithuania's men's football team plays in; a game is found in whichever lists it.
 NATIONAL_PATHS = ("football/world/friendly-international", "football/europe/uefa-nations-league",
                   "football/europe/euro-qualification", "football/world/world-cup-qualification")
-MIN_BOOKMAKERS = 3
+MIN_BOOKMAKERS = 1   # any real bookmaker's odds are enough (owner, 2026-11-09)
 
 # BetExplorer team name (folded) -> our source key (LKL short name / TOPLYGA slug)
 ALIASES = {
