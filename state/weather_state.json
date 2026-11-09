@@ -3973,6 +3973,12 @@
    "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 67.23
   },
   "mt_v": 2,
+  "pending_target": {
+   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 17.3,
+   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 11.38,
+   "68f3fc5f-901b-45f0-bcfe-951c6cc4aa8e": 0.99,
+   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 70.33
+  },
   "reprice": {
    "floor": null,
    "lead": 1.13,
@@ -19107,6 +19113,12 @@
    "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 73.92
   },
   "mt_v": 2,
+  "pending_target": {
+   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 20.26,
+   "ad9b18e2-7282-495a-93e1-f86171f0eb44": 0.99,
+   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 2.28,
+   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 76.46
+  },
   "reprice": {
    "floor": null,
    "lead": 1.22,
