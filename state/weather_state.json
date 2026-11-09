@@ -6903,31 +6903,25 @@
   "date": "2026-11-11",
   "measurements": {},
   "model_target": {
-   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 82.91,
-   "4e412037-a369-43c7-9d17-5d814ab95219": 0.99,
-   "50ff01d9-5317-4fa8-8770-f860efdeb476": 3.11,
-   "7cbb4917-76d5-492d-86eb-336f54444fbf": 12.99
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 78.37,
+   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 78.38,
    "4e412037-a369-43c7-9d17-5d814ab95219": 0.99,
    "50ff01d9-5317-4fa8-8770-f860efdeb476": 8.12,
    "7cbb4917-76d5-492d-86eb-336f54444fbf": 12.51
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.78,
+   "lead": 1.77,
    "models": {
     "ecmwf_aifs025_single": 2.1,
-    "icon_seamless": 2.4,
+    "icon_seamless": 3.0,
     "ukmo_seamless": 2.0
    },
-   "move_pp": 37.9,
-   "mu": 2.7,
-   "sigma": 0.67
+   "move_pp": 5.0,
+   "mu": 2.85,
+   "sigma": 0.79
   },
-  "repriced_at": "2026-11-09T16:11:10.127305+00:00",
+  "repriced_at": "2026-11-09T16:35:40.417515+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -17350,31 +17344,25 @@
   "date": "2026-11-11",
   "measurements": {},
   "model_target": {
-   "24850078-e4b9-4e04-9f82-bcca168025b2": 68.03,
-   "4774065b-cddd-4202-aade-63d787be52f7": 4.06,
-   "99244ea7-10e7-47d7-a37c-303065923cb8": 0.99,
-   "ab9ef87b-6288-425b-92ea-625ab25e7193": 26.92
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "24850078-e4b9-4e04-9f82-bcca168025b2": 51.88,
+   "24850078-e4b9-4e04-9f82-bcca168025b2": 51.89,
    "4774065b-cddd-4202-aade-63d787be52f7": 3.53,
-   "99244ea7-10e7-47d7-a37c-303065923cb8": 1.88,
+   "99244ea7-10e7-47d7-a37c-303065923cb8": 1.87,
    "ab9ef87b-6288-425b-92ea-625ab25e7193": 42.71
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.78,
+   "lead": 1.77,
    "models": {
     "ecmwf_aifs025_single": 3.3,
-    "icon_seamless": 3.4,
+    "icon_seamless": 4.9,
     "ukmo_seamless": 3.0
    },
    "move_pp": 16.1,
-   "mu": 3.44,
-   "sigma": 0.85
+   "mu": 3.81,
+   "sigma": 1.03
   },
-  "repriced_at": "2026-11-09T16:20:47.555118+00:00",
+  "repriced_at": "2026-11-09T16:35:40.417515+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
