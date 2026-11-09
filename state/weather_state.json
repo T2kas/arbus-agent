@@ -17350,6 +17350,12 @@
    "ab9ef87b-6288-425b-92ea-625ab25e7193": 43.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "24850078-e4b9-4e04-9f82-bcca168025b2": 67.99,
+   "4774065b-cddd-4202-aade-63d787be52f7": 4.07,
+   "99244ea7-10e7-47d7-a37c-303065923cb8": 0.99,
+   "ab9ef87b-6288-425b-92ea-625ab25e7193": 26.94
+  },
   "resolved": false,
   "station": "kauno-ams"
  },
