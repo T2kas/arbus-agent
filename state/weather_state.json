@@ -3029,27 +3029,23 @@
    }
   },
   "model_target": {
-   "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 51.66,
-   "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 48.34
-  },
-  "mt_v": 2,
-  "pending_target": {
    "cfad60b5-42ee-457f-8fcf-202d8fd477cb": 54.52,
    "f7e33e4a-0df0-4bc5-bdff-b1c13d5991e6": 45.48
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 8.5,
-   "lead": 0.21,
+   "lead": 0.13,
    "models": {
     "ecmwf_aifs025_single": 7.1,
     "icon_seamless": 7.6,
-    "ukmo_seamless": 6.3
+    "ukmo_seamless": 6.5
    },
-   "move_pp": 2.4,
-   "mu": 7.63,
-   "sigma": 1.0
+   "move_pp": 2.9,
+   "mu": 7.68,
+   "sigma": 0.93
   },
-  "repriced_at": "2026-11-09T05:55:37.086323+00:00",
+  "repriced_at": "2026-11-09T07:45:48.491698+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
@@ -3959,31 +3955,25 @@
   "date": "2026-11-10",
   "measurements": {},
   "model_target": {
-   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 14.0,
-   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 15.22,
+   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 17.03,
+   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 14.75,
    "68f3fc5f-901b-45f0-bcfe-951c6cc4aa8e": 0.99,
-   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 69.79
+   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 67.23
   },
   "mt_v": 2,
-  "pending_target": {
-   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 17.03,
-   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 14.76,
-   "68f3fc5f-901b-45f0-bcfe-951c6cc4aa8e": 0.99,
-   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 67.22
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.22,
+   "lead": 1.13,
    "models": {
     "ecmwf_aifs025_single": 2.4,
     "icon_seamless": 1.9,
-    "ukmo_seamless": 2.6
+    "ukmo_seamless": 2.9
    },
-   "move_pp": 8.5,
-   "mu": 2.93,
-   "sigma": 0.96
+   "move_pp": 3.0,
+   "mu": 3.0,
+   "sigma": 1.01
   },
-  "repriced_at": "2026-11-09T05:45:52.601479+00:00",
+  "repriced_at": "2026-11-09T07:45:48.491698+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
