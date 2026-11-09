@@ -168,7 +168,8 @@ def test_plan_creates_only_games_with_published_odds():
     assert specs[0]["_logos"][0].endswith(".svg")            # official LKL logo
 
 
-def test_no_odds_means_wait_not_create():
+def test_no_odds_means_wait_not_create(monkeypatch):
+    monkeypatch.setattr(games.config, "GAMES_MODEL_FALLBACK", False)
     fetch, odds_fetch = _fetchers({"xfh9p4BG": NO_ODDS, "ppFZhH74": NO_ODDS, "AbCdEfGh": NO_ODDS})
     now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
     specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles=set(),
@@ -194,7 +195,8 @@ def test_a_league_outage_does_not_stop_the_other():
     assert len(specs) == 1 and errors and errors[0].startswith("LKL")
 
 
-def test_lkl_site_blocked_falls_back_to_betexplorer_and_closes_at_noon():
+def test_lkl_site_blocked_falls_back_to_betexplorer_and_closes_at_noon(monkeypatch):
+    monkeypatch.setattr(games.config, "GAMES_MODEL_FALLBACK", False)
     _, odds_fetch = _fetchers({"xfh9p4BG": ODDS_HA, "ppFZhH74": ODDS_1X2, "AbCdEfGh": NO_ODDS})
 
     def fetch(url):
@@ -328,3 +330,22 @@ def test_favourite_keeps_the_bookmaker_price():
     three = betodds.devig([1.60, 3.80, 5.00], "favourite")
     assert abs(three[0] - 1 / 1.60) < 1e-12 and abs(sum(three) - 1) < 1e-12 and three[1] > three[2]
     assert betodds.to_percent(two) == [95, 5]
+
+
+def test_lkl_without_odds_opens_on_the_model():
+    fetch, odds_fetch = _fetchers({"xfh9p4BG": {"odds": ""}, "ppFZhH74": ODDS_1X2})
+    now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
+    specs, waiting, errors = games.plan(now, 7, fetch=fetch, existing_titles={"Kėdainių „Nevėžis-Paskolų klubas“ vs Kauno „Žalgiris“"},
+                                        odds_fetch=odds_fetch)
+    rytas = next(s for s in specs if s["title"].startswith("Vilniaus „Rytas“"))
+    assert errors == [] and waiting == [] and rytas["_odds_bookmakers"] == 0
+    assert sum(o["probability"] for o in rytas["options"]) == 100
+
+
+def test_national_fixtures_keep_only_lithuania():
+    from arbus import betodds
+    row = ('<tr><td><a href="/football/x/{a}/ABCDEFG{i}/" class="in-match"><span>{h}</span> - <span>{v}</span></a></td>'
+           '<td class="table-main__datetime">12.11. 18:00</td></tr>')
+    page = "<table>" + row.format(a="a", i=1, h="Lithuania", v="Suriname") + row.format(a="b", i=2, h="Latvia", v="Estonia") + "</table>"
+    found = betodds.fixtures_for("rinktine", lambda url, **h: page)
+    assert {(f.home, f.away) for f in found} == {("Lietuva", "Surinamas")}

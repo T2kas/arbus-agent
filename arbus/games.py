@@ -392,6 +392,35 @@ def top_spec(g: Game, table, probs: list[int] | None = None) -> dict:
     }
 
 
+def national_spec(g: Game, table, probs: list[int] | None = None) -> dict:
+    """Lithuania's men's football team: priced only from bookmakers (no table to model it from)."""
+    ph, pd, pa = probs if probs else (34, 28, 38)
+    home, away = g.home, g.away
+    deadline = lt_date(g.start + timedelta(days=30))
+    return {
+        "title": f"{home} vs {away}",
+        "subtitle": f"Futbolo rinktinės, {lt_date(g.start)}",
+        "category": "sportas",
+        "image_url": IMG_TOP,
+        "liquidity": config.GAMES_LIQUIDITY,
+        "rules": (
+            f"Rinka bus išspręsta pagal oficialų Lietuvos vyrų futbolo rinktinės rungtynių {home} ir {away}, numatytų {lt_date(g.start)}, rezultatą.\n\n"
+            "Vertinamas rezultatas pasibaigus 90 minučių ir teisėjo pridėtam laikui. Jeigu rungtynės baigsis lygiosiomis, laimės baigtis „Lygiosios“.\n\n"
+            f"Jeigu rungtynės bus nukeltos, vertinamos tos pačios komandų poros nukeltos rungtynės, jeigu jos įvyks iki {deadline} imtinai. "
+            "Jeigu iki šios datos rungtynės nebus sužaistos ir nebus patvirtintas oficialus rezultatas, galutinis rezultatas bus paskirstytas po lygiai.\n\n"
+            "Rezultato šaltiniai yra Lietuvos futbolo federacija (lff.lt) ir UEFA."),
+        "context": f"Lietuvos rinktinė žaidžia su {away if home == 'Lietuva' else home}.",
+        "closes_at": _close(g),
+        "options": [{"label": home, "probability": ph}, {"label": "Lygiosios", "probability": pd},
+                    {"label": away, "probability": pa}],
+    }
+
+
+def national_games(fixtures, now: datetime) -> list[Game]:
+    """BetExplorer gives no trustworthy local kick-off: closes at noon on the day, as LKL's fallback."""
+    return [Game("rinktine", g.start, g.home, g.away, time_known=False) for g in lkl_games_from_fixtures(fixtures, now)]
+
+
 # ── run ────────────────────────────────────────────────────────────────────
 
 def _get(url: str) -> str:
@@ -431,8 +460,9 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
     untraded: dict[str, dict] = {}
     # Open game markets already made: brought up to the current liquidity and picture style.
     live_by_title: dict[str, dict] = {}
-    global LAST_UPGRADES
+    global LAST_UPGRADES, LAST_WAITING_SOON
     LAST_UPGRADES = []
+    LAST_WAITING_SOON = []
 
     if existing_titles is None:
         rows, err = app_api.markets(1000, unresolved=True)
@@ -454,10 +484,15 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
     if "euroleague" in config.GAMES_LEAGUES:
         feed = EL_FEED.format(year=el_season_year(now))
         sources.append(("euroleague", "Eurolyga", feed, feed, parse_el_schedule, parse_el_table, el_spec))
+    if "rinktine" in config.GAMES_LEAGUES:
+        sources.append(("rinktine", "Lietuvos rinktinė", None, None, None, None, national_spec))
     for league, name, sched_url, table_url, parse_s, parse_t, make in sources:
         try:
-            games = parse_s(fetch(sched_url))
-            table = parse_t(fetch(table_url))
+            if league == "rinktine":
+                games, table = national_games(betodds.fixtures_for("rinktine", odds_fetch), now), {}
+            else:
+                games = parse_s(fetch(sched_url))
+                table = parse_t(fetch(table_url))
         except Exception as e:          # one league down must not stop the other
             if league != "lkl":
                 errors.append(f"{name}: {type(e).__name__}: {e}")
@@ -494,15 +529,19 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
                 except Exception as e:
                     errors.append(f"{title}: koeficientai {type(e).__name__}: {e}")
                     continue
-            if mo is None:
+            if mo is None and not (config.GAMES_MODEL_FALLBACK and league in ("lkl", "toplyga")):
                 waiting.append(title)
+                if g.start - now <= timedelta(hours=48):
+                    LAST_WAITING_SOON.append(title)
                 continue
-            spec = make(g, table, betodds.to_percent(mo.probs))
-            spec["_odds_bookmakers"] = mo.bookmakers
-            spec["_logos"] = local_logos(league, g) or ([g.home_logo, g.away_logo] if g.home_logo and g.away_logo else mo.logos)
+            # No bookmaker odds yet: LKL/TOPLYGA open on the table model, and the "follow" step
+            # below moves them to the bookmakers' price as soon as those publish (until the first bet).
+            spec = make(g, table, betodds.to_percent(mo.probs)) if mo else make(g, table)
+            spec["_odds_bookmakers"] = mo.bookmakers if mo else 0
+            spec["_logos"] = local_logos(league, g) or ([g.home_logo, g.away_logo] if g.home_logo and g.away_logo else (mo.logos if mo else []))
             spec["_image_name"] = re.sub(r"[^a-z0-9]+", "-", betodds.fold(
                 f"{league} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-") + CLEAN_IMAGE_TAG
-            spec["_caption"] = (f"{ {'lkl': 'LKL', 'toplyga': 'TOPLYGA', 'euroleague': 'EUROLYGA'}[league] } · "
+            spec["_caption"] = (f"{ {'lkl': 'LKL', 'toplyga': 'TOPLYGA', 'euroleague': 'EUROLYGA', 'rinktine': 'FUTBOLAS'}[league] } · "
                                 f"{MONTHS[g.start.month - 1]} {g.start.day} d."
                                 + (f" {g.start:%H:%M}" if g.time_known else ""))
             candidates.append(spec)
@@ -578,13 +617,30 @@ def _public_spec(spec: dict) -> dict:
     return {k: v for k, v in spec.items() if not k.startswith("_")}
 
 
+LAST_WAITING_SOON: list[str] = []
+_WARNED_FILE = __import__("pathlib").Path.home() / ".arbus-games-warned.json"
+
+
+def _warn_missing_soon() -> None:
+    """Telegram, once per game: it starts within 48 h and still has no market (the runner's home persists)."""
+    import json
+    try:
+        warned = set(json.loads(_WARNED_FILE.read_text()))
+    except Exception:
+        warned = set()
+    new = [t for t in LAST_WAITING_SOON if t not in warned]
+    if new:
+        notify.send("\n".join(f"⚠️ Rungtynės po mažiau nei 48 val., rinkos dar nėra: {t}" for t in new))
+        _WARNED_FILE.write_text(json.dumps(sorted(warned | set(new))))
+
+
 def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
     from . import matchimage
 
     specs, waiting, errors = plan()
     reports = []
     for s in specs:
-        odds_note = f"koef. iš {s['_odds_bookmakers']} bendrovių"
+        odds_note = f"koef. iš {s['_odds_bookmakers']} bendrovių" if s["_odds_bookmakers"] else "modelio kaina, kol bendrovės paskelbs koeficientus"
         if dry_run:
             reports.append({"title": s["title"], "status": "would-create", "options": s["options"],
                             "detail": odds_note})
@@ -641,6 +697,8 @@ def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
         lines += [f"⚠️ Nepavyko: {r['title']} — {r['detail']}" for r in bad]
         lines += [f"⚠️ {e}" for e in errors_to_send]
         notify.send("\n".join(lines))
+    if alert and not dry_run:
+        _warn_missing_soon()
     for e in errors:
         reports.append({"title": "-", "status": "error", "detail": e})
     return reports

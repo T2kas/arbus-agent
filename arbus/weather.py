@@ -1250,6 +1250,8 @@ def assign_two_teams(home_name: str, away_name: str,
 
 def _sports_league(rules: str) -> str | None:
     low = _strip_diacritics(rules).lower()
+    if "futbolo rinktines" in low:
+        return "rinktine"
     if "eurolyg" in low:
         return "euroleague"
     if re.search(r"(?<![a-z])lkl(?![a-z])", low):
@@ -1340,6 +1342,12 @@ def _resolve_sports(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
                     continue
                 labels = [str(app_api._pick(o, "label", "name", "title", default="")) for o in team_opts]
                 game = sports.lkl_result(iso, labels, now.astimezone(tz).date())
+            elif league == "rinktine":
+                iso = sports._rules_date(rules)
+                if not iso or iso > today:
+                    continue
+                labels = [str(app_api._pick(o, "label", "name", "title", default="")) for o in team_opts]
+                game = sports.national_result(iso, labels, now.astimezone(tz).date())
             else:  # toplyga football
                 iso = sports._rules_date(rules)
                 if not iso or iso > today:             # not played yet

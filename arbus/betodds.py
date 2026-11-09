@@ -22,7 +22,11 @@ LEAGUES = {
     "lkl": ("basketball/lithuania/lkl", "ha"),
     "toplyga": ("football/lithuania/toplyga", "1x2"),
     "euroleague": ("basketball/europe/euroleague", "ha"),
+    "rinktine": ("football/world/friendly-international", "1x2"),
 }
+# Every competition Lithuania's men's football team plays in; a game is found in whichever lists it.
+NATIONAL_PATHS = ("football/world/friendly-international", "football/europe/uefa-nations-league",
+                  "football/europe/euro-qualification", "football/world/world-cup-qualification")
 MIN_BOOKMAKERS = 3
 
 # BetExplorer team name (folded) -> our source key (LKL short name / TOPLYGA slug)
@@ -37,6 +41,22 @@ ALIASES = {
         "zalgiris": "zalgiris", "kauno zalgiris": "k-zalgiris", "suduva": "suduva",
         "transinvest": "transinvest", "banga": "banga", "dziugas": "dziugas",
         "panevezys": "panevezys", "hegelmann": "hegelmann", "siauliai": "fa-siauliai",
+    },
+    # English names on BetExplorer -> the Lithuanian title. An opponent missing here is reported, not guessed.
+    "rinktine": {
+        "lithuania": "Lietuva", "suriname": "Surinamas", "liechtenstein": "Lichtenšteinas", "latvia": "Latvija",
+        "estonia": "Estija", "poland": "Lenkija", "finland": "Suomija", "sweden": "Švedija", "norway": "Norvegija",
+        "denmark": "Danija", "iceland": "Islandija", "ireland": "Airija", "northern ireland": "Šiaurės Airija",
+        "scotland": "Škotija", "wales": "Velsas", "england": "Anglija", "france": "Prancūzija", "germany": "Vokietija",
+        "italy": "Italija", "spain": "Ispanija", "portugal": "Portugalija", "netherlands": "Nyderlandai",
+        "belgium": "Belgija", "luxembourg": "Liuksemburgas", "switzerland": "Šveicarija", "austria": "Austrija",
+        "czech republic": "Čekija", "czechia": "Čekija", "slovakia": "Slovakija", "hungary": "Vengrija",
+        "romania": "Rumunija", "bulgaria": "Bulgarija", "greece": "Graikija", "turkey": "Turkija", "cyprus": "Kipras",
+        "malta": "Malta", "croatia": "Kroatija", "serbia": "Serbija", "slovenia": "Slovėnija",
+        "bosnia herzegovina": "Bosnija ir Hercegovina", "montenegro": "Juodkalnija", "north macedonia": "Šiaurės Makedonija",
+        "albania": "Albanija", "kosovo": "Kosovas", "moldova": "Moldova", "ukraine": "Ukraina", "georgia": "Sakartvelas",
+        "armenia": "Armėnija", "azerbaijan": "Azerbaidžanas", "kazakhstan": "Kazachstanas", "israel": "Izraelis",
+        "faroe islands": "Farerų salos", "andorra": "Andora", "san marino": "San Marinas", "gibraltar": "Gibraltaras",
     },
     "euroleague": {
         "zalgiris": "Zalgiris Kaunas", "barcelona": "FC Barcelona",
@@ -221,6 +241,14 @@ def match_odds(league: str, fx: Fixture, fetch=_get) -> MatchOdds | None:
 
 
 def fixtures_for(league: str, fetch=_get) -> list[Fixture]:
+    if league == "rinktine":
+        out = []
+        for path in NATIONAL_PATHS:
+            try:
+                out += [f for f in parse_fixtures(league, fetch(f"{BASE}/{path}/fixtures/")) if "Lietuva" in (f.home, f.away)]
+            except Exception:           # a competition with no page this season
+                continue
+        return out
     path, _ = LEAGUES[league]
     return parse_fixtures(league, fetch(f"{BASE}/{path}/fixtures/"))
 
