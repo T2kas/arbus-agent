@@ -17350,31 +17350,25 @@
   "date": "2026-11-11",
   "measurements": {},
   "model_target": {
-   "24850078-e4b9-4e04-9f82-bcca168025b2": 47.44,
-   "4774065b-cddd-4202-aade-63d787be52f7": 2.16,
-   "99244ea7-10e7-47d7-a37c-303065923cb8": 2.27,
-   "ab9ef87b-6288-425b-92ea-625ab25e7193": 48.13
+   "24850078-e4b9-4e04-9f82-bcca168025b2": 38.93,
+   "4774065b-cddd-4202-aade-63d787be52f7": 1.0,
+   "99244ea7-10e7-47d7-a37c-303065923cb8": 2.52,
+   "ab9ef87b-6288-425b-92ea-625ab25e7193": 57.56
   },
   "mt_v": 2,
-  "pending_target": {
-   "24850078-e4b9-4e04-9f82-bcca168025b2": 38.94,
-   "4774065b-cddd-4202-aade-63d787be52f7": 1.0,
-   "99244ea7-10e7-47d7-a37c-303065923cb8": 2.53,
-   "ab9ef87b-6288-425b-92ea-625ab25e7193": 57.55
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.67,
+   "lead": 1.63,
    "models": {
     "ecmwf_aifs025_single": 3.6,
     "icon_seamless": 4.9,
-    "ukmo_seamless": 3.0
+    "ukmo_seamless": 3.9
    },
-   "move_pp": 5.4,
-   "mu": 3.96,
-   "sigma": 0.99
+   "move_pp": 9.4,
+   "mu": 4.18,
+   "sigma": 0.9
   },
-  "repriced_at": "2026-11-09T18:55:42.423816+00:00",
+  "repriced_at": "2026-11-09T19:50:47.963070+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
