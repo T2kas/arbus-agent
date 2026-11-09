@@ -4014,7 +4014,7 @@
   "resolved_via": "sports"
  },
  "219c3293-3d47-4748-b411-fade614b2643": {
-  "checksum": "23adf8115a16714817bb5f5d3bf4bd54a1bf4de3133581c71cdc6ed350f46f66",
+  "checksum": "330d56662693097f805db81e6ef9682fcddd7aeec1c24507b40bbc6dfe4199a2",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -6898,7 +6898,7 @@
   "station": "klaipedos-ams"
  },
  "439481a4-5590-4690-b1f4-88bd553a4ed2": {
-  "checksum": "cea91ce733a7d5b5131a72ea72b8dfff88bf278d8c95a6fff38b488f1aea25c5",
+  "checksum": "a5f9be0ca7124444d9e2357b7720f0400a92d7d61bbbb61192f1e546e7fbfc72",
   "current_maximum": null,
   "date": "2026-11-11",
   "measurements": {},
@@ -6909,12 +6909,6 @@
    "7cbb4917-76d5-492d-86eb-336f54444fbf": 12.48
   },
   "mt_v": 2,
-  "pending_target": {
-   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 83.02,
-   "4e412037-a369-43c7-9d17-5d814ab95219": 0.99,
-   "50ff01d9-5317-4fa8-8770-f860efdeb476": 3.07,
-   "7cbb4917-76d5-492d-86eb-336f54444fbf": 12.92
-  },
   "reprice": {
    "floor": null,
    "lead": 1.75,
@@ -12556,7 +12550,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260923/"
  },
  "884280ad-57bc-40c6-bdd2-4fc70dfd5d0e": {
-  "checksum": "cea91ce733a7d5b5131a72ea72b8dfff88bf278d8c95a6fff38b488f1aea25c5",
+  "checksum": "a5f9be0ca7124444d9e2357b7720f0400a92d7d61bbbb61192f1e546e7fbfc72",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -17176,7 +17170,7 @@
  "b0bc7e3d-0f39-46f4-b0f0-98017a9308d1": {},
  "b18421a6-e897-463f-a8ce-9ef0a6c5f0cd": {},
  "b3ceaa57-6916-49ed-b492-ac0f7a0ba84c": {
-  "checksum": "23adf8115a16714817bb5f5d3bf4bd54a1bf4de3133581c71cdc6ed350f46f66",
+  "checksum": "330d56662693097f805db81e6ef9682fcddd7aeec1c24507b40bbc6dfe4199a2",
   "current_maximum": null,
   "date": "2026-11-11",
   "measurements": {},
@@ -17345,7 +17339,7 @@
   "station": "kauno-ams"
  },
  "b4f15bac-1ce6-47f6-8e9b-ed44814dee45": {
-  "checksum": "4fa18053ab39c2b2d80add9704989cfbfa793809c87249bba89dfad6f0b3e321",
+  "checksum": "b4f0da0ee673993cc89e8020044dba5cc97e98046ab959107ef7370be9d40430",
   "current_maximum": null,
   "date": "2026-11-11",
   "measurements": {},
@@ -19347,7 +19341,7 @@
   "station": "vilniaus-ams"
  },
  "c153a4f1-ac28-4c28-b75f-7c90bc7b5255": {
-  "checksum": "4fa18053ab39c2b2d80add9704989cfbfa793809c87249bba89dfad6f0b3e321",
+  "checksum": "b4f0da0ee673993cc89e8020044dba5cc97e98046ab959107ef7370be9d40430",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
