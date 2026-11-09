@@ -2958,7 +2958,7 @@
   "station": "kauno-ams"
  },
  "1a2394d2-08d6-4cea-94e8-20c5bf9525cc": {
-  "checksum": "9db26520b3231b5acf6716d37dec9293b159ae0f58072e57c0b893b18ccff37e",
+  "checksum": "3d33156aeba23569704ed0c22af7e0e674816cbd0606baedaf8ed26ff85030b6",
   "current_maximum": 8.5,
   "date": "2026-11-09",
   "eliminated": [
@@ -3050,6 +3050,12 @@
     "received_at": "2026-11-09T11:10:45.936973+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 7.7
+   },
+   "2026-11-09 12:00:00": {
+    "checksum": "3d33156aeba23569704ed0c22af7e0e674816cbd0606baedaf8ed26ff85030b6",
+    "received_at": "2026-11-09T12:10:50.323979+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 6.6
    }
   },
   "model_target": {
@@ -3974,7 +3980,7 @@
   "resolved_via": "sports"
  },
  "219c3293-3d47-4748-b411-fade614b2643": {
-  "checksum": "9db26520b3231b5acf6716d37dec9293b159ae0f58072e57c0b893b18ccff37e",
+  "checksum": "3d33156aeba23569704ed0c22af7e0e674816cbd0606baedaf8ed26ff85030b6",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -12482,7 +12488,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260923/"
  },
  "884280ad-57bc-40c6-bdd2-4fc70dfd5d0e": {
-  "checksum": "a4560dd3f0a5d29f588d65f7c286270ce9a060233d57be30c8be1cc88efd8830",
+  "checksum": "4b03b19be3753c24f7df0a3063081886bed5278c4b50ebf5432e8cbfe6a84057",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -12493,6 +12499,12 @@
    "fe44816f-725a-447c-ae19-c37d0cae91a5": 0.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "058259ee-9443-42e7-8b2a-621aaf76ca04": 83.52,
+   "5343672b-5713-4dce-9865-4c12e90d8004": 12.22,
+   "e2a720ef-fee6-4c68-96dc-227008f4f12e": 3.27,
+   "fe44816f-725a-447c-ae19-c37d0cae91a5": 0.99
+  },
   "reprice": {
    "floor": null,
    "lead": 1.14,
@@ -13305,7 +13317,7 @@
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
  "94901516-74bf-43a4-8e66-3add38bec35b": {
-  "checksum": "a4560dd3f0a5d29f588d65f7c286270ce9a060233d57be30c8be1cc88efd8830",
+  "checksum": "4b03b19be3753c24f7df0a3063081886bed5278c4b50ebf5432e8cbfe6a84057",
   "current_maximum": 4.5,
   "date": "2026-11-09",
   "eliminated": [
@@ -13397,6 +13409,12 @@
     "received_at": "2026-11-09T11:10:45.936973+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": 4.2
+   },
+   "2026-11-09 12:00:00": {
+    "checksum": "4b03b19be3753c24f7df0a3063081886bed5278c4b50ebf5432e8cbfe6a84057",
+    "received_at": "2026-11-09T12:10:50.323979+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 4.0
    }
   },
   "model_target": {
@@ -13853,7 +13871,7 @@
   "station": "kauno-ams"
  },
  "97270c63-a248-4313-9441-040033125fee": {
-  "checksum": "9a80356d617b07f52a03f60c6ad96e3d9c4c01422fa2904a0648e91a74cba394",
+  "checksum": "dc5ce86de676b016abccaf0a31e09ee3fb7d22e172bb193fad7073b2679fc637",
   "current_maximum": 5.5,
   "date": "2026-11-09",
   "eliminated": [
@@ -13945,6 +13963,12 @@
     "received_at": "2026-11-09T11:10:45.936973+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 5.5
+   },
+   "2026-11-09 12:00:00": {
+    "checksum": "dc5ce86de676b016abccaf0a31e09ee3fb7d22e172bb193fad7073b2679fc637",
+    "received_at": "2026-11-09T12:10:50.323979+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 5.2
    }
   },
   "model_target": {
@@ -19137,7 +19161,7 @@
   "station": "vilniaus-ams"
  },
  "c153a4f1-ac28-4c28-b75f-7c90bc7b5255": {
-  "checksum": "9a80356d617b07f52a03f60c6ad96e3d9c4c01422fa2904a0648e91a74cba394",
+  "checksum": "dc5ce86de676b016abccaf0a31e09ee3fb7d22e172bb193fad7073b2679fc637",
   "current_maximum": null,
   "date": "2026-11-10",
   "measurements": {},
@@ -19148,6 +19172,12 @@
    "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 76.64
   },
   "mt_v": 2,
+  "pending_target": {
+   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 25.08,
+   "ad9b18e2-7282-495a-93e1-f86171f0eb44": 0.99,
+   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 1.3,
+   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 72.62
+  },
   "reprice": {
    "floor": null,
    "lead": 1.02,
