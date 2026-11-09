@@ -4025,6 +4025,12 @@
    "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 74.67
   },
   "mt_v": 2,
+  "pending_target": {
+   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 27.09,
+   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 3.55,
+   "68f3fc5f-901b-45f0-bcfe-951c6cc4aa8e": 0.99,
+   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 68.36
+  },
   "reprice": {
    "floor": null,
    "lead": 0.7,
@@ -6909,6 +6915,12 @@
    "7cbb4917-76d5-492d-86eb-336f54444fbf": 12.48
   },
   "mt_v": 2,
+  "pending_target": {
+   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 79.89,
+   "4e412037-a369-43c7-9d17-5d814ab95219": 0.99,
+   "50ff01d9-5317-4fa8-8770-f860efdeb476": 11.8,
+   "7cbb4917-76d5-492d-86eb-336f54444fbf": 7.32
+  },
   "reprice": {
    "floor": null,
    "lead": 1.75,
@@ -12561,6 +12573,12 @@
    "fe44816f-725a-447c-ae19-c37d0cae91a5": 0.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "058259ee-9443-42e7-8b2a-621aaf76ca04": 57.65,
+   "5343672b-5713-4dce-9865-4c12e90d8004": 40.39,
+   "e2a720ef-fee6-4c68-96dc-227008f4f12e": 0.98,
+   "fe44816f-725a-447c-ae19-c37d0cae91a5": 0.98
+  },
   "reprice": {
    "floor": null,
    "lead": 0.7,
@@ -17181,6 +17199,12 @@
    "e82f19ad-9860-4f1f-b925-222c2ee0165a": 6.95
   },
   "mt_v": 2,
+  "pending_target": {
+   "2dc15086-82bb-4ab1-b43c-3cd138c1e3a2": 36.21,
+   "40483f54-734c-4efd-9510-fbae3186fc91": 46.33,
+   "4593f878-ab5d-4485-98e3-15c69ade0d72": 11.93,
+   "e82f19ad-9860-4f1f-b925-222c2ee0165a": 5.53
+  },
   "reprice": {
    "floor": null,
    "lead": 1.78,
@@ -17350,6 +17374,12 @@
    "ab9ef87b-6288-425b-92ea-625ab25e7193": 42.71
   },
   "mt_v": 2,
+  "pending_target": {
+   "24850078-e4b9-4e04-9f82-bcca168025b2": 47.43,
+   "4774065b-cddd-4202-aade-63d787be52f7": 2.17,
+   "99244ea7-10e7-47d7-a37c-303065923cb8": 2.27,
+   "ab9ef87b-6288-425b-92ea-625ab25e7193": 48.13
+  },
   "reprice": {
    "floor": null,
    "lead": 1.77,
@@ -19352,6 +19382,12 @@
    "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 84.17
   },
   "mt_v": 2,
+  "pending_target": {
+   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 2.91,
+   "ad9b18e2-7282-495a-93e1-f86171f0eb44": 0.99,
+   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 11.97,
+   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 84.13
+  },
   "reprice": {
    "floor": null,
    "lead": 0.69,
