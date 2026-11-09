@@ -1485,9 +1485,12 @@ def _eliminate_impossible(market: dict, mid: str, buckets: list[dict],
         log.warning("weather eliminate %s failed: %s", mid, detail)
         return False
     st["eliminated"] = sorted(done | {b["option_id"] for b in todo})
-    # A routine step of the automation, not an alert (owner, 2026-11-07: Telegram only for what
-    # needs a look): logged, not sent.
     log.info("weather eliminated %s: %s (max so far %s °C)", mid, ", ".join(b["label"] for b in todo), _fmt(cur_max))
+    # Sent again (owner, 2026-11-09): the team checks each step against the real temperature.
+    if alert:
+        labels = ", ".join(b["label"] for b in todo)
+        notify.send(f"❌ ORŲ RINKA: baigtys nebeįmanomos → Ne ({labels}); jau "
+                    f"pasiekta ≥{_fmt(cur_max)} °C — {app_api.question_of(market)}")
     return True
 
 
