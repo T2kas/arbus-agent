@@ -4075,6 +4075,12 @@
    "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 74.46
   },
   "mt_v": 2,
+  "pending_target": {
+   "1d42a96a-1be7-4bc9-96dd-770f219ffcdc": 23.24,
+   "29a60e3d-35bc-4660-a611-f7aeb9f91a21": 5.43,
+   "68f3fc5f-901b-45f0-bcfe-951c6cc4aa8e": 0.99,
+   "703139bb-c8d3-410b-b5e8-1d76d5f9cc26": 70.34
+  },
   "reprice": {
    "floor": 1.2,
    "lead": 0.3,
@@ -12666,6 +12672,11 @@
    "fe44816f-725a-447c-ae19-c37d0cae91a5": 0.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "058259ee-9443-42e7-8b2a-621aaf76ca04": 52.11,
+   "5343672b-5713-4dce-9865-4c12e90d8004": 46.9,
+   "fe44816f-725a-447c-ae19-c37d0cae91a5": 0.99
+  },
   "reprice": {
    "floor": 2.7,
    "lead": 0.37,
@@ -17456,6 +17467,12 @@
    "ab9ef87b-6288-425b-92ea-625ab25e7193": 46.85
   },
   "mt_v": 2,
+  "pending_target": {
+   "24850078-e4b9-4e04-9f82-bcca168025b2": 56.33,
+   "4774065b-cddd-4202-aade-63d787be52f7": 0.99,
+   "99244ea7-10e7-47d7-a37c-303065923cb8": 0.99,
+   "ab9ef87b-6288-425b-92ea-625ab25e7193": 41.69
+  },
   "reprice": {
    "floor": null,
    "lead": 1.29,
@@ -19502,31 +19519,25 @@
    }
   },
   "model_target": {
-   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 4.12,
-   "ad9b18e2-7282-495a-93e1-f86171f0eb44": 0.99,
-   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 6.08,
-   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 88.81
-  },
-  "mt_v": 2,
-  "pending_target": {
    "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 4.9,
    "ad9b18e2-7282-495a-93e1-f86171f0eb44": 0.99,
    "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 2.93,
    "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 91.17
   },
+  "mt_v": 2,
   "reprice": {
    "floor": -0.5,
-   "lead": 0.37,
+   "lead": 0.22,
    "models": {
-    "ecmwf_aifs025_single": 3.2,
-    "icon_seamless": 2.2,
+    "ecmwf_aifs025_single": 3.0,
+    "icon_seamless": 2.1,
     "ukmo_seamless": 2.4
    },
-   "move_pp": 3.7,
-   "mu": 3.01,
-   "sigma": 0.61
+   "move_pp": 3.1,
+   "mu": 2.88,
+   "sigma": 0.57
   },
-  "repriced_at": "2026-11-10T02:01:12.576825+00:00",
+  "repriced_at": "2026-11-10T05:45:48.474076+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
