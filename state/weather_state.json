@@ -6932,31 +6932,25 @@
   "date": "2026-11-11",
   "measurements": {},
   "model_target": {
-   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 86.06,
-   "4e412037-a369-43c7-9d17-5d814ab95219": 0.99,
-   "50ff01d9-5317-4fa8-8770-f860efdeb476": 7.24,
-   "7cbb4917-76d5-492d-86eb-336f54444fbf": 5.72
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 85.2,
+   "23b8afdf-0e19-42fb-ba5d-644dab2d0e18": 85.21,
    "4e412037-a369-43c7-9d17-5d814ab95219": 0.99,
    "50ff01d9-5317-4fa8-8770-f860efdeb476": 10.5,
-   "7cbb4917-76d5-492d-86eb-336f54444fbf": 3.31
+   "7cbb4917-76d5-492d-86eb-336f54444fbf": 3.3
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.4,
+   "lead": 1.37,
    "models": {
     "ecmwf_aifs025_single": 2.4,
     "icon_seamless": 2.7,
-    "ukmo_seamless": 2.2
+    "ukmo_seamless": 2.8
    },
    "move_pp": 3.3,
-   "mu": 2.99,
-   "sigma": 0.66
+   "mu": 3.14,
+   "sigma": 0.65
   },
-  "repriced_at": "2026-11-10T01:20:46.373885+00:00",
+  "repriced_at": "2026-11-10T02:01:12.576825+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -19441,31 +19435,25 @@
    }
   },
   "model_target": {
-   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 2.43,
+   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 4.12,
    "ad9b18e2-7282-495a-93e1-f86171f0eb44": 0.99,
-   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 9.76,
-   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 86.81
+   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 6.08,
+   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 88.81
   },
   "mt_v": 2,
-  "pending_target": {
-   "6f1767d8-caac-4ba7-bbdd-e0d72dad2750": 4.13,
-   "ad9b18e2-7282-495a-93e1-f86171f0eb44": 0.99,
-   "ba2e4a52-00ee-42be-8697-99e3a63c7fab": 6.11,
-   "de8aa73c-7c17-43f8-aae2-0f31134e6fcd": 88.77
-  },
   "reprice": {
    "floor": -0.5,
-   "lead": 0.39,
+   "lead": 0.37,
    "models": {
     "ecmwf_aifs025_single": 3.2,
     "icon_seamless": 2.2,
-    "ukmo_seamless": 3.0
+    "ukmo_seamless": 2.4
    },
-   "move_pp": 3.5,
-   "mu": 3.16,
+   "move_pp": 3.7,
+   "mu": 3.01,
    "sigma": 0.61
   },
-  "repriced_at": "2026-11-10T01:35:40.155051+00:00",
+  "repriced_at": "2026-11-10T02:01:12.576825+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
