@@ -1680,7 +1680,13 @@ def run(now: datetime | None = None, *, alert: bool = True, do_resolve: bool = T
         # after the old one resolves (LEA publishes ~11:00), not at the weather hour.
         if config.FUEL_ENABLED and (force_create or vil_hour >= config.FUEL_CREATE_HOUR):
             from . import fuel                            # lazy: fuel imports weather
-            f_specs = fuel.plan_new_markets(rows, now, tz, state=state)
+            # Newest markets of any status: the last fuel market (whose picture is
+            # reused) is usually resolved already and so missing from `rows`.
+            recent, recent_err = app_api.markets(300)
+            if recent_err:
+                log.warning("fuel: recent markets for images: %s", recent_err)
+            f_specs = fuel.plan_new_markets(rows, now, tz, state=state,
+                                            image_rows=recent or [])
             reports += fuel.create_markets(f_specs, alert=alert, do_create=True)
             save_state(state)                             # keeps the LEA history
     return reports, ""

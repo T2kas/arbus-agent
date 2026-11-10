@@ -149,6 +149,20 @@ def test_new_market_reuses_previous_days_image(monkeypatch):
     assert petrol[0]["closes_at"].startswith("2026-09-22T23:30")
 
 
+def test_new_market_takes_image_from_resolved_fuel_market(monkeypatch):
+    """The open rows hold no fuel market once yesterday's resolved: the picture
+    comes from the newest resolved one, else the long-used default."""
+    from datetime import datetime, timezone
+    monkeypatch.setattr(fuel, "latest_lea_price", lambda f, **k: (2.0, "u"))
+    old = _daily_market("benzino A95", "2026 m. rugsėjo 22 d.", resolved=True)
+    old["image_url"] = "https://img/resolved.jpg"
+    now = datetime(2026, 9, 22, 12, tzinfo=timezone.utc)
+    specs = fuel.plan_new_markets([], now, fuel._tz(), image_rows=[old])
+    by_fuel = {s["fuel"]: s["image_url"] for s in specs}
+    assert by_fuel["benzinas"] == "https://img/resolved.jpg"
+    assert by_fuel["dyzelinas"] == fuel.DEFAULT_IMAGES["dyzelinas"]
+
+
 def test_publication_days_skip_weekends_and_holidays():
     from datetime import date
     assert fuel.is_publication_day(date(2026, 9, 25))        # Friday

@@ -273,6 +273,14 @@ FUELS = {
     "dyzelinas": {"gen": "dyzelino", "loc": "dyzelino"},
 }
 
+# The picture every daily fuel market carried from October to 2026-11-06; used
+# only when no earlier fuel market with a picture can be read.
+_IMG = "https://crwtwtwljqypvgvvfmyo.supabase.co/storage/v1/object/public/market-images/3686a8dc-a32c-459b-af52-55089933ee92/"
+DEFAULT_IMAGES = {
+    "benzinas": _IMG + "6378f59a-c3fe-4aaf-a6fd-cf5e7355a5b1.jpg",
+    "dyzelinas": _IMG + "454209f0-161b-4c1b-ab6c-eab923b60d11.jpg",
+}
+
 
 def _fmt(price: float) -> str:
     return f"{price:.3f}".replace(".", ",")
@@ -496,9 +504,13 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
                      *, skip_existing: bool = True,
                      horizon: int | None = None,
                      forecasts: dict | None = None,
-                     state: dict | None = None) -> list[dict]:
+                     state: dict | None = None,
+                     image_rows: list[dict] | None = None) -> list[dict]:
     """Specs for the daily fuel markets that should exist over the horizon. The
-    newest image of an existing fuel market is reused per fuel."""
+    newest image of an existing fuel market is reused per fuel. `rows` holds only
+    open markets, and the previous fuel market is usually resolved by the time
+    the next one is made, so `image_rows` (newest-first, resolved ones included)
+    is searched too; failing both, DEFAULT_IMAGES."""
     horizon = config.FUEL_HORIZON_DAYS if horizon is None else horizon
     today = now.astimezone(tz).date()
     have: set[tuple[str, str]] = set()
@@ -511,6 +523,13 @@ def plan_new_markets(rows: list[dict], now: datetime, tz: ZoneInfo,
         img = str(m.get("image_url") or "")
         if img and tgt[0] not in images:
             images[tgt[0]] = img
+    for m in image_rows or []:
+        tgt = fuel_target(m)
+        img = str(m.get("image_url") or "") if tgt else ""
+        if img and tgt[0] not in images:
+            images[tgt[0]] = img
+    for fuel_key, img in DEFAULT_IMAGES.items():
+        images.setdefault(fuel_key, img)
     hist = {}
     if state is not None and config.FUEL_RECENT_WEEKS > 0:
         try:
