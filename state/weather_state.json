@@ -1804,6 +1804,27 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "10ed8d71-f098-4710-a3a9-220e45d2e576": {
+  "checksum": "414eb9f2d7674bc44aa2d5e1c8b8caddd934478d637df3a69193e0cb88382208",
+  "current_maximum": null,
+  "date": "2026-11-12",
+  "measurements": {},
+  "model_target": {
+   "324a4566-e0a0-4d12-9687-dd09c1f0e08d": 1.0,
+   "6a75e268-df35-4233-ab5f-1b2eb326fd26": 61.0,
+   "a2032b1b-1ddc-492a-a1e0-9f5070237159": 1.0,
+   "bdaf30b2-392a-4e68-b32a-9e37b9c3fca9": 37.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "324a4566-e0a0-4d12-9687-dd09c1f0e08d": 1.27,
+   "6a75e268-df35-4233-ab5f-1b2eb326fd26": 54.85,
+   "a2032b1b-1ddc-492a-a1e0-9f5070237159": 21.87,
+   "bdaf30b2-392a-4e68-b32a-9e37b9c3fca9": 22.01
+  },
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "10fa58f6-fa6d-4714-aacd-9cf4d1738238": {
   "checksum": "6544dfc0b02a009b0aa036846a8ff3d06de5bd08ea807f64a65ba392c7200ff4",
   "current_maximum": 19.6,
@@ -2534,6 +2555,21 @@
  },
  "159770bf-1661-4270-adb3-7a42a00eb6b4": {},
  "1662c457-a6e1-4b63-9f30-b15e7fa87707": {},
+ "1796fc9c-3a28-4411-b73d-c61aa777c6db": {
+  "checksum": "dd4aca8668730de7877ad1a09961616169aad550b551af95a01505ef6da8924d",
+  "current_maximum": null,
+  "date": "2026-11-12",
+  "measurements": {},
+  "model_target": {
+   "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 47.0,
+   "45846e24-e723-4040-901b-fbdd8022c72f": 50.0,
+   "574819e6-f712-49c0-b564-6b0782c2cd8f": 1.0,
+   "e51fe477-5895-40f4-8c90-c73ef9dd0c21": 2.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "184045ec-a32b-4737-b7e3-92f9eaf021c2": {
   "checksum": "4e01034fb12ab6238a3d3d341a15c23e0214f6ca6a21b0415f5251ba4b67c3c9",
   "current_maximum": 13.9,
@@ -8417,6 +8453,27 @@
   "resolved_via": "end_of_day",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
+ },
+ "5430873a-39f0-4aa0-a1c1-2a12626d8ae3": {
+  "checksum": "933ee57117823b48ddc9b966218885c96e0a9edb33a35ba3904d8987c40c9c87",
+  "current_maximum": null,
+  "date": "2026-11-12",
+  "measurements": {},
+  "model_target": {
+   "37265499-20c4-44a6-a6e9-585a840e8b0f": 49.0,
+   "8e0d787e-6796-47dd-85f4-2cecfba81f84": 9.0,
+   "9da1a63d-f9fd-4abb-bb84-c58a1571c581": 4.0,
+   "b48a98db-3a6c-431c-b60c-19223d83eecb": 38.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "37265499-20c4-44a6-a6e9-585a840e8b0f": 63.05,
+   "8e0d787e-6796-47dd-85f4-2cecfba81f84": 1.64,
+   "9da1a63d-f9fd-4abb-bb84-c58a1571c581": 0.99,
+   "b48a98db-3a6c-431c-b60c-19223d83eecb": 34.33
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "56564650-01bd-434f-9381-6f76a4af5630": {
   "checksum": "7ba4447a87255fa7d5469b200ba1ccba890aaaaa29ccc2f3e8cd6bdadc0a72ef",
