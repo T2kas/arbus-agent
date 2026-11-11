@@ -1805,7 +1805,7 @@
   "station": "vilniaus-ams"
  },
  "10ed8d71-f098-4710-a3a9-220e45d2e576": {
-  "checksum": "739395ed732907a5a381f223b38c61a56aeabcddf1f6507dc379f27c35c8a4b6",
+  "checksum": "0fc51214210216ebc5f026e5e8964e279760962378dd5b36cb06fd172cfed16b",
   "current_maximum": 7.6,
   "date": "2026-11-12",
   "eliminated": [
@@ -1818,6 +1818,12 @@
     "received_at": "2026-11-11T22:10:52.434218+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 7.6
+   },
+   "2026-11-11 23:00:00": {
+    "checksum": "0fc51214210216ebc5f026e5e8964e279760962378dd5b36cb06fd172cfed16b",
+    "received_at": "2026-11-11T23:10:51.208572+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 7.2
    }
   },
   "model_target": {
@@ -2574,7 +2580,7 @@
  "159770bf-1661-4270-adb3-7a42a00eb6b4": {},
  "1662c457-a6e1-4b63-9f30-b15e7fa87707": {},
  "1796fc9c-3a28-4411-b73d-c61aa777c6db": {
-  "checksum": "4b033d254e39e4bca86feb1d2e25e7207a2931eea54d2fd8a08d627c0b395b8d",
+  "checksum": "53f08d8ac2b1b8ffcb69d3a500d2bbfdc6752e73f97973c1845c02e26182c16a",
   "current_maximum": 2.9,
   "date": "2026-11-12",
   "eliminated": [
@@ -2587,6 +2593,12 @@
     "received_at": "2026-11-11T22:10:52.434218+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 2.9
+   },
+   "2026-11-11 23:00:00": {
+    "checksum": "53f08d8ac2b1b8ffcb69d3a500d2bbfdc6752e73f97973c1845c02e26182c16a",
+    "received_at": "2026-11-11T23:10:51.208572+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 2.8
    }
   },
   "model_target": {
@@ -16263,7 +16275,7 @@
   "station": "vilniaus-ams"
  },
  "a117f8bf-433d-4e25-86aa-e7b453203b84": {
-  "checksum": "739395ed732907a5a381f223b38c61a56aeabcddf1f6507dc379f27c35c8a4b6",
+  "checksum": "0fc51214210216ebc5f026e5e8964e279760962378dd5b36cb06fd172cfed16b",
   "current_maximum": null,
   "date": "2026-11-13",
   "measurements": {},
@@ -16705,7 +16717,7 @@
   "station": "vilniaus-ams"
  },
  "a85000ad-bb43-4e62-a29d-efbcdfd07a65": {
-  "checksum": "4b033d254e39e4bca86feb1d2e25e7207a2931eea54d2fd8a08d627c0b395b8d",
+  "checksum": "53f08d8ac2b1b8ffcb69d3a500d2bbfdc6752e73f97973c1845c02e26182c16a",
   "current_maximum": null,
   "date": "2026-11-13",
   "measurements": {},
