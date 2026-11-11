@@ -1827,6 +1827,11 @@
    "bdaf30b2-392a-4e68-b32a-9e37b9c3fca9": 23.93
   },
   "mt_v": 2,
+  "pending_target": {
+   "324a4566-e0a0-4d12-9687-dd09c1f0e08d": 2.37,
+   "6a75e268-df35-4233-ab5f-1b2eb326fd26": 29.35,
+   "bdaf30b2-392a-4e68-b32a-9e37b9c3fca9": 68.27
+  },
   "reprice": {
    "floor": null,
    "lead": 0.54,
