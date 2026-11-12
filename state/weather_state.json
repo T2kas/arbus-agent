@@ -287,6 +287,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261005/"
  },
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
+ "05a08eb4-aee9-490f-865b-e21704efe0b5": {},
  "05c8d26a-73f3-4eb7-86fe-038ca9c2fae9": {
   "resolved": true,
   "resolved_at": "2026-10-31T14:50:44.816719+00:00",
@@ -3126,6 +3127,7 @@
   "resolved_price": 1.877,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261105/"
  },
+ "195e5a3a-8728-438d-bd71-4e125d1e91b7": {},
  "1993fdf4-9e01-41d1-b8e7-1e96025c89e1": {
   "checksum": "31c93f871a19945461c6c519527c95d5325ec464d461eb577aeb59334fd847d7",
   "current_maximum": 20.2,
@@ -7980,6 +7982,7 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "477a3b35-6e28-4f4c-879f-5d31f169fbf4": {},
  "48ccbe86-d277-4536-8ac4-5c46366b89f0": {
   "checksum": "5cd9a670983f11393694aa30cd0fa8079bffc20e0656a8c7f8ea92b00b67ac27",
   "current_maximum": 10.3,
@@ -23587,6 +23590,7 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "d99affae-3e46-4171-8988-cb8bc978c550": {},
  "d9e4849c-8d23-404e-8136-7530931f323a": {},
  "daae5682-0737-4442-96ad-a7ad92672760": {
   "checksum": "73d993c325b66b14d529c6ab30cfcd551a9565b450aa0a04d93068cef1bc271b",
