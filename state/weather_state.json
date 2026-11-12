@@ -7227,6 +7227,21 @@
  "436c2483-69aa-47d9-87c6-1eef9cf908d6": {
   "fuel_alerted": true
  },
+ "4379892d-5200-4001-9ef9-a2bdd3190558": {
+  "checksum": "ee08242a029ca19fd3b8d832d61a368bc0042075ecd85484e02135368f1eb052",
+  "current_maximum": null,
+  "date": "2026-11-14",
+  "measurements": {},
+  "model_target": {
+   "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 30.0,
+   "4c73e146-2fef-4155-b315-d19f63033fa8": 3.0,
+   "6e2a4e3b-1aa4-4b92-b65a-f1effbecd251": 1.0,
+   "f18133b4-84df-4f93-ba0a-33eb00590b1e": 66.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "4385ede3-2a70-424b-a84f-d41f5f4ec6cd": {
   "checksum": "456ec680a7405adac0bab80d8784170662ae47d0b4fb632bc431caa93e55f1ff",
   "current_maximum": 16.4,
@@ -14064,6 +14079,21 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261028/"
  },
  "8eb227df-cb87-4eee-bed8-a934c69aea13": {},
+ "8f7d23f3-ded8-4967-8b85-0f7a83af0a3b": {
+  "checksum": "90f72f8bf52fbb88aec16814770a6fff6d9e34d23004e6f9367621a24084cb42",
+  "current_maximum": null,
+  "date": "2026-11-14",
+  "measurements": {},
+  "model_target": {
+   "2ff6479c-532e-4782-b920-28407e1ffeae": 4.0,
+   "7376449f-857a-45ab-b258-8cbadf23730c": 47.0,
+   "93ed74ba-6eae-4972-a3e2-7d05d8e9a52e": 46.0,
+   "f7dfaa1e-c317-4b01-9fcb-a3d6576e1a2d": 3.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "8fe4f113-a0e9-4466-98dd-c1dcdfdb15cc": {
   "checksum": "957d6052de9bd672bebbe476012ba264f73cb6f83452beadf311e53de5e06228",
   "current_maximum": 12.4,
@@ -24649,6 +24679,14 @@
   "resolved_temp": 17.6,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+  "station": "vilniaus-ams"
+ },
+ "e147edf2-9070-4ccb-8f19-4b1c6f63d923": {
+  "checksum": "928ce7990255d2b2dd2847f265b9fe05736109dd65e250e7a3864e04a748c5ac",
+  "current_maximum": null,
+  "date": "2026-11-14",
+  "measurements": {},
+  "resolved": false,
   "station": "vilniaus-ams"
  },
  "e16cd99d-c0f3-4803-93d1-cce54d0d242b": {
