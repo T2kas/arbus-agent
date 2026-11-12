@@ -4803,7 +4803,7 @@
   "station": "vilniaus-ams"
  },
  "2671d60f-ecf6-4eae-a961-cd6fe5a14ba8": {
-  "checksum": "05a5ff266cea503d1ae0517670ada722a35d568d7de5745c03199137a3f9ed94",
+  "checksum": "2b23fa5851de852a7ad2026a995bdba54734f3884752456d6f0872f7f1136fbc",
   "current_maximum": null,
   "date": "2026-11-13",
   "measurements": {},
@@ -7260,7 +7260,7 @@
   "fuel_alerted": true
  },
  "4379892d-5200-4001-9ef9-a2bdd3190558": {
-  "checksum": "c4f82b2c4f0bdd354cbb82531e02e3ed172f269489b566d41c6f661122199333",
+  "checksum": "145a762ae566a18762c1d35c15942dee381daa00dd244d8c67fa805b2f0a636f",
   "current_maximum": null,
   "date": "2026-11-14",
   "measurements": {},
@@ -14128,7 +14128,7 @@
  },
  "8eb227df-cb87-4eee-bed8-a934c69aea13": {},
  "8f7d23f3-ded8-4967-8b85-0f7a83af0a3b": {
-  "checksum": "37f7184810ff4440455cb6619333405d0d8dba5d3d4bbc3619006479ace83a04",
+  "checksum": "0b20302d275cbd1ff3c3501e23a17f19275abaece90a3f81c2b94f39f58956b5",
   "current_maximum": null,
   "date": "2026-11-14",
   "measurements": {},
@@ -16645,7 +16645,7 @@
   "station": "vilniaus-ams"
  },
  "a117f8bf-433d-4e25-86aa-e7b453203b84": {
-  "checksum": "37f7184810ff4440455cb6619333405d0d8dba5d3d4bbc3619006479ace83a04",
+  "checksum": "0b20302d275cbd1ff3c3501e23a17f19275abaece90a3f81c2b94f39f58956b5",
   "current_maximum": null,
   "date": "2026-11-13",
   "measurements": {},
@@ -17094,7 +17094,7 @@
   "station": "vilniaus-ams"
  },
  "a85000ad-bb43-4e62-a29d-efbcdfd07a65": {
-  "checksum": "c4f82b2c4f0bdd354cbb82531e02e3ed172f269489b566d41c6f661122199333",
+  "checksum": "145a762ae566a18762c1d35c15942dee381daa00dd244d8c67fa805b2f0a636f",
   "current_maximum": null,
   "date": "2026-11-13",
   "measurements": {},
@@ -24730,7 +24730,7 @@
   "station": "vilniaus-ams"
  },
  "e147edf2-9070-4ccb-8f19-4b1c6f63d923": {
-  "checksum": "05a5ff266cea503d1ae0517670ada722a35d568d7de5745c03199137a3f9ed94",
+  "checksum": "2b23fa5851de852a7ad2026a995bdba54734f3884752456d6f0872f7f1136fbc",
   "current_maximum": null,
   "date": "2026-11-14",
   "measurements": {},
