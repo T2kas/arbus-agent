@@ -2602,30 +2602,24 @@
    }
   },
   "model_target": {
-   "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 57.56,
-   "45846e24-e723-4040-901b-fbdd8022c72f": 40.48,
-   "574819e6-f712-49c0-b564-6b0782c2cd8f": 0.98,
-   "e51fe477-5895-40f4-8c90-c73ef9dd0c21": 0.98
-  },
-  "mt_v": 2,
-  "pending_target": {
    "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 53.03,
    "45846e24-e723-4040-901b-fbdd8022c72f": 45.98,
    "e51fe477-5895-40f4-8c90-c73ef9dd0c21": 0.99
   },
+  "mt_v": 2,
   "reprice": {
-   "floor": null,
-   "lead": 0.62,
+   "floor": 2.9,
+   "lead": 0.45,
    "models": {
-    "ecmwf_aifs025_single": 3.6,
-    "icon_seamless": 3.8,
+    "ecmwf_aifs025_single": 3.5,
+    "icon_seamless": 3.6,
     "ukmo_seamless": 4.2
    },
-   "move_pp": 3.2,
-   "mu": 4.08,
-   "sigma": 0.61
+   "move_pp": 5.1,
+   "mu": 3.98,
+   "sigma": 0.59
   },
-  "repriced_at": "2026-11-11T20:10:54.072996+00:00",
+  "repriced_at": "2026-11-12T00:05:44.896485+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
@@ -8704,31 +8698,25 @@
   "date": "2026-11-12",
   "measurements": {},
   "model_target": {
-   "37265499-20c4-44a6-a6e9-585a840e8b0f": 65.32,
+   "37265499-20c4-44a6-a6e9-585a840e8b0f": 68.8,
    "8e0d787e-6796-47dd-85f4-2cecfba81f84": 0.98,
    "9da1a63d-f9fd-4abb-bb84-c58a1571c581": 0.98,
-   "b48a98db-3a6c-431c-b60c-19223d83eecb": 32.72
+   "b48a98db-3a6c-431c-b60c-19223d83eecb": 29.22
   },
   "mt_v": 2,
-  "pending_target": {
-   "37265499-20c4-44a6-a6e9-585a840e8b0f": 68.78,
-   "8e0d787e-6796-47dd-85f4-2cecfba81f84": 0.98,
-   "9da1a63d-f9fd-4abb-bb84-c58a1571c581": 0.98,
-   "b48a98db-3a6c-431c-b60c-19223d83eecb": 29.24
-  },
   "reprice": {
    "floor": null,
-   "lead": 0.58,
+   "lead": 0.45,
    "models": {
     "ecmwf_aifs025_single": 2.9,
-    "icon_seamless": 3.2,
+    "icon_seamless": 2.9,
     "ukmo_seamless": 3.4
    },
-   "move_pp": 2.6,
-   "mu": 3.71,
-   "sigma": 0.56
+   "move_pp": 3.5,
+   "mu": 3.66,
+   "sigma": 0.55
   },
-  "repriced_at": "2026-11-11T21:05:43.586155+00:00",
+  "repriced_at": "2026-11-12T00:05:44.896485+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -16291,31 +16279,25 @@
   "date": "2026-11-13",
   "measurements": {},
   "model_target": {
-   "3d9f801c-3991-4f74-86a6-1d2b08b45743": 5.65,
-   "5d1788c1-c2be-4ad2-881f-b0322ff3c101": 46.21,
-   "c26da418-340f-4d5a-9848-d7234a33ee29": 43.48,
-   "f01cdf7a-7936-42e7-b017-65701b506923": 4.67
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "3d9f801c-3991-4f74-86a6-1d2b08b45743": 6.15,
+   "3d9f801c-3991-4f74-86a6-1d2b08b45743": 6.14,
    "5d1788c1-c2be-4ad2-881f-b0322ff3c101": 48.76,
-   "c26da418-340f-4d5a-9848-d7234a33ee29": 41.41,
+   "c26da418-340f-4d5a-9848-d7234a33ee29": 41.42,
    "f01cdf7a-7936-42e7-b017-65701b506923": 3.68
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.54,
+   "lead": 1.45,
    "models": {
-    "ecmwf_aifs025_single": 5.7,
-    "icon_seamless": 7.1,
+    "ecmwf_aifs025_single": 5.8,
+    "icon_seamless": 7.2,
     "ukmo_seamless": 7.1
    },
-   "move_pp": 2.1,
-   "mu": 7.01,
-   "sigma": 1.23
+   "move_pp": 2.6,
+   "mu": 7.1,
+   "sigma": 1.2
   },
-  "repriced_at": "2026-11-11T21:55:37.758717+00:00",
+  "repriced_at": "2026-11-12T00:05:44.896485+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
