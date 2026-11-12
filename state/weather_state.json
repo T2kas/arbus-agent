@@ -2626,29 +2626,24 @@
    }
   },
   "model_target": {
-   "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 53.03,
-   "45846e24-e723-4040-901b-fbdd8022c72f": 45.98,
+   "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 49.34,
+   "45846e24-e723-4040-901b-fbdd8022c72f": 49.67,
    "e51fe477-5895-40f4-8c90-c73ef9dd0c21": 0.99
   },
   "mt_v": 2,
-  "pending_target": {
-   "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 49.35,
-   "45846e24-e723-4040-901b-fbdd8022c72f": 49.66,
-   "e51fe477-5895-40f4-8c90-c73ef9dd0c21": 0.99
-  },
   "reprice": {
    "floor": 2.9,
-   "lead": 0.45,
+   "lead": 0.38,
    "models": {
     "ecmwf_aifs025_single": 3.5,
     "icon_seamless": 3.6,
-    "ukmo_seamless": 4.2
+    "ukmo_seamless": 4.0
    },
-   "move_pp": 5.1,
-   "mu": 3.98,
-   "sigma": 0.59
+   "move_pp": 3.7,
+   "mu": 3.93,
+   "sigma": 0.55
   },
-  "repriced_at": "2026-11-12T00:05:44.896485+00:00",
+  "repriced_at": "2026-11-12T01:50:44.566400+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
@@ -16314,31 +16309,25 @@
   "date": "2026-11-13",
   "measurements": {},
   "model_target": {
-   "3d9f801c-3991-4f74-86a6-1d2b08b45743": 6.07,
-   "5d1788c1-c2be-4ad2-881f-b0322ff3c101": 48.86,
-   "c26da418-340f-4d5a-9848-d7234a33ee29": 41.46,
-   "f01cdf7a-7936-42e7-b017-65701b506923": 3.62
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "3d9f801c-3991-4f74-86a6-1d2b08b45743": 4.47,
+   "3d9f801c-3991-4f74-86a6-1d2b08b45743": 4.46,
    "5d1788c1-c2be-4ad2-881f-b0322ff3c101": 47.2,
    "c26da418-340f-4d5a-9848-d7234a33ee29": 44.6,
    "f01cdf7a-7936-42e7-b017-65701b506923": 3.73
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.4,
+   "lead": 1.38,
    "models": {
     "ecmwf_aifs025_single": 5.8,
     "icon_seamless": 7.2,
-    "ukmo_seamless": 7.1
+    "ukmo_seamless": 6.7
    },
    "move_pp": 3.1,
-   "mu": 7.1,
-   "sigma": 1.2
+   "mu": 7.0,
+   "sigma": 1.15
   },
-  "repriced_at": "2026-11-12T01:31:06.494911+00:00",
+  "repriced_at": "2026-11-12T01:50:44.566400+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
