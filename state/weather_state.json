@@ -2734,29 +2734,24 @@
    }
   },
   "model_target": {
-   "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 45.5,
-   "45846e24-e723-4040-901b-fbdd8022c72f": 53.51,
-   "e51fe477-5895-40f4-8c90-c73ef9dd0c21": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
    "455bb7cd-3c29-4ed3-9a6f-a10e03ebc153": 41.82,
    "45846e24-e723-4040-901b-fbdd8022c72f": 57.19,
    "e51fe477-5895-40f4-8c90-c73ef9dd0c21": 0.99
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 2.9,
-   "lead": 0.21,
+   "lead": 0.02,
    "models": {
     "ecmwf_aifs025_single": 3.4,
-    "icon_seamless": 3.6,
-    "ukmo_seamless": 4.0
+    "icon_seamless": 3.5,
+    "ukmo_seamless": 3.9
    },
-   "move_pp": 3.8,
-   "mu": 3.88,
-   "sigma": 0.53
+   "move_pp": 3.7,
+   "mu": 3.83,
+   "sigma": 0.52
   },
-  "repriced_at": "2026-11-12T05:50:50.385167+00:00",
+  "repriced_at": "2026-11-12T10:25:45.701607+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
