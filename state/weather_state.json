@@ -2692,7 +2692,14 @@
   "station": "kauno-ams"
  },
  "159770bf-1661-4270-adb3-7a42a00eb6b4": {},
- "1662c457-a6e1-4b63-9f30-b15e7fa87707": {},
+ "1662c457-a6e1-4b63-9f30-b15e7fa87707": {
+  "resolved": true,
+  "resolved_at": "2026-11-13T06:01:15.543910+00:00",
+  "resolved_label": "Different Dimension, QV – „Sakartvelas - Special Version“",
+  "resolved_option_id": "7003f60b-ee88-45d2-ad6e-71cefa88fac6",
+  "resolved_via": "music",
+  "resolved_winner": "Different Dimension, QV – Sakartvelas - Special Version"
+ },
  "1796fc9c-3a28-4411-b73d-c61aa777c6db": {
   "checksum": "c4f82b2c4f0bdd354cbb82531e02e3ed172f269489b566d41c6f661122199333",
   "current_maximum": 2.9,
