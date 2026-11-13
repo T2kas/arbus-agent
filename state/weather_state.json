@@ -7407,7 +7407,7 @@
   "fuel_alerted": true
  },
  "4379892d-5200-4001-9ef9-a2bdd3190558": {
-  "checksum": "5057a803c29558578a13a7c8d455175490b38f7534a5549508e4b4bc572f3b6a",
+  "checksum": "19bfa2e451d19d20e39fa9d6edab5c4f1e0ff1020fa909244f0abd9d6f4ddfdb",
   "current_maximum": null,
   "date": "2026-11-14",
   "measurements": {},
@@ -14304,7 +14304,7 @@
  },
  "8eb227df-cb87-4eee-bed8-a934c69aea13": {},
  "8f7d23f3-ded8-4967-8b85-0f7a83af0a3b": {
-  "checksum": "8680aeefb088ae67ce62094659e15b21ae97c9fee92a84d51ace48415a18e7ad",
+  "checksum": "3923f8df23f72804573935a6551ac2cd41cd79c1b176ac28b0ccc9950cad896b",
   "current_maximum": null,
   "date": "2026-11-14",
   "measurements": {},
@@ -15664,7 +15664,7 @@
   "station": "kauno-ams"
  },
  "9c9904ca-7392-4246-b5d4-2b158f31b97b": {
-  "checksum": "8680aeefb088ae67ce62094659e15b21ae97c9fee92a84d51ace48415a18e7ad",
+  "checksum": "3923f8df23f72804573935a6551ac2cd41cd79c1b176ac28b0ccc9950cad896b",
   "current_maximum": null,
   "date": "2026-11-15",
   "measurements": {},
@@ -17169,7 +17169,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261112/"
  },
  "a4c78252-f3d6-48f8-bfea-bb566e15e023": {
-  "checksum": "5057a803c29558578a13a7c8d455175490b38f7534a5549508e4b4bc572f3b6a",
+  "checksum": "19bfa2e451d19d20e39fa9d6edab5c4f1e0ff1020fa909244f0abd9d6f4ddfdb",
   "current_maximum": null,
   "date": "2026-11-15",
   "measurements": {},
@@ -24795,7 +24795,7 @@
   "station": "vilniaus-ams"
  },
  "de41cb94-9fd4-4c03-a5e7-4bf2e8547c63": {
-  "checksum": "52a639b5044c6e153db0fb0ba3b50924c58746fed79cd32e8aa3e99febe1b561",
+  "checksum": "911cc8ce3d804f26c39e583850195ca4b346c7505d1070b3df9ddb1d45838165",
   "current_maximum": null,
   "date": "2026-11-15",
   "measurements": {},
@@ -25271,7 +25271,7 @@
   "station": "vilniaus-ams"
  },
  "e147edf2-9070-4ccb-8f19-4b1c6f63d923": {
-  "checksum": "52a639b5044c6e153db0fb0ba3b50924c58746fed79cd32e8aa3e99febe1b561",
+  "checksum": "911cc8ce3d804f26c39e583850195ca4b346c7505d1070b3df9ddb1d45838165",
   "current_maximum": null,
   "date": "2026-11-14",
   "measurements": {},
