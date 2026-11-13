@@ -7329,31 +7329,25 @@
   "date": "2026-11-14",
   "measurements": {},
   "model_target": {
-   "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 34.83,
-   "4c73e146-2fef-4155-b315-d19f63033fa8": 2.08,
+   "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 37.73,
+   "4c73e146-2fef-4155-b315-d19f63033fa8": 1.3,
    "6e2a4e3b-1aa4-4b92-b65a-f1effbecd251": 0.99,
-   "f18133b4-84df-4f93-ba0a-33eb00590b1e": 62.1
+   "f18133b4-84df-4f93-ba0a-33eb00590b1e": 59.97
   },
   "mt_v": 2,
-  "pending_target": {
-   "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 37.75,
-   "4c73e146-2fef-4155-b315-d19f63033fa8": 1.32,
-   "6e2a4e3b-1aa4-4b92-b65a-f1effbecd251": 0.99,
-   "f18133b4-84df-4f93-ba0a-33eb00590b1e": 59.94
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.32,
+   "lead": 1.2,
    "models": {
-    "ecmwf_aifs025_single": 6.2,
-    "icon_seamless": 6.4,
+    "ecmwf_aifs025_single": 6.1,
+    "icon_seamless": 6.3,
     "ukmo_seamless": 5.2
    },
-   "move_pp": 7.2,
-   "mu": 6.26,
-   "sigma": 0.83
+   "move_pp": 2.9,
+   "mu": 6.19,
+   "sigma": 0.79
   },
-  "repriced_at": "2026-11-13T03:25:37.141055+00:00",
+  "repriced_at": "2026-11-13T06:05:38.180180+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -17318,8 +17312,8 @@
   "mt_v": 2,
   "pending_target": {
    "34246224-a189-4c49-97f8-653d2481f04e": 0.99,
-   "da0a6bb7-0056-4b15-b21e-00dc92650de9": 21.84,
-   "eba0241e-0b20-4b0a-a8fc-b86d5704abb9": 77.17
+   "da0a6bb7-0056-4b15-b21e-00dc92650de9": 22.99,
+   "eba0241e-0b20-4b0a-a8fc-b86d5704abb9": 76.02
   },
   "reprice": {
    "floor": 4.5,
@@ -24954,30 +24948,24 @@
   "measurements": {},
   "model_target": {
    "18da8af5-3afc-4842-8251-54a9bda67d90": 0.99,
-   "24f850d2-4800-40ed-9ae2-95df199ec418": 19.5,
-   "ca6fadfd-acc1-4bb0-8fda-52dcacc69a3b": 75.44,
-   "d9cdd2af-edbd-486c-8b6b-69238544cdab": 4.08
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "18da8af5-3afc-4842-8251-54a9bda67d90": 0.99,
    "24f850d2-4800-40ed-9ae2-95df199ec418": 24.6,
-   "ca6fadfd-acc1-4bb0-8fda-52dcacc69a3b": 72.33,
+   "ca6fadfd-acc1-4bb0-8fda-52dcacc69a3b": 72.35,
    "d9cdd2af-edbd-486c-8b6b-69238544cdab": 2.07
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.72,
+   "lead": 1.2,
    "models": {
-    "ecmwf_aifs025_single": 5.2,
-    "icon_seamless": 5.2,
-    "ukmo_seamless": 4.3
+    "ecmwf_aifs025_single": 5.0,
+    "icon_seamless": 5.1,
+    "ukmo_seamless": 4.2
    },
-   "move_pp": 3.2,
-   "mu": 5.61,
-   "sigma": 0.77
+   "move_pp": 5.1,
+   "mu": 5.45,
+   "sigma": 0.74
   },
-  "repriced_at": "2026-11-12T17:45:48.196963+00:00",
+  "repriced_at": "2026-11-13T06:05:38.180180+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
