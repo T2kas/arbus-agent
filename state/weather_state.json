@@ -1075,7 +1075,14 @@
   "resolved_score": "Panevėžys 2:1 Banga",
   "resolved_via": "sports"
  },
- "0c3d0ae4-2525-4822-9935-9ec21c11e010": {},
+ "0c3d0ae4-2525-4822-9935-9ec21c11e010": {
+  "resolved": true,
+  "resolved_at": "2026-11-13T09:35:39.914534+00:00",
+  "resolved_label": "Nuo 1,785 iki 1,794 €/l",
+  "resolved_option_id": "483fe376-0312-4b16-aacb-ffdd345d5dbb",
+  "resolved_price": 1.789,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261113/"
+ },
  "0e09192d-9a3e-4306-947d-756188355035": {
   "checksum": "89fece40c3d0322edaabffb00048d7a154bfacb2c4e3ae9c8fedea29a389f3bf",
   "current_maximum": 8.8,
@@ -11275,7 +11282,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "7a611089-dd48-4b81-9442-a7baf34c8204": {},
+ "7a611089-dd48-4b81-9442-a7baf34c8204": {
+  "resolved": true,
+  "resolved_at": "2026-11-13T09:35:39.914534+00:00",
+  "resolved_label": "Nuo 2,185 iki 2,194 €/l",
+  "resolved_option_id": "1bf4d081-ad0e-43b8-8319-4b18859a46d8",
+  "resolved_price": 2.187,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261113/"
+ },
  "7bd77c6b-4b5a-4253-9421-703a222bf240": {
   "checksum": "cade70bb8cfd45e5937da0ae95574916235150c7b9b97b3e28aabb30e4cd223c",
   "current_maximum": 11.7,
