@@ -4834,29 +4834,24 @@
    }
   },
   "model_target": {
-   "2a5d7120-a49c-4fa8-b956-529db659a314": 87.52,
-   "764f88aa-e4fd-4015-96e7-1106d31a95e1": 11.48,
+   "2a5d7120-a49c-4fa8-b956-529db659a314": 91.03,
+   "764f88aa-e4fd-4015-96e7-1106d31a95e1": 7.97,
    "b9438e8d-aa08-461f-8b87-79b90be77104": 1.0
   },
   "mt_v": 2,
-  "pending_target": {
-   "2a5d7120-a49c-4fa8-b956-529db659a314": 91.01,
-   "764f88aa-e4fd-4015-96e7-1106d31a95e1": 8.0,
-   "b9438e8d-aa08-461f-8b87-79b90be77104": 1.0
-  },
   "reprice": {
-   "floor": 3.4,
-   "lead": 0.48,
+   "floor": 3.7,
+   "lead": 0.44,
    "models": {
     "ecmwf_aifs025_single": 3.7,
-    "icon_seamless": 4.2,
+    "icon_seamless": 4.1,
     "ukmo_seamless": 4.2
    },
-   "move_pp": 3.2,
-   "mu": 4.58,
-   "sigma": 0.56
+   "move_pp": 3.5,
+   "mu": 4.55,
+   "sigma": 0.54
   },
-  "repriced_at": "2026-11-12T23:25:40.465578+00:00",
+  "repriced_at": "2026-11-13T00:21:05.684213+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
