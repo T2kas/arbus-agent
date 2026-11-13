@@ -778,6 +778,7 @@
   "resolved_price": 2.251,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
  },
+ "0921d1cf-ee5c-4f1e-96d8-f177b6dd4c07": {},
  "0a1902a1-3778-4858-9249-db8c726aac6f": {
   "resolved": true,
   "resolved_at": "2026-10-09T08:31:08.582009+00:00",
@@ -5703,6 +5704,7 @@
   "resolved_price": 1.861,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261110/"
  },
+ "312874a5-4c42-4eda-add0-39c06318e490": {},
  "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
   "checksum": "800329b40287ee0b00ed390fc61cd18ce7987b3f22a0f97337bfda25474b16ac",
   "current_maximum": 10.4,
