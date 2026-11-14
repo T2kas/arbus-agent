@@ -7491,29 +7491,24 @@
    }
   },
   "model_target": {
-   "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 27.59,
-   "4c73e146-2fef-4155-b315-d19f63033fa8": 0.99,
-   "f18133b4-84df-4f93-ba0a-33eb00590b1e": 71.42
-  },
-  "mt_v": 2,
-  "pending_target": {
    "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 31.39,
    "4c73e146-2fef-4155-b315-d19f63033fa8": 0.99,
    "f18133b4-84df-4f93-ba0a-33eb00590b1e": 67.62
   },
+  "mt_v": 2,
   "reprice": {
-   "floor": 4.0,
-   "lead": 0.21,
+   "floor": 4.8,
+   "lead": 0.04,
    "models": {
     "ecmwf_aifs025_single": 6.2,
-    "icon_seamless": 6.4,
-    "ukmo_seamless": 5.4
+    "icon_seamless": 6.2,
+    "ukmo_seamless": 5.3
    },
-   "move_pp": 6.1,
-   "mu": 6.3,
-   "sigma": 0.59
+   "move_pp": 3.8,
+   "mu": 6.22,
+   "sigma": 0.58
   },
-  "repriced_at": "2026-11-14T06:01:13.724637+00:00",
+  "repriced_at": "2026-11-14T10:01:19.471381+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
@@ -15828,31 +15823,25 @@
   "date": "2026-11-15",
   "measurements": {},
   "model_target": {
-   "4c642ee9-a972-4b75-921d-048ffe7f9727": 2.71,
-   "91243c19-8fe8-4cca-8102-0e389d1c1b8b": 2.73,
-   "b0e77d06-1843-41dc-87ab-220960c54945": 47.21,
-   "f941bd74-d682-4647-b000-9a52e1829d29": 47.34
+   "4c642ee9-a972-4b75-921d-048ffe7f9727": 2.5,
+   "91243c19-8fe8-4cca-8102-0e389d1c1b8b": 1.99,
+   "b0e77d06-1843-41dc-87ab-220960c54945": 49.42,
+   "f941bd74-d682-4647-b000-9a52e1829d29": 46.09
   },
   "mt_v": 2,
-  "pending_target": {
-   "4c642ee9-a972-4b75-921d-048ffe7f9727": 2.51,
-   "91243c19-8fe8-4cca-8102-0e389d1c1b8b": 2.0,
-   "b0e77d06-1843-41dc-87ab-220960c54945": 49.41,
-   "f941bd74-d682-4647-b000-9a52e1829d29": 46.08
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.09,
+   "lead": 1.04,
    "models": {
     "ecmwf_aifs025_single": 7.8,
-    "icon_seamless": 8.9,
+    "icon_seamless": 8.7,
     "ukmo_seamless": 8.6
    },
-   "move_pp": 4.7,
-   "mu": 8.95,
-   "sigma": 1.04
+   "move_pp": 2.2,
+   "mu": 8.9,
+   "sigma": 1.0
   },
-  "repriced_at": "2026-11-14T08:55:37.665226+00:00",
+  "repriced_at": "2026-11-14T10:01:19.471381+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -16179,10 +16168,6 @@
   }
  },
  "_fuel_hist": {
-  "2026-08-14": {
-   "benzinas": 1.751,
-   "dyzelinas": 2.019
-  },
   "2026-08-17": {
    "benzinas": 1.742,
    "dyzelinas": 2.011
@@ -16481,7 +16466,8 @@
    "2026-11-09": 1.84,
    "2026-11-10": 1.861,
    "2026-11-11": 1.815,
-   "2026-11-12": 1.786
+   "2026-11-12": 1.786,
+   "2026-11-13": 1.789
   },
   "dyzelinas": {
    "2026-09-23": 2.297,
@@ -16519,7 +16505,8 @@
    "2026-11-09": 2.227,
    "2026-11-10": 2.238,
    "2026-11-11": 2.205,
-   "2026-11-12": 2.185
+   "2026-11-12": 2.185,
+   "2026-11-13": 2.187
   }
  },
  "_obs_max": {
