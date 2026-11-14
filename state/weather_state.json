@@ -9057,7 +9057,7 @@
  },
  "4fc72e8a-6d2a-4668-9720-1d87461b8c9e": {},
  "502b6077-ef61-4bd9-8b6f-5d16ee634fc7": {
-  "checksum": "e07dee21194061600243350261081c1c69694a988f8805c461a40c2c4e1d47b5",
+  "checksum": "2f1a4c64d061836ed5c75e76373d6e9d4c2b1f31423451d2a0b2cef52676b08f",
   "current_maximum": null,
   "date": "2026-11-16",
   "measurements": {},
@@ -14465,7 +14465,7 @@
  },
  "8eb227df-cb87-4eee-bed8-a934c69aea13": {},
  "8f7d23f3-ded8-4967-8b85-0f7a83af0a3b": {
-  "checksum": "e07dee21194061600243350261081c1c69694a988f8805c461a40c2c4e1d47b5",
+  "checksum": "2f1a4c64d061836ed5c75e76373d6e9d4c2b1f31423451d2a0b2cef52676b08f",
   "current_maximum": 8.2,
   "date": "2026-11-14",
   "eliminated": [
@@ -14592,6 +14592,12 @@
     "received_at": "2026-11-14T17:10:55.995329+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 8.2
+   },
+   "2026-11-14 18:00:00": {
+    "checksum": "2f1a4c64d061836ed5c75e76373d6e9d4c2b1f31423451d2a0b2cef52676b08f",
+    "received_at": "2026-11-14T18:10:48.004712+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 8.1
    }
   },
   "model_target": {
@@ -15951,36 +15957,30 @@
   "station": "kauno-ams"
  },
  "9c9904ca-7392-4246-b5d4-2b158f31b97b": {
-  "checksum": "e07dee21194061600243350261081c1c69694a988f8805c461a40c2c4e1d47b5",
+  "checksum": "2f1a4c64d061836ed5c75e76373d6e9d4c2b1f31423451d2a0b2cef52676b08f",
   "current_maximum": null,
   "date": "2026-11-15",
   "measurements": {},
   "model_target": {
-   "4c642ee9-a972-4b75-921d-048ffe7f9727": 3.85,
-   "91243c19-8fe8-4cca-8102-0e389d1c1b8b": 2.85,
-   "b0e77d06-1843-41dc-87ab-220960c54945": 48.83,
-   "f941bd74-d682-4647-b000-9a52e1829d29": 44.48
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "4c642ee9-a972-4b75-921d-048ffe7f9727": 2.84,
-   "91243c19-8fe8-4cca-8102-0e389d1c1b8b": 2.56,
-   "b0e77d06-1843-41dc-87ab-220960c54945": 48.05,
+   "4c642ee9-a972-4b75-921d-048ffe7f9727": 2.83,
+   "91243c19-8fe8-4cca-8102-0e389d1c1b8b": 2.55,
+   "b0e77d06-1843-41dc-87ab-220960c54945": 48.06,
    "f941bd74-d682-4647-b000-9a52e1829d29": 46.56
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 0.84,
+   "lead": 0.7,
    "models": {
-    "ecmwf_aifs025_single": 7.6,
+    "ecmwf_aifs025_single": 7.7,
     "icon_seamless": 8.8,
     "ukmo_seamless": 8.8
    },
-   "move_pp": 2.9,
-   "mu": 8.88,
-   "sigma": 1.09
+   "move_pp": 2.1,
+   "mu": 8.93,
+   "sigma": 1.04
   },
-  "repriced_at": "2026-11-14T14:50:55.611413+00:00",
+  "repriced_at": "2026-11-14T18:10:48.004712+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -17460,7 +17460,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261112/"
  },
  "a4c78252-f3d6-48f8-bfea-bb566e15e023": {
-  "checksum": "246be16f413d012447976580c022dcbc952dae20462ccf69c447e2fa3eb6a5c2",
+  "checksum": "d486147cb6c283fef0a40ec7b4126ab36d773b244eb60b36731f9f94e5ecd615",
   "current_maximum": null,
   "date": "2026-11-15",
   "measurements": {},
@@ -19594,7 +19594,7 @@
   "station": "kauno-ams"
  },
  "b845fac0-18c5-423e-8ee8-a584e36d539d": {
-  "checksum": "246be16f413d012447976580c022dcbc952dae20462ccf69c447e2fa3eb6a5c2",
+  "checksum": "d486147cb6c283fef0a40ec7b4126ab36d773b244eb60b36731f9f94e5ecd615",
   "current_maximum": null,
   "date": "2026-11-16",
   "measurements": {},
@@ -25101,7 +25101,7 @@
   "station": "vilniaus-ams"
  },
  "de41cb94-9fd4-4c03-a5e7-4bf2e8547c63": {
-  "checksum": "7972971313110a5924a9dd649333f293eae15f318be9d73263ed40b790dd5caf",
+  "checksum": "941ce2351f5bfdc77aa1010f186d5ad52d120520fe88d39847d0902041d8054b",
   "current_maximum": null,
   "date": "2026-11-15",
   "measurements": {},
@@ -27043,7 +27043,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "edf843d5-eada-47c8-8ea1-04a96c495abf": {
-  "checksum": "7972971313110a5924a9dd649333f293eae15f318be9d73263ed40b790dd5caf",
+  "checksum": "941ce2351f5bfdc77aa1010f186d5ad52d120520fe88d39847d0902041d8054b",
   "current_maximum": null,
   "date": "2026-11-16",
   "measurements": {},
