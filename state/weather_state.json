@@ -9026,6 +9026,21 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261111/"
  },
  "4fc72e8a-6d2a-4668-9720-1d87461b8c9e": {},
+ "502b6077-ef61-4bd9-8b6f-5d16ee634fc7": {
+  "checksum": "bcccd3ccd642bfbd7a4da2b543731cb33c27efab87fc15964b6b46d56b7294a7",
+  "current_maximum": null,
+  "date": "2026-11-16",
+  "measurements": {},
+  "model_target": {
+   "12749931-b69f-493d-b20d-8e50c6031998": 56.0,
+   "51674a8c-732f-4376-8d14-4e2ea6fc6b19": 2.0,
+   "54682630-9020-4e0f-bc51-b5295fe8f8b5": 3.0,
+   "ea7826b1-3fe0-4609-9bde-e43fad9bf7b6": 39.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "516d2053-d58d-4b64-825a-ffea4bd6a4cb": {
   "resolved": true,
   "resolved_at": "2026-10-15T08:31:11.198816+00:00",
@@ -19530,6 +19545,21 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "b845fac0-18c5-423e-8ee8-a584e36d539d": {
+  "checksum": "60460b12f8f7d364e619d19bca793fb31c8630e72be04bc048e5a63f1fe7deba",
+  "current_maximum": null,
+  "date": "2026-11-16",
+  "measurements": {},
+  "model_target": {
+   "107125a5-f2c3-41ef-99bb-aaa64bab9559": 4.0,
+   "2b7b4c41-1f94-4537-8274-134da968e53e": 29.0,
+   "58c382cf-f9dd-4e0e-b573-d0b097ea5fdf": 1.0,
+   "8a2e8199-92bf-4c95-b147-303b5079fce7": 66.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "b8f7f8f0-6911-4461-8115-28a9198b691e": {},
  "b956de9e-b261-4cc4-b409-9be75b71d77b": {
   "checksum": "b7d6e166e1e845e26e15bf0f612d64e5743f77bdf7480c1ebdd713292e4838af",
@@ -26947,6 +26977,21 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams",
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
+ },
+ "edf843d5-eada-47c8-8ea1-04a96c495abf": {
+  "checksum": "a6c892da602c2743b6c4f33930f620817fc7aa8aee1f51b416b84e3cea0aaee0",
+  "current_maximum": null,
+  "date": "2026-11-16",
+  "measurements": {},
+  "model_target": {
+   "68487c15-0a01-4a17-9ecb-340db506e5cb": 37.0,
+   "9ee93d08-08c6-4636-b660-c2f9de951e2a": 61.0,
+   "e33ee25e-7106-450b-877e-414a1c2ab41c": 1.0,
+   "e6dda319-2ec7-4a09-a269-18d79d8ce954": 1.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "ee42c6c0-f03d-416d-b1f5-cd4e437a137b": {
   "checksum": "71fe51b98181c20dacf894099c84efce7bf65c65fd0fdf085bc2cb2df5e02a77",
