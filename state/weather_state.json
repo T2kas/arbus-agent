@@ -7467,29 +7467,24 @@
    }
   },
   "model_target": {
-   "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 33.71,
-   "4c73e146-2fef-4155-b315-d19f63033fa8": 0.99,
-   "f18133b4-84df-4f93-ba0a-33eb00590b1e": 65.29
-  },
-  "mt_v": 2,
-  "pending_target": {
    "206bb4e5-7bf7-4ce7-80f5-11ac0b14bfe3": 27.59,
    "4c73e146-2fef-4155-b315-d19f63033fa8": 0.99,
    "f18133b4-84df-4f93-ba0a-33eb00590b1e": 71.42
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 4.0,
-   "lead": 0.33,
+   "lead": 0.21,
    "models": {
-    "ecmwf_aifs025_single": 6.0,
+    "ecmwf_aifs025_single": 6.2,
     "icon_seamless": 6.4,
     "ukmo_seamless": 5.4
    },
-   "move_pp": 6.5,
-   "mu": 6.2,
+   "move_pp": 6.1,
+   "mu": 6.3,
    "sigma": 0.59
   },
-  "repriced_at": "2026-11-14T03:05:45.244990+00:00",
+  "repriced_at": "2026-11-14T06:01:13.724637+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
@@ -17285,31 +17280,25 @@
   "date": "2026-11-15",
   "measurements": {},
   "model_target": {
-   "123e88a5-7851-409e-9c50-6c00bca3ad7e": 38.63,
-   "1b4977b8-6178-49d3-92ec-049d714da597": 1.79,
-   "272c57fe-c083-4db5-bd48-3e16619f4709": 58.59,
+   "123e88a5-7851-409e-9c50-6c00bca3ad7e": 33.54,
+   "1b4977b8-6178-49d3-92ec-049d714da597": 1.82,
+   "272c57fe-c083-4db5-bd48-3e16619f4709": 63.65,
    "d2711f18-f02c-434f-8983-c3d79d41bb7f": 0.99
   },
   "mt_v": 2,
-  "pending_target": {
-   "123e88a5-7851-409e-9c50-6c00bca3ad7e": 33.55,
-   "1b4977b8-6178-49d3-92ec-049d714da597": 1.83,
-   "272c57fe-c083-4db5-bd48-3e16619f4709": 63.63,
-   "d2711f18-f02c-434f-8983-c3d79d41bb7f": 0.99
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.28,
+   "lead": 1.21,
    "models": {
-    "ecmwf_aifs025_single": 7.1,
+    "ecmwf_aifs025_single": 6.9,
     "icon_seamless": 5.8,
     "ukmo_seamless": 5.9
    },
-   "move_pp": 2.0,
-   "mu": 6.72,
-   "sigma": 0.84
+   "move_pp": 5.1,
+   "mu": 6.62,
+   "sigma": 0.8
   },
-  "repriced_at": "2026-11-14T04:20:45.180249+00:00",
+  "repriced_at": "2026-11-14T06:01:13.724637+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -24917,31 +24906,25 @@
   "date": "2026-11-15",
   "measurements": {},
   "model_target": {
-   "0348e5dc-cb41-4579-9aa3-2f7976442aff": 51.8,
-   "2fa8c2f5-607d-4c3a-b8f0-a8d92c97ce52": 46.21,
-   "b3fdabe1-83a2-4063-ad50-1ae17b0a4940": 1.0,
-   "be4f2afe-86a0-4a3c-ab30-8f4e9cbc1c35": 1.0
-  },
-  "mt_v": 2,
-  "pending_target": {
    "0348e5dc-cb41-4579-9aa3-2f7976442aff": 49.49,
    "2fa8c2f5-607d-4c3a-b8f0-a8d92c97ce52": 48.52,
    "b3fdabe1-83a2-4063-ad50-1ae17b0a4940": 1.0,
    "be4f2afe-86a0-4a3c-ab30-8f4e9cbc1c35": 1.0
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.29,
+   "lead": 1.21,
    "models": {
-    "ecmwf_aifs025_single": 5.8,
+    "ecmwf_aifs025_single": 5.9,
     "icon_seamless": 4.5,
     "ukmo_seamless": 5.0
    },
-   "move_pp": 4.8,
-   "mu": 5.89,
-   "sigma": 0.82
+   "move_pp": 2.3,
+   "mu": 5.94,
+   "sigma": 0.85
   },
-  "repriced_at": "2026-11-14T03:55:42.988146+00:00",
+  "repriced_at": "2026-11-14T06:01:13.724637+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -25452,29 +25435,24 @@
    }
   },
   "model_target": {
-   "24f850d2-4800-40ed-9ae2-95df199ec418": 21.97,
-   "ca6fadfd-acc1-4bb0-8fda-52dcacc69a3b": 75.5,
-   "d9cdd2af-edbd-486c-8b6b-69238544cdab": 2.53
-  },
-  "mt_v": 2,
-  "pending_target": {
    "24f850d2-4800-40ed-9ae2-95df199ec418": 19.11,
    "ca6fadfd-acc1-4bb0-8fda-52dcacc69a3b": 76.85,
    "d9cdd2af-edbd-486c-8b6b-69238544cdab": 4.04
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 3.4,
-   "lead": 0.33,
+   "lead": 0.21,
    "models": {
-    "ecmwf_aifs025_single": 5.2,
+    "ecmwf_aifs025_single": 5.4,
     "icon_seamless": 5.2,
     "ukmo_seamless": 4.0
    },
-   "move_pp": 6.2,
-   "mu": 5.51,
-   "sigma": 0.73
+   "move_pp": 2.9,
+   "mu": 5.61,
+   "sigma": 0.76
   },
-  "repriced_at": "2026-11-14T03:05:45.244990+00:00",
+  "repriced_at": "2026-11-14T06:01:13.724637+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
