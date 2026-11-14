@@ -9068,6 +9068,12 @@
    "ea7826b1-3fe0-4609-9bde-e43fad9bf7b6": 39.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "12749931-b69f-493d-b20d-8e50c6031998": 58.15,
+   "51674a8c-732f-4376-8d14-4e2ea6fc6b19": 1.0,
+   "54682630-9020-4e0f-bc51-b5295fe8f8b5": 4.57,
+   "ea7826b1-3fe0-4609-9bde-e43fad9bf7b6": 36.28
+  },
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -17477,6 +17483,12 @@
    "d2711f18-f02c-434f-8983-c3d79d41bb7f": 0.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "123e88a5-7851-409e-9c50-6c00bca3ad7e": 26.37,
+   "1b4977b8-6178-49d3-92ec-049d714da597": 1.7,
+   "272c57fe-c083-4db5-bd48-3e16619f4709": 70.93,
+   "d2711f18-f02c-434f-8983-c3d79d41bb7f": 0.99
+  },
   "reprice": {
    "floor": null,
    "lead": 0.79,
@@ -19611,6 +19623,12 @@
    "8a2e8199-92bf-4c95-b147-303b5079fce7": 66.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "107125a5-f2c3-41ef-99bb-aaa64bab9559": 2.65,
+   "2b7b4c41-1f94-4537-8274-134da968e53e": 31.27,
+   "58c382cf-f9dd-4e0e-b573-d0b097ea5fdf": 0.99,
+   "8a2e8199-92bf-4c95-b147-303b5079fce7": 65.09
+  },
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -27067,6 +27085,12 @@
    "e6dda319-2ec7-4a09-a269-18d79d8ce954": 1.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "68487c15-0a01-4a17-9ecb-340db506e5cb": 39.39,
+   "9ee93d08-08c6-4636-b660-c2f9de951e2a": 58.02,
+   "e33ee25e-7106-450b-877e-414a1c2ab41c": 0.99,
+   "e6dda319-2ec7-4a09-a269-18d79d8ce954": 1.6
+  },
   "resolved": false,
   "station": "vilniaus-ams"
  },
