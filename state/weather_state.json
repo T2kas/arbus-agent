@@ -287,7 +287,14 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261005/"
  },
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
- "05a08eb4-aee9-490f-865b-e21704efe0b5": {},
+ "05a08eb4-aee9-490f-865b-e21704efe0b5": {
+  "resolved": true,
+  "resolved_at": "2026-11-14T17:20:46.850127+00:00",
+  "resolved_label": "„Šiauliai“",
+  "resolved_option_id": "539c4466-26ce-446e-9f82-ce09eea8bcbc",
+  "resolved_score": "„Šiauliai“ 97:82 „Gargždai“",
+  "resolved_via": "sports"
+ },
  "05c8d26a-73f3-4eb7-86fe-038ca9c2fae9": {
   "resolved": true,
   "resolved_at": "2026-10-31T14:50:44.816719+00:00",
