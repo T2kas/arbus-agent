@@ -8259,7 +8259,14 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
- "477a3b35-6e28-4f4c-879f-5d31f169fbf4": {},
+ "477a3b35-6e28-4f4c-879f-5d31f169fbf4": {
+  "resolved": true,
+  "resolved_at": "2026-11-14T17:15:47.978312+00:00",
+  "resolved_label": "Panevėžio „Lietkabelis“",
+  "resolved_option_id": "c32ac8ab-8724-4eb1-800c-9df6f495de6a",
+  "resolved_score": "„Tauragė“ 73:81 Panevėžio „Lietkabelis“",
+  "resolved_via": "sports"
+ },
  "48ccbe86-d277-4536-8ac4-5c46366b89f0": {
   "checksum": "5cd9a670983f11393694aa30cd0fa8079bffc20e0656a8c7f8ea92b00b67ac27",
   "current_maximum": 10.3,
