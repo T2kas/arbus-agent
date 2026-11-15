@@ -785,7 +785,14 @@
   "resolved_price": 2.251,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261006/"
  },
- "0921d1cf-ee5c-4f1e-96d8-f177b6dd4c07": {},
+ "0921d1cf-ee5c-4f1e-96d8-f177b6dd4c07": {
+  "resolved": true,
+  "resolved_at": "2026-11-15T16:55:35.897954+00:00",
+  "resolved_label": "Kauno „Žalgiris“",
+  "resolved_option_id": "fbfd0253-2930-46fa-8545-c564a9844ea0",
+  "resolved_score": "Kauno „Žalgiris“ 87:82 Klaipėdos „Neptūnas“",
+  "resolved_via": "sports"
+ },
  "0a1902a1-3778-4858-9249-db8c726aac6f": {
   "resolved": true,
   "resolved_at": "2026-10-09T08:31:08.582009+00:00",
