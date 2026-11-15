@@ -19747,31 +19747,25 @@
   "date": "2026-11-16",
   "measurements": {},
   "model_target": {
-   "107125a5-f2c3-41ef-99bb-aaa64bab9559": 1.06,
-   "2b7b4c41-1f94-4537-8274-134da968e53e": 44.38,
-   "58c382cf-f9dd-4e0e-b573-d0b097ea5fdf": 1.0,
-   "8a2e8199-92bf-4c95-b147-303b5079fce7": 53.56
-  },
-  "mt_v": 2,
-  "pending_target": {
    "107125a5-f2c3-41ef-99bb-aaa64bab9559": 0.99,
    "2b7b4c41-1f94-4537-8274-134da968e53e": 47.76,
    "58c382cf-f9dd-4e0e-b573-d0b097ea5fdf": 0.99,
    "8a2e8199-92bf-4c95-b147-303b5079fce7": 50.26
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.4,
+   "lead": 1.21,
    "models": {
-    "ecmwf_aifs025_single": 5.2,
-    "icon_seamless": 4.1,
+    "ecmwf_aifs025_single": 5.1,
+    "icon_seamless": 4.0,
     "ukmo_seamless": 4.7
    },
-   "move_pp": 7.4,
-   "mu": 5.05,
-   "sigma": 0.83
+   "move_pp": 3.4,
+   "mu": 4.98,
+   "sigma": 0.79
   },
-  "repriced_at": "2026-11-15T01:20:46.859415+00:00",
+  "repriced_at": "2026-11-15T05:50:47.702856+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -27280,31 +27274,25 @@
   "date": "2026-11-16",
   "measurements": {},
   "model_target": {
-   "68487c15-0a01-4a17-9ecb-340db506e5cb": 36.38,
-   "9ee93d08-08c6-4636-b660-c2f9de951e2a": 58.77,
-   "e33ee25e-7106-450b-877e-414a1c2ab41c": 1.0,
-   "e6dda319-2ec7-4a09-a269-18d79d8ce954": 3.85
+   "68487c15-0a01-4a17-9ecb-340db506e5cb": 33.82,
+   "9ee93d08-08c6-4636-b660-c2f9de951e2a": 62.45,
+   "e33ee25e-7106-450b-877e-414a1c2ab41c": 0.99,
+   "e6dda319-2ec7-4a09-a269-18d79d8ce954": 2.74
   },
   "mt_v": 2,
-  "pending_target": {
-   "68487c15-0a01-4a17-9ecb-340db506e5cb": 33.82,
-   "9ee93d08-08c6-4636-b660-c2f9de951e2a": 62.44,
-   "e33ee25e-7106-450b-877e-414a1c2ab41c": 0.99,
-   "e6dda319-2ec7-4a09-a269-18d79d8ce954": 2.75
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.55,
+   "lead": 1.21,
    "models": {
     "ecmwf_aifs025_single": 4.2,
-    "icon_seamless": 3.0,
-    "ukmo_seamless": 4.7
+    "icon_seamless": 3.1,
+    "ukmo_seamless": 4.5
    },
-   "move_pp": 3.0,
-   "mu": 4.64,
-   "sigma": 0.96
+   "move_pp": 3.7,
+   "mu": 4.6,
+   "sigma": 0.86
   },
-  "repriced_at": "2026-11-14T21:50:50.735442+00:00",
+  "repriced_at": "2026-11-15T05:50:47.702856+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
