@@ -9071,7 +9071,7 @@
  },
  "4fc72e8a-6d2a-4668-9720-1d87461b8c9e": {},
  "502b6077-ef61-4bd9-8b6f-5d16ee634fc7": {
-  "checksum": "97a3be6ccba62296b9d4b185f734f897a527db7df8ae866c041baa5208ee1abe",
+  "checksum": "dac1ebcdd0eaea778df7fd1a50da5b7866ec664a09150b8af74985814503384a",
   "current_maximum": null,
   "date": "2026-11-16",
   "measurements": {},
@@ -16013,7 +16013,7 @@
   "station": "kauno-ams"
  },
  "9b631d27-62cf-4462-8f47-79c4c3feb227": {
-  "checksum": "2787b3a1cce4b8bea6b4d322899b9d517dde5d7a0ba1efa948a278232f50aebf",
+  "checksum": "63de241090bd8a303e744885bc55e8f370a8fb592a6b9cd376fee6189d5ae4b5",
   "current_maximum": null,
   "date": "2026-11-17",
   "measurements": {},
@@ -17665,7 +17665,7 @@
   "station": "klaipedos-ams"
  },
  "a25dc0b8-59f4-4ab6-9a51-8edc35cdc45b": {
-  "checksum": "aa0e30d3bae368ea169743084c5bc39547806504703d7e6c2e1d2448e56cb3d3",
+  "checksum": "a898eaca2f9c22f95d6d69ba878ed2943506d09870dc09280b1ef6a7968ad75d",
   "current_maximum": null,
   "date": "2026-11-17",
   "measurements": {},
@@ -19825,7 +19825,7 @@
   "station": "kauno-ams"
  },
  "b4f603d5-8d63-4e49-ba0e-0b2104bff99a": {
-  "checksum": "97a3be6ccba62296b9d4b185f734f897a527db7df8ae866c041baa5208ee1abe",
+  "checksum": "dac1ebcdd0eaea778df7fd1a50da5b7866ec664a09150b8af74985814503384a",
   "current_maximum": null,
   "date": "2026-11-17",
   "measurements": {},
@@ -19992,7 +19992,7 @@
   "station": "kauno-ams"
  },
  "b845fac0-18c5-423e-8ee8-a584e36d539d": {
-  "checksum": "aa0e30d3bae368ea169743084c5bc39547806504703d7e6c2e1d2448e56cb3d3",
+  "checksum": "a898eaca2f9c22f95d6d69ba878ed2943506d09870dc09280b1ef6a7968ad75d",
   "current_maximum": null,
   "date": "2026-11-16",
   "measurements": {},
@@ -27591,7 +27591,7 @@
   "trading_closed_at": "2026-09-09T11:01:11.746659+00:00"
  },
  "edf843d5-eada-47c8-8ea1-04a96c495abf": {
-  "checksum": "2787b3a1cce4b8bea6b4d322899b9d517dde5d7a0ba1efa948a278232f50aebf",
+  "checksum": "63de241090bd8a303e744885bc55e8f370a8fb592a6b9cd376fee6189d5ae4b5",
   "current_maximum": null,
   "date": "2026-11-16",
   "measurements": {},
