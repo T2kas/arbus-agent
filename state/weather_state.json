@@ -5718,7 +5718,14 @@
   "resolved_price": 1.861,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261110/"
  },
- "312874a5-4c42-4eda-add0-39c06318e490": {},
+ "312874a5-4c42-4eda-add0-39c06318e490": {
+  "resolved": true,
+  "resolved_at": "2026-11-15T19:20:53.298067+00:00",
+  "resolved_label": "Vilniaus „Rytas“",
+  "resolved_option_id": "2aa1c5f7-d930-47f2-a2e0-11e0c9136bcd",
+  "resolved_score": "Vilniaus „Rytas“ 96:79 Jonavos „Hipocredit“",
+  "resolved_via": "sports"
+ },
  "323e9347-0fa2-49e7-aacc-6fc1a71d0855": {
   "checksum": "800329b40287ee0b00ed390fc61cd18ce7987b3f22a0f97337bfda25474b16ac",
   "current_maximum": 10.4,
