@@ -9127,31 +9127,25 @@
    }
   },
   "model_target": {
-   "12749931-b69f-493d-b20d-8e50c6031998": 66.7,
-   "51674a8c-732f-4376-8d14-4e2ea6fc6b19": 0.99,
-   "54682630-9020-4e0f-bc51-b5295fe8f8b5": 2.8,
-   "ea7826b1-3fe0-4609-9bde-e43fad9bf7b6": 29.51
-  },
-  "mt_v": 2,
-  "pending_target": {
    "12749931-b69f-493d-b20d-8e50c6031998": 64.02,
    "51674a8c-732f-4376-8d14-4e2ea6fc6b19": 0.99,
    "54682630-9020-4e0f-bc51-b5295fe8f8b5": 1.74,
    "ea7826b1-3fe0-4609-9bde-e43fad9bf7b6": 33.25
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 3.5,
-   "lead": 0.29,
+   "lead": 0.2,
    "models": {
     "ecmwf_aifs025_single": 7.1,
-    "icon_seamless": 6.5,
+    "icon_seamless": 6.9,
     "ukmo_seamless": 6.6
    },
-   "move_pp": 12.7,
-   "mu": 7.52,
-   "sigma": 0.82
+   "move_pp": 3.7,
+   "mu": 7.62,
+   "sigma": 0.79
   },
-  "repriced_at": "2026-11-16T04:01:20.669579+00:00",
+  "repriced_at": "2026-11-16T06:05:40.705437+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
@@ -20106,31 +20100,25 @@
    }
   },
   "model_target": {
-   "107125a5-f2c3-41ef-99bb-aaa64bab9559": 0.99,
-   "2b7b4c41-1f94-4537-8274-134da968e53e": 34.06,
-   "58c382cf-f9dd-4e0e-b573-d0b097ea5fdf": 0.99,
-   "8a2e8199-92bf-4c95-b147-303b5079fce7": 63.97
-  },
-  "mt_v": 2,
-  "pending_target": {
    "107125a5-f2c3-41ef-99bb-aaa64bab9559": 0.98,
    "2b7b4c41-1f94-4537-8274-134da968e53e": 28.41,
    "58c382cf-f9dd-4e0e-b573-d0b097ea5fdf": 0.98,
    "8a2e8199-92bf-4c95-b147-303b5079fce7": 69.62
   },
+  "mt_v": 2,
   "reprice": {
    "floor": 1.9,
-   "lead": 0.22,
+   "lead": 0.2,
    "models": {
     "ecmwf_aifs025_single": 5.5,
-    "icon_seamless": 4.0,
+    "icon_seamless": 4.3,
     "ukmo_seamless": 5.0
    },
-   "move_pp": 3.5,
-   "mu": 5.21,
-   "sigma": 0.67
+   "move_pp": 5.7,
+   "mu": 5.29,
+   "sigma": 0.61
   },
-  "repriced_at": "2026-11-16T05:45:44.734920+00:00",
+  "repriced_at": "2026-11-16T06:05:40.705437+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
