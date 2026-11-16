@@ -6035,7 +6035,14 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261027/"
  },
  "35673c42-e212-489d-9b0a-256985f46083": {},
- "35da7046-e8b3-4f2f-acfa-788c32544db4": {},
+ "35da7046-e8b3-4f2f-acfa-788c32544db4": {
+  "resolved": true,
+  "resolved_at": "2026-11-16T09:31:14.883511+00:00",
+  "resolved_label": "Nuo 1,764 iki 1,774 €/l",
+  "resolved_option_id": "2836ff96-8170-4bee-b2f5-025340527c61",
+  "resolved_price": 1.772,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261116/"
+ },
  "36422882-e9a6-4727-8a0c-175e5153d278": {
   "resolved": true,
   "resolved_at": "2026-11-05T10:01:15.203332+00:00",
@@ -12260,7 +12267,14 @@
   "resolved_via": "music",
   "resolved_winner": "Different Dimension,QV – Sakartvelas – Special Version"
  },
- "7ec625a8-f4da-4bd0-aa34-3aeb288c37bc": {},
+ "7ec625a8-f4da-4bd0-aa34-3aeb288c37bc": {
+  "resolved": true,
+  "resolved_at": "2026-11-16T09:31:14.883511+00:00",
+  "resolved_label": "Nuo 2,164 iki 2,174 €/l",
+  "resolved_option_id": "79c3bd71-fcd6-4a27-a08f-fa43cde74ba8",
+  "resolved_price": 2.173,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261116/"
+ },
  "7f1fe4d2-8fc3-409e-aa9a-1d17082095dc": {
   "resolved": true,
   "resolved_at": "2026-10-13T09:01:28.136756+00:00",
