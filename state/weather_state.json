@@ -10287,6 +10287,14 @@
   "resolved_score": "Žalgiris 3:2 K. Žalgiris",
   "resolved_via": "sports"
  },
+ "5f756127-d389-4814-8d22-1a7987655adb": {
+  "checksum": "7f0f834c63c785f4ce8af554f5c88dfa08d13ac0c33f8f1b78d2e4043fbe8905",
+  "current_maximum": null,
+  "date": "2026-11-18",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "60a43535-792a-4b0f-abaa-173f787da237": {},
  "60d6e769-5bea-4236-be14-7ee79c5d0045": {
   "resolved": true,
@@ -23164,6 +23172,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "c99b18f2-77d1-4a0d-9a4d-280ebbdd49d4": {
+  "checksum": "ff612e4087e829bc75a6dd71c9f7b6c8fdee377e4930e2fc8c76b7d492bb4274",
+  "current_maximum": null,
+  "date": "2026-11-18",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "cbe89df5-1d5c-4f91-a01c-7d04819769c2": {
   "checksum": "f1bdc4249d07c6ecd4a976b3c6e7fbfd4de0e9160847a30102e591a45d346343",
   "current_maximum": 8.7,
@@ -25175,6 +25191,14 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
+ },
+ "dac46440-7221-4149-b228-8f812e23af04": {
+  "checksum": "5879648710d4643ee658bd4dd9a6c2135d1ac78980537b037de7d6152acd81fb",
+  "current_maximum": null,
+  "date": "2026-11-18",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "dbaf9489-c5a2-4a7b-bfa8-031abc90a44c": {
   "fuel_alerted": true
