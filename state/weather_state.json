@@ -10304,7 +10304,7 @@
   "resolved_via": "sports"
  },
  "5f756127-d389-4814-8d22-1a7987655adb": {
-  "checksum": "c88f1b564f5cc2b64e1616ae733992115d85e05e8964021ee01c8b5c42f55f1a",
+  "checksum": "7403a45ef88885958effd181d10d107fa35883cdd6a7fa469b9dbc4d5dbdf9ae",
   "current_maximum": null,
   "date": "2026-11-18",
   "measurements": {},
@@ -16184,7 +16184,7 @@
   "station": "kauno-ams"
  },
  "9b631d27-62cf-4462-8f47-79c4c3feb227": {
-  "checksum": "ee92a20d957d6d8e9499009a2542d3b8ad72f59455fe1d026d540b1c00654c7b",
+  "checksum": "ef37b518a94a33183d47d87d2ad7c3cbebdc44d6287fbf97631243ca01f80393",
   "current_maximum": null,
   "date": "2026-11-17",
   "measurements": {},
@@ -17840,7 +17840,7 @@
   "station": "klaipedos-ams"
  },
  "a25dc0b8-59f4-4ab6-9a51-8edc35cdc45b": {
-  "checksum": "2df8ab08f7e7aac9625ce5ceca27ff78fc78694a38bbd311c3e613f498da2753",
+  "checksum": "a5eacbb5361a600fe56108f4960b0efbffb742c23a10b48cc1e2ed46d1ea54ed",
   "current_maximum": null,
   "date": "2026-11-17",
   "measurements": {},
@@ -20000,7 +20000,7 @@
   "station": "kauno-ams"
  },
  "b4f603d5-8d63-4e49-ba0e-0b2104bff99a": {
-  "checksum": "c88f1b564f5cc2b64e1616ae733992115d85e05e8964021ee01c8b5c42f55f1a",
+  "checksum": "7403a45ef88885958effd181d10d107fa35883cdd6a7fa469b9dbc4d5dbdf9ae",
   "current_maximum": null,
   "date": "2026-11-17",
   "measurements": {},
@@ -23225,7 +23225,7 @@
   "station": "vilniaus-ams"
  },
  "c99b18f2-77d1-4a0d-9a4d-280ebbdd49d4": {
-  "checksum": "2df8ab08f7e7aac9625ce5ceca27ff78fc78694a38bbd311c3e613f498da2753",
+  "checksum": "a5eacbb5361a600fe56108f4960b0efbffb742c23a10b48cc1e2ed46d1ea54ed",
   "current_maximum": null,
   "date": "2026-11-18",
   "measurements": {},
@@ -25265,7 +25265,7 @@
   "station": "klaipedos-ams"
  },
  "dac46440-7221-4149-b228-8f812e23af04": {
-  "checksum": "ee92a20d957d6d8e9499009a2542d3b8ad72f59455fe1d026d540b1c00654c7b",
+  "checksum": "ef37b518a94a33183d47d87d2ad7c3cbebdc44d6287fbf97631243ca01f80393",
   "current_maximum": null,
   "date": "2026-11-18",
   "measurements": {},
