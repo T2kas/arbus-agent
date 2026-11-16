@@ -2879,6 +2879,7 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "17d75953-1ebf-42fe-b678-cb1a7a215873": {},
  "184045ec-a32b-4737-b7e3-92f9eaf021c2": {
   "checksum": "4e01034fb12ab6238a3d3d341a15c23e0214f6ca6a21b0415f5251ba4b67c3c9",
   "current_maximum": 13.9,
