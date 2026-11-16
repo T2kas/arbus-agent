@@ -20065,6 +20065,11 @@
    "ce7acea1-1875-4cb3-976f-6f73697e191f": 1.96
   },
   "mt_v": 2,
+  "pending_target": {
+   "3b30adc4-69e2-4c6d-a39f-3db6739c6deb": 48.74,
+   "4b83d725-9f2d-4a40-b4a7-4129380d7b47": 50.26,
+   "b714d35e-1019-44b8-a66a-a0462b29c544": 1.0
+  },
   "reprice": {
    "floor": null,
    "lead": 0.63,
