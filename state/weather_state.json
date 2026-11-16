@@ -10309,18 +10309,25 @@
   "date": "2026-11-18",
   "measurements": {},
   "model_target": {
-   "2df55ce4-267e-4e7d-b7fd-215c6c97c716": 47.0,
-   "686fe633-1dfc-4a34-9974-85c02437224b": 51.0,
-   "6f33f7c2-cf06-4d70-8bd8-e30ad4369855": 1.0,
-   "9b94f819-13b5-4e4f-914d-325ab1db3f53": 1.0
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "2df55ce4-267e-4e7d-b7fd-215c6c97c716": 6.61,
-   "686fe633-1dfc-4a34-9974-85c02437224b": 47.05,
+   "2df55ce4-267e-4e7d-b7fd-215c6c97c716": 6.6,
+   "686fe633-1dfc-4a34-9974-85c02437224b": 47.06,
    "6f33f7c2-cf06-4d70-8bd8-e30ad4369855": 0.99,
    "9b94f819-13b5-4e4f-914d-325ab1db3f53": 45.35
   },
+  "mt_v": 2,
+  "reprice": {
+   "floor": null,
+   "lead": 1.78,
+   "models": {
+    "ecmwf_aifs025_single": 6.4,
+    "icon_seamless": 5.1,
+    "ukmo_seamless": 6.6
+   },
+   "move_pp": 44.4,
+   "mu": 6.82,
+   "sigma": 1.25
+  },
+  "repriced_at": "2026-11-16T16:20:53.681049+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -23223,18 +23230,25 @@
   "date": "2026-11-18",
   "measurements": {},
   "model_target": {
-   "41682d87-9adf-4195-9c75-272149beeed6": 38.0,
-   "781674ee-842b-4c59-94e0-900e7cfe4c9d": 4.0,
-   "b69960c1-9520-4d7b-8df7-dddfc1301bde": 9.0,
-   "fcbd9c22-5198-48c8-8e41-340e2330430f": 49.0
+   "41682d87-9adf-4195-9c75-272149beeed6": 69.9,
+   "781674ee-842b-4c59-94e0-900e7cfe4c9d": 20.85,
+   "b69960c1-9520-4d7b-8df7-dddfc1301bde": 0.99,
+   "fcbd9c22-5198-48c8-8e41-340e2330430f": 8.26
   },
   "mt_v": 2,
-  "pending_target": {
-   "41682d87-9adf-4195-9c75-272149beeed6": 69.83,
-   "781674ee-842b-4c59-94e0-900e7cfe4c9d": 20.89,
-   "b69960c1-9520-4d7b-8df7-dddfc1301bde": 0.99,
-   "fcbd9c22-5198-48c8-8e41-340e2330430f": 8.29
+  "reprice": {
+   "floor": null,
+   "lead": 1.78,
+   "models": {
+    "ecmwf_aifs025_single": 6.3,
+    "icon_seamless": 5.2,
+    "ukmo_seamless": 6.2
+   },
+   "move_pp": 40.7,
+   "mu": 6.21,
+   "sigma": 0.92
   },
+  "repriced_at": "2026-11-16T16:20:53.681049+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
