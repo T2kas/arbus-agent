@@ -6542,7 +6542,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261015/"
  },
  "3b554813-dec4-474b-bf21-d06da361e63d": {
-  "checksum": "bf52c44ed25c2977b14d9a625f525fef9ca9870a8aebc30f989d7068353367b4",
+  "checksum": "1dc51899aaaf777adbab95f4af65476639e804423d8d9aa4a180246c031559b6",
   "current_maximum": null,
   "date": "2026-11-19",
   "measurements": {},
@@ -10189,7 +10189,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
  },
  "5d01a8d2-61de-4da3-ae28-6fb800d4d1b1": {
-  "checksum": "cbf81aa455e530a7c429fab172ead1d49d12738f8dd5d6089ef7f4e04d97d6ce",
+  "checksum": "a7ecefa912ceed5f7596f2098e5490783a75bd0bb3cbd0885a6af0a8952de400",
   "current_maximum": null,
   "date": "2026-11-19",
   "measurements": {},
@@ -10369,7 +10369,7 @@
   "resolved_via": "sports"
  },
  "5f756127-d389-4814-8d22-1a7987655adb": {
-  "checksum": "adb7e473ecbd0213c5db87e9ee700059a03f0e7c065d4f93debe8d98b0ac66ca",
+  "checksum": "8eede69d0f6f819c15d29a436ed53a9db4c0ab832d1da6ded38c76d36773a8ba",
   "current_maximum": null,
   "date": "2026-11-18",
   "measurements": {},
@@ -23691,7 +23691,7 @@
   "station": "vilniaus-ams"
  },
  "c99b18f2-77d1-4a0d-9a4d-280ebbdd49d4": {
-  "checksum": "bf52c44ed25c2977b14d9a625f525fef9ca9870a8aebc30f989d7068353367b4",
+  "checksum": "1dc51899aaaf777adbab95f4af65476639e804423d8d9aa4a180246c031559b6",
   "current_maximum": null,
   "date": "2026-11-18",
   "measurements": {},
@@ -24651,7 +24651,7 @@
   "resolved_via": "sports"
  },
  "d132a78b-3c25-44c7-8c5c-ff06e71e26a2": {
-  "checksum": "adb7e473ecbd0213c5db87e9ee700059a03f0e7c065d4f93debe8d98b0ac66ca",
+  "checksum": "8eede69d0f6f819c15d29a436ed53a9db4c0ab832d1da6ded38c76d36773a8ba",
   "current_maximum": null,
   "date": "2026-11-19",
   "measurements": {},
@@ -25759,7 +25759,7 @@
   "station": "klaipedos-ams"
  },
  "dac46440-7221-4149-b228-8f812e23af04": {
-  "checksum": "cbf81aa455e530a7c429fab172ead1d49d12738f8dd5d6089ef7f4e04d97d6ce",
+  "checksum": "a7ecefa912ceed5f7596f2098e5490783a75bd0bb3cbd0885a6af0a8952de400",
   "current_maximum": null,
   "date": "2026-11-18",
   "measurements": {},
@@ -25770,6 +25770,12 @@
    "ded55828-67d5-46b6-b677-3186b588f690": 64.43
   },
   "mt_v": 2,
+  "pending_target": {
+   "69361c3d-9c66-4d54-9666-a09b835a8d32": 0.98,
+   "b0145234-e262-4cd5-95c8-e304f4405edd": 0.98,
+   "ddd3cd91-86b1-4c09-81db-6c9b00fcdab8": 28.97,
+   "ded55828-67d5-46b6-b677-3186b588f690": 69.07
+  },
   "reprice": {
    "floor": null,
    "lead": 0.71,
