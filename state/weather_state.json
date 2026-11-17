@@ -6541,6 +6541,27 @@
   "resolved_price": 1.944,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261015/"
  },
+ "3b554813-dec4-474b-bf21-d06da361e63d": {
+  "checksum": "0a99e09bbdfb8707bd24fb4991ea6c1ec14f42a957aafe8b2a1c871c44904c0f",
+  "current_maximum": null,
+  "date": "2026-11-19",
+  "measurements": {},
+  "model_target": {
+   "33af448d-3291-4e96-b473-20f0872cc43f": 5.0,
+   "422febbb-07c3-4027-826d-63ba0c4864e3": 47.0,
+   "53ee456a-0992-4e09-9c88-2237842fbde2": 40.0,
+   "f64ef461-db98-41cb-8ed6-912dc9cc5523": 8.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "33af448d-3291-4e96-b473-20f0872cc43f": 5.91,
+   "422febbb-07c3-4027-826d-63ba0c4864e3": 23.69,
+   "53ee456a-0992-4e09-9c88-2237842fbde2": 69.4,
+   "f64ef461-db98-41cb-8ed6-912dc9cc5523": 0.99
+  },
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "3ba4e8fa-aa8d-4e96-b15f-c5646e41c406": {
   "checksum": "f2ea4538ed7f480565a4c97a93996bb3a10924b9eb863ee9505a18f1e99fbb83",
   "current_maximum": 14.1,
@@ -10159,6 +10180,27 @@
   "resolved_option_id": "61f66bf6-a157-41b5-a67d-4d8916d98165",
   "resolved_price": 1.925,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
+ },
+ "5d01a8d2-61de-4da3-ae28-6fb800d4d1b1": {
+  "checksum": "5b7a9655fc1fde890eb39b2b58563a3b032b8f1b1a31badcb1381afd0764a4eb",
+  "current_maximum": null,
+  "date": "2026-11-19",
+  "measurements": {},
+  "model_target": {
+   "1d285be8-055c-4658-944b-e3e0644f3e4d": 49.0,
+   "2cd22cd7-89d8-4780-8ac3-7125b6700936": 38.0,
+   "d9585e7f-2351-46e5-953f-292d72643a94": 9.0,
+   "dd42ee2c-aa84-4c4a-af68-7e8b77f579be": 4.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "1d285be8-055c-4658-944b-e3e0644f3e4d": 69.79,
+   "2cd22cd7-89d8-4780-8ac3-7125b6700936": 4.36,
+   "d9585e7f-2351-46e5-953f-292d72643a94": 24.85,
+   "dd42ee2c-aa84-4c4a-af68-7e8b77f579be": 0.99
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "5dda36c5-4aa5-4ee0-af7f-353812d0b5f2": {
   "resolved": true,
@@ -24545,6 +24587,27 @@
   "resolved_option_id": "791abc44-9374-4b35-97e5-c99430b0fbb1",
   "resolved_score": "Vilniaus „Rytas“ 89:94 Kauno „Žalgiris“",
   "resolved_via": "sports"
+ },
+ "d132a78b-3c25-44c7-8c5c-ff06e71e26a2": {
+  "checksum": "ac1ce20a239426b16ef1a0b01e5008544c210e037d91e38872facaf77063bdda",
+  "current_maximum": null,
+  "date": "2026-11-19",
+  "measurements": {},
+  "model_target": {
+   "1e7b52d9-0f30-454b-bf84-9f5824bc34ee": 1.0,
+   "913732d6-7112-4fe4-8715-0c08d8446232": 65.0,
+   "c8dcf7d0-7caf-455a-a434-4cd01a3c43df": 32.0,
+   "f789c742-a4ff-48a8-a916-19d18ec5af1d": 2.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "1e7b52d9-0f30-454b-bf84-9f5824bc34ee": 1.39,
+   "913732d6-7112-4fe4-8715-0c08d8446232": 55.81,
+   "c8dcf7d0-7caf-455a-a434-4cd01a3c43df": 37.96,
+   "f789c742-a4ff-48a8-a916-19d18ec5af1d": 4.84
+  },
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "d148c8b0-88fc-40f1-9f3d-92f7e304ee9c": {
   "resolved": true,
