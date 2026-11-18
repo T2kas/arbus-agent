@@ -6067,6 +6067,21 @@
   "resolved_price": 2.247,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261105/"
  },
+ "36587814-3593-4aea-846b-b2fc63b4b119": {
+  "checksum": "cd40117bb5fd06020cd6e4ca2718e0f2e276acb9745a227d409ba46386502560",
+  "current_maximum": null,
+  "date": "2026-11-20",
+  "measurements": {},
+  "model_target": {
+   "28d5bfa6-9c92-4e19-bf2c-b7920d1b3518": 2.0,
+   "5912f073-3c6a-4663-960d-3eaed9500ed9": 48.0,
+   "76f64ad8-c97f-4914-86a0-df8434c5bb20": 47.0,
+   "c6478910-9da0-41a8-a21e-cbc88611013d": 3.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "365bba16-e62b-47e4-914b-6d56cafdfb93": {
   "checksum": "1ed8b6c06b254f75e549b9422ec22355769e8b811d4c19aba6ee14ac708bc8de",
   "current_maximum": 19.9,
@@ -8330,6 +8345,21 @@
   "resolved_temp": 15.9,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+  "station": "kauno-ams"
+ },
+ "46b4147a-56fa-4d72-9886-1c544e1d8176": {
+  "checksum": "de24dd13f07152a68107fec9ac5056c9926d741d910ec132089e934626b5fdfb",
+  "current_maximum": null,
+  "date": "2026-11-20",
+  "measurements": {},
+  "model_target": {
+   "3c0dfba1-3d1e-4c2f-9154-11f82ce9df6b": 4.0,
+   "5b5e7970-7f6b-46fd-8cac-5ea1438ed411": 60.0,
+   "ab14b6d1-cb69-463e-b1a1-a3714bcad350": 35.0,
+   "f7692976-713e-4c53-9598-e4d31574330d": 1.0
+  },
+  "mt_v": 2,
+  "resolved": false,
   "station": "kauno-ams"
  },
  "477a3b35-6e28-4f4c-879f-5d31f169fbf4": {
@@ -28101,6 +28131,27 @@
   },
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+  "station": "vilniaus-ams"
+ },
+ "e6f32360-1478-4b67-b0c1-4d2aeb5b3903": {
+  "checksum": "0a384e80f27beaf0b9849f8d761737468674e3a2dae5c54f1f074f41de7b25e6",
+  "current_maximum": null,
+  "date": "2026-11-20",
+  "measurements": {},
+  "model_target": {
+   "1d4448df-bc79-4a84-b4a8-553256c4ef95": 31.0,
+   "2a0794a9-2b8a-42c0-a5e1-4ee9ae2674f2": 3.0,
+   "46ad8cec-1e67-41a3-a398-1c0b393cf9d6": 13.0,
+   "fa1b85f1-855a-401a-bb62-170551dededf": 53.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "1d4448df-bc79-4a84-b4a8-553256c4ef95": 20.68,
+   "2a0794a9-2b8a-42c0-a5e1-4ee9ae2674f2": 0.99,
+   "46ad8cec-1e67-41a3-a398-1c0b393cf9d6": 4.94,
+   "fa1b85f1-855a-401a-bb62-170551dededf": 73.39
+  },
+  "resolved": false,
   "station": "vilniaus-ams"
  },
  "e7edba6c-4f95-4f70-b7ad-115ec2edd4ab": {
