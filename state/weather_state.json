@@ -6606,6 +6606,11 @@
    "f64ef461-db98-41cb-8ed6-912dc9cc5523": 0.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "33af448d-3291-4e96-b473-20f0872cc43f": 2.63,
+   "422febbb-07c3-4027-826d-63ba0c4864e3": 3.47,
+   "53ee456a-0992-4e09-9c88-2237842fbde2": 93.89
+  },
   "reprice": {
    "floor": null,
    "lead": 0.68,
@@ -25086,30 +25091,24 @@
    }
   },
   "model_target": {
-   "1e7b52d9-0f30-454b-bf84-9f5824bc34ee": 2.65,
-   "913732d6-7112-4fe4-8715-0c08d8446232": 35.48,
-   "c8dcf7d0-7caf-455a-a434-4cd01a3c43df": 60.88,
-   "f789c742-a4ff-48a8-a916-19d18ec5af1d": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
    "913732d6-7112-4fe4-8715-0c08d8446232": 92.98,
    "c8dcf7d0-7caf-455a-a434-4cd01a3c43df": 6.02,
    "f789c742-a4ff-48a8-a916-19d18ec5af1d": 1.0
   },
+  "mt_v": 2,
   "reprice": {
-   "floor": null,
-   "lead": 0.7,
+   "floor": 8.9,
+   "lead": 0.53,
    "models": {
     "ecmwf_aifs025_single": 7.7,
-    "icon_seamless": 8.3,
+    "icon_seamless": 8.2,
     "ukmo_seamless": 8.1
    },
-   "move_pp": 2.4,
-   "mu": 8.64,
-   "sigma": 0.87
+   "move_pp": 56.5,
+   "mu": 8.62,
+   "sigma": 0.84
   },
-  "repriced_at": "2026-11-18T18:15:59.722468+00:00",
+  "repriced_at": "2026-11-18T22:20:59.238857+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
