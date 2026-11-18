@@ -10197,7 +10197,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261026/"
  },
  "5d01a8d2-61de-4da3-ae28-6fb800d4d1b1": {
-  "checksum": "397aa460ed6163ef4c128e444f67c1654edf366ac94149ead2d5cba64650235e",
+  "checksum": "47bb4f80a205e40cbfa9bccef698e19f4fd19265c5a2823bdfe2aad5e57c4f10",
   "current_maximum": null,
   "date": "2026-11-19",
   "measurements": {},
@@ -25873,7 +25873,7 @@
   "station": "klaipedos-ams"
  },
  "dac46440-7221-4149-b228-8f812e23af04": {
-  "checksum": "397aa460ed6163ef4c128e444f67c1654edf366ac94149ead2d5cba64650235e",
+  "checksum": "47bb4f80a205e40cbfa9bccef698e19f4fd19265c5a2823bdfe2aad5e57c4f10",
   "current_maximum": 2.8,
   "date": "2026-11-18",
   "eliminated": [
