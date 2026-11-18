@@ -10265,31 +10265,25 @@
   "date": "2026-11-19",
   "measurements": {},
   "model_target": {
-   "1d285be8-055c-4658-944b-e3e0644f3e4d": 84.29,
-   "2cd22cd7-89d8-4780-8ac3-7125b6700936": 1.35,
-   "d9585e7f-2351-46e5-953f-292d72643a94": 13.38,
+   "1d285be8-055c-4658-944b-e3e0644f3e4d": 78.96,
+   "2cd22cd7-89d8-4780-8ac3-7125b6700936": 0.99,
+   "d9585e7f-2351-46e5-953f-292d72643a94": 19.07,
    "dd42ee2c-aa84-4c4a-af68-7e8b77f579be": 0.99
   },
   "mt_v": 2,
-  "pending_target": {
-   "1d285be8-055c-4658-944b-e3e0644f3e4d": 78.93,
-   "2cd22cd7-89d8-4780-8ac3-7125b6700936": 0.99,
-   "d9585e7f-2351-46e5-953f-292d72643a94": 19.09,
-   "dd42ee2c-aa84-4c4a-af68-7e8b77f579be": 0.99
-  },
   "reprice": {
    "floor": null,
-   "lead": 0.81,
+   "lead": 0.7,
    "models": {
-    "ecmwf_aifs025_single": 6.9,
-    "icon_seamless": 7.0,
+    "ecmwf_aifs025_single": 7.0,
+    "icon_seamless": 7.3,
     "ukmo_seamless": 6.6
    },
-   "move_pp": 2.0,
-   "mu": 7.28,
-   "sigma": 0.6
+   "move_pp": 5.7,
+   "mu": 7.41,
+   "sigma": 0.62
   },
-  "repriced_at": "2026-11-18T15:31:13.194133+00:00",
+  "repriced_at": "2026-11-18T18:15:59.722468+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -25020,31 +25014,25 @@
   "date": "2026-11-19",
   "measurements": {},
   "model_target": {
-   "1e7b52d9-0f30-454b-bf84-9f5824bc34ee": 2.73,
-   "913732d6-7112-4fe4-8715-0c08d8446232": 33.1,
-   "c8dcf7d0-7caf-455a-a434-4cd01a3c43df": 63.18,
+   "1e7b52d9-0f30-454b-bf84-9f5824bc34ee": 2.65,
+   "913732d6-7112-4fe4-8715-0c08d8446232": 35.48,
+   "c8dcf7d0-7caf-455a-a434-4cd01a3c43df": 60.88,
    "f789c742-a4ff-48a8-a916-19d18ec5af1d": 0.99
   },
   "mt_v": 2,
-  "pending_target": {
-   "1e7b52d9-0f30-454b-bf84-9f5824bc34ee": 2.66,
-   "913732d6-7112-4fe4-8715-0c08d8446232": 35.49,
-   "c8dcf7d0-7caf-455a-a434-4cd01a3c43df": 60.87,
-   "f789c742-a4ff-48a8-a916-19d18ec5af1d": 0.99
-  },
   "reprice": {
    "floor": null,
-   "lead": 0.72,
+   "lead": 0.7,
    "models": {
     "ecmwf_aifs025_single": 7.7,
-    "icon_seamless": 8.1,
+    "icon_seamless": 8.3,
     "ukmo_seamless": 8.1
    },
-   "move_pp": 5.4,
-   "mu": 8.59,
-   "sigma": 0.85
+   "move_pp": 2.4,
+   "mu": 8.64,
+   "sigma": 0.87
   },
-  "repriced_at": "2026-11-18T17:46:10.273819+00:00",
+  "repriced_at": "2026-11-18T18:15:59.722468+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
