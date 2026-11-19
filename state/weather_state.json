@@ -491,6 +491,7 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "06bba1f4-2369-4325-a5e3-1878cbb3d721": {},
  "074548e2-7e3b-4a39-bfad-f3864bffee4a": {
   "checksum": "7fe55310d63b5ef4254b9601ed7f902843267394546d087f4b3cbe2a3265fb0d",
   "current_maximum": 12.3,
@@ -4258,6 +4259,7 @@
   "resolved_price": 2.279,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260930/"
  },
+ "1f86ab94-0494-45b3-917a-d1824d5c08e8": {},
  "207fb122-d369-48cb-bd2d-59b37f5d861a": {
   "checksum": "f996dbe02c3b7384c1349c042ec6d0ed9ea7313641148a1211aafd4aaee18035",
   "current_maximum": 12.8,
@@ -30082,6 +30084,7 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "f0d38582-8193-4699-ab71-a6f6cf22eb44": {},
  "f168b8c8-8ea8-48e2-822b-3b0fb6c73420": {
   "checksum": "0b1eac73d416adec4b4a8d9013841c71224c62ab01304622e25b209904fa860c",
   "current_maximum": 14.0,
