@@ -3173,7 +3173,14 @@
   "resolved_price": 1.877,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261105/"
  },
- "195e5a3a-8728-438d-bd71-4e125d1e91b7": {},
+ "195e5a3a-8728-438d-bd71-4e125d1e91b7": {
+  "resolved": true,
+  "resolved_at": "2026-11-19T20:05:39.678095+00:00",
+  "resolved_label": "Atėnų „Panathinaikos“",
+  "resolved_option_id": "04e64a14-211a-475c-9cd6-87ce77311efd",
+  "resolved_score": "Zalgiris Kaunas 72:87 Panathinaikos AKTOR Athens",
+  "resolved_via": "sports"
+ },
  "1993fdf4-9e01-41d1-b8e7-1e96025c89e1": {
   "checksum": "31c93f871a19945461c6c519527c95d5325ec464d461eb577aeb59334fd847d7",
   "current_maximum": 20.2,
