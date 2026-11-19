@@ -17547,6 +17547,10 @@
   "2026-11-18": {
    "benzinas": 1.742,
    "dyzelinas": 2.166
+  },
+  "2026-11-19": {
+   "benzinas": 1.744,
+   "dyzelinas": 2.181
   }
  },
  "_lea_missing": {
@@ -18443,7 +18447,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "a24aa56f-9e14-4f45-a0cc-14c658595757": {},
+ "a24aa56f-9e14-4f45-a0cc-14c658595757": {
+  "resolved": true,
+  "resolved_at": "2026-11-19T10:25:45.427572+00:00",
+  "resolved_label": "Nuo 1,735 iki 1,744 €/l",
+  "resolved_option_id": "b449664c-481e-45ed-8f22-72d03cbfc1b3",
+  "resolved_price": 1.744,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261119/"
+ },
  "a25dc0b8-59f4-4ab6-9a51-8edc35cdc45b": {
   "checksum": "64a117056bec2d616a5fff8ca31bc6e40db8b58556a8610e2e3a8e9b43fbf4bf",
   "current_maximum": 7.2,
@@ -18609,7 +18620,14 @@
   "resolved_price": 2.185,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261112/"
  },
- "a44b5b66-8f11-4308-b164-22b5cd13397b": {},
+ "a44b5b66-8f11-4308-b164-22b5cd13397b": {
+  "resolved": true,
+  "resolved_at": "2026-11-19T10:25:45.427572+00:00",
+  "resolved_label": "2,165 €/l arba daugiau",
+  "resolved_option_id": "856a25bd-d6fa-4adb-898d-2f853731ec4a",
+  "resolved_price": 2.181,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261119/"
+ },
  "a4c78252-f3d6-48f8-bfea-bb566e15e023": {
   "checksum": "ecf398ba5a1621472e2502f14653a8d56110ca672325b89bcd99b05dfd4512e8",
   "current_maximum": 5.8,
