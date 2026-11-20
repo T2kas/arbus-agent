@@ -9750,6 +9750,21 @@
   "resolved_price": 2.166,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261118/"
  },
+ "52672bca-d6c4-48f1-a559-62aa53534bef": {
+  "checksum": "06f2d60dcf05ba668f279c40502f09a22038e3d061b9fce137e23fd61ef584bb",
+  "current_maximum": null,
+  "date": "2026-11-22",
+  "measurements": {},
+  "model_target": {
+   "288f58ce-972c-4e5d-bfde-f7fb1478d8c4": 39.0,
+   "55f29930-1a46-472c-ac38-f1b37f00fe8b": 5.0,
+   "9e812e85-c343-4063-9224-87d643aafe82": 54.0,
+   "f9d706f3-d80c-4fb9-a0f6-f01363e2cfa8": 2.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "52834b90-4b28-4907-85de-0979bea5e216": {
   "resolved": true,
   "resolved_at": "2026-10-25T17:01:23.502227+00:00",
@@ -11597,6 +11612,21 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
+ },
+ "655c006d-88f3-462f-99cd-3e4004b95a49": {
+  "checksum": "ad4af628860fc90cb3f29ebe6e7bcd77e426aaadf7d10d9cc8e8330a5128f1dd",
+  "current_maximum": null,
+  "date": "2026-11-22",
+  "measurements": {},
+  "model_target": {
+   "05801da7-79a6-4777-95e3-14e158919705": 37.0,
+   "1ade5350-a344-4329-bdb8-04c5fa6573b9": 1.0,
+   "ca7d163b-ae1d-4121-944d-b7b03a02eb60": 61.0,
+   "f2f4cf1d-8c84-4499-a32d-be388cb02f5a": 1.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "688030ca-f9d6-4389-ad91-a9bf265059b5": {},
  "6b96c073-3c0f-474e-9444-288220e0a358": {
@@ -24361,6 +24391,21 @@
   "resolved_temp": 11.7,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+  "station": "kauno-ams"
+ },
+ "c748d37a-63ee-4709-902d-8f04cb644971": {
+  "checksum": "542cfe889c7d9af5504a6e9c5f8e2a47b5dcc6d05c780771529c5b4153334434",
+  "current_maximum": null,
+  "date": "2026-11-22",
+  "measurements": {},
+  "model_target": {
+   "037d3a13-e6d0-489e-b8d1-73c80e552b42": 2.0,
+   "1aa98b3f-8381-424a-8cc4-85e85359eaa5": 1.0,
+   "2b2ea841-2bd9-4716-9c18-2f9016ceb37e": 50.0,
+   "ab8e11da-47db-48d4-bb61-d846cd60c325": 47.0
+  },
+  "mt_v": 2,
+  "resolved": false,
   "station": "kauno-ams"
  },
  "c88e481c-5cfc-4420-8071-57548a902f98": {},
