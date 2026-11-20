@@ -11977,6 +11977,12 @@
    "d8d4a6f5-0edb-4f3c-aa82-45abd3a63c82": 86.01
   },
   "mt_v": 2,
+  "pending_target": {
+   "1c602c22-0ddb-4fa6-98f8-f784e08d8037": 0.99,
+   "200a89d4-6f71-436d-8357-9014de4d558f": 4.5,
+   "8bf8658d-b440-4972-8c85-a19ba5099a0a": 6.48,
+   "d8d4a6f5-0edb-4f3c-aa82-45abd3a63c82": 88.03
+  },
   "reprice": {
    "floor": null,
    "lead": 0.92,
