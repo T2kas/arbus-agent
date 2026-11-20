@@ -3920,7 +3920,7 @@
   "resolved_via": "sports"
  },
  "1dd98c46-d03f-46dd-8599-7aa03191db9a": {
-  "checksum": "ad9a916eaba39e58f9e3456eb65e2722eea77e6a1e13b50064e0795066c1c46d",
+  "checksum": "6ad2de9a5f8ae1429e23bbe2f8f395117ff2b9a56406cc2b065728de4217574f",
   "current_maximum": null,
   "date": "2026-11-21",
   "measurements": {},
@@ -9783,7 +9783,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261118/"
  },
  "52672bca-d6c4-48f1-a559-62aa53534bef": {
-  "checksum": "bfe18f2d968d83d928bca3f7f78f0f6a0d2a53073dcaa892d9536c2943b29b29",
+  "checksum": "3edd143edce708c5b15b2793d6aa616d707ced3300da677e115cc6ad2e246619",
   "current_maximum": null,
   "date": "2026-11-22",
   "measurements": {},
@@ -11646,7 +11646,7 @@
   "station": "kauno-ams"
  },
  "655c006d-88f3-462f-99cd-3e4004b95a49": {
-  "checksum": "ad9a916eaba39e58f9e3456eb65e2722eea77e6a1e13b50064e0795066c1c46d",
+  "checksum": "6ad2de9a5f8ae1429e23bbe2f8f395117ff2b9a56406cc2b065728de4217574f",
   "current_maximum": null,
   "date": "2026-11-22",
   "measurements": {},
@@ -11979,7 +11979,7 @@
   "station": "kauno-ams"
  },
  "730e9ebe-57d5-4c4b-bbef-d37a401cccb2": {
-  "checksum": "f42407ec76a635fc47c9fb7017eebc71d21bdaf8886e4105c3f3842ac3e3ae98",
+  "checksum": "6dcdcc3dc4666beefc306ca8a3fa707d7bdca27ee8028a9c8e2933c3b4b9f0a1",
   "current_maximum": null,
   "date": "2026-11-21",
   "measurements": {},
@@ -24439,7 +24439,7 @@
   "station": "kauno-ams"
  },
  "c748d37a-63ee-4709-902d-8f04cb644971": {
-  "checksum": "f42407ec76a635fc47c9fb7017eebc71d21bdaf8886e4105c3f3842ac3e3ae98",
+  "checksum": "6dcdcc3dc4666beefc306ca8a3fa707d7bdca27ee8028a9c8e2933c3b4b9f0a1",
   "current_maximum": null,
   "date": "2026-11-22",
   "measurements": {},
@@ -31763,7 +31763,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261002/"
  },
  "faa9fffa-1c1a-4d11-8100-8d29fe5ae08c": {
-  "checksum": "bfe18f2d968d83d928bca3f7f78f0f6a0d2a53073dcaa892d9536c2943b29b29",
+  "checksum": "3edd143edce708c5b15b2793d6aa616d707ced3300da677e115cc6ad2e246619",
   "current_maximum": null,
   "date": "2026-11-21",
   "measurements": {},
