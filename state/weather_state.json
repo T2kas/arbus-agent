@@ -3925,31 +3925,25 @@
   "date": "2026-11-21",
   "measurements": {},
   "model_target": {
-   "834eeff5-4925-411f-84a6-b70b4390da32": 49.95,
-   "b2d10351-7c03-4f91-84d4-c62b7c67d945": 0.98,
-   "b9673a0e-eff6-473d-b230-b02d4eeaeb1d": 0.98,
-   "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 48.09
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "834eeff5-4925-411f-84a6-b70b4390da32": 55.3,
+   "834eeff5-4925-411f-84a6-b70b4390da32": 55.31,
    "b2d10351-7c03-4f91-84d4-c62b7c67d945": 0.99,
    "b9673a0e-eff6-473d-b230-b02d4eeaeb1d": 0.99,
-   "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 42.73
+   "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 42.72
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.46,
+   "lead": 1.28,
    "models": {
     "ecmwf_aifs025_single": 2.7,
-    "icon_seamless": 2.2,
-    "ukmo_seamless": 2.6
+    "icon_seamless": 1.9,
+    "ukmo_seamless": 2.5
    },
-   "move_pp": 5.9,
-   "mu": 2.93,
-   "sigma": 0.67
+   "move_pp": 5.4,
+   "mu": 2.83,
+   "sigma": 0.71
   },
-  "repriced_at": "2026-11-19T23:55:42.997176+00:00",
+  "repriced_at": "2026-11-20T04:20:55.092537+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -28915,29 +28909,24 @@
    }
   },
   "model_target": {
-   "1d4448df-bc79-4a84-b4a8-553256c4ef95": 7.82,
-   "46ad8cec-1e67-41a3-a398-1c0b393cf9d6": 8.8,
-   "fa1b85f1-855a-401a-bb62-170551dededf": 83.37
+   "1d4448df-bc79-4a84-b4a8-553256c4ef95": 7.85,
+   "46ad8cec-1e67-41a3-a398-1c0b393cf9d6": 5.85,
+   "fa1b85f1-855a-401a-bb62-170551dededf": 86.3
   },
   "mt_v": 2,
-  "pending_target": {
-   "1d4448df-bc79-4a84-b4a8-553256c4ef95": 7.86,
-   "46ad8cec-1e67-41a3-a398-1c0b393cf9d6": 5.88,
-   "fa1b85f1-855a-401a-bb62-170551dededf": 86.26
-  },
   "reprice": {
    "floor": 5.6,
-   "lead": 0.53,
+   "lead": 0.28,
    "models": {
     "ecmwf_aifs025_single": 5.8,
-    "icon_seamless": 7.0,
-    "ukmo_seamless": 7.2
+    "icon_seamless": 6.9,
+    "ukmo_seamless": 7.1
    },
-   "move_pp": 7.2,
-   "mu": 6.83,
-   "sigma": 0.8
+   "move_pp": 3.0,
+   "mu": 6.78,
+   "sigma": 0.73
   },
-  "repriced_at": "2026-11-19T22:20:56.144662+00:00",
+  "repriced_at": "2026-11-20T04:20:55.092537+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
