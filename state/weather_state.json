@@ -3925,31 +3925,25 @@
   "date": "2026-11-21",
   "measurements": {},
   "model_target": {
-   "834eeff5-4925-411f-84a6-b70b4390da32": 45.35,
-   "b2d10351-7c03-4f91-84d4-c62b7c67d945": 0.98,
-   "b9673a0e-eff6-473d-b230-b02d4eeaeb1d": 0.98,
-   "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 52.68
-  },
-  "mt_v": 2,
-  "pending_target": {
    "834eeff5-4925-411f-84a6-b70b4390da32": 48.49,
    "b2d10351-7c03-4f91-84d4-c62b7c67d945": 0.98,
    "b9673a0e-eff6-473d-b230-b02d4eeaeb1d": 0.98,
    "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 49.54
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 0.71,
+   "lead": 0.7,
    "models": {
     "ecmwf_aifs025_single": 2.6,
-    "icon_seamless": 2.3,
+    "icon_seamless": 2.1,
     "ukmo_seamless": 3.0
    },
-   "move_pp": 5.9,
-   "mu": 3.01,
-   "sigma": 0.63
+   "move_pp": 3.1,
+   "mu": 2.96,
+   "sigma": 0.67
   },
-  "repriced_at": "2026-11-20T17:55:46.771971+00:00",
+  "repriced_at": "2026-11-20T18:05:44.362003+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
