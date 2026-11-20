@@ -3925,31 +3925,25 @@
   "date": "2026-11-21",
   "measurements": {},
   "model_target": {
-   "834eeff5-4925-411f-84a6-b70b4390da32": 36.06,
-   "b2d10351-7c03-4f91-84d4-c62b7c67d945": 0.98,
-   "b9673a0e-eff6-473d-b230-b02d4eeaeb1d": 0.98,
-   "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 61.97
-  },
-  "mt_v": 2,
-  "pending_target": {
    "834eeff5-4925-411f-84a6-b70b4390da32": 39.47,
    "b2d10351-7c03-4f91-84d4-c62b7c67d945": 0.98,
    "b9673a0e-eff6-473d-b230-b02d4eeaeb1d": 0.98,
    "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 58.57
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 0.96,
+   "lead": 0.95,
    "models": {
     "ecmwf_aifs025_single": 2.8,
-    "icon_seamless": 2.6,
+    "icon_seamless": 2.4,
     "ukmo_seamless": 2.9
    },
-   "move_pp": 3.1,
-   "mu": 3.16,
-   "sigma": 0.62
+   "move_pp": 3.4,
+   "mu": 3.11,
+   "sigma": 0.64
   },
-  "repriced_at": "2026-11-20T11:50:52.192520+00:00",
+  "repriced_at": "2026-11-20T12:05:40.812274+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -15808,7 +15802,14 @@
   "resolved_via": "cinema",
   "resolved_winner": "Odisėja (Odyssey, The)"
  },
- "9419c7a5-c32c-425e-8aa6-d35318a121e3": {},
+ "9419c7a5-c32c-425e-8aa6-d35318a121e3": {
+  "resolved": true,
+  "resolved_at": "2026-11-20T12:05:40.812274+00:00",
+  "resolved_label": "Nuo 2,164 iki 2,174 €/l",
+  "resolved_option_id": "ad024c56-3bf5-414b-99df-f91a52cfa43c",
+  "resolved_price": 2.171,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261120/"
+ },
  "94901516-74bf-43a4-8e66-3add38bec35b": {
   "checksum": "cea91ce733a7d5b5131a72ea72b8dfff88bf278d8c95a6fff38b488f1aea25c5",
   "current_maximum": 4.5,
@@ -17889,6 +17890,10 @@
   "2026-11-19": {
    "benzinas": 1.744,
    "dyzelinas": 2.181
+  },
+  "2026-11-20": {
+   "benzinas": 1.729,
+   "dyzelinas": 2.171
   }
  },
  "_lea_missing": {
@@ -22979,7 +22984,14 @@
   "resolved_score": "Šiauliai 2:1 Džiugas",
   "resolved_via": "sports"
  },
- "bfe25914-d2ea-4346-b480-402121fc4976": {},
+ "bfe25914-d2ea-4346-b480-402121fc4976": {
+  "resolved": true,
+  "resolved_at": "2026-11-20T12:05:40.812274+00:00",
+  "resolved_label": "1,733 €/l arba mažiau",
+  "resolved_option_id": "44acf267-de9a-49c7-a0b7-37e2e273457c",
+  "resolved_price": 1.729,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261120/"
+ },
  "c0bb8833-7694-453d-b569-cda5363a76f6": {
   "checksum": "0fc5d96570ca2c797159f956d416e756021fb959783791ec54c90ebcb6b384ce",
   "current_maximum": 14.3,
@@ -31564,31 +31576,25 @@
   "date": "2026-11-21",
   "measurements": {},
   "model_target": {
-   "190ee640-e04c-4a00-a500-c1ac90242609": 51.59,
-   "3abb9195-393f-4bdf-976b-bbab7122ee15": 2.19,
-   "710814f2-1b78-4cf6-b1f3-7d76cf58519e": 44.85,
-   "7b2dacd3-2332-493f-9533-704ae328fbd2": 1.37
+   "190ee640-e04c-4a00-a500-c1ac90242609": 49.97,
+   "3abb9195-393f-4bdf-976b-bbab7122ee15": 1.74,
+   "710814f2-1b78-4cf6-b1f3-7d76cf58519e": 46.88,
+   "7b2dacd3-2332-493f-9533-704ae328fbd2": 1.4
   },
   "mt_v": 2,
-  "pending_target": {
-   "190ee640-e04c-4a00-a500-c1ac90242609": 49.97,
-   "3abb9195-393f-4bdf-976b-bbab7122ee15": 1.75,
-   "710814f2-1b78-4cf6-b1f3-7d76cf58519e": 46.88,
-   "7b2dacd3-2332-493f-9533-704ae328fbd2": 1.41
-  },
   "reprice": {
    "floor": null,
-   "lead": 0.96,
+   "lead": 0.95,
    "models": {
     "ecmwf_aifs025_single": 5.0,
-    "icon_seamless": 5.7,
+    "icon_seamless": 5.5,
     "ukmo_seamless": 5.7
    },
-   "move_pp": 4.2,
-   "mu": 6.04,
-   "sigma": 0.95
+   "move_pp": 2.0,
+   "mu": 5.99,
+   "sigma": 0.93
   },
-  "repriced_at": "2026-11-20T11:50:52.192520+00:00",
+  "repriced_at": "2026-11-20T12:05:40.812274+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
