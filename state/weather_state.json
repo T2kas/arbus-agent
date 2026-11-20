@@ -287,6 +287,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261005/"
  },
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
+ "055c3ea7-7120-43ac-a79c-c7240de603f8": {},
  "05a08eb4-aee9-490f-865b-e21704efe0b5": {
   "resolved": true,
   "resolved_at": "2026-11-14T17:20:46.850127+00:00",
@@ -26215,6 +26216,7 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "d3d7fc9f-a342-47a6-94d8-c0043a83b040": {},
  "d400d4c5-1809-45d9-aa75-cf18824c5fa0": {
   "checksum": "3f6315124e7af35be1806baa5da5aab8e98e9254369ffaa99218aa1cdae6278a",
   "current_maximum": 15.8,
