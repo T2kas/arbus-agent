@@ -12088,30 +12088,24 @@
   },
   "model_target": {
    "1c602c22-0ddb-4fa6-98f8-f784e08d8037": 0.99,
-   "200a89d4-6f71-436d-8357-9014de4d558f": 1.91,
-   "8bf8658d-b440-4972-8c85-a19ba5099a0a": 8.67,
-   "d8d4a6f5-0edb-4f3c-aa82-45abd3a63c82": 88.43
+   "200a89d4-6f71-436d-8357-9014de4d558f": 1.31,
+   "8bf8658d-b440-4972-8c85-a19ba5099a0a": 7.22,
+   "d8d4a6f5-0edb-4f3c-aa82-45abd3a63c82": 90.48
   },
   "mt_v": 2,
-  "pending_target": {
-   "1c602c22-0ddb-4fa6-98f8-f784e08d8037": 0.99,
-   "200a89d4-6f71-436d-8357-9014de4d558f": 1.32,
-   "8bf8658d-b440-4972-8c85-a19ba5099a0a": 7.24,
-   "d8d4a6f5-0edb-4f3c-aa82-45abd3a63c82": 90.44
-  },
   "reprice": {
    "floor": 0.2,
-   "lead": 0.37,
+   "lead": 0.26,
    "models": {
     "ecmwf_aifs025_single": 3.3,
-    "icon_seamless": 3.4,
-    "ukmo_seamless": 4.1
+    "icon_seamless": 3.5,
+    "ukmo_seamless": 4.0
    },
    "move_pp": 2.0,
    "mu": 3.74,
-   "sigma": 0.58
+   "sigma": 0.54
   },
-  "repriced_at": "2026-11-21T02:10:55.412046+00:00",
+  "repriced_at": "2026-11-21T04:40:48.823749+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
