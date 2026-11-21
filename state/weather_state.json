@@ -30939,7 +30939,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "f0d38582-8193-4699-ab71-a6f6cf22eb44": {},
+ "f0d38582-8193-4699-ab71-a6f6cf22eb44": {
+  "resolved": true,
+  "resolved_at": "2026-11-21T19:31:12.533790+00:00",
+  "resolved_label": "Kėdainių „Nevėžis-Paskolų klubas“",
+  "resolved_option_id": "18038cb1-a758-4ef3-bece-b1a99440cded",
+  "resolved_score": "„Šiauliai“ 81:82 Kėdainių „Nevėžis-Paskolų klubas“",
+  "resolved_via": "sports"
+ },
  "f168b8c8-8ea8-48e2-822b-3b0fb6c73420": {
   "checksum": "0b1eac73d416adec4b4a8d9013841c71224c62ab01304622e25b209904fa860c",
   "current_maximum": 14.0,
