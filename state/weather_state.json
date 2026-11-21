@@ -9882,6 +9882,12 @@
    "f9d706f3-d80c-4fb9-a0f6-f01363e2cfa8": 1.56
   },
   "mt_v": 2,
+  "pending_target": {
+   "288f58ce-972c-4e5d-bfde-f7fb1478d8c4": 44.83,
+   "55f29930-1a46-472c-ac38-f1b37f00fe8b": 4.1,
+   "9e812e85-c343-4063-9224-87d643aafe82": 47.72,
+   "f9d706f3-d80c-4fb9-a0f6-f01363e2cfa8": 3.36
+  },
   "reprice": {
    "floor": null,
    "lead": 1.06,
@@ -11752,31 +11758,25 @@
   "date": "2026-11-22",
   "measurements": {},
   "model_target": {
-   "05801da7-79a6-4777-95e3-14e158919705": 29.39,
-   "1ade5350-a344-4329-bdb8-04c5fa6573b9": 0.99,
-   "ca7d163b-ae1d-4121-944d-b7b03a02eb60": 68.63,
-   "f2f4cf1d-8c84-4499-a32d-be388cb02f5a": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
    "05801da7-79a6-4777-95e3-14e158919705": 31.89,
    "1ade5350-a344-4329-bdb8-04c5fa6573b9": 0.99,
    "ca7d163b-ae1d-4121-944d-b7b03a02eb60": 66.13,
    "f2f4cf1d-8c84-4499-a32d-be388cb02f5a": 0.99
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.04,
+   "lead": 0.97,
    "models": {
-    "ecmwf_aifs025_single": 1.9,
+    "ecmwf_aifs025_single": 1.8,
     "icon_seamless": 1.6,
     "ukmo_seamless": 2.4
    },
-   "move_pp": 3.5,
-   "mu": 2.32,
+   "move_pp": 2.5,
+   "mu": 2.27,
    "sigma": 0.69
   },
-  "repriced_at": "2026-11-21T10:01:11.298373+00:00",
+  "repriced_at": "2026-11-21T11:45:59.473730+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -24639,31 +24639,25 @@
   "date": "2026-11-22",
   "measurements": {},
   "model_target": {
-   "037d3a13-e6d0-489e-b8d1-73c80e552b42": 0.99,
-   "1aa98b3f-8381-424a-8cc4-85e85359eaa5": 0.99,
-   "2b2ea841-2bd9-4716-9c18-2f9016ceb37e": 59.66,
-   "ab8e11da-47db-48d4-bb61-d846cd60c325": 38.37
-  },
-  "mt_v": 2,
-  "pending_target": {
    "037d3a13-e6d0-489e-b8d1-73c80e552b42": 0.98,
    "1aa98b3f-8381-424a-8cc4-85e85359eaa5": 0.98,
    "2b2ea841-2bd9-4716-9c18-2f9016ceb37e": 54.31,
-   "ab8e11da-47db-48d4-bb61-d846cd60c325": 43.73
+   "ab8e11da-47db-48d4-bb61-d846cd60c325": 43.72
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.04,
+   "lead": 0.97,
    "models": {
-    "ecmwf_aifs025_single": 3.0,
+    "ecmwf_aifs025_single": 2.8,
     "icon_seamless": 3.0,
     "ukmo_seamless": 2.7
    },
-   "move_pp": 2.8,
-   "mu": 3.14,
-   "sigma": 0.69
+   "move_pp": 5.4,
+   "mu": 3.04,
+   "sigma": 0.67
   },
-  "repriced_at": "2026-11-21T10:01:11.298373+00:00",
+  "repriced_at": "2026-11-21T11:45:59.473730+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
