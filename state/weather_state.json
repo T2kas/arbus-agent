@@ -12540,6 +12540,27 @@
   "resolved_price": 1.908,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261030/"
  },
+ "771b8e6f-73c9-408d-acb1-d165d9a9f074": {
+  "checksum": "df11f2b15d628e86caeb7140f4ae34160a77d0f3078ef66cef98f16e05eec9d4",
+  "current_maximum": null,
+  "date": "2026-11-23",
+  "measurements": {},
+  "model_target": {
+   "0033c154-7a2a-429c-991e-20386a87f183": 8.0,
+   "047cf68d-99da-42be-aa83-1201ba753622": 5.0,
+   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 40.0,
+   "e7987925-d778-424c-8d79-14f3baf64b98": 47.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "0033c154-7a2a-429c-991e-20386a87f183": 1.0,
+   "047cf68d-99da-42be-aa83-1201ba753622": 1.39,
+   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 53.44,
+   "e7987925-d778-424c-8d79-14f3baf64b98": 44.17
+  },
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "78467d7d-e511-47d8-be55-e2b098797bb1": {
   "resolved": true,
   "resolved_at": "2026-09-24T10:15:40.196371+00:00",
@@ -13834,6 +13855,27 @@
   "resolved_option_id": "c1568de2-e729-4786-82c6-0fa7bf8b5397",
   "resolved_price": 1.878,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261103/"
+ },
+ "832e4171-f5dc-4b2a-a968-c90fd7e50211": {
+  "checksum": "36439bbc79b045b3a16de220e68abb7648c32cc5cd79c6fd0fddb06b69694631",
+  "current_maximum": null,
+  "date": "2026-11-23",
+  "measurements": {},
+  "model_target": {
+   "41bb0d78-af88-428e-9445-f0e120e9968a": 43.0,
+   "5d949b99-6f45-4959-9c61-d4d0a560a669": 6.0,
+   "7b2b94a1-fc60-46e4-b178-1d25957aaca3": 45.0,
+   "e2e50cd7-0fd5-47a8-bce5-d0e3c1e61093": 6.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "41bb0d78-af88-428e-9445-f0e120e9968a": 71.89,
+   "5d949b99-6f45-4959-9c61-d4d0a560a669": 0.99,
+   "7b2b94a1-fc60-46e4-b178-1d25957aaca3": 25.89,
+   "e2e50cd7-0fd5-47a8-bce5-d0e3c1e61093": 1.23
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "83428f70-d6db-4b22-adf0-aaa754cb1687": {},
  "8473ca6d-de00-420a-a9e3-e390b0ede792": {
@@ -24233,6 +24275,21 @@
   "resolved_option_id": "857451ee-6537-4192-b29b-bc94b5b53683",
   "resolved_via": "cinema",
   "resolved_winner": "Praktinė magija 2 (Practical Magic 2)"
+ },
+ "c3f02a9e-4a6d-463c-8cfc-f3ee1ade6fe6": {
+  "checksum": "17da556483fd493b7b6a0e93f40d2abe9c6b424567227fed3bf554f232d23ea8",
+  "current_maximum": null,
+  "date": "2026-11-23",
+  "measurements": {},
+  "model_target": {
+   "0ca26efb-2628-4e35-a74a-03e5578eb97e": 44.0,
+   "b1f6af1f-eee9-484d-bc45-82774211549f": 2.0,
+   "d85c4fb5-2189-48ca-8e37-04911252bb3d": 52.0,
+   "e1c2a037-cc14-4650-9b08-d9e67f2abd5f": 2.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "c44d4268-2b02-487c-a186-5b3f4efb2011": {
   "resolved": true,
