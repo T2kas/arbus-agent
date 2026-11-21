@@ -492,7 +492,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "06bba1f4-2369-4325-a5e3-1878cbb3d721": {},
+ "06bba1f4-2369-4325-a5e3-1878cbb3d721": {
+  "resolved": true,
+  "resolved_at": "2026-11-21T16:55:41.132740+00:00",
+  "resolved_label": "„Gargždai“",
+  "resolved_option_id": "8da9d94f-686e-4d6b-b7e2-1af243b26608",
+  "resolved_score": "„Gargždai“ 103:91 „Tauragė“",
+  "resolved_via": "sports"
+ },
  "074548e2-7e3b-4a39-bfad-f3864bffee4a": {
   "checksum": "7fe55310d63b5ef4254b9601ed7f902843267394546d087f4b3cbe2a3265fb0d",
   "current_maximum": 12.3,
