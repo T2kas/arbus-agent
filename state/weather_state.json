@@ -3982,6 +3982,12 @@
    "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 35.95
   },
   "mt_v": 2,
+  "pending_target": {
+   "834eeff5-4925-411f-84a6-b70b4390da32": 67.17,
+   "b2d10351-7c03-4f91-84d4-c62b7c67d945": 0.99,
+   "b9673a0e-eff6-473d-b230-b02d4eeaeb1d": 0.99,
+   "cf16bac9-7a3b-4609-abdd-f5a9c81ac6a1": 30.85
+  },
   "reprice": {
    "floor": -1.1,
    "lead": 0.3,
@@ -11722,6 +11728,12 @@
    "f2f4cf1d-8c84-4499-a32d-be388cb02f5a": 0.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "05801da7-79a6-4777-95e3-14e158919705": 35.56,
+   "1ade5350-a344-4329-bdb8-04c5fa6573b9": 0.99,
+   "ca7d163b-ae1d-4121-944d-b7b03a02eb60": 62.46,
+   "f2f4cf1d-8c84-4499-a32d-be388cb02f5a": 0.99
+  },
   "reprice": {
    "floor": null,
    "lead": 1.3,
@@ -12105,6 +12117,12 @@
    "d8d4a6f5-0edb-4f3c-aa82-45abd3a63c82": 90.48
   },
   "mt_v": 2,
+  "pending_target": {
+   "1c602c22-0ddb-4fa6-98f8-f784e08d8037": 0.99,
+   "200a89d4-6f71-436d-8357-9014de4d558f": 1.01,
+   "8bf8658d-b440-4972-8c85-a19ba5099a0a": 10.87,
+   "d8d4a6f5-0edb-4f3c-aa82-45abd3a63c82": 87.13
+  },
   "reprice": {
    "floor": 0.2,
    "lead": 0.26,
@@ -24566,6 +24584,12 @@
    "ab8e11da-47db-48d4-bb61-d846cd60c325": 40.98
   },
   "mt_v": 2,
+  "pending_target": {
+   "037d3a13-e6d0-489e-b8d1-73c80e552b42": 0.99,
+   "1aa98b3f-8381-424a-8cc4-85e85359eaa5": 0.99,
+   "2b2ea841-2bd9-4716-9c18-2f9016ceb37e": 59.1,
+   "ab8e11da-47db-48d4-bb61-d846cd60c325": 38.93
+  },
   "reprice": {
    "floor": null,
    "lead": 1.47,
