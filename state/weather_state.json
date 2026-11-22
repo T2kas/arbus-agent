@@ -287,7 +287,14 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261005/"
  },
  "04b1ead0-3475-433f-b2e9-aca2da04f6ec": {},
- "055c3ea7-7120-43ac-a79c-c7240de603f8": {},
+ "055c3ea7-7120-43ac-a79c-c7240de603f8": {
+  "resolved": true,
+  "resolved_at": "2026-11-22T17:01:20.668043+00:00",
+  "resolved_label": "Kauno „Žalgiris“",
+  "resolved_option_id": "d52c322d-46ac-4ed4-a838-a42224c2b44c",
+  "resolved_score": "Panevėžio „Lietkabelis“ 94:123 Kauno „Žalgiris“",
+  "resolved_via": "sports"
+ },
  "05a08eb4-aee9-490f-865b-e21704efe0b5": {
   "resolved": true,
   "resolved_at": "2026-11-14T17:20:46.850127+00:00",
