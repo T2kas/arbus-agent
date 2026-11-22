@@ -27048,7 +27048,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "d3d7fc9f-a342-47a6-94d8-c0043a83b040": {},
+ "d3d7fc9f-a342-47a6-94d8-c0043a83b040": {
+  "resolved": true,
+  "resolved_at": "2026-11-22T19:31:03.725006+00:00",
+  "resolved_label": "Vilniaus „Rytas“",
+  "resolved_option_id": "1498c57a-edb4-4952-8071-9bad57c7bde0",
+  "resolved_score": "Vilniaus „Rytas“ 87:84 Utenos „Juventus“",
+  "resolved_via": "sports"
+ },
  "d400d4c5-1809-45d9-aa75-cf18824c5fa0": {
   "checksum": "3f6315124e7af35be1806baa5da5aab8e98e9254369ffaa99218aa1cdae6278a",
   "current_maximum": 15.8,
