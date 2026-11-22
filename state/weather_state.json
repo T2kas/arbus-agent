@@ -12928,29 +12928,23 @@
   "model_target": {
    "0033c154-7a2a-429c-991e-20386a87f183": 0.99,
    "047cf68d-99da-42be-aa83-1201ba753622": 0.99,
-   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 76.42,
-   "e7987925-d778-424c-8d79-14f3baf64b98": 21.61
+   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 78.78,
+   "e7987925-d778-424c-8d79-14f3baf64b98": 19.24
   },
   "mt_v": 2,
-  "pending_target": {
-   "0033c154-7a2a-429c-991e-20386a87f183": 0.99,
-   "047cf68d-99da-42be-aa83-1201ba753622": 0.99,
-   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 78.76,
-   "e7987925-d778-424c-8d79-14f3baf64b98": 19.27
-  },
   "reprice": {
    "floor": null,
-   "lead": 0.72,
+   "lead": 0.7,
    "models": {
     "ecmwf_aifs025_single": 1.1,
-    "icon_seamless": 1.4,
+    "icon_seamless": 1.2,
     "ukmo_seamless": 1.5
    },
-   "move_pp": 5.3,
-   "mu": 1.47,
+   "move_pp": 2.4,
+   "mu": 1.42,
    "sigma": 0.62
   },
-  "repriced_at": "2026-11-22T17:45:47.263861+00:00",
+  "repriced_at": "2026-11-22T18:05:48.786092+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -14255,31 +14249,25 @@
   "date": "2026-11-23",
   "measurements": {},
   "model_target": {
-   "41bb0d78-af88-428e-9445-f0e120e9968a": 63.14,
+   "41bb0d78-af88-428e-9445-f0e120e9968a": 60.07,
    "5d949b99-6f45-4959-9c61-d4d0a560a669": 0.98,
-   "7b2b94a1-fc60-46e4-b178-1d25957aaca3": 34.9,
+   "7b2b94a1-fc60-46e4-b178-1d25957aaca3": 37.97,
    "e2e50cd7-0fd5-47a8-bce5-d0e3c1e61093": 0.98
   },
   "mt_v": 2,
-  "pending_target": {
-   "41bb0d78-af88-428e-9445-f0e120e9968a": 60.06,
-   "5d949b99-6f45-4959-9c61-d4d0a560a669": 0.98,
-   "7b2b94a1-fc60-46e4-b178-1d25957aaca3": 37.98,
-   "e2e50cd7-0fd5-47a8-bce5-d0e3c1e61093": 0.98
-  },
   "reprice": {
    "floor": null,
-   "lead": 0.79,
+   "lead": 0.7,
    "models": {
     "ecmwf_aifs025_single": 0.8,
-    "icon_seamless": 0.8,
+    "icon_seamless": 0.6,
     "ukmo_seamless": 1.0
    },
-   "move_pp": 2.0,
-   "mu": 1.17,
+   "move_pp": 3.1,
+   "mu": 1.12,
    "sigma": 0.58
   },
-  "repriced_at": "2026-11-22T15:55:43.538392+00:00",
+  "repriced_at": "2026-11-22T18:05:48.786092+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
