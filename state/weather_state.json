@@ -9950,29 +9950,24 @@
    }
   },
   "model_target": {
-   "288f58ce-972c-4e5d-bfde-f7fb1478d8c4": 8.93,
-   "55f29930-1a46-472c-ac38-f1b37f00fe8b": 6.65,
-   "9e812e85-c343-4063-9224-87d643aafe82": 84.42
+   "288f58ce-972c-4e5d-bfde-f7fb1478d8c4": 7.88,
+   "55f29930-1a46-472c-ac38-f1b37f00fe8b": 10.11,
+   "9e812e85-c343-4063-9224-87d643aafe82": 82.01
   },
   "mt_v": 2,
-  "pending_target": {
-   "288f58ce-972c-4e5d-bfde-f7fb1478d8c4": 7.88,
-   "55f29930-1a46-472c-ac38-f1b37f00fe8b": 10.12,
-   "9e812e85-c343-4063-9224-87d643aafe82": 82.0
-  },
   "reprice": {
    "floor": 4.8,
-   "lead": 0.49,
+   "lead": 0.45,
    "models": {
     "ecmwf_aifs025_single": 3.9,
-    "icon_seamless": 5.3,
+    "icon_seamless": 5.6,
     "ukmo_seamless": 4.7
    },
-   "move_pp": 13.4,
-   "mu": 5.12,
-   "sigma": 1.05
+   "move_pp": 3.5,
+   "mu": 5.19,
+   "sigma": 1.15
   },
-  "repriced_at": "2026-11-21T23:15:46.114827+00:00",
+  "repriced_at": "2026-11-22T00:05:40.559261+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
@@ -13966,31 +13961,25 @@
   "date": "2026-11-23",
   "measurements": {},
   "model_target": {
-   "41bb0d78-af88-428e-9445-f0e120e9968a": 74.29,
-   "5d949b99-6f45-4959-9c61-d4d0a560a669": 0.99,
-   "7b2b94a1-fc60-46e4-b178-1d25957aaca3": 23.73,
-   "e2e50cd7-0fd5-47a8-bce5-d0e3c1e61093": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
    "41bb0d78-af88-428e-9445-f0e120e9968a": 71.32,
    "5d949b99-6f45-4959-9c61-d4d0a560a669": 0.99,
    "7b2b94a1-fc60-46e4-b178-1d25957aaca3": 26.7,
    "e2e50cd7-0fd5-47a8-bce5-d0e3c1e61093": 0.99
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.46,
+   "lead": 1.45,
    "models": {
     "ecmwf_aifs025_single": 1.0,
-    "icon_seamless": 1.0,
+    "icon_seamless": 0.8,
     "ukmo_seamless": 1.4
    },
-   "move_pp": 2.7,
-   "mu": 1.42,
-   "sigma": 0.66
+   "move_pp": 3.0,
+   "mu": 1.37,
+   "sigma": 0.68
   },
-  "repriced_at": "2026-11-21T23:50:49.353341+00:00",
+  "repriced_at": "2026-11-22T00:05:40.559261+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
