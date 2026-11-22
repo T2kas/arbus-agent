@@ -3919,6 +3919,27 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "1cea83f5-bc5a-40e0-a932-8a073e540b88": {
+  "checksum": "817d3690c26726d201975bbffce3e54fa8765cd1ef43e296aee7c520e45b7e72",
+  "current_maximum": null,
+  "date": "2026-11-24",
+  "measurements": {},
+  "model_target": {
+   "0c975e45-0ee2-4c77-ad6c-f919961921f6": 49.0,
+   "0fe17da3-3ca1-4815-b4af-ebac011582a3": 9.0,
+   "931f5131-7755-44ae-a6fd-66f39d55d070": 38.0,
+   "9cf88958-aeec-41ea-83cc-f2d2877320c2": 4.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "0c975e45-0ee2-4c77-ad6c-f919961921f6": 56.51,
+   "0fe17da3-3ca1-4815-b4af-ebac011582a3": 0.99,
+   "931f5131-7755-44ae-a6fd-66f39d55d070": 41.51,
+   "9cf88958-aeec-41ea-83cc-f2d2877320c2": 0.99
+  },
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "1d836f91-6798-44e5-aed7-6a369a4357b6": {
   "resolved": true,
   "resolved_at": "2026-11-08T17:20:54.014252+00:00",
@@ -5612,6 +5633,27 @@
   "resolved_temp": 9.7,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+  "station": "kauno-ams"
+ },
+ "2be82b8f-848d-4b6e-9107-40bf9b25991c": {
+  "checksum": "3d12f5a775a804b45125173f70a1bb23190763b0147facce6b2541b256866701",
+  "current_maximum": null,
+  "date": "2026-11-24",
+  "measurements": {},
+  "model_target": {
+   "1932db64-eead-434a-9cdc-b3091d57c25c": 9.0,
+   "4c1adfe5-f52b-4bf0-bf24-5468564c31b4": 38.0,
+   "694d1e71-e9a3-4d17-8fed-ce358db6b0ee": 4.0,
+   "a88895b0-46e0-4742-b8b7-949576b799e6": 49.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "1932db64-eead-434a-9cdc-b3091d57c25c": 1.0,
+   "4c1adfe5-f52b-4bf0-bf24-5468564c31b4": 52.93,
+   "694d1e71-e9a3-4d17-8fed-ce358db6b0ee": 1.29,
+   "a88895b0-46e0-4742-b8b7-949576b799e6": 44.78
+  },
+  "resolved": false,
   "station": "kauno-ams"
  },
  "2c2578f3-ed94-4f7a-bf6a-9eab3159853c": {
@@ -30999,6 +31041,27 @@
   "resolved_temp": 18.3,
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+  "station": "klaipedos-ams"
+ },
+ "ee483412-3724-4c1d-bc1f-4bedc0820a31": {
+  "checksum": "86dcd3ed7d15451c53daa560fc1636513d4c07976fb0a24d5dd41c8a65ccb75f",
+  "current_maximum": null,
+  "date": "2026-11-24",
+  "measurements": {},
+  "model_target": {
+   "062842b8-2398-4d55-b530-7dde2537f4f5": 1.0,
+   "2b578a24-ef01-4da2-a84e-d9cdd2af3b18": 47.0,
+   "bb4197fb-15c5-4f7a-85e6-ea993b68ce98": 51.0,
+   "de9f80ed-e62b-4aaa-a725-884c69e24d1a": 1.0
+  },
+  "mt_v": 2,
+  "pending_target": {
+   "062842b8-2398-4d55-b530-7dde2537f4f5": 0.99,
+   "2b578a24-ef01-4da2-a84e-d9cdd2af3b18": 66.62,
+   "bb4197fb-15c5-4f7a-85e6-ea993b68ce98": 19.86,
+   "de9f80ed-e62b-4aaa-a725-884c69e24d1a": 12.52
+  },
+  "resolved": false,
   "station": "klaipedos-ams"
  },
  "eeed615a-5119-4e05-bc3e-737b6ec9aff5": {
