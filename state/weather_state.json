@@ -3932,31 +3932,25 @@
   "date": "2026-11-24",
   "measurements": {},
   "model_target": {
-   "0c975e45-0ee2-4c77-ad6c-f919961921f6": 59.84,
+   "0c975e45-0ee2-4c77-ad6c-f919961921f6": 68.53,
    "0fe17da3-3ca1-4815-b4af-ebac011582a3": 0.98,
-   "931f5131-7755-44ae-a6fd-66f39d55d070": 38.2,
+   "931f5131-7755-44ae-a6fd-66f39d55d070": 29.5,
    "9cf88958-aeec-41ea-83cc-f2d2877320c2": 0.98
   },
   "mt_v": 2,
-  "pending_target": {
-   "0c975e45-0ee2-4c77-ad6c-f919961921f6": 68.52,
-   "0fe17da3-3ca1-4815-b4af-ebac011582a3": 0.98,
-   "931f5131-7755-44ae-a6fd-66f39d55d070": 29.52,
-   "9cf88958-aeec-41ea-83cc-f2d2877320c2": 0.98
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.05,
+   "lead": 0.9,
    "models": {
     "ecmwf_aifs025_single": 1.0,
-    "icon_seamless": 0.7,
-    "ukmo_seamless": 0.7
+    "icon_seamless": 0.8,
+    "ukmo_seamless": 1.2
    },
-   "move_pp": 3.4,
-   "mu": 1.13,
+   "move_pp": 8.7,
+   "mu": 1.28,
    "sigma": 0.62
   },
-  "repriced_at": "2026-11-23T09:40:50.673543+00:00",
+  "repriced_at": "2026-11-23T13:25:47.191380+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -5662,30 +5656,24 @@
   "measurements": {},
   "model_target": {
    "1932db64-eead-434a-9cdc-b3091d57c25c": 0.99,
-   "4c1adfe5-f52b-4bf0-bf24-5468564c31b4": 65.62,
+   "4c1adfe5-f52b-4bf0-bf24-5468564c31b4": 71.23,
    "694d1e71-e9a3-4d17-8fed-ce358db6b0ee": 0.99,
-   "a88895b0-46e0-4742-b8b7-949576b799e6": 32.41
+   "a88895b0-46e0-4742-b8b7-949576b799e6": 26.79
   },
   "mt_v": 2,
-  "pending_target": {
-   "1932db64-eead-434a-9cdc-b3091d57c25c": 0.99,
-   "4c1adfe5-f52b-4bf0-bf24-5468564c31b4": 71.21,
-   "694d1e71-e9a3-4d17-8fed-ce358db6b0ee": 0.99,
-   "a88895b0-46e0-4742-b8b7-949576b799e6": 26.82
-  },
   "reprice": {
    "floor": null,
-   "lead": 0.97,
+   "lead": 0.9,
    "models": {
     "ecmwf_aifs025_single": 2.1,
-    "icon_seamless": 2.3,
-    "ukmo_seamless": 1.9
+    "icon_seamless": 2.4,
+    "ukmo_seamless": 2.2
    },
-   "move_pp": 2.8,
-   "mu": 2.25,
-   "sigma": 0.68
+   "move_pp": 5.6,
+   "mu": 2.35,
+   "sigma": 0.66
   },
-  "repriced_at": "2026-11-23T11:45:49.664105+00:00",
+  "repriced_at": "2026-11-23T13:25:47.191380+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
