@@ -3927,7 +3927,7 @@
   "station": "vilniaus-ams"
  },
  "1cea83f5-bc5a-40e0-a932-8a073e540b88": {
-  "checksum": "ee7aee5e25baf498ea6fb01ffa355e7cea0204241fef7e0af2bef968a1455747",
+  "checksum": "6ed147bd46369427c6d456799b3488cd1eb1570b2a64c745551169793e69e8a5",
   "current_maximum": null,
   "date": "2026-11-24",
   "measurements": {},
@@ -5650,7 +5650,7 @@
   "station": "kauno-ams"
  },
  "2be82b8f-848d-4b6e-9107-40bf9b25991c": {
-  "checksum": "bdfa885504a788d4763d1d23e302d265e523c22fcc218145f39c93d3c3462261",
+  "checksum": "9844147fcfeaac442d70ad69b7323d425ca11bf4483ed1bbbfd738b48faa6911",
   "current_maximum": null,
   "date": "2026-11-24",
   "measurements": {},
@@ -12327,7 +12327,7 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "71843439-cd24-4c62-8cae-ace5fcab3d11": {
-  "checksum": "ee7aee5e25baf498ea6fb01ffa355e7cea0204241fef7e0af2bef968a1455747",
+  "checksum": "6ed147bd46369427c6d456799b3488cd1eb1570b2a64c745551169793e69e8a5",
   "current_maximum": null,
   "date": "2026-11-25",
   "measurements": {},
@@ -24503,7 +24503,7 @@
   "station": "vilniaus-ams"
  },
  "c112d545-bb31-4c1f-8c73-b6f2e84f8e45": {
-  "checksum": "964d38fafa74204fbdafe3926ff354a551ef5cbd2cfcb301e10ff37d61eee0aa",
+  "checksum": "6cb7ee0f019677418c2c21596142dced246807bb3ef698542f31ffc538281463",
   "current_maximum": null,
   "date": "2026-11-25",
   "measurements": {},
@@ -30731,7 +30731,7 @@
   "station": "kauno-ams"
  },
  "e94b605e-a9f8-4e00-a3d8-3d44328688e0": {
-  "checksum": "bdfa885504a788d4763d1d23e302d265e523c22fcc218145f39c93d3c3462261",
+  "checksum": "9844147fcfeaac442d70ad69b7323d425ca11bf4483ed1bbbfd738b48faa6911",
   "current_maximum": null,
   "date": "2026-11-25",
   "measurements": {},
@@ -31612,7 +31612,7 @@
   "station": "klaipedos-ams"
  },
  "ee483412-3724-4c1d-bc1f-4bedc0820a31": {
-  "checksum": "964d38fafa74204fbdafe3926ff354a551ef5cbd2cfcb301e10ff37d61eee0aa",
+  "checksum": "6cb7ee0f019677418c2c21596142dced246807bb3ef698542f31ffc538281463",
   "current_maximum": null,
   "date": "2026-11-24",
   "measurements": {},
