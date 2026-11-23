@@ -3938,6 +3938,12 @@
    "9cf88958-aeec-41ea-83cc-f2d2877320c2": 0.98
   },
   "mt_v": 2,
+  "pending_target": {
+   "0c975e45-0ee2-4c77-ad6c-f919961921f6": 70.84,
+   "0fe17da3-3ca1-4815-b4af-ebac011582a3": 0.98,
+   "931f5131-7755-44ae-a6fd-66f39d55d070": 27.19,
+   "9cf88958-aeec-41ea-83cc-f2d2877320c2": 0.98
+  },
   "reprice": {
    "floor": null,
    "lead": 0.9,
