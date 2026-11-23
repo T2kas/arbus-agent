@@ -12969,28 +12969,23 @@
   },
   "model_target": {
    "0033c154-7a2a-429c-991e-20386a87f183": 0.99,
-   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 61.31,
-   "e7987925-d778-424c-8d79-14f3baf64b98": 37.7
+   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 59.29,
+   "e7987925-d778-424c-8d79-14f3baf64b98": 39.72
   },
   "mt_v": 2,
-  "pending_target": {
-   "0033c154-7a2a-429c-991e-20386a87f183": 0.99,
-   "0a7d48dd-172a-4801-af63-e88f1a4df45d": 59.26,
-   "e7987925-d778-424c-8d79-14f3baf64b98": 39.75
-  },
   "reprice": {
    "floor": 1.2,
-   "lead": 0.36,
+   "lead": 0.3,
    "models": {
     "ecmwf_aifs025_single": 0.8,
-    "icon_seamless": 1.7,
+    "icon_seamless": 1.9,
     "ukmo_seamless": 2.2
    },
-   "move_pp": 6.8,
-   "mu": 1.52,
+   "move_pp": 2.0,
+   "mu": 1.57,
    "sigma": 0.67
   },
-  "repriced_at": "2026-11-23T02:15:46.826106+00:00",
+  "repriced_at": "2026-11-23T03:45:47.462760+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
@@ -24802,31 +24797,25 @@
    }
   },
   "model_target": {
-   "0ca26efb-2628-4e35-a74a-03e5578eb97e": 35.27,
-   "b1f6af1f-eee9-484d-bc45-82774211549f": 3.34,
-   "d85c4fb5-2189-48ca-8e37-04911252bb3d": 49.91,
-   "e1c2a037-cc14-4650-9b08-d9e67f2abd5f": 11.48
-  },
-  "mt_v": 2,
-  "pending_target": {
    "0ca26efb-2628-4e35-a74a-03e5578eb97e": 37.33,
-   "b1f6af1f-eee9-484d-bc45-82774211549f": 2.77,
-   "d85c4fb5-2189-48ca-8e37-04911252bb3d": 51.45,
+   "b1f6af1f-eee9-484d-bc45-82774211549f": 2.76,
+   "d85c4fb5-2189-48ca-8e37-04911252bb3d": 51.46,
    "e1c2a037-cc14-4650-9b08-d9e67f2abd5f": 8.45
   },
+  "mt_v": 2,
   "reprice": {
    "floor": -0.1,
-   "lead": 0.36,
+   "lead": 0.3,
    "models": {
     "ecmwf_aifs025_single": 2.8,
-    "icon_seamless": 3.7,
+    "icon_seamless": 3.4,
     "ukmo_seamless": 1.5
    },
-   "move_pp": 6.2,
-   "mu": 3.33,
-   "sigma": 1.35
+   "move_pp": 3.0,
+   "mu": 3.25,
+   "sigma": 1.23
   },
-  "repriced_at": "2026-11-23T02:15:46.826106+00:00",
+  "repriced_at": "2026-11-23T03:45:47.462760+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
