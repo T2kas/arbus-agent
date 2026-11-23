@@ -3927,19 +3927,25 @@
   "station": "vilniaus-ams"
  },
  "1cea83f5-bc5a-40e0-a932-8a073e540b88": {
-  "checksum": "35c32630d41f5804bea014b5bdc060b3631b0de84f892566b972ead40005a839",
-  "current_maximum": -0.1,
+  "checksum": "98a30e492b74c6efce54a5dc4bc73e95e24da8bc542660f712d948cd25154754",
+  "current_maximum": 0.0,
   "date": "2026-11-24",
   "eliminated": [
    "9cf88958-aeec-41ea-83cc-f2d2877320c2"
   ],
-  "max_received_at": "2026-11-23T22:10:56.365300+00:00",
+  "max_received_at": "2026-11-23T23:11:01.804420+00:00",
   "measurements": {
    "2026-11-23 22:00:00": {
     "checksum": "35c32630d41f5804bea014b5bdc060b3631b0de84f892566b972ead40005a839",
     "received_at": "2026-11-23T22:10:56.365300+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": -0.1
+   },
+   "2026-11-23 23:00:00": {
+    "checksum": "98a30e492b74c6efce54a5dc4bc73e95e24da8bc542660f712d948cd25154754",
+    "received_at": "2026-11-23T23:11:01.804420+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 0.0
    }
   },
   "model_target": {
@@ -5662,19 +5668,25 @@
   "station": "kauno-ams"
  },
  "2be82b8f-848d-4b6e-9107-40bf9b25991c": {
-  "checksum": "8229733f6221d9091218dcdfe886e591da414d012f0f6639d83905cd343510ac",
-  "current_maximum": 0.6,
+  "checksum": "aa436f7587ce00821f173d9269680e14b7c978aab294198ac7fa9760e12e19cf",
+  "current_maximum": 0.8,
   "date": "2026-11-24",
   "eliminated": [
    "1932db64-eead-434a-9cdc-b3091d57c25c"
   ],
-  "max_received_at": "2026-11-23T22:10:56.365300+00:00",
+  "max_received_at": "2026-11-23T23:11:01.804420+00:00",
   "measurements": {
    "2026-11-23 22:00:00": {
     "checksum": "8229733f6221d9091218dcdfe886e591da414d012f0f6639d83905cd343510ac",
     "received_at": "2026-11-23T22:10:56.365300+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 0.6
+   },
+   "2026-11-23 23:00:00": {
+    "checksum": "aa436f7587ce00821f173d9269680e14b7c978aab294198ac7fa9760e12e19cf",
+    "received_at": "2026-11-23T23:11:01.804420+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 0.8
    }
   },
   "model_target": {
@@ -12352,7 +12364,7 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "71843439-cd24-4c62-8cae-ace5fcab3d11": {
-  "checksum": "35c32630d41f5804bea014b5bdc060b3631b0de84f892566b972ead40005a839",
+  "checksum": "98a30e492b74c6efce54a5dc4bc73e95e24da8bc542660f712d948cd25154754",
   "current_maximum": null,
   "date": "2026-11-25",
   "measurements": {},
@@ -24529,7 +24541,7 @@
   "station": "vilniaus-ams"
  },
  "c112d545-bb31-4c1f-8c73-b6f2e84f8e45": {
-  "checksum": "e4f15a3dac5efaca1a472d44ddb6376b864042d5b0e6d48b4f84ea1fc36220fa",
+  "checksum": "4b8cae7840fc8ccb4ef38d85e21c8e4f5cecced42174f596a9dc6ec622e5f14c",
   "current_maximum": null,
   "date": "2026-11-25",
   "measurements": {},
@@ -30757,7 +30769,7 @@
   "station": "kauno-ams"
  },
  "e94b605e-a9f8-4e00-a3d8-3d44328688e0": {
-  "checksum": "8229733f6221d9091218dcdfe886e591da414d012f0f6639d83905cd343510ac",
+  "checksum": "aa436f7587ce00821f173d9269680e14b7c978aab294198ac7fa9760e12e19cf",
   "current_maximum": null,
   "date": "2026-11-25",
   "measurements": {},
@@ -31638,7 +31650,7 @@
   "station": "klaipedos-ams"
  },
  "ee483412-3724-4c1d-bc1f-4bedc0820a31": {
-  "checksum": "e4f15a3dac5efaca1a472d44ddb6376b864042d5b0e6d48b4f84ea1fc36220fa",
+  "checksum": "4b8cae7840fc8ccb4ef38d85e21c8e4f5cecced42174f596a9dc6ec622e5f14c",
   "current_maximum": 1.0,
   "date": "2026-11-24",
   "eliminated": [
@@ -31651,6 +31663,12 @@
     "received_at": "2026-11-23T22:10:56.365300+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 1.0
+   },
+   "2026-11-23 23:00:00": {
+    "checksum": "4b8cae7840fc8ccb4ef38d85e21c8e4f5cecced42174f596a9dc6ec622e5f14c",
+    "received_at": "2026-11-23T23:11:01.804420+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 0.7
    }
   },
   "model_target": {
