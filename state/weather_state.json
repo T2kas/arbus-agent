@@ -11987,6 +11987,12 @@
    "c2d35e72-60be-4e87-99bb-18088e160e01": 49.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "30b97cb6-382b-4873-99bb-b72864323e24": 0.98,
+   "64b3ca90-b68e-44f7-b428-f085663e9bf6": 51.37,
+   "701edcc3-2f76-49e2-9bae-e4eeb3cfc5f9": 0.98,
+   "c2d35e72-60be-4e87-99bb-18088e160e01": 46.66
+  },
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -22818,6 +22824,12 @@
    "f7b5d56f-c1c6-4409-944d-a35ff82df423": 33.97
   },
   "mt_v": 2,
+  "pending_target": {
+   "2b7dcbff-86e7-499c-92c5-118d23ab675f": 1.15,
+   "9e74e760-d5cc-43be-abf1-3e9e2d4af5e8": 58.92,
+   "f60c858d-6dd3-4926-9494-c41807128256": 8.99,
+   "f7b5d56f-c1c6-4409-944d-a35ff82df423": 30.93
+  },
   "reprice": {
    "floor": null,
    "lead": 1.71,
@@ -24855,6 +24867,12 @@
    "9e8d136b-4fac-412e-967c-347f494ac19d": 26.49
   },
   "mt_v": 2,
+  "pending_target": {
+   "26beb781-d9d0-4179-9193-cdaad1afcda9": 13.42,
+   "7ac18c76-f4cf-4036-ac7f-5802a20d826d": 60.63,
+   "7eeb0edb-fa6b-4944-9cb7-25fd6f6503ff": 1.0,
+   "9e8d136b-4fac-412e-967c-347f494ac19d": 24.95
+  },
   "reprice": {
    "floor": null,
    "lead": 0.7,
