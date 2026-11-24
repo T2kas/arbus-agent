@@ -6019,7 +6019,14 @@
   "resolved_score": "Banga 1:2 Žalgiris",
   "resolved_via": "sports"
  },
- "2d47ae98-a9c3-41c5-b4c4-f8583b0b2caa": {},
+ "2d47ae98-a9c3-41c5-b4c4-f8583b0b2caa": {
+  "resolved": true,
+  "resolved_at": "2026-11-24T12:01:18.623090+00:00",
+  "resolved_label": "2,183 €/l arba mažiau",
+  "resolved_option_id": "604981c6-b03e-4d60-88e6-52767f1c537f",
+  "resolved_price": 2.168,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261124/"
+ },
  "2e6976a6-ccb3-4b66-b5cc-caf399b01b84": {
   "checksum": "2cae6df85f816cd3e69e2c23a473cd8118884bac20a0171fa0e010a0a2f21071",
   "current_maximum": 12.7,
@@ -19167,6 +19174,10 @@
   "2026-11-23": {
    "benzinas": 1.711,
    "dyzelinas": 2.156
+  },
+  "2026-11-24": {
+   "benzinas": 1.729,
+   "dyzelinas": 2.168
   }
  },
  "_lea_missing": {
@@ -20680,7 +20691,14 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
- "a7c36299-fba4-4744-9141-daa3bb542280": {},
+ "a7c36299-fba4-4744-9141-daa3bb542280": {
+  "resolved": true,
+  "resolved_at": "2026-11-24T12:01:18.623090+00:00",
+  "resolved_label": "1,743 €/l arba mažiau",
+  "resolved_option_id": "f2f44d41-2e0e-4db6-b121-0f1d2d8d40d9",
+  "resolved_price": 1.729,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261124/"
+ },
  "a85000ad-bb43-4e62-a29d-efbcdfd07a65": {
   "checksum": "a3a4914c88d4fed20eb8b0fbd0516793af6806d5d2c7fc95515eedaef00acbc9",
   "current_maximum": 4.8,
