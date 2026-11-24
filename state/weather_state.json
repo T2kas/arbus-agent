@@ -11983,30 +11983,24 @@
   "measurements": {},
   "model_target": {
    "30b97cb6-382b-4873-99bb-b72864323e24": 0.98,
-   "64b3ca90-b68e-44f7-b428-f085663e9bf6": 52.78,
+   "64b3ca90-b68e-44f7-b428-f085663e9bf6": 56.52,
    "701edcc3-2f76-49e2-9bae-e4eeb3cfc5f9": 0.98,
-   "c2d35e72-60be-4e87-99bb-18088e160e01": 45.25
+   "c2d35e72-60be-4e87-99bb-18088e160e01": 41.52
   },
   "mt_v": 2,
-  "pending_target": {
-   "30b97cb6-382b-4873-99bb-b72864323e24": 0.98,
-   "64b3ca90-b68e-44f7-b428-f085663e9bf6": 56.5,
-   "701edcc3-2f76-49e2-9bae-e4eeb3cfc5f9": 0.98,
-   "c2d35e72-60be-4e87-99bb-18088e160e01": 41.53
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.55,
+   "lead": 1.54,
    "models": {
     "ecmwf_aifs025_single": -0.4,
     "icon_seamless": -0.6,
     "ukmo_seamless": -0.1
    },
-   "move_pp": 3.8,
-   "mu": -0.11,
+   "move_pp": 3.7,
+   "mu": -0.18,
    "sigma": 0.67
   },
-  "repriced_at": "2026-11-24T21:45:50.963367+00:00",
+  "repriced_at": "2026-11-24T22:05:40.984952+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
@@ -12656,31 +12650,25 @@
   "date": "2026-11-25",
   "measurements": {},
   "model_target": {
-   "2f5ae9f1-5622-4fd6-ae3d-9b43d2a0e993": 66.05,
-   "65520de0-9938-4b29-8fd8-65980522c209": 0.98,
-   "7195257e-e1dc-4a3e-aa1b-31e78f1e388a": 31.99,
-   "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.98
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "2f5ae9f1-5622-4fd6-ae3d-9b43d2a0e993": 61.6,
+   "2f5ae9f1-5622-4fd6-ae3d-9b43d2a0e993": 61.61,
    "65520de0-9938-4b29-8fd8-65980522c209": 0.98,
    "7195257e-e1dc-4a3e-aa1b-31e78f1e388a": 36.43,
    "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.98
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 0.55,
+   "lead": 0.54,
    "models": {
     "ecmwf_aifs025_single": -0.1,
     "icon_seamless": -0.1,
     "ukmo_seamless": -0.0
    },
-   "move_pp": 2.7,
-   "mu": 0.18,
+   "move_pp": 4.4,
+   "mu": 0.12,
    "sigma": 0.52
   },
-  "repriced_at": "2026-11-24T21:45:50.963367+00:00",
+  "repriced_at": "2026-11-24T22:05:40.984952+00:00",
   "resolved": false,
   "station": "vilniaus-ams"
  },
