@@ -11937,6 +11937,21 @@
   "resolved_price": 1.944,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260928/"
  },
+ "61f79dc1-4210-4208-a524-4ff4ca9b5656": {
+  "checksum": "ae8b4efac430308b08ded1e07cb4711cf1db4d7234ff0d1b277ba5b511676e07",
+  "current_maximum": null,
+  "date": "2026-11-26",
+  "measurements": {},
+  "model_target": {
+   "30b97cb6-382b-4873-99bb-b72864323e24": 1.0,
+   "64b3ca90-b68e-44f7-b428-f085663e9bf6": 49.0,
+   "701edcc3-2f76-49e2-9bae-e4eeb3cfc5f9": 1.0,
+   "c2d35e72-60be-4e87-99bb-18088e160e01": 49.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "62944714-e126-45c7-ac19-bbc3f22b356a": {
   "resolved": true,
   "resolved_at": "2026-11-08T14:20:45.898411+00:00",
@@ -12560,6 +12575,21 @@
   "resolved_option_id": "8bce5ec0-c29f-4158-acf7-6141c7adf6ce",
   "resolved_via": "music",
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
+ },
+ "6eddbcd1-b7d5-4f6a-856c-f3ae43225f9f": {
+  "checksum": "cd5156df5314fe6ed09a7d169f49783c478be48753f5a1999ad4c1e25b618ff3",
+  "current_maximum": null,
+  "date": "2026-11-26",
+  "measurements": {},
+  "model_target": {
+   "15c23bc9-694e-4b1f-8ec2-9acbd0d529a9": 30.0,
+   "553fe937-1f3b-4065-9a80-47e14c9ecb55": 4.0,
+   "a7947de9-0ed9-4c38-9fe1-d594ed21ae42": 1.0,
+   "d6b10f02-8613-4bc6-85b7-d793106d9918": 65.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "kauno-ams"
  },
  "71843439-cd24-4c62-8cae-ace5fcab3d11": {
   "checksum": "ae8b4efac430308b08ded1e07cb4711cf1db4d7234ff0d1b277ba5b511676e07",
@@ -22737,6 +22767,21 @@
   "resolved_via": "decline",
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
+ },
+ "b7612d49-5454-462a-9f42-7339d18564f0": {
+  "checksum": "9da827f1bb6b3dc869214b7ba5749554f4bb4b50f053c5104ed2ead756296a60",
+  "current_maximum": null,
+  "date": "2026-11-26",
+  "measurements": {},
+  "model_target": {
+   "2b7dcbff-86e7-499c-92c5-118d23ab675f": 1.0,
+   "9e74e760-d5cc-43be-abf1-3e9e2d4af5e8": 58.0,
+   "f60c858d-6dd3-4926-9494-c41807128256": 5.0,
+   "f7b5d56f-c1c6-4409-944d-a35ff82df423": 36.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "b845fac0-18c5-423e-8ee8-a584e36d539d": {
   "checksum": "fb9ee3e927315a91e2e81bc4c819fe3a0ef4233e51f35aec674b242125705811",
