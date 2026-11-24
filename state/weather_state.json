@@ -5802,6 +5802,11 @@
    "a88895b0-46e0-4742-b8b7-949576b799e6": 20.71
   },
   "mt_v": 2,
+  "pending_target": {
+   "4c1adfe5-f52b-4bf0-bf24-5468564c31b4": 81.52,
+   "694d1e71-e9a3-4d17-8fed-ce358db6b0ee": 0.99,
+   "a88895b0-46e0-4742-b8b7-949576b799e6": 17.49
+  },
   "reprice": {
    "floor": 0.9,
    "lead": 0.22,
@@ -12481,6 +12486,12 @@
    "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.98
   },
   "mt_v": 2,
+  "pending_target": {
+   "2f5ae9f1-5622-4fd6-ae3d-9b43d2a0e993": 68.33,
+   "65520de0-9938-4b29-8fd8-65980522c209": 0.99,
+   "7195257e-e1dc-4a3e-aa1b-31e78f1e388a": 29.7,
+   "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.99
+  },
   "reprice": {
    "floor": null,
    "lead": 1.46,
@@ -24658,6 +24669,12 @@
    "9e8d136b-4fac-412e-967c-347f494ac19d": 21.68
   },
   "mt_v": 2,
+  "pending_target": {
+   "26beb781-d9d0-4179-9193-cdaad1afcda9": 10.34,
+   "7ac18c76-f4cf-4036-ac7f-5802a20d826d": 66.13,
+   "7eeb0edb-fa6b-4944-9cb7-25fd6f6503ff": 0.99,
+   "9e8d136b-4fac-412e-967c-347f494ac19d": 22.53
+  },
   "reprice": {
    "floor": null,
    "lead": 1.22,
@@ -31837,6 +31854,11 @@
    "de9f80ed-e62b-4aaa-a725-884c69e24d1a": 11.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "2b578a24-ef01-4da2-a84e-d9cdd2af3b18": 81.64,
+   "bb4197fb-15c5-4f7a-85e6-ea993b68ce98": 10.95,
+   "de9f80ed-e62b-4aaa-a725-884c69e24d1a": 7.41
+  },
   "reprice": {
    "floor": 1.4,
    "lead": 0.22,
