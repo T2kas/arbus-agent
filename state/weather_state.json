@@ -12641,6 +12641,12 @@
    "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.98
   },
   "mt_v": 2,
+  "pending_target": {
+   "2f5ae9f1-5622-4fd6-ae3d-9b43d2a0e993": 64.98,
+   "65520de0-9938-4b29-8fd8-65980522c209": 0.98,
+   "7195257e-e1dc-4a3e-aa1b-31e78f1e388a": 33.06,
+   "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.98
+  },
   "reprice": {
    "floor": null,
    "lead": 0.79,
@@ -22818,6 +22824,12 @@
    "f7b5d56f-c1c6-4409-944d-a35ff82df423": 36.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "2b7dcbff-86e7-499c-92c5-118d23ab675f": 1.0,
+   "9e74e760-d5cc-43be-abf1-3e9e2d4af5e8": 59.61,
+   "f60c858d-6dd3-4926-9494-c41807128256": 5.43,
+   "f7b5d56f-c1c6-4409-944d-a35ff82df423": 33.97
+  },
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -31070,6 +31082,12 @@
    "f06f136c-c352-40ee-97bd-b0967c77d5d8": 0.99
   },
   "mt_v": 2,
+  "pending_target": {
+   "2898d8ba-7fee-4b7f-989e-790447765768": 64.41,
+   "54f7af31-55cd-4641-9d84-7deb6c74a9d0": 33.62,
+   "e476ec8f-0b9e-4661-9807-e8b0f437b4e9": 0.98,
+   "f06f136c-c352-40ee-97bd-b0967c77d5d8": 0.98
+  },
   "reprice": {
    "floor": null,
    "lead": 0.79,
