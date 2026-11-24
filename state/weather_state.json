@@ -11989,9 +11989,9 @@
   "mt_v": 2,
   "pending_target": {
    "30b97cb6-382b-4873-99bb-b72864323e24": 0.98,
-   "64b3ca90-b68e-44f7-b428-f085663e9bf6": 51.37,
+   "64b3ca90-b68e-44f7-b428-f085663e9bf6": 52.78,
    "701edcc3-2f76-49e2-9bae-e4eeb3cfc5f9": 0.98,
-   "c2d35e72-60be-4e87-99bb-18088e160e01": 46.66
+   "c2d35e72-60be-4e87-99bb-18088e160e01": 45.25
   },
   "resolved": false,
   "station": "vilniaus-ams"
@@ -12647,6 +12647,12 @@
    "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.98
   },
   "mt_v": 2,
+  "pending_target": {
+   "2f5ae9f1-5622-4fd6-ae3d-9b43d2a0e993": 66.02,
+   "65520de0-9938-4b29-8fd8-65980522c209": 0.98,
+   "7195257e-e1dc-4a3e-aa1b-31e78f1e388a": 32.02,
+   "f0bb4c1b-15fe-408f-99d0-6be982323afa": 0.98
+  },
   "reprice": {
    "floor": null,
    "lead": 0.7,
@@ -22825,10 +22831,10 @@
   },
   "mt_v": 2,
   "pending_target": {
-   "2b7dcbff-86e7-499c-92c5-118d23ab675f": 1.15,
-   "9e74e760-d5cc-43be-abf1-3e9e2d4af5e8": 58.92,
-   "f60c858d-6dd3-4926-9494-c41807128256": 8.99,
-   "f7b5d56f-c1c6-4409-944d-a35ff82df423": 30.93
+   "2b7dcbff-86e7-499c-92c5-118d23ab675f": 1.0,
+   "9e74e760-d5cc-43be-abf1-3e9e2d4af5e8": 61.24,
+   "f60c858d-6dd3-4926-9494-c41807128256": 8.85,
+   "f7b5d56f-c1c6-4409-944d-a35ff82df423": 28.91
   },
   "reprice": {
    "floor": null,
@@ -24868,10 +24874,10 @@
   },
   "mt_v": 2,
   "pending_target": {
-   "26beb781-d9d0-4179-9193-cdaad1afcda9": 13.42,
-   "7ac18c76-f4cf-4036-ac7f-5802a20d826d": 60.63,
-   "7eeb0edb-fa6b-4944-9cb7-25fd6f6503ff": 1.0,
-   "9e8d136b-4fac-412e-967c-347f494ac19d": 24.95
+   "26beb781-d9d0-4179-9193-cdaad1afcda9": 16.05,
+   "7ac18c76-f4cf-4036-ac7f-5802a20d826d": 63.24,
+   "7eeb0edb-fa6b-4944-9cb7-25fd6f6503ff": 0.99,
+   "9e8d136b-4fac-412e-967c-347f494ac19d": 19.71
   },
   "reprice": {
    "floor": null,
@@ -31101,6 +31107,12 @@
    "f06f136c-c352-40ee-97bd-b0967c77d5d8": 0.98
   },
   "mt_v": 2,
+  "pending_target": {
+   "2898d8ba-7fee-4b7f-989e-790447765768": 73.34,
+   "54f7af31-55cd-4641-9d84-7deb6c74a9d0": 24.69,
+   "e476ec8f-0b9e-4661-9807-e8b0f437b4e9": 0.98,
+   "f06f136c-c352-40ee-97bd-b0967c77d5d8": 0.98
+  },
   "reprice": {
    "floor": null,
    "lead": 0.7,
