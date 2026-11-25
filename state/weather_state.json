@@ -7215,7 +7215,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
- "39753f54-c7a9-4a48-be94-98363f12d537": {},
+ "39753f54-c7a9-4a48-be94-98363f12d537": {
+  "resolved": true,
+  "resolved_at": "2026-11-25T13:20:51.426461+00:00",
+  "resolved_label": "Nuo 1,694 iki 1,704 €/l",
+  "resolved_option_id": "d97331f3-7d8c-4041-8cad-91bc9f6d7c4e",
+  "resolved_price": 1.694,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261125/"
+ },
  "39da6411-523f-4c76-bf76-988008df7f4d": {
   "resolved": true,
   "resolved_at": "2026-10-28T09:31:13.966601+00:00",
@@ -12004,7 +12011,14 @@
   "resolved": false,
   "station": "vilniaus-ams"
  },
- "624d3fb9-41ff-442a-8df8-59395855fbea": {},
+ "624d3fb9-41ff-442a-8df8-59395855fbea": {
+  "resolved": true,
+  "resolved_at": "2026-11-25T13:20:51.426461+00:00",
+  "resolved_label": "Nuo 2,134 iki 2,144 €/l",
+  "resolved_option_id": "6d8442d8-4c22-4ca0-bb49-3c67149bf82e",
+  "resolved_price": 2.141,
+  "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261125/"
+ },
  "62944714-e126-45c7-ac19-bbc3f22b356a": {
   "resolved": true,
   "resolved_at": "2026-11-08T14:20:45.898411+00:00",
@@ -19421,6 +19435,10 @@
   "2026-11-24": {
    "benzinas": 1.729,
    "dyzelinas": 2.168
+  },
+  "2026-11-25": {
+   "benzinas": 1.694,
+   "dyzelinas": 2.141
   }
  },
  "_lea_missing": {
