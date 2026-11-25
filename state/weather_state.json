@@ -11977,7 +11977,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260928/"
  },
  "61f79dc1-4210-4208-a524-4ff4ca9b5656": {
-  "checksum": "8ecbc476f40b87255cd270a917922761a3fec6b578d37037ab654c8935375884",
+  "checksum": "9f9ba45efd51bbfd54ac980fb8a1a8e202d3379e706d61c624bed622ab7ae2ce",
   "current_maximum": null,
   "date": "2026-11-26",
   "measurements": {},
@@ -12630,7 +12630,7 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "6eddbcd1-b7d5-4f6a-856c-f3ae43225f9f": {
-  "checksum": "7c55cee37122589c6f5e36c034ff96fdb9ba4f658aaa6ee949b6d5476dce2cc1",
+  "checksum": "5e45898d6c1837f9f2855b56a7662019244786edfc02cd9f65f64c6ff6473a01",
   "current_maximum": null,
   "date": "2026-11-26",
   "measurements": {},
@@ -12658,7 +12658,7 @@
   "station": "kauno-ams"
  },
  "71843439-cd24-4c62-8cae-ace5fcab3d11": {
-  "checksum": "8ecbc476f40b87255cd270a917922761a3fec6b578d37037ab654c8935375884",
+  "checksum": "9f9ba45efd51bbfd54ac980fb8a1a8e202d3379e706d61c624bed622ab7ae2ce",
   "current_maximum": 0.0,
   "date": "2026-11-25",
   "eliminated": [
@@ -12732,6 +12732,12 @@
     "received_at": "2026-11-25T08:10:54.222049+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": -0.2
+   },
+   "2026-11-25 09:00:00": {
+    "checksum": "9f9ba45efd51bbfd54ac980fb8a1a8e202d3379e706d61c624bed622ab7ae2ce",
+    "received_at": "2026-11-25T09:10:48.691429+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": 0.0
    }
   },
   "model_target": {
@@ -22908,7 +22914,7 @@
   "station": "kauno-ams"
  },
  "b7612d49-5454-462a-9f42-7339d18564f0": {
-  "checksum": "d082ad6ec2c92e8692cb2cf690eef2910faf959f8bf67ec11ef717fec2f6db68",
+  "checksum": "ab75242ce6d4ce0deae5047a8cddf1b93fa05c4411d533b4f4b77ac3955ce1b2",
   "current_maximum": null,
   "date": "2026-11-26",
   "measurements": {},
@@ -24945,7 +24951,7 @@
   "station": "vilniaus-ams"
  },
  "c112d545-bb31-4c1f-8c73-b6f2e84f8e45": {
-  "checksum": "d082ad6ec2c92e8692cb2cf690eef2910faf959f8bf67ec11ef717fec2f6db68",
+  "checksum": "ab75242ce6d4ce0deae5047a8cddf1b93fa05c4411d533b4f4b77ac3955ce1b2",
   "current_maximum": 2.0,
   "date": "2026-11-25",
   "eliminated": [
@@ -25019,6 +25025,12 @@
     "received_at": "2026-11-25T08:10:54.222049+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": 0.1
+   },
+   "2026-11-25 09:00:00": {
+    "checksum": "ab75242ce6d4ce0deae5047a8cddf1b93fa05c4411d533b4f4b77ac3955ce1b2",
+    "received_at": "2026-11-25T09:10:48.691429+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": 1.6
    }
   },
   "model_target": {
@@ -31246,7 +31258,7 @@
   "station": "kauno-ams"
  },
  "e94b605e-a9f8-4e00-a3d8-3d44328688e0": {
-  "checksum": "7c55cee37122589c6f5e36c034ff96fdb9ba4f658aaa6ee949b6d5476dce2cc1",
+  "checksum": "5e45898d6c1837f9f2855b56a7662019244786edfc02cd9f65f64c6ff6473a01",
   "current_maximum": 1.6,
   "date": "2026-11-25",
   "eliminated": [
@@ -31320,6 +31332,12 @@
     "received_at": "2026-11-25T08:10:54.222049+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 0.5
+   },
+   "2026-11-25 09:00:00": {
+    "checksum": "5e45898d6c1837f9f2855b56a7662019244786edfc02cd9f65f64c6ff6473a01",
+    "received_at": "2026-11-25T09:10:48.691429+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 0.7
    }
   },
   "model_target": {
