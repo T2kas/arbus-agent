@@ -20144,6 +20144,12 @@
    "ddca9dd3-8c1a-4899-9b93-b56d3873340b": 32.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "86f572e2-abdb-4c57-b484-be8f809cddd9": 0.99,
+   "bb085bc2-e1ae-42c2-a2c9-6ba244a3aa80": 65.59,
+   "c94c5dd1-65b3-4aff-b5dc-81a14e48900d": 10.42,
+   "ddca9dd3-8c1a-4899-9b93-b56d3873340b": 23.0
+  },
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -31568,6 +31574,12 @@
    "f3de2d20-041e-4bea-99d0-58d8b7557c10": 6.0
   },
   "mt_v": 2,
+  "pending_target": {
+   "496187f7-a1c4-44ca-ad00-0111ed07ed2d": 8.19,
+   "7514bbad-4e16-46bf-9dcc-a34ed1f6eb7e": 46.31,
+   "e607ad95-742e-44e6-98f3-328456ad28a2": 40.23,
+   "f3de2d20-041e-4bea-99d0-58d8b7557c10": 5.28
+  },
   "resolved": false,
   "station": "klaipedos-ams"
  },
