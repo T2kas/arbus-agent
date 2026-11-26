@@ -6268,6 +6268,21 @@
   "resolved_price": 1.861,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261110/"
  },
+ "308819d0-6ab5-4432-a1ef-f4d380843f86": {
+  "checksum": "63ea8d1076d20d00c277beaa01bbb19be12da5d840e121bf8bb879aa4c52b9c6",
+  "current_maximum": null,
+  "date": "2026-11-28",
+  "measurements": {},
+  "model_target": {
+   "67c6c1c0-de13-4f98-903f-154d1c067ee6": 6.0,
+   "750f9c8d-8c0b-49b7-bab9-7684e20b6aa3": 2.0,
+   "bdc04c57-d877-44ef-98a8-60d702b15463": 53.0,
+   "e130a071-66e1-499a-abe7-04ca400b0cf7": 39.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "vilniaus-ams"
+ },
  "312874a5-4c42-4eda-add0-39c06318e490": {
   "resolved": true,
   "resolved_at": "2026-11-15T19:20:53.298067+00:00",
@@ -20058,6 +20073,21 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "a0f39361-a59f-432d-a4fd-42efe2a35ac3": {
+  "checksum": "f1bf1dae42eb497559ad31e33d53375f7607a23a6d01f5b15ec2dba98e729039",
+  "current_maximum": null,
+  "date": "2026-11-28",
+  "measurements": {},
+  "model_target": {
+   "86f572e2-abdb-4c57-b484-be8f809cddd9": 1.0,
+   "bb085bc2-e1ae-42c2-a2c9-6ba244a3aa80": 59.0,
+   "c94c5dd1-65b3-4aff-b5dc-81a14e48900d": 8.0,
+   "ddca9dd3-8c1a-4899-9b93-b56d3873340b": 32.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "a10351bf-410a-4843-af93-868c74ffff2f": {
   "checksum": "3c87f6aae94d00b25d314dd1d9233f0194c0c322531bce351f45ed49ebf881dc",
   "current_maximum": 10.5,
@@ -31450,6 +31480,21 @@
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
+ },
+ "e6ca9b18-3ea7-4e37-bc53-70491ba0ba11": {
+  "checksum": "64f84d93f31684dd580805a8c224d5189e93969f767d881924ebd052d89354c6",
+  "current_maximum": null,
+  "date": "2026-11-28",
+  "measurements": {},
+  "model_target": {
+   "496187f7-a1c4-44ca-ad00-0111ed07ed2d": 6.0,
+   "7514bbad-4e16-46bf-9dcc-a34ed1f6eb7e": 45.0,
+   "e607ad95-742e-44e6-98f3-328456ad28a2": 43.0,
+   "f3de2d20-041e-4bea-99d0-58d8b7557c10": 6.0
+  },
+  "mt_v": 2,
+  "resolved": false,
+  "station": "klaipedos-ams"
  },
  "e6f32360-1478-4b67-b0c1-4d2aeb5b3903": {
   "checksum": "e2d2df77ef8d681253aea39395f059a82635fd395c39aa43f6ba2e61673558dd",
