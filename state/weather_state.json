@@ -19121,31 +19121,25 @@
   "date": "2026-11-27",
   "measurements": {},
   "model_target": {
-   "2ee819fd-a8f9-4669-b4b9-00f50ff3fe5a": 5.79,
-   "6469667c-00b2-4cf7-88f5-6daf4cee1ecf": 43.76,
-   "76171f94-b5b4-4e53-86bc-664ca1c71f02": 45.23,
-   "8905d1a8-d0c4-4a52-bc13-fc1d626dd620": 5.22
+   "2ee819fd-a8f9-4669-b4b9-00f50ff3fe5a": 2.41,
+   "6469667c-00b2-4cf7-88f5-6daf4cee1ecf": 48.74,
+   "76171f94-b5b4-4e53-86bc-664ca1c71f02": 45.93,
+   "8905d1a8-d0c4-4a52-bc13-fc1d626dd620": 2.92
   },
   "mt_v": 2,
-  "pending_target": {
-   "2ee819fd-a8f9-4669-b4b9-00f50ff3fe5a": 2.41,
-   "6469667c-00b2-4cf7-88f5-6daf4cee1ecf": 48.73,
-   "76171f94-b5b4-4e53-86bc-664ca1c71f02": 45.93,
-   "8905d1a8-d0c4-4a52-bc13-fc1d626dd620": 2.93
-  },
   "reprice": {
    "floor": null,
-   "lead": 1.0,
+   "lead": 0.84,
    "models": {
     "ecmwf_aifs025_single": -0.2,
-    "icon_seamless": 0.1,
-    "ukmo_seamless": 1.5
+    "icon_seamless": 0.3,
+    "ukmo_seamless": 1.0
    },
-   "move_pp": 2.7,
-   "mu": 0.98,
-   "sigma": 1.25
+   "move_pp": 5.0,
+   "mu": 0.91,
+   "sigma": 1.03
   },
-  "repriced_at": "2026-11-26T10:55:37.623923+00:00",
+  "repriced_at": "2026-11-26T14:55:52.006945+00:00",
   "resolved": false,
   "station": "klaipedos-ams"
  },
@@ -35942,31 +35936,25 @@
   "date": "2026-11-27",
   "measurements": {},
   "model_target": {
-   "43bbc729-a61d-41d1-aeb5-37cf55c53659": 48.3,
-   "955d776d-42b7-48c1-bd58-54ded0b8364c": 0.99,
-   "d3db7ad5-0cd9-4737-81e7-123a91c895d0": 49.73,
-   "f8f8bd65-a68c-43a6-a6ef-555743c43dbd": 0.99
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "43bbc729-a61d-41d1-aeb5-37cf55c53659": 45.38,
+   "43bbc729-a61d-41d1-aeb5-37cf55c53659": 45.37,
    "955d776d-42b7-48c1-bd58-54ded0b8364c": 0.98,
-   "d3db7ad5-0cd9-4737-81e7-123a91c895d0": 52.65,
+   "d3db7ad5-0cd9-4737-81e7-123a91c895d0": 52.66,
    "f8f8bd65-a68c-43a6-a6ef-555743c43dbd": 0.98
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.03,
+   "lead": 0.84,
    "models": {
     "ecmwf_aifs025_single": -0.6,
-    "icon_seamless": -0.1,
-    "ukmo_seamless": 0.5
+    "icon_seamless": -0.0,
+    "ukmo_seamless": 0.2
    },
-   "move_pp": 2.5,
-   "mu": -0.06,
-   "sigma": 0.75
+   "move_pp": 2.9,
+   "mu": -0.11,
+   "sigma": 0.68
   },
-  "repriced_at": "2026-11-26T10:15:47.946782+00:00",
+  "repriced_at": "2026-11-26T14:55:52.006945+00:00",
   "resolved": false,
   "station": "kauno-ams"
  }
