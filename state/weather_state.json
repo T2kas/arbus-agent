@@ -32340,6 +32340,10 @@
    "ea38f1d7-1c01-42a3-ba46-7686c39e7821": 18.75
   },
   "mt_v": 2,
+  "pending_target": {
+   "1cbc9b2b-f744-4b96-94fc-73fee4fba801": 5.87,
+   "89b4d068-1297-46a6-ab55-d7b244f141a8": 94.13
+  },
   "reprice": {
    "floor": null,
    "lead": 0.7,
