@@ -11992,7 +11992,7 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20260928/"
  },
  "61f79dc1-4210-4208-a524-4ff4ca9b5656": {
-  "checksum": "ba2f027bfb305a415381ca56c12b5acfa24efd943cccdb6d2252a95551958ba3",
+  "checksum": "63ea8d1076d20d00c277beaa01bbb19be12da5d840e121bf8bb879aa4c52b9c6",
   "current_maximum": -0.1,
   "date": "2026-11-26",
   "eliminated": [
@@ -12099,6 +12099,12 @@
    "2026-11-26 14:00:00": {
     "checksum": "ba2f027bfb305a415381ca56c12b5acfa24efd943cccdb6d2252a95551958ba3",
     "received_at": "2026-11-26T14:10:52.279919+00:00",
+    "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
+    "temp": -0.4
+   },
+   "2026-11-26 15:00:00": {
+    "checksum": "63ea8d1076d20d00c277beaa01bbb19be12da5d840e121bf8bb879aa4c52b9c6",
+    "received_at": "2026-11-26T15:11:02.159535+00:00",
     "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
     "temp": -0.4
    }
@@ -12759,7 +12765,7 @@
   "resolved_winner": "Jessica Shy – Kas Kaltas (feat. Igoris Kofas)"
  },
  "6eddbcd1-b7d5-4f6a-856c-f3ae43225f9f": {
-  "checksum": "4883f2a02060052fe0bec96c1127407075dbfdcb9629e2318ea1812aa15130cf",
+  "checksum": "f1bf1dae42eb497559ad31e33d53375f7607a23a6d01f5b15ec2dba98e729039",
   "current_maximum": 0.3,
   "date": "2026-11-26",
   "eliminated": [
@@ -12869,6 +12875,12 @@
     "received_at": "2026-11-26T14:10:52.279919+00:00",
     "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
     "temp": 0.1
+   },
+   "2026-11-26 15:00:00": {
+    "checksum": "f1bf1dae42eb497559ad31e33d53375f7607a23a6d01f5b15ec2dba98e729039",
+    "received_at": "2026-11-26T15:11:02.159535+00:00",
+    "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
+    "temp": 0.0
    }
   },
   "model_target": {
@@ -19116,7 +19128,7 @@
   "station": "klaipedos-ams"
  },
  "9cb15102-cdde-49ae-8972-785270d1a0ff": {
-  "checksum": "704273070f1d7adadc23836a4f01db9e969559fc7af67fff6e5c036db6288268",
+  "checksum": "64f84d93f31684dd580805a8c224d5189e93969f767d881924ebd052d89354c6",
   "current_maximum": null,
   "date": "2026-11-27",
   "measurements": {},
@@ -23242,7 +23254,7 @@
   "station": "kauno-ams"
  },
  "b7612d49-5454-462a-9f42-7339d18564f0": {
-  "checksum": "704273070f1d7adadc23836a4f01db9e969559fc7af67fff6e5c036db6288268",
+  "checksum": "64f84d93f31684dd580805a8c224d5189e93969f767d881924ebd052d89354c6",
   "current_maximum": 0.8,
   "date": "2026-11-26",
   "eliminated": [
@@ -23351,6 +23363,12 @@
     "received_at": "2026-11-26T14:10:52.279919+00:00",
     "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
     "temp": -0.4
+   },
+   "2026-11-26 15:00:00": {
+    "checksum": "64f84d93f31684dd580805a8c224d5189e93969f767d881924ebd052d89354c6",
+    "received_at": "2026-11-26T15:11:02.159535+00:00",
+    "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
+    "temp": -1.2
    }
   },
   "model_target": {
@@ -32179,7 +32197,7 @@
   "station": "klaipedos-ams"
  },
  "ec23a5e3-9049-4132-9438-06df79554392": {
-  "checksum": "ba2f027bfb305a415381ca56c12b5acfa24efd943cccdb6d2252a95551958ba3",
+  "checksum": "63ea8d1076d20d00c277beaa01bbb19be12da5d840e121bf8bb879aa4c52b9c6",
   "current_maximum": null,
   "date": "2026-11-27",
   "measurements": {},
@@ -35931,7 +35949,7 @@
   "station": "klaipedos-ams"
  },
  "fff3ac34-9f5d-4edd-a498-0e713bc3e124": {
-  "checksum": "4883f2a02060052fe0bec96c1127407075dbfdcb9629e2318ea1812aa15130cf",
+  "checksum": "f1bf1dae42eb497559ad31e33d53375f7607a23a6d01f5b15ec2dba98e729039",
   "current_maximum": null,
   "date": "2026-11-27",
   "measurements": {},
