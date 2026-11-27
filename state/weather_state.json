@@ -20400,6 +20400,10 @@
    "ddca9dd3-8c1a-4899-9b93-b56d3873340b": 10.33
   },
   "mt_v": 2,
+  "pending_target": {
+   "bb085bc2-e1ae-42c2-a2c9-6ba244a3aa80": 81.95,
+   "c94c5dd1-65b3-4aff-b5dc-81a14e48900d": 18.05
+  },
   "reprice": {
    "floor": null,
    "lead": 0.71,
