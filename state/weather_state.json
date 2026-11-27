@@ -5957,6 +5957,7 @@
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
  },
+ "2c187661-053a-4a71-b3b2-11933b0dc129": {},
  "2c2578f3-ed94-4f7a-bf6a-9eab3159853c": {
   "resolved": true,
   "resolved_at": "2026-10-29T15:55:39.506962+00:00",
