@@ -13581,6 +13581,14 @@
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
  },
+ "746c58d1-060b-48cf-9c93-7251827d05f4": {
+  "resolved": true,
+  "resolved_at": "2026-11-27T01:50:59.134841+00:00",
+  "resolved_label": "„Dubai Basketball“",
+  "resolved_option_id": "68a3a4ba-3db1-45df-8468-6d16dbbe9172",
+  "resolved_score": "Paris Basketball 82:78 Zalgiris Kaunas",
+  "resolved_via": "sports"
+ },
  "74f12b7a-c16b-4e99-bcec-af12630c0a50": {
   "checksum": "fa91d3a9207acaeb56dbe799d779ead26ac687885af35bfd723ce562b6b4aaea",
   "current_maximum": 9.6,
