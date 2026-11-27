@@ -793,6 +793,14 @@
   "resolved_via": "music",
   "resolved_winner": "Different Dimension, QV – Sakartvelas - Special Version"
  },
+ "090a4498-fbdf-480c-8bea-b5c2cd011585": {
+  "checksum": "5214c778a12af2586e7def2c8924533336ce2019f81d4e2174447018cbe38f83",
+  "current_maximum": null,
+  "date": "2026-11-29",
+  "measurements": {},
+  "resolved": false,
+  "station": "kauno-ams"
+ },
  "0911a5b7-82ae-4ce0-ae39-5f5f52a53b2d": {
   "resolved": true,
   "resolved_at": "2026-10-06T08:20:51.549540+00:00",
@@ -2746,6 +2754,14 @@
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261117/"
  },
  "159770bf-1661-4270-adb3-7a42a00eb6b4": {},
+ "15eb1471-c2eb-415b-a51b-cf603954814a": {
+  "checksum": "0b47e13c26cd6b8363febd2aeec791fc9b4193ed13019a36c47c5f05e5666ece",
+  "current_maximum": null,
+  "date": "2026-11-29",
+  "measurements": {},
+  "resolved": false,
+  "station": "klaipedos-ams"
+ },
  "1662c457-a6e1-4b63-9f30-b15e7fa87707": {
   "resolved": true,
   "resolved_at": "2026-11-13T06:01:15.543910+00:00",
@@ -18628,6 +18644,14 @@
  },
  "9a17b75b-2a46-4d9b-be4c-b4cb0fbf290c": {
   "period_alerted": true
+ },
+ "9a4f1993-8e8d-4944-b1b0-e947e42ed790": {
+  "checksum": "f15407e824f439eb6e741c71cf1e55f4c3bc93ec08dfaf09e934b7df4e276430",
+  "current_maximum": null,
+  "date": "2026-11-29",
+  "measurements": {},
+  "resolved": false,
+  "station": "vilniaus-ams"
  },
  "9a6115e1-bdc9-41b2-9c5c-bf98089d1431": {
   "checksum": "673750dedd7086d19d48ce7b25faf444fbfb73002486a8087cc7d60575bda928",
