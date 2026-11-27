@@ -19307,29 +19307,24 @@
    }
   },
   "model_target": {
-   "2ee819fd-a8f9-4669-b4b9-00f50ff3fe5a": 1.29,
-   "6469667c-00b2-4cf7-88f5-6daf4cee1ecf": 48.35,
-   "76171f94-b5b4-4e53-86bc-664ca1c71f02": 50.35
-  },
-  "mt_v": 2,
-  "pending_target": {
    "2ee819fd-a8f9-4669-b4b9-00f50ff3fe5a": 1.38,
    "6469667c-00b2-4cf7-88f5-6daf4cee1ecf": 45.03,
    "76171f94-b5b4-4e53-86bc-664ca1c71f02": 53.59
   },
+  "mt_v": 2,
   "reprice": {
-   "floor": -0.2,
-   "lead": 0.21,
+   "floor": 0.0,
+   "lead": 0.03,
    "models": {
     "ecmwf_aifs025_single": 0.0,
     "icon_seamless": -0.1,
     "ukmo_seamless": 0.9
    },
-   "move_pp": 6.6,
+   "move_pp": 3.3,
    "mu": 0.82,
    "sigma": 0.93
   },
-  "repriced_at": "2026-11-27T05:50:45.870381+00:00",
+  "repriced_at": "2026-11-27T10:15:58.176649+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/klaipedos-ams/observations/latest",
   "station": "klaipedos-ams"
