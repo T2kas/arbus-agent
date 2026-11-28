@@ -78,15 +78,23 @@ def with_vs_image(spec: dict) -> dict:
     uploaded here — the write key lives only in CI — and replaces image_url;
     on any failure the spec's own image_url stays."""
     pair = spec.get("image_vs")
-    if not pair:
+    local = spec.get("image_file")
+    if not pair and not local:
         return spec
     import re as _re
 
     from . import matchimage
 
     name = "batch-" + _re.sub(r"[^a-z0-9]+", "-", spec["title"].lower()).strip("-")[:80]
-    url = matchimage.game_image(list(pair), name, spec.get("image_caption", ""),
-                                style=spec.get("image_style", "logos"))
+    if local:
+        # "image_file": a PNG kept in the repo (e.g. an official fight poster), uploaded as is.
+        try:
+            url = matchimage.upload(Path(local).read_bytes(), name)
+        except OSError:
+            url = None
+    else:
+        url = matchimage.game_image(list(pair), name, spec.get("image_caption", ""),
+                                    style=spec.get("image_style", "logos"))
     out = {k: v for k, v in spec.items() if not k.startswith("image_") or k == "image_url"}
     if url:
         out["image_url"] = url

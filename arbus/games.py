@@ -477,11 +477,11 @@ def basketball_national_games(fixtures, now: datetime) -> list[Game]:
     return out
 
 
-PRICES_FILE = __import__("pathlib").Path(__file__).resolve().parent.parent / "markets" / "game-prices.json"
+PRICES_FILE = __import__("pathlib").Path(__file__).resolve().parent.parent / "markets" / "config" / "game-prices.json"
 
 
 def price_overrides() -> dict[str, dict[str, int]]:
-    """Hand-set opening prices, {title: {option label: percent}}, from markets/game-prices.json:
+    """Hand-set opening prices, {title: {option label: percent}}, from markets/config/game-prices.json:
     for a game whose fresh odds come from a bookmaker the bot does not read (TOPsport), e.g.
     after team news the BetExplorer line has not caught up with. Used on creation and kept by
     the follow-the-odds step, so the bot never moves such a market back."""
@@ -734,7 +734,7 @@ def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
     specs, waiting, errors = plan()
     reports = []
     for s in specs:
-        odds_note = ("kaina iš markets/game-prices.json" if s["_odds_bookmakers"] < 0 else
+        odds_note = ("kaina iš markets/config/game-prices.json" if s["_odds_bookmakers"] < 0 else
                      f"koef. iš {s['_odds_bookmakers']} bendrovių") if s["_odds_bookmakers"] else "modelio kaina, kol bendrovės paskelbs koeficientus"
         if dry_run:
             reports.append({"title": s["title"], "status": "would-create", "options": s["options"],

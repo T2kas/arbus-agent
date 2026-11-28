@@ -214,3 +214,13 @@ def test_vs_image_replaces_image_url_and_strips_helper_fields(monkeypatch):
     # upload failure -> keep the fallback image
     monkeypatch.setattr(matchimage, "game_image", lambda *a, **k: None)
     assert batch_create.with_vs_image(spec)["image_url"] == "https://fallback/x.jpg"
+
+
+def test_image_file_is_uploaded_as_is(monkeypatch, tmp_path):
+    from arbus import batch_create, matchimage
+    f = tmp_path / "poster.png"
+    f.write_bytes(b"PNGDATA")
+    seen = {}
+    monkeypatch.setattr(matchimage, "upload", lambda data, name: seen.update(data=data, name=name) or "https://x/p.png")
+    out = batch_create.with_vs_image({"title": "A vs B", "image_url": "https://old", "image_file": str(f)})
+    assert out == {"title": "A vs B", "image_url": "https://x/p.png"} and seen["data"] == b"PNGDATA"
