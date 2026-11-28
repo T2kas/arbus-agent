@@ -9816,6 +9816,7 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "491f06a1-d36f-4c3c-bd9d-5e738ded1e8f": {},
  "494ea6cf-7db9-4737-9372-c0753760adca": {
   "resolved": true,
   "resolved_at": "2026-10-19T08:25:38.319110+00:00",
@@ -24792,6 +24793,7 @@
   "source": "https://api.meteo.lt/v1/stations/vilniaus-ams/observations/latest",
   "station": "vilniaus-ams"
  },
+ "bbbc456b-4fe5-4918-affc-d4efcdc503ee": {},
  "bc08b81a-e579-4b55-ae22-02c061c0b89e": {
   "checksum": "1eccfd7f26f5f7a1e974b740ef2f85f61bc4abe27091de7e8d0537f197ff895d",
   "current_maximum": 18.9,
