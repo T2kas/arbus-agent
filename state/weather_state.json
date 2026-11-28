@@ -7404,6 +7404,14 @@
   "resolved_price": 1.944,
   "resolved_source": "https://www.ena.lt/Naujiena/kdk-20261015/"
  },
+ "3b233896-545b-4e2c-9f5c-ebfa07d34942": {
+  "resolved": true,
+  "resolved_at": "2026-11-28T08:01:13.487003+00:00",
+  "resolved_label": "„Dubai Basketball“",
+  "resolved_option_id": "a60b6367-f06a-4850-9656-94cba8f2b82b",
+  "resolved_score": "Paris Basketball 82:78 Zalgiris Kaunas",
+  "resolved_via": "sports"
+ },
  "3b554813-dec4-474b-bf21-d06da361e63d": {
   "checksum": "d65760c3162201c46289ef6aedbc293aa6fd55feaeb4ae61bf7d4d2d26db6538",
   "current_maximum": 7.6,
