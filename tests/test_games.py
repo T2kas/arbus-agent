@@ -395,3 +395,26 @@ def test_price_override_sets_opening_price(monkeypatch, tmp_path):
     p.write_text('{"_about": "x", "A vs B": {"A": 30, "B": 70, "_context": "C"}}', encoding="utf-8")
     monkeypatch.setattr(games, "PRICES_FILE", p)
     assert games.price_overrides() == {"A vs B": {"A": 30, "B": 70, "_context": "C"}}
+
+
+def test_stage_pages_fetch_only_the_european_tab():
+    from arbus import betodds
+    base = ('<a href="?stage=AAA&activecountry=X1" class="list-tabs__item__in current">America</a>'
+            '<a href="?stage=EEE&activecountry=Y2" class="list-tabs__item__in">Europe</a>'
+            '<a href="?stage=FFF&activecountry=Y2" title="" class="list-tabs__item__in">First round</a>')
+    seen = []
+
+    def fetch(url, **h):
+        seen.append(url)
+        return base
+    assert len(betodds.stage_pages("basketball/world/world-cup", "fixtures", fetch)) == 2
+    assert seen == ["https://www.betexplorer.com/basketball/world/world-cup/fixtures/",
+                    "https://www.betexplorer.com/basketball/world/world-cup/fixtures/?stage=EEE"]
+
+
+def test_broken_bookmaker_line_is_ignored():
+    from arbus import betodds
+    rows = "".join(f'<tr><td data-odd="{a}"></td><td data-odd="{b}"></td></tr>'
+                   for a, b in [("1.57", "2.51"), ("1.50", "2.60"), ("1.46", "2.47"), ("1.01", "1.29")])
+    probs, books = betodds.parse_odds(rows, 2, "favourite")
+    assert books == 3 and round(probs[0], 3) == round(1 / 1.46, 3)

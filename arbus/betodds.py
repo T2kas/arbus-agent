@@ -223,6 +223,11 @@ def parse_odds(odds_html: str, n_outcomes: int, method: str | None = None) -> tu
         prices = [float(x) for x in re.findall(r'data-odd="([\d.]+)"', row)]
         if len(prices) != n_outcomes or any(p <= 1.0 for p in prices):
             continue
+        # A broken or suspended line (Žalgiris–Dubai 2026-11-28: one book at 1.01 / 1.29, a 77 %
+        # margin) would become the "strongest favourite price" and open the market at 97 %.
+        # Real books run a 2–15 % margin; anything outside 0–20 % is not a price.
+        if not 1.0 <= sum(1 / p for p in prices) <= 1.20:
+            continue
         per_book.append(devig(prices, method))
     if not per_book:
         return [], 0
@@ -275,26 +280,43 @@ def match_odds(league: str, fx: Fixture, fetch=_get) -> MatchOdds | None:
 
 
 def stage_pages(path: str, kind: str, fetch=_get) -> list[str]:
-    """A competition's fixtures/results page plus its European stages. BetExplorer shows one
-    stage per page (the World Cup page opens on the Americas' qualifiers); the European tabs
-    are those sharing the "Europe" tab's activecountry id."""
+    """A competition's fixtures/results page plus its current European stage. BetExplorer shows
+    one stage per page (the World Cup page opens on the Americas' qualifiers); the "Europe" tab
+    links the current European round. One extra request at most: BetExplorer rate-limits (429)."""
     base = f"{BASE}/{path}/{kind}/"
     first = fetch(base)
     pages = [first]
-    eu = re.search(r'href="\?stage=\w+&(?:amp;)?activecountry=(\w+)"[^>]*>\s*Europe\s*<', first)
-    if eu:
-        stages = dict.fromkeys(re.findall(r'href="\?stage=(\w+)&(?:amp;)?activecountry=' + eu.group(1) + '"', first))
-        for st in stages:
-            try:
-                pages.append(fetch(f"{base}?stage={st}"))
-            except Exception:
-                continue
+    eu = re.search(r'href="\?stage=(\w+)&(?:amp;)?activecountry=\w+"[^>]*>\s*Europe\s*<', first)
+    if eu and 'current">Europe' not in first:
+        try:
+            pages.append(fetch(f"{base}?stage={eu.group(1)}"))
+        except Exception:
+            pass
     return pages
+
+
+_PAGE_CACHE: dict[str, tuple[float, str]] = {}
+
+
+def cached(fetch, ttl: float = 600.0):
+    """`fetch` memoised per URL for `ttl` seconds: one run asks for the same fixtures page twice
+    (schedule, then odds), and BetExplorer answers repeats with 429."""
+    import time
+
+    def get(url: str, **headers) -> str:
+        hit = _PAGE_CACHE.get(url)
+        if hit and time.time() - hit[0] < ttl:
+            return hit[1]
+        text = fetch(url, **headers)
+        _PAGE_CACHE[url] = (time.time(), text)
+        return text
+    return get
 
 
 def fixtures_for(league: str, fetch=_get) -> list[Fixture]:
     if league == "rinktine_krepsinis":
         out, seen = [], set()
+        fetch = cached(fetch)
         for path in BASKET_NATIONAL_PATHS:
             try:
                 pages = stage_pages(path, "fixtures", fetch)

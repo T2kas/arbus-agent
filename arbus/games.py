@@ -602,13 +602,14 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
             title = make(g, table)["title"]
             fx = betodds.find(fixtures, g.home, g.away, g.start)
             mo = None
-            if fx:
+            if fx and title not in overrides:   # hand-priced: no odds request needed
                 try:
                     mo = betodds.match_odds(league, fx, odds_fetch)
                 except Exception as e:
                     errors.append(f"{title}: koeficientai {type(e).__name__}: {e}")
                     continue
-            if mo is None and not (config.GAMES_MODEL_FALLBACK and league in ("lkl", "toplyga")):
+            hand = overrides.get(title)
+            if mo is None and not hand and not (config.GAMES_MODEL_FALLBACK and league in ("lkl", "toplyga")):
                 waiting.append(title)
                 if g.start - now <= timedelta(hours=48):
                     LAST_WAITING_SOON.append(title)
