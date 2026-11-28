@@ -17,7 +17,8 @@
     "label": "Aurimas Dumbrauskas",
     "probability": 42
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-simkus-dumbrauskas.png"
  },
  {
   "title": "Benas Šorochovas vs Titas Kunickas",
@@ -37,7 +38,8 @@
     "label": "Titas Kunickas",
     "probability": 50
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-sorochovas-kunickas.png"
  },
  {
   "title": "Pijus Aukštakojis vs Mantas Stankis",
@@ -57,7 +59,8 @@
     "label": "Mantas Stankis",
     "probability": 50
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-aukstakojis-stankis.png"
  },
  {
   "title": "Ričardas Kulis vs Arnoldas Misiūnas",
@@ -78,12 +81,7 @@
     "probability": 9
    }
   ],
-  "image_vs": [
-   "https://stats.uniquetma.com/images/fighters/ricardas-kulis-mid.png",
-   "https://stats.uniquetma.com/images/fighters/arnoldas-misiunas-mid.png"
-  ],
-  "image_style": "fighters",
-  "image_caption": "UTMA 21 · lapkričio 28 d."
+  "image_file": "assets/posters/utma21-kulis-misiunas.png"
  },
  {
   "title": "Rokas Kiulis vs Ričards Ozols",
@@ -103,7 +101,8 @@
     "label": "Ričards Ozols",
     "probability": 66
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-kiulis-ozols.png"
  },
  {
   "title": "Oskaras Buinickas vs Nedas Nedzveckas",
@@ -124,12 +123,7 @@
     "probability": 71
    }
   ],
-  "image_vs": [
-   "https://stats.uniquetma.com/images/fighters/oskaras-buinickas-mid.png",
-   "https://stats.uniquetma.com/images/fighters/nedas-nedzveckas-mid.png"
-  ],
-  "image_style": "fighters",
-  "image_caption": "UTMA 21 · lapkričio 28 d."
+  "image_file": "assets/posters/utma21-buinickas-nedzveckas.png"
  },
  {
   "title": "Žygimantas Kiudelis vs Guy Hagag",
@@ -149,7 +143,8 @@
     "label": "Guy Hagag",
     "probability": 45
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-kiudelis-hagag.png"
  },
  {
   "title": "Matas Pultaražinskas vs Itai Guyer",
@@ -169,7 +164,8 @@
     "label": "Itai Guyer",
     "probability": 32
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-pultarazinskas-guyer.png"
  },
  {
   "title": "Ruach Gordon vs Valerii Strungari",
@@ -189,7 +185,8 @@
     "label": "Valerii Strungari",
     "probability": 45
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-gordon-strungari.png"
  },
  {
   "title": "Dovydas Rimkus vs Ainas Baranauskas",
@@ -210,12 +207,7 @@
     "probability": 36
    }
   ],
-  "image_vs": [
-   "https://stats.uniquetma.com/images/fighters/dovydas-rimkus-mid.png",
-   "https://stats.uniquetma.com/images/fighters/ainas-baranauskas-mid.png"
-  ],
-  "image_style": "fighters",
-  "image_caption": "UTMA 21 · lapkričio 28 d."
+  "image_file": "assets/posters/utma21-rimkus-baranauskas.png"
  },
  {
   "title": "Raimondas Krilavičius vs Akram Belmeki",
@@ -236,12 +228,7 @@
     "probability": 34
    }
   ],
-  "image_vs": [
-   "https://stats.uniquetma.com/images/fighters/raimondas-krilavicius-mid.png",
-   "https://stats.uniquetma.com/images/fighters/akram-belmeki-mid.png"
-  ],
-  "image_style": "fighters",
-  "image_caption": "UTMA 21 · lapkričio 28 d."
+  "image_file": "assets/posters/utma21-krilavicius-belmeki.png"
  },
  {
   "title": "Ignas Barysas vs Robert Masters",
@@ -261,7 +248,8 @@
     "label": "Robert Masters",
     "probability": 50
    }
-  ]
+  ],
+  "image_file": "assets/posters/utma21-barysas-masters.png"
  },
  {
   "title": "Nikola Cvetkovič vs Raimondas Avlasevičius",

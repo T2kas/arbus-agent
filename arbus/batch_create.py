@@ -89,7 +89,7 @@ def with_vs_image(spec: dict) -> dict:
     if local:
         # "image_file": a PNG kept in the repo (e.g. an official fight poster), uploaded as is.
         try:
-            url = matchimage.upload(Path(local).read_bytes(), name)
+            url = matchimage.upload(Path(local).read_bytes(), name + "-poster")
         except OSError:
             url = None
     else:
@@ -142,6 +142,14 @@ def run(path: str, *, dry_run: bool, alert: bool = True) -> tuple[list[dict], st
                                 "detail": f"structure set to {structure}" if ok2
                                 else f"setting structure {structure} FAILED: {d2}"})
                 continue
+            if not dry_run and row is not None and s.get("image_file"):
+                # A poster added after the market was made: upload it and swap the picture.
+                url = with_vs_image(s).get("image_url")
+                if url and url != s.get("image_url") and url != row.get("image_url"):
+                    ok3, d3 = app_api.update_market(row, image_url=url)
+                    reports.append({"status": "updated" if ok3 else "error", "title": title,
+                                    "detail": "picture replaced" if ok3 else f"picture: {d3}"})
+                    continue
             reports.append({"status": "skipped", "title": title, "detail": "already exists"})
             continue
         if dry_run:
@@ -173,9 +181,11 @@ def run(path: str, *, dry_run: bool, alert: bool = True) -> tuple[list[dict], st
         created = [r for r in reports if r["status"] == "created"]
         errors = [r for r in reports if r["status"] == "error"]
         skipped = [r for r in reports if r["status"] == "skipped"]
+        updated = [r for r in reports if r["status"] == "updated"]
         lines = [f"🆕 ĮKELTOS RINKOS ({Path(path).name}): {len(created)} sukurta, "
                  f"{len(skipped)} praleista, {len(errors)} klaidų", ""]
         lines += [f"✅ {r['title']}" for r in created]
+        lines += [f"🖼️ {r['title']} (naujas paveikslėlis)" for r in updated]
         lines += [f"⏭️ {r['title']} (jau yra)" for r in skipped]
         lines += [f"❌ {r['title']}: {str(r['detail'])[:150]}" for r in errors]
         notify.send("\n".join(lines))

@@ -224,3 +224,23 @@ def test_image_file_is_uploaded_as_is(monkeypatch, tmp_path):
     monkeypatch.setattr(matchimage, "upload", lambda data, name: seen.update(data=data, name=name) or "https://x/p.png")
     out = batch_create.with_vs_image({"title": "A vs B", "image_url": "https://old", "image_file": str(f)})
     assert out == {"title": "A vs B", "image_url": "https://x/p.png"} and seen["data"] == b"PNGDATA"
+
+
+def test_rerun_replaces_picture_of_existing_market(monkeypatch, tmp_path):
+    import json
+    from arbus import app as app_api, batch_create, matchimage
+    f = tmp_path / "p.png"
+    f.write_bytes(b"X")
+    spec = {"title": "A vs B", "subtitle": "s", "category": "sportas", "image_url": "https://old", "liquidity": 10,
+            "rules": "r", "context": "c", "closes_at": "2030-01-01T00:00:00+00:00", "image_file": str(f),
+            "options": [{"label": "A", "probability": 50}, {"label": "B", "probability": 50}]}
+    batch = tmp_path / "b.json"
+    batch.write_text(json.dumps([spec]))
+    row = {"id": "m1", "title": "A vs B", "status": "open", "image_url": "https://old"}
+    monkeypatch.setattr(app_api, "markets", lambda *a, **k: ([row], ""))
+    monkeypatch.setattr(matchimage, "upload", lambda data, name: "https://new/" + name + ".png")
+    calls = []
+    monkeypatch.setattr(app_api, "update_market", lambda r, **k: calls.append(k) or (True, "ok"))
+    reports, err = batch_create.run(str(batch), dry_run=False, alert=False)
+    assert err == "" and reports[0]["status"] == "updated"
+    assert calls == [{"image_url": "https://new/batch-a-vs-b-poster.png"}]
