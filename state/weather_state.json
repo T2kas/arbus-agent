@@ -799,31 +799,25 @@
   "date": "2026-11-29",
   "measurements": {},
   "model_target": {
-   "28c7e29d-5782-4148-a903-0426163445b8": 4.11,
-   "7181a01b-07cd-4f4d-b5e9-284134b7e234": 1.0,
-   "79caef2e-8424-4822-a1c9-6d3c95de92e3": 58.53,
-   "d1c6ec91-eb34-4664-aa6b-85a10943c6d0": 36.36
-  },
-  "mt_v": 2,
-  "pending_target": {
-   "28c7e29d-5782-4148-a903-0426163445b8": 3.76,
+   "28c7e29d-5782-4148-a903-0426163445b8": 3.75,
    "7181a01b-07cd-4f4d-b5e9-284134b7e234": 1.36,
-   "79caef2e-8424-4822-a1c9-6d3c95de92e3": 54.73,
+   "79caef2e-8424-4822-a1c9-6d3c95de92e3": 54.74,
    "d1c6ec91-eb34-4664-aa6b-85a10943c6d0": 40.15
   },
+  "mt_v": 2,
   "reprice": {
    "floor": null,
-   "lead": 1.28,
+   "lead": 1.2,
    "models": {
-    "ecmwf_aifs025_single": -3.8,
+    "ecmwf_aifs025_single": -4.0,
     "icon_seamless": -1.9,
     "ukmo_seamless": -1.9
    },
-   "move_pp": 5.6,
-   "mu": -2.73,
-   "sigma": 0.97
+   "move_pp": 3.8,
+   "mu": -2.83,
+   "sigma": 1.0
   },
-  "repriced_at": "2026-11-28T04:15:50.073403+00:00",
+  "repriced_at": "2026-11-28T06:05:41.571885+00:00",
   "resolved": false,
   "station": "kauno-ams"
  },
@@ -20484,27 +20478,23 @@
    }
   },
   "model_target": {
-   "bb085bc2-e1ae-42c2-a2c9-6ba244a3aa80": 87.05,
-   "c94c5dd1-65b3-4aff-b5dc-81a14e48900d": 12.95
-  },
-  "mt_v": 2,
-  "pending_target": {
    "bb085bc2-e1ae-42c2-a2c9-6ba244a3aa80": 83.12,
    "c94c5dd1-65b3-4aff-b5dc-81a14e48900d": 16.88
   },
+  "mt_v": 2,
   "reprice": {
    "floor": -2.7,
-   "lead": 0.34,
+   "lead": 0.2,
    "models": {
-    "ecmwf_aifs025_single": -2.8,
-    "icon_seamless": -1.4,
+    "ecmwf_aifs025_single": -2.6,
+    "icon_seamless": -1.1,
     "ukmo_seamless": -1.2
    },
-   "move_pp": 7.8,
-   "mu": -1.93,
-   "sigma": 0.72
+   "move_pp": 3.9,
+   "mu": -1.76,
+   "sigma": 0.7
   },
-  "repriced_at": "2026-11-28T02:55:40.605587+00:00",
+  "repriced_at": "2026-11-28T06:05:41.571885+00:00",
   "resolved": false,
   "source": "https://api.meteo.lt/v1/stations/kauno-ams/observations/latest",
   "station": "kauno-ams"
