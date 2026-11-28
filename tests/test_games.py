@@ -418,3 +418,11 @@ def test_broken_bookmaker_line_is_ignored():
                    for a, b in [("1.57", "2.51"), ("1.50", "2.60"), ("1.46", "2.47"), ("1.01", "1.29")])
     probs, books = betodds.parse_odds(rows, 2, "favourite")
     assert books == 3 and round(probs[0], 3) == round(1 / 1.46, 3)
+
+
+def test_euroleague_resolver_ignores_other_games_sharing_a_word():
+    from arbus import weather
+    opts = [{"label": "Kauno „Žalgiris“"}, {"label": "„Dubai Basketball“"}]
+    paris = [{"home": "Paris Basketball", "away": "Zalgiris Kaunas", "home_score": 82, "away_score": 78,
+              "url": "", "date": "2026-11-26"}]
+    assert weather._find_el_game(paris, opts) is None

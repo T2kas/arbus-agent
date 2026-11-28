@@ -1209,7 +1209,10 @@ def _resolve_music(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
 
 # ── sports markets: single-match result (Euroleague / TOPLYGA) ───────────────
 
-_TEAM_FILLERS = {"fk", "bc", "kk", "fc", "sc", "bkk", "the", "komanda", "klubas"}
+# Words that say what a club is, not which: "Dubai Basketball" and "Paris Basketball" share
+# only "basketball", which once paid Žalgiris–Dubai (Dec 4) out on Žalgiris's loss in Paris.
+_TEAM_FILLERS = {"fk", "bc", "kk", "fc", "sc", "bkk", "the", "komanda", "klubas",
+                 "basketball", "basket", "football", "club", "krepsinio", "futbolo"}
 
 
 def _team_tokens(label: str) -> set:
@@ -1338,7 +1341,15 @@ def _resolve_sports(rows: list[dict], now: datetime, tz: ZoneInfo, state: dict,
                 year = sports.euroleague_season_year(rules)
                 if not year:
                     continue
-                game = _find_el_game(sports.euroleague_games(year), team_opts)
+                iso = sports._rules_date(rules)
+                if iso and iso > today:                # not played yet
+                    continue
+                games = sports.euroleague_games(year)
+                if iso:                                # only the game on the market's own date
+                    from datetime import date as _date
+                    games = [g for g in games if g.get("date") and
+                             abs((_date.fromisoformat(g["date"]) - _date.fromisoformat(iso)).days) <= 1]
+                game = _find_el_game(games, team_opts)
             elif league == "lkl":
                 iso = sports._rules_date(rules)
                 if not iso or iso > today:             # not played yet
