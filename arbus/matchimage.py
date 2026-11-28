@@ -66,6 +66,25 @@ def compose(home_logo: bytes, away_logo: bytes, caption: str = "",
     photos (transparent PNG) standing full height on the bottom edge."""
     from PIL import Image, ImageDraw
 
+    if style == "flags":
+        # National teams: two round flags on near-black, nothing else — the look of the
+        # hand-made "Lietuva vs Serbija" picture. Each flag is centre-cropped to a square and
+        # cut to a circle; kept near the middle so the app's square card crop shows both.
+        canvas = Image.new("RGB", (W, H), (17, 17, 17))
+        r, gap = 150, 24
+        for cx, data in ((W // 2 - gap // 2 - r, home_logo), (W // 2 + gap // 2 + r, away_logo)):
+            flag = Image.open(io.BytesIO(data)).convert("RGB")
+            side = min(flag.size)
+            left, top = (flag.width - side) // 2, (flag.height - side) // 2
+            flag = flag.crop((left, top, left + side, top + side)).resize((4 * r, 4 * r), Image.LANCZOS)
+            mask = Image.new("L", flag.size, 0)
+            ImageDraw.Draw(mask).ellipse((0, 0, 4 * r - 1, 4 * r - 1), fill=255)
+            flag, mask = flag.resize((2 * r, 2 * r), Image.LANCZOS), mask.resize((2 * r, 2 * r), Image.LANCZOS)
+            canvas.paste(flag, (cx - r, H // 2 - r), mask)
+        out = io.BytesIO()
+        canvas.save(out, "PNG", optimize=True)
+        return out.getvalue()
+
     if style == "clean":
         # Owner, 2026-11-07: the two logos on black, nothing else (no VS, no date). Close to
         # the middle, so a square thumbnail (the app's market cards crop to the centre 675 px)

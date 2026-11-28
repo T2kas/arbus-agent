@@ -28,6 +28,7 @@ from zoneinfo import ZoneInfo
 from . import app as app_api, config, notify
 
 TZ = ZoneInfo("Europe/Vilnius")
+BE_TZ = ZoneInfo("Europe/Prague")   # BetExplorer's display time zone
 UA = {"User-Agent": "Mozilla/5.0 (arbus-agent games bot)"}
 MONTHS = ["sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio", "liepos",
           "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"]
@@ -97,6 +98,8 @@ class Game:
     home_logo: str = ""    # official logo URL (LKL: SVG, TOPLYGA: full-size PNG)
     away_logo: str = ""
     time_known: bool = True  # False: date only (fallback source) -> close at noon
+    competition: str = ""    # national teams: which tournament (subtitle/rules)
+    close: datetime | None = None   # when the market closes, if not at the start
 
 
 def _clean(s: str) -> str:
@@ -330,7 +333,7 @@ def top_probs(home: str, away: str, table) -> tuple[int, int, int]:
 # ── market specs (same templates as the October batch) ─────────────────────
 
 def _close(g: Game) -> str:
-    return g.start.astimezone(timezone.utc).isoformat()
+    return (g.close or g.start).astimezone(timezone.utc).isoformat()
 
 
 def lkl_spec(g: Game, table, probs: list[int] | None = None) -> dict:
@@ -421,6 +424,75 @@ def national_games(fixtures, now: datetime) -> list[Game]:
     return [Game("rinktine", g.start, g.home, g.away, time_known=False) for g in lkl_games_from_fixtures(fixtures, now)]
 
 
+def basketball_national_spec(g: Game, table, probs: list[int] | None = None) -> dict:
+    """Lithuania's men's basketball team, in the hand-made "Lietuva vs Serbija" format (home team
+    first, two named outcomes, no draw). Priced only from bookmakers."""
+    ph, pa = probs if probs else (50, 50)
+    home, away = g.home, g.away
+    comp = g.competition or "Krepšinio rinktinės"
+    other = away if home == "Lietuva" else home
+    deadline = lt_date(g.start + timedelta(days=30))
+    return {
+        "title": f"{home} vs {away}",
+        "subtitle": f"{comp}, {lt_date(g.start)}",
+        "category": "sportas",
+        "image_url": IMG_ZAL,
+        "liquidity": config.GAMES_LIQUIDITY,
+        "rules": (
+            f"Rinka bus išspręsta pagal {lt_date(g.start)} vyksiančių vyrų krepšinio rinktinių rungtynių "
+            f"{home} – {away} ({comp}) galutinį rezultatą.\n\n"
+            "Vertinamas oficialus FIBA užfiksuotas galutinis rezultatas, įskaitant pratęsimus.\n\n"
+            f"Jeigu rungtynės perkeliamos į kitą datą, bet sužaidžiamos iki {deadline} imtinai, vertinamas jų rezultatas. "
+            "Jeigu jos atšaukiamos arba nesužaidžiamos iki šios datos, arba FIBA rezultatą nustato techniniu sprendimu "
+            "be sužaistų rungtynių, rinka anuliuojama ir statymai grąžinami.\n\n"
+            "Rezultato šaltiniai yra FIBA (fiba.basketball), Lietuvos krepšinio federacija ir nacionaliniai naujienų portalai."),
+        "context": (f"Lietuvos krepšinio rinktinė žaidžia {'namie' if home == 'Lietuva' else 'išvykoje'}; "
+                    f"varžovų rinktinė – {other}."),
+        "closes_at": _close(g),
+        "options": [{"label": home, "probability": ph}, {"label": away, "probability": pa}],
+    }
+
+
+def basketball_national_games(fixtures, now: datetime) -> list[Game]:
+    """BetExplorer shows tip-off in Central European time (Bosnia–Lithuania "18:00" = 19:00
+    Vilnius, checked against TOPsport 2026-11-28). The market closes an hour before tip-off."""
+    from . import betodds
+
+    out = []
+    today = now.astimezone(TZ).date()
+    for fx in fixtures:
+        d, mth = fx.day
+        year = today.year + (1 if mth < today.month - 6 else 0)
+        try:
+            if fx.time:
+                start = datetime(year, mth, d, *fx.time, tzinfo=BE_TZ).astimezone(TZ)
+                close = start - timedelta(hours=1)
+            else:
+                start = datetime(year, mth, d, LKL_FALLBACK_CLOSE_HOUR, tzinfo=TZ)
+                close = None
+        except ValueError:
+            continue
+        out.append(Game("rinktine_krepsinis", start, fx.home, fx.away, time_known=False,
+                        competition=betodds.BASKET_COMPETITIONS.get(fx.path, ""), close=close))
+    return out
+
+
+PRICES_FILE = __import__("pathlib").Path(__file__).resolve().parent.parent / "markets" / "game-prices.json"
+
+
+def price_overrides() -> dict[str, dict[str, int]]:
+    """Hand-set opening prices, {title: {option label: percent}}, from markets/game-prices.json:
+    for a game whose fresh odds come from a bookmaker the bot does not read (TOPsport), e.g.
+    after team news the BetExplorer line has not caught up with. Used on creation and kept by
+    the follow-the-odds step, so the bot never moves such a market back."""
+    import json
+    try:
+        data = json.loads(PRICES_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return {k: v for k, v in data.items() if not k.startswith("_") and isinstance(v, dict)}
+
+
 # ── run ────────────────────────────────────────────────────────────────────
 
 def _get(url: str) -> str:
@@ -453,6 +525,7 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
     horizon = now + timedelta(days=horizon_days or config.GAMES_HORIZON_DAYS)
     min_lead = now + timedelta(hours=config.GAMES_MIN_LEAD_HOURS)
     errors, waiting, candidates = [], [], []
+    overrides = price_overrides()
     global LAST_REPRICES
     LAST_REPRICES = []
     # Open game markets nobody has bet on yet, by title: their prices follow the bookmakers
@@ -486,10 +559,16 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
         sources.append(("euroleague", "Eurolyga", feed, feed, parse_el_schedule, parse_el_table, el_spec))
     if "rinktine" in config.GAMES_LEAGUES:
         sources.append(("rinktine", "Lietuvos rinktinė", None, None, None, None, national_spec))
+    if "rinktine_krepsinis" in config.GAMES_LEAGUES:
+        sources.append(("rinktine_krepsinis", "Lietuvos krepšinio rinktinė", None, None, None, None,
+                        basketball_national_spec))
     for league, name, sched_url, table_url, parse_s, parse_t, make in sources:
         try:
             if league == "rinktine":
                 games, table = national_games(betodds.fixtures_for("rinktine", odds_fetch), now), {}
+            elif league == "rinktine_krepsinis":
+                games = basketball_national_games(betodds.fixtures_for(league, odds_fetch), now)
+                table = {}
             else:
                 games = parse_s(fetch(sched_url))
                 table = parse_t(fetch(table_url))
@@ -538,16 +617,30 @@ def plan(now: datetime | None = None, horizon_days: int | None = None,
             # below moves them to the bookmakers' price as soon as those publish (until the first bet).
             spec = make(g, table, betodds.to_percent(mo.probs)) if mo else make(g, table)
             spec["_odds_bookmakers"] = mo.bookmakers if mo else 0
+            hand = overrides.get(spec["title"])
+            if hand and all(o["label"] in hand for o in spec["options"]):
+                for o in spec["options"]:
+                    o["probability"] = int(hand[o["label"]])
+                if hand.get("_context"):
+                    spec["context"] = hand["_context"]
+                spec["_odds_bookmakers"] = -1
             spec["_logos"] = local_logos(league, g) or ([g.home_logo, g.away_logo] if g.home_logo and g.away_logo else (mo.logos if mo else []))
             spec["_image_name"] = re.sub(r"[^a-z0-9]+", "-", betodds.fold(
                 f"{league} {g.start:%Y%m%d %H%M} {g.home} {g.away}")).strip("-") + CLEAN_IMAGE_TAG
-            spec["_caption"] = (f"{ {'lkl': 'LKL', 'toplyga': 'TOPLYGA', 'euroleague': 'EUROLYGA', 'rinktine': 'FUTBOLAS'}[league] } · "
+            if league == "rinktine_krepsinis":
+                # Round flags on near-black, like the hand-made "Lietuva vs Serbija" picture.
+                flags = [betodds.flag_url(g.home), betodds.flag_url(g.away)]
+                if all(flags):
+                    spec["_logos"], spec["_style"] = flags, "flags"
+            spec["_caption"] = (f"{ {'lkl': 'LKL', 'toplyga': 'TOPLYGA', 'euroleague': 'EUROLYGA', 'rinktine': 'FUTBOLAS', 'rinktine_krepsinis': 'KREPŠINIS'}[league] } · "
                                 f"{MONTHS[g.start.month - 1]} {g.start.day} d."
                                 + (f" {g.start:%H:%M}" if g.time_known else ""))
             candidates.append(spec)
 
         for g in follow:
             spec = make(g, table)
+            if spec["title"] in overrides:      # hand-priced: stays at its bookmaker price
+                continue
             row = untraded[spec["title"]]
             fx = betodds.find(fixtures, g.home, g.away, g.start)
             try:
@@ -640,12 +733,13 @@ def run(dry_run: bool = False, alert: bool = True) -> list[dict]:
     specs, waiting, errors = plan()
     reports = []
     for s in specs:
-        odds_note = f"koef. iš {s['_odds_bookmakers']} bendrovių" if s["_odds_bookmakers"] else "modelio kaina, kol bendrovės paskelbs koeficientus"
+        odds_note = ("kaina iš markets/game-prices.json" if s["_odds_bookmakers"] < 0 else
+                     f"koef. iš {s['_odds_bookmakers']} bendrovių") if s["_odds_bookmakers"] else "modelio kaina, kol bendrovės paskelbs koeficientus"
         if dry_run:
             reports.append({"title": s["title"], "status": "would-create", "options": s["options"],
                             "detail": odds_note})
             continue
-        img = matchimage.game_image(s["_logos"], s["_image_name"], s["_caption"])
+        img = matchimage.game_image(s["_logos"], s["_image_name"], s["_caption"], style=s.get("_style", "clean"))
         if img:
             s["image_url"] = img
         ok, detail = app_api.create_market(_public_spec(s))

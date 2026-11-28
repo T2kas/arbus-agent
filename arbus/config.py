@@ -1162,7 +1162,7 @@ FUEL_SIGMA_FLOOR = _env_float("FUEL_SIGMA_FLOOR", 0.010)
 # ── Game markets (arbus games): LKL + TOPLYGA, created ~a week ahead ─────────
 # Each run creates a market for every game starting within GAMES_HORIZON_DAYS
 # that has no market yet (dedupe by title). Prices from official standings.
-GAMES_LEAGUES = {x.strip() for x in _env_str("GAMES_LEAGUES", "lkl,toplyga,euroleague,rinktine").split(",") if x.strip()}
+GAMES_LEAGUES = {x.strip() for x in _env_str("GAMES_LEAGUES", "lkl,toplyga,euroleague,rinktine,rinktine_krepsinis").split(",") if x.strip()}
 # About a week ahead (owner 2026-11-01: "ne per toli į priekį, kad
 # neatsiliktų kainos"; was 30 since 2026-10-18). The Monday run fills the
 # coming week; the daily runs only add games whose odds appeared later

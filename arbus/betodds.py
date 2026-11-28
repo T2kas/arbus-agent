@@ -23,10 +23,18 @@ LEAGUES = {
     "toplyga": ("football/lithuania/toplyga", "1x2"),
     "euroleague": ("basketball/europe/euroleague", "ha"),
     "rinktine": ("football/world/friendly-international", "1x2"),
+    "rinktine_krepsinis": ("basketball/world/world-cup", "ha"),
 }
 # Every competition Lithuania's men's football team plays in; a game is found in whichever lists it.
 NATIONAL_PATHS = ("football/world/friendly-international", "football/europe/uefa-nations-league",
                   "football/europe/euro-qualification", "football/world/world-cup-qualification")
+# Lithuania's men's basketball team: FIBA World Cup qualifiers (BetExplorer keeps them under the
+# World Cup, one tab per region and round), EuroBasket (+ qualifiers) and friendlies.
+BASKET_NATIONAL_PATHS = ("basketball/world/world-cup", "basketball/europe/eurobasket",
+                         "basketball/world/friendly-international")
+BASKET_COMPETITIONS = {"basketball/world/world-cup": "FIBA pasaulio taurės atranka",
+                       "basketball/europe/eurobasket": "Europos krepšinio čempionatas",
+                       "basketball/world/friendly-international": "Draugiškos krepšinio rungtynės"}
 MIN_BOOKMAKERS = 1   # any real bookmaker's odds are enough (owner, 2026-11-09)
 
 # BetExplorer team name (folded) -> our source key (LKL short name / TOPLYGA slug)
@@ -58,6 +66,7 @@ ALIASES = {
         "armenia": "Armėnija", "azerbaijan": "Azerbaidžanas", "kazakhstan": "Kazachstanas", "israel": "Izraelis",
         "faroe islands": "Farerų salos", "andorra": "Andora", "san marino": "San Marinas", "gibraltar": "Gibraltaras",
     },
+    "rinktine_krepsinis": {},          # filled below: the same country names as football
     "euroleague": {
         "zalgiris": "Zalgiris Kaunas", "barcelona": "FC Barcelona",
         "fenerbahce": "Fenerbahce Tarfin Istanbul", "anadolu efes": "Anadolu Efes Istanbul",
@@ -72,6 +81,27 @@ ALIASES = {
         "valencia": "Valencia Basket",
     },
 }
+ALIASES["rinktine_krepsinis"] = ALIASES["rinktine"]
+# Lithuanian country name -> ISO code, for the round-flag pictures (flagcdn.com).
+FLAG_ISO = {
+    "Lietuva": "lt", "Surinamas": "sr", "Lichtenšteinas": "li", "Latvija": "lv", "Estija": "ee", "Lenkija": "pl",
+    "Suomija": "fi", "Švedija": "se", "Norvegija": "no", "Danija": "dk", "Islandija": "is", "Airija": "ie",
+    "Šiaurės Airija": "gb-nir", "Škotija": "gb-sct", "Velsas": "gb-wls", "Anglija": "gb-eng", "Prancūzija": "fr",
+    "Vokietija": "de", "Italija": "it", "Ispanija": "es", "Portugalija": "pt", "Nyderlandai": "nl", "Belgija": "be",
+    "Liuksemburgas": "lu", "Šveicarija": "ch", "Austrija": "at", "Čekija": "cz", "Slovakija": "sk", "Vengrija": "hu",
+    "Rumunija": "ro", "Bulgarija": "bg", "Graikija": "gr", "Turkija": "tr", "Kipras": "cy", "Malta": "mt",
+    "Kroatija": "hr", "Serbija": "rs", "Slovėnija": "si", "Bosnija ir Hercegovina": "ba", "Juodkalnija": "me",
+    "Šiaurės Makedonija": "mk", "Albanija": "al", "Kosovas": "xk", "Moldova": "md", "Ukraina": "ua",
+    "Sakartvelas": "ge", "Armėnija": "am", "Azerbaidžanas": "az", "Kazachstanas": "kz", "Izraelis": "il",
+    "Farerų salos": "fo", "Andora": "ad", "San Marinas": "sm", "Gibraltaras": "gi",
+}
+
+
+def flag_url(name: str) -> str | None:
+    iso = FLAG_ISO.get(name)
+    return f"https://flagcdn.com/w640/{iso}.png" if iso else None
+
+
 _DROP = {"bc", "fk", "fc", "fa", "kk", "bk", "kaunas", "klaipeda", "vilnius",
          "telsiai", "utena", "kedainiai"}
 
@@ -99,6 +129,8 @@ class Fixture:
     day: tuple[int, int]    # (day, month) as BetExplorer shows it
     url: str                # match page path
     match_id: str
+    time: tuple[int, int] | None = None   # (hour, minute) as BetExplorer shows it (UTC)
+    path: str = ""          # competition path it was found under
 
 
 def _get(url: str, **headers) -> str:
@@ -115,7 +147,7 @@ def parse_fixtures(league: str, page: str, today=None) -> list[Fixture]:
     if today is None:
         from datetime import date as _date
         today = _date.today()
-    out, last_day = [], None
+    out, last_day, last_time = [], None, None
     for row in re.findall(r"<tr[^>]*>(.*?)</tr>", page, flags=re.S):
         m = re.search(r'href="(/[^"]+/([A-Za-z0-9]{8})/)" class="in-match"[^>]*>(.*?)</a>',
                       row, flags=re.S)
@@ -126,6 +158,7 @@ def parse_fixtures(league: str, page: str, today=None) -> list[Fixture]:
         if len(names) < 2:
             continue
         dt = re.search(r"table-main__datetime[^>]*>\s*(\d{1,2})\.(\d{1,2})\.", row)
+        tm = re.search(r"table-main__datetime[^>]*>[^<]*?(\d{1,2}):(\d{2})", row)
         rel = re.search(r"table-main__datetime[^>]*>\s*(Today|Tomorrow)", row)
         if dt:
             day = (int(dt.group(1)), int(dt.group(2)))
@@ -134,10 +167,11 @@ def parse_fixtures(league: str, page: str, today=None) -> list[Fixture]:
             day = (d.day, d.month)
         else:
             day = last_day
-        last_day = day
+        time = (int(tm.group(1)), int(tm.group(2))) if tm else (last_time if not (dt or rel) else None)
+        last_day, last_time = day, time
         home, away = team_key(league, names[0]), team_key(league, names[1])
         if home and away and day:
-            out.append(Fixture(home, away, day, m.group(1), m.group(2)))
+            out.append(Fixture(home, away, day, m.group(1), m.group(2), time))
     return out
 
 
@@ -240,7 +274,39 @@ def match_odds(league: str, fx: Fixture, fetch=_get) -> MatchOdds | None:
     return MatchOdds(probs, books, logos)
 
 
+def stage_pages(path: str, kind: str, fetch=_get) -> list[str]:
+    """A competition's fixtures/results page plus its European stages. BetExplorer shows one
+    stage per page (the World Cup page opens on the Americas' qualifiers); the European tabs
+    are those sharing the "Europe" tab's activecountry id."""
+    base = f"{BASE}/{path}/{kind}/"
+    first = fetch(base)
+    pages = [first]
+    eu = re.search(r'href="\?stage=\w+&(?:amp;)?activecountry=(\w+)"[^>]*>\s*Europe\s*<', first)
+    if eu:
+        stages = dict.fromkeys(re.findall(r'href="\?stage=(\w+)&(?:amp;)?activecountry=' + eu.group(1) + '"', first))
+        for st in stages:
+            try:
+                pages.append(fetch(f"{base}?stage={st}"))
+            except Exception:
+                continue
+    return pages
+
+
 def fixtures_for(league: str, fetch=_get) -> list[Fixture]:
+    if league == "rinktine_krepsinis":
+        out, seen = [], set()
+        for path in BASKET_NATIONAL_PATHS:
+            try:
+                pages = stage_pages(path, "fixtures", fetch)
+            except Exception:           # a competition with no page this season
+                continue
+            for page in pages:
+                for f in parse_fixtures(league, page):
+                    if "Lietuva" in (f.home, f.away) and f.match_id not in seen:
+                        seen.add(f.match_id)
+                        f.path = path
+                        out.append(f)
+        return out
     if league == "rinktine":
         out = []
         for path in NATIONAL_PATHS:

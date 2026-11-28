@@ -1,0 +1,9 @@
+{
+  "_about": "Hand-set opening prices for bot game markets, {title: {option: percent}}. The games bot creates the market at this price and does not reprice it to BetExplorer. Use when a bookmaker the bot does not read (e.g. TOPsport) has the fresher line.",
+  "Bosnija ir Hercegovina vs Lietuva": {
+    "Bosnija ir Hercegovina": 23,
+    "Lietuva": 77,
+    "_source": "TOPsport 2026-11-28: 3.00 / 1.30 (Musa cleared to play after the FIBA insurance dispute); BetExplorer's one book 3.76 / 1.20",
+    "_context": "Lietuva lapkričio 26 d. Kaune 97:78 sutriuškino Serbiją, o rugpjūtį namie 78:73 įveikė ir Bosniją ir Hercegoviną. Bosnių žvaigždė Džananas Musa iki paskutinės dienos nežinojo, ar galės žaisti: FIBA pareikalavo apie 18 tūkst. eurų už jo draudimą. Lapkričio 28 d. pranešta, kad klausimas išspręstas ir Musa turėtų žaisti. Lietuvai Sarajeve padės Jonas Valančiūnas ir Arnas Butkevičius."
+  }
+}

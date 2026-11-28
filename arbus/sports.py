@@ -217,19 +217,31 @@ def parse_be_results(page: str, league: str, today: date) -> list[dict]:
     return out
 
 
-def national_result(target_iso: str, option_labels: list[str], today: date | None = None) -> dict | None:
-    """Final score of Lithuania's football game between the two option teams, or None if not final."""
+def national_result(target_iso: str, option_labels: list[str], today: date | None = None,
+                    league: str = "rinktine") -> dict | None:
+    """Final score of Lithuania's national-team game (football "rinktine", basketball
+    "rinktine_krepsinis") between the two option teams, or None if not final."""
     from . import betodds
 
     target = date.fromisoformat(target_iso)
     today = today or date.today()
     wanted = {lbl.strip() for lbl in option_labels}
-    for path in betodds.NATIONAL_PATHS:
-        try:
-            page = betodds._get(f"{betodds.BASE}/{path}/results/")
-        except Exception:
-            continue
-        for g in parse_be_results(page, "rinktine", today):
+    if league == "rinktine_krepsinis":
+        pages = []
+        for path in betodds.BASKET_NATIONAL_PATHS:
+            try:
+                pages += betodds.stage_pages(path, "results")
+            except Exception:
+                continue
+    else:
+        pages = []
+        for path in betodds.NATIONAL_PATHS:
+            try:
+                pages.append(betodds._get(f"{betodds.BASE}/{path}/results/"))
+            except Exception:
+                continue
+    for page in pages:
+        for g in parse_be_results(page, league, today):
             if {g["home_key"], g["away_key"]} == wanted and abs((g["day"] - target).days) <= 1:
                 return dict(g, home=g["home_key"], away=g["away_key"])
     return None

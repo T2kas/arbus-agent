@@ -350,3 +350,48 @@ def test_national_fixtures_keep_only_lithuania():
     page = "<table>" + row.format(a="a", i=1, h="Lithuania", v="Suriname") + row.format(a="b", i=2, h="Latvia", v="Estonia") + "</table>"
     found = betodds.fixtures_for("rinktine", lambda url, **h: page)
     assert {(f.home, f.away) for f in found} == {("Lietuva", "Surinamas")}
+
+
+def test_basketball_national_fixture_time_is_cet_and_closes_hour_before():
+    from datetime import datetime, timezone
+    from arbus import betodds
+    fx = betodds.Fixture("Bosnija ir Hercegovina", "Lietuva", (29, 11), "/x/", "bZsIcMH6", (18, 0),
+                         "basketball/world/world-cup")
+    [g] = games.basketball_national_games([fx], datetime(2026, 11, 28, 10, tzinfo=timezone.utc))
+    assert g.start.isoformat() == "2026-11-29T19:00:00+02:00"      # 18:00 CET = 19:00 Vilnius
+    spec = games.basketball_national_spec(g, {}, [23, 77])
+    assert spec["closes_at"] == "2026-11-29T16:00:00+00:00"
+    assert spec["title"] == "Bosnija ir Hercegovina vs Lietuva"
+    assert spec["subtitle"] == "FIBA pasaulio taurės atranka, 2026 m. lapkričio 29 d."
+    assert [o["label"] for o in spec["options"]] == ["Bosnija ir Hercegovina", "Lietuva"]
+    from arbus import weather
+    assert weather._sports_league(spec["rules"]) == "rinktine_krepsinis"
+
+
+def test_basketball_national_rules_of_hand_made_market_are_detected():
+    from arbus import weather
+    rules = ("Rinka bus išspręsta pagal 2026 m. lapkričio 26 d. vyksiančių Lietuvos ir Serbijos vyrų krepšinio "
+             "rinktinių 2027 m. FIBA pasaulio taurės atrankos rungtynių galutinį rezultatą.")
+    assert weather._sports_league(rules) == "rinktine_krepsinis"
+    futures = ("Rinka bus išspręsta „Taip“, jeigu Lietuvos vyrų krepšinio rinktinė, baigus 2027 m. FIBA pasaulio "
+               "taurės Europos atrankos turnyrą, oficialiai užsitikrins vietą 2027 m. FIBA pasaulio taurės finaliniame turnyre.")
+    assert weather._sports_league(futures) is None
+
+
+def test_fixture_rows_inherit_date_and_time():
+    from datetime import date
+    from arbus import betodds
+    row = ('<tr><td><a href="/basketball/world/world-cup/{s}/{i}/" class="in-match"><span>{h}</span> - '
+           '<span>{a}</span></a></td><td class="table-main__datetime">{d}</td></tr>')
+    page = (row.format(s="iceland-serbia", i="xpTBJ3vQ", h="Iceland", a="Serbia", d="26.02.2027 18:00")
+            + row.format(s="lithuania-turkey", i="WntQe0nJ", h="Lithuania", a="Turkey", d="&nbsp;"))
+    out = betodds.parse_fixtures("rinktine_krepsinis", page, date(2026, 11, 28))
+    assert [(f.home, f.away, f.day, f.time) for f in out] == [
+        ("Islandija", "Serbija", (26, 2), (18, 0)), ("Lietuva", "Turkija", (26, 2), (18, 0))]
+
+
+def test_price_override_sets_opening_price(monkeypatch, tmp_path):
+    p = tmp_path / "game-prices.json"
+    p.write_text('{"_about": "x", "A vs B": {"A": 30, "B": 70, "_context": "C"}}', encoding="utf-8")
+    monkeypatch.setattr(games, "PRICES_FILE", p)
+    assert games.price_overrides() == {"A vs B": {"A": 30, "B": 70, "_context": "C"}}
